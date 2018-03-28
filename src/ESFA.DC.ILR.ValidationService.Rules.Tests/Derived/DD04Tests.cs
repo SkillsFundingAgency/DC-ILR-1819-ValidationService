@@ -16,8 +16,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 ProgTypeNullable = 1,
                 FworkCodeNullable = 1,
                 PwayCodeNullable = 1,
-                AimTypeNullable = 1,
-                LearnStartDateNullable = new DateTime(2015, 1, 1)
+                AimType = 1,
+                LearnStartDate = new DateTime(2015, 1, 1)
             };
 
             var latestLearningDelivery = new TestLearningDelivery()
@@ -25,8 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 ProgTypeNullable = 1,
                 FworkCodeNullable = 1,
                 PwayCodeNullable = 1,
-                AimTypeNullable = 1,
-                LearnStartDateNullable = new DateTime(2017, 1, 1)
+                AimType = 1,
+                LearnStartDate = new DateTime(2017, 1, 1)
             };
 
             var learner = new TestLearner()
@@ -58,10 +58,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             {
                 new TestLearningDelivery()
                 {
-                    AimTypeNullable = 1,
+                    AimType = 1,
                     ProgTypeNullable = 1,
                     FworkCodeNullable = 1,
                     PwayCodeNullable = 1,
+                    LearnStartDate = new DateTime(2017, 1, 1)
                 }
             };
 
@@ -79,15 +80,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             {
                 new TestLearningDelivery()
                 {
-                    AimTypeNullable = 1,
+                    AimType = 1,
                     ProgTypeNullable = 1,
                     FworkCodeNullable = 1,
                     PwayCodeNullable = 1,
-                    LearnStartDateNullable = learnStartDate
+                    LearnStartDate = learnStartDate
                 },
                 new TestLearningDelivery()
                 {
-                    AimTypeNullable = 1,
+                    AimType = 1,
                     ProgTypeNullable = 1,
                     FworkCodeNullable = 1,
                     PwayCodeNullable = 2,
@@ -97,72 +98,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             var dd04 = new DD04();
 
             dd04.EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 1).Should().Be(learnStartDate);
-        }
-
-        [Fact]
-        public void EarliestLearningDeliveryLearnStartDateFor_NullLearningDeliveries()
-        {
-            var learnStartDate = new DateTime(2017, 1, 1);
-
-            var learningDeliveries = new TestLearningDelivery[]
-            {
-                new TestLearningDelivery()
-                {
-                    AimTypeNullable = 1,
-                    ProgTypeNullable = 1,
-                    FworkCodeNullable = 1,
-                    PwayCodeNullable = 1,
-                },
-                new TestLearningDelivery()
-                {
-                    AimTypeNullable = 1,
-                    ProgTypeNullable = 1,
-                    FworkCodeNullable = 1,
-                    PwayCodeNullable = 2,
-                }
-            };
-
-            var dd04 = new DD04();
-
-            dd04.EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 1).Should().BeNull();
-        }
-
-        [Fact]
-        public void EarliestLearningDeliveryLearnStartDateFor_OrderedMatch_WithNull()
-        {
-            var earliestLearnStartDate = new DateTime(2017, 1, 1);
-            var latestLearnStartDate = new DateTime(2018, 1, 1);
-
-            var learningDeliveries = new TestLearningDelivery[]
-            {
-                new TestLearningDelivery()
-                {
-                    AimTypeNullable = 1,
-                    ProgTypeNullable = 1,
-                    FworkCodeNullable = 1,
-                    PwayCodeNullable = 1,
-                    LearnStartDateNullable = earliestLearnStartDate
-                },
-                new TestLearningDelivery()
-                {
-                    AimTypeNullable = 1,
-                    ProgTypeNullable = 1,
-                    FworkCodeNullable = 1,
-                    PwayCodeNullable = 1,
-                    LearnStartDateNullable = latestLearnStartDate
-                },
-                new TestLearningDelivery()
-                {
-                    AimTypeNullable = 1,
-                    ProgTypeNullable = 1,
-                    FworkCodeNullable = 1,
-                    PwayCodeNullable = 1,
-                }
-            };
-
-            var dd04 = new DD04();
-
-            dd04.EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 1).Should().Be(earliestLearnStartDate);
         }
     }
 }

@@ -48,6 +48,7 @@
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ContPrefTypeConstants.cs" />
     <Compile Include="Derived\DD01.cs" />
+    <Compile Include="Derived\DD04.cs" />
     <Compile Include="Derived\Interface\IDD01.cs" />
     <Compile Include="Derived\Interface\IDD04.cs" />
     <Compile Include="Derived\Interface\IDD06.cs" />
