@@ -16,9 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         [InlineData(25)]
         public void Derive_True(long? input)
         {
-            var dd07 = new DD07();
-
-            dd07.Derive(input).Should().Be("Y");
+            NewDD().Derive(input).Should().Be("Y");
         }
 
         [Theory]
@@ -28,9 +26,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         [InlineData(null)]
         public void Derive_False(long? input)
         {
-            var dd07 = new DD07();
+            NewDD().Derive(input).Should().Be("N");
+        }
 
-            dd07.Derive(input).Should().Be("N");
+        private DD07 NewDD()
+        {
+            return new DD07();
         }
     }
 }

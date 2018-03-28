@@ -83,8 +83,10 @@
     <Compile Include="Derived\DD01Tests.cs" />
     <Compile Include="Derived\DD04Tests.cs" />
     <Compile Include="Derived\DD06Tests.cs" />
+    <Compile Include="Derived\DD07Tests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\DateTimeQueryServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

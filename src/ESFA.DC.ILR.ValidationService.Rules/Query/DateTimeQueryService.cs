@@ -7,7 +7,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
     {
         public int YearsBetween(DateTime start, DateTime end)
         {
-            int years = end.Year - start.Year;
+            var years = end.Year - start.Year;
 
             return end < start.AddYears(years) ? years - 1 : years;
         }
