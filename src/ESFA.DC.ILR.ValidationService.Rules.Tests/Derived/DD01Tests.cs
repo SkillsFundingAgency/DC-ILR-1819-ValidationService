@@ -18,12 +18,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         }
 
         [Fact]
-        public void Derive_UlnNull()
-        {
-            NewDD().Derive(null).Should().Be("N");
-        }
-
-        [Fact]
         public void Derive_UlnNotTenCharacters()
         {
             NewDD().Derive(100000004).Should().Be("N");

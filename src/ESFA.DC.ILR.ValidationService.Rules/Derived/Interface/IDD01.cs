@@ -2,6 +2,6 @@
 {
     public interface IDD01
     {
-        string Derive(long? uln);
+        string Derive(long uln);
     }
 }
