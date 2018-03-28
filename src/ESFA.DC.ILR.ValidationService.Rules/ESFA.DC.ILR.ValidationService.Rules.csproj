@@ -66,6 +66,7 @@
     <Compile Include="Query\Interface\ILearnerFAMQueryService.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\ValidationConstants.cs" />
+    <Compile Include="Query\LearnerFAMQueryService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ExternalData\ESFA.DC.ILR.ValidationService.ExternalData.csproj">

@@ -15,25 +15,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             var learnerFams = SetupLearnerFams();
 
-            var codes = new long[] { 1, 3 };
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasAnyLearnerFAMCodesForType(learnerFams, "FamC", codes).Should().BeTrue();
+            NewService().HasAnyLearnerFAMCodesForType(learnerFams, "FamC", new[] { 1, 3 }).Should().BeTrue();
         }
 
         [Fact]
         public void HasAnyLearnerFAMCodesForType_NullFams()
         {
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasAnyLearnerFAMCodesForType(null, "FamB", It.IsAny<List<long>>()).Should().BeFalse();
+            NewService().HasAnyLearnerFAMCodesForType(null, "FamB", It.IsAny<List<int>>()).Should().BeFalse();
         }
 
         [Fact]
         public void HasAnyLearnerFAMCodesForType_False_CodesNull()
         {
             var learnerFams = SetupLearnerFams();
-            var queryService = new LearnerFAMQueryService();
 
-            queryService.HasAnyLearnerFAMCodesForType(learnerFams, "FamB", null).Should().BeFalse();
+            NewService().HasAnyLearnerFAMCodesForType(learnerFams, "FamB", null).Should().BeFalse();
         }
 
         [Fact]
@@ -41,8 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             var learnerFams = SetupLearnerFams();
 
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasAnyLearnerFAMCodesForType(learnerFams, "FamA", new long[] { 2, 3 }).Should().BeFalse();
+            NewService().HasAnyLearnerFAMCodesForType(learnerFams, "FamA", new[] { 2, 3 }).Should().BeFalse();
         }
 
         [Fact]
@@ -50,83 +45,85 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             var learnerFams = SetupLearnerFams();
 
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasLearnerFAMCodeForType(learnerFams, "FamB", 2).Should().BeTrue();
+            NewService().HasLearnerFAMCodeForType(learnerFams, "FamB", 2).Should().BeTrue();
         }
 
         [Fact]
         public void HasLearnerFAMCodeForType_NullLearnerFams()
         {
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasLearnerFAMCodeForType(null, "FamB", 2).Should().BeFalse();
+            NewService().HasLearnerFAMCodeForType(null, "FamB", 2).Should().BeFalse();
         }
 
         [Fact]
         public void HasLearnerFAMCodeForType_FalseMismatch()
         {
             var learnerFams = SetupLearnerFams();
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasLearnerFAMCodeForType(learnerFams, "FamA", 99999).Should().BeFalse();
+
+            NewService().HasLearnerFAMCodeForType(learnerFams, "FamA", 99999).Should().BeFalse();
         }
 
         [Fact]
         public void HasLearnerFAMType_True()
         {
             var learnerFams = SetupLearnerFams();
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasLearnerFAMType(learnerFams, "FamA").Should().BeTrue();
+
+            NewService().HasLearnerFAMType(learnerFams, "FamA").Should().BeTrue();
         }
 
         [Fact]
         public void HasLearnerFAMType_False()
         {
             var learnerFams = SetupLearnerFams();
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasLearnerFAMType(learnerFams, "TYPENOTFOUND").Should().BeFalse();
+
+            NewService().HasLearnerFAMType(learnerFams, "TYPENOTFOUND").Should().BeFalse();
         }
 
         [Fact]
         public void HasLearnerFAMType_False_NullLearnerFams()
         {
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasLearnerFAMType(null, It.IsAny<string>()).Should().BeFalse();
+            NewService().HasLearnerFAMType(null, It.IsAny<string>()).Should().BeFalse();
         }
 
         [Fact]
         public void HasLearnerFAMTypes_True()
         {
             var learnerFams = SetupLearnerFams();
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasAnyLearnerFAMTypes(learnerFams, new List<string>() { "FamA", "TYPENOTFOUND" }).Should().BeTrue();
+
+            NewService().HasAnyLearnerFAMTypes(learnerFams, new List<string>() { "FamA", "TYPENOTFOUND" }).Should().BeTrue();
         }
 
         [Fact]
         public void HasLearnerFAMTypes_False()
         {
             var learnerFams = SetupLearnerFams();
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasAnyLearnerFAMTypes(learnerFams, new List<string>() { "XXXX", "TYPENOTFOUND" }).Should().BeFalse();
+
+            NewService().HasAnyLearnerFAMTypes(learnerFams, new List<string>() { "XXXX", "TYPENOTFOUND" }).Should().BeFalse();
         }
 
         [Fact]
         public void HasLearnerFAMTypes_Null()
         {
             var learnerFams = SetupLearnerFams();
-            var queryService = new LearnerFAMQueryService();
-            queryService.HasAnyLearnerFAMTypes(learnerFams, null).Should().BeFalse();
+
+            NewService().HasAnyLearnerFAMTypes(learnerFams, null).Should().BeFalse();
         }
 
         private ILearnerFAM[] SetupLearnerFams()
         {
             var learnerFams = new TestLearnerFAM[]
             {
-                new TestLearnerFAM() { LearnFAMType = "FamA", LearnFAMCodeNullable = 1 },
-                new TestLearnerFAM() { LearnFAMType = "FamB", LearnFAMCodeNullable = 2 },
-                new TestLearnerFAM() { LearnFAMType = "FamC", LearnFAMCodeNullable = 3 },
-                new TestLearnerFAM() { LearnFAMType = "FamC", LearnFAMCodeNullable = 5 },
+                new TestLearnerFAM() { LearnFAMType = "FamA", LearnFAMCode = 1 },
+                new TestLearnerFAM() { LearnFAMType = "FamB", LearnFAMCode = 2 },
+                new TestLearnerFAM() { LearnFAMType = "FamC", LearnFAMCode = 3 },
+                new TestLearnerFAM() { LearnFAMType = "FamC", LearnFAMCode = 5 },
             };
 
             return learnerFams;
+        }
+
+        private LearnerFAMQueryService NewService()
+        {
+            return new LearnerFAMQueryService();
         }
     }
 }

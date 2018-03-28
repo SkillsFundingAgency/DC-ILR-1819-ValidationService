@@ -5,9 +5,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
 {
     public interface ILearnerFAMQueryService
     {
-        bool HasAnyLearnerFAMCodesForType(IEnumerable<ILearnerFAM> learnerFAMs, string famType, IEnumerable<long> famCodes);
+        bool HasAnyLearnerFAMCodesForType(IEnumerable<ILearnerFAM> learnerFAMs, string famType, IEnumerable<int> famCodes);
 
-        bool HasLearnerFAMCodeForType(IEnumerable<ILearnerFAM> learnerFAMs, string famType, long famCode);
+        bool HasLearnerFAMCodeForType(IEnumerable<ILearnerFAM> learnerFAMs, string famType, int famCode);
 
         bool HasLearnerFAMType(IEnumerable<ILearnerFAM> learnerFAMs, string famType);
 

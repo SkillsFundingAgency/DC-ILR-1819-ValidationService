@@ -19,22 +19,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 
         public bool HasLearnerFAMCodeForType(IEnumerable<ILearnerFAM> learnerFams, string famType, int famCode)
         {
-            if (learnerFams == null)
-            {
-                return false;
-            }
-
-            return learnerFams.Any(ldfam => ldfam.LearnFAMType == famType && ldfam.LearnFAMCode == famCode);
+            return learnerFams != null && learnerFams.Any(ldfam => ldfam.LearnFAMType == famType && ldfam.LearnFAMCode == famCode);
         }
 
         public bool HasLearnerFAMType(IEnumerable<ILearnerFAM> learnerFams, string famType)
         {
-            if (learnerFams == null)
-            {
-                return false;
-            }
-
-            return learnerFams.Any(ldfam => ldfam.LearnFAMType == famType);
+            return learnerFams != null && learnerFams.Any(ldfam => ldfam.LearnFAMType == famType);
         }
 
         public bool HasAnyLearnerFAMTypes(IEnumerable<ILearnerFAM> learnerFams, IEnumerable<string> famTypes)
