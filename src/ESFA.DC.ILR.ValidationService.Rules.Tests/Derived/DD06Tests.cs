@@ -15,48 +15,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             {
                 new TestLearningDelivery()
                 {
-                    LearnStartDateNullable = new DateTime(2015, 1, 1)
+                    LearnStartDate = new DateTime(2015, 1, 1)
                 },
                 new TestLearningDelivery()
                 {
-                    LearnStartDateNullable = new DateTime(2015, 10, 10)
+                    LearnStartDate = new DateTime(2015, 10, 10)
                 },
             };
 
-            var dd06 = new DD06();
-
-            dd06.Derive(learningDeliveries).Should().Be(new DateTime(2015, 1, 1));
+            NewDD().Derive(learningDeliveries).Should().Be(new DateTime(2015, 1, 1));
         }
 
         [Fact]
         public void DeriveFor_NullLearningDelivery()
         {
-            var dd06 = new DD06();
+            Action action = () => NewDD().Derive(null);
 
-            dd06.Derive(null).Should().BeNull();
+            action.Should().Throw<ArgumentNullException>();
         }
 
-        [Fact]
-        public void Derive_ForOne_OneLearningDeliveryStartNull()
+        private DD06 NewDD()
         {
-            var learningDeliveries = new TestLearningDelivery[]
-             {
-                    new TestLearningDelivery()
-                    {
-                        LearnStartDateNullable = null
-                    },
-                    new TestLearningDelivery()
-                    {
-                        LearnStartDateNullable = new DateTime(2015, 1, 1)
-                    },
-                    new TestLearningDelivery()
-                    {
-                        LearnStartDateNullable = new DateTime(2015, 10, 10)
-                    },
-            };
-
-            var dd06 = new DD06();
-            dd06.Derive(learningDeliveries).Should().Be(new DateTime(2015, 1, 1));
+            return new DD06();
         }
     }
 }

@@ -6,11 +6,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 {
     public class DD01Tests
     {
-        public DD01 NewDD()
-        {
-            return new DD01();
-        }
-
         [Fact]
         public void CalculateChecksum()
         {
@@ -39,6 +34,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         public void Derive_TemporaryULN()
         {
             NewDD().Derive(9999999999).Should().Be("Y");
+        }
+
+        private DD01 NewDD()
+        {
+            return new DD01();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
         public DateTime? EarliestLearningDeliveryLearnStartDateFor(IEnumerable<ILearningDelivery> learningDeliveries, long aimType, long? progType, long? fworkCode, long? pwayCode)
         {
-            return learningDeliveries?
+            return learningDeliveries
                     .Where(ld =>
                     ld.AimType == aimType
                     && ld.ProgTypeNullable == progType

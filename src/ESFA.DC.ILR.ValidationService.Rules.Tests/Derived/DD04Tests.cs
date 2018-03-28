@@ -38,17 +38,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            var dd04 = new DD04();
-
-            dd04.Derive(learner.LearningDeliveries, latestLearningDelivery).Should().Be(new DateTime(2015, 1, 1));
+            NewDD().Derive(learner.LearningDeliveries, latestLearningDelivery).Should().Be(new DateTime(2015, 1, 1));
         }
 
         [Fact]
         public void EarliestLearningDeliveryLearnStartDateFor_NullLearningDelivery()
         {
-            var dd04 = new DD04();
+            Action action = () => NewDD().EarliestLearningDeliveryLearnStartDateFor(null, 1, 1, 1, 1);
 
-            dd04.EarliestLearningDeliveryLearnStartDateFor(null, 1, 1, 1, 1).Should().BeNull();
+            action.Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
@@ -66,9 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            var dd04 = new DD04();
-
-            dd04.EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 2).Should().BeNull();
+            NewDD().EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 2).Should().BeNull();
         }
 
         [Fact]
@@ -95,9 +91,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            var dd04 = new DD04();
+            NewDD().EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 1).Should().Be(learnStartDate);
+        }
 
-            dd04.EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 1).Should().Be(learnStartDate);
+        private DD04 NewDD()
+        {
+            return new DD04();
         }
     }
 }

@@ -8,13 +8,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 {
     public class DD06 : IDD06
     {
-        public DateTime? Derive(IEnumerable<ILearningDelivery> learningDeliveries)
+        public DateTime Derive(IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return learningDeliveries?
-                    .Where(ld => ld.LearnStartDateNullable.HasValue)
-                    .OrderBy(ld => ld.LearnStartDateNullable)
-                    .FirstOrDefault()
-                    .LearnStartDateNullable;
+            return learningDeliveries.Min(ld => ld.LearnStartDate);
         }
     }
 }
