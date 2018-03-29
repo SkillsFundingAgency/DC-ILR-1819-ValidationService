@@ -1,12 +1,12 @@
-﻿using ESFA.DC.ILR.ValidationService.InternalData.LLDDCat;
+﻿using System.Linq;
+using ESFA.DC.ILR.ValidationService.InternalData.LLDDCat;
 using FluentAssertions;
-using System.Linq;
 using Xunit;
 using DateTime = System.DateTime;
 
 namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.LLDDCat
 {
-    public class ILlddCatInternalDataServiceTests
+    public class LlddCatInternalDataServiceTests
     {
         [Fact]
         public void CodeExists_True()

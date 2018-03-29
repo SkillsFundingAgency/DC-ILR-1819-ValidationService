@@ -1,7 +1,7 @@
-﻿using ESFA.DC.ILR.ValidationService.InternalData.ContPrefType;
+﻿using System;
+using ESFA.DC.ILR.ValidationService.InternalData.ContPrefType;
 using FluentAssertions;
 using Moq;
-using System;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.ContPrefTypeCode

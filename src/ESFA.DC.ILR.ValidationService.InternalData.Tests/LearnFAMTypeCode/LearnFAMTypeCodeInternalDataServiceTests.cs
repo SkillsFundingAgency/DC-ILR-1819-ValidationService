@@ -1,6 +1,6 @@
-﻿using ESFA.DC.ILR.ValidationService.InternalData.LearnFAMTypeCode;
+﻿using System;
+using ESFA.DC.ILR.ValidationService.InternalData.LearnFAMTypeCode;
 using FluentAssertions;
-using System;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.LearnFAMTypeCode

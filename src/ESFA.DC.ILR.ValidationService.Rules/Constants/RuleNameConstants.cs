@@ -2,6 +2,8 @@
 {
     public static class RuleNameConstants
     {
+        public const string AddHours_01 = "AddHours_01";
+
         public const string DateOfBirth_01 = "DateOfBirth_01";
         public const string DateOfBirth_02 = "DateOfBirth_02";
         public const string DateOfBirth_03 = "DateOfBirth_03";

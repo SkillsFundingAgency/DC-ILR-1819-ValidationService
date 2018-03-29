@@ -39,11 +39,11 @@
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.1-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
+    <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.ILR.Tests.Model, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.ILR.1819.Tests.Model.0.1.1-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Tests.Model.dll</HintPath>
+    <Reference Include="ESFA.DC.ILR.Tests.Model, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.ILR.1819.Tests.Model.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Tests.Model.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions, Version=5.2.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.5.2.0\lib\net45\FluentAssertions.dll</HintPath>
@@ -85,9 +85,11 @@
     <Compile Include="Derived\DD06Tests.cs" />
     <Compile Include="Derived\DD07Tests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_01RuleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
     <Compile Include="Query\LearnerFAMQueryServiceTests.cs" />
+    <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -121,6 +123,7 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

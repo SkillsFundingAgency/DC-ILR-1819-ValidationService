@@ -56,6 +56,6 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.AcademicYearCalendarS
             var academicYearCalendarService = new InternalData.AcademicYearCalendarService.AcademicYearCalendarService();
 
             academicYearCalendarService.FirstSeptemberForDateInAcademicYear(inputDateTime).Should().Be(expectedDateTime);
-        }        
+        }
     }
 }
