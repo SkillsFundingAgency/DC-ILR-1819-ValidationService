@@ -1,8 +1,8 @@
-﻿using ESFA.DC.ILR.ValidationService.InternalData.ContPrefType.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ESFA.DC.ILR.ValidationService.InternalData.ContPrefType.Models;
 
 namespace ESFA.DC.ILR.ValidationService.InternalData.ContPrefType
 {
@@ -76,6 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.ContPrefType
             {
                 return false;
             }
+
             return _validContactPreferenceTypeCodesLookup.Any(x => x.Code == code.Value);
         }
 

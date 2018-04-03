@@ -1,8 +1,8 @@
-﻿using ESFA.DC.ILR.ValidationService.InternalData.LearnFAMTypeCode.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using ESFA.DC.ILR.ValidationService.InternalData.LearnFAMTypeCode.Models;
 
 namespace ESFA.DC.ILR.ValidationService.InternalData.LearnFAMTypeCode
 {
@@ -16,118 +16,117 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.LearnFAMTypeCode
 
             _learnFamTypeCodesLookup = new ReadOnlyCollection<LearnFAMTypeCodeInternalData>(new List<LearnFAMTypeCodeInternalData>()
             {
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="HNS",Code = 1, ValidTo = validTo
+                    Type = "HNS", Code = 1, ValidTo = validTo
                 },
-
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="EHC",Code = 1, ValidTo = validTo
+                    Type = "EHC", Code = 1, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="DLA",Code = 1, ValidTo = validTo
+                    Type = "DLA", Code = 1, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="LSR",Code = 36, ValidTo = validTo
+                    Type = "LSR", Code = 36, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="LSR",Code = 55, ValidTo = validTo
+                    Type = "LSR", Code = 55, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="LSR",Code = 56, ValidTo = validTo
+                    Type = "LSR", Code = 56, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="LSR",Code = 57, ValidTo = validTo
+                    Type = "LSR", Code = 57, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="LSR",Code = 58, ValidTo = validTo
+                    Type = "LSR", Code = 58, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="LSR",Code = 59, ValidTo = validTo
+                    Type = "LSR", Code = 59, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="LSR",Code = 60, ValidTo = validTo
+                    Type = "LSR", Code = 60, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="LSR",Code = 61, ValidTo = validTo
+                    Type = "LSR", Code = 61, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="NLM",Code = 17, ValidTo = validTo
+                    Type = "NLM", Code = 17, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="NLM",Code = 18, ValidTo = validTo
+                    Type = "NLM", Code = 18, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="FME",Code = 1, ValidTo = validTo
+                    Type = "FME", Code = 1, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="FME",Code = 2, ValidTo = validTo
+                    Type = "FME", Code = 2, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="PPE",Code = 1, ValidTo = validTo
+                    Type = "PPE", Code = 1, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="PPE",Code = 2, ValidTo = validTo
+                    Type = "PPE", Code = 2, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="SEN",Code = 1, ValidTo = validTo
+                    Type = "SEN", Code = 1, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="EDF",Code = 1, ValidTo = validTo
+                    Type = "EDF", Code = 1, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="EDF",Code = 2, ValidTo = validTo
+                    Type = "EDF", Code = 2, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="MCF",Code = 1, ValidTo = validTo
+                    Type = "MCF", Code = 1, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="MCF",Code = 2, ValidTo = validTo
+                    Type = "MCF", Code = 2, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="MCF",Code = 3, ValidTo = validTo
+                    Type = "MCF", Code = 3, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="MCF",Code = 4, ValidTo = validTo
+                    Type = "MCF", Code = 4, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="ECF",Code = 1, ValidTo = validTo
+                    Type = "ECF", Code = 1, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="ECF",Code = 2, ValidTo = validTo
+                    Type = "ECF", Code = 2, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="ECF",Code = 3, ValidTo = validTo
+                    Type = "ECF", Code = 3, ValidTo = validTo
                 },
-                new  LearnFAMTypeCodeInternalData()
+                new LearnFAMTypeCodeInternalData()
                 {
-                    Type ="ECF",Code = 4, ValidTo = validTo
+                    Type = "ECF", Code = 4, ValidTo = validTo
                 }
             });
         }

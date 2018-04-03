@@ -17,7 +17,6 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.LLDDCat
                 { 1, date2015 },
                 { 2, date2015 },
                 { 3, date2015 },
-
                 { 4, date2099 },
                 { 5, date2099 },
                 { 6, date2099 },
@@ -32,7 +31,6 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.LLDDCat
                 { 15, date2099 },
                 { 16, date2099 },
                 { 17, date2099 },
-
                 { 93, date2099 },
                 { 94, date2099 },
                 { 95, date2099 },
@@ -51,6 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.LLDDCat
             {
                 return false;
             }
+
             return _validLlddCategories.ContainsKey(category.Value);
         }
 
@@ -60,6 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.LLDDCat
             {
                 return false;
             }
+
             return _validLlddCategories.ContainsKey(category.Value) &&
                 validTo.Value <= _validLlddCategories[category.Value];
         }

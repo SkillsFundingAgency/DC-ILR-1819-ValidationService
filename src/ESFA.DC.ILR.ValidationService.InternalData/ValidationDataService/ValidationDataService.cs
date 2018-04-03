@@ -1,6 +1,6 @@
-﻿using ESFA.DC.ILR.ValidationService.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.InternalData.ValidationDataService
 {
@@ -19,18 +19,39 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.ValidationDataService
             _validationStartDateTime = dateTimeProvider?.UtcNow ?? DateTime.UtcNow;
         }
 
-        public DateTime AcademicYearAugustThirtyFirst {  get { return _academicYearAugustThirtyFirst;  } }
+        public DateTime AcademicYearAugustThirtyFirst
+        {
+            get { return _academicYearAugustThirtyFirst;  }
+        }
 
-        public DateTime AcademicYearEnd { get { return _academicYearEnd; } }
-        
-        public DateTime AcademicYearJanuaryFirst {  get { return _academicYearJanuaryFirst; } }
+        public DateTime AcademicYearEnd
+        {
+            get { return _academicYearEnd; }
+        }
 
-        public DateTime AcademicYearStart { get { return _academicYearStart; } }
+        public DateTime AcademicYearJanuaryFirst
+        {
+            get { return _academicYearJanuaryFirst; }
+        }
 
-        public IReadOnlyCollection<long> ApprenticeProgTypes { get { return _apprenticeshipProgTypes; } }
+        public DateTime AcademicYearStart
+        {
+            get { return _academicYearStart; }
+        }
 
-        public DateTime ApprencticeProgAllowedStartDate { get { return _apprenticeshipProgAllowedStartDate; } }
+        public IReadOnlyCollection<long> ApprenticeProgTypes
+        {
+            get { return _apprenticeshipProgTypes; }
+        }
 
-        public DateTime ValidationStartDateTime { get { return _validationStartDateTime; } }
+        public DateTime ApprencticeProgAllowedStartDate
+        {
+            get { return _apprenticeshipProgAllowedStartDate; }
+        }
+
+        public DateTime ValidationStartDateTime
+        {
+            get { return _validationStartDateTime; }
+        }
     }
 }
