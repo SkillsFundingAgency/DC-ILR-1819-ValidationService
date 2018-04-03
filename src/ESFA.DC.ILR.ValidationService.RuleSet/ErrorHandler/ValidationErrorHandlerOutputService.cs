@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler
         public IEnumerable<IValidationError> Process()
         {
             IEnumerable<IValidationError> errors = ((ValidationErrorHandler)_validationErrorHandler).ErrorBag;
-            
+
             return errors;
         }
     }

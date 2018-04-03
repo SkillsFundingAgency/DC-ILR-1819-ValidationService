@@ -4,7 +4,8 @@ using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet
 {
-    public class AutoFacRuleSetResolutionService<T> : IRuleSetResolutionService<T> where T : class
+    public class AutoFacRuleSetResolutionService<T> : IRuleSetResolutionService<T>
+        where T : class
     {
         private readonly ILifetimeScope _lifetimeScope;
 
