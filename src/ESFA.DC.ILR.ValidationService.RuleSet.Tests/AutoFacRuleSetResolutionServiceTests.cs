@@ -9,11 +9,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 {
     public class AutoFacRuleSetResolutionServiceTests
     {
-        private IRuleSetResolutionService<string> NewService(ILifetimeScope lifetimeScope)
-        {
-            return new AutoFacRuleSetResolutionService<string>(lifetimeScope);
-        }
-
         [Fact]
         public void Resolve_None()
         {
@@ -61,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
                 var service = NewService(scope);
 
                 var rules = service.Resolve().ToList();
-                    
+
                 rules.Should().AllBeAssignableTo<IRule<string>>();
                 rules[0].Should().BeOfType<RuleOne>();
                 rules[1].Should().BeOfType<RuleTwo>();
@@ -95,6 +90,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             }
 
             ruleOne.Should().NotBeSameAs(ruleTwo);
+        }
+
+        private IRuleSetResolutionService<string> NewService(ILifetimeScope lifetimeScope)
+        {
+            return new AutoFacRuleSetResolutionService<string>(lifetimeScope);
         }
     }
 }

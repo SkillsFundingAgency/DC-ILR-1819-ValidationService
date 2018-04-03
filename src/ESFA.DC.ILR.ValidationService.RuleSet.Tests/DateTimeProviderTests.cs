@@ -13,6 +13,5 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             dateTimeProvider.UtcNow.Should().BeCloseTo(DateTime.UtcNow, 50);
         }
-        
     }
 }

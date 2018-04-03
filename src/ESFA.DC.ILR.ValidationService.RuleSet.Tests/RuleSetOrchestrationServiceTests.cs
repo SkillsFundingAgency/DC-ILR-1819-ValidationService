@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             IReferenceDataCachePopulationService<T> referenceDataCachePopulationService = null,
             IRuleSetExecutionService<T> ruleSetExecutionService = null,
             IValidationOutputService<U> validationOutputService = null)
-            where T : class 
+            where T : class
         {
             return new RuleSetOrchestrationService<T, U>(ruleSetResolutionService, validationItemProviderService, referenceDataCache, referenceDataCachePopulationService, ruleSetExecutionService, validationOutputService);
         }
@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationContextMock = new Mock<IValidationContext>();
 
             var ruleSetResolutionServiceMock = new Mock<IRuleSetResolutionService<string>>();
-            ruleSetResolutionServiceMock.Setup(rs => rs.Resolve()).Returns(new List<IRule<string>>() {new RuleOne(), new RuleTwo()});
+            ruleSetResolutionServiceMock.Setup(rs => rs.Resolve()).Returns(new List<IRule<string>>() { new RuleOne(), new RuleTwo() });
 
             var validationItems = new List<string>();
 
@@ -55,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
         {
             var validationContextMock = new Mock<IValidationContext>();
 
-            var ruleSet = new List<IRule<string>>() {new RuleOne(), new RuleTwo()};
+            var ruleSet = new List<IRule<string>>() { new RuleOne(), new RuleTwo() };
 
             var ruleSetResolutionServiceMock = new Mock<IRuleSetResolutionService<string>>();
             ruleSetResolutionServiceMock.Setup(rs => rs.Resolve()).Returns(ruleSet);

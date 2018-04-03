@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         {
             var validationErrorHandlerMock = new Mock<ValidationErrorHandler>();
 
-            validationErrorHandlerMock.SetupGet(veh => veh.ErrorBag).Returns(new ConcurrentBag<IValidationError>() { new ValidationError(), new ValidationError(), new ValidationError() });
+            validationErrorHandlerMock.SetupGet(veh => veh.ErrorBag).Returns(new ConcurrentBag<IValidationError>() { default(ValidationError), default(ValidationError), default(ValidationError) });
 
             var service = NewService(validationErrorHandlerMock.Object);
 

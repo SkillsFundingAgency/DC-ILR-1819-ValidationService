@@ -9,11 +9,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 {
     public class RuleSetExecutionServiceTests
     {
-        private RuleSetExecutionService<string> NewService()
-        {
-            return new RuleSetExecutionService<string>();
-        }
-
         [Fact]
         public void ExecuteEmptyRules()
         {
@@ -76,6 +71,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             ruleOneMock.Verify();
             ruleTwoMock.Verify();
             ruleThreeMock.Verify();
+        }
+
+        private RuleSetExecutionService<string> NewService()
+        {
+            return new RuleSetExecutionService<string>();
         }
     }
 }
