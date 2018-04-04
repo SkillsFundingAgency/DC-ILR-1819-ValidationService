@@ -39,6 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(AddHours_02Rule),
                 typeof(AddHours_04Rule),
                 typeof(AddHours_05Rule),
+                typeof(AddHours_06Rule),
             };
 
             foreach (var ruleType in ruleTypes)
@@ -46,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(4);
+            rules.Should().HaveCount(5);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
