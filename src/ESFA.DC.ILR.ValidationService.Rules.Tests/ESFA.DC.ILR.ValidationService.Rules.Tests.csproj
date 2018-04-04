@@ -87,10 +87,12 @@
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_02RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_04RuleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
     <Compile Include="Query\LearnerFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
+    <Compile Include="Query\LearningDeliveryQueryServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
