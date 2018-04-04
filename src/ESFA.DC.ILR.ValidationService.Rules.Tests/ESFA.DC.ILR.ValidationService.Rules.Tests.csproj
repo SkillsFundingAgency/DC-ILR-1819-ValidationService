@@ -91,6 +91,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_04RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_05RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06RuleTests.cs" />
+    <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
