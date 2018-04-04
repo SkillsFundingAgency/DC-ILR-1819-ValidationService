@@ -63,6 +63,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_02Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_01Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_04Rule.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_05Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
     <Compile Include="Query\Interface\IDateTimeQueryService.cs" />

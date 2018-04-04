@@ -6,13 +6,13 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
 {
-    public class AddHours_04Rule : AbstractRule, IRule<ILearner>
+    public class AddHours_05Rule : AbstractRule, IRule<ILearner>
     {
-        private const double HoursInDay = 24;
+        private const int DaysPerWeek = 7;
 
         private readonly ILearningDeliveryQueryService _learningDeliveryQueryService;
 
-        public AddHours_04Rule(ILearningDeliveryQueryService learningDeliveryQueryService, IValidationErrorHandler validationErrorHandler)
+        public AddHours_05Rule(ILearningDeliveryQueryService learningDeliveryQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler)
         {
             _learningDeliveryQueryService = learningDeliveryQueryService;
@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
                 {
                     if (ConditionMet(_learningDeliveryQueryService.AverageAddHoursPerLearningDay(learningDelivery)))
                     {
-                        HandleValidationError(RuleNameConstants.AddHours_04, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                        HandleValidationError(RuleNameConstants.AddHours_05, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                     }
                 }
             }
@@ -37,9 +37,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
             return addHours > 60;
         }
 
-        public bool ConditionMet(double? averageHoursPerLearningDay)
+        public bool ConditionMet(double? averageHoursPerDay)
         {
-            return averageHoursPerLearningDay > HoursInDay;
+            return averageHoursPerDay * DaysPerWeek > 35;
         }
     }
 }

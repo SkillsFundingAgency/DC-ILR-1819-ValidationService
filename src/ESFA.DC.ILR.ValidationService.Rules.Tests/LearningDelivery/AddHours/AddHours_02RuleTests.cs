@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 
             rule.Validate(learner);
 
-            validationErrorHandlerMock.VerifyAll();
+            validationErrorHandlerMock.Verify(handle);
         }
 
         [Fact]

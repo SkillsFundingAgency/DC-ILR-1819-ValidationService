@@ -11,8 +11,14 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 {
-    public class AddHours_04RuleTests
+    public class AddHours_05RuleTests
     {
+        [Fact]
+        public void AddHoursConditionMet_True()
+        {
+            NewRule().AddHoursConditionMet(61).Should().BeTrue();
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData(0)]
@@ -23,24 +29,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
         }
 
         [Fact]
-        public void AddHoursConditionMet_True()
-        {
-            NewRule().AddHoursConditionMet(61).Should().BeTrue();
-        }
-
-        [Fact]
         public void ConditionMet_True()
         {
-            NewRule().ConditionMet(25).Should().BeTrue();
+            NewRule().ConditionMet(5.1).Should().BeTrue();
         }
 
         [Theory]
         [InlineData(null)]
-        [InlineData(0.0)]
-        [InlineData(24.0)]
-        public void ConditionMet_False(double? averageHours)
+        [InlineData(5)]
+        [InlineData(1)]
+        public void ConditionMet_False(double? averageHoursPerDay)
         {
-            NewRule().ConditionMet(averageHours).Should().BeFalse();
+            NewRule().ConditionMet(averageHoursPerDay).Should().BeFalse();
         }
 
         [Fact]
@@ -55,17 +55,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
             {
                 LearningDeliveries = new List<TestLearningDelivery>()
                 {
-                   learningDelivery
+                    learningDelivery
                 }
             };
 
             var learningDeliveryQueryServiceMock = new Mock<ILearningDeliveryQueryService>();
 
-            learningDeliveryQueryServiceMock.Setup(qs => qs.AverageAddHoursPerLearningDay(learningDelivery)).Returns(25);
+            learningDeliveryQueryServiceMock.Setup(qs => qs.AverageAddHoursPerLearningDay(learningDelivery)).Returns(6);
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("AddHours_04", null, 0, null);
+            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("AddHours_05", null, 0, null);
 
             validationErrorHandlerMock.Setup(handle);
 
@@ -91,9 +91,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
             NewRule().Validate(learner);
         }
 
-        private AddHours_04Rule NewRule(ILearningDeliveryQueryService learningDeliveryQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        private AddHours_05Rule NewRule(ILearningDeliveryQueryService learningDeliveryQueryService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new AddHours_04Rule(learningDeliveryQueryService, validationErrorHandler);
+            return new AddHours_05Rule(learningDeliveryQueryService, validationErrorHandler);
         }
     }
 }
