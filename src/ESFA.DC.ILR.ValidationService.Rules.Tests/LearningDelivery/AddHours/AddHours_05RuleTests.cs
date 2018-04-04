@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 {
-    public class AddHours_05RuleTests
+    public class AddHours_05RuleTests : AbstractRuleTests
     {
         [Fact]
         public void AddHoursConditionMet_True()
@@ -63,15 +62,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 
             learningDeliveryQueryServiceMock.Setup(qs => qs.AverageAddHoursPerLearningDay(learningDelivery)).Returns(6);
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("AddHours_05", null, 0, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            NewRule(learningDeliveryQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AddHours_05"))
+            {
+                NewRule(learningDeliveryQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
@@ -88,7 +82,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
                 }
             };
 
-            NewRule().Validate(learner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         private AddHours_05Rule NewRule(ILearningDeliveryQueryService learningDeliveryQueryService = null, IValidationErrorHandler validationErrorHandler = null)

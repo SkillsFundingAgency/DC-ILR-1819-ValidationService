@@ -1,15 +1,13 @@
-﻿using System;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
-using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 {
-    public class AddHours_02RuleTests
+    public class AddHours_02RuleTests : AbstractRuleTests
     {
         [Theory]
         [InlineData(25)]
@@ -44,17 +42,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
                 }
             };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("AddHours_02", null, 0, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            var rule = NewRule(validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AddHours_02"))
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
@@ -71,7 +62,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
                 }
             };
 
-            NewRule().Validate(learner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         private AddHours_02Rule NewRule(IValidationErrorHandler validationErrorHandler = null)

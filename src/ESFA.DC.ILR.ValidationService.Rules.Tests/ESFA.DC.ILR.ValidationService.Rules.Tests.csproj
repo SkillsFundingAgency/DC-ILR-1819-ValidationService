@@ -80,6 +80,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="Derived\DD01Tests.cs" />
     <Compile Include="Derived\DD04Tests.cs" />
     <Compile Include="Derived\DD06Tests.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_01RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_04RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_05RuleTests.cs" />
+    <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
     <Compile Include="Query\LearnerFAMQueryServiceTests.cs" />
