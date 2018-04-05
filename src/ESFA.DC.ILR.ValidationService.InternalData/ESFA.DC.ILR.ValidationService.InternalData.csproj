@@ -44,9 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcademicYearCalendarService\AcademicYearCalendarService.cs" />
+    <Compile Include="AimType\AimTypeInternalDataService.cs" />
+    <Compile Include="AimType\Interfaces\IAimTypeInternalDataService.cs" />
     <Compile Include="ContPrefType\ContactPreferenceInternalDataService.cs" />
     <Compile Include="ContPrefType\IContactPreferenceInternalDataService.cs" />
     <Compile Include="ContPrefType\Models\ContactPreferenceInternalData.cs" />
+    <Compile Include="Interface\IInternalDataCache.cs" />
+    <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
     <Compile Include="LearnFAMTypeCode\LearnFAMTypeCodeInternalDataService.cs" />
     <Compile Include="LearnFAMTypeCode\ILearnFAMTypeCodeInternalDataService.cs" />
     <Compile Include="LearnFAMTypeCode\Models\LearnFAMTypeCodeInternalData.cs" />
