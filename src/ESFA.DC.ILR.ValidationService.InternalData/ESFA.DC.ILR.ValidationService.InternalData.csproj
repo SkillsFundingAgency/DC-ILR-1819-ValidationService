@@ -51,11 +51,13 @@
     <Compile Include="ContPrefType\Models\ContactPreferenceInternalData.cs" />
     <Compile Include="Interface\IInternalDataCache.cs" />
     <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
+    <Compile Include="InternalDataCache.cs" />
     <Compile Include="LearnFAMTypeCode\LearnFAMTypeCodeInternalDataService.cs" />
     <Compile Include="LearnFAMTypeCode\ILearnFAMTypeCodeInternalDataService.cs" />
     <Compile Include="LearnFAMTypeCode\Models\LearnFAMTypeCodeInternalData.cs" />
     <Compile Include="LLDDCat\ILlddCatInternalDataService.cs" />
     <Compile Include="LLDDCat\LlddCatInternalDataService.cs" />
+    <Compile Include="InternalDataCachePopulationService.cs" />
     <Compile Include="PriorAttain\IPriorAttainInternalDataService.cs" />
     <Compile Include="PriorAttain\PriorAttainInternalDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

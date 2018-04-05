@@ -6,7 +6,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 {
     public class ReferenceDataCachePopulationServiceStub : IReferenceDataCachePopulationService<ILearner>
     {
-        public void Populate(IReferenceDataCache referenceDataCache, IEnumerable<ILearner> validationItems)
+        public void Populate(IEnumerable<ILearner> validationItems)
         {
         }
     }

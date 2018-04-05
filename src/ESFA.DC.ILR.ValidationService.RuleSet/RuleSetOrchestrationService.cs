@@ -2,6 +2,7 @@
 using System.Linq;
 using ESFA.DC.ILR.ValidationService.ExternalData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.InternalData.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet
 {
@@ -11,16 +12,22 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
         private readonly IRuleSetResolutionService<T> _ruleSetResolutionService;
         private readonly IRuleSetExecutionService<T> _ruleSetExecutionService;
         private readonly IValidationItemProviderService<T> _validationItemProviderService;
-        private readonly IReferenceDataCache _referenceDataCache;
         private readonly IReferenceDataCachePopulationService<T> _referenceDataCachePopulationService;
+        private readonly IInternalDataCachePopulationService _internalDataCachPopulationService;
         private readonly IValidationOutputService<U> _validationOutputService;
 
-        public RuleSetOrchestrationService(IRuleSetResolutionService<T> ruleSetResolutionService, IValidationItemProviderService<T> validationItemProviderService, IReferenceDataCache referenceDataCache, IReferenceDataCachePopulationService<T> referenceDataCachePopulationService, IRuleSetExecutionService<T> ruleSetExecutionService, IValidationOutputService<U> validationOutputService)
+        public RuleSetOrchestrationService(
+            IRuleSetResolutionService<T> ruleSetResolutionService,
+            IValidationItemProviderService<T> validationItemProviderService,
+            IReferenceDataCachePopulationService<T> referenceDataCachePopulationService,
+            IInternalDataCachePopulationService internalDataCachePopulationService,
+            IRuleSetExecutionService<T> ruleSetExecutionService,
+            IValidationOutputService<U> validationOutputService)
         {
             _ruleSetResolutionService = ruleSetResolutionService;
             _validationItemProviderService = validationItemProviderService;
-            _referenceDataCache = referenceDataCache;
             _referenceDataCachePopulationService = referenceDataCachePopulationService;
+            _internalDataCachPopulationService = internalDataCachePopulationService;
             _ruleSetExecutionService = ruleSetExecutionService;
             _validationOutputService = validationOutputService;
         }
@@ -31,7 +38,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
 
             var validationItems = _validationItemProviderService.Provide(validationContext).ToList();
 
-            _referenceDataCachePopulationService.Populate(_referenceDataCache, validationItems);
+            _referenceDataCachePopulationService.Populate(validationItems);
+            _internalDataCachPopulationService.Populate();
 
             foreach (var validationItem in validationItems)
             {

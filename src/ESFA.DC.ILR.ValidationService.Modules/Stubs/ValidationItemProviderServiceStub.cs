@@ -11,15 +11,11 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
         {
             var learnerList = new List<ILearner>();
 
-
             for (var i = 0; i < 20000; i++)
             {
                 learnerList.Add(new TestLearner()
                 {
                     LearningDeliveries = new List<TestLearningDelivery>()
-                    //AccomNullable = i,
-                    //ULNNullable = i,
-                    //ALSCostNullable = i
                 });
             }
 

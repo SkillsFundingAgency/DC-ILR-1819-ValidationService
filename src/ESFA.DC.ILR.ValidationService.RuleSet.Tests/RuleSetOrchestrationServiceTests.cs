@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.ExternalData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.InternalData.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet.Tests.Rules;
 using FluentAssertions;
 using Moq;
@@ -10,18 +11,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 {
     public class RuleSetOrchestrationServiceTests
     {
-        public RuleSetOrchestrationService<T, U> NewService<T, U>(
-            IRuleSetResolutionService<T> ruleSetResolutionService = null,
-            IValidationItemProviderService<T> validationItemProviderService = null,
-            IReferenceDataCache referenceDataCache = null,
-            IReferenceDataCachePopulationService<T> referenceDataCachePopulationService = null,
-            IRuleSetExecutionService<T> ruleSetExecutionService = null,
-            IValidationOutputService<U> validationOutputService = null)
-            where T : class
-        {
-            return new RuleSetOrchestrationService<T, U>(ruleSetResolutionService, validationItemProviderService, referenceDataCache, referenceDataCachePopulationService, ruleSetExecutionService, validationOutputService);
-        }
-
         [Fact]
         public void Execute_NoValidationItems()
         {
@@ -35,17 +24,18 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<string>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide(validationContextMock.Object)).Returns(validationItems);
 
-            var referenceDataCacheMock = new Mock<IReferenceDataCache>();
-
             var referenceDataCachePopulationServiceMock = new Mock<IReferenceDataCachePopulationService<string>>();
-            referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate(referenceDataCacheMock.Object, validationItems));
+            referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate(validationItems));
+
+            var internalDataCachePopulationServiceMock = new Mock<IInternalDataCachePopulationService>();
+            internalDataCachePopulationServiceMock.Setup(ps => ps.Populate());
 
             var output = new List<int>() { 1, 2, 3 };
 
             var validationOutputService = new Mock<IValidationOutputService<int>>();
             validationOutputService.Setup(os => os.Process()).Returns(output);
 
-            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, referenceDataCacheMock.Object, referenceDataCachePopulationServiceMock.Object, validationOutputService: validationOutputService.Object);
+            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, referenceDataCachePopulationServiceMock.Object, internalDataCachePopulationServiceMock.Object, validationOutputService: validationOutputService.Object);
 
             service.Execute(validationContextMock.Object).Should().BeSameAs(output);
         }
@@ -67,10 +57,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<string>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide(validationContextMock.Object)).Returns(validationItems);
 
-            var referenceDataCacheMock = new Mock<IReferenceDataCache>();
-
             var referenceDataCachePopulationServiceMock = new Mock<IReferenceDataCachePopulationService<string>>();
-            referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate(referenceDataCacheMock.Object, validationItems));
+            referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate(validationItems));
+
+            var internalDataCachePopulationServiceMock = new Mock<IInternalDataCachePopulationService>();
+            internalDataCachePopulationServiceMock.Setup(ps => ps.Populate());
 
             var ruleSetExecutionServiceMock = new Mock<IRuleSetExecutionService<string>>();
             ruleSetExecutionServiceMock.Setup(es => es.Execute(ruleSet, one)).Verifiable();
@@ -81,11 +72,29 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationOutputService = new Mock<IValidationOutputService<int>>();
             validationOutputService.Setup(os => os.Process()).Returns(output);
 
-            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, referenceDataCacheMock.Object, referenceDataCachePopulationServiceMock.Object, ruleSetExecutionServiceMock.Object, validationOutputService.Object);
+            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, referenceDataCachePopulationServiceMock.Object, internalDataCachePopulationServiceMock.Object, ruleSetExecutionServiceMock.Object, validationOutputService.Object);
 
             service.Execute(validationContextMock.Object).Should().BeSameAs(output);
 
             ruleSetExecutionServiceMock.Verify();
+        }
+
+        public RuleSetOrchestrationService<T, U> NewService<T, U>(
+            IRuleSetResolutionService<T> ruleSetResolutionService = null,
+            IValidationItemProviderService<T> validationItemProviderService = null,
+            IReferenceDataCachePopulationService<T> referenceDataCachePopulationService = null,
+            IInternalDataCachePopulationService internalDataCachePopulationService = null,
+            IRuleSetExecutionService<T> ruleSetExecutionService = null,
+            IValidationOutputService<U> validationOutputService = null)
+            where T : class
+        {
+            return new RuleSetOrchestrationService<T, U>(
+                ruleSetResolutionService,
+                validationItemProviderService,
+                referenceDataCachePopulationService,
+                internalDataCachePopulationService,
+                ruleSetExecutionService,
+                validationOutputService);
         }
     }
 }

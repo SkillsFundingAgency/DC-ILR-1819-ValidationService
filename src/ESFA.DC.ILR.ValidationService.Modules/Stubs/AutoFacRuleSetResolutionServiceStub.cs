@@ -5,7 +5,8 @@ using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 {
-    public class AutoFacRuleSetResolutionServiceStub<T> : IRuleSetResolutionService<T> where T : class
+    public class AutoFacRuleSetResolutionServiceStub<T> : IRuleSetResolutionService<T>
+        where T : class
     {
         private readonly ILifetimeScope _lifetimeScope;
 
@@ -20,12 +21,6 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 
             var rules = containerRules.ToList();
 
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
             rules.AddRange(rules);
             rules.AddRange(rules);
             rules.AddRange(rules);

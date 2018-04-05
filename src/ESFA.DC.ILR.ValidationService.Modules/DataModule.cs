@@ -8,8 +8,12 @@ using ESFA.DC.ILR.ValidationService.ExternalData.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.ExternalData.ULN;
 using ESFA.DC.ILR.ValidationService.ExternalData.ULN.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.InternalData;
 using ESFA.DC.ILR.ValidationService.InternalData.AcademicYearCalendarService;
+using ESFA.DC.ILR.ValidationService.InternalData.AimType;
+using ESFA.DC.ILR.ValidationService.InternalData.AimType.Interfaces;
 using ESFA.DC.ILR.ValidationService.InternalData.ContPrefType;
+using ESFA.DC.ILR.ValidationService.InternalData.Interface;
 using ESFA.DC.ILR.ValidationService.InternalData.LearnFAMTypeCode;
 using ESFA.DC.ILR.ValidationService.InternalData.LLDDCat;
 using ESFA.DC.ILR.ValidationService.InternalData.PriorAttain;
@@ -23,20 +27,19 @@ namespace ESFA.DC.ILR.ValidationService.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ReferenceDataCacheStub>().As<IReferenceDataCache>();
-            builder.RegisterType<ReferenceDataCachePopulationServiceStub>().As<IReferenceDataCachePopulationService<ILearner>>();
-            builder.RegisterType<FileDataService>().As<IFileDataService>();
-            builder.RegisterType<OrganisationReferenceDataService>().As<IOrganisationReferenceDataService>();
-            builder.RegisterType<ULNReferenceDataService>().As<IULNReferenceDataService>();
+            builder.RegisterType<ReferenceDataCacheStub>().As<IReferenceDataCache>().InstancePerLifetimeScope();
+            builder.RegisterType<ReferenceDataCachePopulationServiceStub>().As<IReferenceDataCachePopulationService<ILearner>>().InstancePerLifetimeScope();
+            builder.RegisterType<FileDataService>().As<IFileDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<OrganisationReferenceDataService>().As<IOrganisationReferenceDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<ULNReferenceDataService>().As<IULNReferenceDataService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<ContactPreferenceInternalDataService>().As<IContactPreferenceInternalDataService>();
-            builder.RegisterType<LearnFAMTypeCodeInternalDataService>().As<ILearnFAMTypeCodeInternalDataService>();
-            builder.RegisterType<LlddCatInternalDataService>().As<ILlddCatInternalDataService>();
-            builder.RegisterType<PriorAttainInternalDataService>().As<IPriorAttainInternalDataService>();
+            builder.RegisterType<InternalDataCache>().As<IInternalDataCache>().InstancePerLifetimeScope();
+            builder.RegisterType<InternalDataCachePopulationService>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<AimTypeInternalDataService>().As<IAimTypeInternalDataService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<ValidationDataService>().As<IValidationDataService>();
-            builder.RegisterType<AcademicYearCalendarService>().As<IAcademicYearCalendarService>();
-            builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>();
+            builder.RegisterType<ValidationDataService>().As<IValidationDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<AcademicYearCalendarService>().As<IAcademicYearCalendarService>().InstancePerLifetimeScope();
+            builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>().InstancePerLifetimeScope();
         }
     }
 }

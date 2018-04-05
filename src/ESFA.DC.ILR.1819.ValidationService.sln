@@ -30,6 +30,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests", "ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests\ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests.csproj", "{42079B65-872C-413C-8868-FBEDF1065180}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
