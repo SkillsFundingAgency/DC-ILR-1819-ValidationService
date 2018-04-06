@@ -88,6 +88,10 @@
       <Project>{991f0564-9702-4b47-8b5f-7c5794563f05}</Project>
       <Name>ESFA.DC.ILR.ValidationService.ExternalData</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.FileData\ESFA.DC.ILR.ValidationService.FileData.csproj">
+      <Project>{296CD683-36B7-4ED1-9332-1518A079E134}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.FileData</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513c4f05-55f4-4aef-b3eb-427c024da043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>

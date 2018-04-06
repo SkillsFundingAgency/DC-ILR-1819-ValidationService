@@ -6,11 +6,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{754EEC2F-826D-46CC-80C0-A0A006CA7CE9}</ProjectGuid>
+    <ProjectGuid>{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ESFA.DC.ILR.ValidationService.Rules.Tests</RootNamespace>
-    <AssemblyName>ESFA.DC.ILR.ValidationService.Rules.Tests</AssemblyName>
+    <RootNamespace>ESFA.DC.ILR.ValidationService.FileData.Tests</RootNamespace>
+    <AssemblyName>ESFA.DC.ILR.ValidationService.FileData.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -24,7 +24,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Rules.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,12 +32,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Rules.Tests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
     <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
@@ -48,15 +43,8 @@
     <Reference Include="FluentAssertions, Version=5.2.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.5.2.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.8.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.8.2\lib\net45\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -80,65 +68,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\AbstractRuleTests.cs" />
-    <Compile Include="Derived\DD01Tests.cs" />
-    <Compile Include="Derived\DD04Tests.cs" />
-    <Compile Include="Derived\DD06Tests.cs" />
-    <Compile Include="Derived\DD07Tests.cs" />
-    <Compile Include="Extensions\LongExtensionTests.cs" />
-    <Compile Include="Learner\ULN\ULN_03RuleTests.cs" />
-    <Compile Include="LearningDelivery\AddHours\AddHours_02RuleTests.cs" />
-    <Compile Include="LearningDelivery\AddHours\AddHours_01RuleTests.cs" />
-    <Compile Include="LearningDelivery\AddHours\AddHours_04RuleTests.cs" />
-    <Compile Include="LearningDelivery\AddHours\AddHours_05RuleTests.cs" />
-    <Compile Include="LearningDelivery\AddHours\AddHours_06RuleTests.cs" />
-    <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02RuleTests.cs" />
-    <Compile Include="LearningDelivery\AimType\AimType_01RuleTests.cs" />
-    <Compile Include="LearningDelivery\AimType\AimType_05RuleTests.cs" />
-    <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
+    <Compile Include="FileDataCachePopulationServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\DateTimeQueryServiceTests.cs" />
-    <Compile Include="Query\LearnerFAMQueryServiceTests.cs" />
-    <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
-    <Compile Include="Query\LearningDeliveryQueryServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="ESFA.DC.ILR.ValidationService.Rules.Tests.ruleset">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ExternalData\ESFA.DC.ILR.ValidationService.ExternalData.csproj">
-      <Project>{991F0564-9702-4B47-8B5F-7C5794563F05}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.ExternalData</Name>
-    </ProjectReference>
+    <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.FileData\ESFA.DC.ILR.ValidationService.FileData.csproj">
       <Project>{296CD683-36B7-4ED1-9332-1518A079E134}</Project>
       <Name>ESFA.DC.ILR.ValidationService.FileData</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
-      <Project>{513C4F05-55F4-4AEF-B3EB-427C024DA043}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.InternalData\ESFA.DC.ILR.ValidationService.InternalData.csproj">
-      <Project>{de0f3c7c-9269-4b98-9ce0-9b91f1886c47}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.InternalData</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Rules\ESFA.DC.ILR.ValidationService.Rules.csproj">
-      <Project>{621B61D1-339D-4910-8C86-8A64AF8822F5}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.Rules</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -43,8 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileDataService\FileDataService.cs" />
-    <Compile Include="FileDataService\Interface\IFileDataService.cs" />
     <Compile Include="Interface\IReferenceDataCache.cs" />
     <Compile Include="Interface\IReferenceDataCachePopulationService.cs" />
     <Compile Include="LARS\Model\AnnualValue.cs" />

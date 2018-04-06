@@ -29,6 +29,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests", "ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests\ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests.csproj", "{42079B65-872C-413C-8868-FBEDF1065180}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.FileData", "ESFA.DC.ILR.ValidationService.FileData\ESFA.DC.ILR.ValidationService.FileData.csproj", "{296CD683-36B7-4ED1-9332-1518A079E134}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.FileData.Tests", "ESFA.DC.ILR.ValidationService.FileData.Tests\ESFA.DC.ILR.ValidationService.FileData.Tests.csproj", "{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -90,12 +94,23 @@ Global
 		{42079B65-872C-413C-8868-FBEDF1065180}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42079B65-872C-413C-8868-FBEDF1065180}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42079B65-872C-413C-8868-FBEDF1065180}.Release|Any CPU.Build.0 = Release|Any CPU
+		{296CD683-36B7-4ED1-9332-1518A079E134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{296CD683-36B7-4ED1-9332-1518A079E134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{296CD683-36B7-4ED1-9332-1518A079E134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{296CD683-36B7-4ED1-9332-1518A079E134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E07A096E-09B9-4C13-AEBD-1B9654765419}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

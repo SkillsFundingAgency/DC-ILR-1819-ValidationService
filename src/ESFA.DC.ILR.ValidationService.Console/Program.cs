@@ -11,8 +11,6 @@ namespace ESFA.DC.ILR.ValidationService.Console
         static void Main(string[] args)
         {
             RunValidation();
-
-            System.Console.ReadLine();
         }
 
         private static void RunValidation()

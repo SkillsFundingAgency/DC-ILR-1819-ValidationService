@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.ExternalData.FileDataService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.File.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -43,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
 
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, "ACT", "1")).Returns(false);
 
-            NewRule(learningDeliveryFAMQueryService : learningDeliveryFAMQueryServiceMock.Object).Exclude(learningDelivery).Should().BeFalse();
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).Exclude(learningDelivery).Should().BeFalse();
         }
 
         [Theory]
@@ -79,7 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [Fact]
         public void Validate_NoErrors()
         {
-            var fileDataServiceMock = new Mock<IFileDataService>();
+            var fileDataServiceMock = new Mock<IFileDataCache>();
             var validationDataServiceMock = new Mock<IValidationDataService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -124,7 +123,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
                 }
             };
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
+            var fileDataServiceMock = new Mock<IFileDataCache>();
             var validationDataServiceMock = new Mock<IValidationDataService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -138,9 +137,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             }
         }
 
-        private ULN_03Rule NewRule(IFileDataService fileDataService = null, IValidationDataService validationDataService = null, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        private ULN_03Rule NewRule(IFileDataCache fileDataCache = null, IValidationDataService validationDataService = null, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new ULN_03Rule(fileDataService, validationDataService, learningDeliveryFAMQueryService, validationErrorHandler);
+            return new ULN_03Rule(fileDataCache, validationDataService, learningDeliveryFAMQueryService, validationErrorHandler);
         }
     }
 }

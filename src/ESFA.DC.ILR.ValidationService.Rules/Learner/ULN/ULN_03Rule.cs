@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.FileDataService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.File.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using IFileDataService = ESFA.DC.ILR.ValidationService.Rules.File.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 {
     public class ULN_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IFileDataService _fileDataService;
+        private readonly IFileDataCache _fileDataCache;
         private readonly IValidationDataService _validationDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
@@ -27,10 +28,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
                 FundModelConstants.ESF,
             };
 
-        public ULN_03Rule(IFileDataService fileDataService, IValidationDataService validationDataService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+        public ULN_03Rule(IFileDataCache fileDataCache, IValidationDataService validationDataService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler)
         {
-            _fileDataService = fileDataService;
+            _fileDataCache = fileDataCache;
             _validationDataService = validationDataService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
@@ -39,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
         {
             foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld => !Exclude(ld)))
             {
-                if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataService.FilePreparationDate, _validationDataService.AcademicYearJanuaryFirst))
+                if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataCache.FilePreparationDate, _validationDataService.AcademicYearJanuaryFirst))
                 {
                     HandleValidationError(RuleNameConstants.ULN_03, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }

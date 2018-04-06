@@ -3,14 +3,15 @@ using ESFA.DC.ILR.Tests.Model;
 using FluentAssertions;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.ExternalData.Tests.FileDataService
+namespace ESFA.DC.ILR.ValidationService.FileData.Tests
 {
-    public class FileDataServiceTests
+    public class FileDataCachePopulationServiceTests
     {
         [Fact]
         public void Populate_FilePreparationDate()
         {
-            var fileData = new ExternalData.FileDataService.FileDataService();
+            var fileDataCache = new FileDataCache();
+            var fileDataCachePopulationService = new FileDataCachePopulationService(fileDataCache);
 
             var filePreparationDate = new DateTime(2018, 1, 5);
 
@@ -25,9 +26,9 @@ namespace ESFA.DC.ILR.ValidationService.ExternalData.Tests.FileDataService
                 }
             };
 
-            fileData.Populate(message);
+            fileDataCachePopulationService.Populate(message);
 
-            fileData.FilePreparationDate.Should().Be(filePreparationDate);
+            fileDataCache.FilePreparationDate.Should().Be(filePreparationDate);
         }
     }
 }
