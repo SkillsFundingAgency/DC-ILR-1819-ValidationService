@@ -12,5 +12,7 @@
 
         public const string AimType_01 = "AimType_01";
         public const string AimType_05 = "AimType_05";
+
+        public const string ULN_03 = "ULN_03";
     }
 }

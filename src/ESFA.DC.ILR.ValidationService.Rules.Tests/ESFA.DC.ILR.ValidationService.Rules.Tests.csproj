@@ -86,6 +86,7 @@
     <Compile Include="Derived\DD06Tests.cs" />
     <Compile Include="Derived\DD07Tests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
+    <Compile Include="Learner\ULN\ULN_03RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_02RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_01RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_04RuleTests.cs" />
