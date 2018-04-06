@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<ULNReferenceDataService>().As<IULNReferenceDataService>().InstancePerLifetimeScope();
 
             builder.RegisterType<InternalDataCache>().As<IInternalDataCache>().InstancePerLifetimeScope();
-            builder.RegisterType<InternalDataCachePopulationService>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<InternalDataCachePopulationServiceStub>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
             builder.RegisterType<AimTypeInternalDataService>().As<IAimTypeInternalDataService>().InstancePerLifetimeScope();
 
             builder.RegisterType<ValidationDataService>().As<IValidationDataService>().InstancePerLifetimeScope();
