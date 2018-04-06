@@ -6,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
@@ -27,6 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
                 typeof(AimType_07Rule),
+                typeof(CompStatus_01Rule),
                 typeof(ULN_03Rule),
             };
         }

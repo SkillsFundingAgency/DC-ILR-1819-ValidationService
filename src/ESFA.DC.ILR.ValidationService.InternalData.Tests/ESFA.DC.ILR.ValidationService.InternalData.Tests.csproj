@@ -77,7 +77,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcademicYearCalendarService\AcademicYearCalendarServiceTests.cs" />
-    <Compile Include="AimType\AimTypeInternalDataServiceTests.cs" />
+    <Compile Include="CompStatusInternalDataServiceTests.cs" />
+    <Compile Include="AimTypeInternalDataServiceTests.cs" />
     <Compile Include="ContPrefTypeCode\ContactPreferenceInternalDataServiceTests.cs" />
     <Compile Include="LearnFAMTypeCode\LearnFAMTypeCodeInternalDataServiceTests.cs" />
     <Compile Include="LLDDCat\LlddCatInternalDataServiceTests.cs" />

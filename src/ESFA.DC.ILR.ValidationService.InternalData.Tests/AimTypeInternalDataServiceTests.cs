@@ -5,7 +5,7 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.AimType
+namespace ESFA.DC.ILR.ValidationService.InternalData.Tests
 {
     public class AimTypeInternalDataServiceTests
     {

@@ -11,7 +11,9 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.InternalData;
 using ESFA.DC.ILR.ValidationService.InternalData.AcademicYearCalendarService;
 using ESFA.DC.ILR.ValidationService.InternalData.AimType;
-using ESFA.DC.ILR.ValidationService.InternalData.AimType.Interfaces;
+using ESFA.DC.ILR.ValidationService.InternalData.AimType.Interface;
+using ESFA.DC.ILR.ValidationService.InternalData.CompStatus;
+using ESFA.DC.ILR.ValidationService.InternalData.CompStatus.Interface;
 using ESFA.DC.ILR.ValidationService.InternalData.Interface;
 using ESFA.DC.ILR.ValidationService.InternalData.ValidationDataService;
 using ESFA.DC.ILR.ValidationService.Modules.Stubs;
@@ -32,6 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<InternalDataCache>().As<IInternalDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<InternalDataCachePopulationServiceStub>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
             builder.RegisterType<AimTypeInternalDataService>().As<IAimTypeInternalDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<CompStatusInternalDataService>().As<ICompStatusInternalDataService>().InstancePerLifetimeScope();
 
             builder.RegisterType<FileDataCache>().As<IFileDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<FileDataCachePopulationService>().As<IFileDataCachePopulationService>().InstancePerLifetimeScope();

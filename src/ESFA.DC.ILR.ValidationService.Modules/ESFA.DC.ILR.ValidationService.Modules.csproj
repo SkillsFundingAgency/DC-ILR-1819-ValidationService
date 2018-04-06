@@ -67,7 +67,6 @@
     <Compile Include="DataModule.cs" />
     <Compile Include="Stubs\FileSystemValidationItemProviderService.cs" />
     <Compile Include="Stubs\InternalDataCachePopulationServiceStub.cs" />
-    <Compile Include="Stubs\InternalDataCacheStub.cs" />
     <Compile Include="ValidationOrchestrationModule.cs" />
     <Compile Include="ValidationServiceConsoleModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,5 +6,7 @@ namespace ESFA.DC.ILR.ValidationService.InternalData
     public class InternalDataCache : IInternalDataCache
     {
         public IReadOnlyCollection<int> AimTypes { get; set; }
+
+        public IReadOnlyCollection<int> CompStatuses { get; set; }
     }
 }
