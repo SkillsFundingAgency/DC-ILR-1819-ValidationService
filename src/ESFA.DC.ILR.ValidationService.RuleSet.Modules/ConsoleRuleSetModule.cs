@@ -26,6 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
+                typeof(AimType_07Rule),
                 typeof(ULN_03Rule),
             };
         }
