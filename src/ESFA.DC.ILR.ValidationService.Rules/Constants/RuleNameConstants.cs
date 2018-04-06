@@ -11,5 +11,6 @@
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
 
         public const string AimType_01 = "AimType_01";
+        public const string AimType_05 = "AimType_05";
     }
 }

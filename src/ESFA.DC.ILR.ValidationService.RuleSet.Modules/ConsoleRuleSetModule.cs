@@ -24,6 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_06Rule),
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
+                typeof(AimType_05Rule),
             };
         }
     }
