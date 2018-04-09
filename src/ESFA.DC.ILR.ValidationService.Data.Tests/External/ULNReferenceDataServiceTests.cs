@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void Exists_True()
         {
-            var referenceDataCacheMock = new Mock<IReferenceDataCache>();
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
 
             referenceDataCacheMock.SetupGet(rdc => rdc.ULNs).Returns(new HashSet<long>() { 1, 2, 3 });
 
@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void Exists_False()
         {
-            var referenceDataCacheMock = new Mock<IReferenceDataCache>();
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
 
             referenceDataCacheMock.SetupGet(rdc => rdc.ULNs).Returns(new HashSet<long>() { 1, 2, 3 });
 

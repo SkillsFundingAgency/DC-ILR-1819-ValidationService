@@ -12,14 +12,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
         private readonly IRuleSetResolutionService<T> _ruleSetResolutionService;
         private readonly IRuleSetExecutionService<T> _ruleSetExecutionService;
         private readonly IValidationItemProviderService<IEnumerable<T>> _validationItemProviderService;
-        private readonly IReferenceDataCachePopulationService<T> _referenceDataCachePopulationService;
+        private readonly IExternalDataCachePopulationService<T> _referenceDataCachePopulationService;
         private readonly IInternalDataCachePopulationService _internalDataCachPopulationService;
         private readonly IValidationOutputService<U> _validationOutputService;
 
         public RuleSetOrchestrationService(
             IRuleSetResolutionService<T> ruleSetResolutionService,
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService,
-            IReferenceDataCachePopulationService<T> referenceDataCachePopulationService,
+            IExternalDataCachePopulationService<T> referenceDataCachePopulationService,
             IInternalDataCachePopulationService internalDataCachePopulationService,
             IRuleSetExecutionService<T> ruleSetExecutionService,
             IValidationOutputService<U> validationOutputService)

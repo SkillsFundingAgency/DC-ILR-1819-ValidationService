@@ -4,7 +4,7 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 {
-    public class ReferenceDataCacheStub : IReferenceDataCache
+    public class ReferenceDataCacheStub : IExternalDataCache
     {
         public ReferenceDataCacheStub()
         {

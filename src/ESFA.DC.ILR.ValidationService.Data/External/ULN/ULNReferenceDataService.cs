@@ -6,9 +6,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.ULN
 {
     public class ULNReferenceDataService : IULNReferenceDataService
     {
-        private readonly IReferenceDataCache _referenceDataCache;
+        private readonly IExternalDataCache _referenceDataCache;
 
-        public ULNReferenceDataService(IReferenceDataCache referenceDataCache)
+        public ULNReferenceDataService(IExternalDataCache referenceDataCache)
         {
             _referenceDataCache = referenceDataCache;
         }

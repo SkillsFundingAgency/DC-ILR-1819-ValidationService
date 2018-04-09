@@ -3,7 +3,7 @@ using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Interface
 {
-    public interface IReferenceDataCache
+    public interface IExternalDataCache
     {
         IReadOnlyCollection<long> ULNs { get; }
 

@@ -27,8 +27,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ReferenceDataCacheStub>().As<IReferenceDataCache>().InstancePerLifetimeScope();
-            builder.RegisterType<ReferenceDataCachePopulationServiceStub>().As<IReferenceDataCachePopulationService<ILearner>>().InstancePerLifetimeScope();
+            builder.RegisterType<ReferenceDataCacheStub>().As<IExternalDataCache>().InstancePerLifetimeScope();
+            builder.RegisterType<ReferenceDataCachePopulationServiceStub>().As<IExternalDataCachePopulationService<ILearner>>().InstancePerLifetimeScope();
             builder.RegisterType<OrganisationReferenceDataService>().As<IOrganisationReferenceDataService>().InstancePerLifetimeScope();
             builder.RegisterType<ULNReferenceDataService>().As<IULNReferenceDataService>().InstancePerLifetimeScope();
 

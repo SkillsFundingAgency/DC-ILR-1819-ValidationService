@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide(validationContextMock.Object)).Returns(validationItems);
 
-            var referenceDataCachePopulationServiceMock = new Mock<IReferenceDataCachePopulationService<string>>();
+            var referenceDataCachePopulationServiceMock = new Mock<IExternalDataCachePopulationService<string>>();
             referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate(validationItems));
 
             var internalDataCachePopulationServiceMock = new Mock<IInternalDataCachePopulationService>();
@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide(validationContextMock.Object)).Returns(validationItems);
 
-            var referenceDataCachePopulationServiceMock = new Mock<IReferenceDataCachePopulationService<string>>();
+            var referenceDataCachePopulationServiceMock = new Mock<IExternalDataCachePopulationService<string>>();
             referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate(validationItems));
 
             var internalDataCachePopulationServiceMock = new Mock<IInternalDataCachePopulationService>();
@@ -82,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
         public RuleSetOrchestrationService<T, U> NewService<T, U>(
             IRuleSetResolutionService<T> ruleSetResolutionService = null,
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService = null,
-            IReferenceDataCachePopulationService<T> referenceDataCachePopulationService = null,
+            IExternalDataCachePopulationService<T> referenceDataCachePopulationService = null,
             IInternalDataCachePopulationService internalDataCachePopulationService = null,
             IRuleSetExecutionService<T> ruleSetExecutionService = null,
             IValidationOutputService<U> validationOutputService = null)

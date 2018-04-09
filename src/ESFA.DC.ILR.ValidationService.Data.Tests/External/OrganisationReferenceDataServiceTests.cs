@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [InlineData(5)]
         public void UkprnExists_True(long ukprn)
         {
-            var referenceDataCacheMock = new Mock<IReferenceDataCache>();
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
 
             referenceDataCacheMock.SetupGet(rdc => rdc.UKPRNs).Returns(new HashSet<long>() { 1, 2, 3, 4, 5, 6, 7 });
 
@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [InlineData(8)]
         public void UkprnExists_False(long ukprn)
         {
-            var referenceDataCacheMock = new Mock<IReferenceDataCache>();
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
 
             referenceDataCacheMock.SetupGet(rdc => rdc.UKPRNs).Returns(new HashSet<long>() { 1, 2, 3, 4, 5, 6, 7 });
 

@@ -6,9 +6,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation
 {
     public class OrganisationReferenceDataService : IOrganisationReferenceDataService
     {
-        private readonly IReferenceDataCache _referenceDataCache;
+        private readonly IExternalDataCache _referenceDataCache;
 
-        public OrganisationReferenceDataService(IReferenceDataCache referenceDataCache)
+        public OrganisationReferenceDataService(IExternalDataCache referenceDataCache)
         {
             _referenceDataCache = referenceDataCache;
         }
