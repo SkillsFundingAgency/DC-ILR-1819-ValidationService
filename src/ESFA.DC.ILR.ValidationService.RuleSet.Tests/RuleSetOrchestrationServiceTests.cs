@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var validationItems = new List<string>();
 
-            var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<string>>();
+            var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide(validationContextMock.Object)).Returns(validationItems);
 
             var referenceDataCachePopulationServiceMock = new Mock<IReferenceDataCachePopulationService<string>>();
@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             const string two = "two";
             var validationItems = new List<string>() { one, two };
 
-            var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<string>>();
+            var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide(validationContextMock.Object)).Returns(validationItems);
 
             var referenceDataCachePopulationServiceMock = new Mock<IReferenceDataCachePopulationService<string>>();
@@ -81,7 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
         public RuleSetOrchestrationService<T, U> NewService<T, U>(
             IRuleSetResolutionService<T> ruleSetResolutionService = null,
-            IValidationItemProviderService<T> validationItemProviderService = null,
+            IValidationItemProviderService<IEnumerable<T>> validationItemProviderService = null,
             IReferenceDataCachePopulationService<T> referenceDataCachePopulationService = null,
             IInternalDataCachePopulationService internalDataCachePopulationService = null,
             IRuleSetExecutionService<T> ruleSetExecutionService = null,

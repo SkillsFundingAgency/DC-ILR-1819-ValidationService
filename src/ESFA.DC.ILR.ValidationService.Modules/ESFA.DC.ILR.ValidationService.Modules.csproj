@@ -65,8 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModule.cs" />
-    <Compile Include="Stubs\FileSystemValidationItemProviderService.cs" />
+    <Compile Include="Stubs\LearnerProviderServiceStub.cs" />
     <Compile Include="Stubs\InternalDataCachePopulationServiceStub.cs" />
+    <Compile Include="Stubs\MessageFileSystemProviderService.cs" />
     <Compile Include="ValidationOrchestrationModule.cs" />
     <Compile Include="ValidationServiceConsoleModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,7 +75,6 @@
     <Compile Include="Stubs\ReferenceDataCachePopulationServiceStub.cs" />
     <Compile Include="Stubs\ReferenceDataCacheStub.cs" />
     <Compile Include="Stubs\ValidationContextStub.cs" />
-    <Compile Include="Stubs\ValidationItemProviderServiceStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ESFA.DC.ILR.ValidationService.Modules.ruleset">

@@ -23,9 +23,10 @@ namespace ESFA.DC.ILR.ValidationService.Console
 
         private static void RunValidation(string filePath)
         {
-            var validationContext = new ValidationContextStub();
-
-            validationContext.Input = filePath;
+            var validationContext = new ValidationContextStub
+            {
+                Input = filePath
+            };
 
             var container = BuildContainer();
 

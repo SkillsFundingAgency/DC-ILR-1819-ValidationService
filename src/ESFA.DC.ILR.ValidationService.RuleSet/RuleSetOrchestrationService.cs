@@ -11,14 +11,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
     {
         private readonly IRuleSetResolutionService<T> _ruleSetResolutionService;
         private readonly IRuleSetExecutionService<T> _ruleSetExecutionService;
-        private readonly IValidationItemProviderService<T> _validationItemProviderService;
+        private readonly IValidationItemProviderService<IEnumerable<T>> _validationItemProviderService;
         private readonly IReferenceDataCachePopulationService<T> _referenceDataCachePopulationService;
         private readonly IInternalDataCachePopulationService _internalDataCachPopulationService;
         private readonly IValidationOutputService<U> _validationOutputService;
 
         public RuleSetOrchestrationService(
             IRuleSetResolutionService<T> ruleSetResolutionService,
-            IValidationItemProviderService<T> validationItemProviderService,
+            IValidationItemProviderService<IEnumerable<T>> validationItemProviderService,
             IReferenceDataCachePopulationService<T> referenceDataCachePopulationService,
             IInternalDataCachePopulationService internalDataCachePopulationService,
             IRuleSetExecutionService<T> ruleSetExecutionService,
@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
         {
             var ruleSet = _ruleSetResolutionService.Resolve().ToList();
 
-            var validationItems = _validationItemProviderService.Provide(validationContext).ToList();
+            var validationItems = _validationItemProviderService.Provide(validationContext);
 
             _referenceDataCachePopulationService.Populate(validationItems);
             _internalDataCachPopulationService.Populate();

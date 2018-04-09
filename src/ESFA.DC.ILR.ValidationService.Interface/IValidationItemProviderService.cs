@@ -2,8 +2,8 @@
 
 namespace ESFA.DC.ILR.ValidationService.Interface
 {
-    public interface IValidationItemProviderService<out T> where T : class
+    public interface IValidationItemProviderService<out T>
     {
-        IEnumerable<T> Provide(IValidationContext validationContext);
+        T Provide(IValidationContext validationContext);
     }
 }
