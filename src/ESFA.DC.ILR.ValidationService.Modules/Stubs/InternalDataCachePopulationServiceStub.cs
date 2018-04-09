@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 using ESFA.DC.ILR.ValidationService.InternalData;
 using ESFA.DC.ILR.ValidationService.InternalData.Interface;

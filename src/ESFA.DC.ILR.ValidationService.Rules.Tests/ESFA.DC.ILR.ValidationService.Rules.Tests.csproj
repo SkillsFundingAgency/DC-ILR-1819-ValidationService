@@ -112,10 +112,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ExternalData\ESFA.DC.ILR.ValidationService.ExternalData.csproj">
-      <Project>{991F0564-9702-4B47-8B5F-7C5794563F05}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.ExternalData</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.FileData\ESFA.DC.ILR.ValidationService.FileData.csproj">
       <Project>{296CD683-36B7-4ED1-9332-1518A079E134}</Project>
       <Name>ESFA.DC.ILR.ValidationService.FileData</Name>

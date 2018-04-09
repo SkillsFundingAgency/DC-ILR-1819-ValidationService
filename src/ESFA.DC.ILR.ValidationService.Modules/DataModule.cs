@@ -1,10 +1,11 @@
 ﻿using Autofac;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.Organisation;
-using ESFA.DC.ILR.ValidationService.ExternalData.Organisation.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.ULN;
-using ESFA.DC.ILR.ValidationService.ExternalData.ULN.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.ULN;
+using ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.FileData;
 using ESFA.DC.ILR.ValidationService.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;

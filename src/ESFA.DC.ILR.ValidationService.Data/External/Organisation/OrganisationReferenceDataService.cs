@@ -1,8 +1,8 @@
-﻿using ESFA.DC.ILR.ValidationService.ExternalData.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.Organisation.Interface;
-using System.Linq;
+﻿using System.Linq;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.ExternalData.Organisation
+namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation
 {
     public class OrganisationReferenceDataService : IOrganisationReferenceDataService
     {

@@ -1,7 +1,7 @@
-﻿using ESFA.DC.ILR.ValidationService.ExternalData.LARS.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 
-namespace ESFA.DC.ILR.ValidationService.ExternalData.Interface
+namespace ESFA.DC.ILR.ValidationService.Data.Interface
 {
     public interface IReferenceDataCache
     {

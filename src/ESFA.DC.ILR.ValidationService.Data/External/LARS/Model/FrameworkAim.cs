@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESFA.DC.ILR.ValidationService.ExternalData.LARS.Model
+namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
 {
     public class FrameworkAim
     {

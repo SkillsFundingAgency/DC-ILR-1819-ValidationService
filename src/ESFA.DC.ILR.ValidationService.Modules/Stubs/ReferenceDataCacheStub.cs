@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using ESFA.DC.ILR.ValidationService.ExternalData.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 {

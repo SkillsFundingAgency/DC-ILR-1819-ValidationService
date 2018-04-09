@@ -1,4 +1,4 @@
-﻿namespace ESFA.DC.ILR.ValidationService.ExternalData.Organisation.Interface
+﻿namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface
 {
     public interface IOrganisationReferenceDataService
     {

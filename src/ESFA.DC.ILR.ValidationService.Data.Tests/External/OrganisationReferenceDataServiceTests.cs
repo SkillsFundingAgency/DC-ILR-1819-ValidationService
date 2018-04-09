@@ -5,7 +5,7 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.ExternalData.Tests.Organisation
+namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 {
     public class OrganisationReferenceDataServiceTests
     {

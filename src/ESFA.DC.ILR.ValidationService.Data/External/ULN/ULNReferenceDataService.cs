@@ -1,8 +1,8 @@
-﻿using ESFA.DC.ILR.ValidationService.ExternalData.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.ULN.Interface;
-using System.Linq;
+﻿using System.Linq;
+using ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.ExternalData.ULN
+namespace ESFA.DC.ILR.ValidationService.Data.External.ULN
 {
     public class ULNReferenceDataService : IULNReferenceDataService
     {

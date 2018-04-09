@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ESFA.DC.ILR.ValidationService.InternalData.Tests")]
+[assembly: AssemblyTitle("ESFA.DC.ILR.ValidationService.Data.Population")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ESFA.DC.ILR.ValidationService.InternalData.Tests")]
+[assembly: AssemblyProduct("ESFA.DC.ILR.ValidationService.Data.Population")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ac4146b8-9f67-4082-8bc0-3142c7d4b90e")]
+[assembly: Guid("acacd78d-34bd-45a9-a756-c637cb8987a7")]
 
 // Version information for an assembly consists of the following four values:
 //

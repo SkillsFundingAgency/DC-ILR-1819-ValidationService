@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 {

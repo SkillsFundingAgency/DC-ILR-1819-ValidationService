@@ -1,4 +1,4 @@
-﻿namespace ESFA.DC.ILR.ValidationService.ExternalData.ULN.Interface
+﻿namespace ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface
 {
     public interface IULNReferenceDataService
     {

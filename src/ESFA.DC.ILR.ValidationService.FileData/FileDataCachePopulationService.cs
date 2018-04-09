@@ -1,5 +1,4 @@
-﻿using System;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.File.Interface;
 
