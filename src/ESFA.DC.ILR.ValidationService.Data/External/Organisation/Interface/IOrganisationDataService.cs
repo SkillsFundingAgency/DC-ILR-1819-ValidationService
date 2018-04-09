@@ -1,6 +1,6 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface
 {
-    public interface IOrganisationReferenceDataService
+    public interface IOrganisationDataService
     {
         bool UkprnExists(long ukprn);
     }

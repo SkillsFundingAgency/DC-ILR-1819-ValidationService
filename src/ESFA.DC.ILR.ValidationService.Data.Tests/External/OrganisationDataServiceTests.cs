@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 {
-    public class OrganisationReferenceDataServiceTests
+    public class OrganisationDataServiceTests
     {
         [Theory]
         [InlineData(1)]
@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             referenceDataCacheMock.SetupGet(rdc => rdc.UKPRNs).Returns(new HashSet<long>() { 1, 2, 3, 4, 5, 6, 7 });
 
-            var orgnanisationReferenceDataService = new OrganisationReferenceDataService(referenceDataCacheMock.Object);
+            var orgnanisationReferenceDataService = new OrganisationDataService(referenceDataCacheMock.Object);
 
             orgnanisationReferenceDataService.UkprnExists(ukprn).Should().BeTrue();
         }
@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             referenceDataCacheMock.SetupGet(rdc => rdc.UKPRNs).Returns(new HashSet<long>() { 1, 2, 3, 4, 5, 6, 7 });
 
-            var orgnanisationReferenceDataService = new OrganisationReferenceDataService(referenceDataCacheMock.Object);
+            var orgnanisationReferenceDataService = new OrganisationDataService(referenceDataCacheMock.Object);
 
             orgnanisationReferenceDataService.UkprnExists(ukprn).Should().BeFalse();
         }

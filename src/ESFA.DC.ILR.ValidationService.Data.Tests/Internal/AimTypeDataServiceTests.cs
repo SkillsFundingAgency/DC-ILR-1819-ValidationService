@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using ESFA.DC.ILR.ValidationService.InternalData.AimType;
-using ESFA.DC.ILR.ValidationService.InternalData.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AimType;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.InternalData.Tests
+namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
 {
-    public class AimTypeInternalDataServiceTests
+    public class AimTypeDataServiceTests
     {
         [Fact]
         public void Exists_True()
@@ -21,13 +21,13 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.Tests
             NewService().Exists(2).Should().BeFalse();
         }
 
-        private AimTypeInternalDataService NewService()
+        private AimTypeDataService NewService()
         {
             var internalDataCacheMock = new Mock<IInternalDataCache>();
 
             internalDataCacheMock.SetupGet(c => c.AimTypes).Returns(new HashSet<int>() { 1 });
 
-            return new AimTypeInternalDataService(internalDataCacheMock.Object);
+            return new AimTypeDataService(internalDataCacheMock.Object);
         }
     }
 }

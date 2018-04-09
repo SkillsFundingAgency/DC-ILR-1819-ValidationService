@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.CompStatus.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
         {
             var compStatus = 1;
 
-            var compStatusInternalDataServiceMock = new Mock<ICompStatusInternalDataService>();
+            var compStatusInternalDataServiceMock = new Mock<ICompStatusDataService>();
 
             compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(false);
 
@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
         {
             var compStatus = 1;
 
-            var compStatusInternalDataServiceMock = new Mock<ICompStatusInternalDataService>();
+            var compStatusInternalDataServiceMock = new Mock<ICompStatusDataService>();
 
             compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(true);
 
@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
                 }
             };
 
-            var compStatusInternalDataServiceMock = new Mock<ICompStatusInternalDataService>();
+            var compStatusInternalDataServiceMock = new Mock<ICompStatusDataService>();
 
             compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(false);
 
@@ -82,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
                 }
             };
 
-            var compStatusInternalDataServiceMock = new Mock<ICompStatusInternalDataService>();
+            var compStatusInternalDataServiceMock = new Mock<ICompStatusDataService>();
 
             compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(true);
 
@@ -92,7 +92,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
             }
         }
 
-        private CompStatus_01Rule NewRule(ICompStatusInternalDataService compStatusInternalDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private CompStatus_01Rule NewRule(ICompStatusDataService compStatusInternalDataService = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new CompStatus_01Rule(compStatusInternalDataService, validationErrorHandler);
         }

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 {
-    public class ULNReferenceDataServiceTests
+    public class ULNDataServiceTests
     {
         [Fact]
         public void Exists_True()
@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             referenceDataCacheMock.SetupGet(rdc => rdc.ULNs).Returns(new HashSet<long>() { 1, 2, 3 });
 
-            var ulnReferenceDataService = new ULNReferenceDataService(referenceDataCacheMock.Object);
+            var ulnReferenceDataService = new ULNDataService(referenceDataCacheMock.Object);
 
             ulnReferenceDataService.Exists(2).Should().BeTrue();
         }
@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             referenceDataCacheMock.SetupGet(rdc => rdc.ULNs).Returns(new HashSet<long>() { 1, 2, 3 });
 
-            var ulnReferenceDataService = new ULNReferenceDataService(referenceDataCacheMock.Object);
+            var ulnReferenceDataService = new ULNDataService(referenceDataCacheMock.Object);
 
             ulnReferenceDataService.Exists(4).Should().BeFalse();
         }
@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void Exists_False_Null()
         {
-            var ulnReferenceDataService = new ULNReferenceDataService(null);
+            var ulnReferenceDataService = new ULNDataService(null);
 
             ulnReferenceDataService.Exists(null).Should().BeFalse();
         }

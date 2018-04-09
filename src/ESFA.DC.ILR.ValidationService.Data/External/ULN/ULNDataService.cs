@@ -4,11 +4,11 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.ULN
 {
-    public class ULNReferenceDataService : IULNReferenceDataService
+    public class ULNDataService : IULNDataService
     {
         private readonly IExternalDataCache _referenceDataCache;
 
-        public ULNReferenceDataService(IExternalDataCache referenceDataCache)
+        public ULNDataService(IExternalDataCache referenceDataCache)
         {
             _referenceDataCache = referenceDataCache;
         }

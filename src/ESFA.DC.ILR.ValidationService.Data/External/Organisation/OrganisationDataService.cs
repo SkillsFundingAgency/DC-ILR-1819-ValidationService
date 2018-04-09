@@ -4,11 +4,11 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation
 {
-    public class OrganisationReferenceDataService : IOrganisationReferenceDataService
+    public class OrganisationDataService : IOrganisationDataService
     {
         private readonly IExternalDataCache _referenceDataCache;
 
-        public OrganisationReferenceDataService(IExternalDataCache referenceDataCache)
+        public OrganisationDataService(IExternalDataCache referenceDataCache)
         {
             _referenceDataCache = referenceDataCache;
         }

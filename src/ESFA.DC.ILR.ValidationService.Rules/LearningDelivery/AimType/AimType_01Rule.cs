@@ -1,6 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
@@ -8,9 +8,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
 {
     public class AimType_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IAimTypeInternalDataService _aimTypeInternalDataService;
+        private readonly IAimTypeDataService _aimTypeInternalDataService;
 
-        public AimType_01Rule(IAimTypeInternalDataService aimTypeInternalDataService, IValidationErrorHandler validationErrorHandler)
+        public AimType_01Rule(IAimTypeDataService aimTypeInternalDataService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler)
         {
             _aimTypeInternalDataService = aimTypeInternalDataService;

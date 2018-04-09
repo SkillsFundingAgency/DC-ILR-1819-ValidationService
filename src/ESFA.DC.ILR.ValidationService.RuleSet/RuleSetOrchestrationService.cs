@@ -2,7 +2,6 @@
 using System.Linq;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet
 {

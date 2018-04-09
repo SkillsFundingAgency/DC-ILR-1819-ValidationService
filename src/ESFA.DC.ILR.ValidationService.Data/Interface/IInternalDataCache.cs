@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ESFA.DC.ILR.ValidationService.InternalData.Interface
+namespace ESFA.DC.ILR.ValidationService.Data.Interface
 {
     public interface IInternalDataCache
     {

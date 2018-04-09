@@ -1,6 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.CompStatus.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
@@ -8,9 +8,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
 {
     public class CompStatus_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly ICompStatusInternalDataService _compStatusInternalDataService;
+        private readonly ICompStatusDataService _compStatusInternalDataService;
 
-        public CompStatus_01Rule(ICompStatusInternalDataService compStatusInternalDataService, IValidationErrorHandler validationErrorHandler)
+        public CompStatus_01Rule(ICompStatusDataService compStatusInternalDataService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler)
         {
             _compStatusInternalDataService = compStatusInternalDataService;

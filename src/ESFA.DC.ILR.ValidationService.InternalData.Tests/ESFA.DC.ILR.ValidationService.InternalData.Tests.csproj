@@ -77,12 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcademicYearCalendarService\AcademicYearCalendarServiceTests.cs" />
-    <Compile Include="CompStatusInternalDataServiceTests.cs" />
-    <Compile Include="AimTypeInternalDataServiceTests.cs" />
-    <Compile Include="ContPrefTypeCode\ContactPreferenceInternalDataServiceTests.cs" />
-    <Compile Include="LearnFAMTypeCode\LearnFAMTypeCodeInternalDataServiceTests.cs" />
-    <Compile Include="LLDDCat\LlddCatInternalDataServiceTests.cs" />
-    <Compile Include="PriorAttain\PriorAttainReferenceDataServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidationDataService\ValidationDataServiceTests.cs" />
   </ItemGroup>
@@ -101,6 +95,10 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.8.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
+      <Project>{FAACF863-EB2E-473F-8EF9-F7FA9613F556}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513c4f05-55f4-4aef-b3eb-427c024da043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>

@@ -1,4 +1,4 @@
-﻿namespace ESFA.DC.ILR.ValidationService.InternalData.Interface
+﻿namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
 {
     public interface IInternalDataCachePopulationService
     {

@@ -44,28 +44,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AcademicYearCalendarService\AcademicYearCalendarService.cs" />
-    <Compile Include="AimType\AimTypeInternalDataService.cs" />
-    <Compile Include="AimType\Interface\IAimTypeInternalDataService.cs" />
-    <Compile Include="CompStatus\CompStatusInternalDataService.cs" />
-    <Compile Include="CompStatus\Interface\ICompStatusInternalDataService.cs" />
-    <Compile Include="ContPrefType\ContactPreferenceInternalDataService.cs" />
-    <Compile Include="ContPrefType\IContactPreferenceInternalDataService.cs" />
-    <Compile Include="ContPrefType\Models\ContactPreferenceInternalData.cs" />
-    <Compile Include="Interface\IInternalDataCache.cs" />
-    <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
-    <Compile Include="InternalDataCache.cs" />
-    <Compile Include="LearnFAMTypeCode\LearnFAMTypeCodeInternalDataService.cs" />
-    <Compile Include="LearnFAMTypeCode\ILearnFAMTypeCodeInternalDataService.cs" />
-    <Compile Include="LearnFAMTypeCode\Models\LearnFAMTypeCodeInternalData.cs" />
-    <Compile Include="LLDDCat\ILlddCatInternalDataService.cs" />
-    <Compile Include="LLDDCat\LlddCatInternalDataService.cs" />
-    <Compile Include="InternalDataCachePopulationService.cs" />
-    <Compile Include="PriorAttain\IPriorAttainInternalDataService.cs" />
-    <Compile Include="PriorAttain\PriorAttainInternalDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidationDataService\ValidationDataService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Population\ESFA.DC.ILR.ValidationService.Data.Population.csproj">
+      <Project>{ACACD78D-34BD-45A9-A756-C637CB8987A7}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Data.Population</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
+      <Project>{FAACF863-EB2E-473F-8EF9-F7FA9613F556}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513c4f05-55f4-4aef-b3eb-427c024da043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>

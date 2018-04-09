@@ -72,8 +72,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="External\OrganisationReferenceDataServiceTests.cs" />
-    <Compile Include="External\ULNReferenceDataServiceTests.cs" />
+    <Compile Include="Internal\AimTypeDataServiceTests.cs" />
+    <Compile Include="Internal\CompStatusDataServiceTests.cs" />
+    <Compile Include="External\OrganisationDataServiceTests.cs" />
+    <Compile Include="External\ULNDataServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
