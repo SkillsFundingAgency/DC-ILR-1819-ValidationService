@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 
         public IEnumerable<ILearner> Provide(IValidationContext validationContext)
         {
-            var message = _serializationService.Deserialize<Message>(File.ReadAllText(@"Files/ILR.xml"));
+            var message = _serializationService.Deserialize<Message>(File.ReadAllText(validationContext.Input));
 
             _fileDataCachePopulationService.Populate(message);
 

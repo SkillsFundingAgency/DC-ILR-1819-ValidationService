@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Linq;
+using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
@@ -10,12 +11,21 @@ namespace ESFA.DC.ILR.ValidationService.Console
     {
         static void Main(string[] args)
         {
-            RunValidation();
+            var argsList = args.ToList();
+            
+            if (!argsList.Any())
+            {
+                argsList.Add(@"Files/ILR.xml");
+            }
+
+            RunValidation(argsList.First());
         }
 
-        private static void RunValidation()
+        private static void RunValidation(string filePath)
         {
             var validationContext = new ValidationContextStub();
+
+            validationContext.Input = filePath;
 
             var container = BuildContainer();
 
