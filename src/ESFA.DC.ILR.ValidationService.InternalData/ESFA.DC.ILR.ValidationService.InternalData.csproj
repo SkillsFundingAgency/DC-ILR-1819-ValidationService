@@ -45,7 +45,9 @@
   <ItemGroup>
     <Compile Include="AcademicYearCalendarService\AcademicYearCalendarService.cs" />
     <Compile Include="AimType\AimTypeInternalDataService.cs" />
-    <Compile Include="AimType\Interfaces\IAimTypeInternalDataService.cs" />
+    <Compile Include="AimType\Interface\IAimTypeInternalDataService.cs" />
+    <Compile Include="CompStatus\CompStatusInternalDataService.cs" />
+    <Compile Include="CompStatus\Interface\ICompStatusInternalDataService.cs" />
     <Compile Include="ContPrefType\ContactPreferenceInternalDataService.cs" />
     <Compile Include="ContPrefType\IContactPreferenceInternalDataService.cs" />
     <Compile Include="ContPrefType\Models\ContactPreferenceInternalData.cs" />
@@ -79,5 +81,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

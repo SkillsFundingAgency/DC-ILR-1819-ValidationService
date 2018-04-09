@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using ESFA.DC.ILR.ValidationService.InternalData.AimType.Interfaces;
+using ESFA.DC.ILR.ValidationService.InternalData.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.InternalData.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.InternalData.AimType

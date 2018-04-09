@@ -30,6 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
             }
 
             internalDataCache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));
+            internalDataCache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
         }
 
         public IEnumerable<T> BuildSimpleLookupEnumerable<T>(XElement lookups, string type)

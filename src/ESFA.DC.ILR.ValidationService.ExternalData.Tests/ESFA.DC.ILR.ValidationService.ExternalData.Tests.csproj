@@ -80,7 +80,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileDataService\FileDataServiceTests.cs" />
     <Compile Include="Organisation\OrganisationReferenceDataServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ULN\ULNReferenceDataServiceTests.cs" />
@@ -96,6 +95,10 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ExternalData\ESFA.DC.ILR.ValidationService.ExternalData.csproj">
       <Project>{991f0564-9702-4b47-8b5f-7c5794563f05}</Project>
       <Name>ESFA.DC.ILR.ValidationService.ExternalData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.FileData\ESFA.DC.ILR.ValidationService.FileData.csproj">
+      <Project>{296CD683-36B7-4ED1-9332-1518A079E134}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.FileData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
