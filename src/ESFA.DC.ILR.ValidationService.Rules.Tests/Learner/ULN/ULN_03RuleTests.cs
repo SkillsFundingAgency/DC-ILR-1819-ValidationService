@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
     public class ULN_03RuleTests : AbstractRuleTests
     {
         [Fact]
-        public void Exclude_True()
+        public void LearningDeliveryFAMConditionMet_False()
         {
             var learner = new TestLearner();
 
@@ -23,11 +23,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
 
             learnerQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner, "ACT", "1")).Returns(true);
 
-            NewRule(learnerQueryService: learnerQueryServiceMock.Object).Exclude(learner).Should().BeTrue();
+            NewRule(learnerQueryService: learnerQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learner).Should().BeFalse();
         }
 
         [Fact]
-        public void Exclude_False()
+        public void LearningDeliveryFAMConditionMet_True()
         {
             var learner = new TestLearner();
 
@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
 
             learnerQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner, "ACT", "1")).Returns(false);
 
-            NewRule(learnerQueryService: learnerQueryServiceMock.Object).Exclude(learner).Should().BeFalse();
+            NewRule(learnerQueryService: learnerQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learner).Should().BeTrue();
         }
 
         [Theory]

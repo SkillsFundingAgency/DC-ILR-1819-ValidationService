@@ -38,15 +38,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 
         public void Validate(ILearner objectToValidate)
         {
-            if (!Exclude(objectToValidate))
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+                if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataCache.FilePreparationDate, _academicYearDataService.JanuaryFirst()) && LearningDeliveryFAMConditionMet(objectToValidate))
                 {
-                    if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataCache.FilePreparationDate, _academicYearDataService.JanuaryFirst()))
-                    {
-                        HandleValidationError(RuleNameConstants.ULN_03, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
-                        return;
-                    }
+                    HandleValidationError(RuleNameConstants.ULN_03, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    return;
                 }
             }
         }
@@ -58,9 +55,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
                    && _fundModels.Contains(fundModel);
         }
 
-        public bool Exclude(ILearner learner)
+        public bool LearningDeliveryFAMConditionMet(ILearner learner)
         {
-            return _learnerQueryService.HasLearningDeliveryFAMCodeForType(learner, LearningDeliveryFAMTypeConstants.ACT, "1");
+            return !_learnerQueryService.HasLearningDeliveryFAMCodeForType(learner, LearningDeliveryFAMTypeConstants.ACT, "1");
         }
     }
 }
