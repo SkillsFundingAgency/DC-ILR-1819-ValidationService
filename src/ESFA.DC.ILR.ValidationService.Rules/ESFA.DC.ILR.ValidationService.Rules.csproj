@@ -74,12 +74,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
     <Compile Include="Query\Interface\IDateTimeQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerQueryService.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerFAMQueryService.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\ValidationConstants.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryQueryService.cs" />
     <Compile Include="Query\LearnerFAMQueryService.cs" />
+    <Compile Include="Query\LearnerQueryService.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\LearningDeliveryQueryService.cs" />
   </ItemGroup>

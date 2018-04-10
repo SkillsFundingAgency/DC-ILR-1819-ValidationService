@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
     {
         private readonly IFileDataCache _fileDataCache;
         private readonly IValidationDataService _validationDataService;
-        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
+        private readonly ILearnerQueryService _learnerQueryService;
 
         private readonly IEnumerable<long> _fundModels =
             new HashSet<long>()
@@ -27,21 +27,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
                 FundModelConstants.ESF,
             };
 
-        public ULN_03Rule(IFileDataCache fileDataCache, IValidationDataService validationDataService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+        public ULN_03Rule(IFileDataCache fileDataCache, IValidationDataService validationDataService, ILearnerQueryService learnerQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler)
         {
             _fileDataCache = fileDataCache;
             _validationDataService = validationDataService;
-            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
+            _learnerQueryService = learnerQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld => !Exclude(ld)))
+            if (!Exclude(objectToValidate))
             {
-                if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataCache.FilePreparationDate, _validationDataService.AcademicYearJanuaryFirst))
+                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
-                    HandleValidationError(RuleNameConstants.ULN_03, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataCache.FilePreparationDate, _validationDataService.AcademicYearJanuaryFirst))
+                    {
+                        HandleValidationError(RuleNameConstants.ULN_03, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    }
                 }
             }
         }
@@ -53,9 +56,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
                    && _fundModels.Contains(fundModel);
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public bool Exclude(ILearner learner)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, "1");
+            return _learnerQueryService.HasLearningDeliveryFAMCodeForType(learner, LearningDeliveryFAMTypeConstants.ACT, "1");
         }
     }
 }
