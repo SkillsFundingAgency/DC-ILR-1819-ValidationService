@@ -25,7 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Console
         {
             var validationContext = new ValidationContextStub
             {
-                Input = filePath
+                Input = filePath,
+                Output = filePath + ".vs.csv"
             };
 
             var container = BuildContainer();
@@ -36,6 +37,8 @@ namespace ESFA.DC.ILR.ValidationService.Console
                 
                 var result = ruleSetOrchestrationService.Execute(validationContext);
             }
+
+            System.Console.WriteLine($"{validationContext.Output}");
         }
 
         private static void RegisterContext(ContainerBuilder containerBuilder, IValidationContext validationContext)

@@ -43,7 +43,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
                 {
                     if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataCache.FilePreparationDate, _validationDataService.AcademicYearJanuaryFirst))
                     {
-                        HandleValidationError(RuleNameConstants.ULN_03, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                        HandleValidationError(RuleNameConstants.ULN_03, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, new List<string> { $"\"ULN='{objectToValidate.ULN}',FilePrepDate='{_fileDataCache.FilePreparationDate}'\"" });
                     }
                 }
             }
