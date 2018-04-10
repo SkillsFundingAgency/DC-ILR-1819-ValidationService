@@ -1,10 +1,11 @@
 ﻿using System;
+using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.AcademicYearCalendarService
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
 {
-    public class AcademicYearCalendarServiceTests
+    public class AcademicYearQueryServiceTests
     {
         [Theory]
         [InlineData(1, 2017, "2017-01-27")]
@@ -20,11 +21,11 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.AcademicYearCalendarS
             var date = new DateTime(year, month, 1);
             var expectedValue = DateTime.Parse(expectedDate);
 
-            var academicYearCalendarService = new InternalData.AcademicYearCalendarService.AcademicYearCalendarService();
+            var academicYearQueryService = NewService();
 
             while (date.Month == month)
             {
-                academicYearCalendarService.LastFridayInMonth(date).Should().Be(expectedValue);
+                academicYearQueryService.LastFridayInMonth(date).Should().Be(expectedValue);
                 date = date.AddDays(1);
             }
         }
@@ -38,9 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.AcademicYearCalendarS
             var inputDateTime = DateTime.Parse(inputDate);
             var expectedDateTime = DateTime.Parse(expectedDate);
 
-            var academicYearCalendarService = new InternalData.AcademicYearCalendarService.AcademicYearCalendarService();
-
-            academicYearCalendarService.LastFridayInJuneForDateInAcademicYear(inputDateTime).Should().Be(expectedDateTime);
+            NewService().LastFridayInJuneForDateInAcademicYear(inputDateTime).Should().Be(expectedDateTime);
         }
 
         [Theory]
@@ -53,9 +52,12 @@ namespace ESFA.DC.ILR.ValidationService.InternalData.Tests.AcademicYearCalendarS
             var inputDateTime = DateTime.Parse(inputDate);
             var expectedDateTime = DateTime.Parse(expectedDate);
 
-            var academicYearCalendarService = new InternalData.AcademicYearCalendarService.AcademicYearCalendarService();
+            NewService().FirstSeptemberForDateInAcademicYear(inputDateTime).Should().Be(expectedDateTime);
+        }
 
-            academicYearCalendarService.FirstSeptemberForDateInAcademicYear(inputDateTime).Should().Be(expectedDateTime);
+        private AcademicYearQueryService NewService()
+        {
+            return new AcademicYearQueryService();
         }
     }
 }

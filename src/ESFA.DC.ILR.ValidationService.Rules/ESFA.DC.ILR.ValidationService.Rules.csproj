@@ -72,7 +72,9 @@
     <Compile Include="LearningDelivery\AimType\AimType_07Rule.cs" />
     <Compile Include="LearningDelivery\CompStatus\CompStatus_01Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
+    <Compile Include="Query\Interface\IAcademicYearQueryService.cs" />
     <Compile Include="Query\Interface\IDateTimeQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerQueryService.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryFAMQueryService.cs" />
@@ -93,10 +95,6 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513C4F05-55F4-4AEF-B3EB-427C024DA043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.InternalData\ESFA.DC.ILR.ValidationService.InternalData.csproj">
-      <Project>{de0f3c7c-9269-4b98-9ce0-9b91f1886c47}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.InternalData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

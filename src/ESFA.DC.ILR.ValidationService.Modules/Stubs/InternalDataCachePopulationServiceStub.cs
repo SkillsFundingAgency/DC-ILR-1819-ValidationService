@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
@@ -29,11 +30,24 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
                 lookups = XElement.Load(stream);
             }
 
+            internalDataCache.AcademicYear = BuildAcademicYear();
+
             internalDataCache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));
             internalDataCache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
         }
 
-        public IEnumerable<T> BuildSimpleLookupEnumerable<T>(XElement lookups, string type)
+        private AcademicYear BuildAcademicYear()
+        {
+            return new AcademicYear()
+            {
+                AugustThirtyFirst = new DateTime(2018, 8, 31),
+                End = new DateTime(2019, 7, 31),
+                JanuaryFirst = new DateTime(2019, 1, 1),
+                Start = new DateTime(2018, 1, 8),
+            };
+        }
+
+        private IEnumerable<T> BuildSimpleLookupEnumerable<T>(XElement lookups, string type)
         {
             return lookups
                 .Descendants(type)

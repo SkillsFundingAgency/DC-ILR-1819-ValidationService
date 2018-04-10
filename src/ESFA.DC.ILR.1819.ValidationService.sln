@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.Interface", "ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj", "{513C4F05-55F4-4AEF-B3EB-427C024DA043}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.InternalData", "ESFA.DC.ILR.ValidationService.InternalData\ESFA.DC.ILR.ValidationService.InternalData.csproj", "{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.InternalData.Tests", "ESFA.DC.ILR.ValidationService.InternalData.Tests\ESFA.DC.ILR.ValidationService.InternalData.Tests.csproj", "{AC4146B8-9F67-4082-8BC0-3142C7D4B90E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.Rules.Tests", "ESFA.DC.ILR.ValidationService.Rules.Tests\ESFA.DC.ILR.ValidationService.Rules.Tests.csproj", "{754EEC2F-826D-46CC-80C0-A0A006CA7CE9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.RuleSet", "ESFA.DC.ILR.ValidationService.RuleSet\ESFA.DC.ILR.ValidationService.RuleSet.csproj", "{EBE0154D-6F8B-4DBB-A18F-4929AB74D204}"
@@ -47,14 +43,6 @@ Global
 		{513C4F05-55F4-4AEF-B3EB-427C024DA043}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{513C4F05-55F4-4AEF-B3EB-427C024DA043}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{513C4F05-55F4-4AEF-B3EB-427C024DA043}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC4146B8-9F67-4082-8BC0-3142C7D4B90E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC4146B8-9F67-4082-8BC0-3142C7D4B90E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC4146B8-9F67-4082-8BC0-3142C7D4B90E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC4146B8-9F67-4082-8BC0-3142C7D4B90E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{754EEC2F-826D-46CC-80C0-A0A006CA7CE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{754EEC2F-826D-46CC-80C0-A0A006CA7CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{754EEC2F-826D-46CC-80C0-A0A006CA7CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU

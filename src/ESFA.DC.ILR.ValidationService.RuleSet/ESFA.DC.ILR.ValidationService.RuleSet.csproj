@@ -67,10 +67,6 @@
       <Project>{513c4f05-55f4-4aef-b3eb-427c024da043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.InternalData\ESFA.DC.ILR.ValidationService.InternalData.csproj">
-      <Project>{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.InternalData</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="ESFA.DC.ILR.ValidationService.RuleSet.ruleset">

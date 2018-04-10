@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
@@ -72,10 +71,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [Fact]
         public void Validate_NoErrors()
         {
-            var fileDataServiceMock = new Mock<IFileDataCache>();
-            var validationDataServiceMock = new Mock<IValidationDataService>();
-            var learnerQueryServiceMock = new Mock<ILearnerQueryService>();
-
             var learner = new TestLearner()
             {
                 ULN = 1,
@@ -88,13 +83,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
                 }
             };
 
+            var fileDataServiceMock = new Mock<IFileDataCache>();
             fileDataServiceMock.SetupGet(fd => fd.FilePreparationDate).Returns(new DateTime(1970, 1, 1));
-            validationDataServiceMock.SetupGet(vd => vd.AcademicYearJanuaryFirst).Returns(new DateTime(2018, 1, 1));
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            academicYearDataServiceMock.Setup(ds => ds.JanuaryFirst()).Returns(new DateTime(2018, 1, 1));
+
+            var learnerQueryServiceMock = new Mock<ILearnerQueryService>();
             learnerQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner, "ACT", "1")).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(fileDataServiceMock.Object, validationDataServiceMock.Object, learnerQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, academicYearDataServiceMock.Object, learnerQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -118,22 +118,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             };
 
             var fileDataServiceMock = new Mock<IFileDataCache>();
-            var validationDataServiceMock = new Mock<IValidationDataService>();
-            var learnerQueryServiceMock = new Mock<ILearnerQueryService>();
-
             fileDataServiceMock.SetupGet(fd => fd.FilePreparationDate).Returns(new DateTime(1970, 1, 1));
-            validationDataServiceMock.SetupGet(vd => vd.AcademicYearJanuaryFirst).Returns(new DateTime(2018, 1, 1));
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            academicYearDataServiceMock.Setup(ds => ds.JanuaryFirst()).Returns(new DateTime(2018, 1, 1));
+
+            var learnerQueryServiceMock = new Mock<ILearnerQueryService>();
             learnerQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner, "ACT", "1")).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("ULN_03"))
             {
-                NewRule(fileDataServiceMock.Object, validationDataServiceMock.Object, learnerQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, academicYearDataServiceMock.Object, learnerQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
-        private ULN_03Rule NewRule(IFileDataCache fileDataCache = null, IValidationDataService validationDataService = null, ILearnerQueryService learnerQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        private ULN_03Rule NewRule(IFileDataCache fileDataCache = null, IAcademicYearDataService academicYearDataService = null, ILearnerQueryService learnerQueryService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new ULN_03Rule(fileDataCache, validationDataService, learnerQueryService, validationErrorHandler);
+            return new ULN_03Rule(fileDataCache, academicYearDataService, learnerQueryService, validationErrorHandler);
         }
     }
 }

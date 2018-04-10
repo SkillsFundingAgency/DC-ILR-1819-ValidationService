@@ -8,6 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<AcademicYearQueryService>().As<IAcademicYearQueryService>().InstancePerLifetimeScope();
             builder.RegisterType<DateTimeQueryService>().As<IDateTimeQueryService>().InstancePerLifetimeScope();
             builder.RegisterType<LearningDeliveryQueryService>().As<ILearningDeliveryQueryService>().InstancePerLifetimeScope();
             builder.RegisterType<LearnerQueryService>().As<ILearnerQueryService>().InstancePerLifetimeScope();

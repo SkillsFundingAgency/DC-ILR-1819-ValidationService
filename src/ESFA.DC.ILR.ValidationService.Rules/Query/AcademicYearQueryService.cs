@@ -1,9 +1,9 @@
 ﻿using System;
-using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.InternalData.AcademicYearCalendarService
+namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
-    public class AcademicYearCalendarService : IAcademicYearCalendarService
+    public class AcademicYearQueryService : IAcademicYearQueryService
     {
         public DateTime FirstSeptemberForDateInAcademicYear(DateTime dateTime)
         {
