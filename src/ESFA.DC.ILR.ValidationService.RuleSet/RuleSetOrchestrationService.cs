@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
         private readonly IRuleSetResolutionService<T> _ruleSetResolutionService;
         private readonly IMessageCachePopulationService _messageCachePopulationService;
         private readonly IValidationItemProviderService<IEnumerable<T>> _validationItemProviderService;
-        private readonly IExternalDataCachePopulationService<T> _externalDataCachePopulationService;
+        private readonly IExternalDataCachePopulationService _externalDataCachePopulationService;
         private readonly IInternalDataCachePopulationService _internalDataCachPopulationService;
         private readonly IFileDataCachePopulationService _fileDataCachePopulationService;
         private readonly IValidationOutputService<U> _validationOutputService;
@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
             IRuleSetResolutionService<T> ruleSetResolutionService,
             IMessageCachePopulationService messageCachePopulationService,
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService,
-            IExternalDataCachePopulationService<T> referenceDataCachePopulationService,
+            IExternalDataCachePopulationService referenceDataCachePopulationService,
             IInternalDataCachePopulationService internalDataCachePopulationService,
             IFileDataCachePopulationService fileDataCachePopulationService,
             IRuleSetExecutionService<T> ruleSetExecutionService,
@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
 
             var validationItems = _validationItemProviderService.Provide().ToList();
 
-            _externalDataCachePopulationService.Populate(validationItems);
+            _externalDataCachePopulationService.Populate();
             _internalDataCachPopulationService.Populate();
             _fileDataCachePopulationService.Populate();
 

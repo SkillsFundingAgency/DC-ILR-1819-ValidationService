@@ -25,8 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(validationItems);
 
-            var referenceDataCachePopulationServiceMock = new Mock<IExternalDataCachePopulationService<string>>();
-            referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate(validationItems));
+            var referenceDataCachePopulationServiceMock = new Mock<IExternalDataCachePopulationService>();
+            referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate());
 
             var internalDataCachePopulationServiceMock = new Mock<IInternalDataCachePopulationService>();
             internalDataCachePopulationServiceMock.Setup(ps => ps.Populate());
@@ -64,8 +64,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(validationItems);
 
-            var referenceDataCachePopulationServiceMock = new Mock<IExternalDataCachePopulationService<string>>();
-            referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate(validationItems));
+            var referenceDataCachePopulationServiceMock = new Mock<IExternalDataCachePopulationService>();
+            referenceDataCachePopulationServiceMock.Setup(ps => ps.Populate());
 
             var internalDataCachePopulationServiceMock = new Mock<IInternalDataCachePopulationService>();
             internalDataCachePopulationServiceMock.Setup(ps => ps.Populate());
@@ -93,7 +93,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             IRuleSetResolutionService<T> ruleSetResolutionService = null,
             IMessageCachePopulationService messageCachePopulationService = null,
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService = null,
-            IExternalDataCachePopulationService<T> referenceDataCachePopulationService = null,
+            IExternalDataCachePopulationService referenceDataCachePopulationService = null,
             IInternalDataCachePopulationService internalDataCachePopulationService = null,
             IFileDataCachePopulationService fileDataCachePopulationService = null,
             IRuleSetExecutionService<T> ruleSetExecutionService = null,
