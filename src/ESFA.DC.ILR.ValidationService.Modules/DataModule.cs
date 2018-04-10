@@ -18,8 +18,8 @@ using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.FileData;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Modules.Stubs;
 using ESFA.DC.ILR.ValidationService.RuleSet;
+using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
