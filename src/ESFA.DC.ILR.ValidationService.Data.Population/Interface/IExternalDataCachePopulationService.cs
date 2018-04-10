@@ -2,8 +2,8 @@
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
 {
-    public interface IExternalDataCachePopulationService<in T> where T : class
+    public interface IExternalDataCachePopulationService
     {
-        void Populate(IEnumerable<T> validationItems);
+        void Populate();
     }
 }
