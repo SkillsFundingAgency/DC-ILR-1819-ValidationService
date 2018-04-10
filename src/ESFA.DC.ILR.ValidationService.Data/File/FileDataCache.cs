@@ -1,7 +1,7 @@
 ﻿using System;
-using ESFA.DC.ILR.ValidationService.Rules.File.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.FileData
+namespace ESFA.DC.ILR.ValidationService.Data.File
 {
     public class FileDataCache : IFileDataCache
     {

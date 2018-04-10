@@ -2,6 +2,6 @@
 {
     public interface IValidationItemProviderService<out T>
     {
-        T Provide(IValidationContext validationContext);
+        T Provide();
     }
 }

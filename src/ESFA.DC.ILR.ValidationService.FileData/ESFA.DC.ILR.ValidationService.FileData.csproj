@@ -8,4 +8,9 @@
     <PackageReference Include="ESFA.DC.ILR.1819.Model.Interface" Version="0.1.2-beta0001" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Population\ESFA.DC.ILR.ValidationService.Data.Population.csproj" />
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj" />
+  </ItemGroup>
+
 </Project>

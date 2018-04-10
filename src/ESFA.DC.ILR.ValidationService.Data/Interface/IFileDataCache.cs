@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.File.Interface
+namespace ESFA.DC.ILR.ValidationService.Data.Interface
 {
     public interface IFileDataCache
     {

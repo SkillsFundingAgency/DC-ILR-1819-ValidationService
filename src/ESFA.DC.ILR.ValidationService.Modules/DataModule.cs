@@ -1,24 +1,24 @@
 ﻿using Autofac;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Cache;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ULN;
 using ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AimType;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus;
 using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.FileData;
-using ESFA.DC.ILR.ValidationService.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData;
 using ESFA.DC.ILR.ValidationService.InternalData.AcademicYearCalendarService;
 using ESFA.DC.ILR.ValidationService.InternalData.ValidationDataService;
 using ESFA.DC.ILR.ValidationService.Modules.Stubs;
-using ESFA.DC.ILR.ValidationService.Rules.File.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
@@ -39,6 +39,9 @@ namespace ESFA.DC.ILR.ValidationService.Modules
 
             builder.RegisterType<FileDataCache>().As<IFileDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<FileDataCachePopulationService>().As<IFileDataCachePopulationService>().InstancePerLifetimeScope();
+
+            builder.RegisterType<Cache<IMessage>>().As<ICache<IMessage>>().InstancePerLifetimeScope();
+            builder.RegisterType<MessageCachePopulationService>().As<IMessageCachePopulationService>().InstancePerLifetimeScope();
 
             builder.RegisterType<ValidationDataService>().As<IValidationDataService>().InstancePerLifetimeScope();
             builder.RegisterType<AcademicYearCalendarService>().As<IAcademicYearCalendarService>().InstancePerLifetimeScope();
