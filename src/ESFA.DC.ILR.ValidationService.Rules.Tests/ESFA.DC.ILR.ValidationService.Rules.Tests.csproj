@@ -101,6 +101,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
     <Compile Include="Query\LearnerFAMQueryServiceTests.cs" />
+    <Compile Include="Query\LearnerQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryQueryServiceTests.cs" />
   </ItemGroup>
@@ -112,13 +113,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ExternalData\ESFA.DC.ILR.ValidationService.ExternalData.csproj">
-      <Project>{991F0564-9702-4B47-8B5F-7C5794563F05}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.ExternalData</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.FileData\ESFA.DC.ILR.ValidationService.FileData.csproj">
-      <Project>{296CD683-36B7-4ED1-9332-1518A079E134}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.FileData</Name>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
+      <Project>{FAACF863-EB2E-473F-8EF9-F7FA9613F556}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513C4F05-55F4-4AEF-B3EB-427C024DA043}</Project>

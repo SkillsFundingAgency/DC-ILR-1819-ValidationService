@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
         {
             var aimType = 1;
 
-            var aimTypeInternalDataServiceMock = new Mock<IAimTypeInternalDataService>();
+            var aimTypeInternalDataServiceMock = new Mock<IAimTypeDataService>();
 
             aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(false);
 
@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
         {
             var aimType = 1;
 
-            var aimTypeInternalDataServiceMock = new Mock<IAimTypeInternalDataService>();
+            var aimTypeInternalDataServiceMock = new Mock<IAimTypeDataService>();
 
             aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(true);
 
@@ -52,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
                 }
             };
 
-            var aimTypeInternalDataServiceMock = new Mock<IAimTypeInternalDataService>();
+            var aimTypeInternalDataServiceMock = new Mock<IAimTypeDataService>();
 
             aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(false);
 
@@ -78,7 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
                 }
             };
 
-            var aimTypeInternalDataServiceMock = new Mock<IAimTypeInternalDataService>();
+            var aimTypeInternalDataServiceMock = new Mock<IAimTypeDataService>();
 
             aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(true);
 
@@ -88,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
             }
         }
 
-        private AimType_01Rule NewRule(IAimTypeInternalDataService aimTypeInternalDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private AimType_01Rule NewRule(IAimTypeDataService aimTypeInternalDataService = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new AimType_01Rule(aimTypeInternalDataService, validationErrorHandler);
         }

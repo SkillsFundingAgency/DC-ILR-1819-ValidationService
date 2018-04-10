@@ -23,24 +23,30 @@ namespace ESFA.DC.ILR.ValidationService.Console
 
         private static void RunValidation(string filePath)
         {
-            var validationContext = new ValidationContextStub();
-
-            validationContext.Input = filePath;
+            var validationContext = new ValidationContextStub
+            {
+                Input = filePath
+            };
 
             var container = BuildContainer();
 
-            using (var scope = container.BeginLifetimeScope())
+            using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, validationContext)))
             {
                 var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
-
+                
                 var result = ruleSetOrchestrationService.Execute(validationContext);
             }
+        }
+
+        private static void RegisterContext(ContainerBuilder containerBuilder, IValidationContext validationContext)
+        {
+            containerBuilder.RegisterInstance(validationContext).As<IValidationContext>();
         }
 
         private static IContainer BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
-
+            
             containerBuilder.RegisterModule<ValidationServiceConsoleModule>();
 
             return containerBuilder.Build();

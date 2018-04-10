@@ -7,10 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.Interface", "ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj", "{513C4F05-55F4-4AEF-B3EB-427C024DA043}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.ExternalData", "ESFA.DC.ILR.ValidationService.ExternalData\ESFA.DC.ILR.ValidationService.ExternalData.csproj", "{991F0564-9702-4B47-8B5F-7C5794563F05}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.ExternalData.Tests", "ESFA.DC.ILR.ValidationService.ExternalData.Tests\ESFA.DC.ILR.ValidationService.ExternalData.Tests.csproj", "{D6D7C486-D85A-46C7-8414-B51ECB17DBF8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.InternalData", "ESFA.DC.ILR.ValidationService.InternalData\ESFA.DC.ILR.ValidationService.InternalData.csproj", "{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.InternalData.Tests", "ESFA.DC.ILR.ValidationService.InternalData.Tests\ESFA.DC.ILR.ValidationService.InternalData.Tests.csproj", "{AC4146B8-9F67-4082-8BC0-3142C7D4B90E}"
@@ -29,14 +25,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests", "ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests\ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests.csproj", "{42079B65-872C-413C-8868-FBEDF1065180}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.FileData", "ESFA.DC.ILR.ValidationService.FileData\ESFA.DC.ILR.ValidationService.FileData.csproj", "{296CD683-36B7-4ED1-9332-1518A079E134}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESFA.DC.ILR.ValidationService.Data", "ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj", "{FAACF863-EB2E-473F-8EF9-F7FA9613F556}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.FileData.Tests", "ESFA.DC.ILR.ValidationService.FileData.Tests\ESFA.DC.ILR.ValidationService.FileData.Tests.csproj", "{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.Data.Population", "ESFA.DC.ILR.ValidationService.Data.Population\ESFA.DC.ILR.ValidationService.Data.Population.csproj", "{ACACD78D-34BD-45A9-A756-C637CB8987A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.Data.Tests", "ESFA.DC.ILR.ValidationService.Data.Tests\ESFA.DC.ILR.ValidationService.Data.Tests.csproj", "{F8415CB1-6E85-4E4C-AAE9-B1490802FC76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.Data.Population.Tests", "ESFA.DC.ILR.ValidationService.Data.Population.Tests\ESFA.DC.ILR.ValidationService.Data.Population.Tests.csproj", "{BF5DE04C-B644-47B9-9329-1F62272B41F0}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -50,14 +47,6 @@ Global
 		{513C4F05-55F4-4AEF-B3EB-427C024DA043}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{513C4F05-55F4-4AEF-B3EB-427C024DA043}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{513C4F05-55F4-4AEF-B3EB-427C024DA043}.Release|Any CPU.Build.0 = Release|Any CPU
-		{991F0564-9702-4B47-8B5F-7C5794563F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{991F0564-9702-4B47-8B5F-7C5794563F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{991F0564-9702-4B47-8B5F-7C5794563F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{991F0564-9702-4B47-8B5F-7C5794563F05}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D6D7C486-D85A-46C7-8414-B51ECB17DBF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6D7C486-D85A-46C7-8414-B51ECB17DBF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6D7C486-D85A-46C7-8414-B51ECB17DBF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6D7C486-D85A-46C7-8414-B51ECB17DBF8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -94,20 +83,31 @@ Global
 		{42079B65-872C-413C-8868-FBEDF1065180}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42079B65-872C-413C-8868-FBEDF1065180}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42079B65-872C-413C-8868-FBEDF1065180}.Release|Any CPU.Build.0 = Release|Any CPU
-		{296CD683-36B7-4ED1-9332-1518A079E134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{296CD683-36B7-4ED1-9332-1518A079E134}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{296CD683-36B7-4ED1-9332-1518A079E134}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{296CD683-36B7-4ED1-9332-1518A079E134}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EDC7AD9E-FA69-4BEB-97B3-3029E7F43717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAACF863-EB2E-473F-8EF9-F7FA9613F556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAACF863-EB2E-473F-8EF9-F7FA9613F556}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAACF863-EB2E-473F-8EF9-F7FA9613F556}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAACF863-EB2E-473F-8EF9-F7FA9613F556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACACD78D-34BD-45A9-A756-C637CB8987A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACACD78D-34BD-45A9-A756-C637CB8987A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACACD78D-34BD-45A9-A756-C637CB8987A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACACD78D-34BD-45A9-A756-C637CB8987A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8415CB1-6E85-4E4C-AAE9-B1490802FC76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8415CB1-6E85-4E4C-AAE9-B1490802FC76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8415CB1-6E85-4E4C-AAE9-B1490802FC76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8415CB1-6E85-4E4C-AAE9-B1490802FC76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF5DE04C-B644-47B9-9329-1F62272B41F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF5DE04C-B644-47B9-9329-1F62272B41F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF5DE04C-B644-47B9-9329-1F62272B41F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF5DE04C-B644-47B9-9329-1F62272B41F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E07A096E-09B9-4C13-AEBD-1B9654765419}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
