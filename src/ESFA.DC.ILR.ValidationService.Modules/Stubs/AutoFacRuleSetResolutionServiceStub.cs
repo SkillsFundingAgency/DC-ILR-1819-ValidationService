@@ -21,15 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 
             var rules = containerRules.ToList();
 
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-            rules.AddRange(rules);
-
-            return rules.Take(600);
+            return rules;
         }
     }
 }

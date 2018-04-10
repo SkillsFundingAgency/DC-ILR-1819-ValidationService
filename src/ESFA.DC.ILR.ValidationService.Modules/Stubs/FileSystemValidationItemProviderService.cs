@@ -28,19 +28,6 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
 
             List<MessageLearner> learners = message.Learner.ToList();
 
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-
             return learners;
         }
     }
