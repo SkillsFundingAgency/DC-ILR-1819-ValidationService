@@ -19,16 +19,16 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 
             Rules = new List<Type>()
             {
-                typeof(AddHours_01Rule),
-                typeof(AddHours_02Rule),
-                typeof(AddHours_04Rule),
-                typeof(AddHours_05Rule),
-                typeof(AddHours_06Rule),
-                typeof(AimSeqNumber_02Rule),
-                typeof(AimType_01Rule),
-                typeof(AimType_05Rule),
-                typeof(AimType_07Rule),
-                typeof(CompStatus_01Rule),
+                //typeof(AddHours_01Rule),
+                //typeof(AddHours_02Rule),
+                //typeof(AddHours_04Rule),
+                //typeof(AddHours_05Rule),
+                //typeof(AddHours_06Rule),
+                //typeof(AimSeqNumber_02Rule),
+                //typeof(AimType_01Rule),
+                //typeof(AimType_05Rule),
+                //typeof(AimType_07Rule),
+                //typeof(CompStatus_01Rule),
                 typeof(ULN_03Rule),
             };
         }
