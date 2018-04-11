@@ -39,20 +39,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+            if (LearnerConditionMet(objectToValidate.ULN))
             {
-                if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataCache.FilePreparationDate, _academicYearDataService.JanuaryFirst()) && LearningDeliveryFAMConditionMet(objectToValidate))
+                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.ULN, _fileDataCache.FilePreparationDate));
-                    return;
+                    if (ConditionMet(learningDelivery.FundModel, _fileDataCache.FilePreparationDate, _academicYearDataService.JanuaryFirst()) && LearningDeliveryFAMConditionMet(objectToValidate))
+                    {
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.ULN, _fileDataCache.FilePreparationDate));
+                        return;
+                    }
                 }
             }
         }
 
-        public bool ConditionMet(long fundModel, long uln, DateTime filePreparationDate, DateTime academicYearJanuaryFirst)
+        public bool LearnerConditionMet(long uln)
         {
-            return uln == ValidationConstants.TemporaryULN
-                   && filePreparationDate < academicYearJanuaryFirst
+            return uln == ValidationConstants.TemporaryULN;
+        }
+
+        public bool ConditionMet(long fundModel, DateTime filePreparationDate, DateTime academicYearJanuaryFirst)
+        {
+            return filePreparationDate < academicYearJanuaryFirst
                    && _fundModels.Contains(fundModel);
         }
 

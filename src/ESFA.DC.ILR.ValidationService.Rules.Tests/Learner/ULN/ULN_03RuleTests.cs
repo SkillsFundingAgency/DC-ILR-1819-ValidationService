@@ -45,6 +45,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             NewRule(learnerQueryService: learnerQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learner).Should().BeTrue();
         }
 
+        [Fact]
+        public void LearnerConditionMet_True()
+        {
+            NewRule().LearnerConditionMet(9999999999).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnerConditionMet_False()
+        {
+            NewRule().LearnerConditionMet(1).Should().BeFalse();
+        }
+
         [Theory]
         [InlineData(25)]
         [InlineData(82)]
@@ -54,25 +66,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [InlineData(70)]
         public void ConditionMet_True(long fundModel)
         {
-            NewRule().ConditionMet(fundModel, 9999999999, new DateTime(1970, 1, 1), new DateTime(2018, 1, 1)).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMet_False_Uln()
-        {
-            NewRule().ConditionMet(25, 1, new DateTime(1970, 1, 1), new DateTime(2018, 1, 1)).Should().BeFalse();
+            NewRule().ConditionMet(fundModel, new DateTime(1970, 1, 1), new DateTime(2018, 1, 1)).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False_FundModel()
         {
-            NewRule().ConditionMet(1, 9999999999, new DateTime(1970, 1, 1), new DateTime(2018, 1, 1)).Should().BeFalse();
+            NewRule().ConditionMet(1, new DateTime(1970, 1, 1), new DateTime(2018, 1, 1)).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_FilePreparationDate()
         {
-            NewRule().ConditionMet(25, 9999999999, new DateTime(2030, 1, 1), new DateTime(2018, 1, 1)).Should().BeFalse();
+            NewRule().ConditionMet(25, new DateTime(2030, 1, 1), new DateTime(2018, 1, 1)).Should().BeFalse();
         }
 
         [Fact]
