@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
+using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
 using FluentAssertions;
 using Xunit;
 
@@ -11,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Handle()
         {
-            var validationErrorHandler = new ValidationErrorHandler();
+            var validationErrorHandler = NewHandler();
 
             validationErrorHandler.Handle("RuleName");
 
@@ -21,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void HandleParallel()
         {
-            var validationErrorHandler = new ValidationErrorHandler();
+            var validationErrorHandler = NewHandler();
 
             Parallel.For(0, 1000, (i) =>
             {
@@ -37,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Handle_RuleName()
         {
-            var validationErrorHandler = new ValidationErrorHandler();
+            var validationErrorHandler = NewHandler();
 
             validationErrorHandler.Handle("RuleName");
 
@@ -52,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Handle_LearnRefNumber()
         {
-            var validationErrorHandler = new ValidationErrorHandler();
+            var validationErrorHandler = NewHandler();
 
             validationErrorHandler.Handle("RuleName", "LearnRefNumber");
 
@@ -67,7 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Handle_AimSequenceNumber()
         {
-            var validationErrorHandler = new ValidationErrorHandler();
+            var validationErrorHandler = NewHandler();
 
             validationErrorHandler.Handle("RuleName", "LearnRefNumber", 1234);
 
@@ -82,16 +85,49 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Handle_ErrorMessageParameters()
         {
-            var validationErrorHandler = new ValidationErrorHandler();
+            var validationErrorHandler = NewHandler();
 
-            validationErrorHandler.Handle("RuleName", "LearnRefNumber", 1234, new string[] { "error", "message", "parameters" });
+            validationErrorHandler.Handle("RuleName", "LearnRefNumber", 1234, new List<IErrorMessageParameter>() { new ErrorMessageParameter("A", "error"), new ErrorMessageParameter("B", "message"), new ErrorMessageParameter("C", "parameters") });
 
             var validationError = validationErrorHandler.ErrorBag.First();
 
             validationError.RuleName.Should().Be("RuleName");
             validationError.LearnerReferenceNumber.Should().Be("LearnRefNumber");
             validationError.AimSequenceNumber.Should().Be(1234);
-            validationError.ErrorMessageParameters.Should().Equal(new string[] { "error", "message", "parameters" });
+            validationError.ErrorMessageParameters.Should().HaveCount(3);
+            validationError.ErrorMessageParameters.Should().Equal(new List<IErrorMessageParameter>() { new ErrorMessageParameter("A", "error"), new ErrorMessageParameter("B", "message"), new ErrorMessageParameter("C", "parameters") });
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var errorMessageParameter = NewHandler().BuildErrorMessageParameter("Property", "Value");
+
+            errorMessageParameter.PropertyName.Should().Be("Property");
+            errorMessageParameter.Value.Should().Be("Value");
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters_ToString()
+        {
+            var errorMessageParameter = NewHandler().BuildErrorMessageParameter("Property", 123);
+
+            errorMessageParameter.PropertyName.Should().Be("Property");
+            errorMessageParameter.Value.Should().Be("123");
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters_Null()
+        {
+            var errorMessageParameter = NewHandler().BuildErrorMessageParameter("Property", null);
+
+            errorMessageParameter.PropertyName.Should().Be("Property");
+            errorMessageParameter.Value.Should().Be(null);
+        }
+
+        private ValidationErrorHandler NewHandler()
+        {
+            return new ValidationErrorHandler();
         }
     }
 }

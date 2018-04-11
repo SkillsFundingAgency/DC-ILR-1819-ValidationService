@@ -5,7 +5,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model
 {
     public struct ValidationError : IValidationError
     {
-        public ValidationError(string ruleName, string learnerRefernenceNumber, long? aimSequenceNumber = null,  IEnumerable<string> errorMessageParameters = null)
+        public ValidationError(string ruleName, string learnerRefernenceNumber, long? aimSequenceNumber = null,  IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
         {
             LearnerReferenceNumber = learnerRefernenceNumber;
             AimSequenceNumber = aimSequenceNumber;
@@ -19,6 +19,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model
 
         public string RuleName { get; }
 
-        public IEnumerable<string> ErrorMessageParameters { get; }
+        public IEnumerable<IErrorMessageParameter> ErrorMessageParameters { get; }
     }
 }

@@ -13,6 +13,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
     public class AddHours_05RuleTests : AbstractRuleTests
     {
         [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AddHours_05");
+        }
+
+        [Fact]
         public void AddHoursConditionMet_True()
         {
             NewRule().AddHoursConditionMet(61).Should().BeTrue();
@@ -62,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 
             learningDeliveryQueryServiceMock.Setup(qs => qs.AverageAddHoursPerLearningDay(learningDelivery)).Returns(6);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AddHours_05"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(learningDeliveryQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }

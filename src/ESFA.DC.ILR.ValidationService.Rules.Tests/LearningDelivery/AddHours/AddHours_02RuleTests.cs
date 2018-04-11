@@ -9,6 +9,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 {
     public class AddHours_02RuleTests : AbstractRuleTests
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AddHours_02");
+        }
+
         [Theory]
         [InlineData(25)]
         [InlineData(82)]
@@ -42,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
                 }
             };
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AddHours_02"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }

@@ -12,6 +12,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
     public class AddHours_01RuleTests : AbstractRuleTests
     {
         [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AddHours_01");
+        }
+
+        [Fact]
         public void ConditionMet_True()
         {
             NewRule().ConditionMet(35, 1, new DateTime(2015, 7, 31)).Should().BeTrue();
@@ -80,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
                 }
             };
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AddHours_01"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }

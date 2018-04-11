@@ -10,6 +10,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 {
     public class AimType_05RuleTests : AbstractRuleTests
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AimType_05");
+        }
+
         [Theory]
         [InlineData(5, 25)]
         [InlineData(5, 82)]
@@ -40,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
                 }
             };
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AimType_05"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }

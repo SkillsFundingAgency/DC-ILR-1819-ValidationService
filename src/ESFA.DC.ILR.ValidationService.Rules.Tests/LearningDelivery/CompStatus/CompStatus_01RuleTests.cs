@@ -13,6 +13,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
     public class CompStatus_01RuleTests : AbstractRuleTests
     {
         [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("CompStatus_01");
+        }
+
+        [Fact]
         public void ConditionMet_True()
         {
             var compStatus = 1;
@@ -58,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
 
             compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(false);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("CompStatus_01"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(compStatusInternalDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }

@@ -48,6 +48,7 @@
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ContPrefTypeConstants.cs" />
     <Compile Include="Constants\FundModelConstants.cs" />
+    <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Derived\DD01.cs" />
     <Compile Include="Derived\DD04.cs" />
     <Compile Include="Derived\DD06.cs" />

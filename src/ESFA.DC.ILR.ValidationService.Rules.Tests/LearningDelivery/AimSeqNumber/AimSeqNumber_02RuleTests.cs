@@ -11,6 +11,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimSeqNumbe
     public class AimSeqNumber_02RuleTests : AbstractRuleTests
     {
         [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AimSeqNumber_02");
+        }
+
+        [Fact]
         public void ConditionMet_True()
         {
             NewRule().ConditionMet(1, 2).Should().BeTrue();
@@ -36,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimSeqNumbe
                 }
             };
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AimSeqNumber_02", aimSequenceNumber: 2))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
@@ -14,6 +15,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
 {
     public class ULN_03RuleTests : AbstractRuleTests
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("ULN_03");
+        }
+
         [Fact]
         public void LearningDeliveryFAMConditionMet_False()
         {
@@ -99,7 +106,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         }
 
         [Fact]
-        public void Validate_Errors()
+        public void Validate_Error()
         {
             var learner = new ILR.Tests.Model.TestLearner()
             {
@@ -126,10 +133,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             var learnerQueryServiceMock = new Mock<ILearnerQueryService>();
             learnerQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner, "ACT", "1")).Returns(false);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("ULN_03"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(fileDataServiceMock.Object, academicYearDataServiceMock.Object, learnerQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ULN", (long)1234567890)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FilePrepDate", "01/08/2017")).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1234567890, new DateTime(2017, 8, 1)).ToList();
+
+            validationErrorHandlerMock.Verify();
         }
 
         private ULN_03Rule NewRule(IFileDataCache fileDataCache = null, IAcademicYearDataService academicYearDataService = null, ILearnerQueryService learnerQueryService = null, IValidationErrorHandler validationErrorHandler = null)

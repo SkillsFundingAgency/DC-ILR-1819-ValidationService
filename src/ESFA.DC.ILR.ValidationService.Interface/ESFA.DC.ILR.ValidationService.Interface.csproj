@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDateTimeProvider.cs" />
+    <Compile Include="IErrorMessageParameter.cs" />
     <Compile Include="IRule.cs" />
     <Compile Include="IRuleSetExecutionService.cs" />
     <Compile Include="IRuleSetOrchestrationService.cs" />

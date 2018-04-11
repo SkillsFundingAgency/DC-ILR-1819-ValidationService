@@ -3,5 +3,7 @@
     public interface IRule<in T> where T : class
     {
         void Validate(T objectToValidate);
+
+        string RuleName { get; }
     }
 }

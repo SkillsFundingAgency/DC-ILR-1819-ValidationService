@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
         private readonly ILearningDeliveryQueryService _learningDeliveryQueryService;
 
         public AddHours_06Rule(ILearningDeliveryQueryService learningDeliveryQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.AddHours_06)
         {
             _learningDeliveryQueryService = learningDeliveryQueryService;
         }
@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
             {
                 if (ConditionMet(_learningDeliveryQueryService.AverageAddHoursPerLearningDay(learningDelivery)))
                 {
-                    HandleValidationError(RuleNameConstants.AddHours_06, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }

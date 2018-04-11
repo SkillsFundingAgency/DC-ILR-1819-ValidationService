@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="AutoFacRuleSetResolutionService.cs" />
     <Compile Include="DateTimeProvider.cs" />
+    <Compile Include="ErrorHandler\Model\ErrorMessageParameter.cs" />
     <Compile Include="ErrorHandler\Model\ValidationError.cs" />
     <Compile Include="ErrorHandler\ValidationErrorHandler.cs" />
     <Compile Include="ErrorHandler\ValidationErrorHandlerOutputService.cs" />

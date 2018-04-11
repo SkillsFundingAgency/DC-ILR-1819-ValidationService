@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
         private readonly IAimTypeDataService _aimTypeInternalDataService;
 
         public AimType_01Rule(IAimTypeDataService aimTypeInternalDataService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.AimType_01)
         {
             _aimTypeInternalDataService = aimTypeInternalDataService;
         }
@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
             {
                 if (ConditionMet(learningDelivery.AimType))
                 {
-                    HandleValidationError(RuleNameConstants.AimType_01, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }

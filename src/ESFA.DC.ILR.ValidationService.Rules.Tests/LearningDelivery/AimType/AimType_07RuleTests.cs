@@ -15,6 +15,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
     public class AimType_07RuleTests : AbstractRuleTests
     {
         [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AimType_07");
+        }
+
+        [Fact]
         public void ConditionMet_False_ProgType()
         {
             NewRule().ConditionMet(24, 5, new DateTime(2018, 8, 1)).Should().BeFalse();
@@ -87,7 +93,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, "SOF", "105")).Returns(true);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AimType_07"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }

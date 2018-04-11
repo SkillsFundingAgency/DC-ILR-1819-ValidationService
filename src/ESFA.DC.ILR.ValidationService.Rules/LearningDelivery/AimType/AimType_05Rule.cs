@@ -8,7 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
     public class AimType_05Rule : AbstractRule, IRule<ILearner>
     {
         public AimType_05Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.AimType_05)
         {
         }
 
@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
             {
                 if (ConditionMet(learningDelivery.AimType, learningDelivery.FundModel))
                 {
-                    HandleValidationError(RuleNameConstants.AimType_05, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }

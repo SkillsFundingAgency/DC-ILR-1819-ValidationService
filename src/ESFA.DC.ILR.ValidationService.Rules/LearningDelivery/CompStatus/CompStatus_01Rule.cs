@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
         private readonly ICompStatusDataService _compStatusInternalDataService;
 
         public CompStatus_01Rule(ICompStatusDataService compStatusInternalDataService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.CompStatus_01)
         {
             _compStatusInternalDataService = compStatusInternalDataService;
         }
@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
             {
                 if (ConditionMet(learningDelivery.CompStatus))
                 {
-                    HandleValidationError(RuleNameConstants.CompStatus_01, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }

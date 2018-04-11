@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -29,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
             };
 
         public ULN_03Rule(IFileDataCache fileDataCache, IAcademicYearDataService academicYearDataService, ILearnerQueryService learnerQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.ULN_03)
         {
             _fileDataCache = fileDataCache;
             _academicYearDataService = academicYearDataService;
@@ -42,7 +43,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
             {
                 if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, _fileDataCache.FilePreparationDate, _academicYearDataService.JanuaryFirst()) && LearningDeliveryFAMConditionMet(objectToValidate))
                 {
-                    HandleValidationError(RuleNameConstants.ULN_03, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.ULN, _fileDataCache.FilePreparationDate));
                     return;
                 }
             }
@@ -58,6 +59,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
         public bool LearningDeliveryFAMConditionMet(ILearner learner)
         {
             return !_learnerQueryService.HasLearningDeliveryFAMCodeForType(learner, LearningDeliveryFAMTypeConstants.ACT, "1");
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln, DateTime filePreparationDate)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
+                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, filePreparationDate.ToString("d", new CultureInfo("en-GB"))),
+            };
         }
     }
 }
