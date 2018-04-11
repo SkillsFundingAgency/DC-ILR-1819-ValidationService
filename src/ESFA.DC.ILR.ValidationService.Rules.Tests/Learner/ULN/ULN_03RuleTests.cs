@@ -153,7 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ULN", (long)1234567890)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FilePrepDate", "01/08/2017")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1234567890, new DateTime(2017, 8, 1)).ToList();
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1234567890, new DateTime(2017, 8, 1));
 
             validationErrorHandlerMock.Verify();
         }

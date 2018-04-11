@@ -49,6 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(AimType_05Rule),
                 typeof(AimType_07Rule),
                 typeof(CompStatus_01Rule),
+                typeof(CompStatus_02Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -57,7 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(11);
+            rules.Should().HaveCount(12);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

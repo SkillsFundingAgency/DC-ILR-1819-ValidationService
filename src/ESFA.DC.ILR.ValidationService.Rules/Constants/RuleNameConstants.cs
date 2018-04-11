@@ -15,6 +15,7 @@
         public const string AimType_07 = "AimType_07";
 
         public const string CompStatus_01 = "CompStatus_01";
+        public const string CompStatus_02 = "CompStatus_02";
 
         public const string ULN_03 = "ULN_03";
     }

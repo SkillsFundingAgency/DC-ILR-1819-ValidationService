@@ -97,6 +97,7 @@
     <Compile Include="LearningDelivery\AimType\AimType_05RuleTests.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_07RuleTests.cs" />
     <Compile Include="LearningDelivery\CompStatus\CompStatus_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\CompStatus\CompStatus_02RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryServiceTests.cs" />
