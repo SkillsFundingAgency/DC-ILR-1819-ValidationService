@@ -10,30 +10,60 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
 {
-    public class CompStatus_05RuleTests : AbstractRuleTests
+    public class CompStatus_06RuleTests : AbstractRuleTests
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("CompStatus_05");
+            NewRule().RuleName.Should().Be("CompStatus_06");
         }
 
         [Fact]
         public void ConditionMet_True()
         {
-            NewRule().ConditionMet(1, 1).Should().BeTrue();
+            NewRule().ConditionMet(1, 3).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False_Outcome()
         {
-            NewRule().ConditionMet(null, 1).Should().BeFalse();
+            NewRule().ConditionMet(2, 3).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_CompStatus()
         {
-            NewRule().ConditionMet(1, 2).Should().BeFalse();
+            NewRule().ConditionMet(1, 1).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(8)]
+        public void OutcomeConditionMet_True(int outcome)
+        {
+            NewRule().OutcomeConditionMet(outcome).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(2)]
+        public void OutcomeConditionMet_False(int? outcome)
+        {
+            NewRule().OutcomeConditionMet(outcome).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(3)]
+        [InlineData(6)]
+        public void CompStatusConditionMet_True(int compStatus)
+        {
+            NewRule().CompStatusConditionMet(compStatus).Should().BeTrue();
+        }
+
+        [Fact]
+        public void CompStatusConditionMet_False()
+        {
+            NewRule().CompStatusConditionMet(2).Should().BeFalse();
         }
 
         [Fact]
@@ -46,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
                     new TestLearningDelivery()
                     {
                         OutcomeNullable = 1,
-                        CompStatus = 1,
+                        CompStatus = 3,
                     }
                 }
             };
@@ -90,9 +120,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
             validationErrorHandlerMock.Verify();
         }
 
-        private CompStatus_05Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        private CompStatus_06Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new CompStatus_05Rule(validationErrorHandler);
+            return new CompStatus_06Rule(validationErrorHandler);
         }
     }
 }
