@@ -72,6 +72,7 @@
     <Compile Include="LearningDelivery\AimType\AimType_05Rule.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_07Rule.cs" />
     <Compile Include="LearningDelivery\CompStatus\CompStatus_01Rule.cs" />
+    <Compile Include="LearningDelivery\CompStatus\CompStatus_03Rule.cs" />
     <Compile Include="LearningDelivery\CompStatus\CompStatus_02Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />

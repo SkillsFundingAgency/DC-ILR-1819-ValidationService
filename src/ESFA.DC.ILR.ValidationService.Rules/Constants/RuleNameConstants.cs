@@ -16,6 +16,7 @@
 
         public const string CompStatus_01 = "CompStatus_01";
         public const string CompStatus_02 = "CompStatus_02";
+        public const string CompStatus_03 = "CompStatus_03";
 
         public const string ULN_03 = "ULN_03";
     }
