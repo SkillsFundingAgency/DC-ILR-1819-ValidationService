@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -11,30 +10,30 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
 {
-    public class CompStatus_03RuleTests : AbstractRuleTests
+    public class CompStatus_05RuleTests : AbstractRuleTests
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("CompStatus_03");
+            NewRule().RuleName.Should().Be("CompStatus_05");
         }
 
         [Fact]
         public void ConditionMet_True()
         {
-            NewRule().ConditionMet(null, 2).Should().BeTrue();
+            NewRule().ConditionMet(1, 1).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False_LearnActEndDate()
+        public void ConditionMet_False_Outcome()
         {
-            NewRule().ConditionMet(new DateTime(2017, 1, 1), 1).Should().BeFalse();
+            NewRule().ConditionMet(null, 1).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_CompStatus()
         {
-            NewRule().ConditionMet(null, 1).Should().BeFalse();
+            NewRule().ConditionMet(1, 2).Should().BeFalse();
         }
 
         [Fact]
@@ -46,8 +45,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
                 {
                     new TestLearningDelivery()
                     {
-                        LearnActEndDateNullable = null,
-                        CompStatus = 2,
+                        OutcomeNullable = 1,
+                        CompStatus = 1,
                     }
                 }
             };
@@ -67,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
                 {
                     new TestLearningDelivery()
                     {
-                        LearnActEndDateNullable = new DateTime(2017, 1, 1),
+                        OutcomeNullable = null,
                     }
                 }
             };
@@ -83,16 +82,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("CompStatus", 1)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("CompStatus", 1)).Verifiable(); validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("CompStatus", 1)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("Outcome", 1)).Verifiable();
 
-            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(1);
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, 1);
 
             validationErrorHandlerMock.Verify();
         }
 
-        private CompStatus_03Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        private CompStatus_05Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new CompStatus_03Rule(validationErrorHandler);
+            return new CompStatus_05Rule(validationErrorHandler);
         }
     }
 }

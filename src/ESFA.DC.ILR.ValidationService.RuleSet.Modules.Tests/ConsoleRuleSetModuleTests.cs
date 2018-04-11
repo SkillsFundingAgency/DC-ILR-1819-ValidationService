@@ -51,6 +51,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(CompStatus_01Rule),
                 typeof(CompStatus_02Rule),
                 typeof(CompStatus_03Rule),
+                typeof(CompStatus_04Rule),
+                typeof(CompStatus_05Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -59,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(13);
+            rules.Should().HaveCount(15);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

@@ -8,5 +8,6 @@
 
         public const string CompStatus = "CompStatus";
         public const string LearnActEndDate = "LearnActEndDate";
+        public const string Outcome = "Outcome";
     }
 }
