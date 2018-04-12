@@ -135,7 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ConRefNumbe
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FundModel", 1)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ConRefNumber", "abc")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, "abc");
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, "abc");
 
             validationErrorHandlerMock.Verify();
         }

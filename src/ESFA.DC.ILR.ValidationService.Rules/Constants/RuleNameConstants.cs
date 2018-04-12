@@ -24,6 +24,8 @@
         public const string ConRefNumber_01 = "ConRefNumber_01";
         public const string ConRefNumber_03 = "ConRefNumber_03";
 
+        public const string DelLocPostCode_03 = "DelLocPostCode_03";
+
         public const string ULN_03 = "ULN_03";
     }
 }
