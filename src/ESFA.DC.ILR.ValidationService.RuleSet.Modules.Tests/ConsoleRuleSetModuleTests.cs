@@ -10,6 +10,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
 using FluentAssertions;
 using Moq;
@@ -54,6 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(CompStatus_04Rule),
                 typeof(CompStatus_05Rule),
                 typeof(CompStatus_06Rule),
+                typeof(ConRefNumber_01Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -62,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(16);
+            rules.Should().HaveCount(17);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
