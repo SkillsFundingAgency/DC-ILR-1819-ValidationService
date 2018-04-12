@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 {
-    public class AimType_01RuleTests : AbstractRuleTests
+    public class AimType_01RuleTests : AbstractRuleTests<AimType_01Rule>
     {
         [Fact]
         public void RuleName()

@@ -102,6 +102,7 @@
     <Compile Include="LearningDelivery\CompStatus\CompStatus_04RuleTests.cs" />
     <Compile Include="LearningDelivery\CompStatus\CompStatus_03RuleTests.cs" />
     <Compile Include="LearningDelivery\CompStatus\CompStatus_02RuleTests.cs" />
+    <Compile Include="LearningDelivery\ConRefNumber\ConRefNumber_03RuleTests.cs" />
     <Compile Include="LearningDelivery\ConRefNumber\ConRefNumber_01RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

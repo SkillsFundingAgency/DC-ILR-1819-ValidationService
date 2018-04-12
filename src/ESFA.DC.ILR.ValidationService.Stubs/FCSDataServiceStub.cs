@@ -6,7 +6,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
     {
         public bool ConRefNumberExists(string conRefNumber)
         {
-            return false;
+            return true;
         }
     }
 }

@@ -22,6 +22,7 @@
         public const string CompStatus_06 = "CompStatus_06";
 
         public const string ConRefNumber_01 = "ConRefNumber_01";
+        public const string ConRefNumber_03 = "ConRefNumber_03";
 
         public const string ULN_03 = "ULN_03";
     }

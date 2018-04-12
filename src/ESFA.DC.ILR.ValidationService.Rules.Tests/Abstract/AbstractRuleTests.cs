@@ -6,9 +6,10 @@ using Moq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract
 {
-    public abstract class AbstractRuleTests
+    public abstract class AbstractRuleTests<T>
+        where T : class
     {
-        public ValidationErrorHandlerMock BuildValidationErrorHandlerMockForError()
+        protected ValidationErrorHandlerMock BuildValidationErrorHandlerMockForError()
         {
             var validationErrorHandlerMock = new ValidationErrorHandlerMock(true);
 
@@ -17,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract
             return validationErrorHandlerMock;
         }
 
-        public ValidationErrorHandlerMock BuildValidationErrorHandlerMockForNoError()
+        protected ValidationErrorHandlerMock BuildValidationErrorHandlerMockForNoError()
         {
             var validationErrorHandlerMock = new ValidationErrorHandlerMock(false);
 
@@ -26,6 +27,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract
                 .Throws(new Exception("Validation Error should not be Handled."));
 
             return validationErrorHandlerMock;
+        }
+
+        protected Mock<T> NewRuleMock()
+        {
+            return new Mock<T>
+            {
+                CallBase = true
+            };
         }
     }
 }

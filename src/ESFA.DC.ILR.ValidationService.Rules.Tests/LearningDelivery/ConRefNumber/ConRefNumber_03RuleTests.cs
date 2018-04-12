@@ -10,12 +10,12 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ConRefNumber
 {
-    public class ConRefNumber_01RuleTests : AbstractRuleTests<ConRefNumber_01Rule>
+    public class ConRefNumber_03RuleTests : AbstractRuleTests<ConRefNumber_03Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("ConRefNumber_01");
+            NewRule().RuleName.Should().Be("ConRefNumber_03");
         }
 
         [Fact]
@@ -63,102 +63,67 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ConRefNumbe
         [Fact]
         public void FundModelConditionMet_True()
         {
-            NewRule().FundModelConditionMet(70).Should().BeTrue();
+            NewRule().FundModelConditionMet(10).Should().BeTrue();
         }
 
         [Fact]
         public void FundModelConditionMet_False()
         {
-            NewRule().FundModelConditionMet(71).Should().BeFalse();
+            NewRule().FundModelConditionMet(11).Should().BeFalse();
         }
 
         [Fact]
         public void ConRefNumberConditionMet_True()
         {
-            var conRefNumber = "abc";
-
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-
-            fcsDataServiceMock.Setup(ds => ds.ConRefNumberExists(conRefNumber)).Returns(false);
-
-            NewRule(fcsDataServiceMock.Object).ConRefNumberConditionMet(conRefNumber).Should().BeTrue();
+            NewRule().ConRefNumberConditionMet("abc").Should().BeTrue();
         }
 
-        [Fact]
-        public void ConRefNumberConditionMet_True_Null()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("   ")]
+        public void ConRefNumberConditionMet_False_Null(string conRefNumber)
         {
-            NewRule().ConRefNumberConditionMet(null).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConRefNumberConditionMet_True_WhiteSpace()
-        {
-            NewRule().ConRefNumberConditionMet("  ").Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConRefNumberConditionMet_False_Lookup()
-        {
-            var conRefNumber = "abc";
-
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-
-            fcsDataServiceMock.Setup(ds => ds.ConRefNumberExists(conRefNumber)).Returns(true);
-
-            NewRule(fcsDataServiceMock.Object).ConRefNumberConditionMet(conRefNumber).Should().BeFalse();
+            NewRule().ConRefNumberConditionMet(null).Should().BeFalse();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var conRefNumber = "abc";
-
             var learner = new TestLearner()
             {
                 LearningDeliveries = new List<TestLearningDelivery>()
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = 70,
-                        ConRefNumber = conRefNumber,
+                        FundModel = 10,
+                        ConRefNumber = "abc",
                     }
                 }
             };
 
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-
-            fcsDataServiceMock.Setup(ds => ds.ConRefNumberExists(conRefNumber)).Returns(false);
-
             using (var validationErrorHandler = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(fcsDataServiceMock.Object, validationErrorHandler.Object).Validate(learner);
+                NewRule(validationErrorHandler.Object).Validate(learner);
             }
         }
 
         [Fact]
         public void Validate_NoErrors()
         {
-            var conRefNumber = "abc";
-
             var learner = new TestLearner()
             {
                 LearningDeliveries = new List<TestLearningDelivery>()
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = 70,
-                        ConRefNumber = conRefNumber,
+                        FundModel = 10,
                     }
                 }
             };
 
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-
-            fcsDataServiceMock.Setup(ds => ds.ConRefNumberExists(conRefNumber)).Returns(true);
-
             using (var validationErrorHandler = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(fcsDataServiceMock.Object, validationErrorHandler.Object).Validate(learner);
+                NewRule(validationErrorHandler.Object).Validate(learner);
             }
         }
 
@@ -175,9 +140,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ConRefNumbe
             validationErrorHandlerMock.Verify();
         }
 
-        private ConRefNumber_01Rule NewRule(IFCSDataService fcsDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private ConRefNumber_03Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new ConRefNumber_01Rule(fcsDataService, validationErrorHandler);
+            return new ConRefNumber_03Rule(validationErrorHandler);
         }
     }
 }

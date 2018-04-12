@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
 {
-    public class CompStatus_06RuleTests : AbstractRuleTests
+    public class CompStatus_06RuleTests : AbstractRuleTests<CompStatus_06Rule>
     {
         [Fact]
         public void RuleName()

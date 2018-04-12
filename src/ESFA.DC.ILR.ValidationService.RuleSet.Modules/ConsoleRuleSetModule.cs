@@ -36,6 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(CompStatus_05Rule),
                 typeof(CompStatus_06Rule),
                 typeof(ConRefNumber_01Rule),
+                typeof(ConRefNumber_03Rule),
                 typeof(ULN_03Rule),
             };
         }

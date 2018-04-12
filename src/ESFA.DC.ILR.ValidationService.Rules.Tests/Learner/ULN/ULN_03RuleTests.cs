@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
 {
-    public class ULN_03RuleTests : AbstractRuleTests
+    public class ULN_03RuleTests : AbstractRuleTests<ULN_03Rule>
     {
         [Fact]
         public void RuleName()

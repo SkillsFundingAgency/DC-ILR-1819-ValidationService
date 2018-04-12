@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 {
-    public class AddHours_06RuleTests : AbstractRuleTests
+    public class AddHours_06RuleTests : AbstractRuleTests<AddHours_06Rule>
     {
         [Fact]
         public void RuleName()
