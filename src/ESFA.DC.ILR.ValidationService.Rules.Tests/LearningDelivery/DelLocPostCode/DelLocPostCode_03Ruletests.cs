@@ -126,7 +126,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         }
 
         [Fact]
-        public void LearningDeliveryConditionMet_True()
+        public void LearningDeliveryFAMConditionMet_True()
         {
             var learningDeliveryFams = new List<TestLearningDeliveryFAM>();
 
@@ -138,7 +138,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         }
 
         [Fact]
-        public void LearningDeliveryConditionMet_False()
+        public void LearningDeliveryFAMConditionMet_False()
         {
             var learningDeliveryFams = new List<TestLearningDeliveryFAM>();
 

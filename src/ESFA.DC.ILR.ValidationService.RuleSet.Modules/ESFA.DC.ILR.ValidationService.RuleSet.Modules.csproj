@@ -67,6 +67,10 @@
       <Project>{621b61d1-339d-4910-8c86-8a64af8822f5}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Rules</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Stubs\ESFA.DC.ILR.ValidationService.Stubs.csproj">
+      <Project>{BA81EBE1-6C72-454E-85D5-761B13911B82}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Stubs</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="ESFA.DC.ILR.ValidationService.RuleSet.Modules.ruleset">
