@@ -79,6 +79,7 @@
     <Compile Include="LearningDelivery\CompStatus\CompStatus_02Rule.cs" />
     <Compile Include="LearningDelivery\ConRefNumber\ConRefNumber_03Rule.cs" />
     <Compile Include="LearningDelivery\ConRefNumber\ConRefNumber_01Rule.cs" />
+    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_16Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_03Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_11Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Constants\ValidationConstants.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryQueryService.cs" />
     <Compile Include="Query\Interface\IPostcodeQueryService.cs" />
+    <Compile Include="Query\PostcodeQueryService.cs" />
     <Compile Include="Query\LearnerFAMQueryService.cs" />
     <Compile Include="Query\LearnerQueryService.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryService.cs" />

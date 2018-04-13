@@ -26,6 +26,7 @@
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
+        public const string DelLocPostCode_16 = "DelLocPostCode_16";
 
         public const string ULN_03 = "ULN_03";
     }

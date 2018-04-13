@@ -60,6 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(ConRefNumber_03Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
+                typeof(DelLocPostCode_16Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -68,7 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(20);
+            rules.Should().HaveCount(21);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
