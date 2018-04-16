@@ -10,8 +10,14 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 {
-    public class AimType_01RuleTests : AbstractRuleTests
+    public class AimType_01RuleTests : AbstractRuleTests<AimType_01Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AimType_01");
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
@@ -56,7 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 
             aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(false);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AimType_01"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(aimTypeInternalDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }

@@ -10,6 +10,6 @@ namespace ESFA.DC.ILR.ValidationService.Interface
 
         string RuleName { get; }
 
-        IEnumerable<string> ErrorMessageParameters { get; }
+        IEnumerable<IErrorMessageParameter> ErrorMessageParameters { get; }
     }
 }

@@ -9,8 +9,14 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 {
-    public class AddHours_01RuleTests : AbstractRuleTests
+    public class AddHours_01RuleTests : AbstractRuleTests<AddHours_01Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AddHours_01");
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
@@ -80,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
                 }
             };
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AddHours_01"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }

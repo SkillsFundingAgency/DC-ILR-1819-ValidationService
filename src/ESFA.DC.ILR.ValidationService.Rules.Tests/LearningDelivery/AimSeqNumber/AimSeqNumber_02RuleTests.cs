@@ -8,8 +8,14 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimSeqNumber
 {
-    public class AimSeqNumber_02RuleTests : AbstractRuleTests
+    public class AimSeqNumber_02RuleTests : AbstractRuleTests<AimSeqNumber_02Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AimSeqNumber_02");
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
@@ -36,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimSeqNumbe
                 }
             };
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AimSeqNumber_02", aimSequenceNumber: 2))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }

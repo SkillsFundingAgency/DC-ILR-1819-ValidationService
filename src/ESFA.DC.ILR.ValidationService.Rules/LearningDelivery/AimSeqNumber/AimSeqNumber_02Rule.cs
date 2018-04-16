@@ -8,7 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber
     public class AimSeqNumber_02Rule : AbstractRule, IRule<ILearner>
     {
         public AimSeqNumber_02Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.AimSeqNumber_02)
         {
         }
 
@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber
             {
                 if (ConditionMet(aimCount, learningDelivery.AimSeqNumber))
                 {
-                    HandleValidationError(RuleNameConstants.AimSeqNumber_02, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }

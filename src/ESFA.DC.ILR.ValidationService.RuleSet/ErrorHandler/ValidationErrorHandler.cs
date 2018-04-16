@@ -17,9 +17,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler
             }
         }
 
-        public void Handle(string ruleName, string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<string> errorMessageParameters = null)
+        public void Handle(string ruleName, string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
         {
             _errorbag.Add(new ValidationError(ruleName, learnRefNumber, aimSequenceNumber, errorMessageParameters));
+        }
+
+        public IErrorMessageParameter BuildErrorMessageParameter(string propertyName, object value)
+        {
+            return new ErrorMessageParameter(propertyName, value?.ToString());
         }
     }
 }

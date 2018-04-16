@@ -3,7 +3,7 @@ using System.Linq;
 using Autofac;
 using ESFA.DC.ILR.ValidationService.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
+namespace ESFA.DC.ILR.ValidationService.Stubs
 {
     public class AutoFacRuleSetResolutionServiceStub<T> : IRuleSetResolutionService<T>
         where T : class

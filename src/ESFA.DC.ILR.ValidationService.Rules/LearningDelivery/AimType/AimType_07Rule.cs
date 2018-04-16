@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
         private readonly DateTime _minimumLearnStartDate = new DateTime(2017, 8, 1);
 
         public AimType_07Rule(ILearningDeliveryFAMQueryService learningDeliveryFamQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.AimType_07)
         {
             _learningDeliveryFamQueryService = learningDeliveryFamQueryService;
         }
@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
             {
                 if (ConditionMet(learningDelivery.ProgTypeNullable, learningDelivery.AimType, learningDelivery.LearnStartDate) && LearningDeliveryFAMConditionMet(learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(RuleNameConstants.AimType_07, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }

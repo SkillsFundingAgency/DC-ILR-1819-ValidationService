@@ -113,10 +113,6 @@
       <Project>{513C4F05-55F4-4AEF-B3EB-427C024DA043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.InternalData\ESFA.DC.ILR.ValidationService.InternalData.csproj">
-      <Project>{DE0F3C7C-9269-4B98-9CE0-9B91F1886C47}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.InternalData</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.RuleSet\ESFA.DC.ILR.ValidationService.RuleSet.csproj">
       <Project>{ebe0154d-6f8b-4dbb-a18f-4929ab74d204}</Project>
       <Name>ESFA.DC.ILR.ValidationService.RuleSet</Name>

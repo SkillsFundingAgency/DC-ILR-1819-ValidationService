@@ -4,16 +4,16 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.Serialization.Interfaces;
 
-namespace ESFA.DC.ILR.ValidationService.Modules.Stubs
+namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class MessageFileSystemProviderService : IValidationItemProviderService<IMessage>
+    public class MessageFileSystemProviderServiceStub : IValidationItemProviderService<IMessage>
     {
         private readonly ISerializationService _serializationService;
         private readonly IValidationContext _validationContext;
 
         private IMessage _message;
 
-        public MessageFileSystemProviderService(ISerializationService serializationService, IValidationContext validationContext)
+        public MessageFileSystemProviderServiceStub(ISerializationService serializationService, IValidationContext validationContext)
         {
             _serializationService = serializationService;
             _validationContext = validationContext;

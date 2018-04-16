@@ -10,11 +10,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
 {
     public class AddHours_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IReadOnlyCollection<int> _fundModels = new HashSet<int>() { FundModelConstants.AdultSkills, FundModelConstants.Apprenticeships, FundModelConstants.OtherAdult };
+        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { FundModelConstants.AdultSkills, FundModelConstants.Apprenticeships, FundModelConstants.OtherAdult };
         private readonly DateTime _learnStartDate = new DateTime(2015, 8, 1);
 
         public AddHours_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.AddHours_01)
         {
         }
 
@@ -27,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
                     learningDelivery.AddHoursNullable,
                     learningDelivery.LearnStartDate))
                 {
-                    HandleValidationError(RuleNameConstants.AddHours_01, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }

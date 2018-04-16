@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
         private readonly IReadOnlyCollection<int> _fundModels = new HashSet<int>() { FundModelConstants.CommunityLearning, FundModelConstants.SixteenToNineteen, FundModelConstants.OtherSixteenToNineteen, FundModelConstants.NonFunded };
 
         public AddHours_02Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.AddHours_02)
         {
         }
 
@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
                     learningDelivery.FundModel,
                     learningDelivery.AddHoursNullable))
                 {
-                    HandleValidationError(RuleNameConstants.AddHours_02, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }

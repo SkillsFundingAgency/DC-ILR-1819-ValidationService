@@ -7,14 +7,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
     {
         private readonly IValidationErrorHandler _validationErrorHandler;
 
-        protected AbstractRule(IValidationErrorHandler validationErrorHandler)
+        private readonly string _ruleName;
+
+        protected AbstractRule(IValidationErrorHandler validationErrorHandler, string ruleName)
         {
             _validationErrorHandler = validationErrorHandler;
+            _ruleName = ruleName;
         }
 
-        protected void HandleValidationError(string ruleName, string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<string> errorMessageParameters = null)
+        public string RuleName
         {
-            _validationErrorHandler.Handle(ruleName, learnRefNumber, aimSequenceNumber, errorMessageParameters);
+            get { return _ruleName; }
+        }
+
+        protected void HandleValidationError(string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
+        {
+            _validationErrorHandler.Handle(_ruleName, learnRefNumber, aimSequenceNumber, errorMessageParameters);
+        }
+
+        protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, object value)
+        {
+            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value);
         }
     }
 }

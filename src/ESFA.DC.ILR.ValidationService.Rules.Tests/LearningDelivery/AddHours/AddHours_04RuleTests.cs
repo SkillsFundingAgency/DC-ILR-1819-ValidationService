@@ -10,8 +10,14 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 {
-    public class AddHours_04RuleTests : AbstractRuleTests
+    public class AddHours_04RuleTests : AbstractRuleTests<AddHours_04Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("AddHours_04");
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData(0)]
@@ -62,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
 
             learningDeliveryQueryServiceMock.Setup(qs => qs.AverageAddHoursPerLearningDay(learningDelivery)).Returns(25);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError("AddHours_04"))
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(learningDeliveryQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
