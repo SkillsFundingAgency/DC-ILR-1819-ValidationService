@@ -82,6 +82,7 @@
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_16Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_03Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_11Rule.cs" />
+    <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
