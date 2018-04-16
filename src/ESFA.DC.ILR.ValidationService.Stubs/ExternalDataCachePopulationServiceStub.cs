@@ -2,7 +2,7 @@
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class ReferenceDataCachePopulationServiceStub : IExternalDataCachePopulationService
+    public class ExternalDataCachePopulationServiceStub : IExternalDataCachePopulationService
     {
         public void Populate()
         {
