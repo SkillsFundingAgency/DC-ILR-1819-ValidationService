@@ -2,6 +2,6 @@
 {
     public interface IDD07
     {
-        string Derive(long? progType);
+        string Derive(int? progType);
     }
 }
