@@ -10,5 +10,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IReadOnlyCollection<int> AimTypes { get; }
 
         IReadOnlyCollection<int> CompStatuses { get; }
+
+        IReadOnlyCollection<int> EmpOutcomes { get; }
     }
 }

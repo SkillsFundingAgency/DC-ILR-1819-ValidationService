@@ -43,6 +43,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
                 typeof(EmpOutcome_01Rule),
+                typeof(EmpOutcome_02Rule),
                 typeof(ULN_03Rule),
             };
         }
