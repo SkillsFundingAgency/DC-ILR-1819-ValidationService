@@ -1,7 +1,6 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
 {
-    public interface IExternalDataCachePopulationService
+    public interface IExternalDataCachePopulationService : IPopulationService
     {
-        void Populate();
     }
 }

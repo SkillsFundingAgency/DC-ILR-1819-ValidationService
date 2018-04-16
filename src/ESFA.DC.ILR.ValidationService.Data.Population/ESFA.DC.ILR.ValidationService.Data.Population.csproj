@@ -48,7 +48,10 @@
     <Compile Include="Interface\IFileDataCachePopulationService.cs" />
     <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
     <Compile Include="Interface\IMessageCachePopulationService.cs" />
+    <Compile Include="Interface\IPopulationService.cs" />
+    <Compile Include="Interface\IPreValidationPopulationService.cs" />
     <Compile Include="MessageCachePopulationService.cs" />
+    <Compile Include="PreValidationPopulationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
