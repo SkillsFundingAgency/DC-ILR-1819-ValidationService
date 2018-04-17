@@ -21,19 +21,6 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
             var learners = message.Learners.ToList();
 
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-            learners.AddRange(learners);
-
             return learners;
         }
     }
