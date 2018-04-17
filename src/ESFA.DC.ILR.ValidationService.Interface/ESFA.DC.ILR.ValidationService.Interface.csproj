@@ -57,7 +57,6 @@
     <Compile Include="IRuleSetOrchestrationService.cs" />
     <Compile Include="IRuleSetResolutionService.cs" />
     <Compile Include="IValidationContext.cs" />
-    <Compile Include="IValidationContextPopulationService.cs" />
     <Compile Include="IValidationDataService.cs" />
     <Compile Include="IValidationError.cs" />
     <Compile Include="IValidationErrorHandler.cs" />

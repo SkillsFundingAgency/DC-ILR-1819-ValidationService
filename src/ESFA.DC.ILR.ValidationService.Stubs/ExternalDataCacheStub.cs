@@ -4,9 +4,9 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class ReferenceDataCacheStub : IExternalDataCache
+    public class ExternalDataCacheStub : IExternalDataCache
     {
-        public ReferenceDataCacheStub()
+        public ExternalDataCacheStub()
         {
             ULNs = new List<long>();
             LearningDeliveries = new Dictionary<string, LearningDelivery>();

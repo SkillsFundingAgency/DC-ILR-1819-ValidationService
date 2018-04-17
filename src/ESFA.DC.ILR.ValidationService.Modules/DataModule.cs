@@ -17,6 +17,8 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.AimType;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus;
 using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.EmpOutcome;
+using ESFA.DC.ILR.ValidationService.Data.Internal.EmpOutcome.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.FileData;
@@ -30,8 +32,10 @@ namespace ESFA.DC.ILR.ValidationService.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ReferenceDataCacheStub>().As<IExternalDataCache>().InstancePerLifetimeScope();
-            builder.RegisterType<ReferenceDataCachePopulationServiceStub>().As<IExternalDataCachePopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<PreValidationPopulationService>().As<IPreValidationPopulationService>().InstancePerLifetimeScope();
+
+            builder.RegisterType<ExternalDataCacheStub>().As<IExternalDataCache>().InstancePerLifetimeScope();
+            builder.RegisterType<ExternalDataCachePopulationServiceStub>().As<IExternalDataCachePopulationService>().InstancePerLifetimeScope();
             builder.RegisterType<OrganisationDataService>().As<IOrganisationDataService>().InstancePerLifetimeScope();
             builder.RegisterType<ULNDataService>().As<IULNDataService>().InstancePerLifetimeScope();
             builder.RegisterType<FCSDataServiceStub>().As<IFCSDataService>().InstancePerLifetimeScope();
@@ -42,6 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<AcademicYearDataService>().As<IAcademicYearDataService>().InstancePerLifetimeScope();
             builder.RegisterType<AimTypeDataService>().As<IAimTypeDataService>().InstancePerLifetimeScope();
             builder.RegisterType<CompStatusDataService>().As<ICompStatusDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<EmpOutcomeDataService>().As<IEmpOutcomeDataService>().InstancePerLifetimeScope();
 
             builder.RegisterType<FileDataCache>().As<IFileDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<FileDataCachePopulationService>().As<IFileDataCachePopulationService>().InstancePerLifetimeScope();

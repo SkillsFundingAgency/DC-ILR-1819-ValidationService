@@ -11,5 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         public IReadOnlyCollection<int> AimTypes { get; set; }
 
         public IReadOnlyCollection<int> CompStatuses { get; set; }
+
+        public IReadOnlyCollection<int> EmpOutcomes { get; set; }
     }
 }
