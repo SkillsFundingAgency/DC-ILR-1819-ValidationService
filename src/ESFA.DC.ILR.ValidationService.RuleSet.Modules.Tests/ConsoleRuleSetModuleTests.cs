@@ -13,6 +13,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
 using FluentAssertions;
 using Moq;
@@ -65,6 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(EmpOutcome_01Rule),
                 typeof(EmpOutcome_02Rule),
                 typeof(EmpOutcome_03Rule),
+                typeof(FundModel_01Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -73,7 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(24);
+            rules.Should().HaveCount(25);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

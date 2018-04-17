@@ -19,6 +19,8 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus;
 using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.EmpOutcome;
 using ESFA.DC.ILR.ValidationService.Data.Internal.EmpOutcome.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel;
+using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.FileData;
@@ -47,6 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<AimTypeDataService>().As<IAimTypeDataService>().InstancePerLifetimeScope();
             builder.RegisterType<CompStatusDataService>().As<ICompStatusDataService>().InstancePerLifetimeScope();
             builder.RegisterType<EmpOutcomeDataService>().As<IEmpOutcomeDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<FundModelDataService>().As<IFundModelDataService>().InstancePerLifetimeScope();
 
             builder.RegisterType<FileDataCache>().As<IFileDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<FileDataCachePopulationService>().As<IFileDataCachePopulationService>().InstancePerLifetimeScope();

@@ -32,6 +32,8 @@
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
+        public const string FundModel_01 = "FundModel_01";
+
         public const string ULN_03 = "ULN_03";
     }
 }

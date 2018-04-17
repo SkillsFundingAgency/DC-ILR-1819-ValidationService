@@ -110,6 +110,7 @@
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_02RuleTests.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01RuleTests.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_01RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryServiceTests.cs" />
