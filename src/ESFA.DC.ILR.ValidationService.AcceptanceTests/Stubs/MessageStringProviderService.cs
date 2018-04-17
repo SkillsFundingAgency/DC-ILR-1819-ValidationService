@@ -6,14 +6,14 @@ using ESFA.DC.Serialization.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class MemoryStreamProviderService : IValidationItemProviderService<IMessage>
+    public class MessageStringProviderService : IValidationItemProviderService<IMessage>
     {
         private readonly ISerializationService _serializationService;
         private readonly IValidationContext _validationContext;
 
         private IMessage _message;
 
-        public MemoryStreamProviderService(ISerializationService serializationService, IValidationContext validationContext)
+        public MessageStringProviderService(ISerializationService serializationService, IValidationContext validationContext)
         {
             _serializationService = serializationService;
             _validationContext = validationContext;

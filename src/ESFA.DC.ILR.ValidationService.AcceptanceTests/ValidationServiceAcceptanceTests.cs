@@ -9,20 +9,23 @@ using DCT.TestDataGenerator.Functor;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Stubs;
-//using DCT.TestDataGenerator.Functor;
 using FluentAssertions;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 {
-    public class ValidationServiceAcceptanceTests
+    public class ValidationServiceAcceptanceTests : IClassFixture<TestDataGeneratorFixture>
     {
-        private static List<ILearnerMultiMutator> _functors = new List<ILearnerMultiMutator>(100);
-        private static int UKPRN = 90000064;
+        private TestDataGeneratorFixture _generatureFixture;
 
-        private void AddFunctor(ILearnerMultiMutator i)
+        private List<string> _learnersFound;
+        private List<string> _excludedLearnersFound;
+        private List<string> _unexpectedLearnersFound;
+
+
+        public ValidationServiceAcceptanceTests(TestDataGeneratorFixture generatureFixture)
         {
-            _functors.Add(i);
+            _generatureFixture = generatureFixture;
         }
 
         [Theory]
@@ -32,52 +35,73 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         //[InlineData("ULN_06", false)]
         public void TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
         {
-            _functors = new List<ILearnerMultiMutator>(100);
-            var cache = new DataCache();
-            var rfp = new RuleToFunctorParser(cache);
-            rfp.CreateFunctors(AddFunctor);
-            XmlGenerator generator = new XmlGenerator(rfp, UKPRN);
             List<ActiveRuleValidity> rules = new List<ActiveRuleValidity>(100);
             uint scale = 1;
             rules.Add(new ActiveRuleValidity() { RuleName = rulename, Valid = valid });
-            var result = generator.CreateAllXml(rules, scale, "ESFA/ILR/2018-19");
-            Dictionary<string, string> files = generator.FileContent();
+            var expectedResult = _generatureFixture.Generator.CreateAllXml(rules, scale, XmlGenerator.ESFA201819Namespace);
+            Dictionary<string, string> files = _generatureFixture.Generator.FileContent();
+
+            CreateResultsCollections(expectedResult.Count());
+
             foreach (var kvp in files)
             {
                 var content = kvp.Value;
-                var validationResult = RunValidation(content);
+                var fileValidationResult = RunValidation(content);
+                PopulateResultsCollectionsBasedOnResults(expectedResult, fileValidationResult);
             }
 
-
-            //_functors = new List<ILearnerMultiMutator>(100);
-            //int UKPRN = 8;
-            //var cache = new DataCache();
-            //RuleToFunctorParser rfp = new RuleToFunctorParser(cache);
-            //rfp.CreateFunctors(AddFunctor);
-            //XmlGenerator generator = new XmlGenerator(rfp, UKPRN);
-            //List<ActiveRuleValidity> rules = new List<ActiveRuleValidity>() { new ActiveRuleValidity() { RuleName = "ULN_03", Valid = false } }; ;            var result = generator.CreateAllXml(rules, 1, XmlGenerator.ESFA201819Namespace).ToList();
-
-            //result.Count.Should().Be(_functors.Where(s => s.RuleName() == rules[0].RuleName).First().LearnerMutators(cache).ToList().Count());
+            _excludedLearnersFound.Should().BeEmpty();
+            _unexpectedLearnersFound.Should().BeEmpty();
+            _learnersFound.Should().HaveCount(expectedResult.Count(s => !s.ExclusionRecord));
         }
 
-        private string RunValidation(string content)
+        private void PopulateResultsCollectionsBasedOnResults(IEnumerable<FileRuleLearner> expectedResult, IEnumerable<IValidationError> fileValidationResult)
+        {
+            foreach (var val in fileValidationResult)
+            {
+                var row = expectedResult.Where(s => s.LearnRefNumber == val.LearnerReferenceNumber);
+                if (row.Count() == 0)
+                {
+                    _unexpectedLearnersFound.Add(val.LearnerReferenceNumber);
+                }
+                else if (row.First().ExclusionRecord)
+                {
+                    _excludedLearnersFound.Add(val.LearnerReferenceNumber);
+                }
+                else
+                {
+                    _learnersFound.Add(val.LearnerReferenceNumber);
+                }
+            }
+        }
+
+        private void CreateResultsCollections(int count)
+        {
+            _learnersFound = new List<string>(count);
+            _excludedLearnersFound = new List<string>(count);
+            _unexpectedLearnersFound = new List<string>(count);
+        }
+
+        private IEnumerable<IValidationError> RunValidation(string fileContent)
         {
             var validationContext = new ValidationContextStub
             {
-                Input = content,
+                Input = fileContent,
                 Output = null
             };
 
             var container = BuildContainer();
 
+            IEnumerable<IValidationError> result = null;
+
             using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, validationContext)))
             {
                 var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                var result = ruleSetOrchestrationService.Execute(validationContext);
+                result = ruleSetOrchestrationService.Execute(validationContext);
             }
 
-            return validationContext.Output;
+            return result;
         }
 
         private void RegisterContext(ContainerBuilder containerBuilder, IValidationContext validationContext)
@@ -93,13 +117,5 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
             return containerBuilder.Build();
         }
-
-
-        //private void AddFunctor(ILearnerMultiMutator i)
-        //{
-        //    _functors.Add(i);
-        //}
     }
-
-
 }
