@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
-using ESFA.DC.ILR.ValidationService.Data.External.FCS;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;

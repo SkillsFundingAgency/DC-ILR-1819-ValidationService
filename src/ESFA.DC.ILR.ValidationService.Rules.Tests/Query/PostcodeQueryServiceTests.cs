@@ -1,5 +1,4 @@
-﻿using System.Runtime.Remoting.Messaging;
-using ESFA.DC.ILR.ValidationService.Rules.Query;
+﻿using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
 using Xunit;
 

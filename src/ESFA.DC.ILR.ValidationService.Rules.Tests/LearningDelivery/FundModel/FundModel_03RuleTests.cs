@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;

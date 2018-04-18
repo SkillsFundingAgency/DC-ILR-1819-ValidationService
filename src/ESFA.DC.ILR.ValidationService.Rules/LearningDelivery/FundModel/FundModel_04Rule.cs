@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -16,29 +17,43 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
             _dd07 = dd07;
         }
 
+        public FundModel_04Rule()
+            : base(null, null)
+        {
+        }
+
         public void Validate(ILearner objectToValidate)
         {
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.ProgTypeNullable))
+                if (ConditionMet(learningDelivery.FundModel, learningDelivery.ProgTypeNullable))
                 {
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel));
                 }
             }
         }
 
-        public bool ConditionMet(int? progType)
+        public bool ConditionMet(int fundModel, int? progType)
         {
-            return false;
+            return FundModelConditionMet(fundModel) && ApprenticeshipConditionMet(progType);
         }
 
-        public bool FundModelConditionMet(int fundModel)
+        public virtual bool FundModelConditionMet(int fundModel)
         {
             return fundModel == FundModelConstants.CommunityLearning || fundModel == FundModelConstants.SixteenToNineteen;
         }
 
-        public bool ApprenticeshipConditionMet(int? progType)
+        public virtual bool ApprenticeshipConditionMet(int? progType)
         {
             return _dd07.Derive(progType) == ValidationConstants.Y;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)
+            };
         }
     }
 }

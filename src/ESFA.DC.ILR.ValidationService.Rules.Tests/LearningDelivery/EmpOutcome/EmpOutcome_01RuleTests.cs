@@ -2,7 +2,6 @@
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;

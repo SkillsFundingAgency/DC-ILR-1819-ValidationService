@@ -29,7 +29,12 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         }
 
         [Theory]
-        [InlineData("ULN_03",false)]
+        [InlineData("ULN_03", false)]
+        [InlineData("ULN_03", false)]
+        [InlineData("ULN_03", false)]
+        [InlineData("ULN_03", false)]
+        [InlineData("ULN_03", false)]
+        [InlineData("ULN_03", false)]
         //[InlineData("ULN_04", false)]
         //[InlineData("ULN_05", false)]
         //[InlineData("ULN_06", false)]
@@ -59,8 +64,9 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         {
             foreach (var val in fileValidationResult)
             {
-                var row = expectedResult.Where(s => s.LearnRefNumber == val.LearnerReferenceNumber);
-                if (row.Count() == 0)
+                var row = expectedResult.Where(s => s.LearnRefNumber == val.LearnerReferenceNumber).ToList();
+
+                if (!row.Any())
                 {
                     _unexpectedLearnersFound.Add(val.LearnerReferenceNumber);
                 }
