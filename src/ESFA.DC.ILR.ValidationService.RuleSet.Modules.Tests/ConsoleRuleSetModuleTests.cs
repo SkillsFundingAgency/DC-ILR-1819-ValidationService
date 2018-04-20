@@ -72,6 +72,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(FundModel_05Rule),
                 typeof(FundModel_06Rule),
                 typeof(FundModel_07Rule),
+                typeof(FundModel_08Rule),
+                typeof(FundModel_08Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -80,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(30);
+            rules.Should().HaveCount(31);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

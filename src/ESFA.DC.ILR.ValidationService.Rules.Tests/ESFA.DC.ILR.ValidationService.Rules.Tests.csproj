@@ -115,6 +115,7 @@
     <Compile Include="LearningDelivery\FundModel\FundModel_01RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_05RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_06RuleTests.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_08RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_07RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
