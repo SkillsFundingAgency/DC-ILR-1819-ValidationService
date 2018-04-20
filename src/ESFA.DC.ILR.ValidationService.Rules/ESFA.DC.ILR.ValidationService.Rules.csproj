@@ -88,6 +88,7 @@
     <Compile Include="LearningDelivery\FundModel\FundModel_03Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_04Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_05Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_06Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
