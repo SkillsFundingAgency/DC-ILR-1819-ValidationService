@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.AcceptanceTests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.AcceptanceTests.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.7.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -101,12 +103,14 @@
     <Compile Include="Stubs\MessageStringProviderService.cs" />
     <Compile Include="ErrorHandler\AcceptanceTestsValidationErrorHandlerOutputService.cs" />
     <Compile Include="Module\AcceptanceTestsOrchestrationModule.cs" />
-    <Compile Include="TestDataGeneratorFixture.cs" />
     <Compile Include="Module\ValidationServiceAcceptanceTestsModule.cs" />
     <Compile Include="ValidationServiceAcceptanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ESFA.DC.ILR.ValidationService.AcceptanceTests.ruleset">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
