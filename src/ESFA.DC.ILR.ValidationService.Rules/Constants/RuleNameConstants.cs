@@ -37,6 +37,7 @@
         public const string FundModel_04 = "FundModel_04";
         public const string FundModel_05 = "FundModel_05";
         public const string FundModel_06 = "FundModel_06";
+        public const string FundModel_07 = "FundModel_07";
 
         public const string ULN_03 = "ULN_03";
     }

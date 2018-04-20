@@ -6,6 +6,7 @@
         public const string ADL = "ADL";
         public const string ASL = "ASL";
         public const string LDM = "LDM";
+        public const string RES = "RES";
         public const string SOF = "SOF";
     }
 }
