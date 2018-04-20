@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
 {
@@ -28,6 +31,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
         protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, object value)
         {
             return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value);
+        }
+
+        protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, DateTime value)
+        {
+            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value.ToString("d", new CultureInfo("en-GB")));
+        }
+
+        protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, DateTime? value)
+        {
+            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value?.ToString("d", new CultureInfo("en-GB")));
         }
     }
 }

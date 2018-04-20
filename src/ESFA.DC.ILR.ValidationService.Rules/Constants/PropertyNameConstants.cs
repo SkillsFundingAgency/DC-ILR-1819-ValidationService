@@ -12,6 +12,7 @@
         public const string EmpOutcome = "EmpOutcome";
         public const string FundModel = "FundModel";
         public const string LearnActEndDate = "LearnActEndDate";
+        public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
     }
 }

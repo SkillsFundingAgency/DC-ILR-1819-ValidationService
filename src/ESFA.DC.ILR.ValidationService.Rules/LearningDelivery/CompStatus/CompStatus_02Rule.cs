@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.CompStatus, compStatus),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDate?.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDate),
             };
         }
     }
