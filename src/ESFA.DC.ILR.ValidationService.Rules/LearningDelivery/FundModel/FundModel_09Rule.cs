@@ -8,19 +8,19 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 {
-    public class FundModel_08Rule : AbstractRule, IRule<ILearner>
+    public class FundModel_09Rule : AbstractRule, IRule<ILearner>
     {
         private readonly IDD07 _dd07;
 
         private readonly DateTime _learnStartDate = new DateTime(2017, 5, 1);
 
-        public FundModel_08Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.FundModel_08)
+        public FundModel_09Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.FundModel_09)
         {
             _dd07 = dd07;
         }
 
-        public FundModel_08Rule()
+        public FundModel_09Rule()
             : base(null, null)
         {
         }
@@ -45,7 +45,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
             return AimTypeConditionMet(aimType)
                    && FundModelConditionMet(fundModel)
                    && LearnStartDateConditionMet(learnStartDate)
-                   && ApprenticeshipConditionMet(progType);
+                   && ProgTypeConditionMet(progType)
+                   && ApprenticeshipConditionMet(fundModel, progType);
         }
 
         public virtual bool AimTypeConditionMet(int aimType)
@@ -55,17 +56,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 
         public virtual bool FundModelConditionMet(int fundModel)
         {
-            return fundModel != 35 && fundModel != 99 && fundModel != 81;
+            return fundModel != FundModelConstants.OtherAdult;
         }
 
-        public virtual bool ApprenticeshipConditionMet(int? progType)
+        public virtual bool ProgTypeConditionMet(int? progType)
         {
-            return progType != 25 && _dd07.Derive(progType) == ValidationConstants.Y;
+            return progType == 25;
         }
 
         public virtual bool LearnStartDateConditionMet(DateTime learnStartDate)
         {
             return learnStartDate < _learnStartDate;
+        }
+
+        public virtual bool ApprenticeshipConditionMet(int fundModel, int? progType)
+        {
+            return !(fundModel == FundModelConstants.NonFunded && _dd07.Derive(progType) == ValidationConstants.Y);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)

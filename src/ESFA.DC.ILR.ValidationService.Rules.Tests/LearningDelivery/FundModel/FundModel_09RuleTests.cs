@@ -11,12 +11,12 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 {
-    public class FundModel_08RuleTests : AbstractRuleTests<FundModel_08Rule>
+    public class FundModel_09RuleTests : AbstractRuleTests<FundModel_09Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("FundModel_08");
+            NewRule().RuleName.Should().Be("FundModel_09");
         }
 
         [Fact]
@@ -32,7 +32,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             ruleMock.Setup(r => r.AimTypeConditionMet(aimType)).Returns(true);
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(true);
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
-            ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ProgTypeConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ApprenticeshipConditionMet(fundModel, progType)).Returns(true);
 
             ruleMock.Object.ConditionMet(aimType, fundModel, learnStartDate, progType).Should().BeTrue();
         }
@@ -50,7 +51,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             ruleMock.Setup(r => r.AimTypeConditionMet(aimType)).Returns(false);
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(true);
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
-            ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ProgTypeConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ApprenticeshipConditionMet(fundModel, progType)).Returns(true);
 
             ruleMock.Object.ConditionMet(aimType, fundModel, learnStartDate, progType).Should().BeFalse();
         }
@@ -68,7 +70,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             ruleMock.Setup(r => r.AimTypeConditionMet(aimType)).Returns(true);
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(false);
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
-            ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ProgTypeConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ApprenticeshipConditionMet(fundModel, progType)).Returns(true);
 
             ruleMock.Object.ConditionMet(aimType, fundModel, learnStartDate, progType).Should().BeFalse();
         }
@@ -86,7 +89,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             ruleMock.Setup(r => r.AimTypeConditionMet(aimType)).Returns(true);
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(true);
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(false);
-            ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ProgTypeConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ApprenticeshipConditionMet(fundModel, progType)).Returns(true);
+
+            ruleMock.Object.ConditionMet(aimType, fundModel, learnStartDate, progType).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_ProgType()
+        {
+            var aimType = 1;
+            var fundModel = 1;
+            var learnStartDate = new DateTime(2017, 1, 1);
+            var progType = 1;
+
+            var ruleMock = NewRuleMock();
+
+            ruleMock.Setup(r => r.AimTypeConditionMet(aimType)).Returns(true);
+            ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(true);
+            ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
+            ruleMock.Setup(r => r.ProgTypeConditionMet(progType)).Returns(false);
+            ruleMock.Setup(r => r.ApprenticeshipConditionMet(fundModel, progType)).Returns(true);
 
             ruleMock.Object.ConditionMet(aimType, fundModel, learnStartDate, progType).Should().BeFalse();
         }
@@ -104,7 +127,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             ruleMock.Setup(r => r.AimTypeConditionMet(aimType)).Returns(true);
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(true);
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
-            ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(false);
+            ruleMock.Setup(r => r.ProgTypeConditionMet(progType)).Returns(true);
+            ruleMock.Setup(r => r.ApprenticeshipConditionMet(fundModel, progType)).Returns(false);
 
             ruleMock.Object.ConditionMet(aimType, fundModel, learnStartDate, progType).Should().BeFalse();
         }
@@ -127,13 +151,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             NewRule().FundModelConditionMet(1).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(35)]
-        [InlineData(99)]
-        [InlineData(81)]
-        public void FundModelConditionMet_False(int fundModel)
+        [Fact]
+        public void FundModelConditionMet_False()
         {
-            NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
+            NewRule().FundModelConditionMet(81).Should().BeFalse();
         }
 
         [Fact]
@@ -149,7 +170,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
         }
 
         [Fact]
-        public void ApprenticeshipConditionMet_True()
+        public void ProgTypeConditionMet_True()
+        {
+            NewRule().ProgTypeConditionMet(25).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ProgTypeConditionMet_False()
+        {
+            NewRule().ProgTypeConditionMet(1).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ApprenticeshipConditionMet_False()
         {
             var progType = 1;
 
@@ -157,11 +190,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             dd07Mock.Setup(dd => dd.Derive(progType)).Returns("Y");
 
-            NewRule(dd07Mock.Object).ApprenticeshipConditionMet(progType).Should().BeTrue();
+            NewRule(dd07Mock.Object).ApprenticeshipConditionMet(99, progType).Should().BeFalse();
         }
 
         [Fact]
-        public void ApprenticeshipConditionMet_False_DD()
+        public void ApprenticeshipConditionMet_True_FundModel()
+        {
+            NewRule().ApprenticeshipConditionMet(1, null).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ApprenticeshipConditionMet_True_DD()
         {
             var progType = 1;
 
@@ -169,19 +208,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             dd07Mock.Setup(dd => dd.Derive(progType)).Returns("N");
 
-            NewRule(dd07Mock.Object).ApprenticeshipConditionMet(progType).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ApprenticeshipConditionMet_False_ProgType()
-        {
-            NewRule().ApprenticeshipConditionMet(25).Should().BeFalse();
+            NewRule(dd07Mock.Object).ApprenticeshipConditionMet(99, progType).Should().BeTrue();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var progType = 1;
+            var progType = 25;
 
             var learner = new TestLearner()
             {
@@ -241,9 +274,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             validationErrorHandlerMock.Verify();
         }
 
-        private FundModel_08Rule NewRule(IDD07 dd07 = null, IValidationErrorHandler validationErrorHandler = null)
+        private FundModel_09Rule NewRule(IDD07 dd07 = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new FundModel_08Rule(dd07, validationErrorHandler);
+            return new FundModel_09Rule(dd07, validationErrorHandler);
         }
     }
 }

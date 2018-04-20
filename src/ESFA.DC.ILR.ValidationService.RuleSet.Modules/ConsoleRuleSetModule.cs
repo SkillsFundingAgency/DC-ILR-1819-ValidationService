@@ -53,6 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FundModel_06Rule),
                 typeof(FundModel_07Rule),
                 typeof(FundModel_08Rule),
+                typeof(FundModel_09Rule),
                 typeof(ULN_03Rule),
             };
         }
