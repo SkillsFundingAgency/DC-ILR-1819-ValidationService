@@ -14,6 +14,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
 using FluentAssertions;
 using Moq;
@@ -75,6 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(FundModel_08Rule),
                 typeof(FundModel_08Rule),
                 typeof(FundModel_09Rule),
+                typeof(FworkCode_01Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -83,7 +85,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(32);
+            rules.Should().HaveCount(33);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

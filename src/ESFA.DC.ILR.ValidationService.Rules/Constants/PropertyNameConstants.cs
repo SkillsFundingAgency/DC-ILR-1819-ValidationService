@@ -11,8 +11,10 @@
         public const string DelLocPostCode = "DelLocPostCode";
         public const string EmpOutcome = "EmpOutcome";
         public const string FundModel = "FundModel";
+        public const string FworkCode = "FworkCode";
         public const string LearnActEndDate = "LearnActEndDate";
         public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
+        public const string ProgType = "ProgType";
     }
 }
