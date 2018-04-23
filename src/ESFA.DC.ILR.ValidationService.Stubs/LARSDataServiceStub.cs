@@ -1,5 +1,4 @@
-﻿using System;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
