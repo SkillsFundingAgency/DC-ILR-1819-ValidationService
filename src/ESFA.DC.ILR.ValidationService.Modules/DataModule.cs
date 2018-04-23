@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
@@ -37,6 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
 
             builder.RegisterType<ExternalDataCacheStub>().As<IExternalDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<ExternalDataCachePopulationServiceStub>().As<IExternalDataCachePopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<LARSDataServiceStub>().As<ILARSDataService>().InstancePerLifetimeScope();
             builder.RegisterType<OrganisationDataService>().As<IOrganisationDataService>().InstancePerLifetimeScope();
             builder.RegisterType<ULNDataService>().As<IULNDataService>().InstancePerLifetimeScope();
             builder.RegisterType<FCSDataServiceStub>().As<IFCSDataService>().InstancePerLifetimeScope();

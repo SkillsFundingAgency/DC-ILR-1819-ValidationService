@@ -42,6 +42,8 @@
         public const string FundModel_09 = "FundModel_09";
 
         public const string FworkCode_01 = "FworkCode_01";
+        public const string FworkCode_02 = "FworkCode_02";
+        public const string FworkCode_05 = "FworkCode_05";
 
         public const string ULN_03 = "ULN_03";
     }

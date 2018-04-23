@@ -62,6 +62,7 @@
     <Compile Include="AutoFacRuleSetResolutionServiceStub.cs" />
     <Compile Include="FCSDataServiceStub.cs" />
     <Compile Include="InternalDataCachePopulationServiceStub.cs" />
+    <Compile Include="LARSDataServiceStub.cs" />
     <Compile Include="LearnerProviderServiceStub.cs" />
     <Compile Include="MessageFileSystemProviderServiceStub.cs" />
     <Compile Include="PostcodesDataServiceStub.cs" />

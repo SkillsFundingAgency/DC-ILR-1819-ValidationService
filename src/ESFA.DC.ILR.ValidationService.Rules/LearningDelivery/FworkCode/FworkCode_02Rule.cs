@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -7,17 +8,16 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode
 {
-    public class FworkCode_01Rule : AbstractRule, IRule<ILearner>
+    public class FworkCode_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IEnumerable<int?> _progTypes = new HashSet<int?>() { null, 24, 25, };
 
-        public FworkCode_01Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.FworkCode_01)
+        public FworkCode_02Rule(IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.FworkCode_02)
         {
-            _dd07 = dd07;
         }
 
-        public FworkCode_01Rule()
+        public FworkCode_02Rule()
             : base(null, null)
         {
         }
@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode
             {
                 if (ConditionMet(learningDelivery.FworkCodeNullable, learningDelivery.ProgTypeNullable))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.ProgTypeNullable));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FworkCodeNullable));
                 }
             }
         }
@@ -41,19 +41,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode
 
         public virtual bool ApprenticeshipConditionMet(int? progType)
         {
-            return progType != 25 && _dd07.Derive(progType) == ValidationConstants.Y;
+            return _progTypes.Contains(progType);
         }
 
         public virtual bool FworkCodeConditionMet(int? fworkCode)
         {
-            return !fworkCode.HasValue;
+            return fworkCode.HasValue;
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? progType)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? fworkCode)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.ProgType, progType)
+                BuildErrorMessageParameter(PropertyNameConstants.FworkCode, fworkCode)
             };
         }
     }

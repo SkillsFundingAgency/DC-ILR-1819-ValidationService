@@ -15,6 +15,7 @@
         public const string LearnActEndDate = "LearnActEndDate";
         public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
+        public const string PwayCode = "PwayCode";
         public const string ProgType = "ProgType";
     }
 }
