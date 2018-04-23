@@ -60,6 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FworkCode_02Rule),
                 typeof(FworkCode_05Rule),
                 typeof(LearnActEndDate_01Rule),
+                typeof(LearnActEndDate_04Rule),
                 typeof(ULN_03Rule),
             };
         }

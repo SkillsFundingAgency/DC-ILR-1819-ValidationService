@@ -121,6 +121,7 @@
     <Compile Include="LearningDelivery\FworkCode\FworkCode_05RuleTests.cs" />
     <Compile Include="LearningDelivery\FworkCode\FworkCode_02RuleTests.cs" />
     <Compile Include="LearningDelivery\FworkCode\FworkCode_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_04RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_01RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
