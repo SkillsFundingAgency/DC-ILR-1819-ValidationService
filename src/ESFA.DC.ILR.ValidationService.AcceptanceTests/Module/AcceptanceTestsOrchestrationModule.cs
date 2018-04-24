@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
@@ -16,6 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         {
             builder.RegisterType<MessageStringProviderService>().As<IValidationItemProviderService<IMessage>>();
             builder.RegisterType<AcceptanceTestsValidationErrorHandlerOutputService>().As<IValidationOutputService<IValidationError>>();
+            builder.RegisterType<LARSDataAcceptanceTestsService>().As<ILARSDataService>().InstancePerLifetimeScope();
             builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>().As<IRuleSetOrchestrationService<ILearner, IValidationError>>();
             builder.RegisterType<AutoFacRuleSetResolutionServiceStub<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
             builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();
