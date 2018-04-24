@@ -48,6 +48,8 @@
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
 
+        public const string LearnAimRef_01 = "LearnAimRef_01";
+
         public const string ULN_03 = "ULN_03";
     }
 }

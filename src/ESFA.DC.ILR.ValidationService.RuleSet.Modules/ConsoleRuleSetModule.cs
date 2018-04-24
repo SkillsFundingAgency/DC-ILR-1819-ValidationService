@@ -13,6 +13,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
@@ -61,6 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FworkCode_05Rule),
                 typeof(LearnActEndDate_01Rule),
                 typeof(LearnActEndDate_04Rule),
+                typeof(LearnAimRef_01Rule),
                 typeof(ULN_03Rule),
             };
         }

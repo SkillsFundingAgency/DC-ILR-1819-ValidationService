@@ -8,5 +8,10 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         {
             return true;
         }
+
+        public bool LearnAimRefExists(string learnAimRef)
+        {
+            return true;
+        }
     }
 }

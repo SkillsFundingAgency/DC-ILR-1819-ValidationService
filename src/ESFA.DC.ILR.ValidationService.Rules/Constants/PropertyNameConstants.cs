@@ -13,6 +13,7 @@
         public const string FundModel = "FundModel";
         public const string FworkCode = "FworkCode";
         public const string LearnActEndDate = "LearnActEndDate";
+        public const string LearnAimRef = "LearnAimRef";
         public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
         public const string PwayCode = "PwayCode";
