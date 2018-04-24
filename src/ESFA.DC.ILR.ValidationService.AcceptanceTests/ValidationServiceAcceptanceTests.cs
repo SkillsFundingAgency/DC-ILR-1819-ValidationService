@@ -16,40 +16,31 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 {
     public class ValidationServiceAcceptanceTests
     {
-        private TestDataGeneratorFixture _generatureFixture;
+        private const uint Scale = 1;
+        private const int Ukprn = 90000064;
 
         private List<string> _learnersFound;
         private List<string> _excludedLearnersFound;
         private List<string> _unexpectedLearnersFound;
-
 
         public ValidationServiceAcceptanceTests()
         {
         }
 
         [Theory]
-        [InlineData("FundModel_01", false)]
-        [InlineData("FundModel_03", false)]
-        [InlineData("FundModel_04", false)]
-        [InlineData("FundModel_05", false)]
-        [InlineData("FundModel_06", false)]
-        [InlineData("FundModel_07", false)]
-        [InlineData("FundModel_08", false)]
-        [InlineData("FundModel_09", false)]
+        [InlineData("FworkCode_01", false)]
         public void TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
         {
-            _generatureFixture = new TestDataGeneratorFixture();
             List<ActiveRuleValidity> rules = new List<ActiveRuleValidity>(100);
-            uint scale = 1;
             rules.Add(new ActiveRuleValidity() { RuleName = rulename, Valid = valid });
-            var expectedResult = _generatureFixture.Generator.CreateAllXml(rules, scale, XmlGenerator.ESFA201819Namespace);
-            Dictionary<string, string> files = _generatureFixture.Generator.FileContent();
+            var generator = BuildXmlGenerator();
+            var expectedResult = generator.CreateAllXml(rules, Scale, XmlGenerator.ESFA201819Namespace);
+            var files = generator.FileContent().Values;
 
             CreateResultsCollections(expectedResult.Count());
 
-            foreach (var kvp in files)
+            foreach (var content in files)
             {
-                var content = kvp.Value;
                 var fileValidationResult = RunValidation(content);
                 PopulateResultsCollectionsBasedOnResults(expectedResult, fileValidationResult);
             }
@@ -58,6 +49,14 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
             _unexpectedLearnersFound.Should().BeEmpty();
             int totalExpectedRows = expectedResult.Where(s => !s.ExclusionRecord).Sum(s => s.InvalidLines);
             _learnersFound.Should().HaveCount(totalExpectedRows);
+        }
+
+        private XmlGenerator BuildXmlGenerator()
+        {
+            DataCache cache = new DataCache();
+            RuleToFunctorParser rfp = new RuleToFunctorParser(cache);
+            rfp.CreateFunctors(null);
+            return new XmlGenerator(rfp, Ukprn);
         }
 
         private void PopulateResultsCollectionsBasedOnResults(IEnumerable<FileRuleLearner> expectedResult, IEnumerable<IValidationError> fileValidationResult)
