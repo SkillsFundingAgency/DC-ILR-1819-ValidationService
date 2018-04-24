@@ -14,7 +14,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 {
-    public class ValidationServiceAcceptanceTests : IClassFixture<TestDataGeneratorFixture>
+    public class ValidationServiceAcceptanceTests
     {
         private TestDataGeneratorFixture _generatureFixture;
 
@@ -23,23 +23,22 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         private List<string> _unexpectedLearnersFound;
 
 
-        public ValidationServiceAcceptanceTests(TestDataGeneratorFixture generatureFixture)
+        public ValidationServiceAcceptanceTests()
         {
-            _generatureFixture = generatureFixture;
         }
 
         [Theory]
-        [InlineData("ULN_03", false)]
-        [InlineData("ULN_03", false)]
-        [InlineData("ULN_03", false)]
-        [InlineData("ULN_03", false)]
-        [InlineData("ULN_03", false)]
-        [InlineData("ULN_03", false)]
-        //[InlineData("ULN_04", false)]
-        //[InlineData("ULN_05", false)]
-        //[InlineData("ULN_06", false)]
+        [InlineData("FundModel_01", false)]
+        [InlineData("FundModel_03", false)]
+        [InlineData("FundModel_04", false)]
+        [InlineData("FundModel_05", false)]
+        [InlineData("FundModel_06", false)]
+        [InlineData("FundModel_07", false)]
+        [InlineData("FundModel_08", false)]
+        [InlineData("FundModel_09", false)]
         public void TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
         {
+            _generatureFixture = new TestDataGeneratorFixture();
             List<ActiveRuleValidity> rules = new List<ActiveRuleValidity>(100);
             uint scale = 1;
             rules.Add(new ActiveRuleValidity() { RuleName = rulename, Valid = valid });
@@ -57,26 +56,35 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
             _excludedLearnersFound.Should().BeEmpty();
             _unexpectedLearnersFound.Should().BeEmpty();
-            _learnersFound.Should().HaveCount(expectedResult.Count(s => !s.ExclusionRecord));
+            int totalExpectedRows = expectedResult.Where(s => !s.ExclusionRecord).Sum(s => s.InvalidLines);
+            _learnersFound.Should().HaveCount(totalExpectedRows);
         }
 
         private void PopulateResultsCollectionsBasedOnResults(IEnumerable<FileRuleLearner> expectedResult, IEnumerable<IValidationError> fileValidationResult)
         {
             foreach (var val in fileValidationResult)
             {
-                var row = expectedResult.Where(s => s.LearnRefNumber == val.LearnerReferenceNumber).ToList();
-
-                if (!row.Any())
-                {
-                    _unexpectedLearnersFound.Add(val.LearnerReferenceNumber);
-                }
-                else if (row.First().ExclusionRecord)
+                var exclusionRecordFound = expectedResult.Count(s => s.ExclusionRecord && s.RuleName == val.RuleName && s.LearnRefNumber == val.LearnerReferenceNumber) > 0;
+                if (exclusionRecordFound)
                 {
                     _excludedLearnersFound.Add(val.LearnerReferenceNumber);
                 }
                 else
                 {
-                    _learnersFound.Add(val.LearnerReferenceNumber);
+                    var completelyExpectedResult = expectedResult.Count(s => s.RuleName == val.RuleName && s.LearnRefNumber == val.LearnerReferenceNumber) > 0;
+
+                    if (completelyExpectedResult)
+                    {
+                        _learnersFound.Add(val.LearnerReferenceNumber);
+                    }
+                    else
+                    {
+                        var correctRule = expectedResult.Count(s => s.RuleName == val.RuleName) > 0;
+                        if (correctRule)
+                        {
+                            _unexpectedLearnersFound.Add(val.LearnerReferenceNumber);
+                        }
+                    }
                 }
             }
         }
