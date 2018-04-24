@@ -143,13 +143,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FworkCode
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExists(learnAimRef, progType, fworkCode, pwayCode)).Returns(false);
+            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExistsForFrameworkAims(learnAimRef, progType, fworkCode, pwayCode)).Returns(false);
+            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExistsForCommonComponent(learnAimRef, progType, fworkCode, pwayCode)).Returns(false);
 
             NewRule(larsDataService: larsDataServiceMock.Object).FworkCodeConditionMet(learnAimRef, progType, fworkCode, pwayCode).Should().BeTrue();
         }
 
         [Fact]
-        public void FworkCodeConditionMet_False()
+        public void FworkCodeConditionMet_False_FrameworkAim()
         {
             var learnAimRef = "LearnAimRef";
             var progType = 1;
@@ -158,7 +159,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FworkCode
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExists(learnAimRef, progType, fworkCode, pwayCode)).Returns(true);
+            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExistsForFrameworkAims(learnAimRef, progType, fworkCode, pwayCode)).Returns(true);
+            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExistsForCommonComponent(learnAimRef, progType, fworkCode, pwayCode)).Returns(false);
+
+            NewRule(larsDataService: larsDataServiceMock.Object).FworkCodeConditionMet(learnAimRef, progType, fworkCode, pwayCode).Should().BeFalse();
+        }
+
+        [Fact]
+        public void FworkCodeConditionMet_False_FrameworkCommonComponent()
+        {
+            var learnAimRef = "LearnAimRef";
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+
+            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExistsForFrameworkAims(learnAimRef, progType, fworkCode, pwayCode)).Returns(false);
+            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExistsForCommonComponent(learnAimRef, progType, fworkCode, pwayCode)).Returns(true);
 
             NewRule(larsDataService: larsDataServiceMock.Object).FworkCodeConditionMet(learnAimRef, progType, fworkCode, pwayCode).Should().BeFalse();
         }
@@ -178,7 +196,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FworkCode
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExists(learnAimRef, progType, fworkCode, pwayCode)).Returns(false);
+            larsDataServiceMock.Setup(ds => ds.FrameworkCodeExistsForFrameworkAims(learnAimRef, progType, fworkCode, pwayCode)).Returns(false);
 
             var learner = new TestLearner()
             {

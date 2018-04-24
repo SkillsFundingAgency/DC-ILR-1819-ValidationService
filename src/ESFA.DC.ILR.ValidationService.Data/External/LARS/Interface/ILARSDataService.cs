@@ -2,7 +2,9 @@
 {
     public interface ILARSDataService
     {
-        bool FrameworkCodeExists(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
+        bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
+
+        bool FrameworkCodeExistsForCommonComponent(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
 
         bool LearnAimRefExists(string learnAimRef);
     }

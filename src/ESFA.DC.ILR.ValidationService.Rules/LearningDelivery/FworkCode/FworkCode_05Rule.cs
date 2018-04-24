@@ -63,7 +63,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode
 
         public virtual bool FworkCodeConditionMet(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
-            return !_larsDataService.FrameworkCodeExists(learnAimRef, progType, fworkCode, pwayCode);
+            return !_larsDataService.FrameworkCodeExistsForFrameworkAims(learnAimRef, progType, fworkCode, pwayCode)
+                && !_larsDataService.FrameworkCodeExistsForCommonComponent(learnAimRef, progType, fworkCode, pwayCode);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? progType, int? fworkCode, int? pwayCode)

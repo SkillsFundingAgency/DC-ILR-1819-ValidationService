@@ -4,7 +4,12 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 {
     public class LARSDataServiceStub : ILARSDataService
     {
-        public bool FrameworkCodeExists(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
+        public bool FrameworkCodeExistsForCommonComponent(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
+        {
+            return true;
+        }
+
+        public bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
             return true;
         }
