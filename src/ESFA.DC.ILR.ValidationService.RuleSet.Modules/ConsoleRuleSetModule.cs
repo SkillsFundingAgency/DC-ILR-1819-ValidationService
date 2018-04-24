@@ -11,6 +11,8 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
@@ -49,6 +51,16 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FundModel_01Rule),
                 typeof(FundModel_03Rule),
                 typeof(FundModel_04Rule),
+                typeof(FundModel_05Rule),
+                typeof(FundModel_06Rule),
+                typeof(FundModel_07Rule),
+                typeof(FundModel_08Rule),
+                typeof(FundModel_09Rule),
+                typeof(FworkCode_01Rule),
+                typeof(FworkCode_02Rule),
+                typeof(FworkCode_05Rule),
+                typeof(LearnActEndDate_01Rule),
+                typeof(LearnActEndDate_04Rule),
                 typeof(ULN_03Rule),
             };
         }

@@ -87,6 +87,16 @@
     <Compile Include="LearningDelivery\FundModel\FundModel_01Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_03Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_04Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_05Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_06Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_09Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_08Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_07Rule.cs" />
+    <Compile Include="LearningDelivery\FworkCode\FworkCode_02Rule.cs" />
+    <Compile Include="LearningDelivery\FworkCode\FworkCode_01Rule.cs" />
+    <Compile Include="LearningDelivery\FworkCode\FworkCode_05Rule.cs" />
+    <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_04Rule.cs" />
+    <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_01Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
@@ -125,5 +135,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -36,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.CompStatus, compStatus),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDate?.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDate),
             };
         }
     }

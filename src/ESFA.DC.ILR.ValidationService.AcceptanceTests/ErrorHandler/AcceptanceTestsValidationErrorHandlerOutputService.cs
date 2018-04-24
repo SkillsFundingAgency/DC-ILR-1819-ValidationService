@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
-using ESFA.DC.ILR.ValidationService.Stubs;
-using ESFA.DC.Serialization.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler
 {

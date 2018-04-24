@@ -35,6 +35,18 @@
         public const string FundModel_01 = "FundModel_01";
         public const string FundModel_03 = "FundModel_03";
         public const string FundModel_04 = "FundModel_04";
+        public const string FundModel_05 = "FundModel_05";
+        public const string FundModel_06 = "FundModel_06";
+        public const string FundModel_07 = "FundModel_07";
+        public const string FundModel_08 = "FundModel_08";
+        public const string FundModel_09 = "FundModel_09";
+
+        public const string FworkCode_01 = "FworkCode_01";
+        public const string FworkCode_02 = "FworkCode_02";
+        public const string FworkCode_05 = "FworkCode_05";
+
+        public const string LearnActEndDate_01 = "LearnActEndDate_01";
+        public const string LearnActEndDate_04 = "LearnActEndDate_04";
 
         public const string ULN_03 = "ULN_03";
     }
