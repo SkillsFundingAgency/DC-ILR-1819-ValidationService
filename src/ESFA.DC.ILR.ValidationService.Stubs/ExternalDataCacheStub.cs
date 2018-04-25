@@ -18,5 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         public IReadOnlyDictionary<string, LearningDelivery> LearningDeliveries { get; }
 
         public IReadOnlyCollection<long> UKPRNs { get; }
+
+        public IReadOnlyCollection<Framework> Frameworks { get; }
     }
 }

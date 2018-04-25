@@ -9,6 +9,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
 
         IReadOnlyDictionary<string, LearningDelivery> LearningDeliveries { get; }
 
+        IReadOnlyCollection<Framework> Frameworks { get; }
+
         IReadOnlyCollection<long> UKPRNs { get; }
     }
 }
