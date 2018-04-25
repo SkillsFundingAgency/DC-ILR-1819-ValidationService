@@ -9,30 +9,36 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 {
-    public class LearnAimRef_29RuleTests : AbstractRuleTests<LearnAimRef_29Rule>
+    public class LearnAimRef_30RuleTests : AbstractRuleTests<LearnAimRef_30Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("LearnAimRef_29");
+            NewRule().RuleName.Should().Be("LearnAimRef_30");
         }
 
         [Fact]
-        public void ConditionMet_True()
+        public void ConditionMet_True_LearnAimRef()
         {
-            NewRule().ConditionMet("ZESF0001", 1).Should().BeTrue();
+            NewRule().ConditionMet("not ZPROG001", 1).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False_LearnAimRef()
+        public void ConditionMet_True_AimType()
         {
-            NewRule().ConditionMet("Not ZESF0001", 70).Should().BeFalse();
+            NewRule().ConditionMet("ZPROG001", 2).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False_FundModel()
+        public void ConditionMet_False()
         {
-            NewRule().ConditionMet("ZESF0001", 70).Should().BeFalse();
+            NewRule().ConditionMet("ZPROG001", 1).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_Mismatch()
+        {
+            NewRule().ConditionMet("Not ZPROG001", 2).Should().BeFalse();
         }
 
         [Fact]
@@ -44,8 +50,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 {
                     new TestLearningDelivery()
                     {
-                        LearnAimRef = "ZESF0001",
-                        FundModel = 10,
+                        LearnAimRef = "ZPROG001",
+                        AimType = 2,
                     }
                 }
             };
@@ -66,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                     new TestLearningDelivery()
                     {
                         LearnAimRef = "ZESF0001",
-                        FundModel = 70,
+                        AimType = 2,
                     }
                 }
             };
@@ -81,21 +87,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         public void BuildErrorMessageParameters()
         {
             var learnAimRef = "LearnAimRef";
-            var fundModel = 1;
+            var aimType = 1;
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnAimRef", learnAimRef)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FundModel", fundModel)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("AimType", aimType)).Verifiable();
 
-            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(learnAimRef, fundModel);
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(learnAimRef, aimType);
 
             validationErrorHandlerMock.Verify();
         }
 
-        private LearnAimRef_29Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        private LearnAimRef_30Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new LearnAimRef_29Rule(validationErrorHandler);
+            return new LearnAimRef_30Rule(validationErrorHandler);
         }
     }
 }

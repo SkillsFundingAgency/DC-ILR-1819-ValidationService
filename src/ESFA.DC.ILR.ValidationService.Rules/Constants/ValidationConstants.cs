@@ -10,5 +10,6 @@
         public const long TemporaryULN = 9999999999;
 
         public const string ZESF0001 = "ZESF0001";
+        public const string ZPROG001 = "ZPROG001";
     }
 }

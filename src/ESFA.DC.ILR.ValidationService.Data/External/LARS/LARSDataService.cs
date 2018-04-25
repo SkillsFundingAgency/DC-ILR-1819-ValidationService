@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS

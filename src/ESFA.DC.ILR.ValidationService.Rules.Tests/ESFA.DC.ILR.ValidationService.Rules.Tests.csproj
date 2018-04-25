@@ -124,6 +124,7 @@
     <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_04RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_01RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
