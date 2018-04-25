@@ -84,6 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnActEndDate_01Rule),
                 typeof(LearnActEndDate_04Rule),
                 typeof(LearnAimRef_01Rule),
+                typeof(LearnAimRef_29Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -92,7 +93,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(38);
+            rules.Should().HaveCount(39);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
