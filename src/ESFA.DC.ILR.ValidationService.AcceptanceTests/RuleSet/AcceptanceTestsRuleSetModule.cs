@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using Autofac.Core;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber;
@@ -56,6 +60,20 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FworkCode_02Rule),
                 typeof(FworkCode_05Rule),
             };
+        }
+
+        protected override void Load(ContainerBuilder builder)
+        {
+            foreach (var rule in Rules)
+            {
+                builder.RegisterType(rule)
+                    .As(RuleSetType)
+                    .WithParameter(
+                                 new ResolvedParameter(
+                                   (pi, ctx) => pi.ParameterType == typeof(ILARSDataService),
+                                   (pi, ctx) => ctx.ResolveKeyed<ILARSDataService>(AcceptanceTestsOverrideStubsModule.AcceptanceTestsKey)))
+                    .InstancePerLifetimeScope();
+            }
         }
     }
 }
