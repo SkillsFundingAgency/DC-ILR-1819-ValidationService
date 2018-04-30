@@ -14,6 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
             builder.RegisterModule<QueryServiceModule>();
             builder.RegisterModule<DerivedDataModule>();
             builder.RegisterModule<AcceptanceTestsRuleSetModule>();
+            builder.RegisterModule<AcceptanceTestsOverrideStubsModule>();
         }
     }
 }
