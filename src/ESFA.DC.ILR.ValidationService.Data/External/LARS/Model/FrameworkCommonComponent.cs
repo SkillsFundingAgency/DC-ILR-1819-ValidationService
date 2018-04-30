@@ -4,6 +4,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
 {
     public class FrameworkCommonComponent
     {
+        public const int NotApplicable = -2;
         public int FworkCode { get; set; }
         public int ProgType { get; set; }
         public int PwayCode { get; set; }

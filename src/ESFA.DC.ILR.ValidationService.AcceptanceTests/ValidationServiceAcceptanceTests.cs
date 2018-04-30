@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         }
 
         [Theory]
-        [InlineData("FworkCode_01", false)]
+        [InlineData("FworkCode_05", false)]
         public void TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
         {
             List<ActiveRuleValidity> rules = new List<ActiveRuleValidity>(100);
