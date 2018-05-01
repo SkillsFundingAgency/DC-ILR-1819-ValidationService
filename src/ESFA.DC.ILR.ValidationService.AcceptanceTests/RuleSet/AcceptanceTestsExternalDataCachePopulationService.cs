@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             dynamic rhs = JObject.Parse(content);
             _dataCache.ULNs = new List<long>();
 
-            PopulateUKPRNs(rhs);
+            PopulateOrganisations(rhs);
             PopulateFrameworksFrameworkAimsAndLearningDeliveries(rhs);
         }
 
