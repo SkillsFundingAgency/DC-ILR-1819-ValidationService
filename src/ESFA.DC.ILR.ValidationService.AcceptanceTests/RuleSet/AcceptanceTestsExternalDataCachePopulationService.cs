@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
@@ -10,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 {
     public class AcceptanceTestsExternalDataCachePopulationService : IExternalDataCachePopulationService
     {
-        AcceptanceTestsExternalDataCache _dataCache;
+        private AcceptanceTestsExternalDataCache _dataCache;
 
         public AcceptanceTestsExternalDataCachePopulationService(IExternalDataCache iCache)
         {
@@ -21,49 +22,87 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         {
             string content = File.ReadAllText(@"Files\AcceptanceTestsReferenceData.json");
             dynamic rhs = JObject.Parse(content);
-            string intermediateAim = rhs["_apprenticeShipAims"]["IntermediateLevelApprenticeship"]["LearnAimRef"];
-            // intermediateAim.Should().Be(lhs._apprenticeShipAims[ProgType.IntermediateLevelApprenticeship].LearnAimRef);
             _dataCache.ULNs = new List<long>();
 
-            PopulateOrganisations(rhs);
-            PopulateFrameworksAndFrameworkAims(rhs);
+            PopulateUKPRNs(rhs);
+            PopulateFrameworksFrameworkAimsAndLearningDeliveries(rhs);
         }
 
-        private void PopulateFrameworksAndFrameworkAims(dynamic rhs)
+        private void PopulateFrameworksFrameworkAimsAndLearningDeliveries(dynamic rhs)
         {
             var frameworks = new List<Framework>();
-            JObject appaims = rhs["_apprenticeShipAims"];
-            foreach (JProperty v in appaims.Properties())
+            var learningDeliveries = new Dictionary<string, LearningDelivery>();
+
+            var appaims = rhs._apprenticeShipAims as IEnumerable<dynamic>;
+            foreach (var v in appaims)
             {
-                var s = v.Name + " " + v.Value;
-                int ProgType = v.Value["ProgType"].Value<int>();
-                int FworkCode = v.Value["FworkCode"].Value<int>();
-                int PwayCode = v.Value["PwayCode"].Value<int>();
-                string LearnAimRef = v.Value["LearningDelivery"]["LearnAimRef"].ToString();
-                //"Validity": null,
-                int StdCode = v.Value["StdCode"].Value<int>();
+                int progType = v.Value.ProgType;
+                int fworkCode = v.Value.FworkCode;
+                int pwayCode = v.Value.PwayCode;
+                int stdCode = v.Value.StdCode;
+                LearningDelivery ld = BuildLearningDelivery(learningDeliveries, v);
 
-                FrameworkAim aim = new FrameworkAim()
+                if (ld.FrameworkCommonComponent == FrameworkCommonComponent.NotApplicable &&
+                    fworkCode > 0)
                 {
-                    ProgType = ProgType,
-                    FworkCode = FworkCode,
-                    PwayCode = PwayCode,
-                    LearnAimRef = LearnAimRef
-                };
-
-                frameworks.Add(new Framework()
-                {
-                    ProgType = ProgType,
-                    FworkCode = v.Value["FworkCode"].Value<int>(),
-                    PwayCode = PwayCode,
-                    FrameworkAims = new List<FrameworkAim>()
-                    {
-                        aim
-                    }
-                });
+                    BuildFrameworkAimsAndCommonComponents(frameworks, v, progType, fworkCode, pwayCode, ld);
+                }
             }
 
             _dataCache.Frameworks = frameworks;
+            _dataCache.LearningDeliveries = learningDeliveries;
+        }
+
+        private static void BuildFrameworkAimsAndCommonComponents(List<Framework> frameworks, dynamic v, int progType, int fworkCode, int pwayCode, LearningDelivery ld)
+        {
+            var framework = new Framework()
+            {
+                ProgType = progType,
+                FworkCode = fworkCode,
+                PwayCode = pwayCode,
+                FrameworkAims = new List<FrameworkAim>()
+                {
+                    new FrameworkAim()
+                    {
+                        ProgType = progType,
+                        FworkCode = fworkCode,
+                        PwayCode = pwayCode,
+                        LearnAimRef = ld.LearnAimRef
+                    }
+                }
+            };
+
+            var array = v.Value.FrameworkCommonComponents;
+            var lfcc = new List<FrameworkCommonComponent>();
+
+            foreach (var element in array)
+            {
+                FrameworkCommonComponent fcc = new FrameworkCommonComponent()
+                {
+                    CommonComponent = element.CommonComponent,
+                    ProgType = progType,
+                    FworkCode = fworkCode,
+                    PwayCode = pwayCode,
+                    EffectiveFrom = element.EffectiveFrom,
+                    EffectiveTo = element.EffectiveTo
+                };
+                lfcc.Add(fcc);
+            }
+
+            framework.FrameworkCommonComponents = lfcc;
+            frameworks.Add(framework);
+        }
+
+        private static LearningDelivery BuildLearningDelivery(Dictionary<string, LearningDelivery> learningDeliveries, dynamic v)
+        {
+            LearningDelivery ld = new LearningDelivery()
+            {
+                LearnAimRef = v.Value.LearningDelivery.LearnAimRef,
+                FrameworkCommonComponent = v.Value.LearningDelivery.FrameworkCommonComponent
+            };
+
+            learningDeliveries.Add(ld.LearnAimRef, ld);
+            return ld;
         }
 
         private void PopulateOrganisations(dynamic rhs)
