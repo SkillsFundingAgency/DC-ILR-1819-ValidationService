@@ -48,6 +48,17 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
                 }
             }
 
+            foreach (var ld in rhs._learningDelivery)
+            {
+                string aimRef = ld.LearnAimRef;
+                int? fcc = ld.FrameworkCommonComponent;
+                learningDeliveries.Add(aimRef, new LearningDelivery()
+                {
+                    LearnAimRef = aimRef,
+                    FrameworkCommonComponent = fcc
+                });
+            }
+
             _dataCache.Frameworks = frameworks;
             _dataCache.LearningDeliveries = learningDeliveries;
         }

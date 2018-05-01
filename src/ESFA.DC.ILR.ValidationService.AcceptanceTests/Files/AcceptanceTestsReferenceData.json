@@ -10,6 +10,8 @@
         "LearnAimRef": "60061649",
         "FrameworkCommonComponent": -2
       },
+      "EffectiveFrom": "0001-01-01T00:00:00",
+      "EffectiveTo": null,
       "FrameworkCommonComponents": [],
       "StandardCommonComponents": null
     },
@@ -20,9 +22,11 @@
       "Validity": null,
       "StdCode": 0,
       "LearningDelivery": {
-        "LearnAimRef": "60009044",
+        "LearnAimRef": "60094837",
         "FrameworkCommonComponent": 10
       },
+      "EffectiveFrom": "0001-01-01T00:00:00",
+      "EffectiveTo": null,
       "FrameworkCommonComponents": [
         {
           "ProgType": 2,
@@ -93,6 +97,8 @@
         "LearnAimRef": "5006521X",
         "FrameworkCommonComponent": -2
       },
+      "EffectiveFrom": "0001-01-01T00:00:00",
+      "EffectiveTo": null,
       "FrameworkCommonComponents": [
         {
           "ProgType": 3,
@@ -147,6 +153,8 @@
         "LearnAimRef": "60028427",
         "FrameworkCommonComponent": -2
       },
+      "EffectiveFrom": "0001-01-01T00:00:00",
+      "EffectiveTo": null,
       "FrameworkCommonComponents": [
         {
           "ProgType": 20,
@@ -206,6 +214,8 @@
         "LearnAimRef": "00300728",
         "FrameworkCommonComponent": -2
       },
+      "EffectiveFrom": "0001-01-01T00:00:00",
+      "EffectiveTo": null,
       "FrameworkCommonComponents": [
         {
           "ProgType": 21,
@@ -281,6 +291,8 @@
         "LearnAimRef": "00300225",
         "FrameworkCommonComponent": -2
       },
+      "EffectiveFrom": "0001-01-01T00:00:00",
+      "EffectiveTo": null,
       "FrameworkCommonComponents": [
         {
           "ProgType": 22,
@@ -308,6 +320,8 @@
         "LearnAimRef": "50098184",
         "FrameworkCommonComponent": -2
       },
+      "EffectiveFrom": "0001-01-01T00:00:00",
+      "EffectiveTo": null,
       "FrameworkCommonComponents": [],
       "StandardCommonComponents": [
         {
@@ -436,5 +450,11 @@
     "DummyOrganisationTestingOnly": { "UKPRN": 90000064 },
     "NotExist": { "UKPRN": 99900064 },
     "PartnerOrganisation": { "UKPRN": 99999999 }
-  }
+  },
+  "_learningDelivery": [
+    {
+      "LearnAimRef": "60171145",
+      "FrameworkCommonComponent": 35
+    }
+  ]
 }
