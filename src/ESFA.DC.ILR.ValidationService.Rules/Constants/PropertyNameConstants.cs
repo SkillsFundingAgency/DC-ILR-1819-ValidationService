@@ -17,7 +17,8 @@
         public const string LearnAimRef = "LearnAimRef";
         public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
-        public const string PwayCode = "PwayCode";
         public const string ProgType = "ProgType";
+        public const string PriorAttain = "PriorAttain";
+        public const string PwayCode = "PwayCode";
     }
 }

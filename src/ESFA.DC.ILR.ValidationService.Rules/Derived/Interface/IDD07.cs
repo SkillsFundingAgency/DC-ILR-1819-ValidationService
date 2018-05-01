@@ -2,6 +2,6 @@
 {
     public interface IDD07
     {
-        string Derive(int? progType);
+        bool IsApprenticeship(int? progType);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using Newtonsoft.Json.Linq;
@@ -23,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             dynamic rhs = JObject.Parse(content);
             _dataCache.ULNs = new List<long>();
 
-            PopulateUKPRNs(rhs);
+            PopulateOrganisations(rhs);
             PopulateFrameworksFrameworkAimsAndLearningDeliveries(rhs);
         }
 
@@ -115,13 +116,13 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             return ld;
         }
 
-        private void PopulateUKPRNs(dynamic rhs)
+        private void PopulateOrganisations(dynamic rhs)
         {
-            _dataCache.UKPRNs = new List<long>()
+            _dataCache.Organisations = new Dictionary<long, Organisation>()
             {
-                rhs["_organisations"]["SpecialistDesignatedCollege"]["UKPRN"].Value,
-                rhs["_organisations"]["DummyOrganisationTestingOnly"]["UKPRN"].Value,
-                rhs["_organisations"]["PartnerOrganisation"]["UKPRN"].Value
+                { rhs["_organisations"]["SpecialistDesignatedCollege"]["UKPRN"].Value, null },
+                { rhs["_organisations"]["DummyOrganisationTestingOnly"]["UKPRN"].Value, null },
+                { rhs["_organisations"]["PartnerOrganisation"]["UKPRN"].Value, null },
             };
         }
     }

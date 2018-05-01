@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome
 
         public virtual bool ApprenticeshipConditionMet(int? progType)
         {
-            return _dd07.Derive(progType) == ValidationConstants.Y;
+            return _dd07.IsApprenticeship(progType);
         }
 
         public virtual bool EmpOutcomeConditionMet(int? empOutcome)

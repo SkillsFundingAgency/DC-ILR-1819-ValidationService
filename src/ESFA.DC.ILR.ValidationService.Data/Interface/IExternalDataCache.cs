@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Interface
 {
@@ -11,6 +12,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
 
         IReadOnlyCollection<Framework> Frameworks { get; }
 
-        IReadOnlyCollection<long> UKPRNs { get; }
+        IReadOnlyDictionary<long, Organisation> Organisations { get; }
     }
 }

@@ -60,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 
         public virtual bool ApprenticeshipConditionMet(int? progType)
         {
-            return progType != 25 && _dd07.Derive(progType) == ValidationConstants.Y;
+            return progType != 25 && _dd07.IsApprenticeship(progType);
         }
 
         public virtual bool LearnStartDateConditionMet(DateTime learnStartDate)

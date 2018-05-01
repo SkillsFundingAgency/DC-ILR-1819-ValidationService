@@ -48,5 +48,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             return _externalDataCache.LearningDeliveries.ContainsKey(learnAimRef);
         }
+
+        public bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null && learningDelivery.NotionalNVQLevelv2 == level;
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.FileData
             var message = _messageCache.Item;
 
             fileDataCache.FilePreparationDate = message.HeaderEntity.CollectionDetailsEntity.FilePreparationDate;
+            fileDataCache.UKPRN = message.LearningProviderEntity.UKPRN;
         }
     }
 }
