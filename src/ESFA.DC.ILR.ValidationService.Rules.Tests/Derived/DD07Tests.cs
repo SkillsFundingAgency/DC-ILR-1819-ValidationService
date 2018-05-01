@@ -14,9 +14,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         [InlineData(22)]
         [InlineData(23)]
         [InlineData(25)]
-        public void Derive_True(int? input)
+        public void IsApprenticeship_True(int? input)
         {
-            NewDD().Derive(input).Should().Be("Y");
+            NewDD().IsApprenticeship(input).Should().BeTrue();
         }
 
         [Theory]
@@ -24,9 +24,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         [InlineData(1)]
         [InlineData(99)]
         [InlineData(null)]
-        public void Derive_False(int? input)
+        public void IsApprenticeship_False(int? input)
         {
-            NewDD().Derive(input).Should().Be("N");
+            NewDD().IsApprenticeship(input).Should().BeFalse();
         }
 
         private DD07 NewDD()

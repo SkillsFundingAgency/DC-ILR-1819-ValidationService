@@ -272,7 +272,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var dd07Mock = new Mock<IDD07>();
 
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("N");
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07: dd07Mock.Object).ApprenticeshipConditionMet(progType).Should().BeTrue();
         }
@@ -284,7 +284,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var dd07Mock = new Mock<IDD07>();
 
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("Y");
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07: dd07Mock.Object).ApprenticeshipConditionMet(progType).Should().BeFalse();
         }
@@ -372,7 +372,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRef(learnAimRef, "3")).Returns(true);
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("N");
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
             fileDataCacheMock.SetupGet(c => c.UKPRN).Returns(ukprn);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, "USDC")).Returns(false);
             learningDeliveryFamQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFams, "RES")).Returns(false);

@@ -104,7 +104,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public virtual bool ApprenticeshipConditionMet(int? progType)
         {
-            return _dd07.Derive(progType) != ValidationConstants.Y;
+            return !_dd07.IsApprenticeship(progType);
         }
 
         public virtual bool RestartConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)

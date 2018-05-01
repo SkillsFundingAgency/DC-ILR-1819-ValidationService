@@ -30,8 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 
         public bool ConditionMet(int fundModel, int? progType)
         {
-            return fundModel == FundModelConstants.Apprenticeships
-                   && _dd07.Derive(progType) == ValidationConstants.N;
+            return fundModel == FundModelConstants.Apprenticeships && !_dd07.IsApprenticeship(progType);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)

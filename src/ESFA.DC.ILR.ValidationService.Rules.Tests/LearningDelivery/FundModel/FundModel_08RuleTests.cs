@@ -155,7 +155,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             var dd07Mock = new Mock<IDD07>();
 
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("Y");
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ApprenticeshipConditionMet(progType).Should().BeTrue();
         }
@@ -167,7 +167,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             var dd07Mock = new Mock<IDD07>();
 
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("N");
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).ApprenticeshipConditionMet(progType).Should().BeFalse();
         }
@@ -199,7 +199,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             var dd07Mock = new Mock<IDD07>();
 
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("Y");
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
