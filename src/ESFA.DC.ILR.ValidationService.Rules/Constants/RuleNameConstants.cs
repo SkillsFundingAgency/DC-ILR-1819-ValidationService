@@ -53,6 +53,7 @@
         public const string LearnAimRef_30 = "LearnAimRef_30";
         public const string LearnAimRef_55 = "LearnAimRef_55";
         public const string LearnAimRef_56 = "LearnAimRef_56";
+        public const string LearnAimRef_80 = "LearnAimRef_80";
 
         public const string ULN_03 = "ULN_03";
     }

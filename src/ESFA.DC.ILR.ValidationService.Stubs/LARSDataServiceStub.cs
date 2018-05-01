@@ -18,5 +18,10 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         {
             return true;
         }
+
+        public bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level)
+        {
+            return false;
+        }
     }
 }

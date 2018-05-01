@@ -7,5 +7,7 @@
         bool FrameworkCodeExistsForCommonComponent(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
 
         bool LearnAimRefExists(string learnAimRef);
+
+        bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level);
     }
 }

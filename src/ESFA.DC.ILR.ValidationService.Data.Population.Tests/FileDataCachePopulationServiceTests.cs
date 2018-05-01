@@ -12,9 +12,10 @@ namespace ESFA.DC.ILR.ValidationService.FileData.Tests
     public class FileDataCachePopulationServiceTests
     {
         [Fact]
-        public void Populate_FilePreparationDate()
+        public void Populate()
         {
             var filePreparationDate = new DateTime(2018, 1, 5);
+            var ukprn = 1;
 
             var message = new TestMessage()
             {
@@ -24,7 +25,11 @@ namespace ESFA.DC.ILR.ValidationService.FileData.Tests
                     {
                         FilePreparationDate = filePreparationDate
                     }
-                }
+                },
+                LearningProviderEntity = new TestLearningProvider()
+                {
+                    UKPRN = ukprn,
+                },
             };
             
             var messageCacheMock = new Mock<ICache<IMessage>>();
@@ -38,6 +43,7 @@ namespace ESFA.DC.ILR.ValidationService.FileData.Tests
             fileDataCachePopulationService.Populate();
 
             fileDataCache.FilePreparationDate.Should().Be(filePreparationDate);
+            fileDataCache.UKPRN.Should().Be(ukprn);
         }
     }
 }

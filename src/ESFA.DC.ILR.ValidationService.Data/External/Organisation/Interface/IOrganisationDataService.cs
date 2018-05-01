@@ -3,5 +3,7 @@
     public interface IOrganisationDataService
     {
         bool UkprnExists(long ukprn);
+
+        bool LegalOrgTypeMatchForUkprn(long ukprn, string legalOrgType);
     }
 }
