@@ -59,6 +59,7 @@
     <Compile Include="IValidationContext.cs" />
     <Compile Include="IValidationDataService.cs" />
     <Compile Include="IValidationError.cs" />
+    <Compile Include="IValidationErrorCache.cs" />
     <Compile Include="IValidationErrorHandler.cs" />
     <Compile Include="IValidationItemProviderService.cs" />
     <Compile Include="IValidationOutputService.cs" />

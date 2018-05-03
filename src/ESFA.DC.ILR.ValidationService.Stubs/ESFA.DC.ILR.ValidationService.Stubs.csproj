@@ -39,6 +39,9 @@
     <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.IO.Interfaces, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.IO.Interfaces.0.1.0-beta0001\lib\netstandard2.0\ESFA.DC.IO.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.Serialization.Interfaces, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Serialization.Interfaces.0.1.1-beta0001\lib\netstandard2.0\ESFA.DC.Serialization.Interfaces.dll</HintPath>
     </Reference>
@@ -62,6 +65,7 @@
     <Compile Include="AutoFacRuleSetResolutionServiceStub.cs" />
     <Compile Include="FCSDataServiceStub.cs" />
     <Compile Include="InternalDataCachePopulationServiceStub.cs" />
+    <Compile Include="KeyValuePersistenceService.cs" />
     <Compile Include="LARSDataServiceStub.cs" />
     <Compile Include="LearnerProviderServiceStub.cs" />
     <Compile Include="MessageFileSystemProviderServiceStub.cs" />
@@ -70,6 +74,7 @@
     <Compile Include="ExternalDataCachePopulationServiceStub.cs" />
     <Compile Include="ExternalDataCacheStub.cs" />
     <Compile Include="ValidationContextStub.cs" />
+    <Compile Include="ValidationOutputServiceStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

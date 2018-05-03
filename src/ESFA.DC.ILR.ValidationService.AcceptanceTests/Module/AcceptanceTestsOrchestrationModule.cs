@@ -15,13 +15,14 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<MessageStringProviderService>().As<IValidationItemProviderService<IMessage>>();
-            builder.RegisterType<AcceptanceTestsValidationErrorHandlerOutputService>().As<IValidationOutputService<IValidationError>>();
+            builder.RegisterType<ValidationErrorHandlerOutputService>().As<IValidationOutputService<IValidationError>>();
             builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>().As<IRuleSetOrchestrationService<ILearner, IValidationError>>();
             builder.RegisterType<AutoFacRuleSetResolutionServiceStub<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
             builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();
             builder.RegisterType<XmlSerializationService>().As<ISerializationService>();
             builder.RegisterType<LearnerProviderServiceStub>().As<IValidationItemProviderService<IEnumerable<ILearner>>>();
-            builder.RegisterType<ValidationErrorHandler>().As<IValidationErrorHandler>().InstancePerLifetimeScope();
+            builder.RegisterType<ValidationErrorHandler>().As<IValidationErrorHandler>();
+            builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache>().InstancePerLifetimeScope();
         }
     }
 }

@@ -27,6 +27,7 @@ using ESFA.DC.ILR.ValidationService.FileData;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.Stubs;
+using ESFA.DC.IO.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
@@ -59,6 +60,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<MessageCachePopulationService>().As<IMessageCachePopulationService>().InstancePerLifetimeScope();
 
             builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>().InstancePerLifetimeScope();
+
+            builder.RegisterType<KeyValuePersistenceService>().As<IKeyValuePersistenceService>().InstancePerLifetimeScope();
         }
     }
 }

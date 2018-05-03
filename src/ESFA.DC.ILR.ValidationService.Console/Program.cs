@@ -29,7 +29,9 @@ namespace ESFA.DC.ILR.ValidationService.Console
             var validationContext = new ValidationContextStub
             {
                 Input = filePath,
-                Output = filePath + ".vs.csv"
+                Output = filePath + ".vs.csv",
+                ValidLearnRefNumbersKey = "ValidLearnRefNumbers",
+                InvalidLearnRefNumbersKey = "InvalidLearnRefNumbers",
             };
 
             var container = BuildContainer();

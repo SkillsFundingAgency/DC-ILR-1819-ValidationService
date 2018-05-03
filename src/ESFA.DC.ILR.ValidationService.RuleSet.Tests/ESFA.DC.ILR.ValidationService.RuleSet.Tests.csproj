@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="AutoFacRuleSetResolutionServiceTests.cs" />
     <Compile Include="DateTimeProviderTests.cs" />
+    <Compile Include="ErrorHandler\ValidationErrorCacheTests.cs" />
     <Compile Include="ErrorHandler\ValidationErrorHandlerOutputServiceTests.cs" />
     <Compile Include="ErrorHandler\ValidationErrorHandlerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

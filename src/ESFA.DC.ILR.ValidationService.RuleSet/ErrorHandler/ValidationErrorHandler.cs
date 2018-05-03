@@ -7,19 +7,21 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler
 {
     public class ValidationErrorHandler : IValidationErrorHandler
     {
-        private readonly ConcurrentBag<IValidationError> _errorbag = new ConcurrentBag<IValidationError>();
+        private readonly IValidationErrorCache _validationErrorCache;
 
-        public virtual ConcurrentBag<IValidationError> ErrorBag
+        public ValidationErrorHandler(IValidationErrorCache validationErrorCache)
         {
-            get
-            {
-                return _errorbag;
-            }
+            _validationErrorCache = validationErrorCache;
         }
 
         public void Handle(string ruleName, string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
         {
-            _errorbag.Add(new ValidationError(ruleName, learnRefNumber, aimSequenceNumber, errorMessageParameters));
+            _validationErrorCache.Add(BuildValidationError(ruleName, learnRefNumber, aimSequenceNumber, errorMessageParameters));
+        }
+
+        public IValidationError BuildValidationError(string ruleName, string learnRefNumber, long? aimSequenceNumber, IEnumerable<IErrorMessageParameter> errorMessageParameters)
+        {
+            return new ValidationError(ruleName, learnRefNumber, aimSequenceNumber, errorMessageParameters);
         }
 
         public IErrorMessageParameter BuildErrorMessageParameter(string propertyName, object value)
