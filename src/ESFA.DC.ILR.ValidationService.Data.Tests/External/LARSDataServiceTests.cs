@@ -162,7 +162,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             {
                 { "MissingLearnAimRef", null }
             };
-           
+
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveries);
@@ -267,7 +267,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
-                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = notionalNVQLevelv2 }},
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = notionalNVQLevelv2 } },
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -285,7 +285,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
-                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = notionalNVQLevelv2 }},
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = notionalNVQLevelv2 } },
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -303,7 +303,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
-                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = notionalNVQLevelv2 }},
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = notionalNVQLevelv2 } },
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -319,6 +319,3 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
     }
 }
-
-
-

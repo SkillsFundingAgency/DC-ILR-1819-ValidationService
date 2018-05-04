@@ -53,18 +53,16 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             {
                 string aimRef = ld.LearnAimRef;
                 int? fcc = ld.FrameworkCommonComponent;
-                learningDeliveries.Add(aimRef, new LearningDelivery()
-                {
-                    LearnAimRef = aimRef,
-                    FrameworkCommonComponent = fcc
-                });
+                learningDeliveries.Add(
+                    aimRef,
+                    new LearningDelivery() { LearnAimRef = aimRef, FrameworkCommonComponent = fcc });
             }
 
             _dataCache.Frameworks = frameworks;
             _dataCache.LearningDeliveries = learningDeliveries;
         }
 
-        private static void BuildFrameworkAimsAndCommonComponents(List<Framework> frameworks, dynamic v, int progType, int fworkCode, int pwayCode, LearningDelivery ld)
+        private void BuildFrameworkAimsAndCommonComponents(List<Framework> frameworks, dynamic v, int progType, int fworkCode, int pwayCode, LearningDelivery ld)
         {
             var framework = new Framework()
             {
@@ -104,7 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             frameworks.Add(framework);
         }
 
-        private static LearningDelivery BuildLearningDelivery(Dictionary<string, LearningDelivery> learningDeliveries, dynamic v)
+        private LearningDelivery BuildLearningDelivery(Dictionary<string, LearningDelivery> learningDeliveries, dynamic v)
         {
             LearningDelivery ld = new LearningDelivery()
             {

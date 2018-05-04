@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.FileData.Tests
                     UKPRN = ukprn,
                 },
             };
-            
+
             var messageCacheMock = new Mock<ICache<IMessage>>();
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);

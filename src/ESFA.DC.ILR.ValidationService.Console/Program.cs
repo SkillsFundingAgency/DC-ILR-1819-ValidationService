@@ -10,12 +10,12 @@ using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Console
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var argsList = args.ToList();
-            
+
             if (!argsList.Any())
             {
                 argsList.Add(@"Files/ILR.xml");
@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
             using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, validationContext)))
             {
                 var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
-                
+
                 var errors = ruleSetOrchestrationService.Execute(validationContext);
 
                 OutputResultsToFile(errors, $"{validationContext.Output}");
@@ -67,7 +67,6 @@ namespace ESFA.DC.ILR.ValidationService.Console
             }
 
             System.IO.File.WriteAllText(path, contents.ToString());
-
         }
 
         private static void RegisterContext(ContainerBuilder containerBuilder, IValidationContext validationContext)
@@ -78,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
         private static IContainer BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
-            
+
             containerBuilder.RegisterModule<ValidationServiceConsoleModule>();
 
             return containerBuilder.Build();

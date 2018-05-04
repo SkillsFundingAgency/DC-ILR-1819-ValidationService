@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
             var valid = _keyValuePersistenceService.GetAsync(_validationContext.ValidLearnRefNumbersKey).Result;
             var invalid = _keyValuePersistenceService.GetAsync(_validationContext.InvalidLearnRefNumbersKey).Result;
-                
+
             return _validationErrorCache.ValidationErrors;
         }
     }

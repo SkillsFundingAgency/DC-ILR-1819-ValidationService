@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         public IReadOnlyCollection<long> ULNs { get; }
 
         public IReadOnlyDictionary<string, LearningDelivery> LearningDeliveries { get; }
-        
+
         public IReadOnlyCollection<Framework> Frameworks { get; }
 
         public IReadOnlyDictionary<long, Organisation> Organisations { get; }
