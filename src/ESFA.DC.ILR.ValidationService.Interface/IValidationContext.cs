@@ -2,7 +2,9 @@
 {
     public interface IValidationContext
     {
-        string Input { get; }
+        string Input { get;  }
         string Output { get; }
+
+
     }
 }

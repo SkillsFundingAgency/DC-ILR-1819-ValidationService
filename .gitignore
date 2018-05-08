@@ -286,3 +286,7 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+#service fabric local config
+**/ApplicationParameters/Local.5Node.xml
+**/ApplicationParameters/Local.1Node.xml

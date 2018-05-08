@@ -13,6 +13,14 @@
 
   </Section>
 
+
+  <Section Name="LoggerSection">
+    <Parameter Name="LoggerConnectionstring" Value="" />
+  </Section>
+
+
+
+
   <Section Name="DataTransportSettings">
     <Parameter Name="MaxMessageSize" Value="1073741824" MustOverride="true"/>
     <Parameter Name="SecurityCredentialsType" Value="None" />

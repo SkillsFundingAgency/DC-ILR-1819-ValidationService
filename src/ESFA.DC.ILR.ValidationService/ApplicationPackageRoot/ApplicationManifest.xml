@@ -1,15 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ApplicationManifest ApplicationTypeName="ESFA.DC.ILR.ValidationServiceType"
-                     ApplicationTypeVersion="1.0.0"
-                     xmlns="http://schemas.microsoft.com/2011/01/fabric"
-                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="ESFA.DC.ILR.ValidationServiceType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="ESFA.DC.ILR.ValidationService.Stateless_InstanceCount" DefaultValue="-1" />
     <Parameter Name="QueueName" DefaultValue="dc-job-queue" />
     <Parameter Name="ServiceBusConnectionString" DefaultValue="" />
     <Parameter Name="MaxMessageSize" DefaultValue="1073741824" />
-
+    <Parameter Name="LoggerConnectionstring" DefaultValue="Server=localhost;Database=logs;User Id=loguser;Password=password1;" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -25,6 +21,9 @@
           </Section>
           <Section Name="DataTransportSettings">
             <Parameter Name="MaxMessageSize" Value="[MaxMessageSize]" />
+          </Section>
+          <Section Name="LoggerSection">
+            <Parameter Name="LoggerConnectionstring" Value="[LoggerConnectionstring]" />
           </Section>
         </Settings>
       </ConfigOverride>

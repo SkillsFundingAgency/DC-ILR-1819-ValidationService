@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Integration.ServiceFabric;
+using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.ILR.ValidationService.Stateless.Modules;
+using ESFA.DC.Logging.Config;
+using ESFA.DC.Logging.Config.Interfaces;
+using ESFA.DC.Logging.Enums;
+using ESFA.DC.ServiceFabric.Helpers;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless
@@ -34,7 +40,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
                 using (var container = builder.Build())
                 {
-                    //var logger = container.Resolve<ESFA.DC.Logging.ILogger>();
+                    using (var newScope = container.BeginLifetimeScope())
+                    {
+                        var logger = container.Resolve<ESFA.DC.Logging.Interfaces.ILogger>();
+                    }
+
                     ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(Stateless).Name);
 
                     // Prevents this host process from terminating so services keep running.
@@ -55,6 +65,19 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
         {
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<ValidationServiceSFModule>();
+
+            // get config values and register with 
+            var configHelper = new ConfigurationHelper();
+            var seviceBusOptions =
+                configHelper.GetSectionValues<ServiceBusOptions>("ServiceBusSettings");
+            containerBuilder.RegisterInstance(seviceBusOptions).As<ServiceBusOptions>().SingleInstance();
+
+            // register logger
+            var loggerOptions =
+                configHelper.GetSectionValues<LoggerOptions>("LoggerSection");
+            containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
+            containerBuilder.RegisterModule<LoggerModule>();
+
             return containerBuilder;
         }
     }
