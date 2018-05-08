@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\Severity.cs" />
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="IErrorMessageParameter.cs" />
     <Compile Include="IRule.cs" />

@@ -16,4 +16,8 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="External\ValidationErrors\" />
+  </ItemGroup>
+
 </Project>
