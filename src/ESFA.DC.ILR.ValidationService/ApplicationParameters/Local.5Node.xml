@@ -3,7 +3,7 @@
   <Parameters>
     <Parameter Name="ESFA.DC.ILR.ValidationService.Stateless_InstanceCount" Value="1" />
     <Parameter Name="QueueName" Value="saiqueue" />
-    <Parameter Name="ServiceBusConnectionString" Value="Endpoint=sb://dc-dev-servicebus-weu.servicebus.windows.net/;SharedAccessKeyName=ReadOnlyAccess;SharedAccessKey=si1pBUYJYB0DSH96JU7fOM5xsxzEg+atUF+20QfVY40=" />
+    <Parameter Name="ServiceBusConnectionString" Value="" />
     <Parameter Name="LoggerConnectionstring" Value="Server=localhost;Database=logs;User Id=loguser;Password=password1; " />
   </Parameters>
 </Application>
