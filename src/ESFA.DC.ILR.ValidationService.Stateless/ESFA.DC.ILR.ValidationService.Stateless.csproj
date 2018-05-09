@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Stateless.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>pdbonly</DebugType>
@@ -32,7 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <PlatformTarget>x64</PlatformTarget>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Stateless.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <AdditionalFileItemNames>$(AdditionalFileItemNames);None</AdditionalFileItemNames>
@@ -52,6 +52,9 @@
     </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ESFA.DC.ILR.Model, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.ILR.1819.Model.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.dll</HintPath>
     </Reference>
     <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
@@ -82,6 +85,9 @@
     </Reference>
     <Reference Include="Microsoft.Azure.Amqp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Amqp.2.1.2\lib\net45\Microsoft.Azure.Amqp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Azure.ServiceBus, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7e34167dcc6d6d8c, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.ServiceBus.2.0.0\lib\net461\Microsoft.Azure.ServiceBus.dll</HintPath>
@@ -120,6 +126,9 @@
     </Reference>
     <Reference Include="Microsoft.ServiceFabric.Services.Remoting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=AMD64">
       <HintPath>..\packages\Microsoft.ServiceFabric.Services.Remoting.3.0.480\lib\net45\Microsoft.ServiceFabric.Services.Remoting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=9.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.9.1.1\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -204,11 +213,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JobContext\ValidationContext.cs" />
     <Compile Include="Listeners\ServiceBusQueueListener.cs" />
-    <Compile Include="Models\LoggerSection.cs" />
-    <Compile Include="Models\ServiceBusOptions.cs" />
-    <Compile Include="Models\ServiceBusQueueListenerModel.cs" />
     <Compile Include="Modules\LoggerModule.cs" />
     <Compile Include="Modules\ValidationServiceSFModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -217,6 +222,9 @@
     <Compile Include="ServiceEventSource.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ESFA.DC.ILR.ValidationService.Stateless.ruleset">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="PackageRoot\Config\Settings.xml" />
     <None Include="PackageRoot\ServiceManifest.xml" />
     <None Include="App.config" />
@@ -238,12 +246,18 @@
       <Project>{E2D0F0D5-D9C8-41FE-B0DF-481DD5AA77CF}</Project>
       <Name>ESFA.DC.ILR.ValidationService.RuleSet.Modules</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Stateless.Models\ESFA.DC.ILR.ValidationService.Stateless.Models.csproj">
+      <Project>{eb94fed6-6895-488d-822a-60254bd32fc7}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Stateless.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.ServiceFabric.Actors.3.0.480\build\net45\Microsoft.ServiceFabric.Actors.targets" Condition="Exists('..\packages\Microsoft.ServiceFabric.Actors.3.0.480\build\net45\Microsoft.ServiceFabric.Actors.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -253,7 +267,7 @@
     <Error Condition="!Exists('..\packages\Microsoft.ServiceFabric.Actors.3.0.480\build\net45\Microsoft.ServiceFabric.Actors.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ServiceFabric.Actors.3.0.480\build\net45\Microsoft.ServiceFabric.Actors.targets'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>powershell -NoProfile -ExecutionPolicy RemoteSigned -file $(ProjectDir)Scripts\settings.ps1 $(ProjectDir)</PreBuildEvent>
+    <PreBuildEvent>powershell -NoProfile -ExecutionPolicy RemoteSigned -file $(ProjectDir)Scripts\Settings.ps1 $(ProjectDir)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

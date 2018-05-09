@@ -8,7 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule<ValidationOrchestrationModule>();
+            builder.RegisterModule<ValidationOrchestrationConsoleModule>();
             builder.RegisterModule<DataModule>();
             builder.RegisterModule<QueryServiceModule>();
             builder.RegisterModule<DerivedDataModule>();

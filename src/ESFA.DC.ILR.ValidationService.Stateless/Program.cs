@@ -29,30 +29,21 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
-
-
                 var builder = BuildContainer();
 
                 // Register the Autofac magic for Service Fabric support.
                 builder.RegisterServiceFabricSupport();
+
                 // Register the stateless service.
                 builder.RegisterStatelessService<Stateless>("ESFA.DC.ILR.ValidationService.StatelessType");
 
                 using (var container = builder.Build())
                 {
-                    using (var newScope = container.BeginLifetimeScope())
-                    {
-                        var logger = container.Resolve<ESFA.DC.Logging.Interfaces.ILogger>();
-                    }
-
                     ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(Stateless).Name);
 
                     // Prevents this host process from terminating so services keep running.
                     Thread.Sleep(Timeout.Infinite);
                 }
-
-                // Prevents this host process from terminating so services keep running.
-                Thread.Sleep(Timeout.Infinite);
             }
             catch (Exception e)
             {
@@ -66,11 +57,15 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<ValidationServiceSFModule>();
 
-            // get config values and register with 
+            // get ServiceBus, Azurestorage config values and register container
             var configHelper = new ConfigurationHelper();
             var seviceBusOptions =
                 configHelper.GetSectionValues<ServiceBusOptions>("ServiceBusSettings");
             containerBuilder.RegisterInstance(seviceBusOptions).As<ServiceBusOptions>().SingleInstance();
+
+            var azureStorageOptions =
+                configHelper.GetSectionValues<AzureStorageModel>("AzureStorageSection");
+            containerBuilder.RegisterInstance(azureStorageOptions).As<AzureStorageModel>().SingleInstance();
 
             // register logger
             var loggerOptions =

@@ -18,7 +18,6 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<AutoFacRuleSetResolutionServiceStub<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
             builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();
             builder.RegisterType<XmlSerializationService>().As<ISerializationService>();
-            builder.RegisterType<MessageFileSystemProviderServiceStub>().As<IValidationItemProviderService<IMessage>>();
             builder.RegisterType<LearnerProviderServiceStub>().As<IValidationItemProviderService<IEnumerable<ILearner>>>();
             builder.RegisterType<ValidationErrorHandler>().As<IValidationErrorHandler>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrorHandlerOutputService>().As<IValidationOutputService<IValidationError>>();

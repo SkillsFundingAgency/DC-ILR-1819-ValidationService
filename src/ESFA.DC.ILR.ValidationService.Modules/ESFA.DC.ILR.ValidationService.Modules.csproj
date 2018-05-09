@@ -63,11 +63,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModule.cs" />
+    <Compile Include="ValidationOrchestrationConsoleModule.cs" />
     <Compile Include="ValidationOrchestrationModule.cs" />
+    <Compile Include="ValidationOrchestrationSfModule.cs" />
     <Compile Include="ValidationServiceConsoleModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ESFA.DC.ILR.ValidationService.Modules.ruleset">
       <SubType>Designer</SubType>
     </None>
@@ -85,6 +88,10 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513c4f05-55f4-4aef-b3eb-427c024da043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Providers\ESFA.DC.ILR.ValidationService.Providers.csproj">
+      <Project>{a14b4498-ef4c-4457-ba09-e9aba42face0}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Providers</Name>
     </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.RuleSet.Modules\ESFA.DC.ILR.ValidationService.RuleSet.Modules.csproj">
       <Project>{e2d0f0d5-d9c8-41fe-b0df-481dd5aa77cf}</Project>

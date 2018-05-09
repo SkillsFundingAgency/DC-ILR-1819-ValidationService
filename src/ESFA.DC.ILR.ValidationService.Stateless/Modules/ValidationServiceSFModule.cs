@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule<ValidationOrchestrationModule>();
+            builder.RegisterModule<ValidationOrchestrationSfModule>();
             builder.RegisterModule<DataModule>();
             builder.RegisterModule<QueryServiceModule>();
             builder.RegisterModule<DerivedDataModule>();

@@ -13,7 +13,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-
             builder.Register(c =>
             {
                 var loggerOptions = c.Resolve<LoggerOptions>();
@@ -38,6 +37,5 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Modules
             builder.RegisterType<SerilogLoggerFactory>().As<ISerilogLoggerFactory>().InstancePerLifetimeScope();
             builder.RegisterType<SeriLogger>().As<ILogger>().InstancePerLifetimeScope();
         }
-
     }
 }

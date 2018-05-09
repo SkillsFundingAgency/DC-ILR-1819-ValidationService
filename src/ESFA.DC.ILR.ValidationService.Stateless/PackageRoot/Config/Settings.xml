@@ -18,6 +18,9 @@
     <Parameter Name="LoggerConnectionstring" Value="" />
   </Section>
 
+  <Section  Name="AzureStorageSection">
+    <Parameter Name="AzureBlobConnectionString" Value="" />
+  </Section>
 
 
 

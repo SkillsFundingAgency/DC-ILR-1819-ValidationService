@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Castle.Components.DictionaryAdapter.Xml;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Stateless.JobContext;
 using ESFA.DC.ILR.ValidationService.Stateless.Listeners;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.ILR.ValidationService.Stateless.Modules;
@@ -19,6 +19,7 @@ using ESFA.DC.Logging.Interfaces;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Newtonsoft.Json;
+using ExecutionContext = ESFA.DC.Logging.ExecutionContext;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless
 {
@@ -32,13 +33,15 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
         private readonly string _serviceBusConnectionString;
         private ILogger _logger;
 
-        public Stateless(StatelessServiceContext context, ILifetimeScope parentLifeTimeScope,
+        public Stateless(
+            StatelessServiceContext context,
+            ILifetimeScope parentLifeTimeScope,
             ServiceBusOptions seviceBusOptions)
             : base(context)
         {
             _parentLifeTimeScope = parentLifeTimeScope;
 
-            //get config values
+            // get config values
             _queueName = seviceBusOptions.QueueName;
             _serviceBusConnectionString = seviceBusOptions.ServiceBusConnectionString;
             _logger = parentLifeTimeScope.Resolve<ILogger>();
@@ -51,36 +54,41 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
             yield return new ServiceInstanceListener(
-                context => new ServiceBusQueueListener(ProcessMessageHandler,
-                    _serviceBusConnectionString, _queueName, _logger),
+                context => new ServiceBusQueueListener(
+                    ProcessMessageHandler,
+                    _serviceBusConnectionString,
+                    _queueName,
+                    _logger),
                 "StatelessService-ServiceBusQueueListener");
-
         }
 
         async Task ProcessMessageHandler(ServiceBusQueueListenerModel listernerModel)
         {
-            var jobContext = JsonConvert.DeserializeObject<IJobContextMessage>(Encoding.UTF8.GetString(listernerModel.Message.Body));
+            var jobContext = JsonConvert.DeserializeObject<JobContextMessage>(Encoding.UTF8.GetString(listernerModel.Message.Body));
 
             var validationContext = new ValidationContext()
             {
-                Input = "",
-                Output = ""
+                Input = jobContext.KeyValuePairs[JobContextMessageKey.Filename].ToString()
             };
-
 
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c => c.RegisterInstance(validationContext).As<IValidationContext>()))
             {
+                var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
+                executionContext.JobId = jobContext.JobId.ToString();
                 var logger = childLifeTimeScope.Resolve<ILogger>();
 
                 try
                 {
+                    var azureStorageModel = childLifeTimeScope.Resolve<AzureStorageModel>();
+                    azureStorageModel.AzureContainerReference =
+                        jobContext.KeyValuePairs[JobContextMessageKey.Container].ToString();
+
                     logger.LogInfo("inside processmessage validate");
                     var ruleSetOrchestrationService = childLifeTimeScope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
                     var errors = ruleSetOrchestrationService.Execute(validationContext);
 
                     ServiceEventSource.Current.ServiceMessage(this.Context, "Job done");
-
                 }
                 catch (Exception ex)
                 {

@@ -4,5 +4,6 @@
     <Parameter Name="ESFA.DC.ILR.ValidationService.Stateless_InstanceCount" Value="-1" />
     <Parameter Name="QueueName" Value="##QueueName##" />
     <Parameter Name="ServiceBusConnectionString" Value="##ServiceFabricServiceBusConnectionString##" />
+    <Parameter Name="AzureBlobConnectionString" Value="##AzureBlobConnectionString##" />
   </Parameters>
 </Application>

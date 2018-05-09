@@ -51,6 +51,26 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Listeners
             return Task.FromResult(_serviceBusConnectionString);
         }
 
+        public Task CloseAsync(CancellationToken cancellationToken)
+        {
+            Stop();
+            return Task.FromResult(true);
+        }
+
+        public void Abort()
+        {
+            Stop();
+        }
+
+        private void Stop()
+        {
+            if (_queueClient != null && !_queueClient.IsClosedOrClosing)
+            {
+                _queueClient.CloseAsync();
+                _queueClient = null;
+            }
+        }
+
         async Task ProcessMessagesAsync(Message message, CancellationToken token)
         {
             _logger.LogInfo($"Received message: SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
@@ -63,7 +83,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Listeners
                 Token = token
             });
 
-
             // Complete the message so that it is not received again.
             // This can be done only if the queue Client is created in ReceiveMode.PeekLock mode (which is the default).
             await _queueClient.CompleteAsync(message.SystemProperties.LockToken);
@@ -71,26 +90,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Listeners
             // Note: Use the cancellationToken passed as necessary to determine if the queueClient has already been closed.
             // If queueClient has already been closed, you can choose to not call CompleteAsync() or AbandonAsync() etc.
             // to avoid unnecessary exceptions.
-        }
-
-        public Task CloseAsync(CancellationToken cancellationToken)
-        {
-            this.Stop();
-            return Task.FromResult(true);
-        }
-
-        public void Abort()
-        {
-            this.Stop();
-        }
-
-        private void Stop()
-        {
-            if (this._queueClient != null && !this._queueClient.IsClosedOrClosing)
-            {
-                this._queueClient.CloseAsync();
-                this._queueClient = null;
-            }
         }
 
         // Use this handler to examine the exceptions received on the message pump.
