@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Integration.ServiceFabric;
+using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
-using ESFA.DC.ILR.ValidationService.Stateless.Modules;
 using ESFA.DC.Logging.Config;
 using ESFA.DC.Logging.Config.Interfaces;
 using ESFA.DC.Logging.Enums;
@@ -55,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
         private static ContainerBuilder BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<ValidationServiceSFModule>();
+            containerBuilder.RegisterModule<ValidationServiceSfModule>();
 
             // get ServiceBus, Azurestorage config values and register container
             var configHelper = new ConfigurationHelper();

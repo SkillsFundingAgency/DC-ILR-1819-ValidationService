@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using Autofac;
 using Castle.Components.DictionaryAdapter.Xml;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Stateless.Listeners;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
-using ESFA.DC.ILR.ValidationService.Stateless.Modules;
 using ESFA.DC.JobContext;
 using ESFA.DC.JobContext.Interface;
 using ESFA.DC.Logging;
@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                     _serviceBusConnectionString,
                     _queueName,
                     _logger),
-                "StatelessService-ServiceBusQueueListener");
+                "ValidationService-SBQueueListener");
         }
 
         async Task ProcessMessageHandler(ServiceBusQueueListenerModel listernerModel)
@@ -84,9 +84,10 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                         jobContext.KeyValuePairs[JobContextMessageKey.Container].ToString();
 
                     logger.LogInfo("inside processmessage validate");
-                    var ruleSetOrchestrationService = childLifeTimeScope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                    var errors = ruleSetOrchestrationService.Execute(validationContext);
+                     var preValidationOrchestrationService = childLifeTimeScope.Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
+
+                    var errors = preValidationOrchestrationService.Execute(validationContext);
 
                     ServiceEventSource.Current.ServiceMessage(this.Context, "Job done");
                 }

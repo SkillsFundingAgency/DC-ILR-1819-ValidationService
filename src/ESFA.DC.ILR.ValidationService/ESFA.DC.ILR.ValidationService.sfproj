@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Stateless\ESFA.DC.ILR.ValidationService.Stateless.csproj" />
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ValidationActor\ESFA.DC.ILR.ValidationService.ValidationActor.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

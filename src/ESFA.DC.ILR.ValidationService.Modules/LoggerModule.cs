@@ -6,8 +6,9 @@ using ESFA.DC.Logging.Config;
 using ESFA.DC.Logging.Config.Interfaces;
 using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
+using ExecutionContext = System.Threading.ExecutionContext;
 
-namespace ESFA.DC.ILR.ValidationService.Stateless.Modules
+namespace ESFA.DC.ILR.ValidationService.Modules
 {
     public class LoggerModule : Module
     {

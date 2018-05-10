@@ -288,8 +288,6 @@ __pycache__/
 *.xsd.cs
 
 # service fabric local config
-**/Local.5Node.xml
-**/Local.1Node.xml
 src/ESFA.DC.ILR.ValidationService/ApplicationParameters/Local.1Node.xml
 src/ESFA.DC.ILR.ValidationService/ApplicationParameters/Local.5Node.xml
 

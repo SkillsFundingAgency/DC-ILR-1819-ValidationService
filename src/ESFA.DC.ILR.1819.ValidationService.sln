@@ -41,6 +41,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.Stateless.Models", "ESFA.DC.ILR.ValidationService.Stateless.Models\ESFA.DC.ILR.ValidationService.Stateless.Models.csproj", "{EB94FED6-6895-488D-822A-60254BD32FC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.ValidationActor", "ESFA.DC.ILR.ValidationService.ValidationActor\ESFA.DC.ILR.ValidationService.ValidationActor.csproj", "{037F73A2-D181-4D17-8FE6-A676E2292093}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces", "ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces\ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.csproj", "{F267B89E-04E1-4295-AC75-7E9D833CF189}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +203,18 @@ Global
 		{EB94FED6-6895-488D-822A-60254BD32FC7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB94FED6-6895-488D-822A-60254BD32FC7}.Release|x64.ActiveCfg = Release|Any CPU
 		{EB94FED6-6895-488D-822A-60254BD32FC7}.Release|x64.Build.0 = Release|Any CPU
+		{037F73A2-D181-4D17-8FE6-A676E2292093}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{037F73A2-D181-4D17-8FE6-A676E2292093}.Debug|x64.ActiveCfg = Debug|x64
+		{037F73A2-D181-4D17-8FE6-A676E2292093}.Debug|x64.Build.0 = Debug|x64
+		{037F73A2-D181-4D17-8FE6-A676E2292093}.Release|Any CPU.ActiveCfg = Release|x64
+		{037F73A2-D181-4D17-8FE6-A676E2292093}.Release|x64.ActiveCfg = Release|x64
+		{037F73A2-D181-4D17-8FE6-A676E2292093}.Release|x64.Build.0 = Release|x64
+		{F267B89E-04E1-4295-AC75-7E9D833CF189}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{F267B89E-04E1-4295-AC75-7E9D833CF189}.Debug|x64.ActiveCfg = Debug|x64
+		{F267B89E-04E1-4295-AC75-7E9D833CF189}.Debug|x64.Build.0 = Debug|x64
+		{F267B89E-04E1-4295-AC75-7E9D833CF189}.Release|Any CPU.ActiveCfg = Release|x64
+		{F267B89E-04E1-4295-AC75-7E9D833CF189}.Release|x64.ActiveCfg = Release|x64
+		{F267B89E-04E1-4295-AC75-7E9D833CF189}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
