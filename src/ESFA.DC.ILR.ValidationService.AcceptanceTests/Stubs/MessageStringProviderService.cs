@@ -8,11 +8,11 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
     public class MessageStringProviderService : IValidationItemProviderService<IMessage>
     {
         private readonly ISerializationService _serializationService;
-        private readonly IValidationContext _validationContext;
+        private readonly IPreValidationContext _validationContext;
 
         private IMessage _message;
 
-        public MessageStringProviderService(ISerializationService serializationService, IValidationContext validationContext)
+        public MessageStringProviderService(ISerializationService serializationService, IPreValidationContext validationContext)
         {
             _serializationService = serializationService;
             _validationContext = validationContext;

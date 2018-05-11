@@ -1,19 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
-using ESFA.DC.ILR.Model.Interface;
-using Microsoft.ServiceFabric.Actors;
-using Microsoft.ServiceFabric.Actors.Runtime;
-using Microsoft.ServiceFabric.Actors.Client;
-using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
-using ESFA.DC.Logging.Interfaces;
-using ExecutionContext = ESFA.DC.Logging.ExecutionContext;
-
-namespace ESFA.DC.ILR.ValidationService.ValidationActor
+﻿namespace ESFA.DC.ILR.ValidationService.ValidationActor
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Autofac;
+    using ESFA.DC.ILR.Model.Interface;
+    using ESFA.DC.ILR.ValidationService.Interface;
+    using ESFA.DC.ILR.ValidationService.Stateless.Models;
+    using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
+    using ESFA.DC.Logging.Interfaces;
+    using ESFA.DC.Serialization.Interfaces;
+    using Microsoft.ServiceFabric.Actors;
+    using Microsoft.ServiceFabric.Actors.Runtime;
+    using ExecutionContext = ESFA.DC.Logging.ExecutionContext;
+
     /// <remarks>
     /// This class represents an actor.
     /// Every ActorID maps to an instance of this class.
@@ -38,7 +40,41 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
         {
             _parentLifeTimeScope = parentLifeTimeScope;
             _actorId = actorId;
+        }
 
+        public Task<string> Validate(string jobId, IMessage message, ILearner[] shreddedLearners)
+        {
+            using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope())
+            {
+                var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
+                executionContext.JobId = jobId;
+                executionContext.TaskKey = _actorId.ToString();
+                var logger = childLifeTimeScope.Resolve<ILogger>();
+
+                try
+                {
+                    var validationContext = new ValidationContext()
+                    {
+                        Input = message
+                    };
+
+                    logger.LogInfo("Actor started processing");
+                    var preValidationOrchestrationService = childLifeTimeScope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
+                    var errors = preValidationOrchestrationService.Execute(validationContext);
+                    var serialisationService = childLifeTimeScope.Resolve<ISerializationService>();
+                    logger.LogInfo("actore validation done");
+
+                    var errorString = serialisationService.Serialize(errors);
+                    logger.LogInfo("Actor completed job");
+                    return Task.Run(() => errorString);
+                }
+                catch (Exception ex)
+                {
+                    ActorEventSource.Current.ActorMessage(this, "Exception-{0}", ex.ToString());
+                    logger.LogError("Error while processing Actor job", ex);
+                    throw;
+                }
+            }
         }
 
         /// <summary>
@@ -49,28 +85,6 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
         {
             ActorEventSource.Current.ActorMessage(this, "Actor activated.");
             return this.StateManager.TryAddStateAsync("count", 5);
-        }
-
-
-        public Task<string> Validate(string jobId, IMessage message, ILearner[] shreddedLearners)
-        {
-            using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope())
-            {
-                var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
-                executionContext.JobId = jobId;
-                var logger = childLifeTimeScope.Resolve<ILogger>();
-                try
-                {
-
-                }
-                catch (Exception ex)
-                {
-                    ActorEventSource.Current.ActorMessage(this, "Exception-{0}", ex.ToString());
-                    logger.LogError("Error while processing Actor job", ex);
-                    throw;
-                }
-
-            }
         }
     }
 }

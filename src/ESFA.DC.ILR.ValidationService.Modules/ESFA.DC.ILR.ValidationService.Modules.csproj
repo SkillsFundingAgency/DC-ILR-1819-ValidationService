@@ -31,6 +31,24 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Modules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Modules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Modules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
@@ -87,15 +105,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleDataModule.cs" />
+    <Compile Include="BaseDataModule.cs" />
     <Compile Include="DataModule.cs" />
     <Compile Include="LoggerModule.cs" />
-    <Compile Include="ValidationActorSfModule.cs" />
-    <Compile Include="ValidationOrchestrationConsoleModule.cs" />
-    <Compile Include="ValidationOrchestrationModule.cs" />
-    <Compile Include="ValidationOrchestrationSfModule.cs" />
-    <Compile Include="ValidationServiceConsoleModule.cs" />
+    <Compile Include="ActorDataModule.cs" />
+    <Compile Include="PreValidationDataModule.cs" />
+    <Compile Include="ActorValidationModule.cs" />
+    <Compile Include="ActorPreValidationOrchestrationModule.cs" />
+    <Compile Include="ConsoleValidationOrchestrationModule.cs" />
+    <Compile Include="ActorValidationOrchestrationModule.cs" />
+    <Compile Include="BaseValidationOrchestrationModule.cs" />
+    <Compile Include="PreValidationOrchestrationModule.cs" />
+    <Compile Include="ConsoleValidationServiceModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValidationServiceSFModule.cs" />
+    <Compile Include="PreValidationServiceModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

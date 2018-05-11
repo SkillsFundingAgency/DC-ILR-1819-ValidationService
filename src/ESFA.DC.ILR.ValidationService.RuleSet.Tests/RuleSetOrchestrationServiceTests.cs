@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet.Tests.Rules;
@@ -21,8 +22,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(new List<string>());
 
-            var preValidationPopulationServiceMock = new Mock<IPreValidationPopulationService>();
-            preValidationPopulationServiceMock.Setup(ps => ps.Populate());
+            var preValidationPopulationServiceMock = new Mock<IPreValidationPopulationService<IMessage>>();
+            preValidationPopulationServiceMock.Setup(ps => ps.Populate(It.IsAny<IMessage>()));
 
             var output = new List<int>() { 1, 2, 3 };
 
@@ -51,8 +52,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(validationItems);
 
-            var preValidationPopulationServiceMock = new Mock<IPreValidationPopulationService>();
-            preValidationPopulationServiceMock.Setup(ps => ps.Populate());
+            var preValidationPopulationServiceMock = new Mock<IPreValidationPopulationService<IMessage>>();
+            preValidationPopulationServiceMock.Setup(ps => ps.Populate(It.IsAny<IMessage>()));
 
             var ruleSetExecutionServiceMock = new Mock<IRuleSetExecutionService<string>>();
             ruleSetExecutionServiceMock.Setup(es => es.Execute(ruleSet, one)).Verifiable();
@@ -73,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
         public RuleSetOrchestrationService<T, U> NewService<T, U>(
             IRuleSetResolutionService<T> ruleSetResolutionService = null,
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService = null,
-            IPreValidationPopulationService preValidationPopulationService = null,
+            IPreValidationPopulationService<IMessage> preValidationPopulationService = null,
             IRuleSetExecutionService<T> ruleSetExecutionService = null,
             IValidationOutputService<U> validationOutputService = null)
             where T : class

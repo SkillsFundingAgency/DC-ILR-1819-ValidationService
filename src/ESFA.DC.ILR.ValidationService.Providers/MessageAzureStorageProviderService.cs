@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     public class MessageAzureStorageProviderService : IValidationItemProviderService<IMessage>
     {
         private readonly ISerializationService _serializationService;
-        private readonly IValidationContext _validationContext;
+        private readonly IPreValidationContext _preValidationContext;
 
         private IMessage _message;
         private readonly AzureStorageModel _azureStorageModel;
@@ -26,12 +26,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
         public MessageAzureStorageProviderService(
             ISerializationService serializationService,
-            IValidationContext validationContext,
+            IPreValidationContext prePreValidationContext,
             AzureStorageModel azureStorageModel,
             ILogger logger)
         {
             _serializationService = serializationService;
-            _validationContext = validationContext;
+            _preValidationContext = prePreValidationContext;
             _azureStorageModel = azureStorageModel;
             _logger = logger;
         }
@@ -60,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 var cloudBlobContainerElapsed = stopwatch.ElapsedMilliseconds;
 
-                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(_validationContext.Input);
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(_preValidationContext.Input);
 
                 var cloudBlockBlobElapsed = stopwatch.ElapsedMilliseconds;
 

@@ -10,17 +10,12 @@ using ESFA.DC.Serialization.Xml;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
-    public class ValidationOrchestrationModule : Module
+    public class BaseValidationOrchestrationModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>().As<IRuleSetOrchestrationService<ILearner, IValidationError>>();
-            builder.RegisterType<AutoFacRuleSetResolutionServiceStub<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
-            builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();
             builder.RegisterType<XmlSerializationService>().As<ISerializationService>();
             builder.RegisterType<LearnerProviderServiceStub>().As<IValidationItemProviderService<IEnumerable<ILearner>>>();
-            builder.RegisterType<ValidationErrorHandler>().As<IValidationErrorHandler>().InstancePerLifetimeScope();
-            builder.RegisterType<ValidationErrorHandlerOutputService>().As<IValidationOutputService<IValidationError>>();
         }
     }
 }

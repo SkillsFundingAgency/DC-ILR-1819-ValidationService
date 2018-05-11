@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
 
         private static void RunValidation(string filePath)
         {
-            var validationContext = new ValidationContextStub
+            var preValidationContext = new ValidationContextStub
             {
                 Input = filePath,
                 Output = filePath + ".vs.csv"
@@ -34,16 +34,16 @@ namespace ESFA.DC.ILR.ValidationService.Console
 
             var container = BuildContainer();
 
-            using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, validationContext)))
+            using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, preValidationContext)))
             {
-                var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
+                var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
                 
-                var errors = ruleSetOrchestrationService.Execute(validationContext);
+                var errors = preValidationOrchestrationService.Execute(preValidationContext);
 
-                OutputResultsToFile(errors, $"{validationContext.Output}");
+                OutputResultsToFile(errors, $"{preValidationContext.Output}");
             }
 
-            System.Console.WriteLine($"{validationContext.Output}");
+            System.Console.WriteLine($"{preValidationContext.Output}");
         }
 
         private static void OutputResultsToFile(IEnumerable<IValidationError> errors, string path)
@@ -68,16 +68,16 @@ namespace ESFA.DC.ILR.ValidationService.Console
 
         }
 
-        private static void RegisterContext(ContainerBuilder containerBuilder, IValidationContext validationContext)
+        private static void RegisterContext(ContainerBuilder containerBuilder, IPreValidationContext preValidationContext)
         {
-            containerBuilder.RegisterInstance(validationContext).As<IValidationContext>();
+            containerBuilder.RegisterInstance(preValidationContext).As<IPreValidationContext>();
         }
 
         private static IContainer BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
             
-            containerBuilder.RegisterModule<ValidationServiceConsoleModule>();
+            containerBuilder.RegisterModule<ConsoleValidationServiceModule>();
 
             return containerBuilder.Build();
         }

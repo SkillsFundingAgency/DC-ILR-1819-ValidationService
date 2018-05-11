@@ -15,11 +15,14 @@ using ESFA.DC.Serialization.Xml;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
-    public class ValidationOrchestrationSfModule : ValidationOrchestrationModule
+    public class ActorPreValidationOrchestrationModule : BaseValidationOrchestrationModule
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<MessageAzureStorageProviderService>().As<IValidationItemProviderService<IMessage>>();
+            builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>()
+                .As<IRuleSetOrchestrationService<ILearner, IValidationError>>()
+                .InstancePerLifetimeScope();
+
             base.Load(builder);
         }
     }

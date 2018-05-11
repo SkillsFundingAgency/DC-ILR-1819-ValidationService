@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 
@@ -10,14 +11,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
     {
         private readonly IRuleSetResolutionService<T> _ruleSetResolutionService;
         private readonly IValidationItemProviderService<IEnumerable<T>> _validationItemProviderService;
-        private readonly IPreValidationPopulationService _preValidationPopulationService;
+        private readonly IPreValidationPopulationService<IMessage> _preValidationPopulationService;
         private readonly IValidationOutputService<U> _validationOutputService;
         private readonly IRuleSetExecutionService<T> _ruleSetExecutionService;
 
         public RuleSetOrchestrationService(
             IRuleSetResolutionService<T> ruleSetResolutionService,
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService,
-            IPreValidationPopulationService preValidationPopulationService,
+            IPreValidationPopulationService<IMessage> preValidationPopulationService,
             IRuleSetExecutionService<T> ruleSetExecutionService,
             IValidationOutputService<U> validationOutputService)
         {
@@ -32,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
         {
             var ruleSet = _ruleSetResolutionService.Resolve().ToList();
 
-            _preValidationPopulationService.Populate();
+            _preValidationPopulationService.Populate(validationContext.Input);
 
             foreach (var validationItem in _validationItemProviderService.Provide())
             {

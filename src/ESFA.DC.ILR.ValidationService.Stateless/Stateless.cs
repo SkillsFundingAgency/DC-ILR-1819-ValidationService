@@ -66,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
         {
             var jobContext = JsonConvert.DeserializeObject<JobContextMessage>(Encoding.UTF8.GetString(listernerModel.Message.Body));
 
-            var validationContext = new ValidationContext()
+            var validationContext = new PreValidationContext()
             {
                 Input = jobContext.KeyValuePairs[JobContextMessageKey.Filename].ToString()
             };
@@ -85,11 +85,13 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
                     logger.LogInfo("inside processmessage validate");
 
-                     var preValidationOrchestrationService = childLifeTimeScope.Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
+                    var preValidationOrchestrationService = childLifeTimeScope
+                        .Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
 
                     var errors = preValidationOrchestrationService.Execute(validationContext);
 
-                    ServiceEventSource.Current.ServiceMessage(this.Context, "Job done");
+                    logger.LogInfo("Job complete");
+                    ServiceEventSource.Current.ServiceMessage(this.Context, "Job complete");
                 }
                 catch (Exception ex)
                 {

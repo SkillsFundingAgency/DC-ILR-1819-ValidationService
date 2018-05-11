@@ -30,12 +30,10 @@ using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
-    public class DataModule1 : Module
+    public class BaseDataModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<PreValidationPopulationService>().As<IPreValidationPopulationService>().InstancePerLifetimeScope();
-
             builder.RegisterType<ExternalDataCacheStub>().As<IExternalDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<ExternalDataCachePopulationServiceStub>().As<IExternalDataCachePopulationService>().InstancePerLifetimeScope();
             builder.RegisterType<LARSDataServiceStub>().As<ILARSDataService>().InstancePerLifetimeScope();

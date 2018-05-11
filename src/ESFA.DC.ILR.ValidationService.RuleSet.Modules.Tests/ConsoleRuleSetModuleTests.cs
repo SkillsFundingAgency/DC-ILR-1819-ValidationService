@@ -33,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 
             RegisterDependencies(builder);
 
-            builder.RegisterModule<DataModule>();
+            builder.RegisterModule<ActorDataModule>();
             builder.RegisterModule<DerivedDataModule>();
             builder.RegisterModule<QueryServiceModule>();
             builder.RegisterModule<ConsoleRuleSetModule>();

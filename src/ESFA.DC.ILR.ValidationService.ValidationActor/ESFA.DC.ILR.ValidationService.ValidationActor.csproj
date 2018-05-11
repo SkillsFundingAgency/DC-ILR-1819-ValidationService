@@ -64,6 +64,12 @@
     <Reference Include="ESFA.DC.Logging, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Logging.0.1.1-beta0001\lib\netstandard2.0\ESFA.DC.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.Serialization.Interfaces, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Serialization.Interfaces.0.1.0-beta0001\lib\netstandard2.0\ESFA.DC.Serialization.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ESFA.DC.Serialization.Json, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Serialization.Json.0.1.1-beta0001\lib\netstandard2.0\ESFA.DC.Serialization.Json.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.ServiceFabric.Helpers, Version=0.1.2.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\ESFA.DC.ServiceFabric.Helpers.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.ServiceFabric.Helpers.dll</HintPath>
     </Reference>
@@ -174,6 +180,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
+      <Project>{513C4F05-55F4-4AEF-B3EB-427C024DA043}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Modules\ESFA.DC.ILR.ValidationService.Modules.csproj">
       <Project>{0D9D2578-347B-4DAB-85AD-C3A271A31209}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Modules</Name>

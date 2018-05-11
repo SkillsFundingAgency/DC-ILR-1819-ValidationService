@@ -55,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
         private static ContainerBuilder BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<ValidationServiceSfModule>();
+            containerBuilder.RegisterModule<PreValidationServiceModule>();
 
             // get ServiceBus, Azurestorage config values and register container
             var configHelper = new ConfigurationHelper();

@@ -10,7 +10,8 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule<AcceptanceTestsOrchestrationModule>();
-            builder.RegisterModule<DataModule>();
+            builder.RegisterModule<PreValidationDataModule>();
+            builder.RegisterModule<ActorDataModule>();
             builder.RegisterModule<QueryServiceModule>();
             builder.RegisterModule<DerivedDataModule>();
             builder.RegisterModule<AcceptanceTestsRuleSetModule>();

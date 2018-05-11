@@ -4,12 +4,12 @@ using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
-    public class ValidationServiceSfModule : Module
+    public class PreValidationServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule<ValidationOrchestrationSfModule>();
-            builder.RegisterModule<DataModule>();
+            builder.RegisterModule<PreValidationOrchestrationModule>();
+            builder.RegisterModule<PreValidationDataModule>();
         }
     }
 }

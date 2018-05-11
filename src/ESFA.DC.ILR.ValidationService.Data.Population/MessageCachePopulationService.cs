@@ -20,8 +20,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         public void Populate()
         {
             var messageCache = (Cache<IMessage>)_messageCache;
-
             messageCache.Item = _messageValidationItemProviderService.Provide();
+        }
+
+        public void Populate(IMessage data)
+        {
+            var messageCache = (Cache<IMessage>)_messageCache;
+            messageCache.Item = data;
         }
     }
 }

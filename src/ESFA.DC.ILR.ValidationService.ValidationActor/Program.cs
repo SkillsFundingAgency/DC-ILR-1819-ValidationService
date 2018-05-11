@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
         private static ContainerBuilder BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<ValidationServiceSfModule>();
+            containerBuilder.RegisterModule<ActorValidationModule>();
 
             // register logger
             var configHelper = new ConfigurationHelper();
@@ -60,6 +60,4 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             return containerBuilder;
         }
     }
-
-   
 }

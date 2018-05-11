@@ -25,9 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         public IEnumerable<List<T>> Process()
         {
             var learners = _validationItemProviderService.Provide();
-            var enumerableLearners = learners as T[] ?? learners.ToArray();
-            var learnersPerActors = CalculateLearnersPerActor(enumerableLearners.Count());
-            return SplitList(enumerableLearners.ToList(), learnersPerActors);
+            var learnersPerActors = CalculateLearnersPerActor(learners.Count());
+            return SplitList(learners.ToList(), learnersPerActors);
         }
 
         private int CalculateLearnersPerActor(int totalMessagesCount)
@@ -51,13 +50,12 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
             return 10000;
         }
-       
 
-        private IEnumerable<List<T>> SplitList(List<T> locations, int nSize = 30)
+        private IEnumerable<List<T>> SplitList(List<T> learners, int nSize = 30)
         {
-            for (int i = 0; i < locations.Count; i += nSize)
+            for (int i = 0; i < learners.Count; i += nSize)
             {
-                yield return locations.GetRange(i, Math.Min(nSize, locations.Count - i));
+                yield return learners.GetRange(i, Math.Min(nSize, learners.Count - i));
             }
         }
 
