@@ -22,6 +22,9 @@
           <Section Name="LoggerSection">
             <Parameter Name="LoggerConnectionstring" Value="[LoggerConnectionstring]" />
           </Section>
+          <Section Name="AzureStorageSection">
+            <Parameter Name="AzureBlobConnectionString" Value="[AzureBlobConnectionString]" />
+          </Section>
         </Settings>
       </ConfigOverride>
     </ConfigOverrides>

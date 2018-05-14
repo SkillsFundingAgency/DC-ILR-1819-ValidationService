@@ -1,4 +1,9 @@
-﻿namespace ESFA.DC.ILR.ValidationService.ValidationActor
+﻿using System.IO;
+using System.Text;
+using ESFA.DC.ILR.Model;
+using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
+
+namespace ESFA.DC.ILR.ValidationService.ValidationActor
 {
     using System;
     using System.Collections.Generic;
@@ -42,20 +47,20 @@
             _actorId = actorId;
         }
 
-        public Task<string> Validate(string jobId, IMessage message, ILearner[] shreddedLearners)
+        public Task<string> Validate(ValidationActorModel validationActorModel)
         {
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope())
             {
                 var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
-                executionContext.JobId = jobId;
+                executionContext.JobId = validationActorModel.JobId;
                 executionContext.TaskKey = _actorId.ToString();
                 var logger = childLifeTimeScope.Resolve<ILogger>();
-
+                var jsonSerializationService = childLifeTimeScope.ResolveKeyed<ISerializationService>("Json");
                 try
                 {
                     var validationContext = new ValidationContext()
                     {
-                        Input = message
+                        Input = jsonSerializationService.Deserialize<Message>(new MemoryStream(validationActorModel.Message))
                     };
 
                     logger.LogInfo("Actor started processing");

@@ -5,6 +5,7 @@ namespace ESFA.DC.ILR.ValidationService.Interface
     public interface IValidationContext
     {
         IMessage Input { get; set; }
+        IInternalDataCache InternalDataCache { get; set; }
     }
 
     public interface IPreValidationContext

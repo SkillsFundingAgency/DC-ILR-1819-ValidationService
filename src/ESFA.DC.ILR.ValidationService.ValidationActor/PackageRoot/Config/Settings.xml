@@ -11,4 +11,7 @@
   <Section Name="ValidationActorServiceReplicatorSecurityConfig">
     <Parameter Name="CredentialType" Value="None" />
   </Section>
+  <Section Name="AzureStorageSection">
+    <Parameter Name="AzureBlobConnectionString" Value="" />
+  </Section>
 </Settings>

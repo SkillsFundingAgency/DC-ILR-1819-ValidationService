@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers;
@@ -21,10 +22,12 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         {
             builder.RegisterType<PreValidationOrchestrationSfService<ILearner, IValidationError>>()
                 .As<IPreValidationOrchestrationService<ILearner, IValidationError>>()
+                .WithAttributeFiltering()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<MessageAzureStorageProviderService>()
                 .As<IValidationItemProviderService<IMessage>>()
+                .WithAttributeFiltering()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<LearnerPerActorServiceStub<ILearner, IEnumerable<ILearner>>>()

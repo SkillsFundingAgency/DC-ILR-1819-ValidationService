@@ -16,6 +16,7 @@ using ESFA.DC.JobContext;
 using ESFA.DC.JobContext.Interface;
 using ESFA.DC.Logging;
 using ESFA.DC.Logging.Interfaces;
+using ESFA.DC.Serialization.Interfaces;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Newtonsoft.Json;
@@ -64,14 +65,18 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
         async Task ProcessMessageHandler(ServiceBusQueueListenerModel listernerModel)
         {
-            var jobContext = JsonConvert.DeserializeObject<JobContextMessage>(Encoding.UTF8.GetString(listernerModel.Message.Body));
+            var jsonSerializationService = _parentLifeTimeScope.ResolveKeyed<ISerializationService>("Json");
+            var xmlSerializationService = _parentLifeTimeScope.ResolveKeyed<ISerializationService>("Xml");
+            var jobContext =
+                jsonSerializationService.Deserialize<JobContextMessage>(
+                    Encoding.UTF8.GetString(listernerModel.Message.Body));
 
             var validationContext = new PreValidationContext()
             {
                 Input = jobContext.KeyValuePairs[JobContextMessageKey.Filename].ToString()
             };
 
-            using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c => c.RegisterInstance(validationContext).As<IValidationContext>()))
+            using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c => c.RegisterInstance(validationContext).As<IPreValidationContext>()))
             {
                 var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
                 executionContext.JobId = jobContext.JobId.ToString();

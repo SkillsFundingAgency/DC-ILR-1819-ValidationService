@@ -5,34 +5,35 @@ using System.Text;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population
 {
-    public class ActorPreValidationPopulationService : IPreValidationPopulationService<IMessage>
+    public class ActorPreValidationPopulationService : IPreValidationPopulationService<IValidationContext>
     {
-        private readonly IMessageCachePopulationService _messageCachePopulationService;
+        private readonly IMessageCacheWithDataPopulationService _messageCacheWithDataPopulationService;
         private readonly IFileDataCachePopulationService _fileDataCachePopulationService;
-        private readonly IInternalDataCachePopulationService _internalDataCachePopulationService;
+        private readonly IInternalDataCacheWithDataPopulationService _internalDataCacheWithDataPopulationService;
         private readonly IExternalDataCachePopulationService _externalDataCachePopulationService;
 
         public ActorPreValidationPopulationService(
-            IMessageCachePopulationService messageCachePopulationService,
+            IMessageCacheWithDataPopulationService messageCacheWithDataPopulationService,
             IFileDataCachePopulationService fileDataCachePopulationService,
-            IInternalDataCachePopulationService internalDataCachePopulationService,
+            IInternalDataCacheWithDataPopulationService internalDataCacheWithDataPopulationService,
             IExternalDataCachePopulationService externalDataCachePopulationService)
         {
-            _messageCachePopulationService = messageCachePopulationService;
+            _messageCacheWithDataPopulationService = messageCacheWithDataPopulationService;
             _fileDataCachePopulationService = fileDataCachePopulationService;
-            _internalDataCachePopulationService = internalDataCachePopulationService;
+            _internalDataCacheWithDataPopulationService = internalDataCacheWithDataPopulationService;
             _externalDataCachePopulationService = externalDataCachePopulationService;
         }
       
 
-        public void Populate(IMessage data)
+        public void Populate(IValidationContext validationContext )
         {
-            _messageCachePopulationService.Populate(data);
+            _messageCacheWithDataPopulationService.Populate(validationContext.Input);
             _fileDataCachePopulationService.Populate();
-            _internalDataCachePopulationService.Populate();
+            _internalDataCacheWithDataPopulationService.Populate(validationContext.InternalDataCache);
             _externalDataCachePopulationService.Populate();
         }
     }

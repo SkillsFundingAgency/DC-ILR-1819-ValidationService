@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -25,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly ILogger _logger;
 
         public MessageAzureStorageProviderService(
-            ISerializationService serializationService,
+            [KeyFilter("Xml")]ISerializationService serializationService,
             IPreValidationContext prePreValidationContext,
             AzureStorageModel azureStorageModel,
             ILogger logger)

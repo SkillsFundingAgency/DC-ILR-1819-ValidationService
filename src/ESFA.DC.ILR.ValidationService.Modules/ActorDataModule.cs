@@ -7,6 +7,7 @@ using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
@@ -16,6 +17,15 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         {
             builder.RegisterType<ActorPreValidationPopulationService>().As<IPreValidationPopulationService<IMessage>>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<MessageCacheWithDataPopulationService>()
+                .As<IMessageCacheWithDataPopulationService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<InternalDataCacheWithDataPopulationserviceStub>()
+                .As<IInternalDataCacheWithDataPopulationService>()
+                .InstancePerLifetimeScope();
+
             base.Load(builder);
         }
     }
