@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
 using ESFA.DC.Serialization.Interfaces;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Client;
+using Newtonsoft.Json;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
@@ -63,9 +65,15 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(ilrMessage));
                 var learnersShardAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(learnerShard));
-                var internalDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(
-                        _jsonSerializationService.Serialize(_internalDataCacheProviderService.Provide()));
+                var internalDataCache = _internalDataCacheProviderService.Provide();
+                var internalDataCacheString = JsonConvert.SerializeObject(
+                    internalDataCache,
+                    new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.Auto
+                    });
+
+                var internalDataCacheAsBytes = Encoding.UTF8.GetBytes(internalDataCacheString);
 
                 var validationActorModel = new ValidationActorModel()
                 {

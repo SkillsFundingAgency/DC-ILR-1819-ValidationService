@@ -34,6 +34,10 @@ namespace ESFA.DC.ILR.ValidationService.Modules
                 .As<ILearnerPerActorService<ILearner, IEnumerable<ILearner>>>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<InternalDataCacheProviderServiceStub>()
+                .As<IValidationItemProviderService<IInternalDataCache>>()
+                .InstancePerLifetimeScope();
+
             base.Load(builder);
         }
     }

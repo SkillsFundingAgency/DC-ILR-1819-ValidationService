@@ -192,6 +192,10 @@
       <Project>{EB94FED6-6895-488D-822A-60254BD32FC7}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Stateless.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Stubs\ESFA.DC.ILR.ValidationService.Stubs.csproj">
+      <Project>{ba81ebe1-6c72-454e-85d5-761b13911b82}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Stubs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces\ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.csproj">
       <Project>{F267B89E-04E1-4295-AC75-7E9D833CF189}</Project>
       <Name>ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces</Name>

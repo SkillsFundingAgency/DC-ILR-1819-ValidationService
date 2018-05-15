@@ -73,6 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
             var validationContext = new PreValidationContext()
             {
+                JobId = jobContext.JobId.ToString(),
                 Input = jobContext.KeyValuePairs[JobContextMessageKey.Filename].ToString()
             };
 

@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         {
             return new PreValidationPopulationService(
                 messageCachePopulationService,
-                fileDataCachePopulationService,
+                //fileDataCachePopulationService,
                 internalDataCachePopulationService,
                 externalDataCachePopulationService);
         }

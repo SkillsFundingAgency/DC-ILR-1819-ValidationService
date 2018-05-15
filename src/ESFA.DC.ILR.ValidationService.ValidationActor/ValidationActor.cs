@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Text;
 using ESFA.DC.ILR.Model;
+using ESFA.DC.ILR.ValidationService.Stubs;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
+using Newtonsoft.Json;
 
 namespace ESFA.DC.ILR.ValidationService.ValidationActor
 {
@@ -49,27 +51,42 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
 
         public Task<string> Validate(ValidationActorModel validationActorModel)
         {
-            using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope())
+            var jsonSerialisationSettings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            };
+
+            var jsonSerializationService = _parentLifeTimeScope.ResolveKeyed<ISerializationService>("Json");
+            var internalDataCache = JsonConvert.DeserializeObject<InternalDataCache>(
+                Encoding.UTF8.GetString(validationActorModel.InternalDataCache), jsonSerialisationSettings);
+
+            var validationContext = new ValidationContext()
+            {
+                Input = jsonSerializationService.Deserialize<Message>(
+                    new MemoryStream(validationActorModel.Message)),
+                InternalDataCache = internalDataCache
+            };
+
+            using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c =>
+            {
+                c.RegisterInstance(validationContext).As<IValidationContext>();
+                c.RegisterInstance(validationContext.InternalDataCache).As<IInternalDataCache>();
+            }))
             {
                 var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
                 executionContext.JobId = validationActorModel.JobId;
                 executionContext.TaskKey = _actorId.ToString();
                 var logger = childLifeTimeScope.Resolve<ILogger>();
-                var jsonSerializationService = childLifeTimeScope.ResolveKeyed<ISerializationService>("Json");
                 try
                 {
-                    var validationContext = new ValidationContext()
-                    {
-                        Input = jsonSerializationService.Deserialize<Message>(new MemoryStream(validationActorModel.Message))
-                    };
-
                     logger.LogInfo("Actor started processing");
-                    var preValidationOrchestrationService = childLifeTimeScope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
+                    var preValidationOrchestrationService = childLifeTimeScope
+                        .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
+
                     var errors = preValidationOrchestrationService.Execute(validationContext);
-                    var serialisationService = childLifeTimeScope.Resolve<ISerializationService>();
                     logger.LogInfo("actore validation done");
 
-                    var errorString = serialisationService.Serialize(errors);
+                    var errorString = jsonSerializationService.Serialize(errors);
                     logger.LogInfo("Actor completed job");
                     return Task.Run(() => errorString);
                 }

@@ -9,4 +9,8 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Internal\AcademicYear\Model\" />
+  </ItemGroup>
+
 </Project>

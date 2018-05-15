@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
@@ -15,6 +16,10 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         {
             builder.RegisterType<PreValidationPopulationService>().As<IPreValidationPopulationService>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<AzureInternalDataCachePopulationServiceStub>()
+                .As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
+
             base.Load(builder);
         }
     }
