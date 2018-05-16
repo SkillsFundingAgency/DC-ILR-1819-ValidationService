@@ -8,8 +8,9 @@
   -->
 
   <Section Name="ServiceBusSettings">
-    <Parameter Name="QueueName" Value="" />
+    <Parameter Name="JobsQueueName" Value="" />
     <Parameter Name="ServiceBusConnectionString" Value="" />
+    <Parameter Name="AuditQueueName" Value="" />
 
   </Section>
 

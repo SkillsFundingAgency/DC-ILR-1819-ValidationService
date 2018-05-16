@@ -66,12 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(ilrMessage));
                 var learnersShardAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(learnerShard));
                 var internalDataCache = _internalDataCacheProviderService.Provide();
-                var internalDataCacheString = JsonConvert.SerializeObject(
-                    internalDataCache,
-                    new JsonSerializerSettings()
-                    {
-                        TypeNameHandling = TypeNameHandling.Auto
-                    });
+                var internalDataCacheString = _jsonSerializationService.Serialize(internalDataCache);
 
                 var internalDataCacheAsBytes = Encoding.UTF8.GetBytes(internalDataCacheString);
 

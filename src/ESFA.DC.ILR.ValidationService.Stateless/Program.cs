@@ -6,12 +6,27 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Integration.ServiceFabric;
+using DC.JobContextManager;
+using DC.JobContextManager.Interface;
+using ESFA.DC.Auditing;
+using ESFA.DC.Auditing.Dto;
+using ESFA.DC.Auditing.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
+using ESFA.DC.ILR.ValidationService.Stateless.Configuration;
+using ESFA.DC.ILR.ValidationService.Stateless.Handlers;
+using ESFA.DC.ILR.ValidationService.Stateless.Mapper;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.JobContext;
 using ESFA.DC.Logging.Config;
 using ESFA.DC.Logging.Config.Interfaces;
 using ESFA.DC.Logging.Enums;
+using ESFA.DC.Logging.Interfaces;
+using ESFA.DC.Mapping.Interface;
+using ESFA.DC.Queueing;
+using ESFA.DC.Queueing.Interface;
+using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.ServiceFabric.Helpers;
+using Microsoft.Azure.ServiceBus;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless
@@ -39,6 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
                 using (var container = builder.Build())
                 {
+                    var audi = container.Resolve<IAuditor>();
                     ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(Stateless).Name);
 
                     // Prevents this host process from terminating so services keep running.
@@ -59,9 +75,9 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
             // get ServiceBus, Azurestorage config values and register container
             var configHelper = new ConfigurationHelper();
-            var seviceBusOptions =
+            var serviceBusOptions =
                 configHelper.GetSectionValues<ServiceBusOptions>("ServiceBusSettings");
-            containerBuilder.RegisterInstance(seviceBusOptions).As<ServiceBusOptions>().SingleInstance();
+            containerBuilder.RegisterInstance(serviceBusOptions).As<ServiceBusOptions>().SingleInstance();
 
             var azureStorageOptions =
                 configHelper.GetSectionValues<AzureStorageModel>("AzureStorageSection");
@@ -72,6 +88,61 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 configHelper.GetSectionValues<LoggerOptions>("LoggerSection");
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
+
+            // service bus queue configuration
+            var queueSubscriptionConfig = new ServiceBusQueueConfig(
+                serviceBusOptions.ServiceBusConnectionString,
+                serviceBusOptions.JobsQueueName,
+                Environment.ProcessorCount,
+                serviceBusOptions.TopicName);
+
+            var queuePublishConfig = new ServiceBusQueueConfig(
+                serviceBusOptions.ServiceBusConnectionString,
+                serviceBusOptions.JobsQueueName,
+                Environment.ProcessorCount,
+                serviceBusOptions.TopicName);
+
+            var auditPublishConfig = new ServiceBusQueueConfig(
+                serviceBusOptions.ServiceBusConnectionString,
+                serviceBusOptions.AuditQueueName,
+                Environment.ProcessorCount);
+
+            // register queue services
+            containerBuilder.Register(c =>
+            {
+                var queueSubscriptionService =
+                    new QueueSubscriptionService<JobContextMessage>(
+                        queueSubscriptionConfig,
+                        c.ResolveKeyed<ISerializationService>("Json"),
+                        c.Resolve<ILogger>());
+                return queueSubscriptionService;
+            }).As<IQueueSubscriptionService<JobContextMessage>>();
+
+            containerBuilder.Register(c =>
+            {
+                var queuePublishService =
+                    new QueuePublishService<JobContextMessage>(
+                        queuePublishConfig,
+                        c.ResolveKeyed<ISerializationService>("Json"));
+                return queuePublishService;
+            }).As<IQueuePublishService<JobContextMessage>>();
+
+            containerBuilder.Register(c => new QueuePublishService<AuditingDto>(
+                    auditPublishConfig,
+                    c.ResolveKeyed<ISerializationService>("Json")))
+                .As<IQueuePublishService<AuditingDto>>();
+
+            // register job context manager
+            containerBuilder.RegisterType<Auditor>().As<IAuditor>();
+            containerBuilder.RegisterType<JobContextMessageMapper>()
+                .As<IMapper<JobContextMessage, JobContextMessage>>();
+
+            containerBuilder.RegisterType<MessageHandler>().As<IMessageHandler>();
+
+            containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c =>
+                c.Resolve<IMessageHandler>().Handle);
+
+            containerBuilder.RegisterType<JobContextManager<JobContextMessage>>().As<IJobContextManager>();
 
             return containerBuilder;
         }

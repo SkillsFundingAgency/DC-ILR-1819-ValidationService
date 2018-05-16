@@ -51,14 +51,9 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
 
         public Task<string> Validate(ValidationActorModel validationActorModel)
         {
-            var jsonSerialisationSettings = new JsonSerializerSettings()
-            {
-                TypeNameHandling = TypeNameHandling.Auto
-            };
-
             var jsonSerializationService = _parentLifeTimeScope.ResolveKeyed<ISerializationService>("Json");
-            var internalDataCache = JsonConvert.DeserializeObject<InternalDataCache>(
-                Encoding.UTF8.GetString(validationActorModel.InternalDataCache), jsonSerialisationSettings);
+            var internalDataCache = jsonSerializationService.Deserialize<InternalDataCache>(
+                Encoding.UTF8.GetString(validationActorModel.InternalDataCache));
 
             var validationContext = new ValidationContext()
             {
@@ -84,7 +79,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                         .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
                     var errors = preValidationOrchestrationService.Execute(validationContext);
-                    logger.LogInfo("actore validation done");
+                    logger.LogInfo("actor validation done");
 
                     var errorString = jsonSerializationService.Serialize(errors);
                     logger.LogInfo("Actor completed job");

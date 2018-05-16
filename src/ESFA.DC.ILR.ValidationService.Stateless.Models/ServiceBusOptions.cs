@@ -2,7 +2,9 @@
 {
     public class ServiceBusOptions
     {
-        public string QueueName { get; set; }
+        public string JobsQueueName { get; set; }
+
+        public string AuditQueueName { get; set; }
 
         public string ServiceBusConnectionString { get; set; }
 
