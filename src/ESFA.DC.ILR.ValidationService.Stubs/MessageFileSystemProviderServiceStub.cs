@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -13,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
         private IMessage _message;
 
-        public MessageFileSystemProviderServiceStub(ISerializationService serializationService, IPreValidationContext preValidationContext)
+        public MessageFileSystemProviderServiceStub([KeyFilter("Xml")] ISerializationService serializationService, IPreValidationContext preValidationContext)
         {
             _serializationService = serializationService;
             _preValidationContext = preValidationContext;

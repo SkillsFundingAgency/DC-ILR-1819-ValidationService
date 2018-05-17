@@ -139,6 +139,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
             containerBuilder.RegisterType<MessageHandler>().As<IMessageHandler>();
 
+            // register the  callback handle when a new message is received from SeriveBus
             containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c =>
                 c.Resolve<IMessageHandler>().Handle);
 

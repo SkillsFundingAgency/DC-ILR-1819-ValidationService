@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers;
@@ -19,7 +20,10 @@ namespace ESFA.DC.ILR.ValidationService.Modules
                 .As<IPreValidationOrchestrationService<ILearner, IValidationError>>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<MessageFileSystemProviderServiceStub>().As<IValidationItemProviderService<IMessage>>();
+            builder.RegisterType<MessageFileSystemProviderServiceStub>()
+                .As<IValidationItemProviderService<IMessage>>()
+                .WithAttributeFiltering();
+
             base.Load(builder);
         }
     }
