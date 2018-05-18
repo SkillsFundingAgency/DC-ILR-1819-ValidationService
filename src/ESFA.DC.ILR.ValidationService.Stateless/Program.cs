@@ -96,11 +96,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 Environment.ProcessorCount,
                 serviceBusOptions.TopicName);
 
-            var queuePublishConfig = new ServiceBusQueueConfig(
+            var topicPublishConfig = new ServiceBusTopicConfiguration(
                 serviceBusOptions.ServiceBusConnectionString,
-                serviceBusOptions.JobsQueueName,
-                Environment.ProcessorCount,
-                serviceBusOptions.TopicName);
+                serviceBusOptions.TopicName,
+                serviceBusOptions.FundingCalcSubscriptionName,
+                Environment.ProcessorCount);
 
             var auditPublishConfig = new ServiceBusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
@@ -120,12 +120,12 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
             containerBuilder.Register(c =>
             {
-                var queuePublishService =
-                    new QueuePublishService<JobContextMessage>(
-                        queuePublishConfig,
+                var topicPublishService =
+                    new TopicPublishService<JobContextMessage>(
+                        topicPublishConfig,
                         c.ResolveKeyed<ISerializationService>("Json"));
-                return queuePublishService;
-            }).As<IQueuePublishService<JobContextMessage>>();
+                return topicPublishService;
+            }).As<ITopicPublishService<JobContextMessage>>();
 
             containerBuilder.Register(c => new QueuePublishService<AuditingDto>(
                     auditPublishConfig,

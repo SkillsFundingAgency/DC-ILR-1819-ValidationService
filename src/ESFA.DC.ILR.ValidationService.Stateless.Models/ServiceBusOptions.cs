@@ -9,5 +9,7 @@
         public string ServiceBusConnectionString { get; set; }
 
         public string TopicName { get; set; }
+
+        public string FundingCalcSubscriptionName { get; set; }
     }
 }

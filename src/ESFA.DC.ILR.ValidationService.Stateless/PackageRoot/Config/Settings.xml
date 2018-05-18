@@ -11,7 +11,9 @@
     <Parameter Name="JobsQueueName" Value="" />
     <Parameter Name="ServiceBusConnectionString" Value="" />
     <Parameter Name="AuditQueueName" Value="" />
-
+    <Parameter Name="TopicName" Value="" />
+    <Parameter Name="FundingCalcSubscriptionName" Value="" />
+    <Parameter Name="FundingCalcSqlFilterValue" Value="" />
   </Section>
 
 
