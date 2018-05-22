@@ -7,7 +7,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         public string LearnAimRef { get; set; }        
         public int CategoryRef { get; set; }        
         public DateTime EffectiveFrom { get; set; }
-        public DateTime? EffectiveTo { get; set; }        
-        public LearningDelivery LearningDelivery { get; set; }
+        public DateTime? EffectiveTo { get; set; }
     }
 }
