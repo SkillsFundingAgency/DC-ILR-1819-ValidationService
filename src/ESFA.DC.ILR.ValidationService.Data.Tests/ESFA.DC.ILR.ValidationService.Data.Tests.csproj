@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="External\LARSDataServiceTests.cs" />
+    <Compile Include="External\PostcodesDataServiceTests.cs" />
     <Compile Include="Internal\AcademicYearDataServiceTests.cs" />
     <Compile Include="Internal\AimTypeDataServiceTests.cs" />
     <Compile Include="Internal\CompStatusDataServiceTests.cs" />

@@ -2,6 +2,7 @@
 using System.Linq;
 using ESFA.DC.Data.LARS.Model;
 using ESFA.DC.Data.LARS.Model.Interfaces;
+using ESFA.DC.Data.Postcodes.Model.Interfaces;
 using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External;
@@ -18,13 +19,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         private readonly ICache<IMessage> _messageCache;
         private readonly ILARS _lars;
         private readonly IULN _uln;
+        private readonly IPostcodes _postcodes;
 
-        public ExternalDataCachePopulationService(IExternalDataCache externalDataCache, ICache<IMessage> messageCache, ILARS lars, IULN uln)
+        public ExternalDataCachePopulationService(IExternalDataCache externalDataCache, ICache<IMessage> messageCache, ILARS lars, IULN uln, IPostcodes postcodes)
         {
             _externalDataCache = externalDataCache;
             _messageCache = messageCache;
             _lars = lars;
             _uln = uln;
+            _postcodes = postcodes;
         }
 
         public void Populate()
@@ -115,20 +118,26 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                             EffectiveFrom = fcc.EffectiveFrom,
                             EffectiveTo = fcc.EffectiveTo,
                         }).ToList(),
-                }).ToList();
+                });
 
             var uniqueULNs = UniqueULNsFromMessage(message).ToList();
 
             var ulns = _uln.UniqueLearnerNumbers
                 .Where(u => uniqueULNs.Contains(u.ULN))
-                .Select(u => u.ULN)
-                .ToList();
+                .Select(u => u.ULN);
+
+            var uniquePostcodes = UniquePostcodesFromMessage(message).ToList();
+
+            var postcodes = _postcodes.MasterPostcodes
+                .Where(p => uniquePostcodes.Contains(p.Postcode))
+                .Select(p => p.Postcode);
 
             var externalDataCache = (ExternalDataCache) _externalDataCache;
 
             externalDataCache.LearningDeliveries = learningDeliveryDictionary;
-            externalDataCache.Frameworks = frameworks;
-            externalDataCache.ULNs = ulns;
+            externalDataCache.Frameworks = frameworks.ToList();
+            externalDataCache.ULNs = new HashSet<long>(ulns);
+            externalDataCache.Postcodes = new HashSet<string>(postcodes);
         }
 
         public IEnumerable<string> UniqueLearnAimRefsFromMessage(IMessage message)
@@ -139,7 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                        .SelectMany(l => l.LearningDeliveries)
                        .Where(ld => ld.LearnAimRef != null)
                        .Select(ld => ld.LearnAimRef)
-                       .Distinct() 
+                       .Distinct()
                    ?? new List<string>();
         }
 
@@ -172,6 +181,36 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                 .Select(l => l.ULN)
                 .Distinct()
                 ?? new List<long>();
+        }
+
+        public IEnumerable<string> UniquePostcodesFromMessage(IMessage message)
+        {
+            var learnerPostcodes = message
+                                        .Learners?
+                                        .Where(l => l.Postcode != null)
+                                        .Select(l => l.Postcode)
+                                        .Distinct()
+                ?? new List<string>();
+
+            var learnerPostcodePriors = message
+                                        .Learners?
+                                        .Where(l => l.PostcodePrior != null)
+                                        .Select(l => l.PostcodePrior)
+                                        .Distinct()
+                ?? new List<string>();
+
+            var learningDeliveryLocationPostcodes = message
+                                        .Learners?
+                                        .Where(l => l.LearningDeliveries != null)
+                                        .SelectMany(l => l.LearningDeliveries)
+                                        .Select(ld => ld.DelLocPostCode)
+                                        .Distinct()
+                ?? new List<string>();
+
+            return learnerPostcodes
+                .Union(learnerPostcodePriors)
+                .Union(learningDeliveryLocationPostcodes)
+                .Distinct();
         }
     }
 }

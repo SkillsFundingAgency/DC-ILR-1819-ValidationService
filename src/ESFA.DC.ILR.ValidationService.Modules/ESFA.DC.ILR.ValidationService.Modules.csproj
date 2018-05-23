@@ -62,6 +62,9 @@
     <Reference Include="ESFA.DC.Data.LARS.Model, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Data.LARS.Model.0.1.1-beta0001\lib\net461\ESFA.DC.Data.LARS.Model.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.Data.Postcodes.Model, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Data.Postcodes.Model.0.1.2-beta0001\lib\net461\ESFA.DC.Data.Postcodes.Model.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.Data.ULN.Model, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Data.ULN.Model.0.1.0\lib\net461\ESFA.DC.Data.ULN.Model.dll</HintPath>
     </Reference>
@@ -124,21 +127,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleDataModule.cs" />
+    <Compile Include="Console\ConsoleDataModule.cs" />
     <Compile Include="BaseDataModule.cs" />
-    <Compile Include="DataModule.cs" />
     <Compile Include="LoggerModule.cs" />
-    <Compile Include="ActorDataModule.cs" />
-    <Compile Include="PreValidationDataModule.cs" />
-    <Compile Include="ActorValidationModule.cs" />
-    <Compile Include="ActorPreValidationOrchestrationModule.cs" />
-    <Compile Include="ConsoleValidationOrchestrationModule.cs" />
-    <Compile Include="ActorValidationOrchestrationModule.cs" />
+    <Compile Include="Actor\ActorDataModule.cs" />
+    <Compile Include="PreValidation\PreValidationDataModule.cs" />
+    <Compile Include="Actor\ActorValidationModule.cs" />
+    <Compile Include="Console\ConsoleValidationOrchestrationModule.cs" />
+    <Compile Include="Actor\ActorValidationOrchestrationModule.cs" />
     <Compile Include="BaseValidationOrchestrationModule.cs" />
-    <Compile Include="PreValidationOrchestrationModule.cs" />
-    <Compile Include="ConsoleValidationServiceModule.cs" />
+    <Compile Include="PreValidation\PreValidationOrchestrationModule.cs" />
+    <Compile Include="Console\ConsoleValidationServiceModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PreValidationServiceModule.cs" />
+    <Compile Include="PreValidation\PreValidationServiceModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

@@ -10,5 +10,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External
         public IReadOnlyDictionary<string, LearningDelivery> LearningDeliveries { get; set; }
         public IReadOnlyCollection<Framework> Frameworks { get; set; }
         public IReadOnlyDictionary<long, Organisation.Model.Organisation> Organisations { get; set; }
+        public IReadOnlyCollection<string> Postcodes { get; set; }
     }
 }

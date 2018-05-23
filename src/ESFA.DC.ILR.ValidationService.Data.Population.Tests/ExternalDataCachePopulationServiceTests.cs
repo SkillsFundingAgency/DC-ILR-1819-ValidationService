@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.Data.LARS.Model.Interfaces;
+using ESFA.DC.Data.Postcodes.Model.Interfaces;
 using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
@@ -247,9 +248,138 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
             result.Should().Contain(2);
         }
 
-        private ExternalDataCachePopulationService NewService(IExternalDataCache externalDataCache = null, ICache<IMessage> messageCache = null, ILARS lars = null, IULN uln = null)
+        [Fact]
+        public void UniquePostcodesFromMessage_LearnerPostcodes_NullLearners()
         {
-            return new ExternalDataCachePopulationService(externalDataCache, messageCache, lars, uln);
+            var message = new TestMessage();
+
+            NewService().UniquePostcodesFromMessage(message).Should().BeEmpty();
+        }
+
+        [Fact]
+        public void UniquePostcodesFromMessage_LearnerPostcodes_Distinct()
+        {
+            var message = new TestMessage()
+            {
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner()
+                    {
+                        Postcode = "ABC"
+                    },
+                    new TestLearner()
+                    {
+                        Postcode = "ABC"
+                    },
+                    new TestLearner()
+                    {
+                        Postcode = "DEF"
+                    }
+                }
+            };
+
+            var result = NewService().UniquePostcodesFromMessage(message).ToList();
+
+            result.Should().HaveCount(2);
+            result.Should().Contain("ABC");
+            result.Should().Contain("DEF");
+        }
+
+        [Fact]
+        public void UniquePostcodesFromMessage_LearnerPostcodePriors_NullLearners()
+        {
+            var message = new TestMessage();
+
+            NewService().UniquePostcodesFromMessage(message).Should().BeEmpty();
+        }
+
+        [Fact]
+        public void UniquePostcodesFromMessage_LearnerPostcodePriors_Distinct()
+        {
+            var message = new TestMessage()
+            {
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner()
+                    {
+                        PostcodePrior = "ABC"
+                    },
+                    new TestLearner()
+                    {
+                        PostcodePrior = "ABC"
+                    },
+                    new TestLearner()
+                    {
+                        PostcodePrior = "DEF"
+                    }
+                }
+            };
+
+            var result = NewService().UniquePostcodesFromMessage(message).ToList();
+
+            result.Should().HaveCount(2);
+            result.Should().Contain("ABC");
+            result.Should().Contain("DEF");
+        }
+
+        [Fact]
+        public void UniquePostcodesFromMessage_LearningDeliveryLocationPostcodes_NullLearners()
+        {
+            var message = new TestMessage();
+
+            NewService().UniquePostcodesFromMessage(message).Should().BeEmpty();
+        }
+
+        [Fact]
+        public void UniquePostcodesFromMessage_LearningDeliveryLocationPostcodes_Distinct()
+        {
+            var message = new TestMessage()
+            {
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner()
+                    {
+                        LearningDeliveries = new List<TestLearningDelivery>()
+                        {
+                            new TestLearningDelivery()
+                            {
+                                DelLocPostCode = "ABC"
+                            }
+                        }
+                    },
+                    new TestLearner()
+                    {
+                        LearningDeliveries = new List<TestLearningDelivery>()
+                        {
+                            new TestLearningDelivery()
+                            {
+                                DelLocPostCode = "ABC"
+                            }
+                        }
+                    },
+                    new TestLearner()
+                    {
+                        LearningDeliveries = new List<TestLearningDelivery>()
+                        {
+                            new TestLearningDelivery()
+                            {
+                                DelLocPostCode = "DEF"
+                            }
+                        }
+                    }
+                }
+            };
+
+            var result = NewService().UniquePostcodesFromMessage(message).ToList();
+
+            result.Should().HaveCount(2);
+            result.Should().Contain("ABC");
+            result.Should().Contain("DEF");
+        }
+
+        private ExternalDataCachePopulationService NewService(IExternalDataCache externalDataCache = null, ICache<IMessage> messageCache = null, ILARS lars = null, IULN uln = null, IPostcodes postcodes = null)
+        {
+            return new ExternalDataCachePopulationService(externalDataCache, messageCache, lars, uln, postcodes);
         }
     }
 }

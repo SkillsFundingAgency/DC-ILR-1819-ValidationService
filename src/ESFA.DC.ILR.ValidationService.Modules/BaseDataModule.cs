@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using ESFA.DC.Data.LARS.Model;
 using ESFA.DC.Data.LARS.Model.Interfaces;
+using ESFA.DC.Data.Postcodes.Model;
+using ESFA.DC.Data.Postcodes.Model.Interfaces;
 using ESFA.DC.Data.ULN.Model;
 using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
@@ -11,6 +13,7 @@ using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.Postcodes;
 using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ULN;
 using ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface;
@@ -45,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<OrganisationDataService>().As<IOrganisationDataService>().InstancePerLifetimeScope();
             builder.RegisterType<ULNDataService>().As<IULNDataService>().InstancePerLifetimeScope();
             builder.RegisterType<FCSDataServiceStub>().As<IFCSDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<PostcodesDataServiceStub>().As<IPostcodesDataService>();
+            builder.RegisterType<PostcodesDataService>().As<IPostcodesDataService>();
 
             builder.RegisterType<InternalDataCache>().As<IInternalDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<AcademicYearDataService>().As<IAcademicYearDataService>().InstancePerLifetimeScope();
@@ -64,6 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
 
             builder.RegisterType<LARS>().As<ILARS>().InstancePerLifetimeScope();
             builder.RegisterType<ULN>().As<IULN>().InstancePerLifetimeScope();
+            builder.RegisterType<Postcodes>().As<IPostcodes>().InstancePerLifetimeScope();
         }
     }
 }
