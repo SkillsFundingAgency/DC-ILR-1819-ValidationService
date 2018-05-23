@@ -22,9 +22,9 @@
   -->
   <ClusterConnectionParameters ConnectionEndpoint="__ClusterConnectionParameters.ConnectionEndpoint__" 
                                X509Credential="__ClusterConnectionParameters.X509Credential__" 
-                               ServerCertThumbprint="__ClusterConnectionServerCertThumbprint__" 
+                               ServerCertThumbprint="__ClusterConnectionParameters.ServerCertThumbprint__" 
                                FindType="__ClusterConnectionParameters.FindType__" 
-                               FindValue="__ClusterConnectionFindValue__" 
+                               FindValue="__ClusterConnectionParameters.FindValue__" 
                                StoreLocation="__ClusterConnectionParameters.StoreLocation__" 
                                StoreName="__ClusterConnectionParameters.StoreName__" 
                 />
