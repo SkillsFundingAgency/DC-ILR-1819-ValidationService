@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
             using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, preValidationContext)))
             {
                 var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
-                
+
                 var errors = preValidationOrchestrationService.Execute(preValidationContext);
 
                 OutputResultsToFile(errors, $"{preValidationContext.Output}");
@@ -76,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
         private static IContainer BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
-            
+
             containerBuilder.RegisterModule<ConsoleValidationServiceModule>();
 
             return containerBuilder.Build();

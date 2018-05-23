@@ -17,8 +17,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         public MessageCacheWithDataPopulationService(ICache<IMessage> messageCache)
         {
             _messageCache = messageCache;
-
         }
+
         public void Populate(IMessage data)
         {
             var messageCache = (Cache<IMessage>)_messageCache;

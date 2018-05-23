@@ -15,17 +15,26 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// <summary>
         /// Creates a predicate that evaluates to true.
         /// </summary>
-        public static Expression<Func<T, bool>> True<T>() { return param => true; }
+        public static Expression<Func<T, bool>> True<T>()
+        {
+            return param => true;
+        }
 
         /// <summary>
         /// Creates a predicate that evaluates to false.
         /// </summary>
-        public static Expression<Func<T, bool>> False<T>() { return param => false; }
+        public static Expression<Func<T, bool>> False<T>()
+        {
+            return param => false;
+        }
 
         /// <summary>
         /// Creates a predicate expression from the specified lambda expression.
         /// </summary>
-        public static Expression<Func<T, bool>> Create<T>(Expression<Func<T, bool>> predicate) { return predicate; }
+        public static Expression<Func<T, bool>> Create<T>(Expression<Func<T, bool>> predicate)
+        {
+            return predicate;
+        }
 
         /// <summary>
         /// Combines the first predicate with the second using the logical "and".

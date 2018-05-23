@@ -46,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                     {
                         LearningDeliveries = new List<TestLearningDelivery>()
                         {
-                            new TestLearningDelivery() { FworkCodeNullable = 1, ProgTypeNullable = 1, PwayCodeNullable = null},
+                            new TestLearningDelivery() { FworkCodeNullable = 1, ProgTypeNullable = 1, PwayCodeNullable = null },
                             new TestLearningDelivery() { FworkCodeNullable = 1, ProgTypeNullable = null, PwayCodeNullable = 1 },
                             new TestLearningDelivery() { FworkCodeNullable = null, ProgTypeNullable = 1, PwayCodeNullable = 1 },
                         }
@@ -146,7 +146,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                         {
                             new TestLearningDelivery()
                             {
-                                LearnAimRef =  "A"
+                                LearnAimRef = "A"
                             }
                         }
                     },
@@ -155,9 +155,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                         LearningDeliveries = new List<TestLearningDelivery>()
                         {
                             new TestLearningDelivery()
-
                             {
-                                LearnAimRef =  "B"
+                                LearnAimRef = "B"
                             }
                         }
                     },
@@ -184,7 +183,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                         {
                             new TestLearningDelivery()
                             {
-                                LearnAimRef =  "A"
+                                LearnAimRef = "A"
                             }
                         }
                     },
@@ -193,9 +192,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                         LearningDeliveries = new List<TestLearningDelivery>()
                         {
                             new TestLearningDelivery()
-
                             {
-                                LearnAimRef =  "A"
+                                LearnAimRef = "A"
                             }
                         }
                     },
@@ -212,6 +210,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
         {
             return new LARSFrameworkDataRetrievalService(lars, messageCache);
         }
-
     }
 }

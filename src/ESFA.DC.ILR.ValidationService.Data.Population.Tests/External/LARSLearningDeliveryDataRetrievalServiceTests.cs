@@ -75,7 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                         {
                             new TestLearningDelivery()
                             {
-                                LearnAimRef =  "A"
+                                LearnAimRef = "A"
                             }
                         }
                     },
@@ -84,9 +84,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                         LearningDeliveries = new List<TestLearningDelivery>()
                         {
                             new TestLearningDelivery()
-
                             {
-                                LearnAimRef =  "B"
+                                LearnAimRef = "B"
                             }
                         }
                     },
@@ -113,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                         {
                             new TestLearningDelivery()
                             {
-                                LearnAimRef =  "A"
+                                LearnAimRef = "A"
                             }
                         }
                     },
@@ -122,9 +121,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                         LearningDeliveries = new List<TestLearningDelivery>()
                         {
                             new TestLearningDelivery()
-
                             {
-                                LearnAimRef =  "A"
+                                LearnAimRef = "A"
                             }
                         }
                     },

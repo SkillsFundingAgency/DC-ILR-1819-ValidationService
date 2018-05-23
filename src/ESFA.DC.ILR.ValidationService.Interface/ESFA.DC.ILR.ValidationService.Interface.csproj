@@ -81,7 +81,7 @@
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="IErrorMessageParameter.cs" />
     <Compile Include="IInternalDataCache.cs" />
-    <Compile Include="ILearnerPerActorCalculator.cs" />
+    <Compile Include="ILearnerPerActorService.cs" />
     <Compile Include="IPreValidationOrchestrationService.cs" />
     <Compile Include="IRule.cs" />
     <Compile Include="IRuleSetExecutionService.cs" />

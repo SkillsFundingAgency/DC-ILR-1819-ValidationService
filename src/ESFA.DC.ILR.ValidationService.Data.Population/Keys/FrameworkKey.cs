@@ -16,7 +16,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Keys
         }
 
         public int FworkCode { get; }
+
         public int ProgType { get;  }
+
         public int PwayCode { get; }
     }
 }

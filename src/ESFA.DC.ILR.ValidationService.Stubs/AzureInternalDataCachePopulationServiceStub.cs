@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         private readonly IInternalDataCache _internalDataCache;
         private readonly AzureStorageModel _azureStorageModel;
 
-        public AzureInternalDataCachePopulationServiceStub(IInternalDataCache internalDataCache, AzureStorageModel azureStorageModel )
+        public AzureInternalDataCachePopulationServiceStub(IInternalDataCache internalDataCache, AzureStorageModel azureStorageModel)
         {
             _internalDataCache = internalDataCache;
             _azureStorageModel = azureStorageModel;
@@ -35,14 +35,14 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
             CloudStorageAccount cloudStorageAccount =
                 CloudStorageAccount.Parse(_azureStorageModel.AzureBlobConnectionString);
-          
+
             CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-          
+
             CloudBlobContainer cloudBlobContainer =
                 cloudBlobClient.GetContainerReference(_azureStorageModel.AzureContainerReference);
 
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference("Lookups.xml");
-            
+
             var xmlData = cloudBlockBlob.DownloadText();
 
             // on downloading the file from Azure it adds BOM (Byte Order Mark) so remove it before parsing
@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             }
 
             lookups = XDocument.Parse(xmlData).Root;
-           
+
             internalDataCache.AcademicYear = BuildAcademicYear();
 
             internalDataCache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));

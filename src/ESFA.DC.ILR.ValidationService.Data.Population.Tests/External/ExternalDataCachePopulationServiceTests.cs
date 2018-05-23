@@ -16,8 +16,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
 {
     public class ExternalDataCachePopulationServiceTests
     {
-
-        
         private ExternalDataCachePopulationService NewService(
             IExternalDataCache externalDataCache = null,
             ILARSLearningDeliveryDataRetrievalService larsLearningDeliveryDataRetrievalService = null,

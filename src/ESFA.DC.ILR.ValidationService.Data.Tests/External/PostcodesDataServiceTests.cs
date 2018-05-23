@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             var referenceDataCacheMock = new Mock<IExternalDataCache>();
 
             referenceDataCacheMock.SetupGet(rdc => rdc.Postcodes).Returns(new HashSet<string>() { "abc", "def", "ghi" });
-            
+
             NewService(referenceDataCacheMock.Object).PostcodeExists("abc").Should().BeTrue();
         }
 
@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             var referenceDataCacheMock = new Mock<IExternalDataCache>();
 
             referenceDataCacheMock.SetupGet(rdc => rdc.Postcodes).Returns(new HashSet<string>() { "abc", "def", "ghi" });
-            
+
             NewService(referenceDataCacheMock.Object).PostcodeExists("jkl").Should().BeFalse();
         }
 

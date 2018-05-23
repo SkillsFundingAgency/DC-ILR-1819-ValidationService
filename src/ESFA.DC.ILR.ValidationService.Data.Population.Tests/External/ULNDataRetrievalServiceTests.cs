@@ -1,12 +1,12 @@
-﻿using ESFA.DC.ILR.Tests.Model;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using ESFA.DC.ILR.ValidationService.Data.Population.External;
-using Xunit;
 using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.External;
 using FluentAssertions;
+using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
 {

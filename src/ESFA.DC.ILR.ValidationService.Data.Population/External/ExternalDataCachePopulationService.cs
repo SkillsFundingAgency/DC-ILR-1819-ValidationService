@@ -19,7 +19,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         private readonly IULNDataRetrievalService _ulnDataRetrievalService;
         private readonly IPostcodesDataRetrievalService _postcodesDataRetrievalService;
 
-        public ExternalDataCachePopulationService(IExternalDataCache externalDataCache,
+        public ExternalDataCachePopulationService(
+            IExternalDataCache externalDataCache,
             ILARSLearningDeliveryDataRetrievalService larsLearningDeliveryDataRetrievalService,
             ILARSFrameworkDataRetrievalService larsFrameworkDataRetrievalService,
             IULNDataRetrievalService ulnDataRetrievalService,
@@ -34,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public void Populate()
         {
-            var externalDataCache = (ExternalDataCache) _externalDataCache;
+            var externalDataCache = (ExternalDataCache)_externalDataCache;
 
             externalDataCache.LearningDeliveries = _larsLearningDeliveryDataRetrievalService.Retrieve();
             externalDataCache.Frameworks = _larsFrameworkDataRetrievalService.Retrieve().ToList();

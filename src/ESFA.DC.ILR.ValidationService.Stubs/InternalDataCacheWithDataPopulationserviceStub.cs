@@ -17,7 +17,6 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         public InternalDataCacheWithDataPopulationserviceStub(IInternalDataCache internalDataCache)
         {
             _internalDataCache = internalDataCache;
-
         }
 
         public void Populate(IInternalDataCache data)
