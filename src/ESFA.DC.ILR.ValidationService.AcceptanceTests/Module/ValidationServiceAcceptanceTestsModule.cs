@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using ESFA.DC.ILR.ValidationService.Modules;
+using ESFA.DC.ILR.ValidationService.Modules.Actor;
+using ESFA.DC.ILR.ValidationService.Modules.PreValidation;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
 

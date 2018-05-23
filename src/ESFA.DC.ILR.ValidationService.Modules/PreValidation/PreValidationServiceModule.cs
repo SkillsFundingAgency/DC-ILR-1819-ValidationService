@@ -1,8 +1,6 @@
 ﻿using Autofac;
-using ESFA.DC.ILR.ValidationService.RuleSet.Modules;
-using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
 
-namespace ESFA.DC.ILR.ValidationService.Modules
+namespace ESFA.DC.ILR.ValidationService.Modules.PreValidation
 {
     public class PreValidationServiceModule : Module
     {

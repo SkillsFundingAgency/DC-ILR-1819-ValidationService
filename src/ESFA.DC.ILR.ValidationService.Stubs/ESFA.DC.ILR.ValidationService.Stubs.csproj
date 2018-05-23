@@ -94,11 +94,9 @@
     <Compile Include="InternalDataCachePopulationServiceStub.cs" />
     <Compile Include="InternalDataCacheProviderServiceStub.cs" />
     <Compile Include="InternalDataCacheWithDataPopulationserviceStub.cs" />
-    <Compile Include="LARSDataServiceStub.cs" />
     <Compile Include="LearnerPerActorServiceStub.cs" />
     <Compile Include="LearnerProviderServiceStub.cs" />
     <Compile Include="MessageFileSystemProviderServiceStub.cs" />
-    <Compile Include="PostcodesDataServiceStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExternalDataCachePopulationServiceStub.cs" />
     <Compile Include="ExternalDataCacheStub.cs" />

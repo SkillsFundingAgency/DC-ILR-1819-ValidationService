@@ -48,10 +48,26 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ESFA.DC.Data.LARS.Model, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Data.LARS.Model.0.1.0\lib\net461\ESFA.DC.Data.LARS.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="ESFA.DC.Data.Postcodes.Model, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Data.Postcodes.Model.0.1.2-beta0001\lib\net461\ESFA.DC.Data.Postcodes.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="ESFA.DC.Data.ULN.Model, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Data.ULN.Model.0.1.0\lib\net461\ESFA.DC.Data.ULN.Model.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -62,14 +78,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActorPreValidationPopulationService.cs" />
+    <Compile Include="External\ExternalDataCachePopulationService.cs" />
+    <Compile Include="External\PostcodesDataRetrievalService.cs" />
     <Compile Include="FileDataCachePopulationService.cs" />
     <Compile Include="Interface\IExternalDataCachePopulationService.cs" />
+    <Compile Include="Interface\IExternalDataRetrievalService.cs" />
     <Compile Include="Interface\IFileDataCachePopulationService.cs" />
     <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
     <Compile Include="Interface\IMessageCachePopulationService.cs" />
     <Compile Include="Interface\IMessageCacheWithDataPopulationService.cs" />
     <Compile Include="Interface\IPopulationService.cs" />
     <Compile Include="Interface\IPreValidationPopulationService.cs" />
+    <Compile Include="Keys\FrameworkKey.cs" />
     <Compile Include="MessageCachePopulationService.cs" />
     <Compile Include="MessageCacheWithDataPopulationService.cs" />
     <Compile Include="PreValidationPopulationService.cs" />
@@ -86,6 +106,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
