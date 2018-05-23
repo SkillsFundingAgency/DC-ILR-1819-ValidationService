@@ -11,7 +11,7 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Keys;
 
-namespace ESFA.DC.ILR.ValidationService.Data.Population
+namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 {
     public class ExternalDataCachePopulationService : IExternalDataCachePopulationService
     {

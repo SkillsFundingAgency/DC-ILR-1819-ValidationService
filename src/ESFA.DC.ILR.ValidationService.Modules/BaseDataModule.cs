@@ -30,6 +30,7 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.EmpOutcome.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel;
 using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population;
+using ESFA.DC.ILR.ValidationService.Data.Population.External;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.FileData;
 using ESFA.DC.ILR.ValidationService.Interface;

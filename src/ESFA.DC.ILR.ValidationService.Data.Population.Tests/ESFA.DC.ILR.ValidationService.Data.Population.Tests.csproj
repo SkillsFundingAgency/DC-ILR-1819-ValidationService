@@ -113,7 +113,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExternalDataCachePopulationServiceTests.cs" />
+    <Compile Include="External\ExternalDataCachePopulationServiceTests.cs" />
+    <Compile Include="External\PostcodesDataRetrievalServiceTests.cs" />
     <Compile Include="FileDataCachePopulationServiceTests.cs" />
     <Compile Include="MessageCachePopulationServiceTests.cs" />
     <Compile Include="PreValidationPopulationServiceTests.cs" />

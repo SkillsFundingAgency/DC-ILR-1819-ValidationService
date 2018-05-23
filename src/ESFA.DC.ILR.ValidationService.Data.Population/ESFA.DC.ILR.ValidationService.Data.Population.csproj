@@ -78,9 +78,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActorPreValidationPopulationService.cs" />
-    <Compile Include="ExternalDataCachePopulationService.cs" />
+    <Compile Include="External\ExternalDataCachePopulationService.cs" />
+    <Compile Include="External\PostcodesDataRetrievalService.cs" />
     <Compile Include="FileDataCachePopulationService.cs" />
     <Compile Include="Interface\IExternalDataCachePopulationService.cs" />
+    <Compile Include="Interface\IExternalDataRetrievalService.cs" />
     <Compile Include="Interface\IFileDataCachePopulationService.cs" />
     <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
     <Compile Include="Interface\IMessageCachePopulationService.cs" />
