@@ -5,16 +5,16 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler
 {
     public class ValidationErrorHandlerOutputService : IValidationOutputService<IValidationError>
     {
-        private readonly IValidationErrorHandler _validationErrorHandler;
+        private readonly IValidationErrorCache _validationErrorCache;
 
-        public ValidationErrorHandlerOutputService(IValidationErrorHandler validationErrorHandler)
+        public ValidationErrorHandlerOutputService(IValidationErrorCache validationErrorCache)
         {
-            _validationErrorHandler = validationErrorHandler;
+            _validationErrorCache = validationErrorCache;
         }
 
         public IEnumerable<IValidationError> Process()
         {
-            IEnumerable<IValidationError> errors = ((ValidationErrorHandler)_validationErrorHandler).ErrorBag;
+            IEnumerable<IValidationError> errors = _validationErrorCache.ValidationErrors;
 
             return errors;
         }

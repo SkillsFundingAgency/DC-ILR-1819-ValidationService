@@ -12,6 +12,10 @@ namespace ESFA.DC.ILR.ValidationService.Interface
     {
         string Input { get;  }
         string Output { get; }
+
+        string InvalidLearnRefNumbersKey { get; }
+
+        string ValidLearnRefNumbersKey { get; }
         string JobId { get; set; }
 
 

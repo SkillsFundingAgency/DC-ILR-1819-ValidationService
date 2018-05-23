@@ -36,6 +36,8 @@ using ESFA.DC.ILR.ValidationService.FileData;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.Stubs;
+using ESFA.DC.IO.Dictionary;
+using ESFA.DC.IO.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {
@@ -74,6 +76,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<LARSFrameworkDataRetrievalService>().As<ILARSFrameworkDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<ULNDataRetrievalService>().As<IULNDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<PostcodesDataRetrievalService>().As<IPostcodesDataRetrievalService>().InstancePerLifetimeScope();
+
+            builder.RegisterType<DictionaryKeyValuePersistenceService>().As<IKeyValuePersistenceService>().InstancePerLifetimeScope();
         }
     }
 }

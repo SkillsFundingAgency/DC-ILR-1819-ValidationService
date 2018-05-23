@@ -9,12 +9,12 @@ using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Console
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var argsList = args.ToList();
-            
+
             if (!argsList.Any())
             {
                 argsList.Add(@"Files/ILR.xml");
@@ -28,7 +28,9 @@ namespace ESFA.DC.ILR.ValidationService.Console
             var preValidationContext = new ValidationContextStub
             {
                 Input = filePath,
-                Output = filePath + ".vs.csv"
+                Output = filePath + ".vs.csv",
+                ValidLearnRefNumbersKey = "ValidLearnRefNumbers",
+                InvalidLearnRefNumbersKey = "InvalidLearnRefNumbers",
             };
 
             var container = BuildContainer();
@@ -64,7 +66,6 @@ namespace ESFA.DC.ILR.ValidationService.Console
             }
 
             System.IO.File.WriteAllText(path, contents.ToString());
-
         }
 
         private static void RegisterContext(ContainerBuilder containerBuilder, IPreValidationContext preValidationContext)
