@@ -114,7 +114,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="External\ExternalDataCachePopulationServiceTests.cs" />
+    <Compile Include="External\LARSFrameworkDataRetrievalServiceTests.cs" />
+    <Compile Include="External\LARSLearningDeliveryDataRetrievalServiceTests.cs" />
     <Compile Include="External\PostcodesDataRetrievalServiceTests.cs" />
+    <Compile Include="External\ULNDataRetrievalServiceTests.cs" />
     <Compile Include="FileDataCachePopulationServiceTests.cs" />
     <Compile Include="MessageCachePopulationServiceTests.cs" />
     <Compile Include="PreValidationPopulationServiceTests.cs" />

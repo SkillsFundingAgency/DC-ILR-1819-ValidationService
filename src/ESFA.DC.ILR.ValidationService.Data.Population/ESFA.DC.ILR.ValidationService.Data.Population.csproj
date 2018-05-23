@@ -78,17 +78,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActorPreValidationPopulationService.cs" />
+    <Compile Include="External\AbstractDataRetrievalService.cs" />
+    <Compile Include="External\AbstractLARSDataRetrievalService.cs" />
     <Compile Include="External\ExternalDataCachePopulationService.cs" />
+    <Compile Include="External\LARSFrameworkDataRetrievalService.cs" />
+    <Compile Include="External\LARSLearningDeliveryDataRetrievalService.cs" />
     <Compile Include="External\PostcodesDataRetrievalService.cs" />
+    <Compile Include="External\ULNDataRetrievalService.cs" />
     <Compile Include="FileDataCachePopulationService.cs" />
     <Compile Include="Interface\IExternalDataCachePopulationService.cs" />
     <Compile Include="Interface\IExternalDataRetrievalService.cs" />
     <Compile Include="Interface\IFileDataCachePopulationService.cs" />
     <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
+    <Compile Include="Interface\ILARSFrameworkDataRetrievalService.cs" />
+    <Compile Include="Interface\ILARSLearningDeliveryDataRetrievalService.cs" />
     <Compile Include="Interface\IMessageCachePopulationService.cs" />
     <Compile Include="Interface\IMessageCacheWithDataPopulationService.cs" />
     <Compile Include="Interface\IPopulationService.cs" />
+    <Compile Include="Interface\IPostcodesDataRetrievalService.cs" />
     <Compile Include="Interface\IPreValidationPopulationService.cs" />
+    <Compile Include="Interface\IULNDataRetrievalService.cs" />
     <Compile Include="Keys\FrameworkKey.cs" />
     <Compile Include="MessageCachePopulationService.cs" />
     <Compile Include="MessageCacheWithDataPopulationService.cs" />

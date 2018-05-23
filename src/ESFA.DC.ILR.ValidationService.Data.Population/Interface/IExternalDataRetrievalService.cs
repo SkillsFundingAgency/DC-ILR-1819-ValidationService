@@ -1,7 +1,7 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
 {
-    public interface IExternalDataRetrievalService<out TOut, in TLookup>
+    public interface IExternalDataRetrievalService<out TOut>
     {
-        TOut Retrieve(TLookup lookup);
+        TOut Retrieve();
     }
 }

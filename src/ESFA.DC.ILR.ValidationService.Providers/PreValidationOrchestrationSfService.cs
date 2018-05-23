@@ -62,7 +62,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 var actor = GetValidationActor();
 
                 // TODO:get reference data per each shard and send it to Actors
-
                 var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(ilrMessage));
                 var learnersShardAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(learnerShard));
                 var internalDataCache = _internalDataCacheProviderService.Provide();

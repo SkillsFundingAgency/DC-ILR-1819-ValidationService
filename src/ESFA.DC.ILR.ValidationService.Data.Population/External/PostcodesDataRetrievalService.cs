@@ -2,22 +2,29 @@
 using System.Linq;
 using ESFA.DC.Data.Postcodes.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 {
-    public class PostcodesDataRetrievalService : IExternalDataRetrievalService<IEnumerable<string>, IMessage>
+    public class PostcodesDataRetrievalService : AbstractDataRetrievalService, IPostcodesDataRetrievalService
     {
         private readonly IPostcodes _postcodes;
 
-        public PostcodesDataRetrievalService(IPostcodes postcodes)
+        public PostcodesDataRetrievalService()
+            : base(null)
+        {
+        }
+
+        public PostcodesDataRetrievalService(IPostcodes postcodes, ICache<IMessage> messageCache)
+            : base(messageCache)
         {
             _postcodes = postcodes;
         }
 
-        public IEnumerable<string> Retrieve(IMessage message)
+        public IEnumerable<string> Retrieve()
         {
-            var uniquePostcodes = UniquePostcodesFromMessage(message).ToList();
+            var uniquePostcodes = UniquePostcodesFromMessage(_messageCache.Item).ToList();
 
             return _postcodes.MasterPostcodes
                 .Where(p => uniquePostcodes.Contains(p.Postcode))
@@ -26,32 +33,41 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public IEnumerable<string> UniquePostcodesFromMessage(IMessage message)
         {
-            var learnerPostcodes = message
-                                       .Learners?
-                                       .Where(l => l.Postcode != null)
-                                       .Select(l => l.Postcode)
-                                       .Distinct()
-                                   ?? new List<string>();
-
-            var learnerPostcodePriors = message
-                                            .Learners?
-                                            .Where(l => l.PostcodePrior != null)
-                                            .Select(l => l.PostcodePrior)
-                                            .Distinct()
-                                        ?? new List<string>();
-
-            var learningDeliveryLocationPostcodes = message
-                                                        .Learners?
-                                                        .Where(l => l.LearningDeliveries != null)
-                                                        .SelectMany(l => l.LearningDeliveries)
-                                                        .Select(ld => ld.DelLocPostCode)
-                                                        .Distinct()
-                                                    ?? new List<string>();
-
-            return learnerPostcodes
-                .Union(learnerPostcodePriors)
-                .Union(learningDeliveryLocationPostcodes)
+            return UniqueLearnerPostcodesFromMessage(message)
+                .Union(UniqueLearnerPostcodePriorsFromMessage(message))
+                .Union(UniqueLearningDeliveryLocationPostcodesFromMessage(message))
                 .Distinct();
+        }
+
+        public virtual IEnumerable<string> UniqueLearnerPostcodesFromMessage(IMessage message)
+        {
+            return message
+                        .Learners?
+                        .Where(l => l.Postcode != null)
+                        .Select(l => l.Postcode)
+                        .Distinct()
+                    ?? new List<string>();
+        }
+
+        public virtual IEnumerable<string> UniqueLearnerPostcodePriorsFromMessage(IMessage message)
+        {
+            return message
+                       .Learners?
+                       .Where(l => l.PostcodePrior != null)
+                       .Select(l => l.PostcodePrior)
+                       .Distinct()
+                   ?? new List<string>();
+        }
+
+        public virtual IEnumerable<string> UniqueLearningDeliveryLocationPostcodesFromMessage(IMessage message)
+        {
+            return message
+                       .Learners?
+                       .Where(l => l.LearningDeliveries != null)
+                       .SelectMany(l => l.LearningDeliveries)
+                       .Select(ld => ld.DelLocPostCode)
+                       .Distinct()
+                   ?? new List<string>();
         }
     }
 }
