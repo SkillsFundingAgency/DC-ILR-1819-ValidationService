@@ -4,7 +4,7 @@
     <Parameter Name="ESFA.DC.ILR.ValidationService.Stateless_InstanceCount" Value="-1" />
     <Parameter Name="AuditQueueName" Value="__AuditQueueName__" />
     <Parameter Name="JobsQueueName" Value="__JobsQueueName__" />
-    <Parameter Name="ServiceBusConnectionString" Value="__ServiceFabricServiceBusConnectionString__" />
+    <Parameter Name="ServiceBusConnectionString" Value="__ServiceBusConnectionString__" />
     <Parameter Name="AzureBlobConnectionString" Value="__AzureBlobConnectionString__" />
     <Parameter Name="LoggerConnectionstring" Value="__LoggerConnectionString__" />
     <Parameter Name="TopicName" Value="__TopicName__" />
