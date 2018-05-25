@@ -17,6 +17,7 @@ using ESFA.DC.ILR.ValidationService.Data.External.Postcodes;
 using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ULN;
 using ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors;
 using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear;
@@ -52,6 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<ULNDataService>().As<IULNDataService>().InstancePerLifetimeScope();
             builder.RegisterType<FCSDataServiceStub>().As<IFCSDataService>().InstancePerLifetimeScope();
             builder.RegisterType<PostcodesDataService>().As<IPostcodesDataService>();
+            builder.RegisterType<ValidationErrorsDataService>().As<IValidationErrorsDataService>();
 
             builder.RegisterType<InternalDataCache>().As<IInternalDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<AcademicYearDataService>().As<IAcademicYearDataService>().InstancePerLifetimeScope();

@@ -31,6 +31,8 @@ namespace ESFA.DC.ILR.ValidationService.Console
                 Output = filePath + ".vs.csv",
                 ValidLearnRefNumbersKey = "ValidLearnRefNumbers",
                 InvalidLearnRefNumbersKey = "InvalidLearnRefNumbers",
+                ValidationErrorsKey = "ValidationErrors",
+                ValidationErrorMessageLookupKey = "ValidationErrorMessageLookups",
             };
 
             var container = BuildContainer();

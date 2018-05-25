@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="External\ValidationErrors\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj" />
   </ItemGroup>
 

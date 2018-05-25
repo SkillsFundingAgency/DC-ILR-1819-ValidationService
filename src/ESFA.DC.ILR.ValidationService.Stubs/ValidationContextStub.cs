@@ -13,5 +13,9 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         public string InvalidLearnRefNumbersKey { get; set; }
 
         public string ValidLearnRefNumbersKey { get; set; }
+
+        public string ValidationErrorsKey { get; set; }
+
+        public string ValidationErrorMessageLookupKey { get; set; }
     }
 }

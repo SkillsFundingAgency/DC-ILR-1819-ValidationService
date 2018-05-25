@@ -9,15 +9,17 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler
     public class ValidationErrorHandler : IValidationErrorHandler
     {
         private readonly IValidationErrorCache _validationErrorCache;
+        private readonly IValidationErrorsDataService _validationErrorsDataService;
 
-        public ValidationErrorHandler(IValidationErrorCache validationErrorCache)
+        public ValidationErrorHandler(IValidationErrorCache validationErrorCache, IValidationErrorsDataService validationErrorsDataService)
         {
             _validationErrorCache = validationErrorCache;
+            _validationErrorsDataService = validationErrorsDataService;
         }
 
         public void Handle(string ruleName, string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
         {
-            var severity = Severity.Error;
+            var severity = _validationErrorsDataService.SeverityForRuleName(ruleName);
 
             _validationErrorCache.Add(BuildValidationError(ruleName, learnRefNumber, aimSequenceNumber, severity, errorMessageParameters));
         }

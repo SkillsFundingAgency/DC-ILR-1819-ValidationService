@@ -11,6 +11,10 @@ namespace ESFA.DC.ILR.ValidationService.Interface
         string InvalidLearnRefNumbersKey { get; }
 
         string ValidLearnRefNumbersKey { get; }
+
+        string ValidationErrorsKey { get; }
+
+        string ValidationErrorMessageLookupKey { get; }
     }
 
     public interface IPreValidationContext
@@ -22,6 +26,10 @@ namespace ESFA.DC.ILR.ValidationService.Interface
         string InvalidLearnRefNumbersKey { get; }
 
         string ValidLearnRefNumbersKey { get; }
+
+        string ValidationErrorsKey { get; }
+
+        string ValidationErrorMessageLookupKey { get; }
 
         string JobId { get; set; }
     }
