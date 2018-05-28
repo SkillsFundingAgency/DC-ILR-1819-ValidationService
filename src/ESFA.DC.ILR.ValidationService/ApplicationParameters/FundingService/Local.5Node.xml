@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application Name="fabric:/ESFA.DC.ILR.ValidationService" xmlns="http://schemas.microsoft.com/2011/01/fabric" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Parameters>
+    <Parameter Name="ESFA.DC.ILR.ValidationService.Stateless_InstanceCount" Value="1" />   
+    <Parameter Name="AuditQueueName" Value="sai-audit-queue" />
+    <Parameter Name="ServiceBusConnectionString" Value="Endpoint=sb://dc-dev-servicebus-weu.servicebus.windows.net/;SharedAccessKeyName=ReadOnlyAccess;SharedAccessKey=si1pBUYJYB0DSH96JU7fOM5xsxzEg+atUF+20QfVY40=" />
+    <Parameter Name="LoggerConnectionstring" Value="Server=localhost;Database=logs;User Id=loguser;Password=password1;" />
+	<Parameter Name="TopicName" Value="sai-topic" />	
+    <Parameter Name="FundingCalcSubscriptionName" Value="fundingcalc-init" />
+  </Parameters>
+</Application>
