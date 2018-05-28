@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
+using ESFA.DC.ILR.ValidationService.Modules.Actor;
+using ESFA.DC.ILR.ValidationService.Modules.PreValidation;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
 
-namespace ESFA.DC.ILR.ValidationService.Modules
+namespace ESFA.DC.ILR.ValidationService.Modules.Console
 {
-    public class ActorValidationModule : Module
+    public class ConsoleValidationServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule<ActorValidationOrchestrationModule>();
+            builder.RegisterModule<ConsoleValidationOrchestrationModule>();
+            builder.RegisterModule<PreValidationDataModule>();
             builder.RegisterModule<ActorDataModule>();
+            builder.RegisterModule<ConsoleDataModule>();
             builder.RegisterModule<QueryServiceModule>();
             builder.RegisterModule<DerivedDataModule>();
             builder.RegisterModule<ConsoleRuleSetModule>();

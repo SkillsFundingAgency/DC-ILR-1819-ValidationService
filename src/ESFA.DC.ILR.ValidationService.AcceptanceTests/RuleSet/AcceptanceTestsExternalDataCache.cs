@@ -18,5 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         public IReadOnlyCollection<Framework> Frameworks { get; set; }
 
         public IReadOnlyDictionary<long, Organisation> Organisations { get; set; }
+
+        public IReadOnlyCollection<string> Postcodes { get; set; }
     }
 }

@@ -13,14 +13,17 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             LearningDeliveries = new Dictionary<string, LearningDelivery>();
             Frameworks = new List<Framework>();
             Organisations = new Dictionary<long, Organisation>();
+            Postcodes = new List<string>();
         }
 
         public IReadOnlyCollection<long> ULNs { get; }
 
         public IReadOnlyDictionary<string, LearningDelivery> LearningDeliveries { get; }
-        
+
         public IReadOnlyCollection<Framework> Frameworks { get; }
 
         public IReadOnlyDictionary<long, Organisation> Organisations { get; }
+
+        public IReadOnlyCollection<string> Postcodes { get; }
     }
 }

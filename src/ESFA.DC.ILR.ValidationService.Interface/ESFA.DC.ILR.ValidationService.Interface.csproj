@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Interface.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Interface.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -74,11 +76,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\Severity.cs" />
     <Compile Include="IAcademicYear.cs" />
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="IErrorMessageParameter.cs" />
     <Compile Include="IInternalDataCache.cs" />
-    <Compile Include="ILearnerPerActorCalculator.cs" />
+    <Compile Include="ILearnerPerActorService.cs" />
     <Compile Include="IPreValidationOrchestrationService.cs" />
     <Compile Include="IRule.cs" />
     <Compile Include="IRuleSetExecutionService.cs" />
@@ -87,13 +90,22 @@
     <Compile Include="IValidationContext.cs" />
     <Compile Include="IValidationDataService.cs" />
     <Compile Include="IValidationError.cs" />
+    <Compile Include="IValidationErrorCache.cs" />
     <Compile Include="IValidationErrorHandler.cs" />
+    <Compile Include="IValidationErrorsDataService.cs" />
     <Compile Include="IValidationItemProviderService.cs" />
     <Compile Include="IValidationOutputService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ESFA.DC.ILR.ValidationService.Interface.ruleset">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
@@ -14,87 +14,87 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Handle()
         {
-            var validationErrorHandler = NewHandler();
+            var validationErrorCacheMock = new Mock<IValidationErrorCache>();
+            var validationErrorsDataService = new Mock<IValidationErrorsDataService>();
 
-            validationErrorHandler.Handle("RuleName");
+            var validationErrorHandler = NewHandler(validationErrorCacheMock.Object, validationErrorsDataService.Object);
 
-            validationErrorHandler.ErrorBag.Should().HaveCount(1);
+            var ruleName = "RuleName";
+
+            validationErrorHandler.Handle(ruleName);
+
+            validationErrorsDataService.Verify(c => c.SeverityForRuleName(ruleName), Times.Once);
+            validationErrorCacheMock.Verify(c => c.Add(It.IsAny<IValidationError>()), Times.Once);
         }
 
         [Fact]
-        public void HandleParallel()
+        public void BuildValidationError_RuleName()
         {
             var validationErrorHandler = NewHandler();
 
-            Parallel.For(0, 1000, (i) =>
-            {
-                validationErrorHandler.Handle(i.ToString());
-            });
-
-            for (int i = 0; i < 1000; i++)
-            {
-                validationErrorHandler.ErrorBag.Should().ContainSingle(eb => eb.RuleName == i.ToString());
-            }
-        }
-
-        [Fact]
-        public void Handle_RuleName()
-        {
-            var validationErrorHandler = NewHandler();
-
-            validationErrorHandler.Handle("RuleName");
-
-            var validationError = validationErrorHandler.ErrorBag.First();
+            var validationError = validationErrorHandler.BuildValidationError("RuleName", null, null, null, null);
 
             validationError.RuleName.Should().Be("RuleName");
             validationError.LearnerReferenceNumber.Should().BeNull();
             validationError.AimSequenceNumber.Should().BeNull();
+            validationError.Severity.Should().BeNull();
             validationError.ErrorMessageParameters.Should().BeNull();
         }
 
         [Fact]
-        public void Handle_LearnRefNumber()
+        public void BuildValidationError_LearnRefNumber()
         {
             var validationErrorHandler = NewHandler();
 
-            validationErrorHandler.Handle("RuleName", "LearnRefNumber");
-
-            var validationError = validationErrorHandler.ErrorBag.First();
+            var validationError = validationErrorHandler.BuildValidationError("RuleName", "LearnRefNumber", null, null, null);
 
             validationError.RuleName.Should().Be("RuleName");
             validationError.LearnerReferenceNumber.Should().Be("LearnRefNumber");
             validationError.AimSequenceNumber.Should().BeNull();
+            validationError.Severity.Should().BeNull();
             validationError.ErrorMessageParameters.Should().BeNull();
         }
 
         [Fact]
-        public void Handle_AimSequenceNumber()
+        public void BuildValidationError_AimSequenceNumber()
         {
             var validationErrorHandler = NewHandler();
 
-            validationErrorHandler.Handle("RuleName", "LearnRefNumber", 1234);
-
-            var validationError = validationErrorHandler.ErrorBag.First();
+            var validationError = validationErrorHandler.BuildValidationError("RuleName", "LearnRefNumber", 1234, null, null);
 
             validationError.RuleName.Should().Be("RuleName");
             validationError.LearnerReferenceNumber.Should().Be("LearnRefNumber");
             validationError.AimSequenceNumber.Should().Be(1234);
+            validationError.Severity.Should().BeNull();
             validationError.ErrorMessageParameters.Should().BeNull();
         }
 
         [Fact]
-        public void Handle_ErrorMessageParameters()
+        public void BuildValidationError_Severity()
         {
             var validationErrorHandler = NewHandler();
 
-            validationErrorHandler.Handle("RuleName", "LearnRefNumber", 1234, new List<IErrorMessageParameter>() { new ErrorMessageParameter("A", "error"), new ErrorMessageParameter("B", "message"), new ErrorMessageParameter("C", "parameters") });
+            var validationError = validationErrorHandler.BuildValidationError("RuleName", "LearnRefNumber", 1234, Severity.Error, null);
 
-            var validationError = validationErrorHandler.ErrorBag.First();
+            validationError.RuleName.Should().Be("RuleName");
+            validationError.LearnerReferenceNumber.Should().Be("LearnRefNumber");
+            validationError.AimSequenceNumber.Should().Be(1234);
+            validationError.Severity.Should().Be(Severity.Error);
+            validationError.ErrorMessageParameters.Should().BeNull();
+        }
+
+        [Fact]
+        public void BuildvalidationError_ErrorMessageParameters()
+        {
+            var validationErrorHandler = NewHandler();
+
+            var validationError = validationErrorHandler.BuildValidationError("RuleName", "LearnRefNumber", 1234, Severity.Error, new List<IErrorMessageParameter>() { new ErrorMessageParameter("A", "error"), new ErrorMessageParameter("B", "message"), new ErrorMessageParameter("C", "parameters") });
 
             validationError.RuleName.Should().Be("RuleName");
             validationError.LearnerReferenceNumber.Should().Be("LearnRefNumber");
             validationError.AimSequenceNumber.Should().Be(1234);
             validationError.ErrorMessageParameters.Should().HaveCount(3);
+            validationError.Severity.Should().Be(Severity.Error);
             validationError.ErrorMessageParameters.Should().Equal(new List<IErrorMessageParameter>() { new ErrorMessageParameter("A", "error"), new ErrorMessageParameter("B", "message"), new ErrorMessageParameter("C", "parameters") });
         }
 
@@ -125,9 +125,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
             errorMessageParameter.Value.Should().Be(null);
         }
 
-        private ValidationErrorHandler NewHandler()
+        private ValidationErrorHandler NewHandler(IValidationErrorCache validationErrorCache = null, IValidationErrorsDataService validationErrorsDataService = null)
         {
-            return new ValidationErrorHandler();
+            return new ValidationErrorHandler(validationErrorCache, validationErrorsDataService);
         }
     }
 }

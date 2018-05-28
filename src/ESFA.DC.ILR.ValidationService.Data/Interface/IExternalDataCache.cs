@@ -13,5 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IReadOnlyCollection<Framework> Frameworks { get; }
 
         IReadOnlyDictionary<long, Organisation> Organisations { get; }
+
+        IReadOnlyCollection<string> Postcodes { get; }
     }
 }

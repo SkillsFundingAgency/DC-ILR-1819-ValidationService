@@ -22,7 +22,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
             externalDataCachePopulationServiceMock.Verify();
         }
 
-        private Mock<T> NewPopulationServiceMock<T>() where T : class, IPopulationService
+        private Mock<T> NewPopulationServiceMock<T>()
+            where T : class, IPopulationService
         {
             var mock = new Mock<T>();
 
@@ -39,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         {
             return new PreValidationPopulationService(
                 messageCachePopulationService,
-                //fileDataCachePopulationService,
+                fileDataCachePopulationService,
                 internalDataCachePopulationService,
                 externalDataCachePopulationService);
         }

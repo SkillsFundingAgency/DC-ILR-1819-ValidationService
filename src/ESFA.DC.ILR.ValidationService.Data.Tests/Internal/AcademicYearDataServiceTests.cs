@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
 
             NewService(internalDataCacheMock.Object).Start().Should().Be(date);
         }
-        
+
         private AcademicYearDataService NewService(IInternalDataCache internalDataCache = null)
         {
             return new AcademicYearDataService(internalDataCache);

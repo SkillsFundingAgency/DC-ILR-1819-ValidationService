@@ -20,8 +20,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 .Where(f => f.FrameworkAims != null)
                 .SelectMany(f => f.FrameworkAims
                     .Where(fa =>
-                        fa.LearnAimRef == learnAimRef 
-                        && fa.ProgType == progType 
+                        fa.LearnAimRef == learnAimRef
+                        && fa.ProgType == progType
                         && fa.FworkCode == fworkCode
                         && fa.PwayCode == pwayCode))
                 .Any();
@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
 
-            return learningDelivery != null 
+            return learningDelivery != null
                    && _externalDataCache
                         .Frameworks
                         .Where(f => f.FrameworkCommonComponents != null)

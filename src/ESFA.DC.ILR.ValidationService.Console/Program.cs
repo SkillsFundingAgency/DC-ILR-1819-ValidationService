@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Modules;
+using ESFA.DC.ILR.ValidationService.Modules.Console;
 using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Console
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var argsList = args.ToList();
-            
+
             if (!argsList.Any())
             {
                 argsList.Add(@"Files/ILR.xml");
@@ -29,7 +28,11 @@ namespace ESFA.DC.ILR.ValidationService.Console
             var preValidationContext = new ValidationContextStub
             {
                 Input = filePath,
-                Output = filePath + ".vs.csv"
+                Output = filePath + ".vs.csv",
+                ValidLearnRefNumbersKey = "ValidLearnRefNumbers",
+                InvalidLearnRefNumbersKey = "InvalidLearnRefNumbers",
+                ValidationErrorsKey = "ValidationErrors",
+                ValidationErrorMessageLookupKey = "ValidationErrorMessageLookups",
             };
 
             var container = BuildContainer();
@@ -37,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
             using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, preValidationContext)))
             {
                 var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
-                
+
                 var errors = preValidationOrchestrationService.Execute(preValidationContext);
 
                 OutputResultsToFile(errors, $"{preValidationContext.Output}");
@@ -65,7 +68,6 @@ namespace ESFA.DC.ILR.ValidationService.Console
             }
 
             System.IO.File.WriteAllText(path, contents.ToString());
-
         }
 
         private static void RegisterContext(ContainerBuilder containerBuilder, IPreValidationContext preValidationContext)
@@ -76,7 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
         private static IContainer BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
-            
+
             containerBuilder.RegisterModule<ConsoleValidationServiceModule>();
 
             return containerBuilder.Build();

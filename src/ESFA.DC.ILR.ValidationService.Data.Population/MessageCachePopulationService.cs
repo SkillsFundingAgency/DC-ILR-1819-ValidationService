@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         private readonly IValidationItemProviderService<IMessage> _messageValidationItemProviderService;
 
         public MessageCachePopulationService(
-            ICache<IMessage> messageCache, 
+            ICache<IMessage> messageCache,
             IValidationItemProviderService<IMessage> messageValidationItemProviderService)
         {
             _messageCache = messageCache;

@@ -20,13 +20,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         {
             var organisationDictionary = new Dictionary<long, Organisation>()
             {
-                {1, null},
-                {2, null},
-                {3, null},
-                {4, null},
-                {5, null},
-                {6, null},
-                {7, null},
+                { 1, null },
+                { 2, null },
+                { 3, null },
+                { 4, null },
+                { 5, null },
+                { 6, null },
+                { 7, null },
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -44,13 +44,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         {
             var organisationDictionary = new Dictionary<long, Organisation>()
             {
-                {1, null},
-                {2, null},
-                {3, null},
-                {4, null},
-                {5, null},
-                {6, null},
-                {7, null},
+                { 1, null },
+                { 2, null },
+                { 3, null },
+                { 4, null },
+                { 5, null },
+                { 6, null },
+                { 7, null },
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -68,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var organisationDictionary = new Dictionary<long, Organisation>()
             {
-                { ukprn, new Organisation() { UKPRN = ukprn, LegalOrgType = legalOrgType }},
+                { ukprn, new Organisation() { UKPRN = ukprn, LegalOrgType = legalOrgType } },
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var organisationDictionary = new Dictionary<long, Organisation>()
             {
-                { ukprn, new Organisation() { UKPRN = ukprn, LegalOrgType = legalOrgType }},
+                { ukprn, new Organisation() { UKPRN = ukprn, LegalOrgType = legalOrgType } },
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -97,14 +97,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Fact]
-        public void legalOrgTypeMatchForUKPRN_False_Mismatch()
+        public void LegalOrgTypeMatchForUKPRN_False_Mismatch()
         {
             var ukprn = 1;
             var legalOrgType = "A";
-            
+
             var organisationDictionary = new Dictionary<long, Organisation>()
             {
-                { ukprn, new Organisation() { UKPRN = ukprn, LegalOrgType = legalOrgType }},
+                { ukprn, new Organisation() { UKPRN = ukprn, LegalOrgType = legalOrgType } },
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();

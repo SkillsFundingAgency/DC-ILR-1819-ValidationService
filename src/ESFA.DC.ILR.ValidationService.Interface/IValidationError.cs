@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Interface.Enum;
 
 namespace ESFA.DC.ILR.ValidationService.Interface
 {
@@ -9,6 +10,8 @@ namespace ESFA.DC.ILR.ValidationService.Interface
         long? AimSequenceNumber { get; }
 
         string RuleName { get; }
+
+        Severity? Severity { get; }
 
         IEnumerable<IErrorMessageParameter> ErrorMessageParameters { get; }
     }

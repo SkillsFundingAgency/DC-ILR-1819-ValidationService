@@ -2,16 +2,14 @@
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
 
-namespace ESFA.DC.ILR.ValidationService.Modules
+namespace ESFA.DC.ILR.ValidationService.Modules.Actor
 {
-    public class ConsoleValidationServiceModule : Module
+    public class ActorValidationModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule<ConsoleValidationOrchestrationModule>();
-            builder.RegisterModule<PreValidationDataModule>();
+            builder.RegisterModule<ActorValidationOrchestrationModule>();
             builder.RegisterModule<ActorDataModule>();
-            builder.RegisterModule<ConsoleDataModule>();
             builder.RegisterModule<QueryServiceModule>();
             builder.RegisterModule<DerivedDataModule>();
             builder.RegisterModule<ConsoleRuleSetModule>();

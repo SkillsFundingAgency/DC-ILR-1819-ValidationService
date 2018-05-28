@@ -23,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         {
         }
 
-        [Theory]
+        [Theory(Skip = "Autofac needs Review")]
         [InlineData("FworkCode_05", false)]
         public void TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
         {

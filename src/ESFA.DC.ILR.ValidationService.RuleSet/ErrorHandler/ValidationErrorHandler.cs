@@ -1,25 +1,32 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler
 {
     public class ValidationErrorHandler : IValidationErrorHandler
     {
-        private readonly ConcurrentBag<IValidationError> _errorbag = new ConcurrentBag<IValidationError>();
+        private readonly IValidationErrorCache _validationErrorCache;
+        private readonly IValidationErrorsDataService _validationErrorsDataService;
 
-        public virtual ConcurrentBag<IValidationError> ErrorBag
+        public ValidationErrorHandler(IValidationErrorCache validationErrorCache, IValidationErrorsDataService validationErrorsDataService)
         {
-            get
-            {
-                return _errorbag;
-            }
+            _validationErrorCache = validationErrorCache;
+            _validationErrorsDataService = validationErrorsDataService;
         }
 
         public void Handle(string ruleName, string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
         {
-            _errorbag.Add(new ValidationError(ruleName, learnRefNumber, aimSequenceNumber, errorMessageParameters));
+            var severity = _validationErrorsDataService.SeverityForRuleName(ruleName);
+
+            _validationErrorCache.Add(BuildValidationError(ruleName, learnRefNumber, aimSequenceNumber, severity, errorMessageParameters));
+        }
+
+        public IValidationError BuildValidationError(string ruleName, string learnRefNumber, long? aimSequenceNumber, Severity? severity, IEnumerable<IErrorMessageParameter> errorMessageParameters)
+        {
+            return new ValidationError(ruleName, learnRefNumber, aimSequenceNumber, severity, errorMessageParameters);
         }
 
         public IErrorMessageParameter BuildErrorMessageParameter(string propertyName, object value)

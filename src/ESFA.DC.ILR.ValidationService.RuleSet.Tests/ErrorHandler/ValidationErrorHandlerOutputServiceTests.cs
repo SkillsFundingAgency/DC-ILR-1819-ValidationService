@@ -13,9 +13,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Process_Empty()
         {
-            var validationErrorHandlerMock = new Mock<ValidationErrorHandler>();
+            var validationErrorHandlerMock = new Mock<IValidationErrorCache>();
 
-            validationErrorHandlerMock.SetupGet(veh => veh.ErrorBag).Returns(new ConcurrentBag<IValidationError>());
+            validationErrorHandlerMock.SetupGet(veh => veh.ValidationErrors).Returns(new ConcurrentBag<IValidationError>());
 
             var service = NewService(validationErrorHandlerMock.Object);
 
@@ -27,9 +27,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Process_Errors()
         {
-            var validationErrorHandlerMock = new Mock<ValidationErrorHandler>();
+            var validationErrorHandlerMock = new Mock<IValidationErrorCache>();
 
-            validationErrorHandlerMock.SetupGet(veh => veh.ErrorBag).Returns(new ConcurrentBag<IValidationError>() { default(ValidationError), default(ValidationError), default(ValidationError) });
+            validationErrorHandlerMock.SetupGet(veh => veh.ValidationErrors).Returns(new ConcurrentBag<IValidationError>() { default(ValidationError), default(ValidationError), default(ValidationError) });
 
             var service = NewService(validationErrorHandlerMock.Object);
 
@@ -38,9 +38,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
             output.Should().HaveCount(3);
         }
 
-        private IValidationOutputService<IValidationError> NewService(IValidationErrorHandler validationErrorHandler = null)
+        private IValidationOutputService<IValidationError> NewService(IValidationErrorCache validationErrorCache = null)
         {
-            return new ValidationErrorHandlerOutputService(validationErrorHandler);
+            return new ValidationErrorHandlerOutputService(validationErrorCache);
         }
     }
 }

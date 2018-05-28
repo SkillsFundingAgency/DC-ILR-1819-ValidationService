@@ -27,9 +27,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             _internalDataCacheWithDataPopulationService = internalDataCacheWithDataPopulationService;
             _externalDataCachePopulationService = externalDataCachePopulationService;
         }
-      
 
-        public void Populate(IValidationContext validationContext )
+        public void Populate(IValidationContext validationContext)
         {
             _messageCacheWithDataPopulationService.Populate(validationContext.Input);
             _fileDataCachePopulationService.Populate();
