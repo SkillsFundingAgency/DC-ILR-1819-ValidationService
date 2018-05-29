@@ -24,7 +24,18 @@
   <Section  Name="AzureStorageSection">
     <Parameter Name="AzureBlobConnectionString" Value="" />
   </Section>
+  
+  <Section  Name="ReferenceDataSection">
+    <Parameter Name="LARSConnectionString" Value="" />
+    <Parameter Name="PostcodesConnectionString" Value="" />
+    <Parameter Name="ULNConnectionstring" Value="" />
+  </Section>
 
+
+  <Section  Name="AzureCosmosSection">
+    <Parameter Name="CosmosEndpointUrl" Value="" />
+    <Parameter Name="CosmosAuthKeyOrResourceToken" Value="" />
+  </Section>
 
 
   <Section Name="DataTransportSettings">

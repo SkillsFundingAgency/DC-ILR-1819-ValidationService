@@ -90,6 +90,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
 
+            // register reference data configs
+            var referenceDataOptions =
+                configHelper.GetSectionValues<ReferenceDataOptions>("ReferenceDataSection");
+            containerBuilder.RegisterInstance(referenceDataOptions).As<ReferenceDataOptions>().SingleInstance();
+
             // service bus queue configuration
             var queueSubscriptionConfig = new ServiceBusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
