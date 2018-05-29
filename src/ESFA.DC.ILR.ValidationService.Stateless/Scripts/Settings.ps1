@@ -13,7 +13,7 @@ if (Test-Path $privateFilesPath)
 { 
     Write-Host "Found private repo files, copying..." 
 
-    $repoFilesArray = Get-ChildItem $privateFilesPath -Recurse 
+    $repoFilesArray = Get-ChildItem $privateFilesPath 
     
     Write-Host $repoFilesArray.Length
 

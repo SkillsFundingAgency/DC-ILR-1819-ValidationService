@@ -90,6 +90,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
 
+            // register reference data configs
+            var referenceDataOptions =
+                configHelper.GetSectionValues<ReferenceDataOptions>("ReferenceDataSection");
+            containerBuilder.RegisterInstance(referenceDataOptions).As<ReferenceDataOptions>().SingleInstance();
+
             // service bus queue configuration
             var queueSubscriptionConfig = new ServiceBusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
@@ -140,7 +145,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
             containerBuilder.RegisterType<MessageHandler>().As<IMessageHandler>();
 
-            // register the  callback handle when a new message is received from SeriveBus
+            // register the  callback handle when a new message is received from ServiceBus
             containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c =>
                 c.Resolve<IMessageHandler>().Handle);
 
