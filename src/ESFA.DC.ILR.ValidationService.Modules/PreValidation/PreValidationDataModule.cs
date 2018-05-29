@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ESFA.DC.Data.ILR.ValidationErrors.Model;
+using ESFA.DC.Data.ILR.ValidationErrors.Model.Interfaces;
 using ESFA.DC.Data.LARS.Model;
 using ESFA.DC.Data.LARS.Model.Interfaces;
 using ESFA.DC.Data.Postcodes.Model;
@@ -33,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.PreValidation
             builder.Register(c =>
             {
                 var referenceDataOptions = c.Resolve<ReferenceDataOptions>();
-                return new ULN(referenceDataOptions.LARSConnectionString);
+                return new ULN(referenceDataOptions.ULNConnectionstring);
             }).As<IULN>().InstancePerLifetimeScope();
 
             builder.Register(c =>
@@ -41,6 +43,12 @@ namespace ESFA.DC.ILR.ValidationService.Modules.PreValidation
                 var referenceDataOptions = c.Resolve<ReferenceDataOptions>();
                 return new Postcodes(referenceDataOptions.PostcodesConnectionString);
             }).As<IPostcodes>().InstancePerLifetimeScope();
+
+            builder.Register(c =>
+            {
+                var referenceDataOptions = c.Resolve<ReferenceDataOptions>();
+                return new ValidationErrors(referenceDataOptions.ValidationErrorsConnectionString);
+            }).As<IValidationErrors>();
         }
     }
 }
