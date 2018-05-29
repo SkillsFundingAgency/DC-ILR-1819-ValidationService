@@ -1,7 +1,7 @@
 ﻿using System;
 using ESFA.DC.ILR.ValidationService.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.Stubs
+namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model
 {
     public class AcademicYear : IAcademicYear
     {

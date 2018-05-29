@@ -9,5 +9,7 @@
         public byte[] ShreddedLearners { get; set; }
 
         public byte[] InternalDataCache { get; set; }
+
+        public byte[] ExternalDataCache { get; set; }
     }
 }

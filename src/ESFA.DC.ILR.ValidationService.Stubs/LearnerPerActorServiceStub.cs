@@ -1,29 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class LearnerPerActorServiceStub<T, U> : ILearnerPerActorService<T, List<T>>
+    public class LearnerPerActorServiceStub<T> : ILearnerPerActorService<T, IEnumerable<T>>
         where T : class
     {
         private readonly IValidationItemProviderService<IEnumerable<T>> _validationItemProviderService;
 
-        public LearnerPerActorServiceStub(
-            ICache<IMessage> messageCache,
-            IValidationItemProviderService<IEnumerable<T>> validationItemProviderService)
+        public LearnerPerActorServiceStub(IValidationItemProviderService<IEnumerable<T>> validationItemProviderService)
         {
             _validationItemProviderService = validationItemProviderService;
         }
 
-        public IEnumerable<List<T>> Process()
+        public IEnumerable<IEnumerable<T>> Process()
         {
-            var learners = _validationItemProviderService.Provide();
-            var learnersPerActors = CalculateLearnersPerActor(learners.Count());
-            return SplitList(learners.ToList(), learnersPerActors);
+            var learners = _validationItemProviderService.Provide().ToList();
+
+            var learnersPerActors = CalculateLearnersPerActor(learners.Count);
+
+            return SplitList(learners, learnersPerActors);
         }
 
         private int CalculateLearnersPerActor(int totalMessagesCount)
@@ -51,11 +49,13 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             return 10000;
         }
 
-        private IEnumerable<List<T>> SplitList(List<T> learners, int nSize = 30)
+        private IEnumerable<IEnumerable<T>> SplitList(IEnumerable<T> learners, int nSize = 30)
         {
-            for (int i = 0; i < learners.Count; i += nSize)
+            var learnerList = learners.ToList();
+
+            for (var i = 0; i < learnerList.Count; i += nSize)
             {
-                yield return learners.GetRange(i, Math.Min(nSize, learners.Count - i));
+                yield return learnerList.GetRange(i, Math.Min(nSize, learnerList.Count - i));
             }
         }
     }

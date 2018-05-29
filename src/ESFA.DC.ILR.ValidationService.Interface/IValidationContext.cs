@@ -6,8 +6,6 @@ namespace ESFA.DC.ILR.ValidationService.Interface
     {
         IMessage Input { get; set; }
 
-        IInternalDataCache InternalDataCache { get; set; }
-
         string InvalidLearnRefNumbersKey { get; }
 
         string ValidLearnRefNumbersKey { get; }

@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
 
         private static void RunValidation(string filePath)
         {
-            var preValidationContext = new ValidationContextStub
+            var preValidationContext = new PreValidationContextStub
             {
                 Input = filePath,
                 Output = filePath + ".vs.csv",

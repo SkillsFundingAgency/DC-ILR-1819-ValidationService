@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.Stubs
+namespace ESFA.DC.ILR.ValidationService.Data.Internal
 {
     public class InternalDataCache : IInternalDataCache
     {

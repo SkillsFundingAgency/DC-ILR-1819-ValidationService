@@ -80,7 +80,6 @@
     <Compile Include="IAcademicYear.cs" />
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="IErrorMessageParameter.cs" />
-    <Compile Include="IInternalDataCache.cs" />
     <Compile Include="ILearnerPerActorService.cs" />
     <Compile Include="IPreValidationOrchestrationService.cs" />
     <Compile Include="IRule.cs" />

@@ -10,6 +10,8 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Models
 
         public IInternalDataCache InternalDataCache { get; set; }
 
+        public IExternalDataCache ExternalDataCache { get; set; }
+
         public string InvalidLearnRefNumbersKey { get; set; }
 
         public string ValidLearnRefNumbersKey { get; set; }

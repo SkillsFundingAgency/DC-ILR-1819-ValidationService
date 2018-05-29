@@ -102,7 +102,6 @@
     <Compile Include="Interface\IULNDataRetrievalService.cs" />
     <Compile Include="Keys\FrameworkKey.cs" />
     <Compile Include="MessageCachePopulationService.cs" />
-    <Compile Include="MessageCacheWithDataPopulationService.cs" />
     <Compile Include="PreValidationPopulationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

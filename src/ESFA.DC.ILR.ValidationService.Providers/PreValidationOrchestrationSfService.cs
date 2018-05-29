@@ -27,20 +27,23 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly ILearnerPerActorService<T, IEnumerable<ILearner>> _learnerPerActorService;
         private readonly ICache<IMessage> _messageCache;
         private readonly ISerializationService _jsonSerializationService;
-        private IValidationItemProviderService<IInternalDataCache> _internalDataCacheProviderService;
+        private readonly IInternalDataCache _internalDataCache;
+        private readonly IExternalDataCache _externalDataCache;
 
         public PreValidationOrchestrationSfService(
             IPreValidationPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
             ILearnerPerActorService<T, IEnumerable<ILearner>> learnerPerActorService,
             [KeyFilter("Json")] ISerializationService jsonSerializationService,
-            IValidationItemProviderService<IInternalDataCache> internalDataCacheProviderService)
+            IInternalDataCache internalDataCache,
+            IExternalDataCache externalDataCache)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _learnerPerActorService = learnerPerActorService;
             _messageCache = messageCache;
             _jsonSerializationService = jsonSerializationService;
-            _internalDataCacheProviderService = internalDataCacheProviderService;
+            _internalDataCache = internalDataCache;
+            _externalDataCache = externalDataCache;
         }
 
         public IEnumerable<U> Execute(IPreValidationContext validationContext)
@@ -64,17 +67,21 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 // TODO:get reference data per each shard and send it to Actors
                 var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(ilrMessage));
                 var learnersShardAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(learnerShard));
-                var internalDataCache = _internalDataCacheProviderService.Provide();
+                var internalDataCache = _internalDataCache;
                 var internalDataCacheString = _jsonSerializationService.Serialize(internalDataCache);
+                var externalDataCache = _externalDataCache;
+                var externalDataCacheString = _jsonSerializationService.Serialize(externalDataCache);
 
                 var internalDataCacheAsBytes = Encoding.UTF8.GetBytes(internalDataCacheString);
+                var externalDataCacheAsBytes = Encoding.UTF8.GetBytes(externalDataCacheString);
 
                 var validationActorModel = new ValidationActorModel()
                 {
                     JobId = validationContext.JobId,
                     Message = ilrMessageAsBytes,
                     ShreddedLearners = learnersShardAsBytes,
-                    InternalDataCache = internalDataCacheAsBytes
+                    InternalDataCache = internalDataCacheAsBytes,
+                    ExternalDataCache = externalDataCacheAsBytes,
                 };
 
                 actorTasks.Add(Task.Run(() =>
