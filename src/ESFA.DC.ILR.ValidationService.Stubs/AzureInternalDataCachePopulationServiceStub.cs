@@ -46,10 +46,11 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             var xmlData = cloudBlockBlob.DownloadText();
 
             // on downloading the file from Azure it adds BOM (Byte Order Mark) so remove it before parsing
-            string _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
-            if (xmlData.StartsWith(_byteOrderMarkUtf8))
+            string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+
+            if (xmlData.StartsWith(byteOrderMarkUtf8))
             {
-                xmlData = xmlData.Remove(0, _byteOrderMarkUtf8.Length);
+                xmlData = xmlData.Remove(0, byteOrderMarkUtf8.Length);
             }
 
             lookups = XDocument.Parse(xmlData).Root;

@@ -34,14 +34,15 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
     [StatePersistence(StatePersistence.None)]
     public class ValidationActor : Actor, IValidationActor
     {
-        private ILifetimeScope _parentLifeTimeScope;
-        private ActorId _actorId;
+        private readonly ILifetimeScope _parentLifeTimeScope;
+        private readonly ActorId _actorId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationActor"/> class.
         /// </summary>
         /// <param name="actorService">The Microsoft.ServiceFabric.Actors.Runtime.ActorService that will host this actor instance.</param>
         /// <param name="actorId">The Microsoft.ServiceFabric.Actors.ActorId for this actor instance.</param>
+        /// <param name="parentLifeTimeScope">Autofac Parent Lifetime Scope</param>
         public ValidationActor(ActorService actorService, ActorId actorId, ILifetimeScope parentLifeTimeScope)
             : base(actorService, actorId)
         {

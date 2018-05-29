@@ -6,7 +6,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Models
 {
     public class ValidationContext : IValidationContext
     {
-        public IMessage  Input { get; set; }
+        public IMessage Input { get; set; }
 
         public IInternalDataCache InternalDataCache { get; set; }
 

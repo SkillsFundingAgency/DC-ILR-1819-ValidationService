@@ -54,14 +54,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-//            var jobContextManager = new JobContextManager<JobContextMessage>(
-//                _parentLifeTimeScope.Resolve<IQueueSubscriptionService<JobContextMessage>>(),
-//                _parentLifeTimeScope.Resolve<IQueuePublishService<JobContextMessage>>(),
-//                _parentLifeTimeScope.Resolve<IAuditor>(),
-//                _parentLifeTimeScope.Resolve<IMapper<JobContextMessage, JobContextMessage>>(),
-//                _parentLifeTimeScope.Resolve<MessageHandler>().Handle1,
-//                _logger);
-
             yield return new ServiceInstanceListener(
                 context => _parentLifeTimeScope.Resolve<IJobContextManager>(),
                 "ValidationService-SBQueueListener");

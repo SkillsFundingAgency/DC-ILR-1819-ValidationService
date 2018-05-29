@@ -20,10 +20,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     {
         private readonly ISerializationService _serializationService;
         private readonly IPreValidationContext _preValidationContext;
-
-        private IMessage _message;
         private readonly AzureStorageModel _azureStorageModel;
         private readonly ILogger _logger;
+        private IMessage _message;
 
         public MessageAzureStorageProviderService(
             [KeyFilter("Xml")]ISerializationService serializationService,
