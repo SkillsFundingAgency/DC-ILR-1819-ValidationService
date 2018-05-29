@@ -22,6 +22,5 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces
     {
         [OperationContract]
         Task<string> Validate(ValidationActorModel validationActorModel);
-
     }
 }

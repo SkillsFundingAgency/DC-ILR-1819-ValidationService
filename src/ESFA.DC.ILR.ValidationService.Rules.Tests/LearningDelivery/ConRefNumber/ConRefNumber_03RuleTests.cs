@@ -82,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ConRefNumbe
         [InlineData("   ")]
         public void ConRefNumberConditionMet_False_Null(string conRefNumber)
         {
-            NewRule().ConRefNumberConditionMet(null).Should().BeFalse();
+            NewRule().ConRefNumberConditionMet(conRefNumber).Should().BeFalse();
         }
 
         [Fact]
