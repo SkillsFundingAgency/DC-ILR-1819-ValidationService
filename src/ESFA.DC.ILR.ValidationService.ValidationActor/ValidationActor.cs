@@ -4,16 +4,11 @@ using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
-using ESFA.DC.ILR.ValidationService.Stubs;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
-using Newtonsoft.Json;
 
 namespace ESFA.DC.ILR.ValidationService.ValidationActor
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
     using ESFA.DC.ILR.Model.Interface;
