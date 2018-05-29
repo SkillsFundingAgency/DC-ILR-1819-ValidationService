@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IPreValidationPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
             ILearnerPerActorService<T, IEnumerable<ILearner>> learnerPerActorService,
-            [KeyFilter("Json")] ISerializationService jsonSerializationService,
+            IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache)
         {

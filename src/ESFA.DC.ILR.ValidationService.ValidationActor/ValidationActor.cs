@@ -51,7 +51,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
 
         public Task<string> Validate(ValidationActorModel validationActorModel)
         {
-            var jsonSerializationService = _parentLifeTimeScope.ResolveKeyed<ISerializationService>("Json");
+            var jsonSerializationService = _parentLifeTimeScope.Resolve<IJsonSerializationService>();
             var internalDataCache = jsonSerializationService.Deserialize<InternalDataCache>(Encoding.UTF8.GetString(validationActorModel.InternalDataCache));
             var externalDataCache = jsonSerializationService.Deserialize<ExternalDataCache>(Encoding.UTF8.GetString(validationActorModel.ExternalDataCache));
             var message = jsonSerializationService.Deserialize<Message>(new MemoryStream(validationActorModel.Message));
