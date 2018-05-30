@@ -12,10 +12,6 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Actor
         {
             builder.RegisterType<ActorPreValidationPopulationService>().As<IPreValidationPopulationService<IValidationContext>>().InstancePerLifetimeScope();
 
-            builder.RegisterType<MessageCacheWithDataPopulationService>().As<IMessageCacheWithDataPopulationService>().InstancePerLifetimeScope();
-
-            builder.RegisterType<InternalDataCacheWithDataPopulationserviceStub>().As<IInternalDataCacheWithDataPopulationService>().InstancePerLifetimeScope();
-
             base.Load(builder);
         }
     }

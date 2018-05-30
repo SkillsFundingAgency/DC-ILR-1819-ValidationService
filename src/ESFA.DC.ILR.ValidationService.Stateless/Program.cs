@@ -131,7 +131,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 var queueSubscriptionService =
                     new QueueSubscriptionService<JobContextMessage>(
                         queueSubscriptionConfig,
-                        c.ResolveKeyed<ISerializationService>("Json"),
+                        c.Resolve<IJsonSerializationService>(),
                         c.Resolve<ILogger>());
                 return queueSubscriptionService;
             }).As<IQueueSubscriptionService<JobContextMessage>>();
@@ -141,13 +141,13 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 var topicPublishService =
                     new TopicPublishService<JobContextMessage>(
                         topicPublishConfig,
-                        c.ResolveKeyed<ISerializationService>("Json"));
+                        c.Resolve<IJsonSerializationService>());
                 return topicPublishService;
             }).As<ITopicPublishService<JobContextMessage>>();
 
             containerBuilder.Register(c => new QueuePublishService<AuditingDto>(
                     auditPublishConfig,
-                    c.ResolveKeyed<ISerializationService>("Json")))
+                    c.Resolve<IJsonSerializationService>()))
                 .As<IQueuePublishService<AuditingDto>>();
 
             // register job context manager

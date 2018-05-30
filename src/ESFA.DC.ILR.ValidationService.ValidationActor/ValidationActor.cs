@@ -1,19 +1,18 @@
 ﻿using System.IO;
 using System.Text;
 using ESFA.DC.ILR.Model;
-using ESFA.DC.ILR.ValidationService.Stubs;
+using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
-using Newtonsoft.Json;
 
 namespace ESFA.DC.ILR.ValidationService.ValidationActor
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
     using ESFA.DC.ILR.Model.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External;
     using ESFA.DC.ILR.ValidationService.Interface;
     using ESFA.DC.ILR.ValidationService.Stateless.Models;
     using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
@@ -52,21 +51,22 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
 
         public Task<string> Validate(ValidationActorModel validationActorModel)
         {
-            var jsonSerializationService = _parentLifeTimeScope.ResolveKeyed<ISerializationService>("Json");
-            var internalDataCache = jsonSerializationService.Deserialize<InternalDataCache>(
-                Encoding.UTF8.GetString(validationActorModel.InternalDataCache));
+            var jsonSerializationService = _parentLifeTimeScope.Resolve<IJsonSerializationService>();
+            var internalDataCache = jsonSerializationService.Deserialize<InternalDataCache>(Encoding.UTF8.GetString(validationActorModel.InternalDataCache));
+            var externalDataCache = jsonSerializationService.Deserialize<ExternalDataCache>(Encoding.UTF8.GetString(validationActorModel.ExternalDataCache));
+            var message = jsonSerializationService.Deserialize<Message>(new MemoryStream(validationActorModel.Message));
 
             var validationContext = new ValidationContext()
             {
-                Input = jsonSerializationService.Deserialize<Message>(
-                    new MemoryStream(validationActorModel.Message)),
-                InternalDataCache = internalDataCache
+                Input = message
             };
 
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c =>
             {
                 c.RegisterInstance(validationContext).As<IValidationContext>();
-                c.RegisterInstance(validationContext.InternalDataCache).As<IInternalDataCache>();
+                c.RegisterInstance(new Cache<IMessage>() { Item = message }).As<ICache<IMessage>>();
+                c.RegisterInstance(internalDataCache).As<IInternalDataCache>();
+                c.RegisterInstance(externalDataCache).As<IExternalDataCache>();
             }))
             {
                 var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();

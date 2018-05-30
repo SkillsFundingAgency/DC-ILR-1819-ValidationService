@@ -99,7 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
         private IEnumerable<IValidationError> RunValidation(string fileContent)
         {
-            var validationContext = new ValidationContextStub
+            var validationContext = new PreValidationContextStub
             {
                 Input = fileContent,
                 Output = null

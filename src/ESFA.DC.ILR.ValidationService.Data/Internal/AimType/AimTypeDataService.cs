@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using IInternalDataCache = ESFA.DC.ILR.ValidationService.Data.Interface.IInternalDataCache;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Internal.AimType
 {

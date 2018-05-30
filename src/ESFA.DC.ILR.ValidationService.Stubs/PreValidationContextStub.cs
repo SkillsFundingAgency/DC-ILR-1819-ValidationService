@@ -2,7 +2,7 @@
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class ValidationContextStub : IPreValidationContext
+    public class PreValidationContextStub : IPreValidationContext
     {
         public string Input { get; set; }
 

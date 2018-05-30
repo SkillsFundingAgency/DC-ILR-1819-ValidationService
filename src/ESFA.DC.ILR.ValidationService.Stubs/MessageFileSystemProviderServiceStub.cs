@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
         private IMessage _message;
 
-        public MessageFileSystemProviderServiceStub([KeyFilter("Xml")] ISerializationService serializationService, IPreValidationContext preValidationContext)
+        public MessageFileSystemProviderServiceStub(IXmlSerializationService serializationService, IPreValidationContext preValidationContext)
         {
             _serializationService = serializationService;
             _preValidationContext = preValidationContext;

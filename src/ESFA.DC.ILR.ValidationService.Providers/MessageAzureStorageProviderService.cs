@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private IMessage _message;
 
         public MessageAzureStorageProviderService(
-            [KeyFilter("Xml")]ISerializationService serializationService,
+            IXmlSerializationService serializationService,
             IPreValidationContext prePreValidationContext,
             AzureStorageModel azureStorageModel,
             ILogger logger)
