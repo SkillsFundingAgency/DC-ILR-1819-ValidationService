@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Actor
             builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();
             builder.RegisterType<ValidationErrorHandler>().As<IValidationErrorHandler>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationOutputServiceStub>().As<IValidationOutputService<IValidationError>>().InstancePerLifetimeScope();
-            builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache>().InstancePerLifetimeScope();
+            builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache<IValidationError>>().InstancePerLifetimeScope();
 
             base.Load(builder);
         }

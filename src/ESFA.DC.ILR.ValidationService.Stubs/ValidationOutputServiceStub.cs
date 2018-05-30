@@ -14,18 +14,18 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 {
     public class ValidationOutputServiceStub : IValidationOutputService<IValidationError>
     {
-        private readonly IValidationErrorCache _validationErrorCache;
+        private readonly IValidationErrorCache<IValidationError> _validationErrorCache;
         private readonly ICache<IMessage> _messageCache;
         private readonly IKeyValuePersistenceService _keyValuePersistenceService;
         private readonly IPreValidationContext _validationContext;
-        private readonly ISerializationService _serializationService;
+        private readonly IJsonSerializationService _serializationService;
 
         public ValidationOutputServiceStub(
-            IValidationErrorCache validationErrorCache,
+            IValidationErrorCache<IValidationError> validationErrorCache,
             ICache<IMessage> messageCache,
             IKeyValuePersistenceService keyValuePersistenceService,
             IPreValidationContext validationContext,
-            ISerializationService serializationService)
+            IJsonSerializationService serializationService)
         {
             _validationErrorCache = validationErrorCache;
             _messageCache = messageCache;

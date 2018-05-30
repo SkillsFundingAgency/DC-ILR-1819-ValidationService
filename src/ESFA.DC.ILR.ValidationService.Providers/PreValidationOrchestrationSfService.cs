@@ -24,6 +24,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly ISerializationService _jsonSerializationService;
         private readonly IInternalDataCache _internalDataCache;
         private readonly IExternalDataCache _externalDataCache;
+        private readonly IValidationErrorCache<U> _validationErrorCache;
+        private readonly IValidationOutputService<U> _validationOutputService;
 
         public PreValidationOrchestrationSfService(
             IPreValidationPopulationService preValidationPopulationService,
@@ -31,7 +33,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             ILearnerPerActorService<T, IEnumerable<ILearner>> learnerPerActorService,
             IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
-            IExternalDataCache externalDataCache)
+            IExternalDataCache externalDataCache,
+            IValidationErrorCache<U> validationErrorCache,
+            IValidationOutputService<U> validationOutputService)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _learnerPerActorService = learnerPerActorService;
@@ -39,6 +43,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _jsonSerializationService = jsonSerializationService;
             _internalDataCache = internalDataCache;
             _externalDataCache = externalDataCache;
+            _validationErrorCache = validationErrorCache;
+            _validationOutputService = validationOutputService;
         }
 
         public IEnumerable<U> Execute(IPreValidationContext validationContext)
@@ -84,13 +90,18 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             }
 
             Task.WaitAll(actorTasks.ToArray());
-            var results = new List<U>();
+
             foreach (var actorTask in actorTasks)
             {
-                results.AddRange(_jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result));
+                var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
+
+                foreach (var error in errors)
+                {
+                    _validationErrorCache.Add(error);
+                }
             }
 
-            return results;
+            return _validationOutputService.Process();
         }
 
         private IValidationActor GetValidationActor()

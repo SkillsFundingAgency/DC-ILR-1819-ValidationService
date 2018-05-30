@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<XmlSerializationService>().As<ISerializationService>();
             builder.RegisterType<LearnerProviderServiceStub>().As<IValidationItemProviderService<IEnumerable<ILearner>>>();
             builder.RegisterType<ValidationErrorHandler>().As<IValidationErrorHandler>();
-            builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache>().InstancePerLifetimeScope();
+            builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache<IValidationError>>().InstancePerLifetimeScope();
         }
     }
 }

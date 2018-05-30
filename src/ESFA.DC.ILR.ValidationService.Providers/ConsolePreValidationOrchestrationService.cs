@@ -27,15 +27,18 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IPreValidationPopulationService _preValidationPopulationService;
         private readonly ICache<IMessage> _messageCache;
         private readonly IRuleSetOrchestrationService<T, U> _ruleSetOrchestrationService;
+        private readonly IValidationOutputService<U> _validationOutputService;
 
         public ConsolePreValidationOrchestrationService(
             IPreValidationPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
-            IRuleSetOrchestrationService<T, U> ruleSetOrchestrationService)
+            IRuleSetOrchestrationService<T, U> ruleSetOrchestrationService,
+            IValidationOutputService<U> validationOutputService)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _messageCache = messageCache;
             _ruleSetOrchestrationService = ruleSetOrchestrationService;
+            _validationOutputService = validationOutputService;
         }
 
         public IEnumerable<U> Execute(IPreValidationContext preValidationContext)
@@ -51,7 +54,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 Input = ilrMessage
             };
 
-            return _ruleSetOrchestrationService.Execute(validationContext);
+            _ruleSetOrchestrationService.Execute(validationContext);
+
+            return _validationOutputService.Process();
         }
     }
 }

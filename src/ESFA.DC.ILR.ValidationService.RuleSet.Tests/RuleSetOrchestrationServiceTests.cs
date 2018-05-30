@@ -27,10 +27,10 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var output = new List<int>() { 1, 2, 3 };
 
-            var validationOutputService = new Mock<IValidationOutputService<int>>();
-            validationOutputService.Setup(os => os.Process()).Returns(output);
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<int>>();
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(output);
 
-            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, preValidationPopulationServiceMock.Object, validationOutputService: validationOutputService.Object);
+            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, preValidationPopulationServiceMock.Object, validationErrorCache: validationErrorCacheMock.Object);
 
             service.Execute(validationContextMock.Object).Should().BeSameAs(output);
         }
@@ -61,10 +61,10 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var output = new List<int>() { 1, 2, 3 };
 
-            var validationOutputService = new Mock<IValidationOutputService<int>>();
-            validationOutputService.Setup(os => os.Process()).Returns(output);
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<int>>();
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(output);
 
-            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, preValidationPopulationServiceMock.Object, ruleSetExecutionServiceMock.Object, validationOutputService.Object);
+            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, preValidationPopulationServiceMock.Object, ruleSetExecutionServiceMock.Object, validationErrorCacheMock.Object);
 
             service.Execute(validationContextMock.Object).Should().BeSameAs(output);
 
@@ -76,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService = null,
             IPreValidationPopulationService<IValidationContext> preValidationPopulationService = null,
             IRuleSetExecutionService<T> ruleSetExecutionService = null,
-            IValidationOutputService<U> validationOutputService = null)
+            IValidationErrorCache<U> validationErrorCache = null)
             where T : class
         {
             return new RuleSetOrchestrationService<T, U>(
@@ -84,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
                 validationItemProviderService,
                 preValidationPopulationService,
                 ruleSetExecutionService,
-                validationOutputService);
+                validationErrorCache);
         }
     }
 }
