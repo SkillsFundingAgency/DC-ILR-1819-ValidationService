@@ -17,6 +17,9 @@ using ESFA.DC.ILR.ValidationService.Stateless.Configuration;
 using ESFA.DC.ILR.ValidationService.Stateless.Handlers;
 using ESFA.DC.ILR.ValidationService.Stateless.Mapper;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.IO.AzureCosmos;
+using ESFA.DC.IO.AzureCosmos.Config.Interfaces;
+using ESFA.DC.IO.Interfaces;
 using ESFA.DC.JobContext;
 using ESFA.DC.Logging.Config;
 using ESFA.DC.Logging.Config.Interfaces;
@@ -89,6 +92,15 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 configHelper.GetSectionValues<LoggerOptions>("LoggerSection");
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
+
+            // register Cosmos config
+            var azureCosmosOptions = configHelper.GetSectionValues<AzureCosmosOptions>("AzureCosmosSection");
+            containerBuilder.Register(c => new AzureCosmosKeyValuePersistenceConfig(
+                    azureCosmosOptions.CosmosEndpointUrl,
+                    azureCosmosOptions.CosmosAuthKeyOrResourceToken))
+                .As<IAzureCosmosKeyValuePersistenceServiceConfig>().SingleInstance();
+            containerBuilder.RegisterType<AzureCosmosKeyValuePersistenceService>().As<IKeyValuePersistenceService>()
+                .InstancePerLifetimeScope();
 
             // register reference data configs
             var referenceDataOptions =

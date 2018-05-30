@@ -59,6 +59,12 @@
     <Reference Include="DC-JobContextManager.Interface, Version=0.1.1.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\DC-JobContextManager.Interface.0.1.1-beta0001\lib\netstandard2.0\DC-JobContextManager.Interface.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.Auditing, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Auditing.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.Auditing.dll</HintPath>
     </Reference>
@@ -226,6 +232,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
