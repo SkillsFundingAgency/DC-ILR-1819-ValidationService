@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Autofac.Features.AttributeFilters;
-using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
@@ -16,7 +12,6 @@ using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
 using ESFA.DC.Serialization.Interfaces;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Client;
-using Newtonsoft.Json;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
