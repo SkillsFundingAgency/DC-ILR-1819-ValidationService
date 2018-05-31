@@ -71,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Listeners
 
         async Task ProcessMessagesAsync(Message message, CancellationToken token)
         {
-            _logger.LogInfo($"Received message: SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
+            _logger.LogDebug($"Received message: SequenceNumber:{message.SystemProperties.SequenceNumber} Body:{Encoding.UTF8.GetString(message.Body)}");
 
             // Process the message.
             // call handler

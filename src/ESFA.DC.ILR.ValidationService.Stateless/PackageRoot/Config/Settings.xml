@@ -29,6 +29,7 @@
     <Parameter Name="LARSConnectionString" Value="" />
     <Parameter Name="PostcodesConnectionString" Value="" />
     <Parameter Name="ULNConnectionstring" Value="" />
+    <Parameter Name="ValidationErrorsConnectionString" Value="" />
   </Section>
 
 

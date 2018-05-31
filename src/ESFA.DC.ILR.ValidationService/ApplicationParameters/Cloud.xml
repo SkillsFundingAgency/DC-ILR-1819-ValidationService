@@ -15,5 +15,6 @@
     <Parameter Name="ULNConnectionstring" Value="__ULNConnectionstring__" />
     <Parameter Name="CosmosEndpointUrl" Value="__CosmosEndpointUrl__" />
     <Parameter Name="CosmosAuthKeyOrResourceToken" Value="__CosmosAuthKeyOrResourceToken__" />
+    <Parameter Name="ValidationErrorsConnectionString" Value="__ValidationErrorsConnectionString__" />
   </Parameters>
 </Application>

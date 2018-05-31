@@ -1,27 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ESFA.DC.ILR.Model;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class LearnerPerActorServiceStub<T> : ILearnerPerActorService<T, IEnumerable<T>>
-        where T : class
+    public class LearnerPerActorServiceStub : ILearnerPerActorService
     {
-        private readonly IValidationItemProviderService<IEnumerable<T>> _validationItemProviderService;
+        private readonly ICache<IMessage> _messageCache;
 
-        public LearnerPerActorServiceStub(IValidationItemProviderService<IEnumerable<T>> validationItemProviderService)
+        public LearnerPerActorServiceStub(ICache<IMessage> messageCache)
         {
-            _validationItemProviderService = validationItemProviderService;
+            _messageCache = messageCache;
         }
 
-        public IEnumerable<IEnumerable<T>> Process()
+        public IEnumerable<IMessage> Process()
         {
-            var learners = _validationItemProviderService.Provide().ToList();
+            var learners = _messageCache.Item.Learners.ToList();
 
             var learnersPerActors = CalculateLearnersPerActor(learners.Count);
 
-            return SplitList(learners, learnersPerActors);
+            var learnerShards = SplitList(learners, learnersPerActors);
+
+            // create IMessage shards with learners
+            var messageShards = new List<IMessage>();
+            foreach (var learnerShard in learnerShards)
+            {
+                var message = new Message();
+                message = _messageCache.Item as Message;
+                message.Learner = learnerShard.Cast<MessageLearner>().ToArray();
+                messageShards.Add(message);
+            }
+
+            return messageShards;
         }
 
         private int CalculateLearnersPerActor(int totalMessagesCount)
@@ -49,7 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             return 10000;
         }
 
-        private IEnumerable<IEnumerable<T>> SplitList(IEnumerable<T> learners, int nSize = 30)
+        private IEnumerable<IEnumerable<ILearner>> SplitList(IEnumerable<ILearner> learners, int nSize = 30)
         {
             var learnerList = learners.ToList();
 

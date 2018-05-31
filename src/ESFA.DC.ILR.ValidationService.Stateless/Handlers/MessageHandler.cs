@@ -1,4 +1,5 @@
 ﻿using System.Fabric;
+using ESFA.DC.KeyGenerator.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 {
@@ -26,11 +27,44 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 
         public Task<bool> Handle(JobContextMessage jobContextMessage, CancellationToken cancellationToken)
         {
+            var keyGenerator = _parentLifeTimeScope.Resolve<IKeyGenerator>();
+            var ukprn = Convert.ToInt64(jobContextMessage.KeyValuePairs[JobContextMessageKey.UkPrn]);
+
             var validationContext = new PreValidationContext()
             {
                 JobId = jobContextMessage.JobId.ToString(),
-                Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString()
+                Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
+                InvalidLearnRefNumbersKey = keyGenerator.GenerateKey(
+                    ukprn,
+                    jobContextMessage.JobId,
+                    TaskKeys.ValidationInvalidLearners,
+                    "_"),
+                ValidLearnRefNumbersKey = keyGenerator.GenerateKey(
+                    ukprn,
+                    jobContextMessage.JobId,
+                    TaskKeys.ValidationValidLearners,
+                    "_"),
+                ValidationErrorsKey = keyGenerator.GenerateKey(
+                    ukprn,
+                    jobContextMessage.JobId,
+                    TaskKeys.ValidationErrors,
+                    "_"),
+                ValidationErrorMessageLookupKey = keyGenerator.GenerateKey(
+                    ukprn,
+                    jobContextMessage.JobId,
+                    TaskKeys.ValidationErrorsLookup,
+                    "_")
             };
+
+            // populate the keys into jobcontextmessage
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers] =
+                validationContext.InvalidLearnRefNumbersKey;
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers] =
+                validationContext.ValidLearnRefNumbersKey;
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] =
+                validationContext.ValidationErrorMessageLookupKey;
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors] =
+                validationContext.ValidationErrorsKey;
 
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c => c.RegisterInstance(validationContext).As<IPreValidationContext>()))
             {
@@ -44,16 +78,15 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     azureStorageModel.AzureContainerReference =
                         jobContextMessage.KeyValuePairs[JobContextMessageKey.Container].ToString();
 
-                    logger.LogInfo("inside processmessage validate");
+                    logger.LogDebug("inside processmessage validate");
 
                     var preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
 
+                    // TODO: no need to return errors
                     var errors = preValidationOrchestrationService.Execute(validationContext);
 
-                    // TODO: do something with the errors
-
-                    logger.LogInfo("Job complete");
+                    logger.LogDebug("Job complete");
                     ServiceEventSource.Current.ServiceMessage(_context, "Job complete");
                     return Task.FromResult(true);
                 }

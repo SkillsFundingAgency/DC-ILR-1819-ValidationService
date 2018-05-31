@@ -36,6 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         {
             if (_message == null)
             {
+                 // TODO: replace the below logic with IO nuget
                 // get message from azure storage
                 var startDateTime = DateTime.UtcNow;
 
@@ -78,7 +79,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 processTimes.AppendLine($"Deserialize ms : {deserializedElapsed}");
                 processTimes.AppendLine($"Total Time : {(DateTime.UtcNow - startDateTime).TotalMilliseconds}");
 
-                _logger.LogInfo($"Blob download :{processTimes} ");
+                _logger.LogDebug($"Blob download :{processTimes} ");
             }
 
             return _message;

@@ -75,15 +75,15 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                 var logger = childLifeTimeScope.Resolve<ILogger>();
                 try
                 {
-                    logger.LogInfo("Actor started processing");
+                    logger.LogDebug("Actor started processing");
                     var preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
                     var errors = preValidationOrchestrationService.Execute(validationContext);
-                    logger.LogInfo("actor validation done");
+                    logger.LogDebug("actor validation done");
 
                     var errorString = jsonSerializationService.Serialize(errors);
-                    logger.LogInfo("Actor completed job");
+                    logger.LogDebug("Actor completed job");
                     return Task.Run(() => errorString);
                 }
                 catch (Exception ex)

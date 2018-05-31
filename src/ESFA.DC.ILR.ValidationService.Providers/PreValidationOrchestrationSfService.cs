@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Fabric;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
+using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Client;
@@ -19,23 +24,25 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         where T : class
     {
         private readonly IPreValidationPopulationService _preValidationPopulationService;
-        private readonly ILearnerPerActorService<T, IEnumerable<ILearner>> _learnerPerActorService;
+        private readonly ILearnerPerActorService _learnerPerActorService;
         private readonly ICache<IMessage> _messageCache;
         private readonly ISerializationService _jsonSerializationService;
         private readonly IInternalDataCache _internalDataCache;
         private readonly IExternalDataCache _externalDataCache;
         private readonly IValidationErrorCache<U> _validationErrorCache;
         private readonly IValidationOutputService<U> _validationOutputService;
+        private readonly ILogger _logger;
 
         public PreValidationOrchestrationSfService(
             IPreValidationPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
-            ILearnerPerActorService<T, IEnumerable<ILearner>> learnerPerActorService,
+            ILearnerPerActorService learnerPerActorService,
             IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
             IValidationErrorCache<U> validationErrorCache,
-            IValidationOutputService<U> validationOutputService)
+            IValidationOutputService<U> validationOutputService,
+            ILogger logger)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _learnerPerActorService = learnerPerActorService;
@@ -45,29 +52,33 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _externalDataCache = externalDataCache;
             _validationErrorCache = validationErrorCache;
             _validationOutputService = validationOutputService;
+            _logger = logger;
         }
 
         public IEnumerable<U> Execute(IPreValidationContext validationContext)
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             // get ILR data from file
             _preValidationPopulationService.Populate();
+            _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
 
             // get the learners
             var ilrMessage = _messageCache.Item;
 
             // Get L/A and split the learners into separate lists
-            var learnerShards = _learnerPerActorService.Process();
+            var messageShards = _learnerPerActorService.Process();
 
             var actorTasks = new List<Task<string>>();
 
-            foreach (var learnerShard in learnerShards)
+            foreach (var messageShard in messageShards)
             {
                 // create actors for each Shard.
                 var actor = GetValidationActor();
 
                 // TODO:get reference data per each shard and send it to Actors
-                var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(ilrMessage));
-                var learnersShardAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(learnerShard));
+                var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
                 var internalDataCache = _internalDataCache;
                 var internalDataCacheString = _jsonSerializationService.Serialize(internalDataCache);
                 var externalDataCache = _externalDataCache;
@@ -80,7 +91,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 {
                     JobId = validationContext.JobId,
                     Message = ilrMessageAsBytes,
-                    ShreddedLearners = learnersShardAsBytes,
                     InternalDataCache = internalDataCacheAsBytes,
                     ExternalDataCache = externalDataCacheAsBytes,
                 };
@@ -90,6 +100,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             }
 
             Task.WaitAll(actorTasks.ToArray());
+
+            _logger.LogDebug("all Actors completed");
 
             foreach (var actorTask in actorTasks)
             {
@@ -101,7 +113,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 }
             }
 
-            return _validationOutputService.Process();
+            _logger.LogDebug("Actors results collated");
+            _validationOutputService.Process();
+            _logger.LogDebug("Final results persisted");
+
+            return null;
         }
 
         private IValidationActor GetValidationActor()
