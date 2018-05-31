@@ -1,17 +1,10 @@
-﻿using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Autofac.Core;
-using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.RuleSet;
-using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.Stubs;
-using ESFA.DC.Serialization.Interfaces;
-using ESFA.DC.Serialization.Xml;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
 {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ESFA.DC.IO.AzureCosmos.Config.Interfaces;
+﻿using ESFA.DC.IO.AzureCosmos.Config.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless.Models
 {

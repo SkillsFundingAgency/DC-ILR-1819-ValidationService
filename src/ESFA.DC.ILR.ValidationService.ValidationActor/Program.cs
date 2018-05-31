@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Fabric;
 using System.Threading;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Integration.ServiceFabric;
 using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Modules.Actor;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.ServiceFabric.Helpers;
-using Microsoft.ServiceFabric.Actors.Runtime;
 
 namespace ESFA.DC.ILR.ValidationService.ValidationActor
 {

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -21,17 +19,12 @@ using ESFA.DC.IO.AzureCosmos;
 using ESFA.DC.IO.AzureCosmos.Config.Interfaces;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.JobContext;
-using ESFA.DC.Logging.Config;
-using ESFA.DC.Logging.Config.Interfaces;
-using ESFA.DC.Logging.Enums;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
 using ESFA.DC.Queueing;
 using ESFA.DC.Queueing.Interface;
 using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.ServiceFabric.Helpers;
-using Microsoft.Azure.ServiceBus;
-using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless
 {

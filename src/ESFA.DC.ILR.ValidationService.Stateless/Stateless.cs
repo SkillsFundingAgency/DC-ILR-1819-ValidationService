@@ -1,32 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Fabric;
-using System.Fabric.Management.ServiceModel;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Autofac;
-using Castle.Components.DictionaryAdapter.Xml;
-using DC.JobContextManager;
 using DC.JobContextManager.Interface;
-using ESFA.DC.Auditing.Interface;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Stateless.Handlers;
-using ESFA.DC.ILR.ValidationService.Stateless.Listeners;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
-using ESFA.DC.JobContext;
-using ESFA.DC.JobContext.Interface;
-using ESFA.DC.Logging;
 using ESFA.DC.Logging.Interfaces;
-using ESFA.DC.Mapping.Interface;
-using ESFA.DC.Queueing.Interface;
-using ESFA.DC.Serialization.Interfaces;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using Newtonsoft.Json;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless
 {

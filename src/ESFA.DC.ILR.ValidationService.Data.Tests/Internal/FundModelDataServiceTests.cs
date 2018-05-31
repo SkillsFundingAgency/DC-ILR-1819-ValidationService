@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel;
-using ESFA.DC.ILR.ValidationService.Interface;
 using FluentAssertions;
 using Moq;
 using Xunit;
