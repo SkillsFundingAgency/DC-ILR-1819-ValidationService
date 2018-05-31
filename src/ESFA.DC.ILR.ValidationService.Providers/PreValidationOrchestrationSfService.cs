@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -19,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         where T : class
     {
         private readonly IPreValidationPopulationService _preValidationPopulationService;
-        private readonly ILearnerPerActorService<T, IEnumerable<ILearner>> _learnerPerActorService;
+        private readonly ILearnerPerActorService _learnerPerActorService;
         private readonly ICache<IMessage> _messageCache;
         private readonly ISerializationService _jsonSerializationService;
         private readonly IInternalDataCache _internalDataCache;
@@ -30,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         public PreValidationOrchestrationSfService(
             IPreValidationPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
-            ILearnerPerActorService<T, IEnumerable<ILearner>> learnerPerActorService,
+            ILearnerPerActorService learnerPerActorService,
             IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
@@ -56,18 +59,17 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             var ilrMessage = _messageCache.Item;
 
             // Get L/A and split the learners into separate lists
-            var learnerShards = _learnerPerActorService.Process();
+            var messageShards = _learnerPerActorService.Process();
 
             var actorTasks = new List<Task<string>>();
 
-            foreach (var learnerShard in learnerShards)
+            foreach (var messageShard in messageShards)
             {
                 // create actors for each Shard.
                 var actor = GetValidationActor();
 
                 // TODO:get reference data per each shard and send it to Actors
-                var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(ilrMessage));
-                var learnersShardAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(learnerShard));
+                var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
                 var internalDataCache = _internalDataCache;
                 var internalDataCacheString = _jsonSerializationService.Serialize(internalDataCache);
                 var externalDataCache = _externalDataCache;
@@ -80,7 +82,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 {
                     JobId = validationContext.JobId,
                     Message = ilrMessageAsBytes,
-                    ShreddedLearners = learnersShardAsBytes,
                     InternalDataCache = internalDataCacheAsBytes,
                     ExternalDataCache = externalDataCacheAsBytes,
                 };

@@ -6,8 +6,6 @@
 
         public byte[] Message { get; set; }
 
-        public byte[] ShreddedLearners { get; set; }
-
         public byte[] InternalDataCache { get; set; }
 
         public byte[] ExternalDataCache { get; set; }

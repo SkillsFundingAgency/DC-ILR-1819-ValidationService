@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
+using Newtonsoft.Json;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model
 {
     public struct ValidationError : IValidationError
     {
-        public ValidationError(string ruleName, string learnerRefernenceNumber, long? aimSequenceNumber = null, Severity? severity = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
+        [JsonConstructor]
+        public ValidationError(string ruleName, string learnerReferenceNumber, long? aimSequenceNumber = null, Severity? severity = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
         {
-            LearnerReferenceNumber = learnerRefernenceNumber;
+            LearnerReferenceNumber = learnerReferenceNumber;
             AimSequenceNumber = aimSequenceNumber;
             RuleName = ruleName;
             Severity = severity;

@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.PreValidation
         {
             builder.RegisterType<PreValidationOrchestrationSfService<ILearner, IValidationError>>().As<IPreValidationOrchestrationService<ILearner, IValidationError>>().WithAttributeFiltering().InstancePerLifetimeScope();
             builder.RegisterType<MessageAzureStorageProviderService>().As<IValidationItemProviderService<IMessage>>().WithAttributeFiltering().InstancePerLifetimeScope();
-            builder.RegisterType<LearnerPerActorServiceStub<ILearner>>().As<ILearnerPerActorService<ILearner, IEnumerable<ILearner>>>().InstancePerLifetimeScope();
+            builder.RegisterType<LearnerPerActorServiceStub>().As<ILearnerPerActorService>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationOutputServiceStub>().As<IValidationOutputService<IValidationError>>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache<IValidationError>>().InstancePerLifetimeScope();
 

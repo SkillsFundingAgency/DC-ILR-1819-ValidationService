@@ -21,6 +21,7 @@ using ESFA.DC.IO.AzureCosmos;
 using ESFA.DC.IO.AzureCosmos.Config.Interfaces;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.JobContext;
+using ESFA.DC.KeyGenerator.Interface;
 using ESFA.DC.Logging.Config;
 using ESFA.DC.Logging.Config.Interfaces;
 using ESFA.DC.Logging.Enums;
@@ -162,6 +163,9 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 c.Resolve<IMessageHandler>().Handle);
 
             containerBuilder.RegisterType<JobContextManager<JobContextMessage>>().As<IJobContextManager>();
+
+            // register key generator
+            containerBuilder.RegisterType<KeyGenerator.KeyGenerator>().As<IKeyGenerator>().SingleInstance();
 
             return containerBuilder;
         }
