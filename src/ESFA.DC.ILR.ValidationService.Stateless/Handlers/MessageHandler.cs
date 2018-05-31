@@ -78,7 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     azureStorageModel.AzureContainerReference =
                         jobContextMessage.KeyValuePairs[JobContextMessageKey.Container].ToString();
 
-                    logger.LogInfo("inside processmessage validate");
+                    logger.LogDebug("inside processmessage validate");
 
                     var preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     // TODO: no need to return errors
                     var errors = preValidationOrchestrationService.Execute(validationContext);
 
-                    logger.LogInfo("Job complete");
+                    logger.LogDebug("Job complete");
                     ServiceEventSource.Current.ServiceMessage(_context, "Job complete");
                     return Task.FromResult(true);
                 }

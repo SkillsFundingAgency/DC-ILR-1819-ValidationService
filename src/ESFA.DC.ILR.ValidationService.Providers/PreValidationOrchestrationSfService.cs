@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Fabric;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
+using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Client;
@@ -29,6 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IExternalDataCache _externalDataCache;
         private readonly IValidationErrorCache<U> _validationErrorCache;
         private readonly IValidationOutputService<U> _validationOutputService;
+        private readonly ILogger _logger;
 
         public PreValidationOrchestrationSfService(
             IPreValidationPopulationService preValidationPopulationService,
@@ -38,7 +41,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
             IValidationErrorCache<U> validationErrorCache,
-            IValidationOutputService<U> validationOutputService)
+            IValidationOutputService<U> validationOutputService,
+            ILogger logger)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _learnerPerActorService = learnerPerActorService;
@@ -48,12 +52,17 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _externalDataCache = externalDataCache;
             _validationErrorCache = validationErrorCache;
             _validationOutputService = validationOutputService;
+            _logger = logger;
         }
 
         public IEnumerable<U> Execute(IPreValidationContext validationContext)
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             // get ILR data from file
             _preValidationPopulationService.Populate();
+            _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
 
             // get the learners
             var ilrMessage = _messageCache.Item;
@@ -92,6 +101,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             Task.WaitAll(actorTasks.ToArray());
 
+            _logger.LogDebug("all Actors completed");
+
             foreach (var actorTask in actorTasks)
             {
                 var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
@@ -102,7 +113,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 }
             }
 
-            return _validationOutputService.Process();
+            _logger.LogDebug("Actors results collated");
+            _validationOutputService.Process();
+            _logger.LogDebug("Final results persisted");
+
+            return null;
         }
 
         private IValidationActor GetValidationActor()

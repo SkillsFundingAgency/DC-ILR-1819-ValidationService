@@ -79,7 +79,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 processTimes.AppendLine($"Deserialize ms : {deserializedElapsed}");
                 processTimes.AppendLine($"Total Time : {(DateTime.UtcNow - startDateTime).TotalMilliseconds}");
 
-                _logger.LogInfo($"Blob download :{processTimes} ");
+                _logger.LogDebug($"Blob download :{processTimes} ");
             }
 
             return _message;
