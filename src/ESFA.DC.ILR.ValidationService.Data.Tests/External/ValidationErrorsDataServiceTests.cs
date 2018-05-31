@@ -48,6 +48,29 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             NewService(referenceDataCacheMock.Object).SeverityForRuleName("rulename").Should().BeNull();
         }
 
+        [Fact]
+        public void MessageForRuleName_Missing()
+        {
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
+
+            referenceDataCacheMock.SetupGet(rdc => rdc.ValidationErrors).Returns(new Dictionary<string, ValidationError>());
+
+            NewService(referenceDataCacheMock.Object).MessageforRuleName("rulename").Should().BeNull();
+        }
+
+        [Fact]
+        public void MessageForRuleName()
+        {
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
+
+            referenceDataCacheMock.SetupGet(rdc => rdc.ValidationErrors).Returns(new Dictionary<string, ValidationError>
+            {
+                { "rulename", new ValidationError() { RuleName = "rulename", Message = "message" } }
+            });
+
+            NewService(referenceDataCacheMock.Object).MessageforRuleName("rulename").Should().Be("message");
+        }
+
         private ValidationErrorsDataService NewService(IExternalDataCache externalDataCache = null)
         {
             return new ValidationErrorsDataService(externalDataCache);

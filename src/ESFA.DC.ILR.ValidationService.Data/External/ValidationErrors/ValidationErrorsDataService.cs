@@ -14,6 +14,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors
             _externalDataCache = externalDataCache;
         }
 
+        public string MessageforRuleName(string ruleName)
+        {
+            _externalDataCache.ValidationErrors.TryGetValue(ruleName, out var error);
+
+            return error?.Message;
+        }
+
         public Severity? SeverityForRuleName(string ruleName)
         {
             _externalDataCache.ValidationErrors.TryGetValue(ruleName, out var error);

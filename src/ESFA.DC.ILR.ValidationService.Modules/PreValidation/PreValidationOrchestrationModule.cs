@@ -4,6 +4,7 @@ using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers;
+using ESFA.DC.ILR.ValidationService.Providers.Output;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.Stubs;
 
@@ -16,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.PreValidation
             builder.RegisterType<PreValidationOrchestrationSfService<ILearner, IValidationError>>().As<IPreValidationOrchestrationService<ILearner, IValidationError>>().WithAttributeFiltering().InstancePerLifetimeScope();
             builder.RegisterType<MessageAzureStorageProviderService>().As<IValidationItemProviderService<IMessage>>().WithAttributeFiltering().InstancePerLifetimeScope();
             builder.RegisterType<LearnerPerActorServiceStub<ILearner>>().As<ILearnerPerActorService<ILearner, IEnumerable<ILearner>>>().InstancePerLifetimeScope();
-            builder.RegisterType<ValidationOutputServiceStub>().As<IValidationOutputService<IValidationError>>().InstancePerLifetimeScope();
+            builder.RegisterType<ValidationOutputService>().As<IValidationOutputService<IValidationError>>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache<IValidationError>>().InstancePerLifetimeScope();
 
             base.Load(builder);
