@@ -2,6 +2,7 @@
 using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Providers.Output;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.Stubs;
@@ -15,9 +16,9 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<MessageStringProviderService>().As<IValidationItemProviderService<IMessage>>();
-            builder.RegisterType<ValidationErrorHandlerOutputService>().As<IValidationOutputService<IValidationError>>();
+            builder.RegisterType<ValidationErrorCachePassThroughOutputService>().As<IValidationOutputService<IValidationError>>();
             builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>().As<IRuleSetOrchestrationService<ILearner, IValidationError>>();
-            builder.RegisterType<AutoFacRuleSetResolutionServiceStub<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
+            builder.RegisterType<AutoFacRuleSetResolutionService<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
             builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();
             builder.RegisterType<XmlSerializationService>().As<ISerializationService>();
             builder.RegisterType<LearnerProviderServiceStub>().As<IValidationItemProviderService<IEnumerable<ILearner>>>();

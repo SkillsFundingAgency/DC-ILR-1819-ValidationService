@@ -1,14 +1,14 @@
 ﻿using System.Collections.Concurrent;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
+using ESFA.DC.ILR.ValidationService.Providers.Output;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
+namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 {
-    public class ValidationErrorHandlerOutputServiceTests
+    public class ValidationErrorCachePassThroughOutputServiceTests
     {
         [Fact]
         public void Process_Empty()
@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
 
         private IValidationOutputService<IValidationError> NewService(IValidationErrorCache<IValidationError> validationErrorCache = null)
         {
-            return new ValidationErrorHandlerOutputService(validationErrorCache);
+            return new ValidationErrorCachePassThroughOutputService(validationErrorCache);
         }
     }
 }

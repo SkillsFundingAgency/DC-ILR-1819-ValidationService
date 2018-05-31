@@ -30,13 +30,11 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
             XElement lookups;
 
-            CloudStorageAccount cloudStorageAccount =
-                CloudStorageAccount.Parse(_azureStorageModel.AzureBlobConnectionString);
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_azureStorageModel.AzureBlobConnectionString);
 
             CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
 
-            CloudBlobContainer cloudBlobContainer =
-                cloudBlobClient.GetContainerReference(_azureStorageModel.AzureContainerReference);
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_azureStorageModel.AzureContainerReference);
 
             CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference("Lookups.xml");
 

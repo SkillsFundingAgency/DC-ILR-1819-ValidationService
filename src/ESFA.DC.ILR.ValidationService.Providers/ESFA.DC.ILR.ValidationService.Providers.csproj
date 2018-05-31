@@ -58,6 +58,9 @@
     <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.3-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.IO.Interfaces, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.IO.Interfaces.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.IO.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.Logging, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Logging.0.1.1-beta0001\lib\netstandard2.0\ESFA.DC.Logging.dll</HintPath>
     </Reference>
@@ -166,6 +169,8 @@
   <ItemGroup>
     <Compile Include="MessageAzureStorageProviderService.cs" />
     <Compile Include="ConsolePreValidationOrchestrationService.cs" />
+    <Compile Include="Output\ValidationErrorCachePassThroughOutputService.cs" />
+    <Compile Include="Output\ValidationOutputService.cs" />
     <Compile Include="PreValidationOrchestrationSfService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -188,6 +193,10 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513c4f05-55f4-4aef-b3eb-427c024da043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.IO.Model\ESFA.DC.ILR.ValidationService.IO.Model.csproj">
+      <Project>{3F170AA8-982A-453B-899D-DC9F54AAC8C1}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.IO.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Stateless.Models\ESFA.DC.ILR.ValidationService.Stateless.Models.csproj">
       <Project>{eb94fed6-6895-488d-822a-60254bd32fc7}</Project>

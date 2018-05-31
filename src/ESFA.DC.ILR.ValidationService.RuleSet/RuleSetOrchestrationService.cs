@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
                 _ruleSetExecutionService.Execute(ruleSet, validationItem);
             }
 
-            return _validationErrorCache.ValidationErrors as IEnumerable<U>;
+            return _validationErrorCache.ValidationErrors;
         }
     }
 }

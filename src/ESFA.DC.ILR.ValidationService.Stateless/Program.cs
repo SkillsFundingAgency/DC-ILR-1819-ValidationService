@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -31,8 +29,6 @@ using ESFA.DC.Queueing;
 using ESFA.DC.Queueing.Interface;
 using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.ServiceFabric.Helpers;
-using Microsoft.Azure.ServiceBus;
-using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless
 {

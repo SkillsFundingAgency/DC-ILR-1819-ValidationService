@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -10,28 +8,31 @@ using ESFA.DC.ILR.ValidationService.IO.Model;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 
-namespace ESFA.DC.ILR.ValidationService.Stubs
+namespace ESFA.DC.ILR.ValidationService.Providers.Output
 {
-    public class ValidationOutputServiceStub : IValidationOutputService<IValidationError>
+    public class ValidationOutputService : IValidationOutputService<IValidationError>
     {
         private readonly IValidationErrorCache<IValidationError> _validationErrorCache;
         private readonly ICache<IMessage> _messageCache;
         private readonly IKeyValuePersistenceService _keyValuePersistenceService;
         private readonly IPreValidationContext _validationContext;
         private readonly IJsonSerializationService _serializationService;
+        private readonly IValidationErrorsDataService _validationErrorsDataService;
 
-        public ValidationOutputServiceStub(
+        public ValidationOutputService(
             IValidationErrorCache<IValidationError> validationErrorCache,
             ICache<IMessage> messageCache,
             IKeyValuePersistenceService keyValuePersistenceService,
             IPreValidationContext validationContext,
-            IJsonSerializationService serializationService)
+            IJsonSerializationService serializationService,
+            IValidationErrorsDataService validationErrorsDataService)
         {
             _validationErrorCache = validationErrorCache;
             _messageCache = messageCache;
             _keyValuePersistenceService = keyValuePersistenceService;
             _validationContext = validationContext;
             _serializationService = serializationService;
+            _validationErrorsDataService = validationErrorsDataService;
         }
 
         public IEnumerable<IValidationError> Process()
@@ -63,18 +64,13 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
                 .Select(rn => new ValidationErrorMessageLookup()
                 {
                     RuleName = rn,
-                    Message = "Placeholder"
+                    Message = _validationErrorsDataService.MessageforRuleName(rn)
                 }).ToList();
 
             _keyValuePersistenceService.SaveAsync(_validationContext.ValidLearnRefNumbersKey, _serializationService.Serialize(validLearnerRefNumbers)).Wait();
             _keyValuePersistenceService.SaveAsync(_validationContext.InvalidLearnRefNumbersKey, _serializationService.Serialize(invalidLearnerRefNumbers)).Wait();
             _keyValuePersistenceService.SaveAsync(_validationContext.ValidationErrorsKey, _serializationService.Serialize(validationErrors)).Wait();
             _keyValuePersistenceService.SaveAsync(_validationContext.ValidationErrorMessageLookupKey, _serializationService.Serialize(validationErrorMessageLookups)).Wait();
-
-            var validStored = _keyValuePersistenceService.GetAsync(_validationContext.ValidLearnRefNumbersKey).Result;
-            var invalidStored = _keyValuePersistenceService.GetAsync(_validationContext.InvalidLearnRefNumbersKey).Result;
-            var validationErrorsStored = _keyValuePersistenceService.GetAsync(_validationContext.ValidationErrorsKey).Result;
-            var validationErrorMessagesStored = _keyValuePersistenceService.GetAsync(_validationContext.ValidationErrorMessageLookupKey).Result;
 
             return _validationErrorCache.ValidationErrors;
         }

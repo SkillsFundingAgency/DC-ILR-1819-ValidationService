@@ -134,8 +134,8 @@
     <Reference Include="Microsoft.Azure.ServiceBus, Version=3.0.1.0, Culture=neutral, PublicKeyToken=7e34167dcc6d6d8c, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.ServiceBus.3.0.1.16\lib\netstandard2.0\Microsoft.Azure.ServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.Services.AppAuthentication, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.Services.AppAuthentication.1.1.0-preview\lib\net452\Microsoft.Azure.Services.AppAuthentication.dll</HintPath>
+    <Reference Include="Microsoft.Azure.Services.AppAuthentication, Version=1.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.1\lib\net452\Microsoft.Azure.Services.AppAuthentication.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.19.6.14301, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -430,11 +430,13 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.ServiceFabric.Actors.3.1.274\build\net45\Microsoft.ServiceFabric.Actors.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.ServiceFabric.Actors.3.1.274\build\net45\Microsoft.ServiceFabric.Actors.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Azure.Services.AppAuthentication.1.1.0-preview\build\Microsoft.Azure.Services.AppAuthentication.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.Services.AppAuthentication.1.1.0-preview\build\Microsoft.Azure.Services.AppAuthentication.targets'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Azure.DocumentDB.1.22.0\build\Microsoft.Azure.DocumentDB.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.DocumentDB.1.22.0\build\Microsoft.Azure.DocumentDB.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.1\build\Microsoft.Azure.Services.AppAuthentication.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.1\build\Microsoft.Azure.Services.AppAuthentication.targets'))" />
+    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\NETStandard.Library.targets'))" />
   </Target>
-  <Import Project="..\packages\Microsoft.Azure.Services.AppAuthentication.1.1.0-preview\build\Microsoft.Azure.Services.AppAuthentication.targets" Condition="Exists('..\packages\Microsoft.Azure.Services.AppAuthentication.1.1.0-preview\build\Microsoft.Azure.Services.AppAuthentication.targets')" />
   <Import Project="..\packages\Microsoft.Azure.DocumentDB.1.22.0\build\Microsoft.Azure.DocumentDB.targets" Condition="Exists('..\packages\Microsoft.Azure.DocumentDB.1.22.0\build\Microsoft.Azure.DocumentDB.targets')" />
+  <Import Project="..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.1\build\Microsoft.Azure.Services.AppAuthentication.targets" Condition="Exists('..\packages\Microsoft.Azure.Services.AppAuthentication.1.0.1\build\Microsoft.Azure.Services.AppAuthentication.targets')" />
+  <Import Project="..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\NETStandard.Library.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

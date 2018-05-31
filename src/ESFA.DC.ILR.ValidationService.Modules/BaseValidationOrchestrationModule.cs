@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using Autofac;
-using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.RuleSet;
-using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.Stubs;
 using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.Serialization.Json;
