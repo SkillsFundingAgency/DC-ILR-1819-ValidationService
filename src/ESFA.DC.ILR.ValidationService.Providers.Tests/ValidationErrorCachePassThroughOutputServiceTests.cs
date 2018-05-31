@@ -1,13 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
+using ESFA.DC.ILR.ValidationService.Providers.Output;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
-using ESFA.DC.ILR.ValidationService.RuleSet.Output;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
+namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 {
     public class ValidationErrorCachePassThroughOutputServiceTests
     {
