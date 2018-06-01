@@ -1,18 +1,17 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population
 {
-    public class ActorPreValidationPopulationService : IPreValidationPopulationService<IValidationContext>
+    public class ActorCachePopulationService : IPopulationService
     {
         private readonly IFileDataCachePopulationService _fileDataCachePopulationService;
 
-        public ActorPreValidationPopulationService(IFileDataCachePopulationService fileDataCachePopulationService)
+        public ActorCachePopulationService(IFileDataCachePopulationService fileDataCachePopulationService)
         {
             _fileDataCachePopulationService = fileDataCachePopulationService;
         }
 
-        public void Populate(IValidationContext validationContext)
+        public void Populate()
         {
             _fileDataCachePopulationService.Populate();
         }

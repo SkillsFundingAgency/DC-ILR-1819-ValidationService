@@ -82,7 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActorPreValidationPopulationService.cs" />
+    <Compile Include="ActorCachePopulationService.cs" />
     <Compile Include="External\AbstractDataRetrievalService.cs" />
     <Compile Include="External\AbstractLARSDataRetrievalService.cs" />
     <Compile Include="External\ExternalDataCachePopulationService.cs" />
@@ -99,7 +99,6 @@
     <Compile Include="Interface\ILARSFrameworkDataRetrievalService.cs" />
     <Compile Include="Interface\ILARSLearningDeliveryDataRetrievalService.cs" />
     <Compile Include="Interface\IMessageCachePopulationService.cs" />
-    <Compile Include="Interface\IMessageCacheWithDataPopulationService.cs" />
     <Compile Include="Interface\IPopulationService.cs" />
     <Compile Include="Interface\IPostcodesDataRetrievalService.cs" />
     <Compile Include="Interface\IPreValidationPopulationService.cs" />

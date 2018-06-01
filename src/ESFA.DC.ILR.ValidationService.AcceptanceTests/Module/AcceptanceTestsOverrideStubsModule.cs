@@ -35,6 +35,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules
                     (pi, ctx) => ctx.ResolveKeyed<IExternalDataCache>(AcceptanceTestsOverrideStubsModule.AcceptanceTestsKey)))
                 .Keyed<IExternalDataCachePopulationService>(AcceptanceTestsKey)
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<InternalDataCachePopulationServiceStub>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
         }
     }
 }

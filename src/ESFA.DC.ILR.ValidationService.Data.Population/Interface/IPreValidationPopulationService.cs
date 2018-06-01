@@ -3,9 +3,4 @@
     public interface IPreValidationPopulationService : IPopulationService
     {
     }
-
-    public interface IPreValidationPopulationService<T> : IPopulationService<T>
-        where T : class
-    {
-    }
 }

@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Actor
 {
@@ -9,7 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Actor
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ActorPreValidationPopulationService>().As<IPreValidationPopulationService<IValidationContext>>().InstancePerLifetimeScope();
+            builder.RegisterType<ActorCachePopulationService>().As<IPopulationService>().InstancePerLifetimeScope();
 
             base.Load(builder);
         }

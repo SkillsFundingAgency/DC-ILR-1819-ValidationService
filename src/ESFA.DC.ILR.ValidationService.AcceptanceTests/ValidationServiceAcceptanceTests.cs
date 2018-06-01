@@ -1,10 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Autofac;
 using DCT.TestDataGenerator;
+using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Stubs;
+using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.Serialization.Xml;
 using FluentAssertions;
 using Xunit;
 
@@ -23,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         {
         }
 
-        [Theory(Skip = "Autofac needs Review")]
+        [Theory]
         [InlineData("FworkCode_05", false)]
         public void TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
         {
@@ -97,33 +103,37 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
             _unexpectedLearnersFound = new List<string>(count);
         }
 
-        private IEnumerable<IValidationError> RunValidation(string fileContent)
+        private IEnumerable<IValidationError> RunValidation(string messageString)
         {
-            var validationContext = new PreValidationContextStub
+            var serializationService = new XmlSerializationService();
+
+            var validationContext = new ValidationContext
             {
-                Input = fileContent,
-                Output = null
+                Input = serializationService.Deserialize<Message>(messageString)
+            };
+
+            var preValidationContext = new PreValidationContext()
+            {
+                Input = messageString
             };
 
             var container = BuildContainer();
 
-            IEnumerable<IValidationError> result = null;
-
-            using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, validationContext)))
+            using (var scope = container.BeginLifetimeScope(c =>
             {
-                var ruleSetOrchestrationService =
-                    scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
+                c.RegisterInstance(validationContext).As<IValidationContext>();
+                c.RegisterInstance(preValidationContext).As<IPreValidationContext>();
+            }))
+            {
+                var preValidationPopulationService = scope.Resolve<IPreValidationPopulationService>();
+
+                preValidationPopulationService.Populate();
+
+                var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
                 // TODO: sai to fix this, commented out temporarily
-                // result = ruleSetOrchestrationService.Execute(validationContext);
+                return ruleSetOrchestrationService.Execute(validationContext);
             }
-
-            return result;
-        }
-
-        private void RegisterContext(ContainerBuilder containerBuilder, IPreValidationContext validationContext)
-        {
-            containerBuilder.RegisterInstance(validationContext).As<IPreValidationContext>();
         }
 
         private IContainer BuildContainer()
