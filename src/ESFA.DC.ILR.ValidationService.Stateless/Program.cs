@@ -126,21 +126,21 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.Register(c =>
             {
                 var queueSubscriptionService =
-                    new QueueSubscriptionService<JobContextMessage>(
+                    new QueueSubscriptionService<JobContextDto>(
                         queueSubscriptionConfig,
                         c.Resolve<IJsonSerializationService>(),
                         c.Resolve<ILogger>());
                 return queueSubscriptionService;
-            }).As<IQueueSubscriptionService<JobContextMessage>>();
+            }).As<IQueueSubscriptionService<JobContextDto>>();
 
             containerBuilder.Register(c =>
             {
                 var topicPublishService =
-                    new TopicPublishService<JobContextMessage>(
+                    new TopicPublishService<JobContextDto>(
                         topicPublishConfig,
                         c.Resolve<IJsonSerializationService>());
                 return topicPublishService;
-            }).As<ITopicPublishService<JobContextMessage>>();
+            }).As<ITopicPublishService<JobContextDto>>();
 
             containerBuilder.Register(c => new QueuePublishService<AuditingDto>(
                     auditPublishConfig,
