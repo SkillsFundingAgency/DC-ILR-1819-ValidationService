@@ -1,0 +1,143 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Interface.Enum;
+using ESFA.DC.ILR.ValidationService.IO.Model;
+using ESFA.DC.ILR.ValidationService.Providers.Output;
+using ESFA.DC.IO.Interfaces;
+using ESFA.DC.Serialization.Interfaces;
+using FluentAssertions;
+using Moq;
+using Xunit;
+
+namespace ESFA.DC.ILR.ValidationService.Providers.Tests
+{
+    public class ValidationOutputServiceTests
+    {
+        [Fact]
+        public void SeverityToString_Warning()
+        {
+            NewService().SeverityToString(Severity.Warning).Should().Be("W");
+        }
+
+        [Fact]
+        public void SeverityToString_Error()
+        {
+            NewService().SeverityToString(Severity.Error).Should().Be("E");
+        }
+
+        [Fact]
+        public void SeverityToString_Null()
+        {
+            NewService().SeverityToString(null).Should().BeNull();
+        }
+
+        [Fact]
+        public void BuildInvalidLearnRefNumbers()
+        {
+            var validationErrors = new List<IValidationError>()
+            {
+                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "a"),
+                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "a"),
+                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "b"),
+            };
+
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
+
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
+
+            NewService(validationErrorCacheMock.Object).BuildInvalidLearnRefNumbers().Should().BeEquivalentTo("a", "b");
+        }
+
+        [Fact]
+        public void BuildValidLearnRefNumbers()
+        {
+            var invalidLearnRefNumbers = new List<string>() { "a", "b" };
+
+            var message = new TestMessage()
+            {
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner() { LearnRefNumber = "a" },
+                    new TestLearner() { LearnRefNumber = "b" },
+                    new TestLearner() { LearnRefNumber = "c" },
+                    new TestLearner() { LearnRefNumber = "d" },
+                    new TestLearner() { LearnRefNumber = "e" },
+                }
+            };
+
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+
+            NewService(messageCache: messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
+        }
+
+        [Fact]
+        public async Task SaveAsync()
+        {
+            var serializedValidLearners = "Serialized Valid Learners";
+            var serializedInvalidLearners = "Serialized Invalid Learners";
+            var serializedValidationErrors = "Serialized Validation Errors";
+            var serializedValidationErrorMessageLookups = "Serialized Validation Error Message Lookups";
+
+            var validLearnRefNumbersKey = "Valid Learn Ref Numbers Key";
+            var invalidLearnRefNumbersKey = "Invalid Learn Ref Numbers Key";
+            var validationErrorsKey = "Validation Errors Key";
+            var validationErrorMessageLookupsKey = "Validation Error Message Lookups Key";
+                
+            IEnumerable<string> validLearnerRefNumbers = new List<string>() { "a", "b", "c" };
+            IEnumerable<string> invalidLearnerRefNumbers = new List<string>() { "d", "e", "f" };
+            IEnumerable<ValidationError> validationErrors = new List<ValidationError>() { new ValidationError(), new ValidationError(), new ValidationError() };
+            IEnumerable<ValidationErrorMessageLookup> validationErrorMessageLookups = new List<ValidationErrorMessageLookup> {  new ValidationErrorMessageLookup(), new ValidationErrorMessageLookup(), new ValidationErrorMessageLookup() };
+            
+            var serializationServiceMock = new Mock<IJsonSerializationService>();
+            var preValidationContextMock = new Mock<IPreValidationContext>();
+            var keyValuePersistenceServiceMock = new Mock<IKeyValuePersistenceService>();
+
+            serializationServiceMock.Setup(s => s.Serialize(validLearnerRefNumbers)).Returns(serializedValidLearners);
+            serializationServiceMock.Setup(s => s.Serialize(invalidLearnerRefNumbers)).Returns(serializedInvalidLearners);
+            serializationServiceMock.Setup(s => s.Serialize(validationErrors)).Returns(serializedValidationErrors);
+            serializationServiceMock.Setup(s => s.Serialize(validationErrorMessageLookups)).Returns(serializedValidationErrorMessageLookups);
+
+            preValidationContextMock.SetupGet(c => c.ValidLearnRefNumbersKey).Returns(validLearnRefNumbersKey);
+            preValidationContextMock.SetupGet(c => c.InvalidLearnRefNumbersKey).Returns(invalidLearnRefNumbersKey);
+            preValidationContextMock.SetupGet(c => c.ValidationErrorsKey).Returns(validationErrorsKey);
+            preValidationContextMock.SetupGet(c => c.ValidationErrorMessageLookupKey).Returns(validationErrorMessageLookupsKey);
+
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validLearnRefNumbersKey, serializedValidLearners)).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(invalidLearnRefNumbersKey, serializedInvalidLearners)).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorsKey, serializedValidationErrors)).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorMessageLookupsKey, serializedValidationErrorMessageLookups)).Returns(Task.CompletedTask).Verifiable();
+
+            var service = NewService(
+                keyValuePersistenceService: keyValuePersistenceServiceMock.Object,
+                preValidationContext: preValidationContextMock.Object,
+                jsonSerializationService: serializationServiceMock.Object);
+                
+            await service.SaveAsync(validLearnerRefNumbers, invalidLearnerRefNumbers, validationErrors, validationErrorMessageLookups);
+
+            keyValuePersistenceServiceMock.VerifyAll();
+        }
+
+        private ValidationOutputService NewService(
+            IValidationErrorCache<IValidationError> validationErrorCache = null,
+            ICache<IMessage> messageCache = null,
+            IKeyValuePersistenceService keyValuePersistenceService = null,
+            IPreValidationContext preValidationContext = null,
+            IJsonSerializationService jsonSerializationService = null,
+            IValidationErrorsDataService validationErrorsDataService = null)
+        {
+            return new ValidationOutputService(
+                validationErrorCache,
+                messageCache,
+                keyValuePersistenceService,
+                preValidationContext,
+                jsonSerializationService,
+                validationErrorsDataService);
+        }
+    }
+}

@@ -23,8 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.PreValidation
             builder.RegisterType<PreValidationPopulationService>().As<IPreValidationPopulationService>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<AzureInternalDataCachePopulationServiceStub>()
-                .As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<AzureInternalDataCachePopulationServiceStub>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
 
             builder.Register(c =>
             {

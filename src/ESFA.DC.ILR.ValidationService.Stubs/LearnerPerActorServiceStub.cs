@@ -29,8 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             var messageShards = new List<IMessage>();
             foreach (var learnerShard in learnerShards)
             {
-                var message = new Message();
-                message = _messageCache.Item as Message;
+                Message message = _messageCache.Item as Message;
                 message.Learner = learnerShard.Cast<MessageLearner>().ToArray();
                 messageShards.Add(message);
             }

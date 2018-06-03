@@ -14,6 +14,6 @@
 
         string ValidationErrorMessageLookupKey { get; }
 
-        string JobId { get; set; }
+        string JobId { get; }
     }
 }
