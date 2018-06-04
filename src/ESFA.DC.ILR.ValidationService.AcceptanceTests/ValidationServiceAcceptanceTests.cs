@@ -25,21 +25,20 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         private List<string> _excludedLearnersFound;
         private List<string> _unexpectedLearnersFound;
 
-        public ValidationServiceAcceptanceTests()
-        {
-        }
-
         [Theory]
         [InlineData("FworkCode_05", false)]
         public void TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
         {
-            List<ActiveRuleValidity> rules = new List<ActiveRuleValidity>(100);
-            rules.Add(new ActiveRuleValidity() { RuleName = rulename, Valid = valid });
+            var rules = new List<ActiveRuleValidity>(100)
+            {
+                new ActiveRuleValidity() { RuleName = rulename, Valid = valid }
+            };
+
             var generator = BuildXmlGenerator();
             var expectedResult = generator.CreateAllXml(rules, Scale, XmlGenerator.ESFA201819Namespace);
             var files = generator.FileContent().Values;
 
-            CreateResultsCollections(expectedResult.Count());
+            CreateResultsCollections();
 
             foreach (var content in files)
             {
@@ -49,36 +48,38 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
             _excludedLearnersFound.Should().BeEmpty();
             _unexpectedLearnersFound.Should().BeEmpty();
-            int totalExpectedRows = expectedResult.Where(s => !s.ExclusionRecord).Sum(s => s.InvalidLines);
+            var totalExpectedRows = expectedResult.Where(s => !s.ExclusionRecord).Sum(s => s.InvalidLines);
             _learnersFound.Should().HaveCount(totalExpectedRows);
         }
 
         private XmlGenerator BuildXmlGenerator()
         {
-            DataCache cache = new DataCache();
-            RuleToFunctorParser rfp = new RuleToFunctorParser(cache);
+            var cache = new DataCache();
+            var rfp = new RuleToFunctorParser(cache);
+
             rfp.CreateFunctors(null);
+
             return new XmlGenerator(rfp, Ukprn);
         }
 
-        private void PopulateResultsCollectionsBasedOnResults(
-            IEnumerable<FileRuleLearner> expectedResult,
-            IEnumerable<IValidationError> fileValidationResult)
+        private void PopulateResultsCollectionsBasedOnResults(IEnumerable<FileRuleLearner> expectedResult, IEnumerable<IValidationError> fileValidationResult)
         {
+            expectedResult = expectedResult.ToList();
+
             foreach (var val in fileValidationResult)
             {
-                var exclusionRecordFound = expectedResult.Count(s =>
+                var exclusionRecordFound = expectedResult.Any(s =>
                                                s.ExclusionRecord && s.RuleName == val.RuleName &&
-                                               s.LearnRefNumber == val.LearnerReferenceNumber) > 0;
+                                               s.LearnRefNumber == val.LearnerReferenceNumber);
                 if (exclusionRecordFound)
                 {
                     _excludedLearnersFound.Add(val.LearnerReferenceNumber);
                 }
                 else
                 {
-                    var completelyExpectedResult = expectedResult.Count(s =>
+                    var completelyExpectedResult = expectedResult.Any(s =>
                                                        s.RuleName == val.RuleName &&
-                                                       s.LearnRefNumber == val.LearnerReferenceNumber) > 0;
+                                                       s.LearnRefNumber == val.LearnerReferenceNumber);
 
                     if (completelyExpectedResult)
                     {
@@ -86,7 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
                     }
                     else
                     {
-                        var correctRule = expectedResult.Count(s => s.RuleName == val.RuleName) > 0;
+                        var correctRule = expectedResult.Any(s => s.RuleName == val.RuleName);
                         if (correctRule)
                         {
                             _unexpectedLearnersFound.Add(val.LearnerReferenceNumber);
@@ -96,11 +97,11 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
             }
         }
 
-        private void CreateResultsCollections(int count)
+        private void CreateResultsCollections()
         {
-            _learnersFound = new List<string>(count);
-            _excludedLearnersFound = new List<string>(count);
-            _unexpectedLearnersFound = new List<string>(count);
+            _learnersFound = new List<string>();
+            _excludedLearnersFound = new List<string>();
+            _unexpectedLearnersFound = new List<string>();
         }
 
         private IEnumerable<IValidationError> RunValidation(string messageString)
@@ -131,7 +132,6 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
                 var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                // TODO: sai to fix this, commented out temporarily
                 return ruleSetOrchestrationService.Execute(validationContext);
             }
         }
