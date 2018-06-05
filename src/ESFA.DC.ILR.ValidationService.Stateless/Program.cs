@@ -15,9 +15,9 @@ using ESFA.DC.ILR.ValidationService.Stateless.Configuration;
 using ESFA.DC.ILR.ValidationService.Stateless.Handlers;
 using ESFA.DC.ILR.ValidationService.Stateless.Mapper;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
-using ESFA.DC.IO.AzureCosmos;
-using ESFA.DC.IO.AzureCosmos.Config.Interfaces;
 using ESFA.DC.IO.Interfaces;
+using ESFA.DC.IO.Redis;
+using ESFA.DC.IO.Redis.Config.Interfaces;
 using ESFA.DC.JobContext;
 using ESFA.DC.KeyGenerator.Interface;
 using ESFA.DC.Logging.Interfaces;
@@ -88,12 +88,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterModule<LoggerModule>();
 
             // register Cosmos config
-            var azureCosmosOptions = configHelper.GetSectionValues<AzureCosmosOptions>("AzureCosmosSection");
-            containerBuilder.Register(c => new AzureCosmosKeyValuePersistenceConfig(
-                    azureCosmosOptions.CosmosEndpointUrl,
-                    azureCosmosOptions.CosmosAuthKeyOrResourceToken))
-                .As<IAzureCosmosKeyValuePersistenceServiceConfig>().SingleInstance();
-            containerBuilder.RegisterType<AzureCosmosKeyValuePersistenceService>().As<IKeyValuePersistenceService>()
+            var azureCosmosOptions = configHelper.GetSectionValues<AzureRedisCacheOptions>("AzureRedisSection");
+            containerBuilder.Register(c => new AzureRedisKeyValuePersistenceConfig(
+                azureCosmosOptions.RedisCacheConnectionString))
+                .As<IRedisKeyValuePersistenceServiceConfig>().SingleInstance();
+            containerBuilder.RegisterType<RedisKeyValuePersistenceService>().As<IKeyValuePersistenceService>()
                 .InstancePerLifetimeScope();
 
             // register reference data configs
