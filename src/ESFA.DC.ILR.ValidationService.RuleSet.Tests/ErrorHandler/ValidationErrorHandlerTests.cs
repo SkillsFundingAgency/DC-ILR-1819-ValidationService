@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
@@ -15,12 +14,16 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void Handle()
         {
-            var validationErrorCacheMock = new Mock<IValidationErrorCache>();
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
+            var validationErrorsDataService = new Mock<IValidationErrorsDataService>();
 
-            var validationErrorHandler = NewHandler(validationErrorCacheMock.Object);
+            var validationErrorHandler = NewHandler(validationErrorCacheMock.Object, validationErrorsDataService.Object);
 
-            validationErrorHandler.Handle("RuleName");
+            var ruleName = "RuleName";
 
+            validationErrorHandler.Handle(ruleName);
+
+            validationErrorsDataService.Verify(c => c.SeverityForRuleName(ruleName), Times.Once);
             validationErrorCacheMock.Verify(c => c.Add(It.IsAny<IValidationError>()), Times.Once);
         }
 
@@ -122,9 +125,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
             errorMessageParameter.Value.Should().Be(null);
         }
 
-        private ValidationErrorHandler NewHandler(IValidationErrorCache validationErrorCache = null)
+        private ValidationErrorHandler NewHandler(IValidationErrorCache<IValidationError> validationErrorCache = null, IValidationErrorsDataService validationErrorsDataService = null)
         {
-            return new ValidationErrorHandler(validationErrorCache);
+            return new ValidationErrorHandler(validationErrorCache, validationErrorsDataService);
         }
     }
 }

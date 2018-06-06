@@ -11,7 +11,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         public DateTime EffectiveFrom { get; set; }
 
         public DateTime? EffectiveTo { get; set; }
-
-        public LearningDelivery LearningDelivery { get; set; }
     }
 }

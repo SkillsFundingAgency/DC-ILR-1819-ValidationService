@@ -16,9 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             referenceDataCacheMock.SetupGet(rdc => rdc.ULNs).Returns(new HashSet<long>() { 1, 2, 3 });
 
-            var ulnReferenceDataService = new ULNDataService(referenceDataCacheMock.Object);
-
-            ulnReferenceDataService.Exists(2).Should().BeTrue();
+            NewService(referenceDataCacheMock.Object).Exists(2).Should().BeTrue();
         }
 
         [Fact]
@@ -28,17 +26,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             referenceDataCacheMock.SetupGet(rdc => rdc.ULNs).Returns(new HashSet<long>() { 1, 2, 3 });
 
-            var ulnReferenceDataService = new ULNDataService(referenceDataCacheMock.Object);
-
-            ulnReferenceDataService.Exists(4).Should().BeFalse();
+            NewService(referenceDataCacheMock.Object).Exists(4).Should().BeFalse();
         }
 
         [Fact]
         public void Exists_False_Null()
         {
-            var ulnReferenceDataService = new ULNDataService(null);
+            NewService().Exists(null).Should().BeFalse();
+        }
 
-            ulnReferenceDataService.Exists(null).Should().BeFalse();
+        private ULNDataService NewService(IExternalDataCache externalDataCache = null)
+        {
+            return new ULNDataService(externalDataCache);
         }
     }
 }

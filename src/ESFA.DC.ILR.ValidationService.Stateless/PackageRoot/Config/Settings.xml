@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <!-- Add your custom configuration sections and parameters here -->
+  <!--
+  <Section Name="MyConfigSection">
+    <Parameter Name="MyParameter" Value="Value1" />
+  </Section>
+  -->
+
+  <Section Name="ServiceBusSettings">
+    <Parameter Name="JobsQueueName" Value="" />
+    <Parameter Name="ServiceBusConnectionString" Value="" />
+    <Parameter Name="AuditQueueName" Value="" />
+    <Parameter Name="TopicName" Value="" />
+    <Parameter Name="FundingCalcSubscriptionName" Value="" />
+    <Parameter Name="FundingCalcSqlFilterValue" Value="" />
+  </Section>
+
+
+  <Section Name="LoggerSection">
+    <Parameter Name="LoggerConnectionstring" Value="" />
+  </Section>
+
+  <Section  Name="AzureStorageSection">
+    <Parameter Name="AzureBlobConnectionString" Value="" />
+  </Section>
+  
+  <Section  Name="ReferenceDataSection">
+    <Parameter Name="LARSConnectionString" Value="" />
+    <Parameter Name="PostcodesConnectionString" Value="" />
+    <Parameter Name="ULNConnectionstring" Value="" />
+    <Parameter Name="ValidationErrorsConnectionString" Value="" />
+  </Section>
+
+
+  <Section  Name="AzureRedisSection">
+    <Parameter Name="RedisCacheConnectionString" Value="" />
+  </Section>
+
+
+  <Section Name="DataTransportSettings">
+    <Parameter Name="MaxMessageSize" Value="1073741824" MustOverride="true"/>
+    <Parameter Name="SecurityCredentialsType" Value="None" />
+    <Parameter Name="CertificateFindType" Value="" />
+    <Parameter Name="CertificateFindValue" Value="" />
+    <Parameter Name="CertificateRemoteThumbprints" Value="" />
+    <Parameter Name="CertificateStoreLocation" Value="" />
+    <Parameter Name="CertificateStoreName" Value="" />
+    <Parameter Name="CertificateProtectionLevel" Value="" />
+    <Parameter Name="CertificateRemoteCommonNames" Value="" />
+  </Section>
+  
+</Settings>

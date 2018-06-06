@@ -4,7 +4,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
 {
-    public class QueryServiceModule : Module
+    internal class QueryServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

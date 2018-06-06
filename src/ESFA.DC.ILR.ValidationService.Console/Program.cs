@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autofac;
-using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Modules;
+using ESFA.DC.ILR.ValidationService.Modules.Console;
 using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Console
@@ -26,26 +24,28 @@ namespace ESFA.DC.ILR.ValidationService.Console
 
         private static void RunValidation(string filePath)
         {
-            var validationContext = new ValidationContextStub
+            var preValidationContext = new PreValidationContextStub
             {
                 Input = filePath,
                 Output = filePath + ".vs.csv",
                 ValidLearnRefNumbersKey = "ValidLearnRefNumbers",
                 InvalidLearnRefNumbersKey = "InvalidLearnRefNumbers",
+                ValidationErrorsKey = "ValidationErrors",
+                ValidationErrorMessageLookupKey = "ValidationErrorMessageLookups",
             };
 
             var container = BuildContainer();
 
-            using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, validationContext)))
+            using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, preValidationContext)))
             {
-                var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
+                var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<IValidationError>>();
 
-                var errors = ruleSetOrchestrationService.Execute(validationContext);
+                var errors = preValidationOrchestrationService.Execute(preValidationContext);
 
-                OutputResultsToFile(errors, $"{validationContext.Output}");
+                OutputResultsToFile(errors, $"{preValidationContext.Output}");
             }
 
-            System.Console.WriteLine($"{validationContext.Output}");
+            System.Console.WriteLine($"{preValidationContext.Output}");
         }
 
         private static void OutputResultsToFile(IEnumerable<IValidationError> errors, string path)
@@ -69,16 +69,16 @@ namespace ESFA.DC.ILR.ValidationService.Console
             System.IO.File.WriteAllText(path, contents.ToString());
         }
 
-        private static void RegisterContext(ContainerBuilder containerBuilder, IValidationContext validationContext)
+        private static void RegisterContext(ContainerBuilder containerBuilder, IPreValidationContext preValidationContext)
         {
-            containerBuilder.RegisterInstance(validationContext).As<IValidationContext>();
+            containerBuilder.RegisterInstance(preValidationContext).As<IPreValidationContext>();
         }
 
         private static IContainer BuildContainer()
         {
             var containerBuilder = new ContainerBuilder();
 
-            containerBuilder.RegisterModule<ValidationServiceConsoleModule>();
+            containerBuilder.RegisterModule<ConsoleValidationServiceModule>();
 
             return containerBuilder.Build();
         }

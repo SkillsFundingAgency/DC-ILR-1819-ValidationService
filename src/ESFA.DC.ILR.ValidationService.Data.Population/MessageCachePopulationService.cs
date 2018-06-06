@@ -11,7 +11,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         private readonly ICache<IMessage> _messageCache;
         private readonly IValidationItemProviderService<IMessage> _messageValidationItemProviderService;
 
-        public MessageCachePopulationService(ICache<IMessage> messageCache, IValidationItemProviderService<IMessage> messageValidationItemProviderService)
+        public MessageCachePopulationService(
+            ICache<IMessage> messageCache,
+            IValidationItemProviderService<IMessage> messageValidationItemProviderService)
         {
             _messageCache = messageCache;
             _messageValidationItemProviderService = messageValidationItemProviderService;
@@ -20,7 +22,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         public void Populate()
         {
             var messageCache = (Cache<IMessage>)_messageCache;
-
             messageCache.Item = _messageValidationItemProviderService.Provide();
         }
     }

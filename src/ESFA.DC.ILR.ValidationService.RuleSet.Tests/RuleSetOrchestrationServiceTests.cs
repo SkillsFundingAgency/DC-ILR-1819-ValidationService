@@ -21,15 +21,12 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(new List<string>());
 
-            var preValidationPopulationServiceMock = new Mock<IPreValidationPopulationService>();
-            preValidationPopulationServiceMock.Setup(ps => ps.Populate());
-
             var output = new List<int>() { 1, 2, 3 };
 
-            var validationOutputService = new Mock<IValidationOutputService<int>>();
-            validationOutputService.Setup(os => os.Process()).Returns(output);
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<int>>();
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(output);
 
-            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, preValidationPopulationServiceMock.Object, validationOutputService: validationOutputService.Object);
+            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, validationErrorCache: validationErrorCacheMock.Object);
 
             service.Execute(validationContextMock.Object).Should().BeSameAs(output);
         }
@@ -51,19 +48,16 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(validationItems);
 
-            var preValidationPopulationServiceMock = new Mock<IPreValidationPopulationService>();
-            preValidationPopulationServiceMock.Setup(ps => ps.Populate());
-
             var ruleSetExecutionServiceMock = new Mock<IRuleSetExecutionService<string>>();
             ruleSetExecutionServiceMock.Setup(es => es.Execute(ruleSet, one)).Verifiable();
             ruleSetExecutionServiceMock.Setup(es => es.Execute(ruleSet, two)).Verifiable();
 
             var output = new List<int>() { 1, 2, 3 };
 
-            var validationOutputService = new Mock<IValidationOutputService<int>>();
-            validationOutputService.Setup(os => os.Process()).Returns(output);
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<int>>();
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(output);
 
-            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, preValidationPopulationServiceMock.Object, ruleSetExecutionServiceMock.Object, validationOutputService.Object);
+            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, ruleSetExecutionServiceMock.Object, validationErrorCacheMock.Object);
 
             service.Execute(validationContextMock.Object).Should().BeSameAs(output);
 
@@ -73,17 +67,15 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
         public RuleSetOrchestrationService<T, U> NewService<T, U>(
             IRuleSetResolutionService<T> ruleSetResolutionService = null,
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService = null,
-            IPreValidationPopulationService preValidationPopulationService = null,
             IRuleSetExecutionService<T> ruleSetExecutionService = null,
-            IValidationOutputService<U> validationOutputService = null)
+            IValidationErrorCache<U> validationErrorCache = null)
             where T : class
         {
             return new RuleSetOrchestrationService<T, U>(
                 ruleSetResolutionService,
                 validationItemProviderService,
-                preValidationPopulationService,
                 ruleSetExecutionService,
-                validationOutputService);
+                validationErrorCache);
         }
     }
 }

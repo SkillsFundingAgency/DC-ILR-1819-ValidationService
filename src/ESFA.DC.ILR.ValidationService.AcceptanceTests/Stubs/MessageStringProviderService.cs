@@ -7,25 +7,20 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 {
     public class MessageStringProviderService : IValidationItemProviderService<IMessage>
     {
-        private readonly ISerializationService _serializationService;
-        private readonly IValidationContext _validationContext;
+        private readonly IXmlSerializationService _xmlSerializationService;
+        private readonly IPreValidationContext _validationContext;
 
         private IMessage _message;
 
-        public MessageStringProviderService(ISerializationService serializationService, IValidationContext validationContext)
+        public MessageStringProviderService(IXmlSerializationService xmlSerializationService, IPreValidationContext validationContext)
         {
-            _serializationService = serializationService;
+            _xmlSerializationService = xmlSerializationService;
             _validationContext = validationContext;
         }
 
         public IMessage Provide()
         {
-            if (_message == null)
-            {
-                _message = _serializationService.Deserialize<Message>(_validationContext.Input);
-            }
-
-            return _message;
+            return _message ?? (_message = _xmlSerializationService.Deserialize<Message>(_validationContext.Input));
         }
     }
 }

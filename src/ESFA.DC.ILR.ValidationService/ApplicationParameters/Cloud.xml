@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/ESFA.DC.ILR.ValidationService" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+  <Parameters>
+    <Parameter Name="ESFA.DC.ILR.ValidationService.Stateless_InstanceCount" Value="-1" />
+    <Parameter Name="AuditQueueName" Value="__AuditQueueName__" />
+    <Parameter Name="JobsQueueName" Value="__JobsQueueName__" />
+    <Parameter Name="ServiceBusConnectionString" Value="__ServiceBusConnectionString__" />
+    <Parameter Name="AzureBlobConnectionString" Value="__AzureBlobConnectionString__" />
+    <Parameter Name="LoggerConnectionstring" Value="__LoggerConnectionString__" />
+    <Parameter Name="TopicName" Value="__TopicName__" />
+    <Parameter Name="FundingCalcSubscriptionName" Value="__FundingCalcSubscriptionName__" />
+    <Parameter Name="FundingCalcSqlFilterValue" Value="__FundingCalcSqlFilterValue__" />
+    <Parameter Name="LARSConnectionString" Value="__LARSConnectionString__" />
+    <Parameter Name="PostcodesConnectionString" Value="__PostcodesConnectionString__" />
+    <Parameter Name="ULNConnectionstring" Value="__ULNConnectionstring__" />
+    <Parameter Name="RedisCacheConnectionString" Value="__RedisCacheConnectionString__" />
+    <Parameter Name="ValidationErrorsConnectionString" Value="__ValidationErrorsConnectionString__" />
+    <Parameter Name="ProcessingServicePlacementConstraints" Value="(NodeHostName == ProcessingHosts)" />
+  </Parameters>
+</Application>

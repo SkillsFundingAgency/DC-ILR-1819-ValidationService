@@ -4,7 +4,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler
 {
-    public class ValidationErrorCache : IValidationErrorCache
+    public class ValidationErrorCache : IValidationErrorCache<IValidationError>
     {
         private readonly ConcurrentBag<IValidationError> _validationErrors = new ConcurrentBag<IValidationError>();
 

@@ -8,22 +8,22 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 {
     public class MessageFileSystemProviderServiceStub : IValidationItemProviderService<IMessage>
     {
-        private readonly ISerializationService _serializationService;
-        private readonly IValidationContext _validationContext;
+        private readonly IXmlSerializationService _xmlSerializationService;
+        private readonly IPreValidationContext _preValidationContext;
 
         private IMessage _message;
 
-        public MessageFileSystemProviderServiceStub(ISerializationService serializationService, IValidationContext validationContext)
+        public MessageFileSystemProviderServiceStub(IXmlSerializationService xmlSerializationService, IPreValidationContext preValidationContext)
         {
-            _serializationService = serializationService;
-            _validationContext = validationContext;
+            _xmlSerializationService = xmlSerializationService;
+            _preValidationContext = preValidationContext;
         }
 
         public IMessage Provide()
         {
             if (_message == null)
             {
-                _message = _serializationService.Deserialize<Message>(File.ReadAllText(_validationContext.Input));
+                _message = _xmlSerializationService.Deserialize<Message>(File.ReadAllText(_preValidationContext.Input));
             }
 
             return _message;

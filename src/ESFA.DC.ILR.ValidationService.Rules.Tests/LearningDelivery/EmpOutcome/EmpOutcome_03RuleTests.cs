@@ -90,6 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EmpOutcome
             NewRule().EmpOutcomeConditionMet(1).Should().BeTrue();
         }
 
+        [Fact]
         public void EmpOutcomeConditionMet_False()
         {
             NewRule().EmpOutcomeConditionMet(null).Should().BeFalse();

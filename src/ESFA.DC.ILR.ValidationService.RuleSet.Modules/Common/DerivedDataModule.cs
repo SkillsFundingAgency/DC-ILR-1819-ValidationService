@@ -4,7 +4,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
 {
-    public class DerivedDataModule : Module
+    internal class DerivedDataModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

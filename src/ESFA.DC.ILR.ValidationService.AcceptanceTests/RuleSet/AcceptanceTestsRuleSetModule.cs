@@ -61,19 +61,5 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FworkCode_05Rule),
             };
         }
-
-        protected override void Load(ContainerBuilder builder)
-        {
-            foreach (var rule in Rules)
-            {
-                builder.RegisterType(rule)
-                    .As(RuleSetType)
-                    .WithParameter(
-                                 new ResolvedParameter(
-                                   (pi, ctx) => pi.ParameterType == typeof(ILARSDataService),
-                                   (pi, ctx) => ctx.ResolveKeyed<ILARSDataService>(AcceptanceTestsOverrideStubsModule.AcceptanceTestsKey)))
-                    .InstancePerLifetimeScope();
-            }
-        }
     }
 }
