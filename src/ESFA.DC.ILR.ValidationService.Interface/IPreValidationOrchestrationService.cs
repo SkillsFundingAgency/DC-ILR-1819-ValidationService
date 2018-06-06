@@ -2,8 +2,7 @@
 
 namespace ESFA.DC.ILR.ValidationService.Interface
 {
-    public interface IPreValidationOrchestrationService<T, out U>
-        where T : class
+    public interface IPreValidationOrchestrationService<out U>
     {
         IEnumerable<U> Execute(IPreValidationContext validationContext);
     }

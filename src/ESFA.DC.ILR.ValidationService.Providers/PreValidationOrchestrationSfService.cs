@@ -17,15 +17,15 @@ using Microsoft.ServiceFabric.Actors.Client;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
-    public class PreValidationOrchestrationSfService<T, U> : IPreValidationOrchestrationService<T, U>
-        where T : class
+    public class PreValidationOrchestrationSfService<U> : IPreValidationOrchestrationService<U>
     {
         private readonly IPreValidationPopulationService _preValidationPopulationService;
         private readonly ILearnerPerActorService _learnerPerActorService;
         private readonly ICache<IMessage> _messageCache;
-        private readonly ISerializationService _jsonSerializationService;
+        private readonly IJsonSerializationService _jsonSerializationService;
         private readonly IInternalDataCache _internalDataCache;
         private readonly IExternalDataCache _externalDataCache;
+        private readonly IFileDataCache _fileDataCache;
         private readonly IValidationErrorCache<U> _validationErrorCache;
         private readonly IValidationOutputService<U> _validationOutputService;
         private readonly ILogger _logger;
@@ -37,6 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
+            IFileDataCache fileDataCache,
             IValidationErrorCache<U> validationErrorCache,
             IValidationOutputService<U> validationOutputService,
             ILogger logger)
@@ -47,6 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _jsonSerializationService = jsonSerializationService;
             _internalDataCache = internalDataCache;
             _externalDataCache = externalDataCache;
+            _fileDataCache = fileDataCache;
             _validationErrorCache = validationErrorCache;
             _validationOutputService = validationOutputService;
             _logger = logger;
@@ -76,13 +78,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 // TODO:get reference data per each shard and send it to Actors
                 var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
-                var internalDataCache = _internalDataCache;
-                var internalDataCacheString = _jsonSerializationService.Serialize(internalDataCache);
-                var externalDataCache = _externalDataCache;
-                var externalDataCacheString = _jsonSerializationService.Serialize(externalDataCache);
 
-                var internalDataCacheAsBytes = Encoding.UTF8.GetBytes(internalDataCacheString);
-                var externalDataCacheAsBytes = Encoding.UTF8.GetBytes(externalDataCacheString);
+                var internalDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
+                var externalDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
+                var fileDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
 
                 var validationActorModel = new ValidationActorModel()
                 {
@@ -90,10 +89,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     Message = ilrMessageAsBytes,
                     InternalDataCache = internalDataCacheAsBytes,
                     ExternalDataCache = externalDataCacheAsBytes,
+                    FileDataCache = fileDataCacheAsBytes,
                 };
 
-                actorTasks.Add(Task.Run(() =>
-                    actor.Validate(validationActorModel)));
+                actorTasks.Add(Task.Run(() => actor.Validate(validationActorModel)));
             }
 
             Task.WaitAll(actorTasks.ToArray());

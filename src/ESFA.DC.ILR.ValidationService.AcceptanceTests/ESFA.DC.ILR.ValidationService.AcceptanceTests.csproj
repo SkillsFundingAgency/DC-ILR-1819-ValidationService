@@ -134,7 +134,6 @@
     <Compile Include="Module\AcceptanceTestsOverrideStubsModule.cs" />
     <Compile Include="RuleSet\AcceptanceTestsRuleSetModule.cs" />
     <Compile Include="RuleSet\AcceptanceTestsExternalDataCachePopulationService.cs" />
-    <Compile Include="RuleSet\AcceptanceTestsExternalDataCache.cs" />
     <Compile Include="Stubs\MessageStringProviderService.cs" />
     <Compile Include="Module\AcceptanceTestsOrchestrationModule.cs" />
     <Compile Include="Module\ValidationServiceAcceptanceTestsModule.cs" />

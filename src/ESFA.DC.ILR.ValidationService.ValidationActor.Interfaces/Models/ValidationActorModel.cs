@@ -9,5 +9,7 @@
         public byte[] InternalDataCache { get; set; }
 
         public byte[] ExternalDataCache { get; set; }
+
+        public byte[] FileDataCache { get; set; }
     }
 }

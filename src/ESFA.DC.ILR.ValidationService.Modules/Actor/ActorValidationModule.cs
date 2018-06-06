@@ -9,10 +9,11 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Actor
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterModule<ActorValidationOrchestrationModule>();
-            builder.RegisterModule<ActorDataModule>();
-            builder.RegisterModule<QueryServiceModule>();
-            builder.RegisterModule<DerivedDataModule>();
-            builder.RegisterModule<ConsoleRuleSetModule>();
+            builder.RegisterModule<BaseDataModule>();
+            builder.RegisterModule<RuleSetModule>();
+
+            builder.RegisterModule<DataServiceModule>();
+            builder.RegisterModule<ActorStubsModule>();
         }
     }
 }

@@ -9,8 +9,10 @@ using DC.JobContextManager.Interface;
 using ESFA.DC.Auditing;
 using ESFA.DC.Auditing.Dto;
 using ESFA.DC.Auditing.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.Configuration;
+using ESFA.DC.ILR.ValidationService.Data.Population.Configuration.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
-using ESFA.DC.ILR.ValidationService.Modules.PreValidation;
+using ESFA.DC.ILR.ValidationService.Modules.Stateless;
 using ESFA.DC.ILR.ValidationService.Stateless.Configuration;
 using ESFA.DC.ILR.ValidationService.Stateless.Handlers;
 using ESFA.DC.ILR.ValidationService.Stateless.Mapper;
@@ -96,11 +98,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterType<AzureCosmosKeyValuePersistenceService>().As<IKeyValuePersistenceService>()
                 .InstancePerLifetimeScope();
 
-            // register reference data configs
-            var referenceDataOptions =
-                configHelper.GetSectionValues<ReferenceDataOptions>("ReferenceDataSection");
-            containerBuilder.RegisterInstance(referenceDataOptions).As<ReferenceDataOptions>().SingleInstance();
-
             // service bus queue configuration
             var queueSubscriptionConfig = new ServiceBusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
@@ -152,8 +149,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterType<MessageHandler>().As<IMessageHandler>();
 
             // register the  callback handle when a new message is received from ServiceBus
-            containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c =>
-                c.Resolve<IMessageHandler>().Handle);
+            containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c => c.Resolve<IMessageHandler>().Handle);
 
             containerBuilder.RegisterType<JobContextManager<JobContextMessage>>().As<IJobContextManager>();
 

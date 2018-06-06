@@ -220,7 +220,6 @@
     <Compile Include="AzureStorageModel.cs" />
     <Compile Include="LoggerOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReferenceDataOptions.cs" />
     <Compile Include="ServiceBusOptions.cs" />
     <Compile Include="ServiceBusQueueListenerModel.cs" />
     <Compile Include="PreValidationContext.cs" />

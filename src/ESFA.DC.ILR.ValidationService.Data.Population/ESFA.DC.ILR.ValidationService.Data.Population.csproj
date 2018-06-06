@@ -82,7 +82,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActorCachePopulationService.cs" />
+    <Compile Include="Configuration\Interface\IReferenceDataOptions.cs" />
+    <Compile Include="Configuration\ReferenceDataOptions.cs" />
     <Compile Include="External\AbstractDataRetrievalService.cs" />
     <Compile Include="External\AbstractLARSDataRetrievalService.cs" />
     <Compile Include="External\ExternalDataCachePopulationService.cs" />
@@ -133,5 +134,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

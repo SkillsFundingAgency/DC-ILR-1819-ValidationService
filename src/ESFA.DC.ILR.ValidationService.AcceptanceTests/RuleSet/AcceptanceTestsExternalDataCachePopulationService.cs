@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using ESFA.DC.ILR.ValidationService.Data.External;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
@@ -11,11 +12,11 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 {
     public class AcceptanceTestsExternalDataCachePopulationService : IExternalDataCachePopulationService
     {
-        private AcceptanceTestsExternalDataCache _dataCache;
+        private ExternalDataCache _dataCache;
 
         public AcceptanceTestsExternalDataCachePopulationService(IExternalDataCache iCache)
         {
-            _dataCache = (AcceptanceTestsExternalDataCache)iCache;
+            _dataCache = (ExternalDataCache)iCache;
         }
 
         public void Populate()

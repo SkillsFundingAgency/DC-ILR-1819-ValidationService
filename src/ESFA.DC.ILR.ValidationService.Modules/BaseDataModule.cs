@@ -49,42 +49,17 @@ namespace ESFA.DC.ILR.ValidationService.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ExternalDataCache>().As<IExternalDataCache>().InstancePerLifetimeScope();
-            builder.RegisterType<ExternalDataCachePopulationService>().As<IExternalDataCachePopulationService>().InstancePerLifetimeScope();
-            builder.RegisterType<LARSDataService>().As<ILARSDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<OrganisationDataService>().As<IOrganisationDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<ULNDataService>().As<IULNDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<FCSDataServiceStub>().As<IFCSDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<PostcodesDataService>().As<IPostcodesDataService>();
-            builder.RegisterType<ValidationErrorsDataService>().As<IValidationErrorsDataService>();
-
-            builder.RegisterType<InternalDataCache>().As<IInternalDataCache>().InstancePerLifetimeScope();
-            builder.RegisterType<AcademicYearDataService>().As<IAcademicYearDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<AimTypeDataService>().As<IAimTypeDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<CompStatusDataService>().As<ICompStatusDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<EmpOutcomeDataService>().As<IEmpOutcomeDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<FundModelDataService>().As<IFundModelDataService>().InstancePerLifetimeScope();
-
-            builder.RegisterType<FileDataCache>().As<IFileDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<FileDataCachePopulationService>().As<IFileDataCachePopulationService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<Cache<IMessage>>().As<ICache<IMessage>>().InstancePerLifetimeScope();
             builder.RegisterType<MessageCachePopulationService>().As<IMessageCachePopulationService>().InstancePerLifetimeScope();
 
             builder.RegisterType<DateTimeProvider>().As<IDateTimeProvider>().InstancePerLifetimeScope();
 
-            builder.RegisterType<LARS>().As<ILARS>().InstancePerLifetimeScope();
-            builder.RegisterType<ULN>().As<IULN>().InstancePerLifetimeScope();
-            builder.RegisterType<Postcodes>().As<IPostcodes>().InstancePerLifetimeScope();
-            builder.RegisterType<ValidationErrors>().As<IValidationErrors>().InstancePerLifetimeScope();
-
-            builder.RegisterType<LARSLearningDeliveryDataRetrievalService>().As<ILARSLearningDeliveryDataRetrievalService>().InstancePerLifetimeScope();
-            builder.RegisterType<LARSFrameworkDataRetrievalService>().As<ILARSFrameworkDataRetrievalService>().InstancePerLifetimeScope();
-            builder.RegisterType<ULNDataRetrievalService>().As<IULNDataRetrievalService>().InstancePerLifetimeScope();
-            builder.RegisterType<PostcodesDataRetrievalService>().As<IPostcodesDataRetrievalService>().InstancePerLifetimeScope();
-            builder.RegisterType<ValidationErrorsDataRetrievalService>().As<IValidationErrorsDataRetrievalService>().InstancePerLifetimeScope();
-
             builder.RegisterType<DictionaryKeyValuePersistenceService>().As<IKeyValuePersistenceService>().InstancePerLifetimeScope();
+
+            builder.RegisterModule<CacheModule>();
+            builder.RegisterModule<DataServiceModule>();
+            builder.RegisterModule<ExternalDataCachePopulationServiceModule>();
         }
     }
 }

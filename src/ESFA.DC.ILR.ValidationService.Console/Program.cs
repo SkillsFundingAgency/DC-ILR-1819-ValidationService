@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using Autofac;
-using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules.Console;
 using ESFA.DC.ILR.ValidationService.Stubs;
@@ -39,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
 
             using (var scope = container.BeginLifetimeScope(c => RegisterContext(c, preValidationContext)))
             {
-                var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
+                var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<IValidationError>>();
 
                 var errors = preValidationOrchestrationService.Execute(preValidationContext);
 

@@ -1,26 +1,25 @@
 ﻿using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Providers.Interface;
 using ESFA.DC.Serialization.Interfaces;
 
-namespace ESFA.DC.ILR.ValidationService.Stubs
+namespace ESFA.DC.ILR.ValidationService.Providers
 {
     public class MessageStringProviderService : IValidationItemProviderService<IMessage>
     {
         private readonly IXmlSerializationService _xmlSerializationService;
-        private readonly IPreValidationContext _validationContext;
+        private readonly IStringProviderService _stringProvider;
 
-        private IMessage _message;
-
-        public MessageStringProviderService(IXmlSerializationService xmlSerializationService, IPreValidationContext validationContext)
+        public MessageStringProviderService(IXmlSerializationService xmlSerializationService, IStringProviderService stringProvider)
         {
             _xmlSerializationService = xmlSerializationService;
-            _validationContext = validationContext;
+            _stringProvider = stringProvider;
         }
 
         public IMessage Provide()
         {
-            return _message ?? (_message = _xmlSerializationService.Deserialize<Message>(_validationContext.Input));
+            return _xmlSerializationService.Deserialize<Message>(_stringProvider.Provide());
         }
     }
 }

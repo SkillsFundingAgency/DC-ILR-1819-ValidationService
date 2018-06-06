@@ -2,6 +2,7 @@
 using System.Text;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
@@ -52,8 +53,10 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
         public Task<string> Validate(ValidationActorModel validationActorModel)
         {
             var jsonSerializationService = _parentLifeTimeScope.Resolve<IJsonSerializationService>();
+
             var internalDataCache = jsonSerializationService.Deserialize<InternalDataCache>(Encoding.UTF8.GetString(validationActorModel.InternalDataCache));
             var externalDataCache = jsonSerializationService.Deserialize<ExternalDataCache>(Encoding.UTF8.GetString(validationActorModel.ExternalDataCache));
+            var fileDataCache = jsonSerializationService.Deserialize<FileDataCache>(Encoding.UTF8.GetString(validationActorModel.FileDataCache));
             var message = jsonSerializationService.Deserialize<Message>(new MemoryStream(validationActorModel.Message));
 
             var validationContext = new ValidationContext()
@@ -67,6 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                 c.RegisterInstance(new Cache<IMessage>() { Item = message }).As<ICache<IMessage>>();
                 c.RegisterInstance(internalDataCache).As<IInternalDataCache>();
                 c.RegisterInstance(externalDataCache).As<IExternalDataCache>();
+                c.RegisterInstance(fileDataCache).As<IFileDataCache>();
             }))
             {
                 var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();

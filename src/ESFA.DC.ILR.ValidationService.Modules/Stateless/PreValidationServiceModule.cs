@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace ESFA.DC.ILR.ValidationService.Modules.PreValidation
+namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
 {
     public class PreValidationServiceModule : Module
     {

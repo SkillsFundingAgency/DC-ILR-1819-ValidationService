@@ -18,9 +18,9 @@ using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
-    public class ConsoleRuleSetModule : AbstractRuleSetModule
+    public class RuleSetModule : AbstractRuleSetModule
     {
-        public ConsoleRuleSetModule()
+        public RuleSetModule()
         {
             RuleSetType = typeof(IRule<ILearner>);
 

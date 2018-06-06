@@ -13,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="U"></typeparam>
-    public class ConsolePreValidationOrchestrationService<T, U> : IPreValidationOrchestrationService<T, U>
+    public class ConsolePreValidationOrchestrationService<T, U> : IPreValidationOrchestrationService<U>
         where T : class
     {
         private readonly IPreValidationPopulationService _preValidationPopulationService;

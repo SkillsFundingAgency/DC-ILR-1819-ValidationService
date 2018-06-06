@@ -7,7 +7,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
     using System.Threading;
     using System.Threading.Tasks;
     using Autofac;
-    using ESFA.DC.ILR.Model.Interface;
     using ESFA.DC.ILR.ValidationService.Interface;
     using ESFA.DC.ILR.ValidationService.Stateless.Models;
     using ESFA.DC.JobContext;
@@ -57,14 +56,10 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             };
 
             // populate the keys into jobcontextmessage
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers] =
-                validationContext.InvalidLearnRefNumbersKey;
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers] =
-                validationContext.ValidLearnRefNumbersKey;
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] =
-                validationContext.ValidationErrorMessageLookupKey;
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors] =
-                validationContext.ValidationErrorsKey;
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers] = validationContext.InvalidLearnRefNumbersKey;
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers] = validationContext.ValidLearnRefNumbersKey;
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = validationContext.ValidationErrorMessageLookupKey;
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors] = validationContext.ValidationErrorsKey;
 
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c => c.RegisterInstance(validationContext).As<IPreValidationContext>()))
             {
@@ -81,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     logger.LogDebug("inside processmessage validate");
 
                     var preValidationOrchestrationService = childLifeTimeScope
-                        .Resolve<IPreValidationOrchestrationService<ILearner, IValidationError>>();
+                        .Resolve<IPreValidationOrchestrationService<IValidationError>>();
 
                     // TODO: no need to return errors
                     var errors = preValidationOrchestrationService.Execute(validationContext);

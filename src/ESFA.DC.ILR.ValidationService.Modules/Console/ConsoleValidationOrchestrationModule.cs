@@ -13,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Console
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ConsolePreValidationOrchestrationService<ILearner, IValidationError>>()
-                .As<IPreValidationOrchestrationService<ILearner, IValidationError>>()
+                .As<IPreValidationOrchestrationService<IValidationError>>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<MessageFileSystemProviderServiceStub>()

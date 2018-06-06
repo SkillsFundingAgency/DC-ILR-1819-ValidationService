@@ -10,20 +10,17 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
     {
         private readonly IRuleSetResolutionService<T> _ruleSetResolutionService;
         private readonly IValidationItemProviderService<IEnumerable<T>> _validationItemProviderService;
-        private readonly IPopulationService _populationService;
         private readonly IRuleSetExecutionService<T> _ruleSetExecutionService;
         private readonly IValidationErrorCache<U> _validationErrorCache;
 
         public RuleSetOrchestrationService(
             IRuleSetResolutionService<T> ruleSetResolutionService,
             IValidationItemProviderService<IEnumerable<T>> validationItemProviderService,
-            IPopulationService populationService,
             IRuleSetExecutionService<T> ruleSetExecutionService,
             IValidationErrorCache<U> validationErrorCache)
         {
             _ruleSetResolutionService = ruleSetResolutionService;
             _validationItemProviderService = validationItemProviderService;
-            _populationService = populationService;
             _ruleSetExecutionService = ruleSetExecutionService;
             _validationErrorCache = validationErrorCache;
         }
@@ -31,8 +28,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
         public IEnumerable<U> Execute(IValidationContext validationContext)
         {
             var ruleSet = _ruleSetResolutionService.Resolve().ToList();
-
-            _populationService.Populate();
 
             foreach (var validationItem in _validationItemProviderService.Provide())
             {

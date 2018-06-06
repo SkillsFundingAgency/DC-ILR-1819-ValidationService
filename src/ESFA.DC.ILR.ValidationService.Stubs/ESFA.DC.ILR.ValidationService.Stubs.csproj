@@ -95,7 +95,6 @@
     <Compile Include="AzureInternalDataCachePopulationServiceStub.cs" />
     <Compile Include="InternalDataCachePopulationServiceStub.cs" />
     <Compile Include="LearnerPerActorServiceStub.cs" />
-    <Compile Include="LearnerProviderServiceStub.cs" />
     <Compile Include="MessageFileSystemProviderServiceStub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PreValidationContextStub.cs" />

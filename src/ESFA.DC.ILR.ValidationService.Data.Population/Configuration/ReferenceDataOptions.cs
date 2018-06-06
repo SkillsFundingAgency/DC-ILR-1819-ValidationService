@@ -1,6 +1,8 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Stateless.Models
+﻿using ESFA.DC.ILR.ValidationService.Data.Population.Configuration.Interface;
+
+namespace ESFA.DC.ILR.ValidationService.Data.Population.Configuration
 {
-    public class ReferenceDataOptions
+    public class ReferenceDataOptions : IReferenceDataOptions
     {
         public string LARSConnectionString { get; set; }
 
