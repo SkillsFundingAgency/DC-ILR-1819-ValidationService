@@ -13,8 +13,8 @@
     <Parameter Name="LARSConnectionString" Value="__LARSConnectionString__" />
     <Parameter Name="PostcodesConnectionString" Value="__PostcodesConnectionString__" />
     <Parameter Name="ULNConnectionstring" Value="__ULNConnectionstring__" />
-    <Parameter Name="CosmosEndpointUrl" Value="__CosmosEndpointUrl__" />
-    <Parameter Name="CosmosAuthKeyOrResourceToken" Value="__CosmosAuthKeyOrResourceToken__" />
+    <Parameter Name="RedisCacheConnectionString" Value="__RedisCacheConnectionString__" />
     <Parameter Name="ValidationErrorsConnectionString" Value="__ValidationErrorsConnectionString__" />
+    <Parameter Name="ProcessingServicePlacementConstraints" Value="(NodeHostName == ProcessingHosts)" />
   </Parameters>
 </Application>
