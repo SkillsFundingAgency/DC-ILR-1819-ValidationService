@@ -1,5 +1,5 @@
 ﻿using ESFA.DC.ILR.Model;
-using ESFA.DC.ILR.ValidationService.Providers.Interface;
+using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.Serialization.Interfaces;
 using FluentAssertions;
 using Moq;
@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             var ilrString = "ILR String";
             var message = new Message();
 
-            var stringProviderServiceMock = new Mock<IStringProviderService>();
+            var stringProviderServiceMock = new Mock<IMessageStringProviderService>();
             stringProviderServiceMock.Setup(sps => sps.Provide()).Returns(ilrString);
 
             var xmlSerializationService = new Mock<IXmlSerializationService>();
@@ -24,9 +24,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             NewService(xmlSerializationService.Object, stringProviderServiceMock.Object).Provide().Should().BeSameAs(message);
         }
 
-        private MessageStringProviderService NewService(IXmlSerializationService xmlSerializationService = null, IStringProviderService stringProviderService = null)
+        private MessageProviderService NewService(IXmlSerializationService xmlSerializationService = null, IMessageStringProviderService stringProviderService = null)
         {
-            return new MessageStringProviderService(xmlSerializationService, stringProviderService);
+            return new MessageProviderService(xmlSerializationService, stringProviderService);
         }
     }
 }

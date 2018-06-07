@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
             var referenceDataOptions = configHelper.GetSectionValues<ReferenceDataOptions>("ReferenceDataSection");
             builder.RegisterInstance(referenceDataOptions).As<IReferenceDataOptions>().SingleInstance();
 
-            builder.RegisterType<PreValidationPopulationService>().As<IPreValidationPopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<PreValidationPopulationService>().As<IPopulationService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AzureInternalDataCachePopulationServiceStub>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
 

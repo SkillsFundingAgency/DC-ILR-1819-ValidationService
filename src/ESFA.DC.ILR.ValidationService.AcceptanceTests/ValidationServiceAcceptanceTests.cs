@@ -126,7 +126,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
                 c.RegisterInstance(preValidationContext).As<IPreValidationContext>();
             }))
             {
-                var preValidationPopulationService = scope.Resolve<IPreValidationPopulationService>();
+                var preValidationPopulationService = scope.Resolve<IPopulationService>();
 
                 preValidationPopulationService.Populate();
 

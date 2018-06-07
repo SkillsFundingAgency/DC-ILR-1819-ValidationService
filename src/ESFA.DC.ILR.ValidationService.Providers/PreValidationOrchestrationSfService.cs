@@ -19,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 {
     public class PreValidationOrchestrationSfService<U> : IPreValidationOrchestrationService<U>
     {
-        private readonly IPreValidationPopulationService _preValidationPopulationService;
+        private readonly IPopulationService _preValidationPopulationService;
         private readonly ILearnerPerActorService _learnerPerActorService;
         private readonly ICache<IMessage> _messageCache;
         private readonly IJsonSerializationService _jsonSerializationService;
@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly ILogger _logger;
 
         public PreValidationOrchestrationSfService(
-            IPreValidationPopulationService preValidationPopulationService,
+            IPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
             ILearnerPerActorService learnerPerActorService,
             IJsonSerializationService jsonSerializationService,

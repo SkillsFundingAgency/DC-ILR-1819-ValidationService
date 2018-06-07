@@ -16,13 +16,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     public class ConsolePreValidationOrchestrationService<T, U> : IPreValidationOrchestrationService<U>
         where T : class
     {
-        private readonly IPreValidationPopulationService _preValidationPopulationService;
+        private readonly IPopulationService _preValidationPopulationService;
         private readonly ICache<IMessage> _messageCache;
         private readonly IRuleSetOrchestrationService<T, U> _ruleSetOrchestrationService;
         private readonly IValidationOutputService<U> _validationOutputService;
 
         public ConsolePreValidationOrchestrationService(
-            IPreValidationPopulationService preValidationPopulationService,
+            IPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
             IRuleSetOrchestrationService<T, U> ruleSetOrchestrationService,
             IValidationOutputService<U> validationOutputService)

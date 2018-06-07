@@ -102,7 +102,6 @@
     <Compile Include="Interface\IMessageCachePopulationService.cs" />
     <Compile Include="Interface\IPopulationService.cs" />
     <Compile Include="Interface\IPostcodesDataRetrievalService.cs" />
-    <Compile Include="Interface\IPreValidationPopulationService.cs" />
     <Compile Include="Interface\IULNDataRetrievalService.cs" />
     <Compile Include="Interface\IValidationErrorsDataRetrievalService.cs" />
     <Compile Include="Keys\FrameworkKey.cs" />

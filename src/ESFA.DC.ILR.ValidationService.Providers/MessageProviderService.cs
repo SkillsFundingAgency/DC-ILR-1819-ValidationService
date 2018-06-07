@@ -1,17 +1,16 @@
 ﻿using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Providers.Interface;
 using ESFA.DC.Serialization.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
-    public class MessageStringProviderService : IValidationItemProviderService<IMessage>
+    public class MessageProviderService : IValidationItemProviderService<IMessage>
     {
         private readonly IXmlSerializationService _xmlSerializationService;
-        private readonly IStringProviderService _stringProvider;
+        private readonly IMessageStringProviderService _stringProvider;
 
-        public MessageStringProviderService(IXmlSerializationService xmlSerializationService, IStringProviderService stringProvider)
+        public MessageProviderService(IXmlSerializationService xmlSerializationService, IMessageStringProviderService stringProvider)
         {
             _xmlSerializationService = xmlSerializationService;
             _stringProvider = stringProvider;

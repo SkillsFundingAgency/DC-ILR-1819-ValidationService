@@ -2,7 +2,7 @@
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population
 {
-    public class PreValidationPopulationService : IPreValidationPopulationService
+    public class PreValidationPopulationService : IPopulationService
     {
         private readonly IMessageCachePopulationService _messageCachePopulationService;
         private readonly IFileDataCachePopulationService _fileDataCachePopulationService;
