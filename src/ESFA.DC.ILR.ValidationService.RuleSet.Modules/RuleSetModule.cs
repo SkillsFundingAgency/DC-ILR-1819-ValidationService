@@ -31,6 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AchDate_03Rule),
                 typeof(AchDate_04Rule),
                 typeof(AchDate_05Rule),
+                typeof(AchDate_07Rule),
                 typeof(AddHours_01Rule),
                 typeof(AddHours_02Rule),
                 typeof(AddHours_04Rule),
