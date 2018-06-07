@@ -8,13 +8,13 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using Newtonsoft.Json.Linq;
 
-namespace ESFA.DC.ILR.ValidationService.Stubs
+namespace ESFA.DC.ILR.ValidationService.AcceptanceTests.Stubs
 {
-    public class AcceptanceTestsExternalDataCachePopulationService : IExternalDataCachePopulationService
+    public class AcceptanceTestsExternalDataCachePopulationServiceStub : IExternalDataCachePopulationService
     {
         private ExternalDataCache _dataCache;
 
-        public AcceptanceTestsExternalDataCachePopulationService(IExternalDataCache iCache)
+        public AcceptanceTestsExternalDataCachePopulationServiceStub(IExternalDataCache iCache)
         {
             _dataCache = (ExternalDataCache)iCache;
         }

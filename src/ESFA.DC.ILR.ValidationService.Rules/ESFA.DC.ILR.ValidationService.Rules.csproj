@@ -79,6 +79,7 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
     <Compile Include="Learner\ULN\ULN_03Rule.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_03Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_02Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_02Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_01Rule.cs" />

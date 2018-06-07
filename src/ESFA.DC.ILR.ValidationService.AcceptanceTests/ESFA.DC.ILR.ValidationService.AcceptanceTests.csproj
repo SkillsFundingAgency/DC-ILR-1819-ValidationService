@@ -132,8 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Module\AcceptanceTestsOverrideStubsModule.cs" />
-    <Compile Include="RuleSet\AcceptanceTestsRuleSetModule.cs" />
-    <Compile Include="RuleSet\AcceptanceTestsExternalDataCachePopulationService.cs" />
+    <Compile Include="Stubs\AcceptanceTestsExternalDataCachePopulationServiceStub.cs" />
     <Compile Include="Stubs\ContextMessageStringProviderService.cs" />
     <Compile Include="Module\AcceptanceTestsOrchestrationModule.cs" />
     <Compile Include="Module\ValidationServiceAcceptanceTestsModule.cs" />

@@ -28,6 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
             Rules = new List<Type>()
             {
                 typeof(AchDate_02Rule),
+                typeof(AchDate_03Rule),
                 typeof(AddHours_01Rule),
                 typeof(AddHours_02Rule),
                 typeof(AddHours_04Rule),

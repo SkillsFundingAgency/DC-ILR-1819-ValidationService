@@ -11,38 +11,30 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
 {
-    public class AchDate_02RuleTests : AbstractRuleTests<AchDate_02Rule>
+    public class AchDate_03RuleTests : AbstractRuleTests<AchDate_03Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("AchDate_02");
+            NewRule().RuleName.Should().Be("AchDate_03");
         }
 
         [Fact]
         public void ConditionMet_True()
         {
-            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
-
-            academicYearDataServiceMock.Setup(ay => ay.End()).Returns(new DateTime(2018, 9, 1));
-
-            NewRule(academicYearDataServiceMock.Object).ConditionMet(new DateTime(2019, 1, 1)).Should().BeTrue();
+            NewRule().ConditionMet(new DateTime(2019, 1, 1), new DateTime(2020, 1, 1)).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False()
         {
-            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
-
-            academicYearDataServiceMock.Setup(ay => ay.End()).Returns(new DateTime(2018, 9, 1));
-
-            NewRule(academicYearDataServiceMock.Object).ConditionMet(new DateTime(2017, 1, 1)).Should().BeFalse();
+            NewRule().ConditionMet(new DateTime(2017, 1, 1), new DateTime(2016, 1, 1)).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_Null()
         {
-            NewRule().ConditionMet(null).Should().BeFalse();
+            NewRule().ConditionMet(null, new DateTime(2018, 1, 1)).Should().BeFalse();
         }
 
         [Fact]
@@ -54,18 +46,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
                 {
                     new TestLearningDelivery()
                     {
-                        AchDateNullable = new DateTime(2019, 1, 1)
+                        AchDateNullable = new DateTime(2019, 1, 1),
+                        LearnStartDate = new DateTime(2020, 1, 1),
                     }
                 }
             };
 
-            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
-
-            academicYearDataServiceMock.Setup(ay => ay.End()).Returns(new DateTime(2018, 9, 1));
-
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(academicYearDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -82,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -91,16 +80,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("AchDate", "01/01/2017")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnStartDate", "01/01/2017")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("AchDate", "01/01/2016")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2017, 1, 1));
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2017, 1, 1), new DateTime(2016, 1, 1));
 
             validationErrorHandlerMock.Verify();
         }
 
-        private AchDate_02Rule NewRule(IAcademicYearDataService academicYearDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private AchDate_03Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new AchDate_02Rule(academicYearDataService, validationErrorHandler);
+            return new AchDate_03Rule(validationErrorHandler);
         }
     }
 }

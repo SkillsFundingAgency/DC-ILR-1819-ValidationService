@@ -10,7 +10,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
         {
             builder.RegisterModule<AcceptanceTestsOrchestrationModule>();
             builder.RegisterModule<BaseDataModule>();
-            builder.RegisterModule<AcceptanceTestsRuleSetModule>();
+            builder.RegisterModule<RuleSetModule>();
             builder.RegisterModule<AcceptanceTestsOverrideStubsModule>();
             builder.RegisterModule<SerializationModule>();
             builder.RegisterModule<ProviderModule>();
