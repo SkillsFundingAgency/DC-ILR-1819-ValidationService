@@ -4,6 +4,7 @@
     {
         public const string AchDate_02 = "AchDate_02";
         public const string AchDate_03 = "AchDate_03";
+        public const string AchDate_04 = "AchDate_04";
 
         public const string AddHours_01 = "AddHours_01";
         public const string AddHours_02 = "AddHours_02";

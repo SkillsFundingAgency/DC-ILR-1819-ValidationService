@@ -10,18 +10,18 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
 {
-    public class AchDate_03RuleTests : AbstractRuleTests<AchDate_03Rule>
+    public class AchDate_04RuleTests : AbstractRuleTests<AchDate_04Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("AchDate_03");
+            NewRule().RuleName.Should().Be("AchDate_04");
         }
 
         [Fact]
         public void ConditionMet_True()
         {
-            NewRule().ConditionMet(new DateTime(2019, 1, 1), new DateTime(2020, 1, 1)).Should().BeTrue();
+            NewRule().ConditionMet(new DateTime(2019, 1, 1), null).Should().BeTrue();
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
                     new TestLearningDelivery()
                     {
                         AchDateNullable = new DateTime(2019, 1, 1),
-                        LearnStartDate = new DateTime(2020, 1, 1),
+                        LearnActEndDateNullable = null,
                     }
                 }
             };
@@ -79,7 +79,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnStartDate", "01/01/2017")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnActEndDate", "01/01/2017")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("AchDate", "01/01/2016")).Verifiable();
 
             NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2017, 1, 1), new DateTime(2016, 1, 1));
@@ -87,9 +87,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
             validationErrorHandlerMock.Verify();
         }
 
-        private AchDate_03Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        private AchDate_04Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new AchDate_03Rule(validationErrorHandler);
+            return new AchDate_04Rule(validationErrorHandler);
         }
     }
 }
