@@ -6,6 +6,7 @@
 
         public const string ULN = "ULN";
 
+        public const string AchDate = "AchDate";
         public const string AimType = "AimType";
         public const string CompStatus = "CompStatus";
         public const string ConRefNumber = "ConRefNumber";

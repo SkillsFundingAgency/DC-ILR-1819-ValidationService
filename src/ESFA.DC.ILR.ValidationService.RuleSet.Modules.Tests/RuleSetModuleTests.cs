@@ -7,6 +7,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Modules.Actor;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType;
@@ -25,7 +26,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 {
-    public class ConsoleRuleSetModuleTests
+    public class RuleSetModuleTests
     {
         [Fact]
         public void RuleSet()
@@ -45,6 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 
             var ruleTypes = new List<Type>()
             {
+                typeof(AchDate_02Rule),
                 typeof(AddHours_01Rule),
                 typeof(AddHours_02Rule),
                 typeof(AddHours_04Rule),
@@ -95,7 +97,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(42);
+            rules.Should().HaveCount(43);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

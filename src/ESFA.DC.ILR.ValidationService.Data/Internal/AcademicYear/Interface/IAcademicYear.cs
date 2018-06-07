@@ -1,6 +1,6 @@
 using System;
 
-namespace ESFA.DC.ILR.ValidationService.Interface
+namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface
 {
     public interface IAcademicYear
     {
