@@ -19,6 +19,8 @@
         public const string LearnActEndDate = "LearnActEndDate";
         public const string LearnAimRef = "LearnAimRef";
         public const string LearnDelFAMCode = "LearnDelFAMCode";
+        public const string LearnDelFAMDateFrom = "LearnDelFAMDateFrom";
+        public const string LearnDelFAMDateTo = "LearnDelFAMDateTo";
         public const string LearnDelFAMType = "LearnDelFAMType";
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnStartDate = "LearnStartDate";

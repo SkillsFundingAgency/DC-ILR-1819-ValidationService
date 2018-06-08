@@ -5,7 +5,6 @@ using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
-using ESFA.DC.ILR.ValidationService.Modules.Actor;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
@@ -19,7 +18,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
-using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -95,6 +94,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnAimRef_30Rule),
                 typeof(LearnAimRef_55Rule),
                 typeof(LearnAimRef_80Rule),
+                typeof(LearnDelFAMDateFrom_01Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -103,7 +103,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(49);
+            rules.Should().HaveCount(50);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
