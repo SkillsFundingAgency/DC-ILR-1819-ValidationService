@@ -154,6 +154,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_01RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
