@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.Tests.Model;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
 using Xunit;
@@ -19,9 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
 
             var codes = new string[] { "CodeOne", "CodeThree" };
 
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "TypeTwo", codes).Should().BeTrue();
+            NewService().HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "TypeTwo", codes).Should().BeTrue();
         }
 
         [Fact]
@@ -29,9 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             var codes = new string[] { "CodeOne", "CodeThree" };
 
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasAnyLearningDeliveryFAMCodesForType(null, "TypeTwo", codes).Should().BeFalse();
+            NewService().HasAnyLearningDeliveryFAMCodesForType(null, "TypeTwo", codes).Should().BeFalse();
         }
 
         [Fact]
@@ -44,9 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 new TestLearningDeliveryFAM() { LearnDelFAMType = "TypeTwo", LearnDelFAMCode = "CodeThree" },
             };
 
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "TypeTwo", null).Should().BeFalse();
+            NewService().HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "TypeTwo", null).Should().BeFalse();
         }
 
         [Fact]
@@ -61,9 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
 
             var codes = new string[] { "CodeTwo", "CodeThree" };
 
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "TypeOne", codes).Should().BeFalse();
+            NewService().HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "TypeOne", codes).Should().BeFalse();
         }
 
         [Fact]
@@ -75,17 +69,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 new TestLearningDeliveryFAM() { LearnDelFAMType = "TypeTwo", LearnDelFAMCode = "CodeTwo" },
             };
 
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "TypeTwo", "CodeTwo").Should().BeTrue();
+            NewService().HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "TypeTwo", "CodeTwo").Should().BeTrue();
         }
 
         [Fact]
         public void HasLearningDeliveryFAMCodeForType_FalseNull()
         {
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasLearningDeliveryFAMCodeForType(null, "TypeTwo", "CodeTwo").Should().BeFalse();
+            NewService().HasLearningDeliveryFAMCodeForType(null, "TypeTwo", "CodeTwo").Should().BeFalse();
         }
 
         [Fact]
@@ -97,9 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 new TestLearningDeliveryFAM() { LearnDelFAMType = "TypeTwo", LearnDelFAMCode = "CodeTwo" },
             };
 
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "TypeOne", "CodeThree").Should().BeFalse();
+            NewService().HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "TypeOne", "CodeThree").Should().BeFalse();
         }
 
         [Fact]
@@ -112,9 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 new TestLearningDeliveryFAM() { LearnDelFAMType = "TypeTwo" }
             };
 
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, "TypeOne");
+            NewService().HasLearningDeliveryFAMType(learningDeliveryFAMs, "TypeOne");
         }
 
         [Fact]
@@ -127,17 +113,60 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 new TestLearningDeliveryFAM() { LearnDelFAMType = "TypeTwo" }
             };
 
-            var queryService = new LearningDeliveryFAMQueryService();
-
-            queryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, "TypeThree");
+            NewService().HasLearningDeliveryFAMType(learningDeliveryFAMs, "TypeThree");
         }
 
         [Fact]
         public void HasLearningDeliveryFAMType_False_Null()
         {
-            var queryService = new LearningDeliveryFAMQueryService();
+            NewService().HasLearningDeliveryFAMType(null, "Doesn't Matter");
+        }
 
-            queryService.HasLearningDeliveryFAMType(null, "Doesn't Matter");
+        [Fact]
+        public void HasAnyLearningDeliveryFAMTypes_True()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            var famTypes = new List<string>() { "A", "D" };
+
+            NewService().HasAnyLearningDeliveryFAMTypes(learningDeliveryFAMs, famTypes).Should().BeTrue();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryFAMTypes_False()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            var famTypes = new List<string>() { "D", "E" };
+
+            NewService().HasAnyLearningDeliveryFAMTypes(learningDeliveryFAMs, famTypes).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryFAMTypes_False_NullLearningDeliveryFAMs()
+        {
+            NewService().HasAnyLearningDeliveryFAMTypes(null, new List<string>());
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryFAMTypes_False_NullFAMTypes()
+        {
+            NewService().HasAnyLearningDeliveryFAMTypes(new List<ILearningDeliveryFAM>(), null);
+        }
+
+        private LearningDeliveryFAMQueryService NewService()
+        {
+            return new LearningDeliveryFAMQueryService();
         }
     }
 }

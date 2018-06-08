@@ -26,5 +26,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         {
             return learningDeliveryFAMs != null && learningDeliveryFAMs.Any(ldfam => ldfam.LearnDelFAMType == famType);
         }
+
+        public bool HasAnyLearningDeliveryFAMTypes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, IEnumerable<string> famTypes)
+        {
+            return learningDeliveryFAMs != null
+                   && famTypes != null
+                   && learningDeliveryFAMs.Any(ldfam => famTypes.Contains(ldfam.LearnDelFAMType));
+        }
     }
 }

@@ -10,5 +10,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool HasLearningDeliveryFAMCodeForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType, string famCode);
 
         bool HasLearningDeliveryFAMType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType);
+
+        bool HasAnyLearningDeliveryFAMTypes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, IEnumerable<string> famTypes);
     }
 }
