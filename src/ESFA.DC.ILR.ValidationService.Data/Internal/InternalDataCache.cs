@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
-using ESFA.DC.ILR.ValidationService.Interface;
 using IAcademicYear = ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface.IAcademicYear;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Internal

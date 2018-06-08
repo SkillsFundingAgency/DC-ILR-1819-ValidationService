@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules.Actor;

@@ -77,6 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnAimRef_55Rule),
                 typeof(LearnAimRef_80Rule),
                 typeof(LearnDelFAMDateFrom_01Rule),
+                typeof(LearnDelFAMDateFrom_02Rule),
                 typeof(ULN_03Rule),
             };
         }

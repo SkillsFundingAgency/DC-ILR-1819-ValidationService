@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
@@ -105,10 +103,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [Fact]
         public void Validate_Error()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.SetupGet(c => c.FilePreparationDate).Returns(new DateTime(2017, 1, 1));
-
             var learner = new TestLearner()
             {
                 LearningDeliveries = new List<TestLearningDelivery>()
@@ -136,10 +130,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [Fact]
         public void Validate_NoErrors()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.SetupGet(c => c.FilePreparationDate).Returns(new DateTime(2017, 1, 1));
-
             var learner = new TestLearner()
             {
                 LearningDeliveries = new List<TestLearningDelivery>()

@@ -9,8 +9,6 @@ using DC.JobContextManager.Interface;
 using ESFA.DC.Auditing;
 using ESFA.DC.Auditing.Dto;
 using ESFA.DC.Auditing.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Population.Configuration;
-using ESFA.DC.ILR.ValidationService.Data.Population.Configuration.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Modules.Stateless;
 using ESFA.DC.ILR.ValidationService.Stateless.Configuration;
