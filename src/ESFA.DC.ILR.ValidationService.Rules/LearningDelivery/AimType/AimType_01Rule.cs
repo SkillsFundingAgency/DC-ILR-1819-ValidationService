@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AimType.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -22,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
             {
                 if (ConditionMet(learningDelivery.AimType))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.AimType));
                 }
             }
         }
@@ -30,6 +31,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
         public bool ConditionMet(int aimType)
         {
             return !_aimTypeInternalDataService.Exists(aimType);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int aimType)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.AimType, aimType)
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -18,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
             {
                 if (ConditionMet(learningDelivery.AimType, learningDelivery.FundModel))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.AimType, learningDelivery.FundModel));
                 }
             }
         }
@@ -26,6 +27,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
         public bool ConditionMet(int aimType, int fundModel)
         {
             return aimType == 5 && fundModel != FundModelConstants.CommunityLearning && fundModel != FundModelConstants.SixteenToNineteen;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int aimType, int fundModel)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.AimType, aimType),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)
+            };
         }
     }
 }

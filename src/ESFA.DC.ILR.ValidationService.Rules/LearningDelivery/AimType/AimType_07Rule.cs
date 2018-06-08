@@ -10,6 +10,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
 {
     public class AimType_07Rule : AbstractRule, IRule<ILearner>
     {
+        private const string _learnDelFamCode = "105";
+
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
         private readonly DateTime _minimumLearnStartDate = new DateTime(2017, 8, 1);
 
@@ -25,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
             {
                 if (ConditionMet(learningDelivery.ProgTypeNullable, learningDelivery.AimType, learningDelivery.LearnStartDate) && LearningDeliveryFAMConditionMet(learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.AimType, LearningDeliveryFAMTypeConstants.SOF, _learnDelFamCode));
                 }
             }
         }
@@ -39,7 +41,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
 
         public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams)
         {
-            return _learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, LearningDeliveryFAMTypeConstants.SOF, "105");
+            return _learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, LearningDeliveryFAMTypeConstants.SOF, _learnDelFamCode);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int aimType, string learnDelFamType, string learnDelFamCode)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.AimType, aimType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learnDelFamType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, learnDelFamCode),
+            };
         }
     }
 }
