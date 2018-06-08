@@ -98,6 +98,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
             }
         }
 
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("CompStatus", 1)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1);
+
+            validationErrorHandlerMock.Verify();
+        }
+
         private CompStatus_01Rule NewRule(ICompStatusDataService compStatusInternalDataService = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new CompStatus_01Rule(compStatusInternalDataService, validationErrorHandler);

@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -22,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
             {
                 if (ConditionMet(learningDelivery.CompStatus))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.CompStatus));
                 }
             }
         }
@@ -30,6 +31,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
         public bool ConditionMet(int compStatus)
         {
             return !_compStatusInternalDataService.Exists(compStatus);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int compStatus)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.CompStatus, compStatus)
+            };
         }
     }
 }
