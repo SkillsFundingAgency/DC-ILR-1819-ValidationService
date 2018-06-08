@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -22,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
             {
                 if (ConditionMet(_learningDeliveryQueryService.AverageAddHoursPerLearningDay(learningDelivery)))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, learningDelivery.LearnPlanEndDate, learningDelivery.AddHoursNullable));
                 }
             }
         }
@@ -30,6 +32,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
         public bool ConditionMet(double? addHoursPerDay)
         {
             return addHoursPerDay > 9 && addHoursPerDay < 24;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, DateTime? learnPlanEndDate, int? addHoursNullable)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnPlanEndDate, learnPlanEndDate),
+                BuildErrorMessageParameter(PropertyNameConstants.AddHours, addHoursNullable)
+            };
         }
     }
 }

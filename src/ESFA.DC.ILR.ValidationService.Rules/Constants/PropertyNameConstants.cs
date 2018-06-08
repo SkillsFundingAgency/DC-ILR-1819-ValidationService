@@ -17,6 +17,7 @@
         public const string FworkCode = "FworkCode";
         public const string LearnActEndDate = "LearnActEndDate";
         public const string LearnAimRef = "LearnAimRef";
+        public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
         public const string ProgType = "ProgType";
