@@ -4,6 +4,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimSeqNumber
@@ -66,6 +67,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimSeqNumbe
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("AimSeqNumber", 1)).Verifiable();
+
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(1);
+
+            validationErrorHandlerMock.Verify();
         }
 
         private AimSeqNumber_02Rule NewRule(IValidationErrorHandler validationErrorHandler = null)

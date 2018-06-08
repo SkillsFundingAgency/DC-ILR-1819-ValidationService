@@ -8,6 +8,7 @@
 
         public const string AddHours = "AddHours";
         public const string AchDate = "AchDate";
+        public const string AimSeqNumber = "AimSeqNumber";
         public const string AimType = "AimType";
         public const string CompStatus = "CompStatus";
         public const string ConRefNumber = "ConRefNumber";

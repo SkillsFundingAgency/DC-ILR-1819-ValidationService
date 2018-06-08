@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -20,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber
             {
                 if (ConditionMet(aimCount, learningDelivery.AimSeqNumber))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.AimSeqNumber));
                 }
             }
         }
@@ -28,6 +29,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber
         public bool ConditionMet(int aimCount, int aimSequenceNumber)
         {
             return aimSequenceNumber > aimCount;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int aimSeqNumber)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.AimSeqNumber, aimSeqNumber)
+            };
         }
     }
 }
