@@ -1,8 +1,10 @@
-﻿using ESFA.DC.ILR.Tests.Model;
+﻿using System;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
@@ -72,6 +74,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AddHours
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FundModel", 1)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("AddHours", 1)).Verifiable();
+
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, 1);
+
+            validationErrorHandlerMock.Verify();
         }
 
         private AddHours_02Rule NewRule(IValidationErrorHandler validationErrorHandler = null)

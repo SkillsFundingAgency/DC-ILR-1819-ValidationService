@@ -27,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
                     learningDelivery.AddHoursNullable,
                     learningDelivery.LearnStartDate))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, learningDelivery.FundModel, learningDelivery.AddHoursNullable));
                 }
             }
         }
@@ -52,6 +52,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
         public bool LearnStartDateConditionMet(DateTime learnStartDate)
         {
             return learnStartDate < _learnStartDate;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, int fundModel, int? addHoursNullable)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.AddHours, addHoursNullable)
+            };
         }
     }
 }

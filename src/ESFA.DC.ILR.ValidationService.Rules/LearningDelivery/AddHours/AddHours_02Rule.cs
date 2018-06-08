@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -24,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
                     learningDelivery.FundModel,
                     learningDelivery.AddHoursNullable))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel, learningDelivery.AddHoursNullable));
                 }
             }
         }
@@ -33,6 +34,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
         {
             return addHours.HasValue
                    && _fundModels.Contains(fundModel);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, int? addHoursNullable)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.AddHours, addHoursNullable)
+            };
         }
     }
 }
