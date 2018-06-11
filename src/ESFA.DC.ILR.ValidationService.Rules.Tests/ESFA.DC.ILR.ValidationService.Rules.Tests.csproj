@@ -158,6 +158,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_01RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
