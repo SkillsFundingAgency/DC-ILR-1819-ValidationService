@@ -81,6 +81,14 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     // TODO: no need to return errors
                     var errors = preValidationOrchestrationService.Execute(validationContext);
 
+                    var updatedValidationContext = childLifeTimeScope.Resolve<IPreValidationContext>();
+
+                    // populate the keys into jobcontextmessage
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] = updatedValidationContext.InvalidLearnRefNumbersCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbersCount] = updatedValidationContext.ValidLearnRefNumbersCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalErrorCount] = updatedValidationContext.ValidationTotalErrorCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalWarningCount] = updatedValidationContext.ValidationTotalWarningCount;
+
                     logger.LogDebug("Job complete");
                     ServiceEventSource.Current.ServiceMessage(_context, "Job complete");
                     return Task.FromResult(true);

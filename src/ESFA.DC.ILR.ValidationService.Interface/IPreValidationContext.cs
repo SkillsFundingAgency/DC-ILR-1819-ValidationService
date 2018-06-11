@@ -15,5 +15,13 @@
         string ValidationErrorMessageLookupKey { get; }
 
         string JobId { get; }
+
+        int ValidLearnRefNumbersCount { get; }
+
+        int InvalidLearnRefNumbersCount { get; }
+
+        int ValidationTotalErrorCount { get; }
+
+        int ValidationTotalWarningCount { get; }
     }
 }

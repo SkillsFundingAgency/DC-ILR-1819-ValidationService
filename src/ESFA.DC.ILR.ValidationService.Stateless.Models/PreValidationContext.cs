@@ -17,5 +17,13 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Models
         public string ValidationErrorsKey { get; set; }
 
         public string ValidationErrorMessageLookupKey { get; set; }
+
+        public int ValidLearnRefNumbersCount { get; set; }
+
+        public int InvalidLearnRefNumbersCount { get; set; }
+
+        public int ValidationTotalErrorCount { get; set; }
+
+        public int ValidationTotalWarningCount { get; set; }
     }
 }

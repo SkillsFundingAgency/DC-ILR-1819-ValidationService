@@ -6,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.IO.Model;
+using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 
@@ -100,6 +101,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             var invalidLearnRefNumbersKey = _validationContext.InvalidLearnRefNumbersKey;
             var validationErrorsKey = _validationContext.ValidationErrorsKey;
             var validationErrorMessageLookupKey = _validationContext.ValidationErrorMessageLookupKey;
+
+            var validationContext = (PreValidationContext)_validationContext;
+            validationContext.InvalidLearnRefNumbersCount = invalidLearnerRefNumbers.Count();
+            validationContext.ValidLearnRefNumbersCount = validLearnerRefNumbers.Count();
+            validationContext.ValidationTotalErrorCount = validationErrors.Count(x => x.Severity == Error);
+            validationContext.ValidationTotalWarningCount = validationErrors.Count(x => x.Severity == Warning);
 
             await Task.WhenAll(
                 new[]

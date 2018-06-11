@@ -10,6 +10,14 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
         public string JobId { get; set; }
 
+        public int ValidLearnRefNumbersCount { get; set; }
+
+        public int InvalidLearnRefNumbersCount { get; set; }
+
+        public int ValidationTotalErrorCount { get; set; }
+
+        public int ValidationTotalWarningCount { get; set; }
+
         public string InvalidLearnRefNumbersKey { get; set; }
 
         public string ValidLearnRefNumbersKey { get; set; }
