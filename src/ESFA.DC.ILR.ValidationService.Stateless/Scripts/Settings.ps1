@@ -2,7 +2,7 @@
     [string]$ProjDirectory = ""
 )
 
-$privateFilesPath =  [io.path]::combine($(get-item $ProjDirectory).parent.parent.parent.FullName,"DC-Configs","ServiceFabricSettings",$env:UserName)
+$privateFilesPath =  [io.path]::combine($(get-item $ProjDirectory).parent.parent.parent.FullName,"DC-Configs","ServiceFabricSettings",$env:UserName,"ValidationService")
 Write-Host $privateFilesPath 
  
 $destination = [io.path]::combine($(get-item $ProjDirectory).parent.FullName,"ESFA.DC.ILR.ValidationService","ApplicationParameters")
@@ -13,7 +13,7 @@ if (Test-Path $privateFilesPath)
 { 
     Write-Host "Found private repo files, copying..." 
 
-    $repoFilesArray = Get-ChildItem $privateFilesPath 
+    $repoFilesArray = Get-ChildItem $privateFilesPath
     
     Write-Host $repoFilesArray.Length
 
