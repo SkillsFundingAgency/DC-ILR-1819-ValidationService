@@ -114,6 +114,10 @@
       <Project>{EBE0154D-6F8B-4DBB-A18F-4929AB74D204}</Project>
       <Name>ESFA.DC.ILR.ValidationService.RuleSet</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Stateless.Models\ESFA.DC.ILR.ValidationService.Stateless.Models.csproj">
+      <Project>{eb94fed6-6895-488d-822a-60254bd32fc7}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Stateless.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

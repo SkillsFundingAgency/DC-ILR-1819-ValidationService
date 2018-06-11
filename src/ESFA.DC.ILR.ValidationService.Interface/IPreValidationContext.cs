@@ -16,12 +16,12 @@
 
         string JobId { get; }
 
-        int ValidLearnRefNumbersCount { get; }
+        int ValidLearnRefNumbersCount { get; set; }
 
-        int InvalidLearnRefNumbersCount { get; }
+        int InvalidLearnRefNumbersCount { get; set; }
 
-        int ValidationTotalErrorCount { get; }
+        int ValidationTotalErrorCount { get; set; }
 
-        int ValidationTotalWarningCount { get; }
+        int ValidationTotalWarningCount { get; set; }
     }
 }
