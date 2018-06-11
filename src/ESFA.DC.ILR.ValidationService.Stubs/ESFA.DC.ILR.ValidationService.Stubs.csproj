@@ -95,8 +95,10 @@
     <Compile Include="AzureInternalDataCachePopulationServiceStub.cs" />
     <Compile Include="InternalDataCachePopulationServiceStub.cs" />
     <Compile Include="LearnerPerActorServiceStub.cs" />
+    <Compile Include="OneHundredThousandLearnerProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PreValidationContextStub.cs" />
+    <Compile Include="SixHundredRuleRulesetResolutionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ESFA.DC.ILR.ValidationService.Stubs.ruleset">
@@ -121,6 +123,14 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.IO.Model\ESFA.DC.ILR.ValidationService.IO.Model.csproj">
       <Project>{3f170aa8-982a-453b-899d-dc9f54aac8c1}</Project>
       <Name>ESFA.DC.ILR.ValidationService.IO.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Providers\ESFA.DC.ILR.ValidationService.Providers.csproj">
+      <Project>{A14B4498-EF4C-4457-BA09-E9ABA42FACE0}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.RuleSet\ESFA.DC.ILR.ValidationService.RuleSet.csproj">
+      <Project>{EBE0154D-6F8B-4DBB-A18F-4929AB74D204}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.RuleSet</Name>
     </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Rules\ESFA.DC.ILR.ValidationService.Rules.csproj">
       <Project>{621B61D1-339D-4910-8C86-8A64AF8822F5}</Project>

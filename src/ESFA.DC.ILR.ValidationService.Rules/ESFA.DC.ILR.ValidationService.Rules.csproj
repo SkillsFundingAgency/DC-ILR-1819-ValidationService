@@ -132,6 +132,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_01Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />

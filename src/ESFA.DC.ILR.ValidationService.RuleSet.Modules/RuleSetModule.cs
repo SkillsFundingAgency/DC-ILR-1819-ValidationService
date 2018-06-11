@@ -16,6 +16,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
@@ -80,6 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMDateFrom_02Rule),
                 typeof(LearnDelFAMDateFrom_03Rule),
                 typeof(LearnDelFAMDateFrom_04Rule),
+                typeof(LearnDelFAMDateTo_01Rule),
                 typeof(ULN_03Rule),
             };
         }

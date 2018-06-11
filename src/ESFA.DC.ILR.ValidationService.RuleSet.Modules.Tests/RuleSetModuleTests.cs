@@ -19,6 +19,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -98,6 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnDelFAMDateFrom_02Rule),
                 typeof(LearnDelFAMDateFrom_03Rule),
                 typeof(LearnDelFAMDateFrom_04Rule),
+                typeof(LearnDelFAMDateTo_01Rule),
                 typeof(ULN_03Rule),
             };
 
@@ -106,7 +108,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(53);
+            rules.Should().HaveCount(54);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

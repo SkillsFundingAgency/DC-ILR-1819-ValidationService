@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules.Actor;
@@ -11,6 +12,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Console
     {
         protected override void Load(ContainerBuilder builder)
         {
+            base.Load(builder);
+
             builder.RegisterType<ConsolePreValidationOrchestrationService<ILearner, IValidationError>>()
                 .As<IPreValidationOrchestrationService<IValidationError>>()
                 .InstancePerLifetimeScope();
@@ -18,7 +21,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Console
             builder.RegisterType<FileSystemFileContentStringProviderService>().As<IMessageStringProviderService>().InstancePerLifetimeScope();
             builder.RegisterType<MessageProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
 
-            base.Load(builder);
+            builder.RegisterType<SixHundredRuleRulesetResolutionService<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
+            builder.RegisterType<OneHundredThousandLearnerProvider>().As<IValidationItemProviderService<IEnumerable<ILearner>>>();
         }
     }
 }
