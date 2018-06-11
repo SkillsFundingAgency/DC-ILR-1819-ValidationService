@@ -69,6 +69,7 @@
         public const string LearnDelFAMDateFrom_04 = "LearnDelFAMDateFrom_04";
 
         public const string LearnDelFAMDateTo_01 = "LearnDelFAMDateTo_01";
+        public const string LearnDelFAMDateTo_02 = "LearnDelFAMDateTo_02";
 
         public const string ULN_03 = "ULN_03";
     }
