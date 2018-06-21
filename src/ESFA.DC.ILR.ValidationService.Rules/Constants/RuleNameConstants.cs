@@ -32,6 +32,11 @@
         public const string ConRefNumber_01 = "ConRefNumber_01";
         public const string ConRefNumber_03 = "ConRefNumber_03";
 
+        public const string DateOfBirth_01 = "DateOfBirth_01";
+        public const string DateOfBirth_02 = "DateOfBirth_02";
+        public const string DateOfBirth_05 = "DateOfBirth_05";
+        public const string DateOfBirth_06 = "DateOfBirth_06";
+
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
         public const string DelLocPostCode_16 = "DelLocPostCode_16";

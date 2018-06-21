@@ -78,6 +78,10 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_06Rule.cs" />
     <Compile Include="Learner\ULN\ULN_03Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_10Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_09Rule.cs" />

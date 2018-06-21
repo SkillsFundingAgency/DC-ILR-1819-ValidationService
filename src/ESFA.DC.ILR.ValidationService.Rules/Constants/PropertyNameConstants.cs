@@ -4,6 +4,7 @@
     {
         public const string FilePreparationDate = "FilePrepDate";
 
+        public const string DateOfBirth = "DateOfBirth";
         public const string ULN = "ULN";
 
         public const string AddHours = "AddHours";
