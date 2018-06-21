@@ -1,26 +1,27 @@
 ﻿using System;
-using System.Linq.Expressions;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 {
-    public class DateOfBirth_05RuleTests
+    public class DateOfBirth_05RuleTests : AbstractRuleTests<DateOfBirth_05Rule>
     {
-        public DateOfBirth_05Rule NewRule(IDateTimeQueryService dateTimeQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void RuleName()
         {
-            return new DateOfBirth_05Rule(dateTimeQueryService, validationErrorHandler);
+            NewRule().RuleName.Should().Be("DateOfBirth_05");
         }
 
         [Theory]
         [InlineData(10, 1)]
         [InlineData(99, 3)]
-        public void ConditionMet_True(long fundModel, int age)
+        public void ConditionMet_True(int fundModel, int age)
         {
             var dateOfBirth = new DateTime(1988, 12, 25);
             var learnStartDate = new DateTime(2017, 8, 1);
@@ -35,35 +36,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Fact]
-        public void ConditionMet_False_FundModel_Null()
-        {
-            var rule = NewRule();
-
-            rule.ConditionMet(null, null, null).Should().BeFalse();
-        }
-
-        [Fact]
         public void ConditionMet_False_FundModel()
         {
-            var rule = NewRule();
-
-            rule.ConditionMet(null, null, 1).Should().BeFalse();
+            NewRule().ConditionMet(new DateTime(1988, 12, 25), new DateTime(2017, 8, 1), 1).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_FundModel_DateOfBirth_Null()
         {
-            var rule = NewRule();
-
-            rule.ConditionMet(null, null, 10).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False_FundModel_LearnStartDate_Null()
-        {
-            var rule = NewRule();
-
-            rule.ConditionMet(new DateTime(1988, 12, 25), null, 10).Should().BeFalse();
+            NewRule().ConditionMet(null, new DateTime(2017, 8, 1), 10).Should().BeFalse();
         }
 
         [Fact]
@@ -94,40 +75,67 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 {
                     new TestLearningDelivery()
                     {
-                        FundModelNullable = 10,
-                        LearnStartDateNullable = learnStartDate
+                        FundModel = 10,
+                        LearnStartDate = learnStartDate
                     }
                 }
             };
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(3);
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("DateOfBirth_05", null, null, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            var rule = NewRule(dateTimeQueryServiceMock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(dateTimeQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
         public void Validate_NoErrors()
         {
+            var dateOfBirth = new DateTime(1988, 12, 25);
+            var learnStartDate = new DateTime(2017, 8, 1);
+
             var learner = new TestLearner()
             {
+                DateOfBirthNullable = dateOfBirth,
                 LearningDeliveries = new TestLearningDelivery[]
                 {
                     new TestLearningDelivery()
+                    {
+                        FundModel = 10,
+                        LearnStartDate = learnStartDate
+                    }
                 }
             };
 
-            NewRule().Validate(learner);
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(10);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(dateTimeQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("DateOfBirth", "01/01/2015")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnStartDate", "01/01/2018")).Verifiable();
+
+            NewRule(null, validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2018, 01, 01), new DateTime(2015, 01, 01));
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        public DateOfBirth_05Rule NewRule(IDateTimeQueryService dateTimeQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new DateOfBirth_05Rule(dateTimeQueryService, validationErrorHandler);
         }
     }
 }

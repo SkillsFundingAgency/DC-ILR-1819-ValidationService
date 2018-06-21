@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         [Theory]
         [InlineData(10)]
         [InlineData(99)]
-        public void ConditionMet_True(long fundModel)
+        public void ConditionMet_True(int fundModel)
         {
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         [Fact]
         public void ConditionMet_False_FundModel_Null()
         {
-            NewRule().ConditionMet(null, null, new DateTime(1988, 12, 25)).Should().BeFalse();
+            NewRule().ConditionMet(10, null, new DateTime(1988, 12, 25)).Should().BeFalse();
         }
 
         [Fact]

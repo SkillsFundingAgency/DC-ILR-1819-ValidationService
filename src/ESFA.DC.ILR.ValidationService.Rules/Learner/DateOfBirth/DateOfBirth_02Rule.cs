@@ -30,18 +30,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                 {
                     if (ConditionMet(learningDelivery.FundModel, learningDelivery.LearningDeliveryFAMs, objectToValidate.DateOfBirthNullable))
                     {
-                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable));
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable));
                     }
                 }
             }
         }
 
-        public bool ConditionMet(long? fundModel, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, DateTime? dateOfBirth)
+        public bool ConditionMet(int fundModel, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, DateTime? dateOfBirth)
         {
             return
              !dateOfBirth.HasValue
-                && fundModel.HasValue
-                && _fundModels.Contains(fundModel.Value)
+                && _fundModels.Contains(fundModel)
                 && !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ADL);
         }
 
