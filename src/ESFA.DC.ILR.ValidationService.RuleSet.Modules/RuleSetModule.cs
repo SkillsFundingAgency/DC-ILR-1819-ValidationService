@@ -54,6 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(CompStatus_06Rule),
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
+                typeof(DateOfBirth_01Rule),
                 typeof(DateOfBirth_02Rule),
                 typeof(DateOfBirth_05Rule),
                 typeof(DateOfBirth_06Rule),

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -16,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly IEnumerable<long> _fundModels = new HashSet<long> { 25, 35, 36, 70, 81, 82 };
 
         public DateOfBirth_01Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+           : base(validationErrorHandler, RuleNameConstants.DateOfBirth_01)
         {
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
@@ -25,26 +26,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         {
             if (objectToValidate.LearningDeliveries != null)
             {
-                foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld => !Exclude(ld)))
+                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
-                    if (ConditionMet(learningDelivery.FundModelNullable, objectToValidate.DateOfBirthNullable))
+                    if (ConditionMet(learningDelivery.FundModel, learningDelivery.LearningDeliveryFAMs, objectToValidate.DateOfBirthNullable))
                     {
-                        HandleValidationError(RuleNameConstants.DateOfBirth_01, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable));
                     }
                 }
             }
         }
 
-        public bool ConditionMet(long? fundModel, DateTime? dateOfBirth)
+        public bool ConditionMet(int fundModel, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, DateTime? dateOfBirth)
         {
             return !dateOfBirth.HasValue
-                && fundModel.HasValue
-                && _fundModels.Contains(fundModel.Value);
+                && _fundModels.Contains(fundModel)
+                && !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "034");
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "034");
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth?.ToString("d", new CultureInfo("en-GB")))
+            };
         }
     }
 }
