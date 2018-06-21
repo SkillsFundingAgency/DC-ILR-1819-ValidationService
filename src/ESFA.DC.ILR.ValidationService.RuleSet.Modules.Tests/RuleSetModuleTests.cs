@@ -72,6 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(ConRefNumber_01Rule),
                 typeof(DateOfBirth_02Rule),
                 typeof(DateOfBirth_05Rule),
+                typeof(DateOfBirth_06Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
@@ -114,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(59);
+            rules.Should().HaveCount(60);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
