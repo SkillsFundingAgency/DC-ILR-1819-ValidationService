@@ -19,6 +19,8 @@ using ESFA.DC.IO.Interfaces;
 using ESFA.DC.IO.Redis;
 using ESFA.DC.IO.Redis.Config.Interfaces;
 using ESFA.DC.JobContext;
+using ESFA.DC.JobStatus.Dto;
+using ESFA.DC.JobStatus.Interface;
 using ESFA.DC.KeyGenerator.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
@@ -142,6 +144,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterType<Auditor>().As<IAuditor>();
             containerBuilder.RegisterType<JobContextMessageMapper>()
                 .As<IMapper<JobContextMessage, JobContextMessage>>();
+
+            // register Job Status
+            containerBuilder.Register(c => new JobStatus.JobStatus(
+                c.Resolve<IQueuePublishService<JobStatusDto>>()))
+                .As<IJobStatus>();
 
             containerBuilder.RegisterType<MessageHandler>().As<IMessageHandler>();
 
