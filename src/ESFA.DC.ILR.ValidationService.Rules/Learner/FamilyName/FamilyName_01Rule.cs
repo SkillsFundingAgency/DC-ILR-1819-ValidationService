@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -12,20 +13,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public FamilyName_01Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.FamilyName_01)
         {
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate.LearningDeliveries == null || !objectToValidate.LearningDeliveries.All(ld => Exclude(ld)))
+            if (!CrossLearningDeliveryConditionMet(objectToValidate.LearningDeliveries) && ConditionMet(objectToValidate.FamilyName))
             {
-                if (ConditionMet(objectToValidate.FamilyName))
-                {
-                    HandleValidationError(RuleNameConstants.FamilyName_01, objectToValidate.LearnRefNumber);
-                }
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.FamilyName));
             }
+        }
+
+        public bool CrossLearningDeliveryConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
+        {
+            return learningDeliveries.All(ld => ld.FundModel == 10
+                || learningDeliveries.All(ldf => ldf.FundModel == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(ld.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108")));
         }
 
         public bool ConditionMet(string familyName)
@@ -33,10 +37,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName
             return string.IsNullOrWhiteSpace(familyName);
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string familyName)
         {
-            return learningDelivery.FundModelNullable == 10
-                || (learningDelivery.FundModelNullable == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108"));
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FamilyName, familyName),
+            };
         }
     }
 }
