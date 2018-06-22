@@ -130,7 +130,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.GivenNames
                 }
             };
 
-            NewRule().Validate(learner);
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), "SOF", "100")).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
@@ -184,4 +191,3 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.GivenNames
         }
     }
 }
-
