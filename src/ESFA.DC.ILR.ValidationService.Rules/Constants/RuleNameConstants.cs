@@ -79,5 +79,6 @@
         public const string LearnDelFAMDateTo_04 = "LearnDelFAMDateTo_04";
 
         public const string ULN_03 = "ULN_03";
+        public const string ULN_05 = "ULN_05";
     }
 }
