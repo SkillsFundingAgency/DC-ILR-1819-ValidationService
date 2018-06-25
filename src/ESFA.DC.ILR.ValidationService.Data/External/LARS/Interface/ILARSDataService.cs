@@ -8,6 +8,8 @@
 
         bool LearnAimRefExists(string learnAimRef);
 
+        bool LearnAimRefExistsForLearningDeliveryCategoryRef(string learnAimRef, int categoryRef);
+
         bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level);
     }
 }
