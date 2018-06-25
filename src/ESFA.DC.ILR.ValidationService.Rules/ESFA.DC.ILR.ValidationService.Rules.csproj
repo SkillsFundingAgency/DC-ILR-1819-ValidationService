@@ -82,7 +82,11 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_06Rule.cs" />
+    <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_01Rule.cs" />
     <Compile Include="Learner\ULN\ULN_03Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_04Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_05Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_10Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_09Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_07Rule.cs" />

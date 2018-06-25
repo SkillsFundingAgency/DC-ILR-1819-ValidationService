@@ -109,7 +109,11 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_06RuleTests.cs" />
+    <Compile Include="Learner\FamilyName\FamilyName_01RuleTests.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_01RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_03RuleTests.cs" />
+    <Compile Include="Learner\ULN\ULN_04RuleTests.cs" />
+    <Compile Include="Learner\ULN\ULN_05RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_10RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_09RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_07RuleTests.cs" />

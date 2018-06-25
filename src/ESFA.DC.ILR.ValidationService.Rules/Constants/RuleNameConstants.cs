@@ -45,6 +45,8 @@
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
+        public const string FamilyName_01 = "FamilyName_01";
+
         public const string FundModel_01 = "FundModel_01";
         public const string FundModel_03 = "FundModel_03";
         public const string FundModel_04 = "FundModel_04";
@@ -57,6 +59,8 @@
         public const string FworkCode_01 = "FworkCode_01";
         public const string FworkCode_02 = "FworkCode_02";
         public const string FworkCode_05 = "FworkCode_05";
+
+        public const string GivenNames_01 = "GivenNames_01";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
@@ -79,5 +83,7 @@
         public const string LearnDelFAMDateTo_04 = "LearnDelFAMDateTo_04";
 
         public const string ULN_03 = "ULN_03";
+        public const string ULN_04 = "ULN_04";
+        public const string ULN_05 = "ULN_05";
     }
 }

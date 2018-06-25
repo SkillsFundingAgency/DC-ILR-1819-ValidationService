@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -12,16 +13,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
         private readonly IDD01 _dd01;
 
         public ULN_04Rule(IDD01 dd01, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+             : base(validationErrorHandler, RuleNameConstants.ULN_04)
         {
             _dd01 = dd01;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.ULNNullable, _dd01.Derive(objectToValidate.ULNNullable)))
+            if (ConditionMet(objectToValidate.ULN, _dd01.Derive(objectToValidate.ULN)))
             {
-                HandleValidationError(RuleNameConstants.ULN_04, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.ULN));
+                return;
             }
         }
 
@@ -36,6 +38,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 
             return dd01 == ValidationConstants.N
                    || (dd01 != ValidationConstants.Y && ulnString.Length >= 10 && dd01 != ulnString.ElementAt(9).ToString());
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
+            };
         }
     }
 }
