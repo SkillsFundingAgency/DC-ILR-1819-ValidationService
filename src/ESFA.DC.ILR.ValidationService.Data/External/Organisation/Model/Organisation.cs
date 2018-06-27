@@ -5,5 +5,7 @@
         public long UKPRN { get; set; }
 
         public string LegalOrgType { get; set; }
+
+        public bool PartnerUKPRN { get; set; }
     }
 }
