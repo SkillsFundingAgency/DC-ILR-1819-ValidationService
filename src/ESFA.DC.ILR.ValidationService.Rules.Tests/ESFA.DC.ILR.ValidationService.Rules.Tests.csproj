@@ -161,6 +161,8 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03RuleTests.cs" />
@@ -174,6 +176,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryServiceTests.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
+    <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryServiceTests.cs" />
     <Compile Include="Query\LearnerFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearnerQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />

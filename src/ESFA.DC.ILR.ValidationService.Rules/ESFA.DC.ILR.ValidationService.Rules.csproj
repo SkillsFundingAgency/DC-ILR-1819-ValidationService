@@ -134,6 +134,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04Rule.cs" />
@@ -156,6 +157,8 @@
     <Compile Include="Constants\ValidationConstants.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryQueryService.cs" />
     <Compile Include="Query\Interface\IPostcodeQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerEmploymentStatusMonitoringQueryService.cs" />
+    <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryService.cs" />
     <Compile Include="Query\PostcodeQueryService.cs" />
     <Compile Include="Query\LearnerFAMQueryService.cs" />
     <Compile Include="Query\LearnerQueryService.cs" />
