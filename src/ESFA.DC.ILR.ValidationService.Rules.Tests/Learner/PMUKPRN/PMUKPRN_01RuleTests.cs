@@ -111,6 +111,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PMUKPRN
             }
         }
 
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            long? pmUKPRN = 1;
+
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("PMUKPRN", pmUKPRN)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(pmUKPRN);
+
+            validationErrorHandlerMock.Verify();
+        }
+
         private PMUKPRN_01Rule NewRule(IOrganisationDataService organisationDataService = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new PMUKPRN_01Rule(organisationDataService, validationErrorHandler);

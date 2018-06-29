@@ -128,6 +128,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PartnerUKPR
             }
         }
 
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            long ukprn = 1;
+            long? partnerUKPRN = 1;
+
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("UKPRN", ukprn)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("PartnerUKPRN", partnerUKPRN)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(ukprn, partnerUKPRN);
+
+            validationErrorHandlerMock.Verify();
+        }
+
         private PartnerUKPRN_03Rule NewRule(IFileDataCache fileDataCache = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new PartnerUKPRN_03Rule(fileDataCache, validationErrorHandler);
