@@ -111,6 +111,8 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_06RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01RuleTests.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_01RuleTests.cs" />
+    <Compile Include="Learner\PMUKPRN\PMUKPRN_01RuleTests.cs" />
+    <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_03RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_04RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_05RuleTests.cs" />
