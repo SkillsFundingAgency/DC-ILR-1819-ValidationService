@@ -104,6 +104,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PartnerUKPRN_02Rule),
                 typeof(PartnerUKPRN_03Rule),
                 typeof(PlanLearnHours_02Rule),
+                typeof(PlanLearnHours_04Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(PrevUKPRN_01Rule),
                 typeof(ULN_03Rule),

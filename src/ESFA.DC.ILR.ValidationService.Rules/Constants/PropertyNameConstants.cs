@@ -30,6 +30,7 @@
         public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
         public const string PartnerUKPRN = "PartnerUKPRN";
+        public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
         public const string PMUKPRN = "PMUKPRN";
         public const string PrevUKPRN = "PrevUKPRN";

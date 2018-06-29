@@ -1,35 +1,48 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours
 {
-    /// <summary>
-    /// If returned, the sum of the Planned learning hours and the Planned employability, enrichment and pastoral hours should not be greater than 1000 hours
-    /// </summary>
     public class PlanLearnHours_04Rule : AbstractRule, IRule<ILearner>
     {
         public PlanLearnHours_04Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PlanLearnHours_04)
         {
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+            if (ConditionMet(objectToValidate.PlanLearnHoursNullable, objectToValidate.PlanEEPHoursNullable))
             {
-                if (ConditionMet(objectToValidate.PlanLearnHoursNullable, objectToValidate.PlanEEPHoursNullable))
-                {
-                    HandleValidationError(RuleNameConstants.PlanLearnHours_04Rule, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
-                }
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.PMUKPRNNullable, objectToValidate.PlanEEPHoursNullable));
             }
         }
 
-        public bool ConditionMet(long? planLearnHours, long? planEeepHours)
+        public bool ConditionMet(int? planLearnHours, int? planEEPHours)
         {
-            return planLearnHours.HasValue &&
-                   planLearnHours.Value + (planEeepHours ?? 0) > 1000;
+            return (PlanLearnHoursValue(planLearnHours) + PlanEEPHoursValue(planEEPHours)) > 1000;
+        }
+
+        public int PlanLearnHoursValue(int? planLearnHours)
+        {
+            return planLearnHours ?? 0;
+        }
+
+        public int PlanEEPHoursValue(int? planEEPHours)
+        {
+            return planEEPHours ?? 0;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? planLearnHours, int? planEEPHours)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, planLearnHours),
+                BuildErrorMessageParameter(PropertyNameConstants.PlanEEPHours, planEEPHours)
+            };
         }
     }
 }
