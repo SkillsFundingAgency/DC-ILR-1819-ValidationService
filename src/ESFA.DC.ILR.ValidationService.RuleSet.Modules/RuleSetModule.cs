@@ -22,6 +22,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
@@ -98,6 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMDateTo_02Rule),
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
+                typeof(PartnerUKPRN_01Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(PrevUKPRN_01Rule),
                 typeof(ULN_03Rule),
