@@ -36,29 +36,21 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                 InvalidLearnRefNumbersKey = keyGenerator.GenerateKey(
                     ukprn,
                     jobContextMessage.JobId,
-                    TaskKeys.ValidationInvalidLearners,
-                    "_"),
+                    TaskKeys.ValidationInvalidLearners),
                 ValidLearnRefNumbersKey = keyGenerator.GenerateKey(
                     ukprn,
                     jobContextMessage.JobId,
-                    TaskKeys.ValidationValidLearners,
-                    "_"),
+                    TaskKeys.ValidationValidLearners),
                 ValidationErrorsKey = keyGenerator.GenerateKey(
                     ukprn,
                     jobContextMessage.JobId,
-                    TaskKeys.ValidationErrors,
-                    "_"),
-                ValidationErrorMessageLookupKey = keyGenerator.GenerateKey(
-                    ukprn,
-                    jobContextMessage.JobId,
-                    TaskKeys.ValidationErrorsLookup,
-                    "_")
+                    TaskKeys.ValidationErrors)
             };
 
             // populate the keys into jobcontextmessage
             jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers] = validationContext.InvalidLearnRefNumbersKey;
             jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers] = validationContext.ValidLearnRefNumbersKey;
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = validationContext.ValidationErrorMessageLookupKey;
+//            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = validationContext.ValidationErrorMessageLookupKey;
             jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors] = validationContext.ValidationErrorsKey;
 
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c => c.RegisterInstance(validationContext).As<IPreValidationContext>()))

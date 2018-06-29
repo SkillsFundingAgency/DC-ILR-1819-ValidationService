@@ -1,4 +1,5 @@
-﻿using ESFA.DC.IO.Redis.Config.Interfaces;
+﻿using System;
+using ESFA.DC.IO.Redis.Config.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless.Models
 {
@@ -10,5 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Models
         }
 
         public string ConnectionString { get; }
+
+        public TimeSpan? KeyExpiry => TimeSpan.FromDays(14);
     }
 }
