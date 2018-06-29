@@ -13,6 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         private readonly ILARSFrameworkDataRetrievalService _larsFrameworkDataRetrievalService;
         private readonly IULNDataRetrievalService _ulnDataRetrievalService;
         private readonly IPostcodesDataRetrievalService _postcodesDataRetrievalService;
+        private readonly IOrganisationsDataRetrievalService _organisationsDataRetrievalService;
         private readonly IValidationErrorsDataRetrievalService _validationErrorsDataRetrievalService;
 
         public ExternalDataCachePopulationService(
@@ -21,6 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             ILARSFrameworkDataRetrievalService larsFrameworkDataRetrievalService,
             IULNDataRetrievalService ulnDataRetrievalService,
             IPostcodesDataRetrievalService postcodesDataRetrievalService,
+            IOrganisationsDataRetrievalService organisationsDataRetrievalService,
             IValidationErrorsDataRetrievalService validationErrorsDataRetrievalService)
         {
             _externalDataCache = externalDataCache;
@@ -28,6 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _larsFrameworkDataRetrievalService = larsFrameworkDataRetrievalService;
             _ulnDataRetrievalService = ulnDataRetrievalService;
             _postcodesDataRetrievalService = postcodesDataRetrievalService;
+            _organisationsDataRetrievalService = organisationsDataRetrievalService;
             _validationErrorsDataRetrievalService = validationErrorsDataRetrievalService;
         }
 
@@ -39,6 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             externalDataCache.Frameworks = _larsFrameworkDataRetrievalService.Retrieve().ToList();
             externalDataCache.ULNs = new HashSet<long>(_ulnDataRetrievalService.Retrieve());
             externalDataCache.Postcodes = new HashSet<string>(_postcodesDataRetrievalService.Retrieve());
+            externalDataCache.Organisations = _organisationsDataRetrievalService.Retrieve();
             externalDataCache.ValidationErrors = _validationErrorsDataRetrievalService.Retrieve();
         }
     }

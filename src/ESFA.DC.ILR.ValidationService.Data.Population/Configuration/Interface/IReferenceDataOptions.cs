@@ -4,6 +4,8 @@
     {
         string LARSConnectionString { get; }
 
+        string OrganisationsConnectionString { get; }
+
         string PostcodesConnectionString { get; }
 
         string ULNConnectionstring { get; }

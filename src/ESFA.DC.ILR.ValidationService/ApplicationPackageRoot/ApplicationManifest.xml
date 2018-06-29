@@ -15,6 +15,7 @@
     <Parameter Name="ValidationActorService_MinReplicaSetSize" DefaultValue="1" />
     <Parameter Name="ValidationActorService_TargetReplicaSetSize" DefaultValue="1" />
     <Parameter Name="LARSConnectionString" DefaultValue="metadata=res://*/LARS.csdl|res://*/LARS.ssdl|res://*/LARS.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.LARS.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
+    <Parameter Name="OrganisationsConnectionString" DefaultValue="metadata=res://*/Organisations.csdl|res://*/Organisations.ssdl|res://*/Organisations.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.Organisations.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
     <Parameter Name="PostcodesConnectionString" DefaultValue="metadata=res://*/Postcodes.csdl|res://*/Postcodes.ssdl|res://*/Postcodes.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.Postcodes.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
     <Parameter Name="ULNConnectionstring" DefaultValue="metadata=res://*/ULN.csdl|res://*/ULN.ssdl|res://*/ULN.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.ULN.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
     <Parameter Name="ValidationErrorsConnectionString" DefaultValue="" />
@@ -66,6 +67,7 @@
           </Section>
           <Section Name="ReferenceDataSection">
             <Parameter Name="LARSConnectionString" Value="[LARSConnectionString]" />
+            <Parameter Name="OrganisationsConnectonString" Value="[OrganisationsConnectionString]" />
             <Parameter Name="PostcodesConnectionString" Value="[PostcodesConnectionString]" />
             <Parameter Name="ULNConnectionstring" Value="[ULNConnectionstring]" />
             <Parameter Name="ValidationErrorsConnectionString" Value="[ValidationErrorsConnectionString]" />
