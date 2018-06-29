@@ -87,6 +87,8 @@
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
 
+        public const string PlanLearnHours_02 = "PlanLearnHours_02";
+
         public const string PMUKPRN_01 = "PMUKPRN_01";
         public const string PrevUKPRN_01 = "PrevUKPRN_01";
 

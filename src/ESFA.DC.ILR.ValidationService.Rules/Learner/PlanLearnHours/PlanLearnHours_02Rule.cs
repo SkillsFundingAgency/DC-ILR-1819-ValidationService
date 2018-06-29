@@ -6,15 +6,12 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours
 {
-    /// <summary>
-    /// If returned, the Planned learning hours should be greater than zero
-    /// </summary>
     public class PlanLearnHours_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<long> _fundModels = new HashSet<long> { 25, 82, 35, 36, 81, 10, 99 };
+        private readonly HashSet<long> _fundModels = new HashSet<long> { 10, 25, 82, 35, 36, 81, 99 };
 
         public PlanLearnHours_02Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PlanLearnHours_02)
         {
         }
 
@@ -22,23 +19,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours
         {
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(objectToValidate.PlanLearnHoursNullable, learningDelivery.FundModelNullable))
+                if (ConditionMet(objectToValidate.PlanLearnHoursNullable, learningDelivery.FundModel))
                 {
-                    HandleValidationError(RuleNameConstants.PlanLearnHours_02Rule, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.PMUKPRNNullable, learningDelivery.FundModel));
                 }
             }
         }
 
-        public bool ConditionMet(long? planLearnHoursNullable, long? fundModel)
+        public bool ConditionMet(int? planLearnHours, int fundModel)
         {
-            return planLearnHoursNullable.HasValue &&
-                   planLearnHoursNullable.Value == 0 &&
-                    FundModelConditionMet(fundModel);
+            return PlanLearnHoursConditionMet(planLearnHours)
+                   && FundModelConditionMet(fundModel);
         }
 
-        public bool FundModelConditionMet(long? fundModel)
+        public bool PlanLearnHoursConditionMet(int? planLearnHours)
         {
-            return fundModel.HasValue && _fundModels.Contains(fundModel.Value);
+            return planLearnHours.HasValue
+                && planLearnHours.Value == 0;
+        }
+
+        public bool FundModelConditionMet(int fundModel)
+        {
+            return _fundModels.Contains(fundModel);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? planLearnHours, int fundModel)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, planLearnHours),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)
+            };
         }
     }
 }
