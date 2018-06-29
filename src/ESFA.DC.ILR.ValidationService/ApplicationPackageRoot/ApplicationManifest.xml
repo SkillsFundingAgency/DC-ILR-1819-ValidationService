@@ -67,7 +67,7 @@
           </Section>
           <Section Name="ReferenceDataSection">
             <Parameter Name="LARSConnectionString" Value="[LARSConnectionString]" />
-            <Parameter Name="OrganisationsConnectonString" Value="[OrganisationsConnectionString]" />
+            <Parameter Name="OrganisationsConnectionString" Value="[OrganisationsConnectionString]" />
             <Parameter Name="PostcodesConnectionString" Value="[PostcodesConnectionString]" />
             <Parameter Name="ULNConnectionstring" Value="[ULNConnectionstring]" />
             <Parameter Name="ValidationErrorsConnectionString" Value="[ValidationErrorsConnectionString]" />
