@@ -1,20 +1,25 @@
-﻿using ESFA.DC.ILR.Tests.Model;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrevUKPRN
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PartnerUKPRN
 {
-    public class PrevUKPRN_01RuleTests : AbstractRuleTests<PrevUKPRN_01Rule>
+    public class PartnerUKPRN_01RuleTests : AbstractRuleTests<PartnerUKPRN_01Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("PrevUKPRN_01");
+            NewRule().RuleName.Should().Be("PartnerUKPRN_01");
         }
 
         [Fact]
@@ -78,9 +83,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrevUKPRN
         [Fact]
         public void Validate_Error()
         {
-            var learner = new TestLearner()
+            var learner = new TestLearner
             {
-                PrevUKPRNNullable = 1,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery()
+                    {
+                        PartnerUKPRNNullable = 1
+                    }
+                }
             };
 
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
@@ -96,9 +107,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrevUKPRN
         [Fact]
         public void Validate_NoError()
         {
-            var learner = new TestLearner()
+            var learner = new TestLearner
             {
-                PrevUKPRNNullable = 1,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery()
+                    {
+                        PartnerUKPRNNullable = 1
+                    }
+                }
             };
 
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
@@ -114,20 +131,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrevUKPRN
         [Fact]
         public void BuildErrorMessageParameters()
         {
-            long? prevUKPRN = 1;
+            long? partnerUKPRN = 1;
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("PrevUKPRN", prevUKPRN)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("PartnerUKPRN", partnerUKPRN)).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(prevUKPRN);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(partnerUKPRN);
 
             validationErrorHandlerMock.Verify();
         }
 
-        private PrevUKPRN_01Rule NewRule(IOrganisationDataService organisationDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private PartnerUKPRN_01Rule NewRule(IOrganisationDataService organisationDataService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new PrevUKPRN_01Rule(organisationDataService, validationErrorHandler);
+            return new PartnerUKPRN_01Rule(organisationDataService, validationErrorHandler);
         }
     }
 }

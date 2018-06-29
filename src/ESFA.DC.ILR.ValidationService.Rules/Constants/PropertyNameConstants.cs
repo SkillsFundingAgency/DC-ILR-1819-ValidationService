@@ -3,6 +3,7 @@
     public static class PropertyNameConstants
     {
         public const string FilePreparationDate = "FilePrepDate";
+        public const string UKPRN = "UKPRN";
 
         public const string DateOfBirth = "DateOfBirth";
         public const string ULN = "ULN";
@@ -28,6 +29,9 @@
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
+        public const string PartnerUKPRN = "PartnerUKPRN";
+        public const string PlanEEPHours = "PlanEEPHours";
+        public const string PlanLearnHours = "PlanLearnHours";
         public const string PMUKPRN = "PMUKPRN";
         public const string PrevUKPRN = "PrevUKPRN";
         public const string ProgType = "ProgType";

@@ -8,6 +8,7 @@ using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PMUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
@@ -25,6 +26,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -116,6 +118,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnDelFAMDateTo_02Rule),
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
+                typeof(PartnerUKPRN_01Rule),
+                typeof(PartnerUKPRN_02Rule),
+                typeof(PartnerUKPRN_03Rule),
+                typeof(PlanLearnHours_02Rule),
+                typeof(PlanLearnHours_04Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(PrevUKPRN_01Rule),
                 typeof(ULN_03Rule),
@@ -128,7 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(69);
+            rules.Should().HaveCount(74);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
