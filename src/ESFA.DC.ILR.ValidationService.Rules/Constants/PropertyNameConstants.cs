@@ -3,6 +3,7 @@
     public static class PropertyNameConstants
     {
         public const string FilePreparationDate = "FilePrepDate";
+        public const string UKPRN = "UKPRN";
 
         public const string DateOfBirth = "DateOfBirth";
         public const string ULN = "ULN";
