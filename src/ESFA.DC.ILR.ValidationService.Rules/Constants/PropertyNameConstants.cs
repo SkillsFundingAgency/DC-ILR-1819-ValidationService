@@ -28,6 +28,7 @@
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnStartDate = "LearnStartDate";
         public const string Outcome = "Outcome";
+        public const string PMUKPRN = "PMUKPRN";
         public const string ProgType = "ProgType";
         public const string PriorAttain = "PriorAttain";
         public const string PwayCode = "PwayCode";
