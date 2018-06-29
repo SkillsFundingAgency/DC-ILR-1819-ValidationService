@@ -84,6 +84,7 @@
         public const string LearnDelFAMDateTo_04 = "LearnDelFAMDateTo_04";
 
         public const string PMUKPRN_01 = "PMUKPRN_01";
+        public const string PrevUKPRN_01 = "PrevUKPRN_01";
 
         public const string ULN_03 = "ULN_03";
         public const string ULN_04 = "ULN_04";

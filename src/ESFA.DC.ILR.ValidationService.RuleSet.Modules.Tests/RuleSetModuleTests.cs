@@ -8,6 +8,8 @@ using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PMUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
@@ -114,6 +116,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnDelFAMDateTo_02Rule),
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
+                typeof(PMUKPRN_01Rule),
+                typeof(PrevUKPRN_01Rule),
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),
                 typeof(ULN_05Rule),
@@ -124,7 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(67);
+            rules.Should().HaveCount(69);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
