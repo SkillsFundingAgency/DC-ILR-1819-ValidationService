@@ -27,10 +27,10 @@
   
   <Section  Name="ReferenceDataSection">
     <Parameter Name="LARSConnectionString" Value="" />
-    <Parameter Name="OrganistionsConnectionString" Value="" />
     <Parameter Name="PostcodesConnectionString" Value="" />
     <Parameter Name="ULNConnectionstring" Value="" />
     <Parameter Name="ValidationErrorsConnectionString" Value="" />
+    <Parameter Name="OrganisationsConnectionString" Value="" />
   </Section>
 
 
