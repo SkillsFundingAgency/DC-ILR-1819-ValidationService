@@ -84,6 +84,7 @@
         public const string LearnDelFAMDateTo_04 = "LearnDelFAMDateTo_04";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
+        public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
 
         public const string PMUKPRN_01 = "PMUKPRN_01";
         public const string PrevUKPRN_01 = "PrevUKPRN_01";

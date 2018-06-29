@@ -100,6 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
                 typeof(PartnerUKPRN_01Rule),
+                typeof(PartnerUKPRN_02Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(PrevUKPRN_01Rule),
                 typeof(ULN_03Rule),
