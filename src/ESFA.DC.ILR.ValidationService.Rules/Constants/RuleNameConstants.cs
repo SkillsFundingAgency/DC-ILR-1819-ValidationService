@@ -16,6 +16,8 @@
         public const string AddHours_05 = "AddHours_05";
         public const string AddHours_06 = "AddHours_06";
 
+        public const string AFinType_10 = "AFinType_10";
+
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
 
         public const string AimType_01 = "AimType_01";

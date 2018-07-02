@@ -104,6 +104,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_04Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_05Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_10Rule.cs" />
     <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02Rule.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_01Rule.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_05Rule.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Query\Interface\IAcademicYearQueryService.cs" />
     <Compile Include="Query\Interface\IDateTimeQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerQueryService.cs" />
+    <Compile Include="Query\Interface\ILearningDeliveryAppFinRecordQueryService.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerFAMQueryService.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="Query\Interface\IPostcodeQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerEmploymentStatusMonitoringQueryService.cs" />
     <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryService.cs" />
+    <Compile Include="Query\LearningDeliveryAppFinRecordQueryService.cs" />
     <Compile Include="Query\PostcodeQueryService.cs" />
     <Compile Include="Query\LearnerFAMQueryService.cs" />
     <Compile Include="Query\LearnerQueryService.cs" />
