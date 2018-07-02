@@ -48,6 +48,7 @@
           <Section Name="ServiceBusSettings">
             <Parameter Name="JobsQueueName" Value="[JobsQueueName]" />
             <Parameter Name="AuditQueueName" Value="[AuditQueueName]" />
+            <Parameter Name="JobStatusQueueName" Value="[AuditQueueName]" />
             <Parameter Name="ServiceBusConnectionString" Value="[ServiceBusConnectionString]" />
             <Parameter Name="TopicName" Value="[TopicName]" />
             <Parameter Name="FundingCalcSubscriptionName" Value="[FundingCalcSubscriptionName]" />
