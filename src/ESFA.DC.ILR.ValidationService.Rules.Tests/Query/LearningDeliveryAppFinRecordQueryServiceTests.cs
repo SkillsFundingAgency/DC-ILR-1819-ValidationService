@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
-        public void HasAnyLearningDeliveryFAMCodesForType_FalseNull()
+        public void HasAnyLearningDeliveryAFinCodesForType_FalseNull()
         {
             var codes = new int[] { 1, 3 };
 
@@ -33,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
-        public void HasAnyLearningDeliveryFAMCodesForType_False_CodesNull()
+        public void HasAnyLearningDeliveryAFinCodesForType_False_CodesNull()
         {
             var learningDeliveryAppFinRecords = new TestAppFinRecord[]
            {
@@ -46,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
-        public void HasAnyLearningDeliveryFAMCodesForType_False_Mismatch()
+        public void HasAnyLearningDeliveryAFinCodesForType_False_Mismatch()
         {
             var learningDeliveryAppFinRecords = new TestAppFinRecord[]
            {
@@ -55,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 new TestAppFinRecord() { AFinType = "TypeTwo", AFinCode = 3 },
            };
 
-            var codes = new int[] { 1, 3 };
+            var codes = new int[] { 2, 3 };
 
             NewService().HasAnyLearningDeliveryAFinCodesForType(learningDeliveryAppFinRecords, "TypeOne", codes).Should().BeFalse();
         }
