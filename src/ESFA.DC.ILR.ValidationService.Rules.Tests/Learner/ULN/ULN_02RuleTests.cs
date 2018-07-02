@@ -1,135 +1,200 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
+using System.Linq;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
 {
-    public class ULN_02RuleTests
+    public class ULN_02RuleTests : AbstractRuleTests<ULN_02Rule>
     {
         [Fact]
-        public void Exclude_True()
+        public void RuleName()
         {
-            var learningDelivery = new TestLearningDelivery()
-            {
-                LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { }
-            };
-
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, "SOF", "1")).Returns(true);
-
-            var uln_02 = new ULN_02Rule(learningDeliveryFAMQueryServiceMock.Object, null);
-
-            uln_02.Exclude(learningDelivery).Should().BeTrue();
+            NewRule().RuleName.Should().Be("ULN_02");
         }
 
         [Fact]
-        public void Exclude_False()
+        public void LearningDeliveryFAMConditionMet_False()
         {
-            var learningDelivery = new TestLearningDelivery()
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { }
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "SOF",
+                    LearnDelFAMCode = "1"
+                }
             };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(true);
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, "SOF", "1")).Returns(false);
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learningDeliveryFAMs).Should().BeFalse();
+        }
 
-            var uln_02 = new ULN_02Rule(learningDeliveryFAMQueryServiceMock.Object, null);
+        [Fact]
+        public void LearningDeliveryFAMConditionMet_True()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMCode = "1"
+                }
+            };
 
-            uln_02.Exclude(learningDelivery).Should().BeFalse();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learningDeliveryFAMs).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ULNConditionMet_False_FundModel()
+        {
+            NewRule().ULNConditionMet(35, ValidationConstants.TemporaryULN).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ULNConditionMet_False_ULN()
+        {
+            NewRule().ULNConditionMet(10, 123456789).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ULNConditionMet_True()
+        {
+            NewRule().ULNConditionMet(10, ValidationConstants.TemporaryULN).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(99)]
-        [InlineData(10)]
-        public void ConditionMet_True(long fundModel)
+        [InlineData(35, ValidationConstants.TemporaryULN, "SOF")]
+        [InlineData(10, 123456789, "SOF")]
+        [InlineData(10, ValidationConstants.TemporaryULN, "ACT")]
+        public void ConditionMet_False(int fundModel, long uln, string famType)
         {
-            var uln_02 = new ULN_02Rule(null, null);
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = famType,
+                    LearnDelFAMCode = "1"
+                }
+            };
 
-            uln_02.ConditionMet(fundModel, 9999999999).Should().BeTrue();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(true);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(fundModel, uln, learningDeliveryFAMs).Should().BeFalse();
         }
 
         [Fact]
-        public void ConditionMet_False_Uln()
+        public void ConditionMet_True()
         {
-            var uln_02 = new ULN_02Rule(null, null);
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMCode = "1"
+                }
+            };
 
-            uln_02.ConditionMet(10, 1).Should().BeFalse();
-        }
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(false);
 
-        [Fact]
-        public void ConditionMet_False_FundModel()
-        {
-            var uln_02 = new ULN_02Rule(null, null);
-
-            uln_02.ConditionMet(1, 9999999999).Should().BeFalse();
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(10, ValidationConstants.TemporaryULN, learningDeliveryFAMs).Should().BeTrue();
         }
 
         [Fact]
         public void Validate_NoErrors()
         {
-            var messageLearner = new TestLearner()
+            var learner = new TestLearner()
             {
-                ULNNullable = 1,
+                ULN = 9999999999,
                 LearningDeliveries = new TestLearningDelivery[]
-                {
+                            {
                     new TestLearningDelivery()
                     {
-                        FundModelNullable = 2,
-                    }
+                        FundModel = 10,
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "SOF",
+                                LearnDelFAMCode = "1"
+                            }
+                        }
+                    },
                 }
             };
 
+            var fams = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
+
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(fams, "SOF", "1")).Returns(true);
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), "SOF", "1")).Returns(false);
-
-            var uln_02 = new ULN_02Rule(learningDeliveryFAMQueryServiceMock.Object, null);
-
-            uln_02.Validate(messageLearner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_Errors()
+        public void Validate_Error()
         {
-            var messageLearner = new TestLearner()
+            var learner = new TestLearner()
             {
-                ULNNullable = 9999999999,
+                ULN = 9999999999,
                 LearningDeliveries = new TestLearningDelivery[]
                 {
                     new TestLearningDelivery()
                     {
-                        FundModelNullable = 10,
+                        FundModel = 10,
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "ACT",
+                                LearnDelFAMCode = "1"
+                            }
+                        }
                     },
-                    new TestLearningDelivery()
-                    {
-                        FundModelNullable = 99,
-                    }
                 }
             };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs), "SOF", "1")).Returns(false);
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), "SOF", "1")).Returns(false);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ULN_02", null, null, null);
-            validationErrorHandlerMock.Setup(handle);
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            var uln_02 = new ULN_02Rule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ULN", (long)1234567890)).Verifiable();
 
-            uln_02.Validate(messageLearner);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1234567890);
 
-            validationErrorHandlerMock.Verify(handle, Times.Exactly(2));
+            validationErrorHandlerMock.Verify();
+        }
+
+        private ULN_02Rule NewRule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new ULN_02Rule(learningDeliveryFAMQueryService, validationErrorHandler);
         }
     }
 }
