@@ -93,6 +93,9 @@
         public const string PlanLearnHours_04 = "PlanLearnHours_04";
 
         public const string PMUKPRN_01 = "PMUKPRN_01";
+
+        public const string PostcodePrior_01 = "PostcodePrior_01";
+
         public const string PrevUKPRN_01 = "PrevUKPRN_01";
 
         public const string ULN_02 = "ULN_02";
