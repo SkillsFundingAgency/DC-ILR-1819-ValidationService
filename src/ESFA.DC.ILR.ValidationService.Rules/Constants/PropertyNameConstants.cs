@@ -35,6 +35,7 @@
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
         public const string PMUKPRN = "PMUKPRN";
+        public const string PostcodePrior = "PostcodePrior";
         public const string PrevUKPRN = "PrevUKPRN";
         public const string ProgType = "ProgType";
         public const string PriorAttain = "PriorAttain";
