@@ -68,6 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             // Get L/A and split the learners into separate lists
             var messageShards = _learnerPerActorService.Process();
+            stopWatch.Restart();
 
             var actorTasks = new List<Task<string>>();
 
@@ -114,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             _logger.LogDebug($"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
             _validationOutputService.Process();
-            _logger.LogDebug("Final results persisted");
+            _logger.LogDebug($"Validation Final results persisted {stopWatch.ElapsedMilliseconds}");
 
             return null;
         }

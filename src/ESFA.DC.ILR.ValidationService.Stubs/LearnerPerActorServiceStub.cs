@@ -27,9 +27,15 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
             // create IMessage shards with learners
             var messageShards = new List<IMessage>();
+            var msg = _messageCache.Item as Message;
             foreach (var learnerShard in learnerShards)
             {
-                Message message = _messageCache.Item as Message;
+                // shallow duplication is sufficient except for the learners
+                Message message = new Message();
+                message.Header = msg.Header;
+                message.LearnerDestinationandProgression = msg.LearnerDestinationandProgression;
+                message.LearningProvider = msg.LearningProvider;
+                message.SourceFiles = msg.SourceFiles;
                 message.Learner = learnerShard.Cast<MessageLearner>().ToArray();
                 messageShards.Add(message);
             }
