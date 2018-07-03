@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
-                var builder = BuildContainer();
+               var builder = BuildContainer();
 
                 // Register the Autofac magic for Service Fabric support.
                 builder.RegisterServiceFabricSupport();
@@ -156,25 +156,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterType<Auditor>().As<IAuditor>();
             containerBuilder.RegisterType<JobContextMessageMapper>()
                 .As<IMapper<JobContextMessage, JobContextMessage>>();
-
-            //// register Jobcontext services
-            //// TODO - this isn't right, it needs to subscribe to no topics. Needs a bit of a rethinkon core framework classes
-            //// or similar.
-            //var topicConfig = new ServiceBusTopicConfiguration(
-            //    serviceBusOptions.ServiceBusConnectionString,
-            //    serviceBusOptions.TopicName,
-            //    serviceBusOptions.FundingCalcSubscriptionName,
-            //    Environment.ProcessorCount);
-
-            //containerBuilder.Register(c =>
-            //{
-            //    var topicSubscriptionSevice =
-            //        new TopicSubscriptionSevice<JobContextDto>(
-            //            topicConfig,
-            //            c.Resolve<IJsonSerializationService>(),
-            //            c.Resolve<ILogger>());
-            //    return topicSubscriptionSevice;
-            //}).As<ITopicSubscriptionService<JobContextDto>>();
 
             //register Job Status
             containerBuilder.Register(c => new JobStatus.JobStatus(

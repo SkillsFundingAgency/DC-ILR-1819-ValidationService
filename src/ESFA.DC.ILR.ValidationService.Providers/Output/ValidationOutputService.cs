@@ -61,17 +61,17 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                         }).ToList()
                 }).ToList();
 
-            var validationErrorMessageLookups = _validationErrorCache
-                .ValidationErrors
-                .Select(ve => ve.RuleName)
-                .Distinct()
-                .Select(rn => new ValidationErrorMessageLookup()
-                {
-                    RuleName = rn,
-                    Message = _validationErrorsDataService.MessageforRuleName(rn)
-                }).ToList();
+            //var validationErrorMessageLookups = _validationErrorCache
+            //    .ValidationErrors
+            //    .Select(ve => ve.RuleName)
+            //    .Distinct()
+            //    .Select(rn => new ValidationErrorMessageLookup()
+            //    {
+            //        RuleName = rn,
+            //        Message = _validationErrorsDataService.MessageforRuleName(rn)
+            //    }).ToList();
 
-            SaveAsync(validLearnerRefNumbers, invalidLearnerRefNumbers, validationErrors, validationErrorMessageLookups).Wait();
+            SaveAsync(validLearnerRefNumbers, invalidLearnerRefNumbers, validationErrors).Wait();
 
             return _validationErrorCache.ValidationErrors;
         }
@@ -95,12 +95,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                 .Where(lrn => !invalidLearnRefNumbersHashSet.Contains(lrn));
         }
 
-        public async Task SaveAsync(IEnumerable<string> validLearnerRefNumbers, IEnumerable<string> invalidLearnerRefNumbers, IEnumerable<ValidationError> validationErrors, IEnumerable<ValidationErrorMessageLookup> validationErrorMessageLookups)
+        public async Task SaveAsync(IEnumerable<string> validLearnerRefNumbers, IEnumerable<string> invalidLearnerRefNumbers, IEnumerable<ValidationError> validationErrors)
         {
             var validLearnRefNumbersKey = _validationContext.ValidLearnRefNumbersKey;
             var invalidLearnRefNumbersKey = _validationContext.InvalidLearnRefNumbersKey;
             var validationErrorsKey = _validationContext.ValidationErrorsKey;
-            var validationErrorMessageLookupKey = _validationContext.ValidationErrorMessageLookupKey;
 
             var validationContext = _validationContext;
             validationContext.InvalidLearnRefNumbersCount = invalidLearnerRefNumbers.Count();
@@ -114,7 +113,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                     _keyValuePersistenceService.SaveAsync(validLearnRefNumbersKey, _serializationService.Serialize(validLearnerRefNumbers)),
                     _keyValuePersistenceService.SaveAsync(invalidLearnRefNumbersKey, _serializationService.Serialize(invalidLearnerRefNumbers)),
                     _keyValuePersistenceService.SaveAsync(validationErrorsKey, _serializationService.Serialize(validationErrors)),
-                    _keyValuePersistenceService.SaveAsync(validationErrorMessageLookupKey, _serializationService.Serialize(validationErrorMessageLookups)),
                 });
         }
 

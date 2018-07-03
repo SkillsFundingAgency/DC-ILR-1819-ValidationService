@@ -50,7 +50,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             // populate the keys into jobcontextmessage
             jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers] = validationContext.InvalidLearnRefNumbersKey;
             jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers] = validationContext.ValidLearnRefNumbersKey;
-//            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = validationContext.ValidationErrorMessageLookupKey;
             jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors] = validationContext.ValidationErrorsKey;
 
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c => c.RegisterInstance(validationContext).As<IPreValidationContext>()))
