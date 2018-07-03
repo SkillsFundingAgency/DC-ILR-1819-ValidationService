@@ -101,7 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             var invalidLearnRefNumbersKey = _validationContext.InvalidLearnRefNumbersKey;
             var validationErrorsKey = _validationContext.ValidationErrorsKey;
 
-            var validationContext = _validationContext;
+            var validationContext = (PreValidationContext)_validationContext;
             validationContext.InvalidLearnRefNumbersCount = invalidLearnerRefNumbers.Count();
             validationContext.ValidLearnRefNumbersCount = validLearnerRefNumbers.Count();
             validationContext.ValidationTotalErrorCount = validationErrors.Count(x => x.Severity == Error);
