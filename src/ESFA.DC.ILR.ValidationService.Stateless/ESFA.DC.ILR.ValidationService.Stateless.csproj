@@ -53,8 +53,8 @@
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DC-JobContextManager, Version=0.1.6.0, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\DC-JobContextManager.0.1.6-beta0001\lib\netstandard2.0\DC-JobContextManager.dll</HintPath>
+    <Reference Include="DC-JobContextManager, Version=0.1.7.0, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\DC-JobContextManager.0.1.7-beta0001\lib\netstandard2.0\DC-JobContextManager.dll</HintPath>
     </Reference>
     <Reference Include="DC-JobContextManager.Interface, Version=0.1.1.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\DC-JobContextManager.Interface.0.1.1-beta0001\lib\netstandard2.0\DC-JobContextManager.Interface.dll</HintPath>
@@ -113,11 +113,11 @@
     <Reference Include="ESFA.DC.Mapping.Interface, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Mapping.Interface.0.1.0-beta0001\lib\netstandard2.0\ESFA.DC.Mapping.Interface.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.Queueing, Version=0.1.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.Queueing.0.1.8-beta0001\lib\netstandard2.0\ESFA.DC.Queueing.dll</HintPath>
+    <Reference Include="ESFA.DC.Queueing, Version=0.1.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Queueing.0.1.10-beta0001\lib\netstandard2.0\ESFA.DC.Queueing.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.Queueing.Interface, Version=0.1.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.Queueing.Interface.0.1.8-beta0001\lib\netstandard2.0\ESFA.DC.Queueing.Interface.dll</HintPath>
+    <Reference Include="ESFA.DC.Queueing.Interface, Version=0.1.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Queueing.Interface.0.1.10-beta0001\lib\netstandard2.0\ESFA.DC.Queueing.Interface.dll</HintPath>
     </Reference>
     <Reference Include="ESFA.DC.Serialization.Interfaces, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Serialization.Interfaces.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.Serialization.Interfaces.dll</HintPath>
@@ -373,6 +373,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\JobStatusQueueConfig.cs" />
     <Compile Include="Configuration\ServiceBusQueueConfig.cs" />
     <Compile Include="Configuration\ServiceBusTopicConfiguration.cs" />
     <Compile Include="Handlers\IMessageHandler.cs" />

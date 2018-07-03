@@ -9,6 +9,7 @@
 
   <Section Name="ServiceBusSettings">
     <Parameter Name="JobsQueueName" Value="" />
+    <Parameter Name="JobStatusQueueName" Value="" />
     <Parameter Name="ServiceBusConnectionString" Value="" />
     <Parameter Name="AuditQueueName" Value="" />
     <Parameter Name="TopicName" Value="" />

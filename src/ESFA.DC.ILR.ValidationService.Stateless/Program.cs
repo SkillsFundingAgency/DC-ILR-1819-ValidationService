@@ -19,6 +19,7 @@ using ESFA.DC.IO.Interfaces;
 using ESFA.DC.IO.Redis;
 using ESFA.DC.IO.Redis.Config.Interfaces;
 using ESFA.DC.JobContext;
+using ESFA.DC.JobContext.Interface;
 using ESFA.DC.JobStatus.Dto;
 using ESFA.DC.JobStatus.Interface;
 using ESFA.DC.KeyGenerator.Interface;
@@ -101,8 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             var queueSubscriptionConfig = new ServiceBusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.JobsQueueName,
-                Environment.ProcessorCount,
-                serviceBusOptions.TopicName);
+                Environment.ProcessorCount);
 
             var topicPublishConfig = new ServiceBusTopicConfiguration(
                 serviceBusOptions.ServiceBusConnectionString,
@@ -140,12 +140,43 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                     c.Resolve<IJsonSerializationService>()))
                 .As<IQueuePublishService<AuditingDto>>();
 
+            // Job Status Update Service
+            var jobStatusPublishConfig = new JobStatusQueueConfig(
+                serviceBusOptions.ServiceBusConnectionString,
+                serviceBusOptions.JobStatusQueueName,
+                Environment.ProcessorCount);
+
+            containerBuilder.Register(c => new QueuePublishService<JobStatusDto>(
+                    jobStatusPublishConfig,
+                    c.Resolve<IJsonSerializationService>()))
+                .As<IQueuePublishService<JobStatusDto>>();
+            containerBuilder.RegisterType<JobStatus.JobStatus>().As<IJobStatus>();
+
             // register job context manager
             containerBuilder.RegisterType<Auditor>().As<IAuditor>();
             containerBuilder.RegisterType<JobContextMessageMapper>()
                 .As<IMapper<JobContextMessage, JobContextMessage>>();
 
-            // register Job Status
+            //// register Jobcontext services
+            //// TODO - this isn't right, it needs to subscribe to no topics. Needs a bit of a rethinkon core framework classes
+            //// or similar.
+            //var topicConfig = new ServiceBusTopicConfiguration(
+            //    serviceBusOptions.ServiceBusConnectionString,
+            //    serviceBusOptions.TopicName,
+            //    serviceBusOptions.FundingCalcSubscriptionName,
+            //    Environment.ProcessorCount);
+
+            //containerBuilder.Register(c =>
+            //{
+            //    var topicSubscriptionSevice =
+            //        new TopicSubscriptionSevice<JobContextDto>(
+            //            topicConfig,
+            //            c.Resolve<IJsonSerializationService>(),
+            //            c.Resolve<ILogger>());
+            //    return topicSubscriptionSevice;
+            //}).As<ITopicSubscriptionService<JobContextDto>>();
+
+            //register Job Status
             containerBuilder.Register(c => new JobStatus.JobStatus(
                 c.Resolve<IQueuePublishService<JobStatusDto>>()))
                 .As<IJobStatus>();
@@ -155,7 +186,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             // register the  callback handle when a new message is received from ServiceBus
             containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c => c.Resolve<IMessageHandler>().Handle);
 
-            containerBuilder.RegisterType<JobContextManager<JobContextMessage>>().As<IJobContextManager>();
+            containerBuilder.RegisterType<JobContextManagerForQueue<JobContextMessage>>().As<IJobContextManager>()
+                .InstancePerLifetimeScope();
+
+            containerBuilder.RegisterType<JobContextMessage>().As<IJobContextMessage>()
+                .InstancePerLifetimeScope();
 
             // register key generator
             containerBuilder.RegisterType<KeyGenerator.KeyGenerator>().As<IKeyGenerator>().SingleInstance();
