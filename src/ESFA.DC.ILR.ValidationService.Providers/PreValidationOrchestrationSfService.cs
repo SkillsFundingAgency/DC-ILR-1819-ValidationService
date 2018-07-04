@@ -75,6 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             foreach (var messageShard in messageShards)
             {
                 _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
+
                 // create actors for each Shard.
                 var actor = GetValidationActor();
 

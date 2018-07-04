@@ -71,13 +71,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PostcodePrior
         [InlineData(null)]
         [InlineData("ZZ99 9ZZ")]
         [InlineData("Postcode")]
-        public void ConditionMet_False(string Postcode)
+        public void ConditionMet_False(string postcode)
         {
             var postcodesDataServiceMock = new Mock<IPostcodesDataService>();
 
-            postcodesDataServiceMock.Setup(ds => ds.PostcodeExists("Postcode")).Returns(true);
+            postcodesDataServiceMock.Setup(ds => ds.PostcodeExists(postcode)).Returns(true);
 
-            NewRule(postcodesDataServiceMock.Object).ConditionMet("Postcode").Should().BeFalse();
+            NewRule(postcodesDataServiceMock.Object).ConditionMet(postcode).Should().BeFalse();
         }
 
         [Fact]

@@ -157,7 +157,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterType<JobContextMessageMapper>()
                 .As<IMapper<JobContextMessage, JobContextMessage>>();
 
-            //register Job Status
+            // register Job Status
             containerBuilder.Register(c => new JobStatus.JobStatus(
                 c.Resolve<IQueuePublishService<JobStatusDto>>()))
                 .As<IJobStatus>();

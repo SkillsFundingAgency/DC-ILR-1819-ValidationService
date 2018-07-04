@@ -71,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Postcode
         [InlineData(null)]
         [InlineData("ZZ99 9ZZ")]
         [InlineData("Postcode")]
-        public void ConditionMet_False(string Postcode)
+        public void ConditionMet_False(string postcode)
         {
             var postcodesDataServiceMock = new Mock<IPostcodesDataService>();
 
