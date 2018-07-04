@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
@@ -21,9 +22,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         {
             var uniqueULNs = UniqueULNsFromMessage(_messageCache.Item);
 
-            return _uln.UniqueLearnerNumbers
-                .Where(u => uniqueULNs.Contains(u.ULN))
-                .Select(u => u.ULN);
+            List<long> result = new List<long>(uniqueULNs.Count());
+            var ulnShards = SplitList(uniqueULNs, 5000);
+            foreach (var shard in ulnShards)
+            {
+                result.AddRange(_uln.UniqueLearnerNumbers
+                .Where(u => shard.Contains(u.ULN))
+                .Select(u => u.ULN));
+            }
+
+            return result;
         }
 
         public IEnumerable<long> UniqueULNsFromMessage(IMessage message)
@@ -33,6 +41,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                        .Select(l => l.ULN)
                        .Distinct()
                    ?? new List<long>();
+        }
+
+        private IEnumerable<IEnumerable<long>> SplitList(IEnumerable<long> ulns, int nSize = 30)
+        {
+            var ulnList = ulns.ToList();
+
+            for (var i = 0; i < ulnList.Count; i += nSize)
+            {
+                yield return ulnList.GetRange(i, Math.Min(nSize, ulnList.Count - i));
+            }
         }
     }
 }
