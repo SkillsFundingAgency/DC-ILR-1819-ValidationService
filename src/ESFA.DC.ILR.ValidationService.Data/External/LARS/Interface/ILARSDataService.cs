@@ -11,5 +11,9 @@
         bool LearnAimRefExistsForLearningDeliveryCategoryRef(string learnAimRef, int categoryRef);
 
         bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level);
+
+        bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level);
+
+        bool FullLevel3EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level);
     }
 }

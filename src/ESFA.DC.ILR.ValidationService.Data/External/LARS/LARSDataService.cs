@@ -64,5 +64,25 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
             return learningDelivery != null && learningDelivery.NotionalNVQLevelv2 == level;
         }
+
+        public bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues
+                    .Where(av => av.FullLevel2EntitlementCategory == level).Any();
+        }
+
+        public bool FullLevel3EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues
+                    .Where(av => av.FullLevel3EntitlementCategory == level).Any();
+        }
     }
 }
