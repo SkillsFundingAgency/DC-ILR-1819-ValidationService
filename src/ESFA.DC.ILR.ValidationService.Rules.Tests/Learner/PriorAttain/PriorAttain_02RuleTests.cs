@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
         }
 
         [Fact]
-        public void PriorAttainConditionMet_False_()
+        public void PriorAttainConditionMet_False()
         {
             NewRule().PriorAttainConditionMet(100).Should().BeFalse();
         }
