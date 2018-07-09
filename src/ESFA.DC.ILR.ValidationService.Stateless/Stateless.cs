@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Fabric;
 using Autofac;
-using DC.JobContextManager.Interface;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.JobContext;
+using ESFA.DC.JobContextManager.Interface;
 using ESFA.DC.Logging.Interfaces;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
@@ -34,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
             yield return new ServiceInstanceListener(
-                context => _parentLifeTimeScope.Resolve<IJobContextManager>(),
+                context => _parentLifeTimeScope.Resolve<IJobContextManager<JobContextMessage>>(),
                 "ValidationService-SBQueueListener");
         }
     }
