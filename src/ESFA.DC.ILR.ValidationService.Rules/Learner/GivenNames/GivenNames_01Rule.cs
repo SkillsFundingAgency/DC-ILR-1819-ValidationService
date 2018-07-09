@@ -20,21 +20,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames
 
         public void Validate(ILearner objectToValidate)
         {
-            if (!CrossLearningDeliveryConditionMet(objectToValidate.LearningDeliveries) && ConditionMet(objectToValidate.GivenNames))
+            if (ConditionMet(objectToValidate.GivenNames, objectToValidate.LearningDeliveries))
             {
                 HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.GivenNames));
             }
+        }
+
+        public bool ConditionMet(string givenNames, IEnumerable<ILearningDelivery> learningDeliveries)
+        {
+            return GivenNamesConditionMet(givenNames)
+                && !CrossLearningDeliveryConditionMet(learningDeliveries);
+        }
+
+        public bool GivenNamesConditionMet(string givenNames)
+        {
+            return string.IsNullOrWhiteSpace(givenNames);
         }
 
         public bool CrossLearningDeliveryConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
         {
             return learningDeliveries.All(ld => ld.FundModel == 10
                 || learningDeliveries.All(ldf => ldf.FundModel == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(ld.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108")));
-        }
-
-        public bool ConditionMet(string familyName)
-        {
-            return string.IsNullOrWhiteSpace(familyName);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string givenNames)

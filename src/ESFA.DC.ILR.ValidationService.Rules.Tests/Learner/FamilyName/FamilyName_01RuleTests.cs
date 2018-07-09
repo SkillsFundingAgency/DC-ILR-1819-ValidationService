@@ -57,21 +57,79 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.FamilyName
         }
 
         [Fact]
-        public void ConditionMet_True_Null()
+        public void FamilyNameConditionMet_True_Null()
         {
-            NewRule().ConditionMet(null).Should().BeTrue();
+            NewRule().FamilyNameConditionMet(null).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_True_Whitespace()
+        public void FamilyNameConditionMet_True_Whitespace()
         {
-            NewRule().ConditionMet("    ").Should().BeTrue();
+            NewRule().FamilyNameConditionMet("    ").Should().BeTrue();
+        }
+
+        [Fact]
+        public void FamilyNameConditionMet_False()
+        {
+            NewRule().FamilyNameConditionMet("Not Null or White Space").Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_True()
+        {
+            var fundModel = 35;
+            var learnDelFamCode = "108";
+
+            IEnumerable<TestLearningDelivery> learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    FundModel = fundModel,
+                    LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                    {
+                        new TestLearningDeliveryFAM
+                        {
+                            LearnDelFAMType = "SOF",
+                            LearnDelFAMCode = learnDelFamCode
+                        }
+                    }
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), "SOF", learnDelFamCode)).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(null, learningDeliveries).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False()
         {
-            NewRule().ConditionMet("Not Null or White Space").Should().BeFalse();
+            var fundModel = 10;
+            var learnDelFamCode = "108";
+
+            IEnumerable<TestLearningDelivery> learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    FundModel = fundModel,
+                    LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                    {
+                        new TestLearningDeliveryFAM
+                        {
+                            LearnDelFAMType = "SOF",
+                            LearnDelFAMCode = learnDelFamCode
+                        }
+                    }
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), "SOF", learnDelFamCode)).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(null, learningDeliveries).Should().BeFalse();
         }
 
         [Fact]
