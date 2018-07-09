@@ -30,6 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
                 if (ConditionMet(objectToValidate.PriorAttainNullable, learningDelivery.FundModel, learningDelivery.LearnAimRef, learningDelivery.LearningDeliveryFAMs))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.PriorAttainNullable));
+                    return;
                 }
             }
         }
