@@ -11,5 +11,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 
             return end < start.AddYears(years) ? years - 1 : years;
         }
+
+        public double DaysBetween(DateTime start, DateTime end)
+        {
+            return (end - start).TotalDays;
+        }
     }
 }
