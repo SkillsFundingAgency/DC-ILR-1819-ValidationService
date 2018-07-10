@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.ExternalData.FileDataService.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -12,74 +14,103 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 {
     public class ULN_07Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IFileDataService _fileDataService;
-        private readonly IValidationDataService _validationDataService;
+        private readonly IAcademicYearDataService _academicDataQueryService;
+        private readonly IDateTimeQueryService _dateTimeQueryService;
+        private readonly IFileDataCache _fileDataCache;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        private readonly IEnumerable<long?> _fundModels = new HashSet<long?> { 25, 82, 35, 36, 81, 70 };
+        private readonly IEnumerable<int> _fundModels = new HashSet<int> { 25, 35, 36, 70, 81, 82 };
 
-        public ULN_07Rule(IFileDataService fileDataService, IValidationDataService validationDataService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+        public ULN_07Rule(
+            IAcademicYearDataService academicDataQueryService,
+            IDateTimeQueryService dateTimeQueryService,
+            IFileDataCache fileDataCache,
+            ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.ULN_07)
         {
-            _fileDataService = fileDataService;
-            _validationDataService = validationDataService;
+            _academicDataQueryService = academicDataQueryService;
+            _dateTimeQueryService = dateTimeQueryService;
+            _fileDataCache = fileDataCache;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld => !Exclude(ld)))
+            var filePrepDate = _fileDataCache.FilePreparationDate;
+            var januaryFirst = _academicDataQueryService.JanuaryFirst();
+
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 if (ConditionMet(
-                    learningDelivery.FundModelNullable,
-                    _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ADL, "1"),
-                    objectToValidate.ULNNullable,
-                    _fileDataService.FilePreparationDate,
-                    _validationDataService.AcademicYearJanuaryFirst,
-                    learningDelivery.LearnStartDateNullable,
-                    learningDelivery.LearnPlanEndDateNullable,
-                    learningDelivery.LearnActEndDateNullable))
+                    objectToValidate.ULN,
+                    learningDelivery.FundModel,
+                    learningDelivery.LearningDeliveryFAMs,
+                    learningDelivery.LearnStartDate,
+                    learningDelivery.LearnPlanEndDate,
+                    learningDelivery.LearnActEndDateNullable,
+                    filePrepDate,
+                    januaryFirst))
                 {
-                    HandleValidationError(RuleNameConstants.ULN_07, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                    HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.ULN, filePrepDate, learningDelivery.LearnStartDate));
                 }
             }
         }
 
-        public bool ConditionMet(long? fundModel, bool adlFamCodeOne, long? uln, DateTime filePreparationDate, DateTime academicYearJanuaryFirst, DateTime? learnStartDate, DateTime? learnPlanEndDate, DateTime? learnActEndDate)
+        public bool ConditionMet(
+            long uln,
+            int fundModel,
+            IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs,
+            DateTime learnStartDate,
+            DateTime learnPlanEndDate,
+            DateTime? learnActEndDate,
+            DateTime filePrepDate,
+            DateTime januaryFirst)
         {
-            return FundModelConditionMet(fundModel, adlFamCodeOne)
-                && FilePreparationDateConditionMet(filePreparationDate, academicYearJanuaryFirst)
-                && LearningDatesConditionMet(learnStartDate, learnPlanEndDate, learnActEndDate, filePreparationDate)
-                && UlnConditionMet(uln);
+            return UlnConditionMet(uln)
+                && FundModelConditionMet(fundModel, learningDeliveryFAMs)
+                && FilePreparationDateConditionMet(learnStartDate, filePrepDate, januaryFirst)
+                && LearningDatesConditionMet(learnStartDate, learnPlanEndDate, learnActEndDate)
+                && LearningDeliveryFAMConditionMet(learningDeliveryFAMs);
         }
 
-        public bool FundModelConditionMet(long? fundModel, bool adlFamCodeOne)
-        {
-            return _fundModels.Contains(fundModel)
-                || (fundModel == 99 && adlFamCodeOne);
-        }
-
-        public bool FilePreparationDateConditionMet(DateTime filePreparationDate, DateTime academicYearJanuaryFirst)
-        {
-            return filePreparationDate >= academicYearJanuaryFirst;
-        }
-
-        public bool LearningDatesConditionMet(DateTime? learnStartDate, DateTime? learnPlanEndDate, DateTime? learnActEndDate, DateTime filePreparationDate)
-        {
-            return ((learnPlanEndDate - learnStartDate).Value.TotalDays >= 5
-                || (learnActEndDate.HasValue && (learnActEndDate - learnStartDate).Value.TotalDays >= 5))
-                && (filePreparationDate - learnStartDate).Value.TotalDays > 60;
-        }
-
-        public bool UlnConditionMet(long? uln)
+        public bool UlnConditionMet(long uln)
         {
             return uln == ValidationConstants.TemporaryULN;
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public bool FundModelConditionMet(int fundModel, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "034")
-                || _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, "1");
+            return _fundModels.Contains(fundModel)
+                || (fundModel == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "ADL", "1"));
+        }
+
+        public bool FilePreparationDateConditionMet(DateTime learnStartDate, DateTime filePrepDate, DateTime januaryFirst)
+        {
+            return filePrepDate >= januaryFirst
+                && _dateTimeQueryService.DaysBetween(learnStartDate, filePrepDate) > 60;
+        }
+
+        public bool LearningDatesConditionMet(DateTime learnStartDate, DateTime learnPlanEndDate, DateTime? learnActEndDate)
+        {
+            return _dateTimeQueryService.DaysBetween(learnStartDate, learnPlanEndDate) >= 5
+                || (learnActEndDate.HasValue && _dateTimeQueryService.DaysBetween(learnStartDate, (DateTime)learnActEndDate) >= 5);
+        }
+
+        public virtual bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams)
+        {
+            return !(_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, LearningDeliveryFAMTypeConstants.LDM, "034")
+                || _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, LearningDeliveryFAMTypeConstants.ACT, "1"));
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln, DateTime filePrepDate, DateTime learnStartDate)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
+                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, filePrepDate.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
+            };
         }
     }
 }
