@@ -124,6 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),
                 typeof(ULN_05Rule),
+                typeof(ULN_06Rule),
             };
         }
     }
