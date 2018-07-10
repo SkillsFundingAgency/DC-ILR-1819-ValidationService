@@ -60,29 +60,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [Fact]
         public void FilePreparationDateConditionMet_True()
         {
-            var learnStartDate = new DateTime(2018, 12, 01);
+            var learnStartDate = new DateTime(2019, 04, 01);
             var filePrepDate = new DateTime(2019, 05, 01);
             var januaryFirst = new DateTime(2019, 01, 01);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, filePrepDate)).Returns(100);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, filePrepDate)).Returns(30);
 
             NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object).FilePreparationDateConditionMet(learnStartDate, filePrepDate,  januaryFirst).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(2018, 30)]
-        [InlineData(2019, 0)]
-        public void FilePreparationDateConditionMet_False(int filePrepDateYear, double mockValue)
+        [InlineData(2018)]
+        [InlineData(2019)]
+        public void FilePreparationDateConditionMet_False(int filePrepDateYear)
         {
-            var learnStartDate = new DateTime(2019, 04, 01);
-            var filePrepDate = new DateTime(filePrepDateYear, 05, 01);
+            var learnStartDate = new DateTime(2019, 03, 01);
+            var filePrepDate = new DateTime(filePrepDateYear, 07, 01);
             var januaryFirst = new DateTime(2019, 01, 01);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, filePrepDate)).Returns(mockValue);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, filePrepDate)).Returns(100);
 
             NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object).FilePreparationDateConditionMet(learnStartDate, filePrepDate, januaryFirst).Should().BeFalse();
         }
@@ -144,12 +144,40 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object).LearningDatesConditionMet(learnStartDate, learnPlanEndDate, learnActEndDate).Should().BeFalse();
         }
 
+        [Theory]
+        [InlineData("LDM", "034")]
+        [InlineData("ACT", "1")]
+        public void LearningDeliveryFAMConditionMet_True(string famType, string famCode)
+        {
+            var learningDeliveryFams = new List<TestLearningDeliveryFAM>();
+
+            var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFamQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, famType, famCode)).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFamQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learningDeliveryFams).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData("LDM", "034")]
+        [InlineData("ACT", "1")]
+        public void LearningDeliveryFAMConditionMet_False(string famType, string famCode)
+        {
+            var learningDeliveryFams = new List<TestLearningDeliveryFAM>();
+
+            var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFamQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, famType, famCode)).Returns(true);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFamQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learningDeliveryFams).Should().BeFalse();
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
             var uln = 9999999999;
             var fundModel = 35;
-            var learnStartDate = new DateTime(2019, 05, 01);
+            var learnStartDate = new DateTime(2019, 02, 01);
             var learnPlanEndDate = new DateTime(2019, 05, 10);
             var learnActEndDate = new DateTime(2019, 05, 10);
             var filePrepDate = new DateTime(2019, 01, 01);
@@ -159,8 +187,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "ADL", "1")).Returns(false);
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(100);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(false);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(50);
 
             NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object)
                 .ConditionMet(uln, fundModel, learningDeliveryFAMs, learnStartDate, learnPlanEndDate, learnActEndDate, filePrepDate, januaryFirst)
@@ -168,23 +196,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         }
 
         [Theory]
-        [InlineData(1111111111, 35, "2019-01-01", "2019-05-10", 100)]
-        [InlineData(9999999999, 100, "2019-01-01", "2019-05-10", 100)]
-        [InlineData(9999999999, 35, "2018-3-10", "2019-05-10", 100)]
-        [InlineData(9999999999, 35, "2019-01-01", "2019-05-01", 1)]
-        public void ConditionMet_False(long uln, int fundModel, string filePrepDateString, string learnPlanEndDateString, double dateTimeMock)
+        [InlineData(1111111111, 35, "2019-01-01", "2019-05-10", 100, "LDM", "033")]
+        [InlineData(9999999999, 100, "2019-01-01", "2019-05-10", 100, "LDM", "033")]
+        [InlineData(9999999999, 35, "2018-3-10", "2019-05-10", 100, "LDM", "033")]
+        [InlineData(9999999999, 35, "2019-01-01", "2019-05-01", 1, "LDM", "033")]
+        [InlineData(9999999999, 99, "2019-01-01", "2019-05-01", 1, "LDM", "034")]
+        [InlineData(9999999999, 99, "2019-01-01", "2019-05-01", 1, "ACT", "1")]
+        public void ConditionMet_False(long uln, int fundModel, string filePrepDateString, string learnPlanEndDateString, double dateTimeMock, string famType, string famCode)
         {
             var learnStartDate = new DateTime(2019, 05, 01);
             var learnPlanEndDate = DateTime.Parse(learnPlanEndDateString);
             var learnActEndDate = new DateTime(2019, 05, 10);
             var filePrepDate = DateTime.Parse(filePrepDateString);
             var januaryFirst = new DateTime(2019, 01, 01);
-            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>();
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ADL",
+                    LearnDelFAMCode = "1"
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = famType,
+                    LearnDelFAMCode = famCode
+                }
+            };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "ADL", "1")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(true);
             dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(dateTimeMock);
 
             NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object)
@@ -204,7 +246,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
                     new TestLearningDelivery
                     {
                         FundModel = 35,
-                        LearnStartDate = new DateTime(2019, 05, 01),
+                        LearnStartDate = new DateTime(2019, 02, 01),
                         LearnPlanEndDate = new DateTime(2019, 05, 10),
                         LearningDeliveryFAMs = learningDeliveryFAMs
                     }
@@ -217,7 +259,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             academicDataQueryServiceMock.Setup(qs => qs.JanuaryFirst()).Returns(new DateTime(2019, 01, 01));
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(100);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(50);
             fileDataCacheMock.Setup(fd => fd.FilePreparationDate).Returns(new DateTime(2019, 01, 01));
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "ADL", "1")).Returns(false);
 

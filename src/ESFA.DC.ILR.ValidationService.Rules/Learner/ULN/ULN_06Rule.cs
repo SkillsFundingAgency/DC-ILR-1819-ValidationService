@@ -70,7 +70,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
             return UlnConditionMet(uln)
                 && FundModelConditionMet(fundModel, learningDeliveryFAMs)
                 && FilePreparationDateConditionMet(learnStartDate, filePrepDate, januaryFirst)
-                && LearningDatesConditionMet(learnStartDate, learnPlanEndDate, learnActEndDate);
+                && LearningDatesConditionMet(learnStartDate, learnPlanEndDate, learnActEndDate)
+                && LearningDeliveryFAMConditionMet(learningDeliveryFAMs);
         }
 
         public bool UlnConditionMet(long uln)
@@ -87,13 +88,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
         public bool FilePreparationDateConditionMet(DateTime learnStartDate, DateTime filePrepDate, DateTime januaryFirst)
         {
             return filePrepDate >= januaryFirst
-                && _dateTimeQueryService.DaysBetween(learnStartDate, filePrepDate) > 60;
+                && _dateTimeQueryService.DaysBetween(learnStartDate, filePrepDate) <= 60;
         }
 
         public bool LearningDatesConditionMet(DateTime learnStartDate, DateTime learnPlanEndDate, DateTime? learnActEndDate)
         {
             return _dateTimeQueryService.DaysBetween(learnStartDate, learnPlanEndDate) >= 5
                 || (learnActEndDate.HasValue && _dateTimeQueryService.DaysBetween(learnStartDate, (DateTime)learnActEndDate) >= 5);
+        }
+
+        public virtual bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams)
+        {
+            return !(_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, LearningDeliveryFAMTypeConstants.LDM, "034")
+                || _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, LearningDeliveryFAMTypeConstants.ACT, "1"));
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln, DateTime filePrepDate, DateTime learnStartDate)
