@@ -6,6 +6,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Configuration
     {
         public string LARSConnectionString { get; set; }
 
+        public string OrganisationsConnectionString { get; set;  }
+
         public string PostcodesConnectionString { get; set; }
 
         public string ULNConnectionstring { get; set; }

@@ -12,33 +12,48 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
     {
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        private readonly IEnumerable<long?> _fundModels = new long?[] { 99, 10 };
+        private readonly IEnumerable<int> _fundModels = new int[] { 99, 10 };
 
         public ULN_02Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.ULN_02)
         {
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld => !Exclude(ld)))
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.FundModelNullable, objectToValidate.ULNNullable))
+                if (ConditionMet(learningDelivery.FundModel, objectToValidate.ULN, learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(RuleNameConstants.ULN_02, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.ULN));
+                    return;
                 }
             }
         }
 
-        public bool ConditionMet(long? fundModel, long? uln)
+        public bool ConditionMet(int fundModel, long uln, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        {
+            return ULNConditionMet(fundModel, uln)
+                && LearningDeliveryFAMConditionMet(learningDeliveryFAMs);
+        }
+
+        public bool ULNConditionMet(int fundModel, long uln)
         {
             return _fundModels.Contains(fundModel) && uln == ValidationConstants.TemporaryULN;
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "1");
+            return !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "1");
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.ULN, uln)
+            };
         }
     }
 }

@@ -49,11 +49,40 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             return _externalDataCache.LearningDeliveries.ContainsKey(learnAimRef);
         }
 
+        public bool LearnAimRefExistsForLearningDeliveryCategoryRef(string learnAimRef, int categoryRef)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.LearningDeliveryCategories != null
+                && learningDelivery.LearningDeliveryCategories.Where(cr => cr.CategoryRef == categoryRef).Any();
+        }
+
         public bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
 
             return learningDelivery != null && learningDelivery.NotionalNVQLevelv2 == level;
+        }
+
+        public bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues
+                    .Where(av => av.FullLevel2EntitlementCategory == level).Any();
+        }
+
+        public bool FullLevel3EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues
+                    .Where(av => av.FullLevel3EntitlementCategory == level).Any();
         }
     }
 }

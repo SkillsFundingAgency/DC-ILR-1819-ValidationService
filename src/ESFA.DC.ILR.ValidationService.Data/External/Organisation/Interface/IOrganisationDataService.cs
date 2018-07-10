@@ -5,5 +5,7 @@
         bool UkprnExists(long ukprn);
 
         bool LegalOrgTypeMatchForUkprn(long ukprn, string legalOrgType);
+
+        bool IsPartnerUkprn(long ukprn);
     }
 }

@@ -88,12 +88,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             var invalidLearnRefNumbersKey = "Invalid Learn Ref Numbers Key";
             var validationErrorsKey = "Validation Errors Key";
             var validationErrorMessageLookupsKey = "Validation Error Message Lookups Key";
-                
+
             IEnumerable<string> validLearnerRefNumbers = new List<string>() { "a", "b", "c" };
             IEnumerable<string> invalidLearnerRefNumbers = new List<string>() { "d", "e", "f" };
             IEnumerable<ValidationError> validationErrors = new List<ValidationError>() { new ValidationError(), new ValidationError(), new ValidationError() };
-            IEnumerable<ValidationErrorMessageLookup> validationErrorMessageLookups = new List<ValidationErrorMessageLookup> {  new ValidationErrorMessageLookup(), new ValidationErrorMessageLookup(), new ValidationErrorMessageLookup() };
-            
+            IEnumerable<ValidationErrorMessageLookup> validationErrorMessageLookups = new List<ValidationErrorMessageLookup> { new ValidationErrorMessageLookup(), new ValidationErrorMessageLookup(), new ValidationErrorMessageLookup() };
+
             var serializationServiceMock = new Mock<IJsonSerializationService>();
             var preValidationContextMock = new Mock<IPreValidationContext>();
             var keyValuePersistenceServiceMock = new Mock<IKeyValuePersistenceService>();
@@ -117,7 +117,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
                 keyValuePersistenceService: keyValuePersistenceServiceMock.Object,
                 preValidationContext: preValidationContextMock.Object,
                 jsonSerializationService: serializationServiceMock.Object);
-                
+
             await service.SaveAsync(validLearnerRefNumbers, invalidLearnerRefNumbers, validationErrors, validationErrorMessageLookups);
 
             keyValuePersistenceServiceMock.VerifyAll();

@@ -2,9 +2,19 @@
 using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PMUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PostcodePrior;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
@@ -17,6 +27,8 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
@@ -41,6 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_04Rule),
                 typeof(AddHours_05Rule),
                 typeof(AddHours_06Rule),
+                typeof(AFinType_10Rule),
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
@@ -53,12 +66,19 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(CompStatus_06Rule),
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
+                typeof(DateOfBirth_01Rule),
+                typeof(DateOfBirth_02Rule),
+                typeof(DateOfBirth_05Rule),
+                typeof(DateOfBirth_06Rule),
+                typeof(DateOfBirth_20Rule),
+                typeof(DateOfBirth_35Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
                 typeof(EmpOutcome_01Rule),
                 typeof(EmpOutcome_02Rule),
                 typeof(EmpOutcome_03Rule),
+                typeof(FamilyName_01Rule),
                 typeof(FundModel_01Rule),
                 typeof(FundModel_03Rule),
                 typeof(FundModel_04Rule),
@@ -70,12 +90,15 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FworkCode_01Rule),
                 typeof(FworkCode_02Rule),
                 typeof(FworkCode_05Rule),
+                typeof(GivenNames_01Rule),
                 typeof(LearnActEndDate_01Rule),
                 typeof(LearnActEndDate_04Rule),
                 typeof(LearnAimRef_01Rule),
                 typeof(LearnAimRef_29Rule),
                 typeof(LearnAimRef_30Rule),
                 typeof(LearnAimRef_55Rule),
+                typeof(LearnAimRef_56Rule),
+                typeof(LearnAimRef_57Rule),
                 typeof(LearnAimRef_80Rule),
                 typeof(LearnDelFAMDateFrom_01Rule),
                 typeof(LearnDelFAMDateFrom_02Rule),
@@ -85,7 +108,22 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMDateTo_02Rule),
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
+                typeof(LearnDelFAMType_39Rule),
+                typeof(PartnerUKPRN_01Rule),
+                typeof(PartnerUKPRN_02Rule),
+                typeof(PartnerUKPRN_03Rule),
+                typeof(PlanLearnHours_02Rule),
+                typeof(PlanLearnHours_04Rule),
+                typeof(PMUKPRN_01Rule),
+                typeof(Postcode_14Rule),
+                typeof(PostcodePrior_01Rule),
+                typeof(PrevUKPRN_01Rule),
+                typeof(PriorAttain_01Rule),
+                typeof(PriorAttain_02Rule),
+                typeof(ULN_02Rule),
                 typeof(ULN_03Rule),
+                typeof(ULN_04Rule),
+                typeof(ULN_05Rule),
             };
         }
     }

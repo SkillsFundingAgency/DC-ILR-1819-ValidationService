@@ -55,10 +55,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                     Severity = SeverityToString(ve.Severity),
                     ValidationErrorParameters = ve.ErrorMessageParameters?
                     .Select(emp => new ValidationErrorParameter()
-                        {
-                            PropertyName = emp.PropertyName,
-                            Value = emp.Value
-                        }).ToList()
+                    {
+                        PropertyName = emp.PropertyName,
+                        Value = emp.Value
+                    }).ToList()
                 }).ToList();
 
             var validationErrorMessageLookups = _validationErrorCache
@@ -102,7 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             var validationErrorsKey = _validationContext.ValidationErrorsKey;
             var validationErrorMessageLookupKey = _validationContext.ValidationErrorMessageLookupKey;
 
-            var validationContext = (PreValidationContext)_validationContext;
+            var validationContext = _validationContext;
             validationContext.InvalidLearnRefNumbersCount = invalidLearnerRefNumbers.Count();
             validationContext.ValidLearnRefNumbersCount = validLearnerRefNumbers.Count();
             validationContext.ValidationTotalErrorCount = validationErrors.Count(x => x.Severity == Error);

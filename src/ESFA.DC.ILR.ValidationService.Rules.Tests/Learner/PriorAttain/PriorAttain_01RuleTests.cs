@@ -1,131 +1,204 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 {
-    public class PriorAttain_01RuleTests
+    public class PriorAttain_01RuleTests : AbstractRuleTests<PriorAttain_01Rule>
     {
         [Fact]
-        public void ConditionMet_True()
+        public void RuleName()
         {
-            var rule = new PriorAttain_01Rule(null, null);
-            rule.ConditionMet(null).Should().BeTrue();
+            NewRule().RuleName.Should().Be("PriorAttain_01");
         }
 
         [Fact]
-        public void ConditionMet_False()
+        public void PriorAttainConditionMet_True()
         {
-            var rule = new PriorAttain_01Rule(null, null);
-            rule.ConditionMet(1).Should().BeFalse();
+            NewRule().PriorAttainConditionMet(null).Should().BeTrue();
+        }
+
+        [Fact]
+        public void PriorAttainConditionMet_False()
+        {
+            NewRule().PriorAttainConditionMet(97).Should().BeFalse();
+        }
+
+        [Fact]
+        public void FundModelConditionMet_True()
+        {
+            NewRule().FundModelConditionMet(99).Should().BeTrue();
+        }
+
+        [Fact]
+        public void FundModelConditionMet_False()
+        {
+            NewRule().FundModelConditionMet(25).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearningDeliveryFAMConditionMet_False()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "SOF",
+                    LearnDelFAMCode = "108"
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "108")).Returns(true);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMSConditionMet(99, learningDeliveryFAMs).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(100, "ACT", "1")]
-        [InlineData(50, "SOF", "108")]
-        [InlineData(99, "SOF", "99")]
-        [InlineData(99, "ACT", "108")]
-        public void ExcludeCondition_False_FundModel(long? fundModel, string famType, string famCode)
+        [InlineData(81, "SOF", "108", true)]
+        [InlineData(99, "LDM", "108", false)]
+        [InlineData(99, "SOF", "110", false)]
+        [InlineData(81, "SOF", "110", false)]
+        public void LearningDeliveryFAMConditionMet_True(int fundModel, string famType, string famCode, bool mockBool)
         {
-            var learningDelivery = new TestLearningDelivery()
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { },
-                FundModelNullable = fundModel
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = famType,
+                    LearnDelFAMCode = famCode
+                }
             };
 
-            var famQueryService = new Mock<ILearningDeliveryFAMQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            famQueryService.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, famType, famCode)).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "108")).Returns(mockBool);
 
-            var rule = new PriorAttain_01Rule(null, famQueryService.Object);
-            rule.Exclude(learningDelivery).Should().BeFalse();
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMSConditionMet(fundModel, learningDeliveryFAMs).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(10, "ACT", "1")]
-        [InlineData(25, "ACT", "1")]
-        [InlineData(82, "ACT", "1")]
-        [InlineData(99, "SOF", "108")]
-        public void ExcludeCondition_True(long? fundModel, string famType, string famCode)
+        [InlineData(97, 81, "SOF", "110", false)]
+        [InlineData(null, 10, "SOF", "110", false)]
+        [InlineData(null, 99, "SOF", "108", true)]
+        public void ConditionMet_False(int? priorAttain, int fundModel, string famType, string famCode, bool mockBool)
         {
-            var learningDelivery = new TestLearningDelivery()
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { },
-                FundModelNullable = fundModel
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = famType,
+                    LearnDelFAMCode = famCode
+                }
             };
 
-            var famQueryService = new Mock<ILearningDeliveryFAMQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            famQueryService.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, famType, famCode)).Returns(famType == "SOF");
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "108")).Returns(mockBool);
 
-            var rule = new PriorAttain_01Rule(null, famQueryService.Object);
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(priorAttain, fundModel, learningDeliveryFAMs).Should().BeFalse();
+        }
 
-            rule.Exclude(learningDelivery).Should().BeTrue();
+        [Theory]
+        [InlineData(null, 80, "SOF", "110", false)]
+        [InlineData(null, 99, "SOF", "110", false)]
+        [InlineData(null, 70, "SOF", "108", true)]
+        public void ConditionMet_True(int? priorAttain, int fundModel, string famType, string famCode, bool mockBool)
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = famType,
+                    LearnDelFAMCode = famCode
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "108")).Returns(mockBool);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(priorAttain, fundModel, learningDeliveryFAMs).Should().BeTrue();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var learningDelivery = new TestLearningDelivery()
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { },
+                 new TestLearningDeliveryFAM
+                 {
+                     LearnDelFAMType = "SOF",
+                     LearnDelFAMCode = "108"
+                 }
             };
 
-            var learner = new TestLearner()
+            var learner = new TestLearner
             {
-                LearningDeliveries = new TestLearningDelivery[]
+                LearningDeliveries = new List<TestLearningDelivery>
                 {
-                    learningDelivery
+                    new TestLearningDelivery
+                    {
+                        FundModel = 70,
+                        LearningDeliveryFAMs = learningDeliveryFAMs
+                    }
                 }
             };
 
-            var famQueryService = new Mock<ILearningDeliveryFAMQueryService>();
-            famQueryService.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PriorAttain_01", null, null, null);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "108")).Returns(true);
 
-            var rule = new PriorAttain_01Rule(validationErrorHandlerMock.Object, famQueryService.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
         public void Validate_NoError()
         {
-            var learningDelivery = new TestLearningDelivery()
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { },
+                 new TestLearningDeliveryFAM
+                 {
+                     LearnDelFAMType = "SOF",
+                     LearnDelFAMCode = "108"
+                 }
             };
 
-            var learner = new TestLearner()
+            var learner = new TestLearner
             {
-                PriorAttainNullable = 10,
-                LearningDeliveries = new TestLearningDelivery[]
+                LearningDeliveries = new List<TestLearningDelivery>
                 {
-                    learningDelivery
+                    new TestLearningDelivery
+                    {
+                        FundModel = 99,
+                        LearningDeliveryFAMs = learningDeliveryFAMs
+                    }
                 }
             };
 
-            var famQueryService = new Mock<ILearningDeliveryFAMQueryService>();
-            famQueryService.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PriorAttain_01", null, null, null);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "108")).Returns(true);
 
-            var rule = new PriorAttain_01Rule(validationErrorHandlerMock.Object, famQueryService.Object);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
 
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+        private PriorAttain_01Rule NewRule(ILearningDeliveryFAMQueryService learningDeliveryFamQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new PriorAttain_01Rule(learningDeliveryFamQueryService, validationErrorHandler);
         }
     }
 }

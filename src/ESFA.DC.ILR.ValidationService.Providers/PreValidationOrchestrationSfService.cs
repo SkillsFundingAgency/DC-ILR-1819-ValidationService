@@ -68,11 +68,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             // Get L/A and split the learners into separate lists
             var messageShards = _learnerPerActorService.Process();
+            stopWatch.Restart();
 
             var actorTasks = new List<Task<string>>();
 
             foreach (var messageShard in messageShards)
             {
+                _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
+
                 // create actors for each Shard.
                 var actor = GetValidationActor();
 
@@ -95,6 +98,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 actorTasks.Add(Task.Run(() => actor.Validate(validationActorModel)));
             }
 
+            _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
+
             Task.WaitAll(actorTasks.ToArray());
 
             _logger.LogDebug("all Actors completed");
@@ -109,9 +114,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 }
             }
 
-            _logger.LogDebug("Actors results collated");
+            _logger.LogDebug($"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
             _validationOutputService.Process();
-            _logger.LogDebug("Final results persisted");
+            _logger.LogDebug($"Validation Final results persisted {stopWatch.ElapsedMilliseconds}");
 
             return null;
         }

@@ -50,8 +50,8 @@
     <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.3-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
+    <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -78,7 +78,26 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_06Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_20Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
+    <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_01Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04Rule.cs" />
+    <Compile Include="Learner\PMUKPRN\PMUKPRN_01Rule.cs" />
+    <Compile Include="Learner\PostcodePrior\PostcodePrior_01Rule.cs" />
+    <Compile Include="Learner\Postcode\Postcode_14Rule.cs" />
+    <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01Rule.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_02Rule.cs" />
     <Compile Include="Learner\ULN\ULN_03Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_04Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_05Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_10Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_09Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_07Rule.cs" />
@@ -91,6 +110,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_04Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_05Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_10Rule.cs" />
     <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02Rule.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_01Rule.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_05Rule.cs" />
@@ -126,6 +146,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04Rule.cs" />
@@ -136,18 +157,26 @@
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39Rule.cs" />
+    <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03Rule.cs" />
+    <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02Rule.cs" />
+    <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
     <Compile Include="Query\Interface\IAcademicYearQueryService.cs" />
     <Compile Include="Query\Interface\IDateTimeQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerQueryService.cs" />
+    <Compile Include="Query\Interface\ILearningDeliveryAppFinRecordQueryService.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerFAMQueryService.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\ValidationConstants.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryQueryService.cs" />
     <Compile Include="Query\Interface\IPostcodeQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerEmploymentStatusMonitoringQueryService.cs" />
+    <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryService.cs" />
+    <Compile Include="Query\LearningDeliveryAppFinRecordQueryService.cs" />
     <Compile Include="Query\PostcodeQueryService.cs" />
     <Compile Include="Query\LearnerFAMQueryService.cs" />
     <Compile Include="Query\LearnerQueryService.cs" />

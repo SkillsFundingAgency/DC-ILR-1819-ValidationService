@@ -11,6 +11,7 @@
     <Parameter Name="FundingCalcSubscriptionName" Value="__FundingCalcSubscriptionName__" />
     <Parameter Name="FundingCalcSqlFilterValue" Value="__FundingCalcSqlFilterValue__" />
     <Parameter Name="LARSConnectionString" Value="__LARSConnectionString__" />
+    <Parameter Name="OrganisationsConnectionString" Value="__OrganisationsConnectionString__" />
     <Parameter Name="PostcodesConnectionString" Value="__PostcodesConnectionString__" />
     <Parameter Name="ULNConnectionstring" Value="__ULNConnectionstring__" />
     <Parameter Name="RedisCacheConnectionString" Value="__RedisCacheConnectionString__" />

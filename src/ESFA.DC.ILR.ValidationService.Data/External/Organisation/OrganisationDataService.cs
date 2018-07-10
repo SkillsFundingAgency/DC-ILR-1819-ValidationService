@@ -23,5 +23,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation
         {
             return _referenceDataCache.Organisations.ContainsKey(ukprn);
         }
+
+        public bool IsPartnerUkprn(long ukprn)
+        {
+            _referenceDataCache.Organisations.TryGetValue(ukprn, out var organisation);
+
+            return organisation != null && organisation.PartnerUKPRN == true;
+        }
     }
 }

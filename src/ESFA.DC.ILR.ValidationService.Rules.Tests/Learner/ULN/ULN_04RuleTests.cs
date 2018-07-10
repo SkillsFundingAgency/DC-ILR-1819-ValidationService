@@ -4,14 +4,21 @@ using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
 {
-    public class ULN_04RuleTests
+    public class ULN_04RuleTests : AbstractRuleTests<ULN_05Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("ULN_04");
+        }
+
         [Theory]
         [InlineData(1000000043)]
         [InlineData(null)]
@@ -20,10 +27,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             NewRule().ConditionMet(uln, "N").Should().BeTrue();
         }
 
-        [Fact]
-        public void ConditionMet_False()
+        [Theory]
+        [InlineData(1000000043, "Y")]
+        [InlineData(1000000043, "3")]
+        public void ConditionMet_False(long? uln, string dd01)
         {
-            NewRule().ConditionMet(1000000004, "4").Should().BeFalse();
+            NewRule().ConditionMet(uln, dd01).Should().BeFalse();
         }
 
         [Fact]
@@ -31,16 +40,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         {
             var learner = new TestLearner()
             {
-                ULNNullable = 1000000043,
+                ULN = 1000000043,
             };
 
             var dd01Mock = new Mock<IDD01>();
 
             dd01Mock.Setup(dd => dd.Derive(1000000043)).Returns("Y");
 
-            var rule = NewRule(dd01Mock.Object);
-
-            rule.Validate(learner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(dd01Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
@@ -48,24 +58,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         {
             var learner = new TestLearner()
             {
-                ULNNullable = 1000000042,
+                ULN = 1000000042,
             };
 
             var dd01Mock = new Mock<IDD01>();
 
             dd01Mock.Setup(dd => dd.Derive(1000000042)).Returns("N");
 
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(dd01Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ULN_04", null, null, null);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ULN", (long)1234567890)).Verifiable();
 
-            validationErrorHandlerMock.Setup(handle);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1234567890);
 
-            var rule = new ULN_04Rule(dd01Mock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            validationErrorHandlerMock.Verify();
         }
 
         private ULN_04Rule NewRule(IDD01 dd01 = null, IValidationErrorHandler validationErrorHandler = null)

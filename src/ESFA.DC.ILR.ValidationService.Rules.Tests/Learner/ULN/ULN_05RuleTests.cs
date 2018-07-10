@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Linq.Expressions;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.ExternalData.ULN.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
 {
-    public class ULN_05RuleTests
+    public class ULN_05RuleTests : AbstractRuleTests<ULN_05Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("ULN_05");
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
@@ -35,16 +42,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         {
             var learner = new TestLearner()
             {
-                ULNNullable = 1
+                ULN = 1
             };
 
-            var ulnReferenceDataServiceMock = new Mock<IULNReferenceDataService>();
+            var ulnDataServiceMock = new Mock<IULNDataService>();
 
-            ulnReferenceDataServiceMock.Setup(urds => urds.Exists(1)).Returns(true);
+            ulnDataServiceMock.Setup(urds => urds.Exists(1)).Returns(true);
 
-            var rule = NewRule(ulnReferenceDataServiceMock.Object);
-
-            rule.Validate(learner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(ulnDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
@@ -52,28 +60,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         {
             var learner = new TestLearner()
             {
-                ULNNullable = 1,
+                ULN = 1,
             };
 
-            var ulnReferenceDataServiceMock = new Mock<IULNReferenceDataService>();
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var ulnDataServiceMock = new Mock<IULNDataService>();
 
-            ulnReferenceDataServiceMock.Setup(urds => urds.Exists(1)).Returns(false);
+            ulnDataServiceMock.Setup(urds => urds.Exists(1)).Returns(false);
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ULN_05", null, null, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            var rule = NewRule(ulnReferenceDataServiceMock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(ulnDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
-        private ULN_05Rule NewRule(IULNReferenceDataService uLNReferenceDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void BuildErrorMessageParameters()
         {
-            return new ULN_05Rule(uLNReferenceDataService, validationErrorHandler);
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ULN", (long)1234567890)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1234567890);
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private ULN_05Rule NewRule(IULNDataService ulnDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new ULN_05Rule(ulnDataService, validationErrorHandler);
         }
     }
 }

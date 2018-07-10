@@ -114,6 +114,60 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             NewService(externalDataCacheMock.Object).LegalOrgTypeMatchForUkprn(ukprn, "B").Should().BeFalse();
         }
 
+        [Fact]
+        public void IsPartnerUKPRN_True()
+        {
+            var ukprn = 1;
+            var partnerUkprn = true;
+
+            var organisationDictionary = new Dictionary<long, Organisation>()
+            {
+                { ukprn, new Organisation() { UKPRN = ukprn, PartnerUKPRN = partnerUkprn } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(rdc => rdc.Organisations).Returns(organisationDictionary);
+
+            NewService(externalDataCacheMock.Object).IsPartnerUkprn(ukprn).Should().BeTrue();
+        }
+
+        [Fact]
+        public void IsPartnerUKPRN_False_UKPRNMismatch()
+        {
+            var ukprn = 1;
+            var partnerUkprn = true;
+
+            var organisationDictionary = new Dictionary<long, Organisation>()
+            {
+                { ukprn, new Organisation() { UKPRN = ukprn, PartnerUKPRN = partnerUkprn } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(rdc => rdc.Organisations).Returns(organisationDictionary);
+
+            NewService(externalDataCacheMock.Object).IsPartnerUkprn(2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void IsPartnerUKPRN_False()
+        {
+            var ukprn = 1;
+            var partnerUkprn = false;
+
+            var organisationDictionary = new Dictionary<long, Organisation>()
+            {
+                { ukprn, new Organisation() { UKPRN = ukprn, PartnerUKPRN = partnerUkprn } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(rdc => rdc.Organisations).Returns(organisationDictionary);
+
+            NewService(externalDataCacheMock.Object).IsPartnerUkprn(ukprn).Should().BeFalse();
+        }
+
         private OrganisationDataService NewService(IExternalDataCache externalDataCache)
         {
             return new OrganisationDataService(externalDataCache);

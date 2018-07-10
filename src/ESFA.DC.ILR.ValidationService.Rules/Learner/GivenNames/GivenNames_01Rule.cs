@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -12,31 +13,42 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public GivenNames_01Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.GivenNames_01)
         {
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate.LearningDeliveries == null || !objectToValidate.LearningDeliveries.All(ld => Exclude(ld)))
+            if (ConditionMet(objectToValidate.GivenNames, objectToValidate.LearningDeliveries))
             {
-                if (ConditionMet(objectToValidate.GivenNames))
-                {
-                    HandleValidationError(RuleNameConstants.GivenNames_01, objectToValidate.LearnRefNumber);
-                }
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.GivenNames));
             }
         }
 
-        public bool ConditionMet(string givenName)
+        public bool ConditionMet(string givenNames, IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return string.IsNullOrWhiteSpace(givenName);
+            return GivenNamesConditionMet(givenNames)
+                && !CrossLearningDeliveryConditionMet(learningDeliveries);
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public bool GivenNamesConditionMet(string givenNames)
         {
-            return learningDelivery.FundModelNullable == 10
-                || (learningDelivery.FundModelNullable == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108"));
+            return string.IsNullOrWhiteSpace(givenNames);
+        }
+
+        public bool CrossLearningDeliveryConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
+        {
+            return learningDeliveries.All(ld => ld.FundModel == 10
+                || learningDeliveries.All(ldf => ldf.FundModel == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(ld.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108")));
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string givenNames)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.GivenNames, givenNames),
+            };
         }
     }
 }

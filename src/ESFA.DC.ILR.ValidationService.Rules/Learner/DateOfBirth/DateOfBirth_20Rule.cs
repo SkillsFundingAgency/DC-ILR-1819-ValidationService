@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -11,16 +12,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_20Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IValidationDataService _validationDataService;
+        private readonly IAcademicYearDataService _academicYearDataService;
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         private readonly IEnumerable<long?> _fundModels = new HashSet<long?>() { 25, 82 };
 
-        public DateOfBirth_20Rule(IValidationDataService validationDataService, IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+        public DateOfBirth_20Rule(IAcademicYearDataService academicYearDataService, IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.DateOfBirth_20)
         {
-            _validationDataService = validationDataService;
+            _academicYearDataService = academicYearDataService;
             _dateTimeQueryService = dateTimeQueryService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
@@ -32,30 +33,54 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                 foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
                     if (ConditionMet(
-                        learningDelivery.FundModelNullable,
+                        learningDelivery.ProgTypeNullable,
+                        learningDelivery.FundModel,
                         objectToValidate.DateOfBirthNullable,
-                        _validationDataService.AcademicYearAugustThirtyFirst,
-                        _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(
-                            learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "107")))
+                        learningDelivery.LearningDeliveryFAMs))
                     {
-                        HandleValidationError(RuleNameConstants.DateOfBirth_20, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable));
+                        return;
                     }
                 }
             }
         }
 
-        public bool Exclude(long? progType)
+        public bool ConditionMet(int? progType, int fundModel, DateTime? dateOfBirth, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return progType == 24;
+            return ProgTypeConditionMet(progType)
+                && FundModelConditionMet(fundModel)
+                && DateOfBirthConditionMet(dateOfBirth)
+                && LearningDeliveryFAMConditionMet(learningDeliveryFAMs);
         }
 
-        public bool ConditionMet(long? fundModel, DateTime? dateOfBirth, DateTime academicYearAugustThirtyFirst, bool hasSOF107)
+        public bool ProgTypeConditionMet(int? progType)
         {
-            return !hasSOF107
-                && fundModel.HasValue
-                && _fundModels.Contains(fundModel.Value)
-                && dateOfBirth.HasValue
-                && _dateTimeQueryService.YearsBetween(dateOfBirth.Value, academicYearAugustThirtyFirst) < 19;
+            return progType != null ? progType != 24 : true;
+        }
+
+        public bool FundModelConditionMet(int fundModel)
+        {
+            return _fundModels.Contains(fundModel);
+        }
+
+        public bool DateOfBirthConditionMet(DateTime? dateOfBirth)
+        {
+            return dateOfBirth.HasValue
+                && _dateTimeQueryService.YearsBetween((DateTime)dateOfBirth, _academicYearDataService.AugustThirtyFirst()) < 19;
+        }
+
+        public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        {
+            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, "SOF")
+                && !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "107");
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth)
+            };
         }
     }
 }

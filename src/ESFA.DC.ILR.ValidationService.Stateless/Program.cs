@@ -19,6 +19,9 @@ using ESFA.DC.IO.Interfaces;
 using ESFA.DC.IO.Redis;
 using ESFA.DC.IO.Redis.Config.Interfaces;
 using ESFA.DC.JobContext;
+using ESFA.DC.JobContext.Interface;
+using ESFA.DC.JobStatus.Dto;
+using ESFA.DC.JobStatus.Interface;
 using ESFA.DC.KeyGenerator.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
@@ -42,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
-                var builder = BuildContainer();
+               var builder = BuildContainer();
 
                 // Register the Autofac magic for Service Fabric support.
                 builder.RegisterServiceFabricSupport();
@@ -99,8 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             var queueSubscriptionConfig = new ServiceBusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.JobsQueueName,
-                Environment.ProcessorCount,
-                serviceBusOptions.TopicName);
+                Environment.ProcessorCount);
 
             var topicPublishConfig = new ServiceBusTopicConfiguration(
                 serviceBusOptions.ServiceBusConnectionString,
@@ -138,17 +140,38 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                     c.Resolve<IJsonSerializationService>()))
                 .As<IQueuePublishService<AuditingDto>>();
 
+            // Job Status Update Service
+            var jobStatusPublishConfig = new JobStatusQueueConfig(
+                serviceBusOptions.ServiceBusConnectionString,
+                serviceBusOptions.JobStatusQueueName,
+                Environment.ProcessorCount);
+
+            containerBuilder.Register(c => new QueuePublishService<JobStatusDto>(
+                    jobStatusPublishConfig,
+                    c.Resolve<IJsonSerializationService>()))
+                .As<IQueuePublishService<JobStatusDto>>();
+            containerBuilder.RegisterType<JobStatus.JobStatus>().As<IJobStatus>();
+
             // register job context manager
             containerBuilder.RegisterType<Auditor>().As<IAuditor>();
             containerBuilder.RegisterType<JobContextMessageMapper>()
                 .As<IMapper<JobContextMessage, JobContextMessage>>();
+
+            // register Job Status
+            containerBuilder.Register(c => new JobStatus.JobStatus(
+                c.Resolve<IQueuePublishService<JobStatusDto>>()))
+                .As<IJobStatus>();
 
             containerBuilder.RegisterType<MessageHandler>().As<IMessageHandler>();
 
             // register the  callback handle when a new message is received from ServiceBus
             containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c => c.Resolve<IMessageHandler>().Handle);
 
-            containerBuilder.RegisterType<JobContextManager<JobContextMessage>>().As<IJobContextManager>();
+            containerBuilder.RegisterType<JobContextManagerForQueue<JobContextMessage>>().As<IJobContextManager>()
+                .InstancePerLifetimeScope();
+
+            containerBuilder.RegisterType<JobContextMessage>().As<IJobContextMessage>()
+                .InstancePerLifetimeScope();
 
             // register key generator
             containerBuilder.RegisterType<KeyGenerator.KeyGenerator>().As<IKeyGenerator>().SingleInstance();

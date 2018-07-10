@@ -1,17 +1,22 @@
-﻿using System;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.ExternalData.Organisation.Interface;
+﻿using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrevUKPRN
 {
-    public class PrevUKPRN_01RuleTests
+    public class PrevUKPRN_01RuleTests : AbstractRuleTests<PrevUKPRN_01Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("PrevUKPRN_01");
+        }
+
         [Fact]
         public void NullConditionMet_True()
         {
@@ -25,15 +30,49 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrevUKPRN
         }
 
         [Fact]
-        public void LookupConditionMet_True()
+        public void LookupConditionMet_False()
         {
-            NewRule().LookupConditionMet(false).Should().BeTrue();
+            var organisationDataServiceMock = new Mock<IOrganisationDataService>();
+
+            organisationDataServiceMock.Setup(ds => ds.IsPartnerUkprn(1)).Returns(true);
+
+            NewRule(organisationDataServiceMock.Object).LookupConditionMet(1).Should().BeFalse();
         }
 
         [Fact]
-        public void LookupConditionMet_False()
+        public void LookupConditionMet_True()
         {
-            NewRule().LookupConditionMet(true).Should().BeFalse();
+            var organisationDataServiceMock = new Mock<IOrganisationDataService>();
+
+            organisationDataServiceMock.Setup(ds => ds.IsPartnerUkprn(1)).Returns(false);
+
+            NewRule(organisationDataServiceMock.Object).LookupConditionMet(2).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ConditionMet_False()
+        {
+            var organisationDataServiceMock = new Mock<IOrganisationDataService>();
+
+            organisationDataServiceMock.Setup(ds => ds.IsPartnerUkprn(1)).Returns(true);
+
+            NewRule(organisationDataServiceMock.Object).ConditionMet(1).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_True()
+        {
+            var organisationDataServiceMock = new Mock<IOrganisationDataService>();
+
+            organisationDataServiceMock.Setup(ds => ds.IsPartnerUkprn(1)).Returns(false);
+
+            NewRule(organisationDataServiceMock.Object).ConditionMet(2).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ConditionMet_False_NullUkprn()
+        {
+            NewRule().ConditionMet(null).Should().BeFalse();
         }
 
         [Fact]
@@ -44,33 +83,51 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrevUKPRN
                 PrevUKPRNNullable = 1,
             };
 
-            var organisationReferenceDataServiceMock = new Mock<IOrganisationReferenceDataService>();
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var organisationDataServiceMock = new Mock<IOrganisationDataService>();
 
-            organisationReferenceDataServiceMock.Setup(ord => ord.UkprnExists(1)).Returns(false);
+            organisationDataServiceMock.Setup(ds => ds.IsPartnerUkprn(1)).Returns(false);
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PrevUKPRN_01", null, null, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            var rule = NewRule(organisationReferenceDataServiceMock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(organisationDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_NoErrors()
+        public void Validate_NoError()
         {
-            var learner = new TestLearner();
+            var learner = new TestLearner()
+            {
+                PrevUKPRNNullable = 1,
+            };
 
-            NewRule().Validate(learner);
+            var organisationDataServiceMock = new Mock<IOrganisationDataService>();
+
+            organisationDataServiceMock.Setup(ds => ds.IsPartnerUkprn(1)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(organisationDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
-        private PrevUKPRN_01Rule NewRule(IOrganisationReferenceDataService organisationReferenceDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void BuildErrorMessageParameters()
         {
-            return new PrevUKPRN_01Rule(organisationReferenceDataService, validationErrorHandler);
+            long? prevUKPRN = 1;
+
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("PrevUKPRN", prevUKPRN)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(prevUKPRN);
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private PrevUKPRN_01Rule NewRule(IOrganisationDataService organisationDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new PrevUKPRN_01Rule(organisationDataService, validationErrorHandler);
         }
     }
 }

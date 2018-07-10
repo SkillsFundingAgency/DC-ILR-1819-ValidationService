@@ -20,6 +20,7 @@
     <Parameter Name="ValidationErrorsConnectionString" DefaultValue="" />
     <Parameter Name="RedisCacheConnectionString" DefaultValue="" />
     <Parameter Name="ProcessingServicePlacementConstraints" DefaultValue="" />
+    <Parameter Name="OrganisationsConnectionString" DefaultValue="metadata=res://*/Organisations.csdl|res://*/Organisations.ssdl|res://*/Organisations.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.Organisations.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -47,6 +48,7 @@
           <Section Name="ServiceBusSettings">
             <Parameter Name="JobsQueueName" Value="[JobsQueueName]" />
             <Parameter Name="AuditQueueName" Value="[AuditQueueName]" />
+            <Parameter Name="JobStatusQueueName" Value="[AuditQueueName]" />
             <Parameter Name="ServiceBusConnectionString" Value="[ServiceBusConnectionString]" />
             <Parameter Name="TopicName" Value="[TopicName]" />
             <Parameter Name="FundingCalcSubscriptionName" Value="[FundingCalcSubscriptionName]" />
@@ -69,6 +71,7 @@
             <Parameter Name="PostcodesConnectionString" Value="[PostcodesConnectionString]" />
             <Parameter Name="ULNConnectionstring" Value="[ULNConnectionstring]" />
             <Parameter Name="ValidationErrorsConnectionString" Value="[ValidationErrorsConnectionString]" />
+            <Parameter Name="OrganisationsConnectionString" Value="[OrganisationsConnectionString]" />
           </Section>
         </Settings>
       </ConfigOverride>
