@@ -5,6 +5,7 @@ using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
+using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
@@ -127,6 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
                 typeof(LearnDelFAMType_39Rule),
+                typeof(NUMHUS_01Rule),
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
                 typeof(PartnerUKPRN_03Rule),
@@ -151,7 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(85);
+            rules.Should().HaveCount(86);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

@@ -78,6 +78,7 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
+    <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />
