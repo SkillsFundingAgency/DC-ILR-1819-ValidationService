@@ -142,6 +142,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
                 typeof(QUALENT3_01Rule),
+                typeof(QUALENT3_02Rule),
                 typeof(ULN_02Rule),
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),
@@ -155,7 +156,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(87);
+            rules.Should().HaveCount(88);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

@@ -15,5 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         public IReadOnlyCollection<int> EmpOutcomes { get; set; }
 
         public IReadOnlyCollection<int> FundModels { get; set; }
+
+        public IReadOnlyCollection<string> QUALENT3s { get; set; }
     }
 }

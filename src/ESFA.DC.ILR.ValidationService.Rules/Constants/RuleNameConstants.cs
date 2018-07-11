@@ -110,6 +110,7 @@
         public const string PriorAttain_02 = "PriorAttain_02";
 
         public const string QUALENT3_01 = "QUALENT3_01";
+        public const string QUALENT3_02 = "QUALENT3_02";
 
         public const string ULN_02 = "ULN_02";
         public const string ULN_03 = "ULN_03";
