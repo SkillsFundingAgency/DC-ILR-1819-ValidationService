@@ -36,6 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             internalDataCache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
             internalDataCache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
             internalDataCache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
+            internalDataCache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
         }
 
         private AcademicYear BuildAcademicYear()

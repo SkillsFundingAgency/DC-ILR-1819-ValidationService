@@ -78,6 +78,10 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
+    <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
+    <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
+    <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
+    <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />

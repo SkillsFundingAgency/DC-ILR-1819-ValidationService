@@ -89,9 +89,13 @@
 
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
 
+        public const string NUMHUS_01 = "NUMHUS_01";
+
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
+
+        public const string PCFLDCS_02 = "PCFLDCS_02";
 
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
         public const string PlanLearnHours_04 = "PlanLearnHours_04";
@@ -106,6 +110,9 @@
 
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
+
+        public const string QUALENT3_01 = "QUALENT3_01";
+        public const string QUALENT3_02 = "QUALENT3_02";
 
         public const string ULN_02 = "ULN_02";
         public const string ULN_03 = "ULN_03";

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
+using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
+using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
@@ -109,9 +112,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
                 typeof(LearnDelFAMType_39Rule),
+                typeof(NUMHUS_01Rule),
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
                 typeof(PartnerUKPRN_03Rule),
+                typeof(PCFLDCS_02Rule),
                 typeof(PlanLearnHours_02Rule),
                 typeof(PlanLearnHours_04Rule),
                 typeof(PMUKPRN_01Rule),
@@ -120,6 +125,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PrevUKPRN_01Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
+                typeof(QUALENT3_01Rule),
+                typeof(QUALENT3_02Rule),
                 typeof(ULN_02Rule),
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),

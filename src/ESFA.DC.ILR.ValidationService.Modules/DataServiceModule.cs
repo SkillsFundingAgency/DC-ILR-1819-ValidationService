@@ -18,6 +18,8 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.EmpOutcome;
 using ESFA.DC.ILR.ValidationService.Data.Internal.EmpOutcome.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel;
 using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3;
+using ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
@@ -37,6 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<CompStatusDataService>().As<ICompStatusDataService>().InstancePerLifetimeScope();
             builder.RegisterType<EmpOutcomeDataService>().As<IEmpOutcomeDataService>().InstancePerLifetimeScope();
             builder.RegisterType<FundModelDataService>().As<IFundModelDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<QUALENT3DataService>().As<IQUALENT3DataService>().InstancePerLifetimeScope();
         }
     }
 }

@@ -15,5 +15,7 @@
         bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level);
 
         bool FullLevel3EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level);
+
+        bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef);
     }
 }

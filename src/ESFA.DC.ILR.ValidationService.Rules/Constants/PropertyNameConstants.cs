@@ -41,5 +41,6 @@
         public const string ProgType = "ProgType";
         public const string PriorAttain = "PriorAttain";
         public const string PwayCode = "PwayCode";
+        public const string QUALENT3 = "QUALENT3";
     }
 }

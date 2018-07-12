@@ -151,7 +151,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
         [InlineData(98, 81, "LearnAimRef", "LDM", "110", false, true)]
         [InlineData(98, 35, "LearnAimRef", "LDM", "110", false, true)]
         [InlineData(98, 70, "LearnAimRef", "LDM", "110", false, true)]
-        [InlineData(98, 81, "LearnAimRef", "LDM", "110", false, true)]
         [InlineData(98, 81, "LearnAimRef", "LDM", "110", true, true)]
         [InlineData(98, 81, "LearnAimRef", "LDM", "110", true, false)]
         public void ConditionMet_True(int? priorAttain, int fundModel, string learnAimRef, string famType, string famCode, bool mockValueLevelTwo, bool mockValueLevelThree)
