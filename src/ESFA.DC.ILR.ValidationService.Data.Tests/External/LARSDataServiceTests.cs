@@ -260,6 +260,60 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Fact]
+        public void NotionalNVQLevelMatchForLearnAimRef_True()
+        {
+            var learnAimRef = "LearnAimRef";
+            var notionalNVQLevel = "E";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevel = notionalNVQLevel } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelMatchForLearnAimRef(learnAimRef, notionalNVQLevel).Should().BeTrue();
+        }
+
+        [Fact]
+        public void NotionalNVQLevelMatchForLearnAimRef_False_Null()
+        {
+            var learnAimRef = "LearnAimRef";
+            var notionalNVQLevel = "E";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevel = notionalNVQLevel } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelMatchForLearnAimRef("NotLearnAimRef", notionalNVQLevel).Should().BeFalse();
+        }
+
+        [Fact]
+        public void NotionalNVQLevelMatchForLearnAimRef_False_Mismatch()
+        {
+            var learnAimRef = "LearnAimRef";
+            var notionalNVQLevel = "E";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevel = notionalNVQLevel } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelMatchForLearnAimRef(learnAimRef, "2").Should().BeFalse();
+        }
+
+        [Fact]
         public void NotionalNVQLevelV2MatchForLearnAimRef_True()
         {
             var learnAimRef = "LearnAimRef";
@@ -537,6 +591,119 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
             NewService(externalDataCacheMock.Object).FullLevel3EntitlementCategoryMatchForLearnAimRef(learnAimRef, 2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void BasicSkillsMatchForLearnAimRef_True()
+        {
+            var learnAimRef = "LearnAimRef";
+            var basicSkills = 1;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkills = basicSkills
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRef(learnAimRef, basicSkills).Should().BeTrue();
+        }
+
+        [Fact]
+        public void BasicSkillsMatchForLearnAimRef_False_Null_LearnAimRef()
+        {
+            var learnAimRef = "LearnAimRef";
+            var basicSkills = 1;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkills = basicSkills
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRef("NotLearnAimRef", basicSkills).Should().BeFalse();
+        }
+
+        [Fact]
+        public void BasicSkillsMatchForLearnAimRef_False_Null_AnnualValue()
+        {
+            var learnAimRef = "LearnAimRef";
+            var basicSkills = 1;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRef(learnAimRef, basicSkills).Should().BeFalse();
+        }
+
+        [Fact]
+        public void BasicSkillsMatchForLearnAimRef_False_Mismatch()
+        {
+            var learnAimRef = "LearnAimRef";
+            var basicSkills = 1;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkills = basicSkills
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRef(learnAimRef, 2).Should().BeFalse();
         }
 
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
