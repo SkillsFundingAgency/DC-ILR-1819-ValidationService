@@ -91,6 +91,8 @@
 
         public const string NUMHUS_01 = "NUMHUS_01";
 
+        public const string OutGrade_03 = "OutGrade_03";
+
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";

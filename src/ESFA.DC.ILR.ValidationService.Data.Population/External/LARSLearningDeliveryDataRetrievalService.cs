@@ -31,6 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     {
                         FrameworkCommonComponent = ld.FrameworkCommonComponent,
                         LearnAimRef = ld.LearnAimRef,
+                        NotionalNVQLevel = ld.NotionalNVQLevel,
                         NotionalNVQLevelv2 = ld.NotionalNVQLevelv2,
                         LearnDirectClassSystemCode1 = ld.LearnDirectClassSystemCode1,
                         AnnualValues = ld.LARS_AnnualValue
