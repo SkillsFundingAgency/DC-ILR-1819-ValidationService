@@ -10,6 +10,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
 
         public int? FrameworkCommonComponent { get; set; }
 
+        public string LearnDirectClassSystemCode1 { get; set; }
+
         public IEnumerable<LearningDeliveryCategory> LearningDeliveryCategories { get; set; }
 
         public IEnumerable<FrameworkAim> FrameworkAims { get; set; }

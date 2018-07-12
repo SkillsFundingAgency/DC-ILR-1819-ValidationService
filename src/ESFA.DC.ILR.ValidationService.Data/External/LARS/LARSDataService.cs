@@ -84,5 +84,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && learningDelivery.AnnualValues
                     .Where(av => av.FullLevel3EntitlementCategory == level).Any();
         }
+
+        public bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.LearnDirectClassSystemCode1 != "NUL";
+        }
     }
 }
