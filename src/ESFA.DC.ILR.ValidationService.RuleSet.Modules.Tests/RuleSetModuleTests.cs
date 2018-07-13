@@ -16,6 +16,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.PMUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PostcodePrior;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
@@ -100,6 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(EmpOutcome_02Rule),
                 typeof(EmpOutcome_03Rule),
                 typeof(FamilyName_01Rule),
+                typeof(FamilyName_02Rule),
                 typeof(FundModel_01Rule),
                 typeof(FundModel_03Rule),
                 typeof(FundModel_04Rule),
@@ -113,6 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(FworkCode_02Rule),
                 typeof(FworkCode_05Rule),
                 typeof(GivenNames_01Rule),
+                typeof(GivenNames_02Rule),
                 typeof(LearnActEndDate_01Rule),
                 typeof(LearnActEndDate_04Rule),
                 typeof(LearnAimRef_01Rule),
@@ -137,12 +140,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(PartnerUKPRN_02Rule),
                 typeof(PartnerUKPRN_03Rule),
                 typeof(PCFLDCS_02Rule),
+                typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),
                 typeof(PlanLearnHours_04Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(Postcode_14Rule),
                 typeof(PostcodePrior_01Rule),
                 typeof(PrevUKPRN_01Rule),
+                typeof(PrimaryLLDD_01Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
                 typeof(QUALENT3_01Rule),
@@ -160,7 +165,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(90);
+            rules.Should().HaveCount(94);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

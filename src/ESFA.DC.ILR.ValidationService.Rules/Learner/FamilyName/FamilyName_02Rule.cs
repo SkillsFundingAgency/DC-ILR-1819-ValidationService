@@ -13,31 +13,49 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public FamilyName_02Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.FamilyName_02)
         {
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (CrossLearningDeliveryConditionMet(objectToValidate.LearningDeliveries) && ConditionMet(objectToValidate.PlanLearnHoursNullable, objectToValidate.FamilyName))
+            if (ConditionMet(objectToValidate.FamilyName, objectToValidate.PlanLearnHoursNullable, objectToValidate.LearningDeliveries))
             {
-                HandleValidationError(RuleNameConstants.FamilyName_02, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.FamilyName, objectToValidate.PlanLearnHoursNullable));
             }
+        }
+
+        public bool ConditionMet(string familyName, int? planLearnHours, IEnumerable<ILearningDelivery> learningDeliveries)
+        {
+            return FamilyNameConditionMet(familyName)
+                && PlanLearnHoursConditionMet(planLearnHours)
+                && CrossLearningDeliveryConditionMet(learningDeliveries);
+        }
+
+        public bool FamilyNameConditionMet(string familyName)
+        {
+            return string.IsNullOrWhiteSpace(familyName);
+        }
+
+        public bool PlanLearnHoursConditionMet(int? planLearnHours)
+        {
+            return planLearnHours.HasValue && planLearnHours > 10;
         }
 
         public bool CrossLearningDeliveryConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return learningDeliveries != null
-                && (learningDeliveries.All(ld => ld.FundModelNullable == 10)
-                || learningDeliveries.All(ld => ld.FundModelNullable == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(ld.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108")));
+            return learningDeliveries.All(ld => ld.FundModel == 10
+                || learningDeliveries.All(ldf => ldf.FundModel == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(ld.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108")));
         }
 
-        public bool ConditionMet(long? planLearnHours, string familyName)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string familyName, int? planLearnHours)
         {
-            return planLearnHours.HasValue
-                && planLearnHours > 10
-                && string.IsNullOrWhiteSpace(familyName);
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FamilyName, familyName),
+                BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, planLearnHours)
+            };
         }
     }
 }

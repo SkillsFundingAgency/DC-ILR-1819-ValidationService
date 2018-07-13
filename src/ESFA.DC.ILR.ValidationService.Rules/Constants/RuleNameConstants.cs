@@ -50,6 +50,7 @@
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
         public const string FamilyName_01 = "FamilyName_01";
+        public const string FamilyName_02 = "FamilyName_02";
 
         public const string FundModel_01 = "FundModel_01";
         public const string FundModel_03 = "FundModel_03";
@@ -65,6 +66,7 @@
         public const string FworkCode_05 = "FworkCode_05";
 
         public const string GivenNames_01 = "GivenNames_01";
+        public const string GivenNames_02 = "GivenNames_02";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
@@ -99,6 +101,7 @@
 
         public const string PCFLDCS_02 = "PCFLDCS_02";
 
+        public const string PlanLearnHours_01 = "PlanLearnHours_01";
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
         public const string PlanLearnHours_04 = "PlanLearnHours_04";
 
@@ -109,6 +112,8 @@
         public const string PostcodePrior_01 = "PostcodePrior_01";
 
         public const string PrevUKPRN_01 = "PrevUKPRN_01";
+
+        public const string PrimaryLLDD_01 = "PrimaryLLDD_01";
 
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";

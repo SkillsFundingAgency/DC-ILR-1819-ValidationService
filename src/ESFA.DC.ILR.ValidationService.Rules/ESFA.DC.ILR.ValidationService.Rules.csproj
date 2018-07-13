@@ -89,13 +89,17 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
+    <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_01Rule.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_02Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04Rule.cs" />
     <Compile Include="Learner\PMUKPRN\PMUKPRN_01Rule.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_01Rule.cs" />
     <Compile Include="Learner\Postcode\Postcode_14Rule.cs" />
     <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01Rule.cs" />
+    <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_01Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
     <Compile Include="Learner\ULN\ULN_02Rule.cs" />
