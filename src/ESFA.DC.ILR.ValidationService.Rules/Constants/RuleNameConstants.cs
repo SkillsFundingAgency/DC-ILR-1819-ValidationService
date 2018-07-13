@@ -110,6 +110,8 @@
 
         public const string PrevUKPRN_01 = "PrevUKPRN_01";
 
+        public const string PrimaryLLDD_01 = "PrimaryLLDD_01";
+
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
 
