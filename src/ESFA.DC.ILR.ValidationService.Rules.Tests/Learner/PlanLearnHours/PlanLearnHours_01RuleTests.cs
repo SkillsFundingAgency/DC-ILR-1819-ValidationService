@@ -6,158 +6,285 @@ using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanLearnHours
 {
-    public class PlanLearnHours_01RuleTests : PlanLearnHoursTestsBase
+    public class PlanLearnHours_01RuleTests : AbstractRuleTests<PlanLearnHours_01Rule>
     {
         [Fact]
-        public void ConditionMet_True()
+        public void RuleName()
         {
-            NewRule().ConditionMet(null).Should().BeTrue();
+            NewRule().RuleName.Should().Be("PlanLearnHours_01");
         }
 
         [Fact]
-        public void ConditionMet_False()
+        public void PlanLearnHoursConditionMet_True()
         {
-            NewRule().ConditionMet(10).Should().BeFalse();
+            NewRule().PlanLearnHoursConditionMet(null).Should().BeTrue();
         }
 
         [Fact]
-        public void ExcludeConditionMet_AllAimsClosed_True()
+        public void PlanLearnHoursConditionMet_False()
         {
-            var learningDeliveries = new List<TestLearningDelivery>()
+            NewRule().PlanLearnHoursConditionMet(1).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnActEndDateConditionMet_True()
+        {
+            var learningDeliveries = new List<TestLearningDelivery>
             {
-                new TestLearningDelivery()
+                new TestLearningDelivery
                 {
-                    LearnActEndDateNullable = new DateTime(2018, 1, 1)
+                    LearnActEndDateNullable = new DateTime(2017, 07, 20)
                 },
-                new TestLearningDelivery()
+                new TestLearningDelivery
                 {
-                    LearnActEndDateNullable = new DateTime(2018, 1, 1)
                 }
             };
 
-            NewRule().HasAllLearningAimsClosedExcludeConditionMet(learningDeliveries).Should().BeTrue();
+            NewRule().LearnActEndDateConditionMet(learningDeliveries).Should().BeTrue();
         }
 
         [Fact]
-        public void ExcludeConditionMet_All_AimsClosed_False()
+        public void LearnActEndDateConditionMet_False()
         {
-            var learningDeliveries = new List<TestLearningDelivery>()
+            var learningDeliveries = new List<TestLearningDelivery>
             {
-                new TestLearningDelivery(),
-                new TestLearningDelivery()
+                new TestLearningDelivery
                 {
-                    LearnActEndDateNullable = new DateTime(2017, 1, 1),
+                    LearnActEndDateNullable = new DateTime(2017, 07, 20)
+                },
+                new TestLearningDelivery
+                {
+                    LearnActEndDateNullable = new DateTime(2017, 07, 20)
                 }
             };
 
-            NewRule().HasAllLearningAimsClosedExcludeConditionMet(learningDeliveries).Should().BeFalse();
+            NewRule().LearnActEndDateConditionMet(learningDeliveries).Should().BeFalse();
         }
 
-        [Theory]
-        [InlineData(70, null)]
-        [InlineData(null, 2)]
-        public void ExcludeConditionMet_True(long? fundModel, long? progType)
+        [Fact]
+        public void LearnerConditionMet_True()
         {
-            var learningDelivery = SetupLearningDelivery(fundModel, progType);
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnActEndDateNullable = new DateTime(2017, 07, 20)
+                },
+                new TestLearningDelivery
+                {
+                }
+            };
 
+            NewRule().LearnerConditionMet(null, learningDeliveries).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnerConditionMet_False_LearnActEndDate()
+        {
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnActEndDateNullable = new DateTime(2017, 07, 20)
+                },
+                new TestLearningDelivery
+                {
+                    LearnActEndDateNullable = new DateTime(2017, 07, 20)
+                }
+            };
+
+            NewRule().LearnerConditionMet(null, learningDeliveries).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnerConditionMet_False_LearnPlanHours()
+        {
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnActEndDateNullable = new DateTime(2017, 07, 20)
+                },
+                new TestLearningDelivery
+                {
+                }
+            };
+
+            NewRule().LearnerConditionMet(1, learningDeliveries).Should().BeFalse();
+        }
+
+        [Fact]
+        public void FundModelConditionMet_True()
+        {
+            NewRule().FundModelConditionMet(1).Should().BeTrue();
+        }
+
+        [Fact]
+        public void FundModelConditionMet_False()
+        {
+            NewRule().FundModelConditionMet(70).Should().BeFalse();
+        }
+
+        [Fact]
+        public void DD07ConditionMet_True()
+        {
+            var progType = 101;
             var dd07Mock = new Mock<IDD07>();
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("Y");
 
-            var rule = NewRule(dd07Mock.Object);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
-            rule.Exclude(learningDelivery).Should().BeTrue();
+            NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(10, null)]
-        [InlineData(null, 12)]
-        public void ExcludeConditionMet_False(long? fundModel, long? progType)
+        [Fact]
+        public void DD07ConditionMet_True_Null()
         {
-            var learningDelivery = SetupLearningDelivery(fundModel, progType);
-
             var dd07Mock = new Mock<IDD07>();
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("N");
 
-            var rule = NewRule(dd07Mock.Object);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(null)).Returns(false);
 
-            rule.Exclude(learningDelivery).Should().BeFalse();
+            NewRule(dd07Mock.Object).DD07ConditionMet(null).Should().BeTrue();
         }
 
         [Fact]
-        public void ExcludeConditionDD07_False()
+        public void DD07ConditionMet_False()
         {
-            NewRule().HasLearningDeliveryDd07ExcludeConditionMet(string.Empty).Should().BeFalse();
+            var progType = 24;
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
+
+            NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
         }
 
         [Fact]
-        public void ExcludeConditionDD07_True()
+        public void LearningDeliveryConditionMet_True()
         {
-            NewRule().HasLearningDeliveryDd07ExcludeConditionMet("Y").Should().BeTrue();
+            var progType = 101;
+            var fundModel = 1;
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
+
+            NewRule(dd07Mock.Object).LearningDeliveryConditionMet(fundModel, progType).Should().BeTrue();
         }
 
         [Fact]
-        public void ExcludeConditionFundModel_True()
+        public void LearningDeliveryConditionMet_False_ProgType()
         {
-            NewRule().HasLearningDeliveryFundModelExcludeConditionMet(70).Should().BeTrue();
+            var progType = 24;
+            var fundModel = 1;
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
+
+            NewRule(dd07Mock.Object).LearningDeliveryConditionMet(fundModel, progType).Should().BeFalse();
         }
 
         [Fact]
-        public void ExcludeConditionFundModel_False()
+        public void LearningDeliveryConditionMet_False_FundModel()
         {
-            NewRule().HasLearningDeliveryFundModelExcludeConditionMet(10).Should().BeFalse();
+            var progType = 101;
+            var fundModel = 70;
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
+
+            NewRule(dd07Mock.Object).LearningDeliveryConditionMet(fundModel, progType).Should().BeFalse();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var learner = SetupLearner(null, null, 35);
+            var progType = 101;
+            var fundModel = 1;
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PlanLearnHours_01", null, null, null);
+            var learner = new TestLearner
+            {
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery()
+                    {
+                        ProgTypeNullable = progType,
+                        FundModel = fundModel,
+                    },
+                    new TestLearningDelivery()
+                    {
+                        ProgTypeNullable = progType,
+                        FundModel = fundModel,
+                    }
+                }
+            };
 
             var dd07Mock = new Mock<IDD07>();
-            dd07Mock.Setup(dd => dd.Derive(It.IsAny<long>())).Returns("N");
 
-            var rule = NewRule(dd07Mock.Object, validationErrorHandlerMock.Object);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
         public void Validate_NoError()
         {
-            var learner = SetupLearner(1, null, 35);
+            var progType = 101;
+            var fundModel = 1;
+
+            var learner = new TestLearner
+            {
+                PlanLearnHoursNullable = 1,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery()
+                    {
+                        ProgTypeNullable = progType,
+                        FundModel = fundModel,
+                    },
+                    new TestLearningDelivery()
+                    {
+                        ProgTypeNullable = progType,
+                        FundModel = fundModel,
+                    }
+                }
+            };
+
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            int? planLearnHours = 0;
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PlanLearnHours_01", null, null, null);
 
-            var rule = NewRule(validationErrorHandler: validationErrorHandlerMock.Object);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("PlanLearnHours", planLearnHours)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FundModel", 10)).Verifiable();
 
-            rule.Validate(learner);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(planLearnHours, 10);
 
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            validationErrorHandlerMock.Verify();
         }
 
         private PlanLearnHours_01Rule NewRule(IDD07 dd07 = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new PlanLearnHours_01Rule(dd07, validationErrorHandler);
-        }
-
-        private ILearningDelivery SetupLearningDelivery(long? fundModel, long? progType)
-        {
-            return new TestLearningDelivery()
-            {
-                FundModelNullable = fundModel,
-                ProgTypeNullable = progType,
-            };
         }
     }
 }

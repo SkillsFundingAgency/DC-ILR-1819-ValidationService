@@ -138,6 +138,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(PartnerUKPRN_02Rule),
                 typeof(PartnerUKPRN_03Rule),
                 typeof(PCFLDCS_02Rule),
+                typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),
                 typeof(PlanLearnHours_04Rule),
                 typeof(PMUKPRN_01Rule),
@@ -162,7 +163,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(91);
+            rules.Should().HaveCount(92);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

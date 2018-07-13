@@ -8,58 +8,70 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours
 {
-    /// <summary>
-    /// The Planned learning hours must be returned unless the learner is undertaking an apprenticeship
-    /// </summary>
     public class PlanLearnHours_01Rule : AbstractRule, IRule<ILearner>
     {
         private readonly IDD07 _dd07;
 
         public PlanLearnHours_01Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PlanLearnHours_01)
         {
             _dd07 = dd07;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.PlanLearnHoursNullable))
+            if (LearnerConditionMet(objectToValidate.PlanLearnHoursNullable, objectToValidate.LearningDeliveries))
             {
-                if (!HasAllLearningAimsClosedExcludeConditionMet(objectToValidate.LearningDeliveries))
+                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
-                    // if there is any learning delivery not DD07 and fundmodel 70 then exclusion doesnt apply
-                    if (objectToValidate.LearningDeliveries == null || objectToValidate.LearningDeliveries.Any(x => !Exclude(x)))
+                    if (LearningDeliveryConditionMet(learningDelivery.FundModel, learningDelivery.ProgTypeNullable))
                     {
-                        HandleValidationError(RuleNameConstants.PlanLearnHours_01Rule, objectToValidate.LearnRefNumber);
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.PlanLearnHoursNullable, learningDelivery.FundModel));
+                        return;
                     }
                 }
             }
         }
 
-        public bool ConditionMet(long? planLearnHoursNullable)
+        public bool LearnerConditionMet(int? planLearnHours, IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return !planLearnHoursNullable.HasValue;
+            return !planLearnHours.HasValue
+                && !learningDeliveries.All(ld => ld.LearnActEndDateNullable.HasValue);
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public bool PlanLearnHoursConditionMet(int? planLearnHours)
         {
-            return HasLearningDeliveryDd07ExcludeConditionMet(_dd07.Derive(learningDelivery.ProgTypeNullable)) ||
-                   HasLearningDeliveryFundModelExcludeConditionMet(learningDelivery.FundModelNullable);
+            return !planLearnHours.HasValue;
         }
 
-        public bool HasLearningDeliveryDd07ExcludeConditionMet(string dd07)
+        public bool LearnActEndDateConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return dd07 == ValidationConstants.Y;
+            return !learningDeliveries.All(ld => ld.LearnActEndDateNullable.HasValue);
         }
 
-        public bool HasLearningDeliveryFundModelExcludeConditionMet(long? fundModelNullable)
+        public bool LearningDeliveryConditionMet(int fundModel, int? progType)
         {
-            return fundModelNullable.HasValue && fundModelNullable.Value == 70;
+            return FundModelConditionMet(fundModel)
+                && DD07ConditionMet(progType);
         }
 
-        public bool HasAllLearningAimsClosedExcludeConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        public bool FundModelConditionMet(int fundModel)
         {
-            return learningDeliveries != null && learningDeliveries.All(x => x.LearnActEndDateNullable.HasValue);
+            return fundModel != 70;
+        }
+
+        public bool DD07ConditionMet(int? progType)
+        {
+            return !_dd07.IsApprenticeship(progType);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? planLearnHours, int fundModel)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, planLearnHours),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)
+            };
         }
     }
 }
