@@ -91,6 +91,7 @@
     <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_01Rule.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04Rule.cs" />
