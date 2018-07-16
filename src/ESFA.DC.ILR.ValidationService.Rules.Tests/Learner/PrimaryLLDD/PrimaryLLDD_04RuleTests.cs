@@ -5,129 +5,199 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
 {
-    public class PrimaryLLDD_04RuleTests
+    public class PrimaryLLDD_04RuleTests : AbstractRuleTests<PrimaryLLDD_04Rule>
     {
         [Fact]
-        public void ConditionMet_True()
+        public void RuleName()
         {
-            var rule = NewRule();
-            var lllddAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(null)
-            };
-            rule.ConditionMet(lllddAndHealthProblems).Should().BeTrue();
+            NewRule().RuleName.Should().Be("PrimaryLLDD_04");
         }
 
         [Fact]
-        public void ConditionMet_False()
+        public void LLDDHealthProbConditionMet_True()
         {
-            var rule = NewRule();
-            var lllddAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(1)
-            };
-            rule.ConditionMet(lllddAndHealthProblems).Should().BeFalse();
+            NewRule().LLDDHealthProbConditionMet(1).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False_MultipleRecords()
+        public void LLDDHealthProbConditionMet_False()
         {
-            var rule = NewRule();
-            var lllddAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(99),
-                SetupLlddHealthAndProblem(20)
-            };
-            rule.ConditionMet(lllddAndHealthProblems).Should().BeFalse();
+            NewRule().LLDDHealthProbConditionMet(20).Should().BeFalse();
         }
 
         [Fact]
-        public void ConditionMet_False_Null()
+        public void LLDDConditionMet_True()
         {
-            var rule = NewRule();
-            rule.ConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void Exclude_False()
-        {
-            var rule = NewRule(null);
-
-            var llDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
             {
-                SetupLlddHealthAndProblem(9999),
-                SetupLlddHealthAndProblem(100),
-                SetupLlddHealthAndProblem(null)
-            };
-            rule.Exclude(llDDAndHealthProblems).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(99)]
-        [InlineData(98)]
-        public void Exclude_True(long? excludeCatValue)
-        {
-            var rule = NewRule(null);
-
-            var llDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(null, excludeCatValue),
-            };
-            rule.Exclude(llDDAndHealthProblems).Should().BeTrue();
-        }
-
-        [Fact]
-        public void Validate_True()
-        {
-            var validationErrorHandlerMock = SetupPrimaryLLdd(1);
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PrimaryLLDD_04", null, null, null);
-
-            validationErrorHandlerMock.Verify(handle, Times.Never);
-        }
-
-        [Fact]
-        public void ValidateFalse()
-        {
-            var validationErrorHandlerMock = SetupPrimaryLLdd(null);
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PrimaryLLDD_04", null, null, null);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
-
-        private Mock<IValidationErrorHandler> SetupPrimaryLLdd(long? primaryLlddValue)
-        {
-            var learner = new TestLearner()
-            {
-                LLDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
+                new TestLLDDAndHealthProblem
                 {
-                    SetupLlddHealthAndProblem(primaryLlddValue),
+                    LLDDCat = 20
+                },
+            };
+
+            NewRule().LLDDConditionMet(llddAndHealthProblems).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LLDDConditionMet_False_PrimaryLLDD()
+        {
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20,
+                    PrimaryLLDDNullable = 1
                 }
             };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            return validationErrorHandlerMock;
+            NewRule().LLDDConditionMet(llddAndHealthProblems).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LLDDConditionMet_False_Count()
+        {
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 10
+                }
+            };
+
+            NewRule().LLDDConditionMet(llddAndHealthProblems).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LLDDConditionMet_False_Excluded()
+        {
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98
+                }
+            };
+
+            NewRule().LLDDConditionMet(llddAndHealthProblems).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LLDDConditionMet_False_NullRecords()
+        {
+            NewRule().LLDDConditionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_True()
+        {
+            var lldHealthProb = 1;
+
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20,
+                }
+            };
+
+            NewRule().ConditionMet(lldHealthProb, llddAndHealthProblems).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ConditionMet_False_NoLLDDHealthProb()
+        {
+            var lldHealthProb = 2;
+
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20,
+                }
+            };
+
+            NewRule().ConditionMet(lldHealthProb, llddAndHealthProblems).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_LLDDHealthProblems()
+        {
+            var lldHealthProb = 1;
+
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98,
+                }
+            };
+
+            NewRule().ConditionMet(lldHealthProb, llddAndHealthProblems).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Validate_Error()
+        {
+            var llddHealthProb = 1;
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20
+                }
+            };
+
+            var learner = new TestLearner
+            {
+                LLDDHealthProb = llddHealthProb,
+                LLDDAndHealthProblems = llddAndHealthProblems
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
+        {
+            var llddHealthProb = 1;
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98
+                }
+            };
+
+            var learner = new TestLearner
+            {
+                LLDDHealthProb = llddHealthProb,
+                LLDDAndHealthProblems = llddAndHealthProblems
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         private PrimaryLLDD_04Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
             return new PrimaryLLDD_04Rule(validationErrorHandler);
-        }
-
-        private TestLLDDAndHealthProblem SetupLlddHealthAndProblem(long? primarylldValue, long? lldCatValue = 10)
-        {
-            return new TestLLDDAndHealthProblem()
-            {
-                LLDDCatNullable = lldCatValue,
-                PrimaryLLDDNullable = primarylldValue
-            };
         }
     }
 }

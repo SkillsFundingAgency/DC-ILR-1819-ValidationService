@@ -150,6 +150,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(PostcodePrior_01Rule),
                 typeof(PrevUKPRN_01Rule),
                 typeof(PrimaryLLDD_01Rule),
+                typeof(PrimaryLLDD_04Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
                 typeof(QUALENT3_01Rule),
@@ -167,7 +168,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(96);
+            rules.Should().HaveCount(97);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
