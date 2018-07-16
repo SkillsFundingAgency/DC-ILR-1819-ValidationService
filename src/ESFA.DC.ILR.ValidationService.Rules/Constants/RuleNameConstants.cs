@@ -51,6 +51,7 @@
 
         public const string FamilyName_01 = "FamilyName_01";
         public const string FamilyName_02 = "FamilyName_02";
+        public const string FamilyName_04 = "FamilyName_04";
 
         public const string FundModel_01 = "FundModel_01";
         public const string FundModel_03 = "FundModel_03";
