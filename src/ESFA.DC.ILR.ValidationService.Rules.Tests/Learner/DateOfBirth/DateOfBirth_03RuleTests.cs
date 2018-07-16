@@ -1,111 +1,174 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 {
-    public class DateOfBirth_03RuleTests
+    public class DateOfBirth_03RuleTests : AbstractRuleTests<DateOfBirth_03Rule>
     {
-        [Theory]
-        [InlineData(100)]
-        [InlineData(115)]
-        [InlineData(999)]
-        public void ConditionMet_True(int age)
+        [Fact]
+        public void RuleName()
         {
-            var dateOfBirth = new DateTime(1988, 12, 25);
-            var academicYearStart = new DateTime(2017, 8, 1);
-
-            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-
-            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, academicYearStart)).Returns(age);
-
-            var rule = NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object);
-
-            rule.ConditionMet(dateOfBirth, academicYearStart).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(15)]
-        [InlineData(99)]
-        public void ConditionMet_False(int age)
-        {
-            var dateOfBirth = new DateTime(1988, 12, 25);
-            var academicYearStart = new DateTime(2017, 8, 1);
-
-            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-
-            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, academicYearStart)).Returns(age);
-
-            var rule = NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object);
-
-            rule.ConditionMet(dateOfBirth, academicYearStart).Should().BeFalse();
+            NewRule().RuleName.Should().Be("DateOfBirth_03");
         }
 
         [Fact]
-        public void ConditionMet_False_Null()
+        public void DateOfBirthCondtionMet_True()
         {
-            var rule = NewRule();
+            NewRule().DateOfBirthConditionMet(new DateTime(2000, 01, 01)).Should().BeTrue();
+        }
 
-            rule.ConditionMet(null, new DateTime(2017, 8, 1)).Should().BeFalse();
+        [Fact]
+        public void DateOfBirthCondtionMet_False()
+        {
+            NewRule().DateOfBirthConditionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void AgeCondtionMet_True()
+        {
+            var dateOfBirth = new DateTime(1918, 01, 01);
+            var start = new DateTime(2018, 08, 01);
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(start);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, start)).Returns(100);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object).AgeConditionMet(dateOfBirth).Should().BeTrue();
+        }
+
+        [Fact]
+        public void AgeCondtionMet_False()
+        {
+            var dateOfBirth = new DateTime(2000, 01, 01);
+            var start = new DateTime(2018, 08, 01);
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(start);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, start)).Returns(18);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object).AgeConditionMet(dateOfBirth).Should().BeFalse();
+        }
+
+        [Fact]
+        public void CondtionMet_True()
+        {
+            var dateOfBirth = new DateTime(1918, 01, 01);
+            var start = new DateTime(2018, 08, 01);
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(start);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, start)).Returns(100);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object).AgeConditionMet(dateOfBirth).Should().BeTrue();
+        }
+
+        [Fact]
+        public void CondtionMet_False_NullDOB()
+        {
+            var dateOfBirth = new DateTime(1918, 01, 01);
+            var start = new DateTime(2018, 08, 01);
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(start);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, start)).Returns(100);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object).AgeConditionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void CondtionMet_False_Age()
+        {
+            var dateOfBirth = new DateTime(2000, 01, 01);
+            var start = new DateTime(2018, 08, 01);
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(start);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, start)).Returns(18);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object).AgeConditionMet(dateOfBirth).Should().BeFalse();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var dateOfBirth = new DateTime(1988, 12, 25);
-            var academicYearStart = new DateTime(2017, 8, 1);
+            var dateOfBirth = new DateTime(1918, 01, 01);
+            var start = new DateTime(2018, 08, 01);
 
             var learner = new TestLearner()
             {
                 DateOfBirthNullable = dateOfBirth
             };
 
-            var validationDataServiceMock = new Mock<IValidationDataService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationDataServiceMock.SetupGet(vds => vds.AcademicYearStart).Returns(academicYearStart);
+            academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(start);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, start)).Returns(100);
 
-            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, academicYearStart)).Returns(100);
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("DateOfBirth_03", null, null, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            var rule = NewRule(validationDataServiceMock.Object, dateTimeQueryServiceMock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_NoErrors()
+        public void Validate_NoError()
         {
-            var dateOfBirth = new DateTime(1988, 12, 25);
-            var academicYearStart = new DateTime(2017, 8, 1);
+            var dateOfBirth = new DateTime(2000, 01, 01);
+            var start = new DateTime(2018, 08, 01);
 
-            var learner = new TestLearner();
+            var learner = new TestLearner()
+            {
+                DateOfBirthNullable = dateOfBirth
+            };
 
-            var validationDataServiceMock = new Mock<IValidationDataService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
-            validationDataServiceMock.SetupGet(vds => vds.AcademicYearStart).Returns(academicYearStart);
+            academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(start);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, start)).Returns(18);
 
-            var rule = NewRule(validationDataServiceMock.Object);
-
-            rule.Validate(learner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
-        private DateOfBirth_03Rule NewRule(IValidationDataService validationDataService = null, IDateTimeQueryService dateTimeQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void BuildErrorMessageParameters()
         {
-            return new DateOfBirth_03Rule(validationDataService, dateTimeQueryService, validationErrorHandler);
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("DateOfBirth", "01/01/2000")).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2000, 01, 01));
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private DateOfBirth_03Rule NewRule(IAcademicYearDataService academicYearDataService = null, IDateTimeQueryService dateTimeQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new DateOfBirth_03Rule(academicYearDataService, dateTimeQueryService, validationErrorHandler);
         }
     }
 }
