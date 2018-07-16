@@ -99,6 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FworkCode_05Rule),
                 typeof(GivenNames_01Rule),
                 typeof(GivenNames_02Rule),
+                typeof(GivenNames_04Rule),
                 typeof(LearnActEndDate_01Rule),
                 typeof(LearnActEndDate_04Rule),
                 typeof(LearnAimRef_01Rule),
