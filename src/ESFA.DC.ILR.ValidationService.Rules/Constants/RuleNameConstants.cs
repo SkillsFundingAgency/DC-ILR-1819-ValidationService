@@ -37,6 +37,7 @@
         public const string DateOfBirth_01 = "DateOfBirth_01";
         public const string DateOfBirth_02 = "DateOfBirth_02";
         public const string DateOfBirth_03 = "DateOfBirth_03";
+        public const string DateOfBirth_04 = "DateOfBirth_04";
         public const string DateOfBirth_05 = "DateOfBirth_05";
         public const string DateOfBirth_06 = "DateOfBirth_06";
         public const string DateOfBirth_20 = "DateOfBirth_20";
