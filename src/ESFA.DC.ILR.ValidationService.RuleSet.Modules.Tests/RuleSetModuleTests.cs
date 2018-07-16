@@ -89,8 +89,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(ConRefNumber_01Rule),
                 typeof(DateOfBirth_01Rule),
                 typeof(DateOfBirth_02Rule),
+                typeof(DateOfBirth_03Rule),
+                typeof(DateOfBirth_04Rule),
                 typeof(DateOfBirth_05Rule),
                 typeof(DateOfBirth_06Rule),
+                typeof(DateOfBirth_07Rule),
                 typeof(DateOfBirth_20Rule),
                 typeof(DateOfBirth_35Rule),
                 typeof(ConRefNumber_03Rule),
@@ -102,6 +105,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(EmpOutcome_03Rule),
                 typeof(FamilyName_01Rule),
                 typeof(FamilyName_02Rule),
+                typeof(FamilyName_04Rule),
                 typeof(FundModel_01Rule),
                 typeof(FundModel_03Rule),
                 typeof(FundModel_04Rule),
@@ -116,6 +120,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(FworkCode_05Rule),
                 typeof(GivenNames_01Rule),
                 typeof(GivenNames_02Rule),
+                typeof(GivenNames_04Rule),
                 typeof(LearnActEndDate_01Rule),
                 typeof(LearnActEndDate_04Rule),
                 typeof(LearnAimRef_01Rule),
@@ -148,6 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(PostcodePrior_01Rule),
                 typeof(PrevUKPRN_01Rule),
                 typeof(PrimaryLLDD_01Rule),
+                typeof(PrimaryLLDD_04Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
                 typeof(QUALENT3_01Rule),
@@ -165,7 +171,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(94);
+            rules.Should().HaveCount(100);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

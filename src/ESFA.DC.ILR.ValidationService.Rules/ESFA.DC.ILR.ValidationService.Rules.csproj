@@ -84,14 +84,19 @@
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_03Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_04Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_06Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_07Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
+    <Compile Include="Learner\FamilyName\FamilyName_04Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_01Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_02Rule.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_04Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04Rule.cs" />
@@ -100,6 +105,7 @@
     <Compile Include="Learner\Postcode\Postcode_14Rule.cs" />
     <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01Rule.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_01Rule.cs" />
+    <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_04Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
     <Compile Include="Learner\ULN\ULN_02Rule.cs" />

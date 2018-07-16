@@ -1,43 +1,48 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD
 {
-    /// <summary>
-    /// If there is only one LLDD and Health problem record then the Primary LLDD and health problem must be recorded
-    /// </summary>
     public class PrimaryLLDD_04Rule : AbstractRule, IRule<ILearner>
     {
         private readonly HashSet<long> _excludeLlddCatValues = new HashSet<long>() { 98, 99 };
 
         public PrimaryLLDD_04Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PrimaryLLDD_04)
         {
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.LLDDAndHealthProblems) && !Exclude(objectToValidate.LLDDAndHealthProblems))
+            if (ConditionMet(objectToValidate.LLDDHealthProb, objectToValidate.LLDDAndHealthProblems))
             {
-                HandleValidationError(RuleNameConstants.PrimaryLLDD_04Rule, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber);
             }
         }
 
-        public bool ConditionMet(IReadOnlyCollection<ILLDDAndHealthProblem> lLDDAndHealthProblems)
+        public bool ConditionMet(int llddHealthProb, IEnumerable<ILLDDAndHealthProblem> llddAndHealthProblems)
         {
-            return lLDDAndHealthProblems != null &&
-                   lLDDAndHealthProblems.Count == 1 &&
-                   !lLDDAndHealthProblems.Single().PrimaryLLDDNullable.HasValue;
+            return LLDDHealthProbConditionMet(llddHealthProb)
+                && LLDDConditionMet(llddAndHealthProblems);
         }
 
-        public bool Exclude(IReadOnlyCollection<ILLDDAndHealthProblem> lLDDAndHealthProblems)
+        public bool LLDDHealthProbConditionMet(int llddHealthProb)
         {
-            return lLDDAndHealthProblems != null &&
-                   lLDDAndHealthProblems.All(x => x.LLDDCatNullable.HasValue && _excludeLlddCatValues.Contains(x.LLDDCatNullable.Value));
+            return llddHealthProb == 1;
+        }
+
+        public bool LLDDConditionMet(IEnumerable<ILLDDAndHealthProblem> llddAndHealthProblems)
+        {
+            return llddAndHealthProblems != null
+                && llddAndHealthProblems.Count() == 1
+                && !_excludeLlddCatValues.Contains(llddAndHealthProblems.First().LLDDCat)
+                && !llddAndHealthProblems.First().PrimaryLLDDNullable.HasValue;
         }
     }
 }

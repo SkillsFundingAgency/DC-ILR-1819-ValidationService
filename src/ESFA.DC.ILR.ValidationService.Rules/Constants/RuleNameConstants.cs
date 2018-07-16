@@ -36,8 +36,11 @@
 
         public const string DateOfBirth_01 = "DateOfBirth_01";
         public const string DateOfBirth_02 = "DateOfBirth_02";
+        public const string DateOfBirth_03 = "DateOfBirth_03";
+        public const string DateOfBirth_04 = "DateOfBirth_04";
         public const string DateOfBirth_05 = "DateOfBirth_05";
         public const string DateOfBirth_06 = "DateOfBirth_06";
+        public const string DateOfBirth_07 = "DateOfBirth_07";
         public const string DateOfBirth_20 = "DateOfBirth_20";
         public const string DateOfBirth_35 = "DateOfBirth_35";
 
@@ -51,6 +54,7 @@
 
         public const string FamilyName_01 = "FamilyName_01";
         public const string FamilyName_02 = "FamilyName_02";
+        public const string FamilyName_04 = "FamilyName_04";
 
         public const string FundModel_01 = "FundModel_01";
         public const string FundModel_03 = "FundModel_03";
@@ -67,6 +71,7 @@
 
         public const string GivenNames_01 = "GivenNames_01";
         public const string GivenNames_02 = "GivenNames_02";
+        public const string GivenNames_04 = "GivenNames_04";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
@@ -114,6 +119,7 @@
         public const string PrevUKPRN_01 = "PrevUKPRN_01";
 
         public const string PrimaryLLDD_01 = "PrimaryLLDD_01";
+        public const string PrimaryLLDD_04 = "PrimaryLLDD_04";
 
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
