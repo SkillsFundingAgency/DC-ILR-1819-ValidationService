@@ -118,6 +118,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_07RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_12RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_13RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_23RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01RuleTests.cs" />
