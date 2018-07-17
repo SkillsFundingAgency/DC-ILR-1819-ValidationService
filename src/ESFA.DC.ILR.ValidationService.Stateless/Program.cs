@@ -15,6 +15,7 @@ using ESFA.DC.ILR.ValidationService.Stateless.Mapper;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.IO.Redis;
+using ESFA.DC.IO.Redis.Config;
 using ESFA.DC.IO.Redis.Config.Interfaces;
 using ESFA.DC.JobContext;
 using ESFA.DC.JobContext.Interface;
@@ -90,13 +91,12 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
 
-            // register Cosmos config
-            var azureCosmosOptions = configHelper.GetSectionValues<AzureRedisCacheOptions>("AzureRedisSection");
-            containerBuilder.Register(c => new AzureRedisKeyValuePersistenceConfig(
-                azureCosmosOptions.RedisCacheConnectionString))
-                .As<IRedisKeyValuePersistenceServiceConfig>().SingleInstance();
-            containerBuilder.RegisterType<RedisKeyValuePersistenceService>().As<IKeyValuePersistenceService>()
-                .InstancePerLifetimeScope();
+            var azureRedisCacheOptions = configHelper.GetSectionValues<AzureRedisCacheOptions>("AzureRedisSection");
+            containerBuilder.Register(c => new RedisKeyValuePersistenceServiceConfig()
+            {
+                ConnectionString = azureRedisCacheOptions.RedisCacheConnectionString,
+                KeyExpiry = new TimeSpan(14, 0, 0, 0)
+            }).As<IRedisKeyValuePersistenceServiceConfig>().SingleInstance();
 
             // service bus queue configuration
             var queueSubscriptionConfig = new ServiceBusQueueConfig(
