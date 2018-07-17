@@ -218,7 +218,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AzureRedisKeyValuePersistenceConfig.cs" />
     <Compile Include="AzureRedisCacheOptions.cs" />
     <Compile Include="AzureStorageModel.cs" />
     <Compile Include="LoggerOptions.cs" />
