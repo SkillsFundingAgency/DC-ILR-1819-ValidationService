@@ -28,6 +28,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear
             return _internalDataCache.AcademicYear.JanuaryFirst;
         }
 
+        public DateTime JulyThirtyFirst()
+        {
+            return _internalDataCache.AcademicYear.JulyThirtyFirst;
+        }
+
         public DateTime Start()
         {
             return _internalDataCache.AcademicYear.Start;
