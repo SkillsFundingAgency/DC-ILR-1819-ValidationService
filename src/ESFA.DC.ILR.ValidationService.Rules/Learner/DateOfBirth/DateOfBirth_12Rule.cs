@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -10,13 +13,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_12Rule : AbstractRule, IRule<ILearner>
     {
+        private readonly HashSet<string> _famCodes = new HashSet<string> { "1", "2" };
+
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        private readonly IEnumerable<string> famCodes = new HashSet<string> { "1", "2" };
-
         public DateOfBirth_12Rule(IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.DateOfBirth_12)
         {
             _dateTimeQueryService = dateTimeQueryService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
@@ -24,31 +27,45 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate.LearningDeliveries != null)
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+                if (ConditionMet(objectToValidate.DateOfBirthNullable, learningDelivery))
                 {
-                    if (ConditionMet(
-                        learningDelivery.FundModelNullable,
-                        objectToValidate.DateOfBirthNullable,
-                        learningDelivery.LearnStartDateNullable,
-                        _learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(
-                            learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ASL, famCodes)))
-                    {
-                        HandleValidationError(RuleNameConstants.DateOfBirth_12, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
-                    }
+                    HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable));
+                    return;
                 }
             }
         }
 
-        public bool ConditionMet(long? fundModel, DateTime? dateOfBirth, DateTime? learnStartDate, bool hasASLOneorTwo)
+        public bool ConditionMet(DateTime? dateOfBirth, ILearningDelivery learningDelivery)
         {
-            return hasASLOneorTwo
-                && fundModel.HasValue
-                && fundModel.Value == 10
-                && dateOfBirth.HasValue
-                && learnStartDate.HasValue
-                && _dateTimeQueryService.YearsBetween(dateOfBirth.Value, learnStartDate.Value) < 19;
+            return FundModelConditionMet(learningDelivery.FundModel)
+                && DateOfBirthConditionMet(dateOfBirth, learningDelivery.LearnStartDate)
+                && LearningDeliveryFAMConditionMet(learningDelivery.LearningDeliveryFAMs);
+        }
+
+        public bool FundModelConditionMet(int fundModel)
+        {
+            return fundModel == 10;
+        }
+
+        public bool DateOfBirthConditionMet(DateTime? dateOfBirth, DateTime learnStartDate)
+        {
+            return dateOfBirth.HasValue
+                && _dateTimeQueryService.YearsBetween(dateOfBirth.Value, learnStartDate) < 19;
+        }
+
+        public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        {
+            return _learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "ASL", _famCodes);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth?.ToString("d", new CultureInfo("en-GB")))
+            };
         }
     }
 }

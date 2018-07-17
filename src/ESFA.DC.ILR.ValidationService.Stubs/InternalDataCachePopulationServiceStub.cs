@@ -46,6 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
                 AugustThirtyFirst = new DateTime(2018, 8, 31),
                 End = new DateTime(2019, 7, 31),
                 JanuaryFirst = new DateTime(2019, 1, 1),
+                JulyThirtyFirst = new DateTime(2019, 7, 31),
                 Start = new DateTime(2018, 8, 1),
             };
         }

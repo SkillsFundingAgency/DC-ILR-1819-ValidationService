@@ -1,164 +1,353 @@
 ﻿using System;
-using System.Linq.Expressions;
+using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 {
-    public class DateOfBirth_13RuleTests
+    public class DateOfBirth_13RuleTests : AbstractRuleTests<DateOfBirth_13Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("DateOfBirth_13");
+        }
+
+        [Fact]
+        public void FundModelCondtionMet_True()
+        {
+            NewRule().FundModelConditionMet(99).Should().BeTrue();
+        }
+
+        [Fact]
+        public void FundModelCondtionMet_False()
+        {
+            NewRule().FundModelConditionMet(25).Should().BeFalse();
+        }
+
+        [Fact]
+        public void DateOfBirthCondtionMet_True()
+        {
+            var dateOfBirth = new DateTime(2005, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(13);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object).DateOfBirthConditionMet(dateOfBirth).Should().BeTrue();
+        }
+
+        [Fact]
+        public void DateOfBirthConditionMet_False()
+        {
+            var dateOfBirth = new DateTime(2000, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(19);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object).DateOfBirthConditionMet(dateOfBirth).Should().BeFalse();
+        }
+
+        [Fact]
+        public void DateOfBirthConditionMet_False_NullDOB()
+        {
+            var dateOfBirth = new DateTime(2000, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(19);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object).DateOfBirthConditionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearningDeliveryFAMConditionMet_True()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMCode = "1",
+                    LearnDelFAMType = "SOF"
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(true);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learningDeliveryFAMs).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearningDeliveryFAMConditionMet_False()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMCode = "120",
+                    LearnDelFAMType = "SOF"
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearningDeliveryFAMConditionMet_False_Null()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMConditionMet(learningDeliveryFAMs).Should().BeFalse();
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
-            var dateOfBirth = new DateTime(2000, 1, 1);
-            var academicYearEnd = new DateTime(2017, 7, 31);
+            var dateOfBirth = new DateTime(2005, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
+            var learningDelivery = new TestLearningDelivery
+            {
+                FundModel = 99,
+                LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                {
+                    new TestLearningDeliveryFAM
+                    {
+                        LearnDelFAMCode = "1",
+                        LearnDelFAMType = "SOF"
+                    }
+                }
+            };
 
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, academicYearEnd)).Returns(15);
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(13);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, "SOF", "1")).Returns(true);
 
-            var rule = NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object);
-
-            rule.ConditionMet(99, dateOfBirth, academicYearEnd, true).Should().BeTrue();
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object).ConditionMet(dateOfBirth, learningDelivery).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False_LearningDeliveryFAM()
+        public void ConditionMet_False_DatOfBirth()
         {
-            var dateOfBirth = new DateTime(2000, 1, 1);
-            var academicYearEnd = new DateTime(2017, 7, 31);
+            var dateOfBirth = new DateTime(2000, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
+            var learningDelivery = new TestLearningDelivery
+            {
+                FundModel = 99,
+                LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                {
+                    new TestLearningDeliveryFAM
+                    {
+                        LearnDelFAMCode = "1",
+                        LearnDelFAMType = "SOF"
+                    }
+                }
+            };
 
-            var rule = NewRule();
-
-            rule.ConditionMet(99, dateOfBirth, academicYearEnd, false).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False_FundModel_Null()
-        {
-            var dateOfBirth = new DateTime(2000, 1, 1);
-            var academicYearEnd = new DateTime(2017, 7, 31);
-
-            var rule = NewRule();
-
-            rule.ConditionMet(null, dateOfBirth, academicYearEnd, true).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False_FundModel_Different()
-        {
-            var dateOfBirth = new DateTime(2000, 1, 1);
-            var academicYearEnd = new DateTime(2017, 7, 31);
-
-            var rule = NewRule();
-
-            rule.ConditionMet(100, dateOfBirth, academicYearEnd, true).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False_DateOfBirth_Null()
-        {
-            var learnStartDate = new DateTime(2017, 6, 30);
-
-            var rule = NewRule();
-
-            rule.ConditionMet(99, null, learnStartDate, true).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False_Age_17()
-        {
-            var dateOfBirth = new DateTime(2000, 1, 1);
-            var academicYearEnd = new DateTime(2017, 7, 31);
-
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, academicYearEnd)).Returns(17);
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(19);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, "SOF", "1")).Returns(true);
 
-            var rule = NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object);
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object).ConditionMet(dateOfBirth, learningDelivery).Should().BeFalse();
+        }
 
-            rule.ConditionMet(10, dateOfBirth, academicYearEnd, true).Should().BeFalse();
+        [Fact]
+        public void ConditionMet_False_FundModel()
+        {
+            var dateOfBirth = new DateTime(2005, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
+            var learningDelivery = new TestLearningDelivery
+            {
+                FundModel = 25,
+                LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                {
+                    new TestLearningDeliveryFAM
+                    {
+                        LearnDelFAMCode = "1",
+                        LearnDelFAMType = "SOF"
+                    }
+                }
+            };
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(19);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, "SOF", "1")).Returns(true);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object).ConditionMet(dateOfBirth, learningDelivery).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_FAMS()
+        {
+            var dateOfBirth = new DateTime(2005, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
+            var learningDelivery = new TestLearningDelivery
+            {
+                FundModel = 99,
+                LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                {
+                    new TestLearningDeliveryFAM
+                    {
+                        LearnDelFAMCode = "120",
+                        LearnDelFAMType = "SOF"
+                    }
+                }
+            };
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(13);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, "SOF", "1")).Returns(false);
+
+            NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object).ConditionMet(dateOfBirth, learningDelivery).Should().BeFalse();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var dateOfBirth = new DateTime(2000, 1, 1);
-            var academicYearEnd = new DateTime(2017, 7, 31);
-            var learningDeliveryFAMs = new TestLearningDeliveryFAM[] { };
+            var dateOfBirth = new DateTime(2005, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
 
-            var learner = new TestLearner()
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                DateOfBirthNullable = dateOfBirth,
-                LearningDeliveries = new TestLearningDelivery[]
+                new TestLearningDeliveryFAM
                 {
-                    new TestLearningDelivery()
-                    {
-                        FundModelNullable = 99,
-                        LearningDeliveryFAMs = learningDeliveryFAMs
-                    }
+                    LearnDelFAMCode = "1",
+                    LearnDelFAMType = "SOF"
                 }
             };
 
-            var validationDataServiceMock = new Mock<IValidationDataService>();
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                   FundModel = 99,
+                   LearningDeliveryFAMs = learningDeliveryFAMs
+                }
+            };
+
+            var learner = new TestLearner
+            {
+                DateOfBirthNullable = dateOfBirth,
+                LearningDeliveries = learningDeliveries
+            };
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationDataServiceMock.SetupGet(vds => vds.AcademicYearEnd).Returns(new DateTime(2017, 7, 31));
-            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, academicYearEnd)).Returns(15);
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(13);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(true);
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("DateOfBirth_13", null, null, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            var rule = NewRule(validationDataServiceMock.Object, dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_NoErrors()
+        public void Validate_NoError()
         {
-            var dateOfBirth = new DateTime(2000, 1, 1);
-            var learnStartDate = new DateTime(2017, 6, 30);
-            var learningDeliveryFAMs = new TestLearningDeliveryFAM[] { };
+            var dateOfBirth = new DateTime(1990, 01, 01);
+            var julyThirtyFirst = new DateTime(2019, 07, 31);
 
-            var learner = new TestLearner()
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                DateOfBirthNullable = dateOfBirth,
-                LearningDeliveries = new TestLearningDelivery[]
+                new TestLearningDeliveryFAM
                 {
-                    new TestLearningDelivery()
-                    {
-                        FundModelNullable = 99,
-                        LearningDeliveryFAMs = learningDeliveryFAMs
-                    }
+                    LearnDelFAMCode = "1",
+                    LearnDelFAMType = "SOF"
                 }
             };
 
-            var validationDataServiceMock = new Mock<IValidationDataService>();
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                   FundModel = 99,
+                   LearningDeliveryFAMs = learningDeliveryFAMs
+                }
+            };
+
+            var learner = new TestLearner
+            {
+                DateOfBirthNullable = dateOfBirth,
+                LearningDeliveries = learningDeliveries
+            };
+
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            validationDataServiceMock.SetupGet(vds => vds.AcademicYearEnd).Returns(new DateTime(2017, 7, 31));
+            academicYearDataServiceMock.Setup(ds => ds.JulyThirtyFirst()).Returns(julyThirtyFirst);
+            dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, julyThirtyFirst)).Returns(19);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "1")).Returns(false);
 
-            var rule = NewRule(validationDataServiceMock.Object, learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object);
-
-            rule.Validate(learner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(academicYearDataServiceMock.Object, dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
-        private DateOfBirth_13Rule NewRule(IValidationDataService validationDataService = null, IDateTimeQueryService dateTimeQueryService = null, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void BuildErrorMessageParameters()
         {
-            return new DateOfBirth_13Rule(validationDataService, dateTimeQueryService, learningDeliveryFAMQueryService, validationErrorHandler);
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("DateOfBirth", "01/01/2000")).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2000, 01, 01));
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private DateOfBirth_13Rule NewRule(IAcademicYearDataService academicYearDataService = null, IDateTimeQueryService dateTimeQueryService = null, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new DateOfBirth_13Rule(academicYearDataService, dateTimeQueryService, learningDeliveryFAMQueryService, validationErrorHandler);
         }
     }
 }
