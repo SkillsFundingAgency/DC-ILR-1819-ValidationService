@@ -78,6 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_05Rule),
                 typeof(DateOfBirth_06Rule),
                 typeof(DateOfBirth_07Rule),
+                typeof(DateOfBirth_12Rule),
                 typeof(DateOfBirth_20Rule),
                 typeof(DateOfBirth_35Rule),
                 typeof(DelLocPostCode_03Rule),
