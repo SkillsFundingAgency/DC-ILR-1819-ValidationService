@@ -97,6 +97,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 ConnectionString = azureRedisCacheOptions.RedisCacheConnectionString,
                 KeyExpiry = new TimeSpan(14, 0, 0, 0)
             }).As<IRedisKeyValuePersistenceServiceConfig>().SingleInstance();
+            containerBuilder.RegisterType<RedisKeyValuePersistenceService>().As<IKeyValuePersistenceService>().InstancePerLifetimeScope();
 
             // service bus queue configuration
             var queueSubscriptionConfig = new ServiceBusQueueConfig(
