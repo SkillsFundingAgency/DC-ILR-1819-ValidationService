@@ -56,6 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             internalDataCache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
             internalDataCache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
             internalDataCache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
+            internalDataCache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
         }
 
         private AcademicYear BuildAcademicYear()
@@ -66,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
                 End = new DateTime(2019, 7, 31),
                 JanuaryFirst = new DateTime(2019, 1, 1),
                 JulyThirtyFirst = new DateTime(2019, 7, 31),
-                Start = new DateTime(2018, 1, 8),
+                Start = new DateTime(2018, 8, 1),
             };
         }
 
