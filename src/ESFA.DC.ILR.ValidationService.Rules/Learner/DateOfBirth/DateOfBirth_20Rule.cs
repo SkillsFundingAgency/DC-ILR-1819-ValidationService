@@ -28,19 +28,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate.LearningDeliveries != null)
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+                if (ConditionMet(
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FundModel,
+                    objectToValidate.DateOfBirthNullable,
+                    learningDelivery.LearningDeliveryFAMs))
                 {
-                    if (ConditionMet(
-                        learningDelivery.ProgTypeNullable,
-                        learningDelivery.FundModel,
-                        objectToValidate.DateOfBirthNullable,
-                        learningDelivery.LearningDeliveryFAMs))
-                    {
-                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable));
-                        return;
-                    }
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable));
+                    return;
                 }
             }
         }
