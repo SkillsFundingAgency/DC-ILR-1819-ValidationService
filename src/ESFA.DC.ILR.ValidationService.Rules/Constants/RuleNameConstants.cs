@@ -108,6 +108,8 @@
 
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
 
+        public const string LLDDCat_02 = "LLDDCat_02";
+
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OutGrade_03 = "OutGrade_03";

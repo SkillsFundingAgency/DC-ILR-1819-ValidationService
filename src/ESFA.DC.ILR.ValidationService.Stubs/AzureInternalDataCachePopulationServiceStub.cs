@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using Microsoft.WindowsAzure.Storage;
@@ -56,6 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             internalDataCache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
             internalDataCache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
             internalDataCache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
+            internalDataCache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "LLDDCat"));
             internalDataCache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
         }
 
@@ -78,6 +80,18 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
                 .Descendants("option")
                 .Attributes("code")
                 .Select(c => (T)Convert.ChangeType(c.Value, typeof(T)));
+        }
+
+        private IDictionary<int, ValidityPeriods> BuildLookupWithValidityPeriods(XElement lookups, string type)
+        {
+            return lookups
+                 .Descendants(type)
+                 .Descendants("option")
+                 .ToDictionary(c => int.Parse(c.Attribute("code").Value), v => new ValidityPeriods
+                 {
+                     ValidFrom = DateTime.Parse(v.Attribute("validFrom").Value),
+                     ValidTo = DateTime.Parse(v.Attribute("validTo").Value)
+                 });
         }
     }
 }
