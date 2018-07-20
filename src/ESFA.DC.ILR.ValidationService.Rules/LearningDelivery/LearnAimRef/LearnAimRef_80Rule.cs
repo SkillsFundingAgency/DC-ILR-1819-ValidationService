@@ -99,7 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public virtual bool LevelConditionMet(string learnAimRef)
         {
-            return _larsDataService.NotionalNVQLevelV2MatchForLearnAimRef(learnAimRef, "3");
+            return _larsDataService.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3");
         }
 
         public virtual bool ApprenticeshipConditionMet(int? progType)

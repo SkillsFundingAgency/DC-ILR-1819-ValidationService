@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 
@@ -65,11 +66,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             return learningDelivery != null && learningDelivery.NotionalNVQLevel == level;
         }
 
-        public bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level)
+        public bool NotionalNVQLevelV2MatchForLearnAimRefAndLevel(string learnAimRef, string level)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
 
             return learningDelivery != null && learningDelivery.NotionalNVQLevelv2 == level;
+        }
+
+        public bool NotionalNVQLevelV2MatchForLearnAimRefAndLevels(string learnAimRef, IEnumerable<string> levels)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null && levels.Contains(learningDelivery.NotionalNVQLevelv2);
         }
 
         public bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
