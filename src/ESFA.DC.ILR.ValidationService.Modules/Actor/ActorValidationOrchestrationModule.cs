@@ -6,7 +6,6 @@ using ESFA.DC.ILR.ValidationService.Providers;
 using ESFA.DC.ILR.ValidationService.Providers.Output;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
-using ESFA.DC.ILR.ValidationService.Stubs;
 using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.Serialization.Json;
 using ESFA.DC.Serialization.Xml;
