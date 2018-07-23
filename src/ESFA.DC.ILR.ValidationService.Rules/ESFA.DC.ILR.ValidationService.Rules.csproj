@@ -187,6 +187,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_03Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03Rule.cs" />

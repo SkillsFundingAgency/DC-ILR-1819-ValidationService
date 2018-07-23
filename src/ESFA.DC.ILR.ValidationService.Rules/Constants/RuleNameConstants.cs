@@ -106,6 +106,7 @@
         public const string LearnDelFAMDateTo_03 = "LearnDelFAMDateTo_03";
         public const string LearnDelFAMDateTo_04 = "LearnDelFAMDateTo_04";
 
+        public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
 
         public const string LLDDCat_01 = "LLDDCat_01";
