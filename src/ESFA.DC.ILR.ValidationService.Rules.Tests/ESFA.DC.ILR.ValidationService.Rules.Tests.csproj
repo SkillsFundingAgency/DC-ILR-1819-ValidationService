@@ -155,6 +155,7 @@
     <Compile Include="Learner\ULN\ULN_05RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_06RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_07RuleTests.cs" />
+    <Compile Include="Learner\ULN\ULN_09RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_10RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_09RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_07RuleTests.cs" />

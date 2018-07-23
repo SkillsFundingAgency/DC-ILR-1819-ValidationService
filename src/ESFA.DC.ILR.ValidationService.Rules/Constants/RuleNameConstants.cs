@@ -149,5 +149,6 @@
         public const string ULN_05 = "ULN_05";
         public const string ULN_06 = "ULN_06";
         public const string ULN_07 = "ULN_07";
+        public const string ULN_09 = "ULN_09";
     }
 }

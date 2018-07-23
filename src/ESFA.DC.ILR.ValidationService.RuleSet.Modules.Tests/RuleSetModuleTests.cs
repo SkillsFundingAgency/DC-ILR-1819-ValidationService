@@ -180,6 +180,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(ULN_05Rule),
                 typeof(ULN_06Rule),
                 typeof(ULN_07Rule),
+                typeof(ULN_09Rule),
             };
 
             foreach (var ruleType in ruleTypes)
@@ -187,7 +188,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(115);
+            rules.Should().HaveCount(116);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
