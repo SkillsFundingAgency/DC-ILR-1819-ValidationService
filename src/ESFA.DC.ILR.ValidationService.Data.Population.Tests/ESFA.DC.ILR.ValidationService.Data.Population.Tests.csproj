@@ -126,6 +126,7 @@
     <Compile Include="External\ULNDataRetrievalServiceTests.cs" />
     <Compile Include="FileDataCachePopulationServiceTests.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
+    <Compile Include="InternalDataCachePopulationServiceTests.cs" />
     <Compile Include="MessageCachePopulationServiceTests.cs" />
     <Compile Include="PreValidationPopulationServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -110,6 +110,7 @@
     <Compile Include="Interface\IPostcodesDataRetrievalService.cs" />
     <Compile Include="Interface\IULNDataRetrievalService.cs" />
     <Compile Include="Interface\IValidationErrorsDataRetrievalService.cs" />
+    <Compile Include="InternalDataCachePopulationService.cs" />
     <Compile Include="Keys\FrameworkKey.cs" />
     <Compile Include="MessageCachePopulationService.cs" />
     <Compile Include="PreValidationPopulationService.cs" />
@@ -141,6 +142,10 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Files\Lookups.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
