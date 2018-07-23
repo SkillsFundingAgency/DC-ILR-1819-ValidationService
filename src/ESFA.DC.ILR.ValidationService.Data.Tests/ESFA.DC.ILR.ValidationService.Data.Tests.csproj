@@ -109,6 +109,7 @@
     <Compile Include="External\ULNDataServiceTests.cs" />
     <Compile Include="Internal\FundModelDataServiceTests.cs" />
     <Compile Include="Internal\EmpOutcomeDataServiceTests.cs" />
+    <Compile Include="Internal\LLDDCatDataServiceTests.cs" />
     <Compile Include="Internal\QUALENT3DataServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

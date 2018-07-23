@@ -11,6 +11,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PMUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode;
@@ -99,6 +100,13 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(DateOfBirth_14Rule),
                 typeof(DateOfBirth_20Rule),
                 typeof(DateOfBirth_23Rule),
+                typeof(DateOfBirth_24Rule),
+                typeof(DateOfBirth_25Rule),
+                typeof(DateOfBirth_26Rule),
+                typeof(DateOfBirth_27Rule),
+                typeof(DateOfBirth_29Rule),
+                typeof(DateOfBirth_30Rule),
+                typeof(DateOfBirth_32Rule),
                 typeof(DateOfBirth_35Rule),
                 typeof(DateOfBirth_46Rule),
                 typeof(ConRefNumber_03Rule),
@@ -144,6 +152,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
                 typeof(LearnDelFAMType_39Rule),
+                typeof(LLDDCat_02Rule),
                 typeof(NUMHUS_01Rule),
                 typeof(OutGrade_03Rule),
                 typeof(PartnerUKPRN_01Rule),
@@ -176,7 +185,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(105);
+            rules.Should().HaveCount(113);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

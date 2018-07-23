@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
+﻿using System.Collections.Generic;
+
+namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
     public interface ILARSDataService
     {
@@ -12,7 +14,9 @@
 
         bool NotionalNVQLevelMatchForLearnAimRef(string learnAimRef, string level);
 
-        bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level);
+        bool NotionalNVQLevelV2MatchForLearnAimRefAndLevel(string learnAimRef, string level);
+
+        bool NotionalNVQLevelV2MatchForLearnAimRefAndLevels(string learnAimRef, IEnumerable<string> levels);
 
         bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level);
 

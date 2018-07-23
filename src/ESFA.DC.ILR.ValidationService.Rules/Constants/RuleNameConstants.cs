@@ -46,6 +46,13 @@
         public const string DateOfBirth_14 = "DateOfBirth_14";
         public const string DateOfBirth_20 = "DateOfBirth_20";
         public const string DateOfBirth_23 = "DateOfBirth_23";
+        public const string DateOfBirth_24 = "DateOfBirth_24";
+        public const string DateOfBirth_25 = "DateOfBirth_25";
+        public const string DateOfBirth_26 = "DateOfBirth_26";
+        public const string DateOfBirth_27 = "DateOfBirth_27";
+        public const string DateOfBirth_29 = "DateOfBirth_29";
+        public const string DateOfBirth_30 = "DateOfBirth_30";
+        public const string DateOfBirth_32 = "DateOfBirth_32";
         public const string DateOfBirth_35 = "DateOfBirth_35";
         public const string DateOfBirth_46 = "DateOfBirth_46";
 
@@ -100,6 +107,8 @@
         public const string LearnDelFAMDateTo_04 = "LearnDelFAMDateTo_04";
 
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
+
+        public const string LLDDCat_02 = "LLDDCat_02";
 
         public const string NUMHUS_01 = "NUMHUS_01";
 

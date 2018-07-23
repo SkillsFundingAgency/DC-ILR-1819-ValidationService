@@ -1,46 +1,32 @@
 ﻿using System;
-using System.Linq.Expressions;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 {
-    public class DateOfBirth_24RuleTests
+    public class DateOfBirth_24RuleTests : AbstractRuleTests<DateOfBirth_24Rule>
     {
         [Fact]
         public void ConditionMet_True()
         {
-            var rule = NewRule();
-
-            rule.ConditionMet(1234, null).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMet_False_ULN_Null()
-        {
-            var rule = NewRule();
-
-            rule.ConditionMet(null, null).Should().BeFalse();
+            NewRule().ConditionMet(1234, null).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False_ULN_Temporary()
         {
-            var rule = NewRule();
-
-            rule.ConditionMet(9999999999, null).Should().BeFalse();
+            NewRule().ConditionMet(9999999999, null).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_DateOfBirth()
         {
-            var rule = NewRule();
-
-            rule.ConditionMet(1234, new DateTime(1990, 1, 1)).Should().BeFalse();
+            NewRule().ConditionMet(1234, new DateTime(1990, 1, 1)).Should().BeFalse();
         }
 
         [Fact]
@@ -48,34 +34,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         {
             var learner = new TestLearner()
             {
-                ULNNullable = 1234
+                ULN = 1234
             };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("DateOfBirth_24", null, null, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            var rule = NewRule(validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_NoErrors()
+        public void Validate_NoError()
         {
             var learner = new TestLearner()
             {
-                ULNNullable = 1234,
-                DateOfBirthNullable = new DateTime(2112, 1, 1)
+                ULN = 1234,
+                DateOfBirthNullable = new DateTime(2000, 01, 01)
             };
 
-            var rule = NewRule();
-
-            rule.Validate(learner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         private DateOfBirth_24Rule NewRule(IValidationErrorHandler validationErrorHandler = null)

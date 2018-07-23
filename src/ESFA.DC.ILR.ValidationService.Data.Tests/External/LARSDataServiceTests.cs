@@ -314,7 +314,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Fact]
-        public void NotionalNVQLevelV2MatchForLearnAimRef_True()
+        public void NotionalNVQLevelV2MatchForLearnAimRefAndLevel_True()
         {
             var learnAimRef = "LearnAimRef";
             var notionalNVQLevelv2 = "1";
@@ -328,11 +328,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
-            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRef(learnAimRef, notionalNVQLevelv2).Should().BeTrue();
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, notionalNVQLevelv2).Should().BeTrue();
         }
 
         [Fact]
-        public void NotionalNVQLevelV2MatchForLearnAimRef_False_Null()
+        public void NotionalNVQLevelV2MatchForLearnAimRefAndLevel_False_Null()
         {
             var learnAimRef = "LearnAimRef";
             var notionalNVQLevelv2 = "1";
@@ -346,11 +346,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
-            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRef("NotLearnAimRef", notionalNVQLevelv2).Should().BeFalse();
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRefAndLevel("NotLearnAimRef", notionalNVQLevelv2).Should().BeFalse();
         }
 
         [Fact]
-        public void NotionalNVQLevelV2MatchForLearnAimRef_False_Mismatch()
+        public void NotionalNVQLevelV2MatchForLearnAimRefAndLevel_False_Mismatch()
         {
             var learnAimRef = "LearnAimRef";
             var notionalNVQLevelv2 = "1";
@@ -364,7 +364,61 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
-            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRef(learnAimRef, "2").Should().BeFalse();
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "2").Should().BeFalse();
+        }
+
+        [Fact]
+        public void NotionalNVQLevelV2MatchForLearnAimRefAndLevels_True()
+        {
+            var learnAimRef = "LearnAimRef";
+            var notionalNVQLevelv2 = new List<string> { "1", "2", "H" };
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = "2" } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRefAndLevels(learnAimRef, notionalNVQLevelv2).Should().BeTrue();
+        }
+
+        [Fact]
+        public void NotionalNVQLevelV2MatchForLearnAimRefAndLevels_False_Null()
+        {
+            var learnAimRef = "LearnAimRef";
+            var notionalNVQLevelv2 = new List<string> { "1", "2", "H" };
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = "2" } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRefAndLevels("NotLearnAimRef", notionalNVQLevelv2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void NotionalNVQLevelV2MatchForLearnAimRefAndLevels_False_Mismatch()
+        {
+            var learnAimRef = "LearnAimRef";
+            var notionalNVQLevelv2 = new List<string> { "1", "2", "H" };
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                { learnAimRef, new LearningDelivery() { LearnAimRef = learnAimRef, NotionalNVQLevelv2 = "G" } },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).NotionalNVQLevelV2MatchForLearnAimRefAndLevels(learnAimRef, notionalNVQLevelv2).Should().BeFalse();
         }
 
         [Fact]

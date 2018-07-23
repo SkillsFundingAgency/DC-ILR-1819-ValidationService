@@ -111,6 +111,8 @@
     <Compile Include="HE\NUMHUS\NUMHUS_01RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_30RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_27RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_03RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_04RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05RuleTests.cs" />
@@ -119,7 +121,12 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_12RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_13RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_14RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_26RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_25RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_23RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_24RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_29RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_32RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_46RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
@@ -129,6 +136,7 @@
     <Compile Include="Learner\GivenNames\GivenNames_01RuleTests.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_02RuleTests.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_04RuleTests.cs" />
+    <Compile Include="Learner\LLDDCat\LLDDCat_Rule02Tests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04RuleTests.cs" />

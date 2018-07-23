@@ -6,21 +6,22 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
-    public class DateOfBirth_20Rule : AbstractRule, IRule<ILearner>
+    public class DateOfBirth_25Rule : AbstractRule, IRule<ILearner>
     {
+        private readonly IDD07 _dd07;
         private readonly IAcademicYearDataService _academicYearDataService;
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        private readonly IEnumerable<long?> _fundModels = new HashSet<long?>() { 25, 82 };
-
-        public DateOfBirth_20Rule(IAcademicYearDataService academicYearDataService, IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.DateOfBirth_20)
+        public DateOfBirth_25Rule(IDD07 dd07, IAcademicYearDataService academicYearDataService, IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.DateOfBirth_25)
         {
+            _dd07 = dd07;
             _academicYearDataService = academicYearDataService;
             _dateTimeQueryService = dateTimeQueryService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
@@ -31,8 +32,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 if (ConditionMet(
-                    learningDelivery.ProgTypeNullable,
                     learningDelivery.FundModel,
+                    learningDelivery.ProgTypeNullable,
                     objectToValidate.DateOfBirthNullable,
                     learningDelivery.LearningDeliveryFAMs))
                 {
@@ -42,34 +43,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             }
         }
 
-        public bool ConditionMet(int? progType, int fundModel, DateTime? dateOfBirth, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool ConditionMet(int fundModel, int? progType, DateTime? dateOfBirth, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return ProgTypeConditionMet(progType)
-                && FundModelConditionMet(fundModel)
+            return FundModelConditionMet(fundModel)
+                && DD07ConditionMet(progType)
                 && DateOfBirthConditionMet(dateOfBirth)
                 && LearningDeliveryFAMConditionMet(learningDeliveryFAMs);
         }
 
-        public bool ProgTypeConditionMet(int? progType)
-        {
-            return progType != null ? progType != 24 : true;
-        }
-
         public bool FundModelConditionMet(int fundModel)
         {
-            return _fundModels.Contains(fundModel);
+            return fundModel == 35;
+        }
+
+        public bool DD07ConditionMet(int? progType)
+        {
+            return progType.HasValue
+                && !_dd07.IsApprenticeship(progType);
         }
 
         public bool DateOfBirthConditionMet(DateTime? dateOfBirth)
         {
             return dateOfBirth.HasValue
-                && _dateTimeQueryService.YearsBetween((DateTime)dateOfBirth, _academicYearDataService.AugustThirtyFirst()) < 19;
+                && _dateTimeQueryService.YearsBetween(dateOfBirth.Value, _academicYearDataService.AugustThirtyFirst()) < 19;
         }
 
         public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, "SOF")
-                && !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "107");
+            return !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "LDM", "034");
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth)

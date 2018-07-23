@@ -396,11 +396,11 @@
     <LearnFAMType>
       <option code="DLA" description="Disabled students allowance" />
       <option code="ECF" description="GCSE English condition of funding" />
-      <option code="EDF" description="Eligibility for EFA disadvantage funding" />
+      <option code="EDF" description="Eligibility for 16-19 (excluding Apprenticeships) disadvantage funding" />
       <option code="EHC" description="Education Health Care plan" />
       <option code="FME" description="Free meals eligiblity" />
       <option code="HNS" description="High needs students" />
-      <option code="LDA" description="Learning difficulty assessment" />
+      <!--<option code="LDA" description="Learning difficulty assessment" />-->
       <option code="LSR" description="Learner support reason" />
       <option code="MCF" description="GCSE maths condition of funding" />
       <option code="NLM" description="National learner monitoring" />
@@ -412,31 +412,31 @@
       <option code="2" description="Learner does not consider himself or herself to have a learning difficulty and/or disability and/or health problem" />
       <option code="9" description="No information provided by the learner" />
     </LLDDHealthProb>
-    <LLDDCat>
-      <option code="1" description="Emotional/behavioural difficulties" />
-      <option code="2" description="Multiple disabilities" />
-      <option code="3" description="Multiple learning difficulties" />
-      <option code="4" description="Visual impairment" />
-      <option code="5" description="Hearing impairment" />
-      <option code="6" description="Disability affecting mobility" />
-      <option code="7" description="Profound complex disabilities" />
-      <option code="8" description="Social and emotional difficulties" />
-      <option code="9" description="Mental health difficulty" />
-      <option code="10" description="Moderate learning difficulty " />
-      <option code="11" description="Severe learning difficulty " />
-      <option code="12" description="Dyslexia" />
-      <option code="13" description="Dyscalculia " />
-      <option code="14" description="Autism spectrum disorder" />
-      <option code="15" description="Asperger's syndrome" />
-      <option code="16" description="Temporary disability after illness (for example post-viral) or accident" />
-      <option code="17" description="Speech, Language and Communication Needs" />
-      <option code="93" description="Other physical disability" />
-      <option code="94" description="Other specific learning difficulty (e.g. Dyspraxia)" />
-      <option code="95" description="Other medical condition (for example epilepsy, asthma, diabetes)" />
-      <option code="96" description="Other learning difficulty" />
-      <option code="97" description="Other disability" />
-      <option code="98" description="Prefer not to say" />
-      <option code="99" description="Not provided" />
+     <LLDDCat>
+      <option code="1" description="Emotional/behavioural difficulties" validFrom="2000-01-01" validTo="2015-07-31" />
+      <option code="2" description="Multiple disabilities" validFrom="2000-01-01" validTo="2015-07-31" />
+      <option code="3" description="Multiple learning difficulties" validFrom="2000-01-01" validTo="2015-07-31" />
+      <option code="4" description="Visual impairment" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="5" description="Hearing impairment" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="6" description="Disability affecting mobility" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="7" description="Profound complex disabilities" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="8" description="Social and emotional difficulties" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="9" description="Mental health difficulty" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="10" description="Moderate learning difficulty " validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="11" description="Severe learning difficulty " validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="12" description="Dyslexia" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="13" description="Dyscalculia" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="14" description="Autism spectrum disorder" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="15" description="Asperger's syndrome" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="16" description="Temporary disability after illness (for example post-viral) or accident" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="17" description="Speech, Language and Communication Needs" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="93" description="Other physical disability" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="94" description="Other specific learning difficulty (e.g. Dyspraxia)" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="95" description="Other medical condition (for example epilepsy, asthma, diabetes)" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="96" description="Other learning difficulty" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="97" description="Other disability" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="98" description="Prefer not to say" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="99" description="Not provided" validFrom="2000-01-01" validTo="2099-12-31" />
     </LLDDCat>
     <LocType>
       <option code="1" description="Postal Address" />
@@ -455,7 +455,7 @@
       <option code="2" description="English or Welsh LEA award" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="3" description="Student Awards Agency for Scotland (SAAS)" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="4" description="DELNI/Northern Ireland Education and Library Boards" validFrom="2000-01-01" validTo="2099-12-31" />
-      <option code="5" description="Institutional waiver of support costs" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="5" description="Provider waiver of support costs" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="6" description="Local Government - Channel Islands and Isle of Man" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="7" description="Fee waiver under government unemployed learners scheme" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="8" description="British Academy" validFrom="2000-01-01" validTo="2099-12-31" />
@@ -475,7 +475,7 @@
       <option code="26" description="Other charitable foundation" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="31" description="Departments of Health/NHS/Social Care" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="32" description="Departments of Social Services" validFrom="2000-01-01" validTo="2099-12-31" />
-      <option code="33" description="BIS" validFrom="2000-01-01" validTo="2099-12-31" />
+      <option code="33" description="BIS" validFrom="2000-01-01" validTo="2018-07-31" />
       <option code="34" description="Other HM government departments/public bodies" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="35" description="Scholarship of HM forces" validFrom="2000-01-01" validTo="2099-12-31" />
       <option code="36" description="Scottish Enterprise/Highlands and Islands Enterprise/Training Enterprise Council/Local Enterprise Company" validFrom="2000-01-01" validTo="2099-12-31" />
@@ -1520,6 +1520,7 @@
       <option code="44" description="Other personal reasons" />
       <option code="45" description="Written off after lapse of time – HE learning aims only" />
       <option code="46" description="Exclusion" />
+      <option code="47" description="Learner has transferred to another provider due to merger" />
       <option code="97" description="Other" />
       <option code="98" description="Reason not known" />
     </WithdrawReason>
@@ -1553,6 +1554,10 @@
         <option code="2" description="Learner is employed for less than 16 hours per week" />
         <option code="3" description="Learner is employed for 16 – 19 hours per week " />
         <option code="4" description="Learner is employed for 20 hours or more per week" />
+        <option code="5" description="Learner is employed for 0 to 10 hours per week" />
+        <option code="6" description="Learner is employed for 11 to 20 hours per week" />
+        <option code="7" description="Learner is employed for 21 to 30 hours per week" />
+        <option code="8" description="Learner is employed for 31+ hours per week" />
       </EII>
       <LOE>
         <option code="1" description="Learner has been employed for up to 3 months " />
@@ -1584,8 +1589,8 @@
       <ECF>
         <option code="1" description="Learner is exempt from GCSE English condition of funding due to a learning difficulty" />
         <option code="2" description="Learner is exempt from GCSE English condition of funding as they hold an equivalent overseas qualification" />
-        <option code="3" description="Learner has met the GCSE English condition of funding as they hold an approved equivalent UK qualification" />        
-        <option code="4" description="Learner has met the GCSE English condition of funding by undertaking/completing a valid English GCSE or equivalent qualification at another institution through collaboration with the home institution" />        
+        <option code="3" description="Learner has met the GCSE English condition of funding as they hold an approved equivalent UK qualification" />
+        <option code="4" description="Learner has met the GCSE English condition of funding by undertaking/completing a valid English GCSE or equivalent qualification at another institution through collaboration with the home institution" />
       </ECF>
       <EDF>
         <option code="1" description="Learner has not achieved a maths GCSE (at grade A*-C/9-4) by the end of year 11" />
@@ -1601,9 +1606,9 @@
       <HNS>
         <option code="1" description="Learner is a high needs student in receipt of element 3 ‘top-up’ funding from the local authority" />
       </HNS>
-      <LDA>
+      <!--<LDA>
         <option code="1" description="Learner has a Section 139A Learning Difficulty Assessment " />
-      </LDA>
+      </LDA>-->
       <LSR>
         <option code="36" description="Care to Learn " />
         <option code="55" description="16-19 Bursary Fund – learner is a member of a vulnerable group " />
@@ -1654,7 +1659,7 @@
       <EEF>
         <option code="2" description="Entitlement to 16–18 Apprenticeship funding, where the learner is 19 or over" />
         <option code="3" description="Entitlement to 19-23 Apprenticeship funding, where the learner is 24 or over" />
-        <option code="4" description="Entitlement to extended funding for apprentices aged 19 to 24" />
+        <option code="4" description="Entitlement to extended funding for apprentices" />
       </EEF>
       <FFI>
         <option code="1" description="Fully funded learning aim " />
@@ -1719,6 +1724,7 @@
       </LDM>
       <LSF>
         <option code="1" description="Learning support funding " />
+        <option code="2-11" description="Unassigned" />
       </LSF>
       <NSA>
         <option code="1" description="Fashion Retail " />
@@ -1729,7 +1735,7 @@
         <option code="6" description="Nuclear " />
         <option code="7" description="Process Industries " />
         <option code="8" description="Creative and Cultural " />
-        <option code="9" description="Hospitality " />     
+        <option code="9" description="Hospitality " />
         <option code="10" description="Sport and Active Leisure " />
         <option code="11" description="Retail " />
         <option code="12" description="Materials, Production and Supply " />
@@ -1750,7 +1756,7 @@
         <option code="5" description="50 – 74% " />
         <option code="6" description="75 – 99% " />
         <option code="7" description="100% " />
-      </POD>      
+      </POD>
       <RES>
         <option code="1" description="Learning aim restarted" />
       </RES>

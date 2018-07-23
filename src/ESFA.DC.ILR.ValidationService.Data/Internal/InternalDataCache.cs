@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
 using IAcademicYear = ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface.IAcademicYear;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Internal
@@ -15,6 +16,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         public IReadOnlyCollection<int> EmpOutcomes { get; set; }
 
         public IReadOnlyCollection<int> FundModels { get; set; }
+
+        public IDictionary<int, ValidityPeriods> LLDDCats { get; set; }
 
         public IReadOnlyCollection<string> QUALENT3s { get; set; }
     }
