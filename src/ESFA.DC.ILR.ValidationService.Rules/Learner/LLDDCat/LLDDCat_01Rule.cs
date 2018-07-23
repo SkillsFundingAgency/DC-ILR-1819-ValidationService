@@ -1,39 +1,48 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat
 {
-    /// <summary>
-    /// LLDDandHealthProblem.LLDDCat <> null and LLDDandHealthProblem.LLDDCat <> valid lookup on ILR_LLDDCat
-    /// </summary>
     public class LLDDCat_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly ILlddCatInternalDataService _llddCatDataService;
+        private readonly ILLDDCatDataService _llddCatDataService;
 
-        public LLDDCat_01Rule(IValidationErrorHandler validationErrorHandler, ILlddCatInternalDataService llddCatDataService)
-            : base(validationErrorHandler)
+        public LLDDCat_01Rule(ILLDDCatDataService llddCatDataService, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.LLDDCat_01)
         {
             _llddCatDataService = llddCatDataService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var lldcat in objectToValidate.LLDDAndHealthProblems)
+            if (objectToValidate.LLDDAndHealthProblems != null)
             {
-                if (ConditionMet(lldcat.LLDDCatNullable))
+                foreach (var llddAndHealthProblem in objectToValidate.LLDDAndHealthProblems)
                 {
-                    HandleValidationError(RuleNameConstants.LLDDCat_01Rule, objectToValidate.LearnRefNumber);
+                    if (ConditionMet(llddAndHealthProblem.LLDDCat))
+                    {
+                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(llddAndHealthProblem.LLDDCat));
+                        return;
+                    }
                 }
             }
         }
 
-        public bool ConditionMet(long? llddCategory)
+        public bool ConditionMet(int llddCat)
         {
-            return llddCategory.HasValue &&
-                   !_llddCatDataService.CategoryExists(llddCategory);
+            return !_llddCatDataService.Exists(llddCat);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int llddCat)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LLDDCat, llddCat),
+            };
         }
     }
 }

@@ -30,6 +30,7 @@
         public const string LearnDelFAMType = "LearnDelFAMType";
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnStartDate = "LearnStartDate";
+        public const string LLDDCat = "LLDDCat";
         public const string Outcome = "Outcome";
         public const string OutGrade = "OutGrade";
         public const string PartnerUKPRN = "PartnerUKPRN";
