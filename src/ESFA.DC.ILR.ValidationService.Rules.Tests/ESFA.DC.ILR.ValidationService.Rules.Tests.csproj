@@ -104,6 +104,7 @@
     <Compile Include="Derived\DD04Tests.cs" />
     <Compile Include="Derived\DD06Tests.cs" />
     <Compile Include="Derived\DD07Tests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02RuleTests.cs" />

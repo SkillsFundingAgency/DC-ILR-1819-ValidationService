@@ -75,6 +75,7 @@
     <Compile Include="Derived\Interface\IDD04.cs" />
     <Compile Include="Derived\Interface\IDD06.cs" />
     <Compile Include="Derived\Interface\IDD07.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
@@ -197,8 +198,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
+    <Compile Include="Query\LearnerEmploymentStatusQueryService.cs" />
     <Compile Include="Query\Interface\IAcademicYearQueryService.cs" />
     <Compile Include="Query\Interface\IDateTimeQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerEmploymentStatusQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerQueryService.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryAppFinRecordQueryService.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryFAMQueryService.cs" />
@@ -224,6 +227,10 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513C4F05-55F4-4AEF-B3EB-427C024DA043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.RuleSet\ESFA.DC.ILR.ValidationService.RuleSet.csproj">
+      <Project>{EBE0154D-6F8B-4DBB-A18F-4929AB74D204}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.RuleSet</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,7 @@
         public const string ConRefNumber = "ConRefNumber";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string EmpOutcome = "EmpOutcome";
+        public const string EmpStat = "EmpStat";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
         public const string FworkCode = "FworkCode";
