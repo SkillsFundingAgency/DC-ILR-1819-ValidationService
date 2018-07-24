@@ -65,16 +65,15 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     var preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IPreValidationOrchestrationService<IValidationError>>();
 
-                    // TODO: no need to return errors
-                    var errors = preValidationOrchestrationService.Execute(validationContext);
+                    var validationContext = childLifeTimeScope.Resolve<IPreValidationContext>();
 
-                    var updatedValidationContext = childLifeTimeScope.Resolve<IPreValidationContext>();
+                    preValidationOrchestrationService.Execute(validationContext);
 
                     // populate the keys into jobcontextmessage
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] = updatedValidationContext.InvalidLearnRefNumbersCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbersCount] = updatedValidationContext.ValidLearnRefNumbersCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalErrorCount] = updatedValidationContext.ValidationTotalErrorCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalWarningCount] = updatedValidationContext.ValidationTotalWarningCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] = validationContext.InvalidLearnRefNumbersCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbersCount] = validationContext.ValidLearnRefNumbersCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalErrorCount] = validationContext.ValidationTotalErrorCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalWarningCount] = validationContext.ValidationTotalWarningCount;
 
                     logger.LogDebug("Job complete");
                     ServiceEventSource.Current.ServiceMessage(_context, "Job complete");
