@@ -104,6 +104,7 @@
     <Compile Include="Derived\DD04Tests.cs" />
     <Compile Include="Derived\DD06Tests.cs" />
     <Compile Include="Derived\DD07Tests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02RuleTests.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Learner\ULN\ULN_05RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_06RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_07RuleTests.cs" />
+    <Compile Include="Learner\ULN\ULN_09RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_10RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_09RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_07RuleTests.cs" />
@@ -214,6 +216,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_03RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03RuleTests.cs" />

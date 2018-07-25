@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
@@ -99,6 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(EmpOutcome_01Rule),
                 typeof(EmpOutcome_02Rule),
                 typeof(EmpOutcome_03Rule),
+                typeof(EmpStat_12Rule),
                 typeof(FamilyName_01Rule),
                 typeof(FamilyName_02Rule),
                 typeof(FamilyName_04Rule),
@@ -133,6 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMDateTo_02Rule),
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
+                typeof(LearnDelFAMType_02Rule),
                 typeof(LearnDelFAMType_39Rule),
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
@@ -161,6 +164,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_05Rule),
                 typeof(ULN_06Rule),
                 typeof(ULN_07Rule),
+                typeof(ULN_09Rule),
             };
         }
     }

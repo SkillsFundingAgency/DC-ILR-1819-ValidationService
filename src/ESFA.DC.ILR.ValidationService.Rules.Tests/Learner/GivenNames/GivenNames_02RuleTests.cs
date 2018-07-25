@@ -9,7 +9,7 @@ using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.givenNames
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.GivenNames
 {
     public class GivenNames_02RuleTests : AbstractRuleTests<GivenNames_02Rule>
     {

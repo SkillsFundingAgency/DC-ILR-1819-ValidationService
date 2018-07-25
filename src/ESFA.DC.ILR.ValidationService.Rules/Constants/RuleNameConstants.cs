@@ -64,6 +64,8 @@
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
+        public const string EmpStat_12 = "EmpStat_12";
+
         public const string FamilyName_01 = "FamilyName_01";
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
@@ -106,6 +108,7 @@
         public const string LearnDelFAMDateTo_03 = "LearnDelFAMDateTo_03";
         public const string LearnDelFAMDateTo_04 = "LearnDelFAMDateTo_04";
 
+        public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
 
         public const string LLDDCat_01 = "LLDDCat_01";
@@ -148,5 +151,6 @@
         public const string ULN_05 = "ULN_05";
         public const string ULN_06 = "ULN_06";
         public const string ULN_07 = "ULN_07";
+        public const string ULN_09 = "ULN_09";
     }
 }

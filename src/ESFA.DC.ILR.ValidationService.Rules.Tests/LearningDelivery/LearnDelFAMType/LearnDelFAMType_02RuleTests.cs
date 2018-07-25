@@ -12,54 +12,24 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAMType
 {
-    public class LearnDelFAMType_39RuleTests : AbstractRuleTests<LearnDelFAMType_39Rule>
+    public class LearnDelFAMType_02RuleTests : AbstractRuleTests<LearnDelFAMType_02Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("LearnDelFAMType_39");
-        }
-
-        [Fact]
-        public void ProgTypeConditionMet_True()
-        {
-            NewRule().ProgTypeConditionMet(20).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ProgTypeConditionMet_True_Null()
-        {
-            NewRule().ProgTypeConditionMet(null).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ProgTypeConditionMet_False()
-        {
-            NewRule().ProgTypeConditionMet(25).Should().BeFalse();
+            NewRule().RuleName.Should().Be("LearnDelFAMType_02");
         }
 
         [Fact]
         public void FundModelConditionMet_True()
         {
-            NewRule().FundModelConditionMet(81).Should().BeTrue();
+            NewRule().FundModelConditionMet(35).Should().BeTrue();
         }
 
         [Fact]
         public void FundModelConditionMet_False()
         {
-            NewRule().FundModelConditionMet(35).Should().BeFalse();
-        }
-
-        [Fact]
-        public void LearnStartDateConditionMet_True()
-        {
-            NewRule().LearnStartDateConditionMet(new DateTime(2015, 08, 01)).Should().BeTrue();
-        }
-
-        [Fact]
-        public void LearnStartDateConditionMet_False()
-        {
-            NewRule().LearnStartDateConditionMet(new DateTime(2012, 08, 01)).Should().BeFalse();
+            NewRule().FundModelConditionMet(99).Should().BeFalse();
         }
 
         [Fact]
@@ -79,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "LDM")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "FFI")).Returns(false);
 
             NewRule(learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsConditionMet(learningDeliveryFAMs).Should().BeTrue();
         }
@@ -91,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             {
                 new TestLearningDeliveryFAM
                 {
-                    LearnDelFAMType = "LDM"
+                    LearnDelFAMType = "FFI"
                 },
                 new TestLearningDeliveryFAM
                 {
@@ -101,9 +71,75 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "LDM")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "FFI")).Returns(true);
 
             NewRule(learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsConditionMet(learningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_True()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "SOF"
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "RES"
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "FFI")).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(35, learningDeliveryFAMs).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ConditionMet_False_FundModel()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "SOF"
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "RES"
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "FFI")).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(99, learningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_FFIFamType()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "FFI"
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "RES"
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "FFI")).Returns(true);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).ConditionMet(35, learningDeliveryFAMs).Should().BeFalse();
         }
 
         [Fact]
@@ -115,9 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery()
                     {
-                        ProgTypeNullable = 20,
-                        FundModel = 81,
-                        LearnStartDate = new DateTime(2018, 01, 01),
+                        FundModel = 35,
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
@@ -137,7 +171,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "LDM")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "FFI")).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -154,14 +188,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery()
                     {
-                        ProgTypeNullable = 20,
-                        FundModel = 81,
-                        LearnStartDate = new DateTime(2018, 01, 01),
+                        FundModel = 35,
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
                             {
-                                LearnDelFAMType = "LDM"
+                                LearnDelFAMType = "FFI"
                             },
                             new TestLearningDeliveryFAM
                             {
@@ -176,7 +208,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "LDM")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "FFI")).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -187,24 +219,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [Fact]
         public void BuildErrorMessageParameters()
         {
-            DateTime learnStartDate = new DateTime(2018, 01, 01);
-            int fundModel = 81;
-            int? progType = 20;
+            int fundModel = 35;
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnStartDate", "01/01/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FundModel", fundModel)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ProgType", progType)).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(learnStartDate, fundModel, progType);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(fundModel);
 
             validationErrorHandlerMock.Verify();
         }
 
-        private LearnDelFAMType_39Rule NewRule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        private LearnDelFAMType_02Rule NewRule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new LearnDelFAMType_39Rule(learningDeliveryFAMQueryService, validationErrorHandler);
+            return new LearnDelFAMType_02Rule(learningDeliveryFAMQueryService, validationErrorHandler);
         }
     }
 }

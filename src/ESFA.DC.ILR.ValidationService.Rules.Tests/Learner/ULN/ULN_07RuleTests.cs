@@ -16,6 +16,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
     public class ULN_07RuleTests : AbstractRuleTests<ULN_07Rule>
     {
         [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("ULN_07");
+        }
+
+        [Fact]
         public void UlnConditionMet_True()
         {
             NewRule().UlnConditionMet(9999999999).Should().BeTrue();
