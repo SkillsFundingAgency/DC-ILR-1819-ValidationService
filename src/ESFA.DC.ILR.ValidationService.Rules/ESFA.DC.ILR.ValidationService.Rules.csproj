@@ -85,6 +85,7 @@
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_30Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_27Rule.cs" />
