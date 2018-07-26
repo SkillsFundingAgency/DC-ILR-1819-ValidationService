@@ -56,6 +56,7 @@
         public const string DateOfBirth_32 = "DateOfBirth_32";
         public const string DateOfBirth_35 = "DateOfBirth_35";
         public const string DateOfBirth_46 = "DateOfBirth_46";
+        public const string DateOfBirth_47 = "DateOfBirth_47";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
