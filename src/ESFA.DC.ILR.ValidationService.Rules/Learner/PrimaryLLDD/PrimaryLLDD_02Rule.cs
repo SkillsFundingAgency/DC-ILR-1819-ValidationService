@@ -1,36 +1,43 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD
 {
-    /// <summary>
-    /// .LLDDandHealthProblem.PrimaryLLDD<> null and LLDDandHealthProblem.PrimaryLLDD <> valid look up on ILR_PrimaryLLDD
-    /// </summary>
     public class PrimaryLLDD_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly int _validPrimaryLldd = 1;
-
         public PrimaryLLDD_02Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PrimaryLLDD_02)
         {
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var lldcat in objectToValidate.LLDDAndHealthProblems)
+            if (objectToValidate.LLDDAndHealthProblems != null)
             {
-                if (ConditionMet(lldcat.PrimaryLLDDNullable))
+                foreach (var lldcat in objectToValidate.LLDDAndHealthProblems)
                 {
-                    HandleValidationError(RuleNameConstants.PrimaryLLDD_02Rule, objectToValidate.LearnRefNumber);
+                    if (ConditionMet(lldcat.PrimaryLLDDNullable))
+                    {
+                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(lldcat.PrimaryLLDDNullable));
+                    }
                 }
             }
         }
 
-        public bool ConditionMet(long? primaryLlddValue)
+        public bool ConditionMet(int? primaryLLDD)
         {
-            return primaryLlddValue.HasValue && primaryLlddValue.Value != _validPrimaryLldd;
+            return primaryLLDD.HasValue && primaryLLDD.Value != 1;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? primaryLLDD)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.PrimaryLLDD, primaryLLDD)
+            };
         }
     }
 }

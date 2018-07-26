@@ -5,92 +5,128 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
 {
-    public class PrimaryLLDD_03RuleTests
+    public class PrimaryLLDD_03RuleTests : AbstractRuleTests<PrimaryLLDD_03Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("PrimaryLLDD_03");
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
-            var rule = NewRule();
-            var lllddAndHealthProblems = new List<ILLDDAndHealthProblem>()
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
             {
-                SetupLlddHealthAndProblem(1),
-                SetupLlddHealthAndProblem(1)
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20,
+                    PrimaryLLDDNullable = 1
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98,
+                    PrimaryLLDDNullable = 1
+                }
             };
-            rule.ConditionMet(lllddAndHealthProblems).Should().BeTrue();
+
+            NewRule().ConditionMet(llddAndHealthProblems).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False()
         {
-            var rule = NewRule();
-            var lllddAndHealthProblems = new List<ILLDDAndHealthProblem>()
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
             {
-                SetupLlddHealthAndProblem(99),
-                SetupLlddHealthAndProblem(1)
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20,
+                    PrimaryLLDDNullable = 1
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98
+                }
             };
-            rule.ConditionMet(lllddAndHealthProblems).Should().BeFalse();
+
+            NewRule().ConditionMet(llddAndHealthProblems).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_Null()
         {
-            var rule = NewRule();
-            rule.ConditionMet(null).Should().BeFalse();
+            NewRule().ConditionMet(null).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_True()
+        public void Validate_Error()
         {
-            var validationErrorHandlerMock = SetupPrimaryLLdd(1, 99);
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PrimaryLLDD_03", null, null, null);
-
-            validationErrorHandlerMock.Verify(handle, Times.Never);
-        }
-
-        [Fact]
-        public void ValidateFalse()
-        {
-            var validationErrorHandlerMock = SetupPrimaryLLdd(1, 1);
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PrimaryLLDD_03", null, null, null);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
-
-        private Mock<IValidationErrorHandler> SetupPrimaryLLdd(long? primaryLlddValue1, long? primaryLlddValue2)
-        {
-            var learner = new TestLearner()
+            var llddHealthProb = 1;
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
             {
-                LLDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
+                new TestLLDDAndHealthProblem
                 {
-                    SetupLlddHealthAndProblem(primaryLlddValue1),
-                    SetupLlddHealthAndProblem(primaryLlddValue2)
+                    LLDDCat = 20,
+                    PrimaryLLDDNullable = 1
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98,
+                    PrimaryLLDDNullable = 1
                 }
             };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            return validationErrorHandlerMock;
+            var learner = new TestLearner
+            {
+                LLDDHealthProb = llddHealthProb,
+                LLDDAndHealthProblems = llddAndHealthProblems
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
+        {
+            var llddHealthProb = 1;
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20,
+                    PrimaryLLDDNullable = 1
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98
+                }
+            };
+
+            var learner = new TestLearner
+            {
+                LLDDHealthProb = llddHealthProb,
+                LLDDAndHealthProblems = llddAndHealthProblems
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         private PrimaryLLDD_03Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
             return new PrimaryLLDD_03Rule(validationErrorHandler);
-        }
-
-        private TestLLDDAndHealthProblem SetupLlddHealthAndProblem(long? primarylldValue)
-        {
-            return new TestLLDDAndHealthProblem()
-            {
-                LLDDCatNullable = 10,
-                PrimaryLLDDNullable = primarylldValue
-            };
         }
     }
 }
