@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
@@ -21,6 +22,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level);
 
         bool FullLevel3EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level);
+
+        bool FullLevel3PercentForLearnAimRefAndDateAndPercentValue(string learnAimRef, DateTime learnStartDate, decimal percentValue);
 
         bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef);
 

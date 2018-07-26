@@ -179,6 +179,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_59Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80Rule.cs" />
