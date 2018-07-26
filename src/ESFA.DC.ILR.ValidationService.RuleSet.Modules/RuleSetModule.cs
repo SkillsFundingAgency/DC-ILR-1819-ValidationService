@@ -157,6 +157,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PrevUKPRN_01Rule),
                 typeof(PrimaryLLDD_01Rule),
                 typeof(PrimaryLLDD_02Rule),
+                typeof(PrimaryLLDD_03Rule),
                 typeof(PrimaryLLDD_04Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
