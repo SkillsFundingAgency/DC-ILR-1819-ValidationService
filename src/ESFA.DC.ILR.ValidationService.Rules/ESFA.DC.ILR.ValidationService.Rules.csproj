@@ -122,6 +122,7 @@
     <Compile Include="Learner\Postcode\Postcode_14Rule.cs" />
     <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01Rule.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_01Rule.cs" />
+    <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_02Rule.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_04Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
