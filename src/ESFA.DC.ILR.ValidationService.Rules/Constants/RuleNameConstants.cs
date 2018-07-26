@@ -50,11 +50,13 @@
         public const string DateOfBirth_25 = "DateOfBirth_25";
         public const string DateOfBirth_26 = "DateOfBirth_26";
         public const string DateOfBirth_27 = "DateOfBirth_27";
+        public const string DateOfBirth_28 = "DateOfBirth_28";
         public const string DateOfBirth_29 = "DateOfBirth_29";
         public const string DateOfBirth_30 = "DateOfBirth_30";
         public const string DateOfBirth_32 = "DateOfBirth_32";
         public const string DateOfBirth_35 = "DateOfBirth_35";
         public const string DateOfBirth_46 = "DateOfBirth_46";
+        public const string DateOfBirth_47 = "DateOfBirth_47";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
@@ -96,6 +98,7 @@
         public const string LearnAimRef_55 = "LearnAimRef_55";
         public const string LearnAimRef_56 = "LearnAimRef_56";
         public const string LearnAimRef_57 = "LearnAimRef_57";
+        public const string LearnAimRef_59 = "LearnAimRef_59";
         public const string LearnAimRef_80 = "LearnAimRef_80";
 
         public const string LearnDelFAMDateFrom_01 = "LearnDelFAMDateFrom_01";

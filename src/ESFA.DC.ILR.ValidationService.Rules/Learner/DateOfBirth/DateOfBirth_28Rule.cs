@@ -10,19 +10,20 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
-    public class DateOfBirth_46Rule : AbstractRule, IRule<ILearner>
+    public class DateOfBirth_28Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IEnumerable<long?> _fundModels = new HashSet<long?>() { 36, 81 };
-        private readonly DateTime _firstAug2016 = new DateTime(2016, 08, 01);
+        private readonly IEnumerable<long?> _fundModels = new HashSet<long?>() { 35, 81 };
+        private readonly DateTime _firstAug2014 = new DateTime(2014, 08, 01);
 
         private readonly IDateTimeQueryService _dateTimeQueryService;
+        private readonly IDD07 _dd07;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public DateOfBirth_46Rule(IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-           : base(validationErrorHandler, RuleNameConstants.DateOfBirth_46)
+        public DateOfBirth_28Rule(IDateTimeQueryService dateTimeQueryService, IDD07 dd07, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+           : base(validationErrorHandler, RuleNameConstants.DateOfBirth_28)
         {
             _dateTimeQueryService = dateTimeQueryService;
-
+            _dd07 = dd07;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
@@ -53,9 +54,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             return FundModelConditionMet(fundModel)
             && LearnStartDateConditionMet(learnStartDate)
             && AimTypeConditionMet(aimType)
-            && ProgTypeConditionMet(progType)
             && DateOfBirthConditionMet(dateOfBirth, learnStartDate)
-            && LearnPlanEndDateConditionMet(learnStartDate, learnPlanEndDate)
+            && ApprenticeshipConditionMet(progType)
+            && ApprenticeshipDurationConditionMet(learnStartDate, learnPlanEndDate)
             && LearningDeliveryFAMConditionMet(learningDeliveryFAMs);
         }
 
@@ -66,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 
         public bool LearnStartDateConditionMet(DateTime learnStartDate)
         {
-            return learnStartDate >= _firstAug2016;
+            return learnStartDate < _firstAug2014;
         }
 
         public bool AimTypeConditionMet(int aimType)
@@ -74,21 +75,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             return aimType == 1;
         }
 
-        public bool ProgTypeConditionMet(int? progType)
-        {
-            return progType.HasValue
-                && progType == 25;
-        }
-
         public bool DateOfBirthConditionMet(DateTime? dateOfBirth, DateTime learnStartDate)
         {
             return dateOfBirth.HasValue
-                && _dateTimeQueryService.YearsBetween((DateTime)dateOfBirth, learnStartDate) >= 16;
+                && _dateTimeQueryService.YearsBetween(dateOfBirth.Value, learnStartDate) < 19;
         }
 
-        public bool LearnPlanEndDateConditionMet(DateTime learnStartDate, DateTime learnPlanEndDate)
+        public bool ApprenticeshipConditionMet(int? progType)
         {
-            return _dateTimeQueryService.DaysBetween(learnStartDate, learnPlanEndDate) < 372;
+            return progType.HasValue
+                && _dd07.IsApprenticeship(progType);
+        }
+
+        public bool ApprenticeshipDurationConditionMet(DateTime learnStartDate, DateTime learnPlanEndDate)
+        {
+            return _dateTimeQueryService.MonthsBetween(learnStartDate, learnPlanEndDate) < 12;
         }
 
         public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)

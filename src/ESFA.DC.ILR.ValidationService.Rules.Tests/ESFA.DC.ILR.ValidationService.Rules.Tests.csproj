@@ -112,6 +112,7 @@
     <Compile Include="HE\NUMHUS\NUMHUS_01RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_28RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_30RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_27RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_03RuleTests.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_29RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_47RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_46RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
@@ -207,6 +209,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_59RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03RuleTests.cs" />

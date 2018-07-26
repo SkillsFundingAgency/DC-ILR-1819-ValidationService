@@ -105,11 +105,13 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(DateOfBirth_25Rule),
                 typeof(DateOfBirth_26Rule),
                 typeof(DateOfBirth_27Rule),
+                typeof(DateOfBirth_28Rule),
                 typeof(DateOfBirth_29Rule),
                 typeof(DateOfBirth_30Rule),
                 typeof(DateOfBirth_32Rule),
                 typeof(DateOfBirth_35Rule),
                 typeof(DateOfBirth_46Rule),
+                typeof(DateOfBirth_47Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
@@ -144,6 +146,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnAimRef_55Rule),
                 typeof(LearnAimRef_56Rule),
                 typeof(LearnAimRef_57Rule),
+                typeof(LearnAimRef_59Rule),
                 typeof(LearnAimRef_80Rule),
                 typeof(LearnDelFAMDateFrom_01Rule),
                 typeof(LearnDelFAMDateFrom_02Rule),
@@ -190,7 +193,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(117);
+            rules.Should().HaveCount(120);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

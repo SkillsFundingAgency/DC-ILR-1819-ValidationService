@@ -41,6 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 BasicSkills = av.BasicSkills,
                                 FullLevel2EntitlementCategory = av.FullLevel2EntitlementCategory,
                                 FullLevel3EntitlementCategory = av.FullLevel3EntitlementCategory,
+                                FullLevel3Percent = av.FullLevel3Percent,
                                 EffectiveFrom = av.EffectiveFrom,
                                 EffectiveTo = av.EffectiveTo,
                             }).ToList(),
