@@ -1,43 +1,44 @@
 ﻿using System;
+using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat
 {
-    /// <summary>
-    /// DD06 > 'Valid to' in ILR_LLDDCat
-    /// </summary>
     public class LLDDCat_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly ILlddCatInternalDataService _llddCatDataService;
         private readonly IDD06 _dd06;
+        private readonly ILLDDCatDataService _llddCatDataService;
 
-        public LLDDCat_02Rule(IValidationErrorHandler validationErrorHandler, ILlddCatInternalDataService llddCatDataService, IDD06 dd06)
-            : base(validationErrorHandler)
+        public LLDDCat_02Rule(IDD06 dd06, ILLDDCatDataService llddCatDataService, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.LLDDCat_02)
         {
-            _llddCatDataService = llddCatDataService;
             _dd06 = dd06;
+            _llddCatDataService = llddCatDataService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var lldcat in objectToValidate.LLDDAndHealthProblems)
+            if (objectToValidate.LLDDAndHealthProblems != null)
             {
-                if (ConditionMet(lldcat.LLDDCatNullable, _dd06.Derive(objectToValidate.LearningDeliveries)))
+                foreach (var lldcat in objectToValidate.LLDDAndHealthProblems)
                 {
-                    HandleValidationError(RuleNameConstants.LLDDCat_02Rule, objectToValidate.LearnRefNumber);
+                    if (ConditionMet(lldcat.LLDDCat, objectToValidate.LearningDeliveries))
+                    {
+                        HandleValidationError(objectToValidate.LearnRefNumber);
+                        return;
+                    }
                 }
             }
         }
 
-        public bool ConditionMet(long? llddCategory, DateTime? minimumStartDate)
+        public bool ConditionMet(int llddCat, IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return llddCategory.HasValue &&
-                   !_llddCatDataService.CategoryExistForDate(llddCategory, minimumStartDate);
+            return !_llddCatDataService.IsDateValidForLLDDCat(llddCat, _dd06.Derive(learningDeliveries));
         }
     }
 }

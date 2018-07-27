@@ -3,134 +3,179 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
 {
-    public class LLDDCat_Rule02Tests
+    public class LLDDCat_Rule02Tests : AbstractRuleTests<LLDDCat_02Rule>
     {
-        [Theory]
-        [InlineData(1, "2015-08-10")]
-        [InlineData(2, "2015-08-10")]
-        [InlineData(3, "2015-08-10")]
-        [InlineData(4, "2100-01-01")]
-        [InlineData(17, "2100-01-01")]
-        [InlineData(93, "2100-01-01")]
-        [InlineData(99, "2100-01-01")]
-        public void ConditionMet_True(long? category, string validTo)
+        [Fact]
+        public void RuleName()
         {
-            var validToDate = string.IsNullOrEmpty(validTo) ? (DateTime?)null : DateTime.Parse(validTo);
-
-            var lldCatServiceMock = new Mock<ILlddCatInternalDataService>();
-            lldCatServiceMock.Setup(x => x.CategoryExistForDate(It.IsAny<long?>(), It.IsAny<DateTime?>())).Returns(false);
-
-            var dd06Mock = new Mock<IDD06>();
-            dd06Mock.Setup(x =>
-                x.Derive(It.IsAny<IReadOnlyCollection<ILearningDelivery>>())).Returns(validToDate);
-
-            var rule = NewRule(null, lldCatServiceMock.Object, dd06Mock.Object);
-            rule.ConditionMet(category, validToDate).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(1, "2015-07-31")]
-        [InlineData(2, "2015-07-31")]
-        [InlineData(3, "2015-07-31")]
-        [InlineData(4, "2099-12-31")]
-        [InlineData(17, "2099-12-31")]
-        [InlineData(93, "2099-12-31")]
-        [InlineData(99, "2099-12-31")]
-        [InlineData(99, null)]
-        [InlineData(null, null)]
-        public void ConditionMet_False(long? category, string validTo)
-        {
-            var validToDate = string.IsNullOrEmpty(validTo) ? (DateTime?)null : DateTime.Parse(validTo);
-
-            var lldCatServiceMock = new Mock<ILlddCatInternalDataService>();
-            lldCatServiceMock.Setup(x => x.CategoryExistForDate(It.IsAny<long?>(), It.IsAny<DateTime?>())).Returns(true);
-
-            var dd06Mock = new Mock<IDD06>();
-            dd06Mock.Setup(x =>
-                x.Derive(It.IsAny<IReadOnlyCollection<ILearningDelivery>>())).Returns(validToDate);
-
-            var rule = NewRule(null, lldCatServiceMock.Object, dd06Mock.Object);
-            rule.ConditionMet(category, validToDate).Should().BeFalse();
+            NewRule().RuleName.Should().Be("LLDDCat_02");
         }
 
         [Fact]
-        public void ConditionMet_Null_False()
+        public void ConditionMet_True()
         {
-            var rule = NewRule();
-            rule.ConditionMet(null, null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void Validate_True()
-        {
-            var learner = new TestLearner()
+            var llddCat = 1;
+            var learningDeliveries = new List<TestLearningDelivery>
             {
-                LLDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
+                new TestLearningDelivery
                 {
-                    new TestLLDDAndHealthProblem()
-                    {
-                        LLDDCatNullable = 1
-                    }
+                    LearnStartDate = new DateTime(2015, 01, 01)
+                },
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2017, 01, 01)
+                },
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 07, 01)
                 }
             };
 
-            var lldCatServiceMock = new Mock<ILlddCatInternalDataService>();
-            lldCatServiceMock.Setup(x => x.CategoryExistForDate(It.IsAny<long?>(), It.IsAny<DateTime?>())).Returns(true);
-
             var dd06Mock = new Mock<IDD06>();
-            dd06Mock.Setup(x =>
-                x.Derive(It.IsAny<IReadOnlyCollection<ILearningDelivery>>())).Returns(new DateTime(2010, 10, 10));
+            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LLDDCat_02", null, null, null);
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
+            llddCatDataServiceMock.Setup(ds => ds.IsDateValidForLLDDCat(llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(false);
 
-            var rule = NewRule(validationErrorHandlerMock.Object, lldCatServiceMock.Object, dd06Mock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            NewRule(dd06Mock.Object, llddCatDataServiceMock.Object).ConditionMet(llddCat, learningDeliveries).Should().BeTrue();
         }
 
         [Fact]
-        public void Validate_False()
+        public void ConditionMet_False()
         {
-            var learner = new TestLearner()
+            var llddCat = 1;
+            var learningDeliveries = new List<TestLearningDelivery>
             {
-                LLDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
+                new TestLearningDelivery
                 {
-                    new TestLLDDAndHealthProblem()
-                    {
-                        LLDDCatNullable = 1
-                    }
+                    LearnStartDate = new DateTime(2015, 01, 01)
+                },
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2017, 01, 01)
+                },
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 07, 01)
                 }
             };
 
-            var lldCatServiceMock = new Mock<ILlddCatInternalDataService>();
-            lldCatServiceMock.Setup(x => x.CategoryExistForDate(It.IsAny<long?>(), It.IsAny<DateTime?>())).Returns(false);
-
             var dd06Mock = new Mock<IDD06>();
-            dd06Mock.Setup(x =>
-                x.Derive(It.IsAny<IReadOnlyCollection<ILearningDelivery>>())).Returns(new DateTime(2010, 10, 10));
+            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LLDDCat_02", null, null, null);
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
+            llddCatDataServiceMock.Setup(ds => ds.IsDateValidForLLDDCat(llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(true);
 
-            var rule = NewRule(validationErrorHandlerMock.Object, lldCatServiceMock.Object, dd06Mock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            NewRule(dd06Mock.Object, llddCatDataServiceMock.Object).ConditionMet(llddCat, learningDeliveries).Should().BeFalse();
         }
 
-        private LLDDCat_02Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILlddCatInternalDataService llddCatDataService = null, IDD06 dd06 = null)
+        [Fact]
+        public void Validate_Error()
         {
-            return new LLDDCat_02Rule(validationErrorHandler, llddCatDataService, dd06);
+            var llddCat = 1;
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 01, 01)
+                },
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2017, 01, 01)
+                },
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 07, 01)
+                }
+            };
+
+            var learner = new TestLearner()
+            {
+                LLDDAndHealthProblems = new List<TestLLDDAndHealthProblem>
+                {
+                    new TestLLDDAndHealthProblem
+                    {
+                        PrimaryLLDDNullable = 1,
+                        LLDDCat = llddCat
+                    }
+                },
+                LearningDeliveries = learningDeliveries
+            };
+
+            var dd06Mock = new Mock<IDD06>();
+            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
+            llddCatDataServiceMock.Setup(ds => ds.IsDateValidForLLDDCat(llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(dd06Mock.Object, llddCatDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
+        {
+            var llddCat = 1;
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 01, 01)
+                },
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2017, 01, 01)
+                },
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 07, 01)
+                }
+            };
+
+            var learner = new TestLearner()
+            {
+                LLDDAndHealthProblems = new List<TestLLDDAndHealthProblem>
+                {
+                    new TestLLDDAndHealthProblem
+                    {
+                        PrimaryLLDDNullable = 1,
+                        LLDDCat = llddCat
+                    }
+                },
+                LearningDeliveries = learningDeliveries
+            };
+
+            var dd06Mock = new Mock<IDD06>();
+            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
+            llddCatDataServiceMock.Setup(ds => ds.IsDateValidForLLDDCat(llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(dd06Mock.Object, llddCatDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        private LLDDCat_02Rule NewRule(
+            IDD06 dd06 = null,
+            ILLDDCatDataService llddCatDataService = null,
+            IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new LLDDCat_02Rule(dd06, llddCatDataService, validationErrorHandler);
         }
     }
 }

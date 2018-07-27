@@ -9,47 +9,49 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD
 {
-    /// <summary>
-    /// If the earliest Learning start date is on or after 1 August 2015, then the Primary LLDD and health problem must be recorded on one of the LLDD and health problem records
-    /// </summary>
     public class PrimaryLLDD_01Rule : AbstractRule, IRule<ILearner>
     {
-        private const int ValidPrimaryLldd = 1;
-        private readonly DateTime _minimumLearningStartDateAllowed = new DateTime(2015, 08, 01);
+        private readonly DateTime _firstAugust2015 = new DateTime(2015, 08, 01);
         private readonly HashSet<long> _excludeLlddCatValues = new HashSet<long>() { 98, 99 };
+
         private readonly IDD06 _dd06;
 
-        public PrimaryLLDD_01Rule(IValidationErrorHandler validationErrorHandler, IDD06 dd06)
-            : base(validationErrorHandler)
+        public PrimaryLLDD_01Rule(IDD06 dd06, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PrimaryLLDD_01)
         {
             _dd06 = dd06;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.LLDDAndHealthProblems, _dd06.Derive(objectToValidate.LearningDeliveries)) && !Exclude(objectToValidate.LLDDAndHealthProblems))
+            if (ConditionMet(objectToValidate.LLDDHealthProb, objectToValidate.LLDDAndHealthProblems, objectToValidate.LearningDeliveries))
             {
-                HandleValidationError(RuleNameConstants.PrimaryLLDD_01Rule, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber);
             }
         }
 
-        public bool ConditionMet(IReadOnlyCollection<ILLDDAndHealthProblem> lLDDAndHealthProblems, DateTime? minimumStartDate)
+        public bool ConditionMet(int llddHealthProb, IEnumerable<ILLDDAndHealthProblem> llddAndHealthProblems, IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return minimumStartDate.HasValue &&
-                   minimumStartDate.Value >= _minimumLearningStartDateAllowed &&
-                   ConditionMetAnyValidPrimaryLldd(lLDDAndHealthProblems);
+            return LLDDHealthProbConditionMet(llddHealthProb)
+                && LearnStartDateConditionMet(learningDeliveries)
+                && LLDDConditionMet(llddAndHealthProblems);
         }
 
-        public bool ConditionMetAnyValidPrimaryLldd(IReadOnlyCollection<ILLDDAndHealthProblem> lLDDAndHealthProblems)
+        public bool LLDDHealthProbConditionMet(int llddHealthProb)
         {
-            return lLDDAndHealthProblems == null ||
-                   !lLDDAndHealthProblems.Any(x => x.PrimaryLLDDNullable.HasValue && x.PrimaryLLDDNullable.Value == ValidPrimaryLldd);
+            return llddHealthProb == 1;
         }
 
-        public bool Exclude(IReadOnlyCollection<ILLDDAndHealthProblem> lLDDAndHealthProblems)
+        public bool LearnStartDateConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return lLDDAndHealthProblems != null &&
-                   lLDDAndHealthProblems.All(x => x.LLDDCatNullable.HasValue && _excludeLlddCatValues.Contains(x.LLDDCatNullable.Value));
+            return _dd06.Derive(learningDeliveries) >= _firstAugust2015;
+        }
+
+        public bool LLDDConditionMet(IEnumerable<ILLDDAndHealthProblem> llddAndHealthProblems)
+        {
+            return llddAndHealthProblems != null
+                && !llddAndHealthProblems.All(x => _excludeLlddCatValues.Contains(x.LLDDCat))
+                && !llddAndHealthProblems.Any(x => x.PrimaryLLDDNullable == 1);
         }
     }
 }

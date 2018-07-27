@@ -6,174 +6,306 @@ using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
 {
-    public class PrimaryLLDD_01RuleTests
+    public class PrimaryLLDD_01RuleTests : AbstractRuleTests<PrimaryLLDD_01Rule>
     {
         [Fact]
-        public void ConditionMet_True_NullLlddCategories()
+        public void RuleName()
         {
-            var rule = NewRule();
-            rule.ConditionMet(null, new DateTime(2015, 09, 01)).Should().BeTrue();
+            NewRule().RuleName.Should().Be("PrimaryLLDD_01");
+        }
+
+        [Fact]
+        public void LLDDHealthProbConditionMet_True()
+        {
+            NewRule().LLDDHealthProbConditionMet(1).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LLDDHealthProbConditionMet_False()
+        {
+            NewRule().LLDDHealthProbConditionMet(20).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateConditionMet_True()
+        {
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2018, 01, 01)
+                },
+                 new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 08, 01)
+                }
+            };
+
+            var dd06Mock = new Mock<IDD06>();
+
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 08, 01));
+
+            NewRule(dd06Mock.Object).LearnStartDateConditionMet(learningDeliveries).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnStartDateConditionMet_False()
+        {
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2018, 01, 01)
+                },
+                 new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2009, 08, 01)
+                }
+            };
+
+            var dd06Mock = new Mock<IDD06>();
+
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2009, 08, 01));
+
+            NewRule(dd06Mock.Object).LearnStartDateConditionMet(learningDeliveries).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LLDDConditionMet_True()
+        {
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20,
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98
+                }
+            };
+
+            NewRule().LLDDConditionMet(llddAndHealthProblems).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LLDDConditionMet_False_Null()
+        {
+            NewRule().LLDDConditionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LLDDConditionMet_False_AllExcluded()
+        {
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98,
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 99
+                }
+            };
+
+            NewRule().LLDDConditionMet(llddAndHealthProblems).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LLDDConditionMet_False()
+        {
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20,
+                    PrimaryLLDDNullable = 1
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 99
+                }
+            };
+
+            NewRule().LLDDConditionMet(llddAndHealthProblems).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_True()
         {
-            var rule = NewRule(null, null);
+            var lldHealthProb = 1;
 
-            var llDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
             {
-                SetupLlddHealthAndProblem(99),
-                SetupLlddHealthAndProblem(null),
-            };
-            rule.ConditionMet(llDDAndHealthProblems, new DateTime(2015, 09, 01)).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMet_False_NullLearningStartDate()
-        {
-            var rule = NewRule(null, null);
-            rule.ConditionMet(It.IsAny<IReadOnlyCollection<ILLDDAndHealthProblem>>(), null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False_LearningStartDate()
-        {
-            var rule = NewRule(null, null);
-            rule.ConditionMet(null, new DateTime(2015, 07, 31)).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False()
-        {
-            var rule = NewRule(null, null);
-
-            var llDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(1),
-                SetupLlddHealthAndProblem(100),
-            };
-            rule.ConditionMet(llDDAndHealthProblems, new DateTime(2015, 08, 31)).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMetAnyValidPrimaryLldd_True_NullValue()
-        {
-            var rule = NewRule(null, null);
-            rule.ConditionMetAnyValidPrimaryLldd(null).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMetAnyValidPrimaryLldd_True_InvalidValue()
-        {
-            var rule = NewRule(null, null);
-
-            var llDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(99),
-                SetupLlddHealthAndProblem(100)
-            };
-            rule.ConditionMetAnyValidPrimaryLldd(llDDAndHealthProblems).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMetAnyValidPrimaryLldd_False()
-        {
-            var rule = NewRule(null, null);
-
-            var llDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(1),
-                SetupLlddHealthAndProblem(100)
-            };
-            rule.ConditionMetAnyValidPrimaryLldd(llDDAndHealthProblems).Should().BeFalse();
-        }
-
-        [Fact]
-        public void Exclude_False()
-        {
-            var rule = NewRule(null, null);
-
-            var llDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(null, 9999),
-                SetupLlddHealthAndProblem(null, 100),
-                SetupLlddHealthAndProblem(null, null)
-            };
-            rule.Exclude(llDDAndHealthProblems).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(99)]
-        [InlineData(98)]
-        public void Exclude_True(long? excludeCatValue)
-        {
-            var rule = NewRule(null, null);
-
-            var llDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
-            {
-                SetupLlddHealthAndProblem(null, excludeCatValue),
-                SetupLlddHealthAndProblem(200, excludeCatValue),
-            };
-            rule.Exclude(llDDAndHealthProblems).Should().BeTrue();
-        }
-
-        [Fact]
-        public void Validate_False()
-        {
-            var validationErrorHandlerMock = SetupForValidate(9999);
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PrimaryLLDD_01", null, null, null);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
-
-        [Fact]
-        public void Validate_True()
-        {
-            var validationErrorHandlerMock = SetupForValidate(1);
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PrimaryLLDD_01", null, null, null);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
-        }
-
-        private Mock<IValidationErrorHandler> SetupForValidate(long? primaryLldValue)
-        {
-            var learner = new TestLearner()
-            {
-                LLDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
+                new TestLLDDAndHealthProblem
                 {
-                    SetupLlddHealthAndProblem(primaryLldValue, 10),
-                    SetupLlddHealthAndProblem(null, 100),
-                    SetupLlddHealthAndProblem(null, null)
+                    LLDDCat = 20,
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98
+                }
+            };
+
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2018, 01, 01)
+                },
+                 new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 08, 01)
                 }
             };
 
             var dd06Mock = new Mock<IDD06>();
-            dd06Mock.Setup(x =>
-                x.Derive(It.IsAny<IReadOnlyCollection<ILearningDelivery>>())).Returns(new DateTime(2015, 08, 31));
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 08, 01));
 
-            var rule = NewRule(validationErrorHandlerMock.Object, dd06Mock.Object);
-            rule.Validate(learner);
-            return validationErrorHandlerMock;
+            NewRule(dd06Mock.Object).ConditionMet(lldHealthProb, llddAndHealthProblems, learningDeliveries).Should().BeTrue();
         }
 
-        private PrimaryLLDD_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null, IDD06 dd06 = null)
+        [Theory]
+        [InlineData(2, 20, 98, null, 2018, 2015)]
+        [InlineData(1, 20, 98, null, 2018, 2014)]
+        [InlineData(1, 99, 98, null, 2018, 2015)]
+        [InlineData(1, 20, 98, 1, 2018, 2015)]
+        public void ConditionMet_False(int llddHealthProb, int llddCat1, int llddCat2, int? primaryLLDD, int year1, int year2)
         {
-            return new PrimaryLLDD_01Rule(validationErrorHandler, dd06);
-        }
-
-        private TestLLDDAndHealthProblem SetupLlddHealthAndProblem(long? primarylldValue, long? lldCat = 1)
-        {
-            return new TestLLDDAndHealthProblem()
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
             {
-                LLDDCatNullable = lldCat,
-                PrimaryLLDDNullable = primarylldValue
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = llddCat1,
+                    PrimaryLLDDNullable = primaryLLDD
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = llddCat2
+                }
             };
+
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(year1, 01, 01)
+                },
+                 new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(year2, 08, 01)
+                }
+            };
+
+            var dd06Mock = new Mock<IDD06>();
+
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(year2, 08, 01));
+
+            NewRule(dd06Mock.Object).ConditionMet(llddHealthProb, llddAndHealthProblems, learningDeliveries).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Validate_Error()
+        {
+            var llddHealthProb = 1;
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 20
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98
+                }
+            };
+
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2018, 01, 01)
+                },
+                 new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 08, 01)
+                }
+            };
+
+            var learner = new TestLearner
+            {
+                LLDDHealthProb = llddHealthProb,
+                LLDDAndHealthProblems = llddAndHealthProblems,
+                LearningDeliveries = learningDeliveries
+            };
+
+            var dd06Mock = new Mock<IDD06>();
+
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 08, 01));
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(dd06Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
+        {
+            var llddHealthProb = 1;
+            var llddAndHealthProblems = new List<TestLLDDAndHealthProblem>
+            {
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 99
+                },
+                new TestLLDDAndHealthProblem
+                {
+                    LLDDCat = 98
+                }
+            };
+
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2018, 01, 01)
+                },
+                 new TestLearningDelivery
+                {
+                    LearnStartDate = new DateTime(2015, 08, 01)
+                }
+            };
+
+            var learner = new TestLearner
+            {
+                LLDDHealthProb = llddHealthProb,
+                LLDDAndHealthProblems = llddAndHealthProblems,
+                LearningDeliveries = learningDeliveries
+            };
+
+            var dd06Mock = new Mock<IDD06>();
+
+            dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 08, 01));
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(dd06Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        private PrimaryLLDD_01Rule NewRule(IDD06 dd06 = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new PrimaryLLDD_01Rule(dd06, validationErrorHandler);
         }
     }
 }

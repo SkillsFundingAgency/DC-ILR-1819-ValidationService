@@ -9,22 +9,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
     public class DateOfBirth_24Rule : AbstractRule, IRule<ILearner>
     {
         public DateOfBirth_24Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.DateOfBirth_24)
         {
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.ULNNullable, objectToValidate.DateOfBirthNullable))
+            if (ConditionMet(objectToValidate.ULN, objectToValidate.DateOfBirthNullable))
             {
-                HandleValidationError(RuleNameConstants.DateOfBirth_24, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber);
             }
         }
 
-        public bool ConditionMet(long? uln, DateTime? dateOfBirth)
+        public bool ConditionMet(long uln, DateTime? dateOfBirth)
         {
-            return uln.HasValue
-                && uln != ValidationConstants.TemporaryULN
+            return uln != ValidationConstants.TemporaryULN
                 && !dateOfBirth.HasValue;
         }
     }

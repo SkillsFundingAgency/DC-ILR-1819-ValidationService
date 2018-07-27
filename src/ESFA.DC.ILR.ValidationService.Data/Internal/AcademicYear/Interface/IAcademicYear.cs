@@ -10,6 +10,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface
 
         DateTime JanuaryFirst { get; }
 
+        DateTime JulyThirtyFirst { get; }
+
         DateTime Start { get; }
     }
 }

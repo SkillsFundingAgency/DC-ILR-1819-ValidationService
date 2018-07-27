@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 
@@ -58,11 +60,76 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && learningDelivery.LearningDeliveryCategories.Where(cr => cr.CategoryRef == categoryRef).Any();
         }
 
-        public bool NotionalNVQLevelV2MatchForLearnAimRef(string learnAimRef, string level)
+        public bool NotionalNVQLevelMatchForLearnAimRef(string learnAimRef, string level)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null && learningDelivery.NotionalNVQLevel == level;
+        }
+
+        public bool NotionalNVQLevelV2MatchForLearnAimRefAndLevel(string learnAimRef, string level)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
 
             return learningDelivery != null && learningDelivery.NotionalNVQLevelv2 == level;
+        }
+
+        public bool NotionalNVQLevelV2MatchForLearnAimRefAndLevels(string learnAimRef, IEnumerable<string> levels)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null && levels.Contains(learningDelivery.NotionalNVQLevelv2);
+        }
+
+        public bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues
+                    .Where(av => av.FullLevel2EntitlementCategory == level).Any();
+        }
+
+        public bool FullLevel3EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues
+                    .Where(av => av.FullLevel3EntitlementCategory == level).Any();
+        }
+
+        public bool FullLevel3PercentForLearnAimRefAndDateAndPercentValue(string learnAimRef, DateTime learnStartDate, decimal percentValue)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues
+                    .Where(av =>
+                       av.FullLevel3Percent == percentValue
+                    && av.EffectiveFrom <= learnStartDate
+                    && av.EffectiveTo >= learnStartDate).Any();
+        }
+
+        public bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.LearnDirectClassSystemCode1 != "NUL";
+        }
+
+        public bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues
+                    .Where(av => av.BasicSkills == basicSkills).Any();
         }
     }
 }

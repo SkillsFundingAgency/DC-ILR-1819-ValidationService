@@ -29,35 +29,26 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             var keyGenerator = _parentLifeTimeScope.Resolve<IKeyGenerator>();
             var ukprn = Convert.ToInt64(jobContextMessage.KeyValuePairs[JobContextMessageKey.UkPrn]);
 
-            var validationContext = new PreValidationContext()
-            {
-                JobId = jobContextMessage.JobId.ToString(),
-                Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
-                InvalidLearnRefNumbersKey = keyGenerator.GenerateKey(
-                    ukprn,
-                    jobContextMessage.JobId,
-                    TaskKeys.ValidationInvalidLearners),
-                ValidLearnRefNumbersKey = keyGenerator.GenerateKey(
-                    ukprn,
-                    jobContextMessage.JobId,
-                    TaskKeys.ValidationValidLearners),
-                ValidationErrorsKey = keyGenerator.GenerateKey(
-                    ukprn,
-                    jobContextMessage.JobId,
-                    TaskKeys.ValidationErrors),
-                ValidationErrorMessageLookupKey = keyGenerator.GenerateKey(
-                    ukprn,
-                    jobContextMessage.JobId,
-                    TaskKeys.ValidationErrorsLookup)
-            };
+            // populate the keys into jobcontextmessage - this should be done in Orchestrator
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationInvalidLearners);
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationValidLearners);
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationErrors);
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationErrors);
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.FundingAlbOutput] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.FundingAlbOutput);
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.FundingFm35Output] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.FundingFm35Output);
 
-            // populate the keys into jobcontextmessage
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers] = validationContext.InvalidLearnRefNumbersKey;
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers] = validationContext.ValidLearnRefNumbersKey;
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors] = validationContext.ValidationErrorsKey;
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = validationContext.ValidationErrorMessageLookupKey;
-
-            using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c => c.RegisterInstance(validationContext).As<IPreValidationContext>()))
+            using (var childLifeTimeScope = _parentLifeTimeScope
+                .BeginLifetimeScope(c =>
+                    c.RegisterInstance(
+                new PreValidationContext()
+                {
+                    JobId = jobContextMessage.JobId.ToString(),
+                    Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
+                    InvalidLearnRefNumbersKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers].ToString(),
+                    ValidLearnRefNumbersKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers].ToString(),
+                    ValidationErrorsKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors].ToString(),
+                    ValidationErrorMessageLookupKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups].ToString()
+                }).As<IPreValidationContext>()))
             {
                 var executionContext = (Logging.ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
                 executionContext.JobId = jobContextMessage.JobId.ToString();
@@ -74,16 +65,15 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     var preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IPreValidationOrchestrationService<IValidationError>>();
 
-                    // TODO: no need to return errors
-                    var errors = preValidationOrchestrationService.Execute(validationContext);
+                    var validationContext = childLifeTimeScope.Resolve<IPreValidationContext>();
 
-                    var updatedValidationContext = childLifeTimeScope.Resolve<IPreValidationContext>();
+                    preValidationOrchestrationService.Execute(validationContext);
 
                     // populate the keys into jobcontextmessage
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] = updatedValidationContext.InvalidLearnRefNumbersCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbersCount] = updatedValidationContext.ValidLearnRefNumbersCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalErrorCount] = updatedValidationContext.ValidationTotalErrorCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalWarningCount] = updatedValidationContext.ValidationTotalWarningCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] = validationContext.InvalidLearnRefNumbersCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbersCount] = validationContext.ValidLearnRefNumbersCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalErrorCount] = validationContext.ValidationTotalErrorCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalWarningCount] = validationContext.ValidationTotalWarningCount;
 
                     logger.LogDebug("Job complete");
                     ServiceEventSource.Current.ServiceMessage(_context, "Job complete");

@@ -31,12 +31,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     {
                         FrameworkCommonComponent = ld.FrameworkCommonComponent,
                         LearnAimRef = ld.LearnAimRef,
+                        NotionalNVQLevel = ld.NotionalNVQLevel,
                         NotionalNVQLevelv2 = ld.NotionalNVQLevelv2,
+                        LearnDirectClassSystemCode1 = ld.LearnDirectClassSystemCode1,
                         AnnualValues = ld.LARS_AnnualValue
                             .Select(av => new AnnualValue()
                             {
                                 LearnAimRef = av.LearnAimRef,
                                 BasicSkills = av.BasicSkills,
+                                FullLevel2EntitlementCategory = av.FullLevel2EntitlementCategory,
+                                FullLevel3EntitlementCategory = av.FullLevel3EntitlementCategory,
+                                FullLevel3Percent = av.FullLevel3Percent,
                                 EffectiveFrom = av.EffectiveFrom,
                                 EffectiveTo = av.EffectiveTo,
                             }).ToList(),

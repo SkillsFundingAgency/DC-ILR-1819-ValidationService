@@ -1,106 +1,119 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.LLDDCat;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
 {
-    public class LLDDCat_Rule01Tests
+    public class LLDDCat_Rule01Tests : AbstractRuleTests<LLDDCat_01Rule>
     {
-        [Theory]
-        [InlineData(18)]
-        [InlineData(100)]
-        [InlineData(0)]
-        public void ConditionMet_True(long? category)
+        [Fact]
+        public void RuleName()
         {
-            var lldCatServiceMock = new Mock<ILlddCatInternalDataService>();
-            lldCatServiceMock.Setup(x => x.CategoryExists(category)).Returns(false);
-            var rule = NewRule(null, lldCatServiceMock.Object);
+            NewRule().RuleName.Should().Be("LLDDCat_01");
+        }
 
-            rule.ConditionMet(category).Should().BeTrue();
+        [Fact]
+        public void ConditionMet_True()
+        {
+            var llddCat = 1;
+
+            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+
+            llddCatDataServiceMock.Setup(ds => ds.Exists(llddCat)).Returns(false);
+
+            NewRule(llddCatDataServiceMock.Object).ConditionMet(llddCat).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False()
         {
-            var lldCatServiceMock = new Mock<ILlddCatInternalDataService>();
-            lldCatServiceMock.Setup(x => x.CategoryExists(It.IsAny<long?>())).Returns(true);
+            var llddCat = 1;
 
-            var rule = NewRule(null, lldCatServiceMock.Object);
-            foreach (var num in Enumerable.Range(1, 17).Concat(Enumerable.Range(93, 7)))
+            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+
+            llddCatDataServiceMock.Setup(ds => ds.Exists(llddCat)).Returns(true);
+
+            NewRule(llddCatDataServiceMock.Object).ConditionMet(llddCat).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Validate_Error()
+        {
+            var llddCat = 1;
+
+            var learner = new TestLearner()
             {
-                rule.ConditionMet(num).Should().BeFalse();
+                LLDDAndHealthProblems = new List<TestLLDDAndHealthProblem>
+                {
+                    new TestLLDDAndHealthProblem
+                    {
+                        PrimaryLLDDNullable = 1,
+                        LLDDCat = llddCat
+                    }
+                }
+            };
+
+            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+
+            llddCatDataServiceMock.Setup(ds => ds.Exists(llddCat)).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(llddCatDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Fact]
-        public void ConditionMet_Null_False()
+        public void Validate_NoError()
         {
-            var rule = NewRule();
-            rule.ConditionMet(null).Should().BeFalse();
-        }
+            var llddCat = 1;
 
-        [Fact]
-        public void Validate_True()
-        {
             var learner = new TestLearner()
             {
-                LLDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
+                LLDDAndHealthProblems = new List<TestLLDDAndHealthProblem>
                 {
-                    new TestLLDDAndHealthProblem()
+                    new TestLLDDAndHealthProblem
                     {
-                        LLDDCatNullable = 1
+                        PrimaryLLDDNullable = 1,
+                        LLDDCat = llddCat
                     }
                 }
             };
 
-            var lldCatServiceMock = new Mock<ILlddCatInternalDataService>();
-            lldCatServiceMock.Setup(x => x.CategoryExists(1)).Returns(true);
+            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LLDDCat_01", null, null, null);
+            llddCatDataServiceMock.Setup(ds => ds.Exists(llddCat)).Returns(true);
 
-            var rule = NewRule(validationErrorHandlerMock.Object, lldCatServiceMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(llddCatDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_False()
+        public void BuildErrorMessageParameters()
         {
-            var learner = new TestLearner()
-            {
-                LLDDAndHealthProblems = new List<ILLDDAndHealthProblem>()
-                {
-                    new TestLLDDAndHealthProblem()
-                    {
-                        LLDDCatNullable = 20
-                    }
-                }
-            };
-
-            var lldCatServiceMock = new Mock<ILlddCatInternalDataService>();
-            lldCatServiceMock.Setup(x => x.CategoryExists(20)).Returns(false);
-
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LLDDCat_01", null, null, null);
 
-            var rule = NewRule(validationErrorHandlerMock.Object, lldCatServiceMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LLDDCat", 1)).Verifiable();
+
+            NewRule(null, validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1);
+
+            validationErrorHandlerMock.Verify();
         }
 
-        private LLDDCat_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILlddCatInternalDataService llddCatDataService = null)
+        private LLDDCat_01Rule NewRule(ILLDDCatDataService llddCatDataService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new LLDDCat_01Rule(validationErrorHandler, llddCatDataService);
+            return new LLDDCat_01Rule(llddCatDataService, validationErrorHandler);
         }
     }
 }

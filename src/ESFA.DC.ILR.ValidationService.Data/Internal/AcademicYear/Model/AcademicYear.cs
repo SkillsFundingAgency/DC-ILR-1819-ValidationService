@@ -11,6 +11,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model
 
         public DateTime JanuaryFirst { get; set; }
 
+        public DateTime JulyThirtyFirst { get; set; }
+
         public DateTime Start { get; set; }
     }
 }

@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Xml.Linq;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ILR.ValidationService.Stateless.Models;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace ESFA.DC.ILR.ValidationService.Stubs
+namespace ESFA.DC.ILR.ValidationService.Data.Population
 {
-    public class AzureInternalDataCachePopulationServiceStub : IInternalDataCachePopulationService
+    public class InternalDataCachePopulationService : IInternalDataCachePopulationService
     {
+        private readonly string resourceName = "ESFA.DC.ILR.ValidationService.Data.Population.Files.Lookups.xml";
         private readonly IInternalDataCache _internalDataCache;
-        private readonly AzureStorageModel _azureStorageModel;
 
-        public AzureInternalDataCachePopulationServiceStub(IInternalDataCache internalDataCache, AzureStorageModel azureStorageModel)
+        public InternalDataCachePopulationService(IInternalDataCache internalDataCache)
         {
             _internalDataCache = internalDataCache;
-            _azureStorageModel = azureStorageModel;
         }
 
         public void Populate()
@@ -30,25 +28,13 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
             XElement lookups;
 
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_azureStorageModel.AzureBlobConnectionString);
+            var assembly = Assembly.GetAssembly(typeof(InternalDataCachePopulationService));
 
-            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_azureStorageModel.AzureContainerReference);
-
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference("Lookups.xml");
-
-            var xmlData = cloudBlockBlob.DownloadText();
-
-            // on downloading the file from Azure it adds BOM (Byte Order Mark) so remove it before parsing
-            string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
-
-            if (xmlData.StartsWith(byteOrderMarkUtf8))
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
             {
-                xmlData = xmlData.Remove(0, byteOrderMarkUtf8.Length);
+                lookups = XElement.Load(stream);
             }
-
-            lookups = XDocument.Parse(xmlData).Root;
 
             internalDataCache.AcademicYear = BuildAcademicYear();
 
@@ -56,6 +42,8 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             internalDataCache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
             internalDataCache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
             internalDataCache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
+            internalDataCache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "LLDDCat"));
+            internalDataCache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
         }
 
         private AcademicYear BuildAcademicYear()
@@ -65,7 +53,8 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
                 AugustThirtyFirst = new DateTime(2018, 8, 31),
                 End = new DateTime(2019, 7, 31),
                 JanuaryFirst = new DateTime(2019, 1, 1),
-                Start = new DateTime(2018, 1, 8),
+                JulyThirtyFirst = new DateTime(2019, 7, 31),
+                Start = new DateTime(2018, 8, 1),
             };
         }
 
@@ -76,6 +65,18 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
                 .Descendants("option")
                 .Attributes("code")
                 .Select(c => (T)Convert.ChangeType(c.Value, typeof(T)));
+        }
+
+        private IDictionary<int, ValidityPeriods> BuildLookupWithValidityPeriods(XElement lookups, string type)
+        {
+            return lookups
+                 .Descendants(type)
+                 .Descendants("option")
+                 .ToDictionary(c => int.Parse(c.Attribute("code").Value), v => new ValidityPeriods
+                 {
+                     ValidFrom = DateTime.Parse(v.Attribute("validFrom").Value),
+                     ValidTo = DateTime.Parse(v.Attribute("validTo").Value)
+                 });
         }
     }
 }

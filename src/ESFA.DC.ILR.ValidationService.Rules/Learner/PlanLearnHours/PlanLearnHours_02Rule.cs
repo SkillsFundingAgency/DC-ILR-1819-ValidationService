@@ -22,6 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours
                 if (ConditionMet(objectToValidate.PlanLearnHoursNullable, learningDelivery.FundModel))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.PMUKPRNNullable, learningDelivery.FundModel));
+                    return;
                 }
             }
         }

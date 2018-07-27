@@ -91,7 +91,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
                     .Where(esm => esm.EmploymentStatusMonitorings.Any(esmt => esmt.ESMType == "BSI" && esmt.ESMCode == 3))
                     .Select(les => les.DateEmpStatApp).First() <= learnStartDate)
                 || (_learnerEmploymentStatusMonitoringQueryService.HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "BSI", 4)
-                && _learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "LDM", "318")
+                && !_learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "LDM", "318")
                 && (learnerEmploymentStatuses
                   .Where(esm => esm.EmploymentStatusMonitorings.Any(esmt => esmt.ESMType == "BSI" && esmt.ESMCode == 4))
                   .Select(les => les.DateEmpStatApp).First() <= learnStartDate));

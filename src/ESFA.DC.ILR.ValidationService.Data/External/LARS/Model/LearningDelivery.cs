@@ -6,9 +6,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
     {
         public string LearnAimRef { get; set; }
 
+        public string NotionalNVQLevel { get; set; }
+
         public string NotionalNVQLevelv2 { get; set; }
 
         public int? FrameworkCommonComponent { get; set; }
+
+        public string LearnDirectClassSystemCode1 { get; set; }
 
         public IEnumerable<LearningDeliveryCategory> LearningDeliveryCategories { get; set; }
 

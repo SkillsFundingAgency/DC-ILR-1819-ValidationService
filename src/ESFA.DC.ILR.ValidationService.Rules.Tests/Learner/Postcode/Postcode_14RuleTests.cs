@@ -75,9 +75,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Postcode
         {
             var postcodesDataServiceMock = new Mock<IPostcodesDataService>();
 
-            postcodesDataServiceMock.Setup(ds => ds.PostcodeExists("Postcode")).Returns(true);
+            postcodesDataServiceMock.Setup(ds => ds.PostcodeExists(postcode)).Returns(true);
 
-            NewRule(postcodesDataServiceMock.Object).ConditionMet("Postcode").Should().BeFalse();
+            NewRule(postcodesDataServiceMock.Object).ConditionMet(postcode).Should().BeFalse();
         }
 
         [Fact]

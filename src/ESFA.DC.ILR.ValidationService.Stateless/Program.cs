@@ -4,8 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Integration.ServiceFabric;
-using DC.JobContextManager;
-using DC.JobContextManager.Interface;
 using ESFA.DC.Auditing;
 using ESFA.DC.Auditing.Dto;
 using ESFA.DC.Auditing.Interface;
@@ -17,9 +15,12 @@ using ESFA.DC.ILR.ValidationService.Stateless.Mapper;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.IO.Redis;
+using ESFA.DC.IO.Redis.Config;
 using ESFA.DC.IO.Redis.Config.Interfaces;
 using ESFA.DC.JobContext;
 using ESFA.DC.JobContext.Interface;
+using ESFA.DC.JobContextManager;
+using ESFA.DC.JobContextManager.Interface;
 using ESFA.DC.JobStatus.Dto;
 using ESFA.DC.JobStatus.Interface;
 using ESFA.DC.KeyGenerator.Interface;
@@ -94,14 +95,13 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
 
-            Console.WriteLine($"BuildContainer:5");
-            // register Cosmos config
-            var azureCosmosOptions = configHelper.GetSectionValues<AzureRedisCacheOptions>("AzureRedisSection");
-            containerBuilder.Register(c => new AzureRedisKeyValuePersistenceConfig(
-                azureCosmosOptions.RedisCacheConnectionString))
-                .As<IRedisKeyValuePersistenceServiceConfig>().SingleInstance();
-            containerBuilder.RegisterType<RedisKeyValuePersistenceService>().As<IKeyValuePersistenceService>()
-                .InstancePerLifetimeScope();
+            var azureRedisCacheOptions = configHelper.GetSectionValues<AzureRedisCacheOptions>("AzureRedisSection");
+            containerBuilder.Register(c => new RedisKeyValuePersistenceServiceConfig()
+            {
+                ConnectionString = azureRedisCacheOptions.RedisCacheConnectionString,
+                KeyExpiry = new TimeSpan(14, 0, 0, 0)
+            }).As<IRedisKeyValuePersistenceServiceConfig>().SingleInstance();
+            containerBuilder.RegisterType<RedisKeyValuePersistenceService>().As<IKeyValuePersistenceService>().InstancePerLifetimeScope();
 
             Console.WriteLine($"BuildContainer:6");
             // service bus queue configuration
@@ -184,7 +184,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             // register the  callback handle when a new message is received from ServiceBus
             containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c => c.Resolve<IMessageHandler>().Handle);
 
-            Console.WriteLine($"BuildContainer:18");
             containerBuilder.RegisterType<JobContextManagerForQueue<JobContextMessage>>().As<IJobContextManager>()
                 .InstancePerLifetimeScope();
 

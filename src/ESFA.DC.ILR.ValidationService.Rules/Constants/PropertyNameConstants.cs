@@ -18,6 +18,7 @@
         public const string ConRefNumber = "ConRefNumber";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string EmpOutcome = "EmpOutcome";
+        public const string EmpStat = "EmpStat";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
         public const string FworkCode = "FworkCode";
@@ -30,7 +31,9 @@
         public const string LearnDelFAMType = "LearnDelFAMType";
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnStartDate = "LearnStartDate";
+        public const string LLDDCat = "LLDDCat";
         public const string Outcome = "Outcome";
+        public const string OutGrade = "OutGrade";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
@@ -39,7 +42,9 @@
         public const string PostcodePrior = "PostcodePrior";
         public const string PrevUKPRN = "PrevUKPRN";
         public const string ProgType = "ProgType";
+        public const string PrimaryLLDD = "PrimaryLLDD";
         public const string PriorAttain = "PriorAttain";
         public const string PwayCode = "PwayCode";
+        public const string QUALENT3 = "QUALENT3";
     }
 }

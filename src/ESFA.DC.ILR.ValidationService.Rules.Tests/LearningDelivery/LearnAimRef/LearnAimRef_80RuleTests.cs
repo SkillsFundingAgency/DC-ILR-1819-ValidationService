@@ -247,7 +247,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRef(learnAimRef, "3")).Returns(true);
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(true);
 
             NewRule(larsDataServiceMock.Object).LevelConditionMet(learnAimRef).Should().BeTrue();
         }
@@ -259,7 +259,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRef(learnAimRef, "3")).Returns(false);
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(false);
 
             NewRule(larsDataServiceMock.Object).LevelConditionMet(learnAimRef).Should().BeFalse();
         }
@@ -370,7 +370,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var fileDataCacheMock = new Mock<IFileDataCache>();
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRef(learnAimRef, "3")).Returns(true);
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(true);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
             fileDataCacheMock.SetupGet(c => c.UKPRN).Returns(ukprn);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, "USDC")).Returns(false);

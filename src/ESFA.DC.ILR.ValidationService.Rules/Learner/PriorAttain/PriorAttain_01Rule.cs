@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -8,50 +7,51 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
 {
-    // <summary>
-    // The Prior attainment code must be returned
-    // Exclusion : This rule is not triggered by community learning aims (LearningDelivery.FundModel = 10) or
-    // (LearningDelivery.FundModel = 99 and  (LearningDeliveryFAM.LearnDelFAMType = SOF and LearningDeliveryFAM.LearnDelFAMCode = 108)).
-    // This rule is also not triggered by EFA funded learners (LearningDelivery.FundModel = 25 or 82)
-    // </summary>
     public class PriorAttain_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
-        private readonly HashSet<long> _excludeFundModels = new HashSet<long> { 10, 25, 82 };
+        private readonly HashSet<int> _fundModels = new HashSet<int> { 10, 25, 82 };
 
-        public PriorAttain_01Rule(IValidationErrorHandler validationErrorHandler, ILearningDeliveryFAMQueryService learningDeliveryFamQueryService)
-           : base(validationErrorHandler)
+        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
+
+        public PriorAttain_01Rule(ILearningDeliveryFAMQueryService learningDeliveryFamQueryService, IValidationErrorHandler validationErrorHandler)
+           : base(validationErrorHandler, RuleNameConstants.PriorAttain_01)
         {
             _learningDeliveryFamQueryService = learningDeliveryFamQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld => !Exclude(ld)))
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(objectToValidate.PriorAttainNullable))
+                if (ConditionMet(objectToValidate.PriorAttainNullable, learningDelivery.FundModel, learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(RuleNameConstants.PriorAttain_01Rule, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                    return;
                 }
             }
         }
 
-        public bool ConditionMet(long? priorAttain)
+        public bool ConditionMet(int? priorAttain, int fundModel, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        {
+            return PriorAttainConditionMet(priorAttain)
+                && FundModelConditionMet(fundModel)
+                && LearningDeliveryFAMSConditionMet(fundModel, learningDeliveryFAMs);
+        }
+
+        public bool PriorAttainConditionMet(int? priorAttain)
         {
             return !priorAttain.HasValue;
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public bool FundModelConditionMet(int fundModel)
         {
-            var fundModelConditionMet = learningDelivery.FundModelNullable.HasValue
-                && _excludeFundModels.Contains(learningDelivery.FundModelNullable.Value);
+            return !_fundModels.Contains(fundModel);
+        }
 
-            var famTypeConditionMet = learningDelivery.FundModelNullable.HasValue &&
-                            (learningDelivery.FundModelNullable.Value == 99
-                            && _learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(
-                            learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108"));
-
-            return fundModelConditionMet || famTypeConditionMet;
+        public bool LearningDeliveryFAMSConditionMet(int fundModel, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        {
+            return !(fundModel == 99
+                && _learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "SOF", "108"));
         }
     }
 }
