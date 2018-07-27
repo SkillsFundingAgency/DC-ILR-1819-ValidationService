@@ -71,25 +71,30 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
         private static ContainerBuilder BuildContainer()
         {
+            Console.WriteLine($"BuildContainer:1");
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule<PreValidationServiceModule>();
 
+            Console.WriteLine($"BuildContainer:2");
             // get ServiceBus, Azurestorage config values and register container
             var configHelper = new ConfigurationHelper();
             var serviceBusOptions =
                 configHelper.GetSectionValues<ServiceBusOptions>("ServiceBusSettings");
             containerBuilder.RegisterInstance(serviceBusOptions).As<ServiceBusOptions>().SingleInstance();
 
+            Console.WriteLine($"BuildContainer:3");
             var azureStorageOptions =
                 configHelper.GetSectionValues<AzureStorageModel>("AzureStorageSection");
             containerBuilder.RegisterInstance(azureStorageOptions).As<AzureStorageModel>().SingleInstance();
 
+            Console.WriteLine($"BuildContainer:4");
             // register logger
             var loggerOptions =
                 configHelper.GetSectionValues<LoggerOptions>("LoggerSection");
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
 
+            Console.WriteLine($"BuildContainer:5");
             // register Cosmos config
             var azureCosmosOptions = configHelper.GetSectionValues<AzureRedisCacheOptions>("AzureRedisSection");
             containerBuilder.Register(c => new AzureRedisKeyValuePersistenceConfig(
@@ -98,23 +103,27 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterType<RedisKeyValuePersistenceService>().As<IKeyValuePersistenceService>()
                 .InstancePerLifetimeScope();
 
+            Console.WriteLine($"BuildContainer:6");
             // service bus queue configuration
             var queueSubscriptionConfig = new ServiceBusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.JobsQueueName,
                 Environment.ProcessorCount);
 
+            Console.WriteLine($"BuildContainer:7");
             var topicPublishConfig = new ServiceBusTopicConfiguration(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.TopicName,
                 serviceBusOptions.FundingCalcSubscriptionName,
                 Environment.ProcessorCount);
 
+            Console.WriteLine($"BuildContainer:8");
             var auditPublishConfig = new ServiceBusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.AuditQueueName,
                 Environment.ProcessorCount);
 
+            Console.WriteLine($"BuildContainer:9");
             // register queue services
             containerBuilder.Register(c =>
             {
@@ -126,6 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 return queueSubscriptionService;
             }).As<IQueueSubscriptionService<JobContextDto>>();
 
+            Console.WriteLine($"BuildContainer:10");
             containerBuilder.Register(c =>
             {
                 var topicPublishService =
@@ -135,44 +145,54 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 return topicPublishService;
             }).As<ITopicPublishService<JobContextDto>>();
 
+            Console.WriteLine($"BuildContainer:11");
             containerBuilder.Register(c => new QueuePublishService<AuditingDto>(
                     auditPublishConfig,
                     c.Resolve<IJsonSerializationService>()))
                 .As<IQueuePublishService<AuditingDto>>();
 
+            Console.WriteLine($"BuildContainer:12");
             // Job Status Update Service
             var jobStatusPublishConfig = new JobStatusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.JobStatusQueueName,
                 Environment.ProcessorCount);
 
+            Console.WriteLine($"BuildContainer:13");
             containerBuilder.Register(c => new QueuePublishService<JobStatusDto>(
                     jobStatusPublishConfig,
                     c.Resolve<IJsonSerializationService>()))
                 .As<IQueuePublishService<JobStatusDto>>();
             containerBuilder.RegisterType<JobStatus.JobStatus>().As<IJobStatus>();
 
+            Console.WriteLine($"BuildContainer:14");
             // register job context manager
             containerBuilder.RegisterType<Auditor>().As<IAuditor>();
             containerBuilder.RegisterType<JobContextMessageMapper>()
                 .As<IMapper<JobContextMessage, JobContextMessage>>();
 
+            Console.WriteLine($"BuildContainer:15");
             // register Job Status
             containerBuilder.Register(c => new JobStatus.JobStatus(
                 c.Resolve<IQueuePublishService<JobStatusDto>>()))
                 .As<IJobStatus>();
 
+            Console.WriteLine($"BuildContainer:16");
             containerBuilder.RegisterType<MessageHandler>().As<IMessageHandler>();
 
+            Console.WriteLine($"BuildContainer:17");
             // register the  callback handle when a new message is received from ServiceBus
             containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c => c.Resolve<IMessageHandler>().Handle);
 
+            Console.WriteLine($"BuildContainer:18");
             containerBuilder.RegisterType<JobContextManagerForQueue<JobContextMessage>>().As<IJobContextManager>()
                 .InstancePerLifetimeScope();
 
+            Console.WriteLine($"BuildContainer:19");
             containerBuilder.RegisterType<JobContextMessage>().As<IJobContextMessage>()
                 .InstancePerLifetimeScope();
 
+            Console.WriteLine($"BuildContainer:20");
             // register key generator
             containerBuilder.RegisterType<KeyGenerator.KeyGenerator>().As<IKeyGenerator>().SingleInstance();
 
