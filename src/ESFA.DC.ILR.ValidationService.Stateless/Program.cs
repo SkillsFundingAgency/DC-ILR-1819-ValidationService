@@ -95,6 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
 
+            Console.WriteLine($"BuildContainer:5");
             var azureRedisCacheOptions = configHelper.GetSectionValues<AzureRedisCacheOptions>("AzureRedisSection");
             containerBuilder.Register(c => new RedisKeyValuePersistenceServiceConfig()
             {
@@ -184,7 +185,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             // register the  callback handle when a new message is received from ServiceBus
             containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c => c.Resolve<IMessageHandler>().Handle);
 
-            containerBuilder.RegisterType<JobContextManagerForQueue<JobContextMessage>>().As<IJobContextManager>()
+            containerBuilder.RegisterType<JobContextManagerForQueue<JobContextMessage>>().As<IJobContextManager<JobContextMessage>>()
                 .InstancePerLifetimeScope();
 
             Console.WriteLine($"BuildContainer:19");
