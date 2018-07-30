@@ -146,6 +146,8 @@
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
 
+        public const string TTACCOM_04 = "TTACCOM_04";
+
         public const string ULN_02 = "ULN_02";
         public const string ULN_03 = "ULN_03";
         public const string ULN_04 = "ULN_04";

@@ -110,6 +110,7 @@
     <Compile Include="HE\QUALENT3\QUALENT3_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01RuleTests.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01RuleTests.cs" />
+    <Compile Include="HE\TTACCOM\TTACCOM_04RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_28RuleTests.cs" />

@@ -6,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
+using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
@@ -159,6 +160,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PriorAttain_02Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
+                typeof(TTACCOM_04Rule),
                 typeof(ULN_02Rule),
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),
