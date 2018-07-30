@@ -56,6 +56,7 @@
         public const string DateOfBirth_32 = "DateOfBirth_32";
         public const string DateOfBirth_35 = "DateOfBirth_35";
         public const string DateOfBirth_46 = "DateOfBirth_46";
+        public const string DateOfBirth_47 = "DateOfBirth_47";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
@@ -97,6 +98,7 @@
         public const string LearnAimRef_55 = "LearnAimRef_55";
         public const string LearnAimRef_56 = "LearnAimRef_56";
         public const string LearnAimRef_57 = "LearnAimRef_57";
+        public const string LearnAimRef_59 = "LearnAimRef_59";
         public const string LearnAimRef_80 = "LearnAimRef_80";
 
         public const string LearnDelFAMDateFrom_01 = "LearnDelFAMDateFrom_01";
@@ -138,6 +140,8 @@
         public const string PrevUKPRN_01 = "PrevUKPRN_01";
 
         public const string PrimaryLLDD_01 = "PrimaryLLDD_01";
+        public const string PrimaryLLDD_02 = "PrimaryLLDD_02";
+        public const string PrimaryLLDD_03 = "PrimaryLLDD_03";
         public const string PrimaryLLDD_04 = "PrimaryLLDD_04";
 
         public const string PriorAttain_01 = "PriorAttain_01";

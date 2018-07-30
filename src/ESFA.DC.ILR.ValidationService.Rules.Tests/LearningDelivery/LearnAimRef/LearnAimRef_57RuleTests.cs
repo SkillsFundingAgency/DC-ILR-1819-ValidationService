@@ -218,7 +218,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
         [Theory]
         [InlineData("BSI", 3, "SOF", "318")]
-        [InlineData("BSI", 4, "LDM", "318")]
+        [InlineData("BSI", 4, "LDM", "320")]
         public void EsmConditionMet_True(string esmType, int esmCode, string famType, string famCode)
         {
                 var learnerEmploymentStatuses = new TestLearnerEmploymentStatus[]

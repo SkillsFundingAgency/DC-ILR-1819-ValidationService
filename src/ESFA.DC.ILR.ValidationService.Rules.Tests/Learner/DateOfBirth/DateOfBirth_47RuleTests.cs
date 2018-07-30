@@ -11,12 +11,12 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 {
-    public class DateOfBirth_46RuleTests : AbstractRuleTests<DateOfBirth_46Rule>
+    public class DateOfBirth_47RuleTests : AbstractRuleTests<DateOfBirth_47Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("DateOfBirth_46");
+            NewRule().RuleName.Should().Be("DateOfBirth_47");
         }
 
         [Theory]
@@ -76,6 +76,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Fact]
+        public void CompStatusConditionMet_True()
+        {
+            NewRule().CompStatusConditionMet(2).Should().BeTrue();
+        }
+
+        [Fact]
+        public void CompStatusConditionMet_False()
+        {
+            NewRule().CompStatusConditionMet(1).Should().BeFalse();
+        }
+
+        [Fact]
         public void DateOfBirthConditionMet_True()
         {
             var dateOfBirth = new DateTime(2000, 01, 01);
@@ -115,29 +127,42 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Fact]
-        public void LearnPlanEndDateConditionMet_True()
+        public void LearnActEndDateConditionMet_True()
         {
             var learnStartDate = new DateTime(2018, 08, 01);
-            var learnPlanEndDate = new DateTime(2019, 08, 01);
+            var learnActEndDate = new DateTime(2019, 08, 01);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnPlanEndDate)).Returns(365);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnActEndDate)).Returns(365);
 
-            NewRule(dateTimeQueryServiceMock.Object).LearnPlanEndDateConditionMet(learnStartDate, learnPlanEndDate).Should().BeTrue();
+            NewRule(dateTimeQueryServiceMock.Object).LearnActEndDateConditionMet(learnStartDate, learnActEndDate).Should().BeTrue();
         }
 
         [Fact]
-        public void LearnPlanEndDateConditionMet_False()
+        public void LearnActEndDateConditionMet_False()
         {
             var learnStartDate = new DateTime(2018, 08, 01);
-            var learnPlanEndDate = new DateTime(2019, 08, 31);
+            var learnActEndDate = new DateTime(2019, 08, 31);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnPlanEndDate)).Returns(395);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnActEndDate)).Returns(395);
 
-            NewRule(dateTimeQueryServiceMock.Object).LearnPlanEndDateConditionMet(learnStartDate, learnPlanEndDate).Should().BeFalse();
+            NewRule(dateTimeQueryServiceMock.Object).LearnActEndDateConditionMet(learnStartDate, learnActEndDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnActEndDateConditionMet_False_Null()
+        {
+            var learnStartDate = new DateTime(2018, 08, 01);
+            var learnActEndDate = new DateTime(2019, 08, 01);
+
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnActEndDate)).Returns(365);
+
+            NewRule(dateTimeQueryServiceMock.Object).LearnActEndDateConditionMet(learnStartDate, null).Should().BeFalse();
         }
 
         [Fact]
@@ -183,7 +208,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         {
             var dateOfBirth = new DateTime(2000, 01, 01);
             var learnStartDate = new DateTime(2018, 08, 01);
-            var learnPlanEndDate = new DateTime(2019, 08, 01);
+            var learnActEndDate = new DateTime(2019, 08, 01);
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
                 new TestLearningDeliveryFAM
@@ -198,8 +223,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 FundModel = 36,
                 ProgTypeNullable = 25,
                 AimType = 1,
+                CompStatus = 2,
                 LearnStartDate = learnStartDate,
-                LearnPlanEndDate = learnPlanEndDate,
+                LearnActEndDateNullable = learnActEndDate,
                 LearningDeliveryFAMs = learningDeliveryFAMs
             };
 
@@ -207,15 +233,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(18);
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnPlanEndDate)).Returns(365);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnActEndDate)).Returns(365);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES")).Returns(false);
 
             NewRule(dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object)
                 .ConditionMet(
                         learningDelivery.ProgTypeNullable,
                         learningDelivery.FundModel,
+                        learningDelivery.CompStatus,
                         learningDelivery.LearnStartDate,
-                        learningDelivery.LearnPlanEndDate,
+                        learningDelivery.LearnActEndDateNullable,
                         learningDelivery.AimType,
                         dateOfBirth,
                         learningDelivery.LearningDeliveryFAMs)
@@ -223,18 +250,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(99, "2018-08-01", 1, 25, 18, 365, false)]
-        [InlineData(36, "2015-08-01", 1, 25, 18, 365, false)]
-        [InlineData(36, "2018-08-01", 2, 25, 18, 365, false)]
-        [InlineData(36, "2018-08-01", 1, 20, 18, 365, false)]
-        [InlineData(36, "2018-08-01", 1, 25, 15, 365, false)]
-        [InlineData(36, "2018-08-01", 1, 25, 15, 380, false)]
-        [InlineData(36, "2018-08-01", 1, 25, 15, 365, true)]
-        public void ConditionMet_False(int fundModel, string learnStartDateString, int aimType, int? progType, int age, int days, bool famMock)
+        [InlineData(99, "2018-08-01", 1, 25, 2, 18, 365, false)]
+        [InlineData(36, "2015-08-01", 1, 25, 2, 18, 365, false)]
+        [InlineData(36, "2018-08-01", 2, 25, 2, 18, 365, false)]
+        [InlineData(36, "2018-08-01", 1, 20, 2, 18, 365, false)]
+        [InlineData(36, "2018-08-01", 1, 25, 1, 18, 365, false)]
+        [InlineData(36, "2018-08-01", 1, 25, 2, 15, 365, false)]
+        [InlineData(36, "2018-08-01", 1, 25, 2, 15, 380, false)]
+        [InlineData(36, "2018-08-01", 1, 25, 2, 15, 365, true)]
+        public void ConditionMet_False(int fundModel, string learnStartDateString, int aimType, int? progType, int compStatus, int age, int days, bool famMock)
         {
             var dateOfBirth = new DateTime(2000, 01, 01);
             var learnStartDate = DateTime.Parse(learnStartDateString);
-            var learnPlanEndDate = new DateTime(2019, 08, 01);
+            var learnActEndDate = new DateTime(2019, 08, 01);
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
                 new TestLearningDeliveryFAM
@@ -249,8 +277,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 FundModel = fundModel,
                 ProgTypeNullable = progType,
                 AimType = aimType,
+                CompStatus = compStatus,
                 LearnStartDate = learnStartDate,
-                LearnPlanEndDate = learnPlanEndDate,
+                LearnActEndDateNullable = learnActEndDate,
                 LearningDeliveryFAMs = learningDeliveryFAMs
             };
 
@@ -258,15 +287,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(age);
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnPlanEndDate)).Returns(days);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnActEndDate)).Returns(days);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES")).Returns(famMock);
 
             NewRule(dateTimeQueryServiceMock.Object, learningDeliveryFAMQueryServiceMock.Object)
                 .ConditionMet(
                         learningDelivery.ProgTypeNullable,
                         learningDelivery.FundModel,
+                        learningDelivery.CompStatus,
                         learningDelivery.LearnStartDate,
-                        learningDelivery.LearnPlanEndDate,
+                        learningDelivery.LearnActEndDateNullable,
                         learningDelivery.AimType,
                         dateOfBirth,
                         learningDelivery.LearningDeliveryFAMs)
@@ -278,7 +308,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         {
             var dateOfBirth = new DateTime(2000, 01, 01);
             var learnStartDate = new DateTime(2018, 08, 01);
-            var learnPlanEndDate = new DateTime(2019, 08, 01);
+            var learnActEndDate = new DateTime(2019, 08, 01);
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
                 new TestLearningDeliveryFAM
@@ -295,8 +325,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                     FundModel = 36,
                     ProgTypeNullable = 25,
                     AimType = 1,
+                    CompStatus = 2,
                     LearnStartDate = learnStartDate,
-                    LearnPlanEndDate = learnPlanEndDate,
+                    LearnActEndDateNullable = learnActEndDate,
                     LearningDeliveryFAMs = learningDeliveryFAMs
                 }
             };
@@ -311,7 +342,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(18);
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnPlanEndDate)).Returns(365);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnActEndDate)).Returns(365);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES")).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -325,7 +356,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         {
             var dateOfBirth = new DateTime(2000, 01, 01);
             var learnStartDate = new DateTime(2018, 08, 01);
-            var learnPlanEndDate = new DateTime(2019, 08, 01);
+            var learnActEndDate = new DateTime(2019, 08, 01);
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
                 new TestLearningDeliveryFAM
@@ -342,8 +373,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                     FundModel = 36,
                     ProgTypeNullable = 25,
                     AimType = 1,
+                    CompStatus = 2,
                     LearnStartDate = learnStartDate,
-                    LearnPlanEndDate = learnPlanEndDate,
+                    LearnActEndDateNullable = learnActEndDate,
                     LearningDeliveryFAMs = learningDeliveryFAMs
                 }
             };
@@ -358,7 +390,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(15);
-            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnPlanEndDate)).Returns(365);
+            dateTimeQueryServiceMock.Setup(qs => qs.DaysBetween(learnStartDate, learnActEndDate)).Returns(365);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES")).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
@@ -380,9 +412,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             validationErrorHandlerMock.Verify();
         }
 
-        private DateOfBirth_46Rule NewRule(IDateTimeQueryService dateTimeQueryService = null, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        private DateOfBirth_47Rule NewRule(IDateTimeQueryService dateTimeQueryService = null, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new DateOfBirth_46Rule(dateTimeQueryService, learningDeliveryFAMQueryService, validationErrorHandler);
+            return new DateOfBirth_47Rule(dateTimeQueryService, learningDeliveryFAMQueryService, validationErrorHandler);
         }
     }
 }

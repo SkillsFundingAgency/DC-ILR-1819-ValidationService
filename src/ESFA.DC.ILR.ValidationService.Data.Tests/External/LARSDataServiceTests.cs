@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -645,6 +646,145 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
             NewService(externalDataCacheMock.Object).FullLevel3EntitlementCategoryMatchForLearnAimRef(learnAimRef, 2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void FullLevel3PercentForLearnAimRefAndDateAndPercentValue_True()
+        {
+            var learnAimRef = "LearnAimRef";
+            var learnStartDate = new DateTime(2018, 8, 1);
+            var fullLevel3Percent = 100m;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                EffectiveFrom = new DateTime(2018, 8, 1),
+                                EffectiveTo = new DateTime(2019, 8, 1),
+                                FullLevel3Percent = fullLevel3Percent
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, fullLevel3Percent)
+                .Should().BeTrue();
+        }
+
+        [Fact]
+        public void FullLevel3PercentForLearnAimRefAndDateAndPercentValue_False_Dates()
+        {
+            var learnAimRef = "LearnAimRef";
+            var learnStartDate = new DateTime(2018, 8, 1);
+            var fullLevel3Percent = 100m;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                EffectiveFrom = new DateTime(2018, 10, 1),
+                                EffectiveTo = new DateTime(2019, 8, 1),
+                                FullLevel3Percent = fullLevel3Percent
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, fullLevel3Percent)
+                .Should().BeFalse();
+        }
+
+        [Fact]
+        public void FullLevel3PercentForLearnAimRefAndDateAndPercentValue_False_NullFullLevel3Percent()
+        {
+            var learnAimRef = "LearnAimRef";
+            var learnStartDate = new DateTime(2018, 8, 1);
+            var fullLevel3Percent = 100m;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                EffectiveFrom = new DateTime(2018, 8, 1),
+                                EffectiveTo = new DateTime(2019, 8, 1)
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, fullLevel3Percent)
+                .Should().BeFalse();
+        }
+
+        [Fact]
+        public void FullLevel3PercentForLearnAimRefAndDateAndPercentValue_False_Mismatch()
+        {
+            var learnAimRef = "LearnAimRef";
+            var learnStartDate = new DateTime(2018, 8, 1);
+            var fullLevel3Percent = 100m;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                EffectiveFrom = new DateTime(2018, 8, 1),
+                                EffectiveTo = new DateTime(2019, 8, 1),
+                                FullLevel3Percent = fullLevel3Percent
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .FullLevel3PercentForLearnAimRefAndDateAndPercentValue("NOTLearnAimRef", learnStartDate, fullLevel3Percent)
+                .Should().BeFalse();
         }
 
         [Fact]

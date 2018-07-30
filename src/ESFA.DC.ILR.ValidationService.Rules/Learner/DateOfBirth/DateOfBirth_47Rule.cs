@@ -10,7 +10,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
-    public class DateOfBirth_46Rule : AbstractRule, IRule<ILearner>
+    public class DateOfBirth_47Rule : AbstractRule, IRule<ILearner>
     {
         private readonly IEnumerable<long?> _fundModels = new HashSet<long?>() { 36, 81 };
         private readonly DateTime _firstAug2016 = new DateTime(2016, 08, 01);
@@ -18,8 +18,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public DateOfBirth_46Rule(IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-           : base(validationErrorHandler, RuleNameConstants.DateOfBirth_46)
+        public DateOfBirth_47Rule(IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+           : base(validationErrorHandler, RuleNameConstants.DateOfBirth_47)
         {
             _dateTimeQueryService = dateTimeQueryService;
 
@@ -35,8 +35,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                     if (ConditionMet(
                         learningDelivery.ProgTypeNullable,
                         learningDelivery.FundModel,
+                        learningDelivery.CompStatus,
                         learningDelivery.LearnStartDate,
-                        learningDelivery.LearnPlanEndDate,
+                        learningDelivery.LearnActEndDateNullable,
                         learningDelivery.AimType,
                         objectToValidate.DateOfBirthNullable,
                         learningDelivery.LearningDeliveryFAMs))
@@ -48,14 +49,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             }
         }
 
-        public bool ConditionMet(int? progType, int fundModel, DateTime learnStartDate, DateTime learnPlanEndDate, int aimType, DateTime? dateOfBirth, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool ConditionMet(int? progType, int fundModel, int compStatus, DateTime learnStartDate, DateTime? learnActEndDate, int aimType, DateTime? dateOfBirth, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return FundModelConditionMet(fundModel)
             && LearnStartDateConditionMet(learnStartDate)
             && AimTypeConditionMet(aimType)
             && ProgTypeConditionMet(progType)
+            && CompStatusConditionMet(compStatus)
             && DateOfBirthConditionMet(dateOfBirth, learnStartDate)
-            && LearnPlanEndDateConditionMet(learnStartDate, learnPlanEndDate)
+            && LearnActEndDateConditionMet(learnStartDate, learnActEndDate)
             && LearningDeliveryFAMConditionMet(learningDeliveryFAMs);
         }
 
@@ -80,15 +82,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                 && progType == 25;
         }
 
+        public bool CompStatusConditionMet(int compStatus)
+        {
+            return compStatus == 2;
+        }
+
         public bool DateOfBirthConditionMet(DateTime? dateOfBirth, DateTime learnStartDate)
         {
             return dateOfBirth.HasValue
                 && _dateTimeQueryService.YearsBetween((DateTime)dateOfBirth, learnStartDate) >= 16;
         }
 
-        public bool LearnPlanEndDateConditionMet(DateTime learnStartDate, DateTime learnPlanEndDate)
+        public bool LearnActEndDateConditionMet(DateTime learnStartDate, DateTime? learnActEndDate)
         {
-            return _dateTimeQueryService.DaysBetween(learnStartDate, learnPlanEndDate) < 372;
+            return learnActEndDate.HasValue
+                && _dateTimeQueryService.DaysBetween(learnStartDate, learnActEndDate.Value) < 372;
         }
 
         public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
