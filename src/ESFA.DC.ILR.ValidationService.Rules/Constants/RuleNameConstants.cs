@@ -117,6 +117,7 @@
         public const string LLDDCat_01 = "LLDDCat_01";
         public const string LLDDCat_02 = "LLDDCat_02";
 
+        public const string NETFEE_01 = "NETFEE_01";
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OutGrade_03 = "OutGrade_03";
@@ -149,6 +150,8 @@
 
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
+
+        public const string TTACCOM_04 = "TTACCOM_04";
 
         public const string ULN_02 = "ULN_02";
         public const string ULN_03 = "ULN_03";
