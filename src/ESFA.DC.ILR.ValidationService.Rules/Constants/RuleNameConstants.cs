@@ -117,6 +117,7 @@
         public const string LLDDCat_01 = "LLDDCat_01";
         public const string LLDDCat_02 = "LLDDCat_02";
 
+        public const string NETFEE_01 = "NETFEE_01";
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OutGrade_03 = "OutGrade_03";

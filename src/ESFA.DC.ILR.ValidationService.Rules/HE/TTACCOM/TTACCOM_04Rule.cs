@@ -25,7 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
 
         public void Validate(ILearner objectToValidate)
         {
-            if (LearnStartDateConditionMet(objectToValidate.LearningDeliveries)
+            if (objectToValidate.LearningDeliveries != null
+                && LearnStartDateConditionMet(objectToValidate.LearningDeliveries)
                 && LearnerHEConditionMet(objectToValidate.LearnerHEEntity))
             {
                 foreach (var learningDelivery in objectToValidate.LearningDeliveries)
