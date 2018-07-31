@@ -1,18 +1,18 @@
-﻿using System.Fabric;
+﻿using System;
+using System.Fabric;
+using System.Threading;
+using System.Threading.Tasks;
+using Autofac;
+using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.JobContext;
+using ESFA.DC.JobContext.Interface;
 using ESFA.DC.KeyGenerator.Interface;
+using ESFA.DC.Logging.Interfaces;
+using ExecutionContext = ESFA.DC.Logging.ExecutionContext;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Autofac;
-    using ESFA.DC.ILR.ValidationService.Interface;
-    using ESFA.DC.ILR.ValidationService.Stateless.Models;
-    using ESFA.DC.JobContext;
-    using ESFA.DC.JobContext.Interface;
-    using ESFA.DC.Logging.Interfaces;
-
     public class MessageHandler : IMessageHandler
     {
         private readonly ILifetimeScope _parentLifeTimeScope;
@@ -33,14 +33,14 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationInvalidLearners);
             jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationValidLearners);
             jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationErrors);
-            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationErrors);
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationErrorsLookup);
             jobContextMessage.KeyValuePairs[JobContextMessageKey.FundingAlbOutput] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.FundingAlbOutput);
             jobContextMessage.KeyValuePairs[JobContextMessageKey.FundingFm35Output] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.FundingFm35Output);
 
             using (var childLifeTimeScope = _parentLifeTimeScope
                 .BeginLifetimeScope(c =>
                     c.RegisterInstance(
-                new PreValidationContext()
+                new PreValidationContext
                 {
                     JobId = jobContextMessage.JobId.ToString(),
                     Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
@@ -50,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     ValidationErrorMessageLookupKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups].ToString()
                 }).As<IPreValidationContext>()))
             {
-                var executionContext = (Logging.ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
+                var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
                 executionContext.JobId = jobContextMessage.JobId.ToString();
                 var logger = childLifeTimeScope.Resolve<ILogger>();
 
