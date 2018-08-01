@@ -163,6 +163,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
                 typeof(NETFEE_01Rule),
+                typeof(NETFEE_02Rule),
                 typeof(NUMHUS_01Rule),
                 typeof(OutGrade_03Rule),
                 typeof(PartnerUKPRN_01Rule),
@@ -200,7 +201,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(124);
+            rules.Should().HaveCount(125);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

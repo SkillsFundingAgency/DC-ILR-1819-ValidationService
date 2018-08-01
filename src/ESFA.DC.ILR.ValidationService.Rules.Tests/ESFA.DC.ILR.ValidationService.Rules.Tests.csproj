@@ -107,6 +107,7 @@
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01RuleTests.cs" />
+    <Compile Include="HE\NETFEE\NETFEE_02RuleTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01RuleTests.cs" />
