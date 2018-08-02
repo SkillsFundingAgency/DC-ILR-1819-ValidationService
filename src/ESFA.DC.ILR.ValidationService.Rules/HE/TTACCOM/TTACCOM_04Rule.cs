@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
             {
                 foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
-                    if (ConditionMet(learningDelivery))
+                    if (ConditionMet(learningDelivery.LearningDeliveryHEEntity))
                     {
                         HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearningDeliveryHEEntity.MODESTUD));
                     }
@@ -39,9 +39,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
             }
         }
 
-        public bool ConditionMet(ILearningDelivery learningDelivery)
+        public bool ConditionMet(ILearningDeliveryHE learningDeliveryHE)
         {
-            return LearningDeliveryHEConditionMet(learningDelivery);
+            return LearningDeliveryHEConditionMet(learningDeliveryHE);
         }
 
         public bool LearnerHEConditionMet(ILearnerHE learnerHE)
@@ -49,11 +49,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
             return learnerHE != null && !learnerHE.TTACCOMNullable.HasValue;
         }
 
-        public bool LearningDeliveryHEConditionMet(ILearningDelivery learningDelivery)
+        public bool LearningDeliveryHEConditionMet(ILearningDeliveryHE learningDeliveryHE)
         {
-            return learningDelivery != null
-                && learningDelivery.LearningDeliveryHEEntity != null
-                && learningDelivery.LearningDeliveryHEEntity.MODESTUD == 1;
+            return learningDeliveryHE != null
+                && learningDeliveryHE.MODESTUD == 1;
         }
 
         public bool LearnStartDateConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
