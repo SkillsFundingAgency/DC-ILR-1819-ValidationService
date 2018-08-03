@@ -161,6 +161,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnDelFAMDateTo_03Rule),
                 typeof(LearnDelFAMDateTo_04Rule),
                 typeof(LearnDelFAMType_02Rule),
+                typeof(LearnDelFAMType_03Rule),
                 typeof(LearnDelFAMType_39Rule),
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
@@ -203,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(126);
+            rules.Should().HaveCount(127);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
