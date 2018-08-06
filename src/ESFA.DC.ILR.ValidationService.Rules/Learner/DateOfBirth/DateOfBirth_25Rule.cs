@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         public bool DD07ConditionMet(int? progType)
         {
             return progType.HasValue
-                && !_dd07.IsApprenticeship(progType);
+                && !_dd07.IsApprenticeship(progType.Value);
         }
 
         public bool DateOfBirthConditionMet(DateTime? dateOfBirth)
