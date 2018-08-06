@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.ELQ
                 return;
             }
 
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => d.LearningDeliveryFAMs != null))
             {
                 if (ConditionMet(learningDelivery.FundModel, learningDelivery.LearningDeliveryHEEntity, learningDelivery.LearningDeliveryFAMs))
                 {

@@ -99,6 +99,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.ELQ
                         LearningDeliveryHEEntity = new TestLearningDeliveryHE()
                         {
                             ELQNullable = null
+                        },
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.SOF,
+                                LearnDelFAMCode = "1"
+                            }
                         }
                     }
                 },
