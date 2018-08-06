@@ -23,6 +23,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.PostcodePrior;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
@@ -190,6 +191,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(TTACCOM_04Rule),
+                typeof(UKPRN_06Rule),
                 typeof(ULN_02Rule),
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),
@@ -204,7 +206,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(127);
+            rules.Should().HaveCount(128);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

@@ -20,6 +20,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.PostcodePrior;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
@@ -171,6 +172,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(TTACCOM_04Rule),
+                typeof(UKPRN_06Rule),
                 typeof(ULN_02Rule),
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),
