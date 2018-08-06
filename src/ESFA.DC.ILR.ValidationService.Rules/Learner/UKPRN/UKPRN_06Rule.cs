@@ -22,13 +22,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN
         private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string> { "AEBC1819" };
 
         public UKPRN_06Rule(
-            IFCSDataService fCSDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IDD07 dd07,
-            IValidationErrorHandler validationErrorHandler)
+            IValidationErrorHandler validationErrorHandler,
+            IFCSDataService fcsDataService = null)
             : base(validationErrorHandler, RuleNameConstants.UKPRN_06)
         {
-            _fcsDataService = fCSDataService;
+            _fcsDataService = fcsDataService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
             _dd07 = dd07;
         }

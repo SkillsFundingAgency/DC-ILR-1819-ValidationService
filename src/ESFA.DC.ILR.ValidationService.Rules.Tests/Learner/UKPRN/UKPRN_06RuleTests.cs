@@ -381,7 +381,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.UKPRN
             IDD07 dd07 = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
-            return new UKPRN_06Rule(fCSDataService, learningDeliveryFAMQueryService, dd07, validationErrorHandler);
+            return new UKPRN_06Rule(fcsDataService: fCSDataService, learningDeliveryFAMQueryService: learningDeliveryFAMQueryService, dd07: dd07, validationErrorHandler: validationErrorHandler);
         }
     }
 }
