@@ -33,6 +33,7 @@
         public const string LearnStartDate = "LearnStartDate";
         public const string LLDDCat = "LLDDCat";
         public const string MODESTUD = "MODESTUD";
+        public const string NETFEE = "NETFEE";
         public const string Outcome = "Outcome";
         public const string OutGrade = "OutGrade";
         public const string PartnerUKPRN = "PartnerUKPRN";

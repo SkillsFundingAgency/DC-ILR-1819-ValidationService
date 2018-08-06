@@ -62,6 +62,8 @@
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
         public const string DelLocPostCode_16 = "DelLocPostCode_16";
 
+        public const string ELQ_01 = "ELQ_01";
+
         public const string EmpOutcome_01 = "EmpOutcome_01";
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
@@ -112,12 +114,14 @@
         public const string LearnDelFAMDateTo_04 = "LearnDelFAMDateTo_04";
 
         public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
+        public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
 
         public const string LLDDCat_01 = "LLDDCat_01";
         public const string LLDDCat_02 = "LLDDCat_02";
 
         public const string NETFEE_01 = "NETFEE_01";
+        public const string NETFEE_02 = "NETFEE_02";
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OutGrade_03 = "OutGrade_03";
@@ -152,6 +156,8 @@
         public const string QUALENT3_02 = "QUALENT3_02";
 
         public const string TTACCOM_04 = "TTACCOM_04";
+
+        public const string UKPRN_06 = "UKPRN_06";
 
         public const string ULN_02 = "ULN_02";
         public const string ULN_03 = "ULN_03";

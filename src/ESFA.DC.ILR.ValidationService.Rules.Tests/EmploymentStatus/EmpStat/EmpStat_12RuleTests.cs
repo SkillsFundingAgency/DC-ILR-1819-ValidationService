@@ -60,13 +60,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void DD07ConditionMet_False_Null()
         {
-            var progType = 25;
+            int? progType = null;
 
             var dd07Mock = new Mock<IDD07>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
-            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(null).Should().BeFalse();
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
         }
 
         [Fact]

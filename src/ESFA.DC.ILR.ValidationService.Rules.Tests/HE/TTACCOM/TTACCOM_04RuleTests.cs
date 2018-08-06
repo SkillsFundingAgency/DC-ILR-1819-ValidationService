@@ -23,12 +23,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         [Fact]
         public void LearningDeliveryHEConditionMet_False()
         {
-            TestLearningDelivery learningDelivery = new TestLearningDelivery()
+            TestLearningDeliveryHE learningDeliveryHE = new TestLearningDeliveryHE()
             {
-                LearningDeliveryHEEntity = new TestLearningDeliveryHE() { MODESTUD = 2 }
+                MODESTUD = 2
             };
 
-            NewRule().LearningDeliveryHEConditionMet(learningDelivery).Should().BeFalse();
+            NewRule().LearningDeliveryHEConditionMet(learningDeliveryHE).Should().BeFalse();
         }
 
         [Fact]
@@ -40,12 +40,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         [Fact]
         public void LearningDeliveryHEConditionMet_True()
         {
-            TestLearningDelivery learningDelivery = new TestLearningDelivery()
+            TestLearningDeliveryHE learningDeliveryHE = new TestLearningDeliveryHE()
             {
-                LearningDeliveryHEEntity = new TestLearningDeliveryHE() { MODESTUD = 1 }
+                MODESTUD = 1
             };
 
-            NewRule().LearningDeliveryHEConditionMet(learningDelivery).Should().BeTrue();
+            NewRule().LearningDeliveryHEConditionMet(learningDeliveryHE).Should().BeTrue();
         }
 
         [Fact]
@@ -85,11 +85,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         [Fact]
         public void ConditionMet_True()
         {
-            TestLearningDelivery learningDelivery = new TestLearningDelivery()
+            TestLearningDeliveryHE learningDeliveryHE = new TestLearningDeliveryHE()
             {
-                LearningDeliveryHEEntity = new TestLearningDeliveryHE() { MODESTUD = 1 }
+                MODESTUD = 1
             };
-            NewRule(NewDD06()).ConditionMet(learningDelivery).Should().BeTrue();
+
+            NewRule(NewDD06()).ConditionMet(learningDeliveryHE).Should().BeTrue();
         }
 
         [Theory]
@@ -97,12 +98,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         [InlineData(2)]
         public void ConditionMet_False(int modeStud)
         {
-            TestLearningDelivery learningDelivery = new TestLearningDelivery()
+            TestLearningDeliveryHE learningDeliveryHE = new TestLearningDeliveryHE()
             {
-                LearningDeliveryHEEntity = new TestLearningDeliveryHE() { MODESTUD = modeStud }
+                MODESTUD = modeStud
             };
 
-            NewRule().ConditionMet(learningDelivery).Should().BeFalse();
+            NewRule().ConditionMet(learningDeliveryHE).Should().BeFalse();
         }
 
         [Fact]
