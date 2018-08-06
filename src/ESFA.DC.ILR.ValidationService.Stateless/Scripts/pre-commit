@@ -1,0 +1,2 @@
+#!/bin/sh
+powershell -noprofile -executionpolicy unrestricted -file src/ESFA.DC.Web.Ui/PreCommit.ps1
