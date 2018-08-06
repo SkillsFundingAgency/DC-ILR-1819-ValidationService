@@ -87,8 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public virtual bool DD07ConditionMet(int? progType)
         {
-            return progType.HasValue
-                && !_dd07.IsApprenticeship(progType.Value);
+            return !_dd07.IsApprenticeship(progType);
         }
 
         public virtual bool LearnStartDateConditionMet(DateTime learnStartDate)
