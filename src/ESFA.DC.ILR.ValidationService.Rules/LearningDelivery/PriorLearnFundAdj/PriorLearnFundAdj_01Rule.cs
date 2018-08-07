@@ -34,6 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj
                     learningDelivery.LearningDeliveryFAMs))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(learningDelivery.FundModel, learningDelivery.PriorLearnFundAdjNullable, LearningDeliveryFAMTypeConstants.ADL));
+                    return;
                 }
             }
         }

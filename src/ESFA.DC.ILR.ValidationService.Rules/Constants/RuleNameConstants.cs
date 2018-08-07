@@ -125,6 +125,8 @@
         public const string NETFEE_02 = "NETFEE_02";
         public const string NUMHUS_01 = "NUMHUS_01";
 
+        public const string OtherFundAdj_01 = "OtherFundAdj_01";
+
         public const string OutGrade_03 = "OutGrade_03";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
