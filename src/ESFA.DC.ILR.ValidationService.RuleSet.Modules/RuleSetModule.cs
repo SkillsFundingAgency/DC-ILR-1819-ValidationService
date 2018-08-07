@@ -38,8 +38,10 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
@@ -100,6 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_35Rule),
                 typeof(DateOfBirth_46Rule),
                 typeof(DateOfBirth_47Rule),
+                typeof(DateOfBirth_48Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
@@ -151,6 +154,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(NETFEE_01Rule),
                 typeof(NETFEE_02Rule),
                 typeof(NUMHUS_01Rule),
+                typeof(OtherFundAdj_01Rule),
                 typeof(OutGrade_03Rule),
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
@@ -169,6 +173,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PrimaryLLDD_04Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
+                typeof(PriorLearnFundAdj_01Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(TTACCOM_04Rule),

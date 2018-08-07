@@ -110,6 +110,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_47Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_46Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_48Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_04Rule.cs" />
@@ -202,10 +203,12 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39Rule.cs" />
+    <Compile Include="LearningDelivery\OtherFundAdj\OtherFundAdj_01Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_03Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01Rule.cs" />
+    <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />

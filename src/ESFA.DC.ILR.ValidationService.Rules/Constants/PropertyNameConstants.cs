@@ -34,6 +34,7 @@
         public const string LLDDCat = "LLDDCat";
         public const string MODESTUD = "MODESTUD";
         public const string NETFEE = "NETFEE";
+        public const string OtherFundAdj = "OtherFundAdj";
         public const string Outcome = "Outcome";
         public const string OutGrade = "OutGrade";
         public const string PartnerUKPRN = "PartnerUKPRN";
@@ -46,6 +47,7 @@
         public const string ProgType = "ProgType";
         public const string PrimaryLLDD = "PrimaryLLDD";
         public const string PriorAttain = "PriorAttain";
+        public const string PriorLearnFundAdj = "PriorLearnFundAdj";
         public const string PwayCode = "PwayCode";
         public const string QUALENT3 = "QUALENT3";
     }

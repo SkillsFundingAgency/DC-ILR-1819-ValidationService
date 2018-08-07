@@ -41,8 +41,10 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -116,6 +118,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(DateOfBirth_35Rule),
                 typeof(DateOfBirth_46Rule),
                 typeof(DateOfBirth_47Rule),
+                typeof(DateOfBirth_48Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
@@ -169,6 +172,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(NETFEE_01Rule),
                 typeof(NETFEE_02Rule),
                 typeof(NUMHUS_01Rule),
+                typeof(OtherFundAdj_01Rule),
                 typeof(OutGrade_03Rule),
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
@@ -188,6 +192,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(PrimaryLLDD_04Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
+                typeof(PriorLearnFundAdj_01Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(TTACCOM_04Rule),
@@ -206,7 +211,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(128);
+            rules.Should().HaveCount(131);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
