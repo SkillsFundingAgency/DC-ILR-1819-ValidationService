@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
@@ -22,13 +20,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         }
 
         [Fact]
-        public void PriorLearFu0dnAdjConditionMet_True()
+        public void PriorLearFundAdjConditionMet_True()
         {
             NewRule().PriorLearnFundAdjConditionMet(1).Should().BeTrue();
         }
 
         [Fact]
-        public void PriorLearFu0dnAdjConditionMet_False()
+        public void PriorLearFundAdjConditionMet_False()
         {
             NewRule().PriorLearnFundAdjConditionMet(null).Should().BeFalse();
         }
