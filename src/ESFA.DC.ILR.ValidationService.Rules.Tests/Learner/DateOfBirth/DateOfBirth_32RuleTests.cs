@@ -132,14 +132,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(null, false)]
-        [InlineData(25, true)]
-        public void DD07ConditionMet_False(int? progType, bool mockBool)
+        [Fact]
+        public void DD07ConditionMet_True_Null()
         {
+            int? progType = null;
+
             var dd07Mock = new Mock<IDD07>();
 
-            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(mockBool);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
+
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
+        }
+
+        [Fact]
+        public void DD07ConditionMet_False()
+        {
+            int? progType = 24;
+
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
         }

@@ -69,8 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         public bool DD07ConditionMet(int? progType)
         {
-            return progType.HasValue
-                && _dd07.IsApprenticeship(progType.Value);
+            return _dd07.IsApprenticeship(progType);
         }
 
         public bool EmpStatConditionMet(DateTime learnStartDate, IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses)

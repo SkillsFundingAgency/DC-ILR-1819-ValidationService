@@ -46,6 +46,7 @@
         public const string ProgType = "ProgType";
         public const string PrimaryLLDD = "PrimaryLLDD";
         public const string PriorAttain = "PriorAttain";
+        public const string PriorLearnFundAdj = "PriorLearnFundAdj";
         public const string PwayCode = "PwayCode";
         public const string QUALENT3 = "QUALENT3";
     }

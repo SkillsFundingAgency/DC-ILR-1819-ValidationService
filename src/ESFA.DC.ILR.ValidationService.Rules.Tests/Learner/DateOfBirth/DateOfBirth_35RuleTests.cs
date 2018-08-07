@@ -216,7 +216,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
         [Theory]
         [InlineData(25, 35, "2018-08-01", "2019-01-01", 1, "2000-01-01", 18, "LDM", true, false)]
-        [InlineData(null, 35, "2018-08-01", "2019-01-01", 1, "2000-01-01", 18, "LDM", true, false)]
+        [InlineData(null, 35, "2018-08-01", "2019-01-01", 1, "2000-01-01", 18, "LDM", false, false)]
         [InlineData(24, 99, "2018-08-01", "2019-01-01", 1, "2000-01-01", 18, "LDM", true, false)]
         [InlineData(24, 35, "2013-08-01", "2019-01-01", 1, "2000-01-01", 18, "LDM", true, false)]
         [InlineData(24, 35, "2018-08-01", "2019-01-01", 2, "2000-01-01", 18, "LDM", true, false)]
