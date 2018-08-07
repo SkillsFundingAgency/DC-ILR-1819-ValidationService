@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 
         public DateTime LastFridayInJuneForDateInAcademicYear(DateTime dateTime)
         {
-            return LastFridayInMonth(dateTime.Month > 8 ? new DateTime(dateTime.Year + 1, 6, 1) : new DateTime(dateTime.Year, 6, 1));
+            return LastFridayInMonth(dateTime.Month > 8 ? LastFridayInMonth(new DateTime(dateTime.Year + 1, 6, 1)) : LastFridayInMonth(new DateTime(dateTime.Year, 6, 1)));
         }
 
         public DateTime LastFridayInMonth(DateTime dateTime)
