@@ -152,6 +152,8 @@
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
 
+        public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
+
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
 
