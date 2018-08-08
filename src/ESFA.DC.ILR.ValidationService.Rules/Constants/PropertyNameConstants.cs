@@ -29,6 +29,8 @@
         public const string LearnDelFAMDateFrom = "LearnDelFAMDateFrom";
         public const string LearnDelFAMDateTo = "LearnDelFAMDateTo";
         public const string LearnDelFAMType = "LearnDelFAMType";
+        public const string LearnFAMCode = "LearnFAMCode";
+        public const string LearnFAMType = "LearnFAMType";
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnStartDate = "LearnStartDate";
         public const string LLDDCat = "LLDDCat";
