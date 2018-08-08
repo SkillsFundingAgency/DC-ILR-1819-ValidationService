@@ -160,6 +160,8 @@
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
 
+        public const string R07 = "R07";
+
         public const string TTACCOM_04 = "TTACCOM_04";
 
         public const string UKPRN_06 = "UKPRN_06";
