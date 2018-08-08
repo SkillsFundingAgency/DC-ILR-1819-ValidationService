@@ -215,7 +215,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(132);
+            rules.Should().HaveCount(133);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
