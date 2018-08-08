@@ -163,6 +163,7 @@
         public const string QUALENT3_02 = "QUALENT3_02";
 
         public const string R07 = "R07";
+        public const string R85 = "R85";
 
         public const string TTACCOM_04 = "TTACCOM_04";
 
