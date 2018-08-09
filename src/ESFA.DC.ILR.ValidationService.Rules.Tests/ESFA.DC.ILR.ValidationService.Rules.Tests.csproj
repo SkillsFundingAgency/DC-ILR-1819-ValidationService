@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
+    <Compile Include="CrossEntity\R85RuleTests.cs" />
     <Compile Include="CrossEntity\R07RuleTests.cs" />
     <Compile Include="Derived\DD01Tests.cs" />
     <Compile Include="Derived\DD04Tests.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="Query\AcademicYearQueryServiceTests.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
     <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryServiceTests.cs" />
+    <Compile Include="Query\LearnerDPQueryServiceTests.cs" />
     <Compile Include="Query\LearnerFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearnerQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryAppFinRecordQueryServiceTests.cs" />

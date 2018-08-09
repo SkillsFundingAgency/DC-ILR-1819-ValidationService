@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void ConditionMet()
+        public void ConditionMet_True()
         {
             var learningDeliveries = new List<TestLearningDelivery>
             {
@@ -37,6 +37,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             };
 
             NewRule().ConditionMet(learningDeliveries).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ConditionMet_False()
+        {
+            var learningDeliveries = new List<TestLearningDelivery>
+            {
+                new TestLearningDelivery
+                {
+                    AimSeqNumber = 1
+                },
+                new TestLearningDelivery
+                {
+                    AimSeqNumber = 2
+                }
+            };
+
+            NewRule().ConditionMet(learningDeliveries).Should().BeFalse();
         }
 
         [Fact]

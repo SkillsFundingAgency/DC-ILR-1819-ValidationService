@@ -199,6 +199,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(R07Rule),
+                typeof(R85Rule),
                 typeof(TTACCOM_04Rule),
                 typeof(UKPRN_06Rule),
                 typeof(ULN_02Rule),
