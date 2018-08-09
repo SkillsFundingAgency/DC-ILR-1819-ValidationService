@@ -20,9 +20,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCFLDCS
         }
 
         [Fact]
-        public void LearningDeliveryHEConditionMet_True_LDHE_Null()
+        public void LearningDeliveryHEConditionMet_False_LDHE_Null()
         {
-            NewRule().LearningDeliveryHEConditionMet(null).Should().BeTrue();
+            NewRule().LearningDeliveryHEConditionMet(null).Should().BeFalse();
         }
 
         [Fact]
@@ -111,7 +111,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCFLDCS
                 {
                     new TestLearningDelivery()
                     {
-                        LearnAimRef = learnAimRef
+                        LearnAimRef = learnAimRef,
+                        LearningDeliveryHEEntity = new TestLearningDeliveryHE()
                     }
                 }
             };

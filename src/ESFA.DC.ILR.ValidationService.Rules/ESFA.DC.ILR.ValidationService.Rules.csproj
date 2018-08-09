@@ -66,7 +66,10 @@
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ContPrefTypeConstants.cs" />
     <Compile Include="Constants\FundModelConstants.cs" />
+    <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
+    <Compile Include="CrossEntity\R85Rule.cs" />
+    <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="Derived\DD01.cs" />
     <Compile Include="Derived\DD04.cs" />
     <Compile Include="Derived\DD06.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Learner\GivenNames\GivenNames_01Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_02Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_04Rule.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_16Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_01Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
@@ -212,6 +216,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
+    <Compile Include="Query\LearnerDPQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerDPQueryService.cs" />
     <Compile Include="Query\LearnerEmploymentStatusQueryService.cs" />
     <Compile Include="Query\Interface\IAcademicYearQueryService.cs" />
     <Compile Include="Query\Interface\IDateTimeQueryService.cs" />

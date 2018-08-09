@@ -24,6 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.FileData
 
             fileDataCache.FilePreparationDate = message.HeaderEntity.CollectionDetailsEntity.FilePreparationDate;
             fileDataCache.UKPRN = message.LearningProviderEntity.UKPRN;
+            fileDataCache.LearnerDestinationAndProgressions = message.LearnerDestinationAndProgressions;
         }
     }
 }
