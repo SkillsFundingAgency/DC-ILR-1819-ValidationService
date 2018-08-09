@@ -53,17 +53,17 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 {
-    public class RuleSetModuleTests
+    public class LearnerRuleSetModuleTests
     {
         [Fact]
-        public void RuleSet()
+        public void LearnerRuleSet()
         {
             var builder = new ContainerBuilder();
 
             RegisterDependencies(builder);
 
             builder.RegisterModule<BaseDataModule>();
-            builder.RegisterModule<RuleSetModule>();
+            builder.RegisterModule<LearnerRuleSetModule>();
 
             var container = builder.Build();
 
