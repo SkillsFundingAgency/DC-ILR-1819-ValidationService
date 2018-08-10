@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN
             {
                 if (ConditionMet(learningDelivery.ProgTypeNullable, learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(learningDelivery.LearnAimRef, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel, LearningDeliveryFAMTypeConstants.LDM, "034"));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel, LearningDeliveryFAMTypeConstants.LDM, "034"));
                 }
             }
         }

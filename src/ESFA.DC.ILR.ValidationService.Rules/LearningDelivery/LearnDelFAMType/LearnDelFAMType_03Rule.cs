@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             {
                 if (ConditionMet(learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(learningDelivery.LearnAimRef, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel, LearningDeliveryFAMTypeConstants.ASL, "1"));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel, LearningDeliveryFAMTypeConstants.ASL, "1"));
                 }
             }
         }
