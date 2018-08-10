@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade
 {
@@ -22,7 +19,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade
             _larsDataService = larsDataService;
         }
 
-        public void Validate(ILearner objectToValidate)
+        public OutGrade_03Rule()
+           : base(null, null)
+        {
+        }
+
+            public void Validate(ILearner objectToValidate)
         {
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
@@ -40,19 +42,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade
                 && LARSConditionMet(learnAimRef);
         }
 
-        public bool OutcomeCondtionMet(int? outcome)
+        public virtual bool OutcomeCondtionMet(int? outcome)
         {
             return outcome != null && outcome == 1;
         }
 
-        public bool OutGradeCondtionMet(string outGrade)
+        public virtual bool OutGradeCondtionMet(string outGrade)
         {
             return !_outGrades.Contains(outGrade);
         }
 
-        public bool LARSConditionMet(string learnAimRef)
+        public virtual bool LARSConditionMet(string learnAimRef)
         {
-            return _larsDataService.BasicSkillsMatchForLearnAimRef(learnAimRef, 1);
+            return _larsDataService.NotionalNVQLevelMatchForLearnAimRef(learnAimRef, "E")
+                && _larsDataService.BasicSkillsMatchForLearnAimRef(learnAimRef, 1);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string outGrade)
