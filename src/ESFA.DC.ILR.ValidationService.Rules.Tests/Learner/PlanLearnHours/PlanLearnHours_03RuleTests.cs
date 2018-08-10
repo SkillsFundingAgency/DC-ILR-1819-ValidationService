@@ -1,79 +1,151 @@
 ﻿using System;
-using System.Linq.Expressions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanLearnHours
 {
-    public class PlanLearnHours_03RuleTests : PlanLearnHoursTestsBase
+    public class PlanLearnHours_03RuleTests : AbstractRuleTests<PlanLearnHours_03Rule>
     {
-        [Theory]
-        [InlineData(25)]
-        [InlineData(82)]
-
-        public void ConditionMet_True(long? fundModel)
+        [Fact]
+        public void RuleName()
         {
-            var rule = new PlanLearnHours_03Rule(null);
-            rule.ConditionMet(0, 0, fundModel).Should().BeTrue();
+            NewRule().RuleName.Should().Be("PlanLearnHours_03");
         }
 
         [Theory]
-        [InlineData(null, null, null)]
-        [InlineData(null, 35, null)]
-        [InlineData(0, 10, 1000)]
-        [InlineData(0, 10, 35)]
-        public void ConditionMet_False(long? planLearnHours, long? planEeepHours, long? fundModel)
+        [InlineData(5, 10)]
+        [InlineData(null, 5)]
+        [InlineData(5, null)]
+        public void LearnerConditionMet_False(int? planLearnHours, int? planEEPhours)
         {
-            var rule = new PlanLearnHours_03Rule(null);
-            rule.ConditionMet(planLearnHours, planEeepHours, fundModel).Should().BeFalse();
+            NewRule().LearnerConditionMet(planLearnHours, planEEPhours).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData(999)]
-        public void ConditionMet_FundModel_False(long? fundModel)
+        [InlineData(0, 0)]
+        [InlineData(null, 0)]
+        [InlineData(0, null)]
+        [InlineData(null, null)]
+        public void LearnerConditionMet_True(int? planLearnHours, int? planEEPhours)
         {
-            var rule = new PlanLearnHours_03Rule(null);
-            rule.FundModelConditionMet(fundModel).Should().BeFalse();
+            NewRule().LearnerConditionMet(planLearnHours, planEEPhours).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(25)]
-        [InlineData(82)]
-
-        public void ConditionMet_FundModel_True(long? fundModel)
+        [InlineData(0)]
+        [InlineData(FundModelConstants.Apprenticeships)]
+        public void FundModelConditionMet_False(int fundModel)
         {
-            var rule = new PlanLearnHours_03Rule(null);
-            rule.FundModelConditionMet(fundModel).Should().BeTrue();
+            NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(FundModelConstants.CommunityLearning)]
+        [InlineData(FundModelConstants.SixteenToNineteen)]
+        public void FundModelConditionMet_True(int fundModel)
+        {
+            NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(FundModelConstants.Apprenticeships)]
+        public void ConditionMet_False(int fundModel)
+        {
+            NewRule().ConditionMet(fundModel).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(FundModelConstants.CommunityLearning)]
+        [InlineData(FundModelConstants.SixteenToNineteen)]
+        public void ConditionMet_True(int fundModel)
+        {
+            NewRule().ConditionMet(fundModel).Should().BeTrue();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var learner = SetupLearner(0, 0, 25);
+            var learner = new TestLearner()
+            {
+                PlanLearnHoursNullable = 0,
+                PlanEEPHoursNullable = 0,
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = FundModelConstants.SixteenToNineteen
+                    },
+                    new TestLearningDelivery()
+                    {
+                        FundModel = FundModelConstants.CommunityLearning
+                    }
+                }
+            };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PlanLearnHours_03", null, null, null);
-
-            var rule = new PlanLearnHours_03Rule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
         public void Validate_NoError()
         {
-            var learner = SetupLearner(0, 10, 25);
+            var learner = new TestLearner()
+            {
+                PlanLearnHoursNullable = 5,
+                PlanEEPHoursNullable = 6,
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = FundModelConstants.AdultSkills
+                    },
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 0
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            int? planLearnHours = 0;
+            int? planEEPHours = 0;
+            int fundModel = 25;
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PlanLearnHours_03", null, null, null);
 
-            var rule = new PlanLearnHours_03Rule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, planLearnHours)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.PlanEEPHours, planEEPHours)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(planLearnHours, planEEPHours, fundModel);
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private PlanLearnHours_03Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new PlanLearnHours_03Rule(validationErrorHandler);
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -6,39 +10,55 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours
 {
-    /// <summary>
-    /// If returned, the sum of the Planned learning hours and the Planned employability, enrichment and pastoral hours must be greater than zero
-    /// </summary>
     public class PlanLearnHours_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<long> _fundModels = new HashSet<long> { 25, 82 };
+        private readonly HashSet<long> _fundModels = new HashSet<long> { FundModelConstants.CommunityLearning, FundModelConstants.SixteenToNineteen };
 
         public PlanLearnHours_03Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PlanLearnHours_03)
         {
         }
 
         public void Validate(ILearner objectToValidate)
         {
+            if (!LearnerConditionMet(objectToValidate.PlanLearnHoursNullable, objectToValidate.PlanEEPHoursNullable)
+                || objectToValidate.LearningDeliveries == null)
+            {
+                return;
+            }
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(objectToValidate.PlanLearnHoursNullable, objectToValidate.PlanEEPHoursNullable, learningDelivery.FundModelNullable))
+                if (ConditionMet(learningDelivery.FundModel))
                 {
-                    HandleValidationError(RuleNameConstants.PlanLearnHours_03Rule, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.PlanLearnHoursNullable, objectToValidate.PlanEEPHoursNullable, learningDelivery.FundModel));
                 }
             }
         }
 
-        public bool ConditionMet(long? planLearnHours, long? planEeepHours, long? fundModel)
+        public bool ConditionMet(int fundModel)
         {
-            return planLearnHours.HasValue &&
-                   planLearnHours.Value + (planEeepHours ?? 0) == 0
-                   && FundModelConditionMet(fundModel);
+            return FundModelConditionMet(fundModel);
         }
 
-        public bool FundModelConditionMet(long? fundModel)
+        public bool LearnerConditionMet(int? planLearnHours, int? planEEPHours)
         {
-            return fundModel.HasValue && _fundModels.Contains(fundModel.Value);
+            return (planLearnHours ?? 0) + (planEEPHours ?? 0) == 0;
+        }
+
+        public bool FundModelConditionMet(int fundModel)
+        {
+            return _fundModels.Contains(fundModel);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? planLearnHours, int? planEEPHours, int fundModel)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, planLearnHours),
+                BuildErrorMessageParameter(PropertyNameConstants.PlanEEPHours, planEEPHours),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)
+            };
         }
     }
 }
