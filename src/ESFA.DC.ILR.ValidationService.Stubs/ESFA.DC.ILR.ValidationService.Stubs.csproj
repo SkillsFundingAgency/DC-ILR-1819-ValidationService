@@ -93,6 +93,8 @@
   <ItemGroup>
     <Compile Include="FCSDataServiceStub.cs" />
     <Compile Include="LearnerPerActorServiceStub.cs" />
+    <Compile Include="ConsoleMessageValidationServiceStub.cs" />
+    <Compile Include="MessageValidationServiceStub.cs" />
     <Compile Include="OneHundredThousandLearnerProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PreValidationContextStub.cs" />

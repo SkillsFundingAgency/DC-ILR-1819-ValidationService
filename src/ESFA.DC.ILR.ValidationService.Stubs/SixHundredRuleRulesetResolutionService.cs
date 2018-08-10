@@ -9,7 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
     public class SixHundredRuleRulesetResolutionService<T> : AutoFacRuleSetResolutionService<T>, IRuleSetResolutionService<T>
         where T : class
     {
-        private const int RuleCount = 600;
+        private const int RuleCount = 100;
 
         public SixHundredRuleRulesetResolutionService(ILifetimeScope lifetimeScope)
             : base(lifetimeScope)
