@@ -5,6 +5,6 @@ namespace ESFA.DC.ILR.ValidationService.Interface
 {
     public interface IMessageValidationService<U>
     {
-        IEnumerable<IValidationError> Execute(IMessage message);
+        IEnumerable<U> Execute(IMessage message);
     }
 }

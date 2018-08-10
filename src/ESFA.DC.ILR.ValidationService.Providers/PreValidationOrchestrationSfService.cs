@@ -70,12 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             var ilrMessage = _messageCache.Item;
 
             // Message Validation
-            var messageValidationResults = _messageValidationService.Execute(ilrMessage);
-
-            foreach (var messageValidationResult in messageValidationResults)
-            {
-                    _validationErrorCache.Add((U)messageValidationResult);
-            }
+            _messageValidationService.Execute(ilrMessage);
 
             // Get L/A and split the learners into separate lists
             var messageShards = _learnerPerActorService.Process();
