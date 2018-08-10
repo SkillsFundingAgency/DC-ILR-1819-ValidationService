@@ -114,6 +114,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_46Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_04Rule.cs" />
