@@ -16,5 +16,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
 
             return learnerEmploymentStatuses.Where(les => les.DateEmpStatApp == dateEmpStatApp).Select(les => les.EmpStat).FirstOrDefault();
         }
+
+        public IEnumerable<int> EmpStatsForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateEmpStatApp)
+        {
+            if (learnerEmploymentStatuses == null)
+            {
+                return null;
+            }
+
+            return learnerEmploymentStatuses.Where(les => les.DateEmpStatApp >= dateEmpStatApp).Select(les => les.EmpStat).ToList();
+        }
     }
 }
