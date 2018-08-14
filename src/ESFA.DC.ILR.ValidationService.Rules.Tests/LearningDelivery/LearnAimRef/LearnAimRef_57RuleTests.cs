@@ -323,6 +323,41 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         [Fact]
+        public void EsmConditionMet_False_Null()
+        {
+            var learnerEmploymentStatuses = new TestLearnerEmploymentStatus[] { };
+
+            var learningDelivery = new TestLearningDelivery
+            {
+                LearnStartDate = new DateTime(2018, 08, 01),
+                LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                        new TestLearningDeliveryFAM
+                        {
+                            LearnDelFAMType = "BSI",
+                            LearnDelFAMCode = "3"
+                        }
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            var learnerEmploymentStatusMonitoringQueryServiceMock = new Mock<ILearnerEmploymentStatusMonitoringQueryService>();
+
+            learningDeliveryFAMQueryServiceMock
+                .Setup(ds => ds.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, "LDM", "3"))
+                .Returns(false);
+            learnerEmploymentStatusMonitoringQueryServiceMock
+                .Setup(ds => ds.HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "BSI", 3))
+                .Returns(false);
+
+            NewRule(
+                learnerEmploymentStatusMonitoringQueryService: learnerEmploymentStatusMonitoringQueryServiceMock.Object,
+                learningDeliveryFamQueryService: learningDeliveryFAMQueryServiceMock.Object)
+                .EsmConditionMet(learningDelivery.LearnStartDate, learnerEmploymentStatuses, learningDelivery.LearningDeliveryFAMs)
+                .Should().BeFalse();
+        }
+
+        [Fact]
         public void Validate_Error()
         {
             var learnAimRef = "LearnAimRef";
