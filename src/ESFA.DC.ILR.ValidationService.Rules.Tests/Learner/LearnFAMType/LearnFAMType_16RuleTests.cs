@@ -1,244 +1,271 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
 {
-    public class LearnFAMType_16RuleTests
+    public class LearnFAMType_16RuleTests : AbstractRuleTests<LearnFAMType_16Rule>
     {
         [Fact]
-        public void ConditionMet_True()
+        public void RuleName()
         {
-            var famTypesList = new List<ILearnerFAM>()
+            NewRule().RuleName.Should().Be("LearnFAMType_16");
+        }
+
+        [Fact]
+        public void LearnerFAMsConditionMet_False()
+        {
+            TestLearner testLearner = new TestLearner
             {
-                new TestLearnerFAM()
+                LearnerFAMs = new TestLearnerFAM[]
                 {
-                    LearnFAMType = "ECF",
-                    LearnFAMCodeNullable = 1
-                },
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "XXX"
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 2,
+                        LearnFAMType = LearnerFAMTypeConstants.DLA
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 2,
+                        LearnFAMType = LearnerFAMTypeConstants.SEN
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 3,
+                        LearnFAMType = LearnerFAMTypeConstants.EHC
+                    }
                 }
             };
 
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock
-                .Setup(x => x.HasLearnerFAMCodeForType(famTypesList, It.IsAny<string>(), It.IsAny<long>()))
-                .Returns(true);
-            learnerFamQueryServiceMock.Setup(x => x.HasAnyLearnerFAMTypes(famTypesList, It.IsAny<IEnumerable<string>>())).Returns(false);
+            IEnumerable<string> learnerFAMTypes = new HashSet<string>() { LearnerFAMTypeConstants.SEN, LearnerFAMTypeConstants.EHC };
+            var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
 
-            var rule = NewRule(null, learnerFamQueryServiceMock.Object);
-            rule.ConditionMet(famTypesList).Should().BeTrue();
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(testLearner.LearnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(false);
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasAnyLearnerFAMTypes(testLearner.LearnerFAMs, learnerFAMTypes)).Returns(true);
+
+            NewRule(learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).LearnerFAMsConditionMet(testLearner.LearnerFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnerFAMsCondtionMet_Null()
+        {
+            TestLearner testLearner = new TestLearner
+            {
+                LearnerFAMs = new TestLearnerFAM[]
+                {
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 1,
+                        LearnFAMType = LearnerFAMTypeConstants.ECF
+                    }
+                }
+            };
+
+            var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(testLearner.LearnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(false);
+
+            NewRule(learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).LearnerFAMsConditionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnerFAMsConditionMet_True()
+        {
+            TestLearner testLearner = new TestLearner
+            {
+                LearnerFAMs = new TestLearnerFAM[]
+                {
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 1,
+                        LearnFAMType = LearnerFAMTypeConstants.ECF
+                    }
+                }
+            };
+            IEnumerable<string> learnerFAMTypes = new HashSet<string>() { LearnerFAMTypeConstants.SEN, LearnerFAMTypeConstants.EHC };
+            var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(testLearner.LearnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(true);
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasAnyLearnerFAMTypes(testLearner.LearnerFAMs, learnerFAMTypes)).Returns(false);
+            NewRule(learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).LearnerFAMsConditionMet(testLearner.LearnerFAMs).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False()
         {
-            var famTypesList = new List<ILearnerFAM>()
+            TestLearner testLearner = new TestLearner
             {
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "ECF",
-                    LearnFAMCodeNullable = 1
-                },
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "SEN"
-                }
-            };
-
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock
-                .Setup(x => x.HasLearnerFAMCodeForType(famTypesList, "ECF", 1))
-                .Returns(true);
-
-            learnerFamQueryServiceMock.Setup(x => x.HasAnyLearnerFAMTypes(famTypesList, It.IsAny<IEnumerable<string>>())).Returns(true);
-
-            var rule = NewRule(null, learnerFamQueryServiceMock.Object);
-            rule.ConditionMet(famTypesList).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMetForValidFamType_True()
-        {
-            var famTypesList = new List<ILearnerFAM>()
-            {
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "ECF"
-                },
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "1"
-                }
-            };
-
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock
-                .Setup(x => x.HasLearnerFAMCodeForType(famTypesList, It.IsAny<string>(), It.IsAny<long>()))
-                .Returns(true);
-            var rule = NewRule(null, learnerFamQueryServiceMock.Object);
-            rule.ConditionMetForValidFamType(famTypesList).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData("ECF", 2)]
-        [InlineData("XXX", 1)]
-        public void ConditionMetForValidFamType_False(string famType, long famCode)
-        {
-            var famTypesList = new List<ILearnerFAM>()
-            {
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = famType,
-                    LearnFAMCodeNullable = famCode
-                }
-            };
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock
-                .Setup(x => x.HasLearnerFAMCodeForType(famTypesList, It.IsAny<string>(), It.IsAny<long>()))
-                .Returns(false);
-            var rule = NewRule(null, learnerFamQueryServiceMock.Object);
-
-            rule.ConditionMetForValidFamType(famTypesList).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData("SEN")]
-        [InlineData("EHC")]
-        public void ConditionMetSENOrEHCNotFound_False(string famType)
-        {
-            var famTypesList = new List<ILearnerFAM>()
-            {
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = famType
-                },
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "XXXX"
-                }
-            };
-
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock
-                .Setup(x => x.HasAnyLearnerFAMTypes(famTypesList, It.IsAny<IEnumerable<string>>()))
-                .Returns(true);
-            var rule = NewRule(null, learnerFamQueryServiceMock.Object);
-
-            rule.ConditionMetSENOrEHCNotFound(famTypesList).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMetSENOrEHCNotFound_True()
-        {
-            var famTypesList = new List<ILearnerFAM>()
-            {
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "AAAA"
-                },
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "XXXX"
-                }
-            };
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock
-                .Setup(x => x.HasAnyLearnerFAMTypes(famTypesList, It.IsAny<IEnumerable<string>>()))
-                .Returns(false);
-            var rule = NewRule(null, learnerFamQueryServiceMock.Object);
-
-            rule.ConditionMetSENOrEHCNotFound(famTypesList).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMet_False_NullEmpty()
-        {
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock
-                .Setup(x => x.HasLearnerFAMCodeForType(null, It.IsAny<string>(), It.IsAny<long>()))
-                .Returns(false);
-
-            var rule = NewRule(null, learnerFamQueryServiceMock.Object);
-
-            rule.ConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void Validate_False()
-        {
-            var learner = new TestLearner()
-            {
-                LearnerFAMs = new List<ILearnerFAM>()
+                LearnerFAMs = new TestLearnerFAM[]
                 {
                     new TestLearnerFAM()
                     {
-                        LearnFAMType = "ECF",
-                        LearnFAMCodeNullable = 1
+                        LearnFAMCode = 2,
+                        LearnFAMType = LearnerFAMTypeConstants.DLA
                     },
                     new TestLearnerFAM()
                     {
-                        LearnFAMType = "AAA"
+                        LearnFAMCode = 2,
+                        LearnFAMType = LearnerFAMTypeConstants.SEN
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 3,
+                        LearnFAMType = LearnerFAMTypeConstants.EHC
                     }
                 }
             };
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LearnFAMType_16", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            IEnumerable<string> learnerFAMTypes = new HashSet<string>() { LearnerFAMTypeConstants.SEN, LearnerFAMTypeConstants.EHC };
+            var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
 
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock.Setup(x => x.HasLearnerFAMCodeForType(learner.LearnerFAMs, "ECF", 1)).Returns(true);
-            learnerFamQueryServiceMock.Setup(x => x.HasAnyLearnerFAMTypes(learner.LearnerFAMs, It.IsAny<IEnumerable<string>>())).Returns(false);
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(testLearner.LearnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(false);
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasAnyLearnerFAMTypes(testLearner.LearnerFAMs, learnerFAMTypes)).Returns(true);
 
-            var rule = NewRule(validationErrorHandlerMock.Object, learnerFamQueryServiceMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            NewRule(learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).LearnerFAMsConditionMet(testLearner.LearnerFAMs).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_True()
+        public void ConditionMet_Null()
         {
-            var learner = new TestLearner()
+            TestLearner testLearner = new TestLearner
             {
-                LearnerFAMs = new List<ILearnerFAM>()
+                LearnerFAMs = new TestLearnerFAM[]
                 {
                     new TestLearnerFAM()
                     {
-                        LearnFAMType = "ECF",
-                        LearnFAMCodeNullable = 1
-                    },
-                    new TestLearnerFAM()
-                    {
-                        LearnFAMType = "SEN"
+                        LearnFAMCode = 1,
+                        LearnFAMType = LearnerFAMTypeConstants.ECF
                     }
                 }
             };
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LearnFAMType_16", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
 
-            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryServiceMock.Setup(x => x.HasLearnerFAMCodeForType(learner.LearnerFAMs, "ECF", 1)).Returns(true);
-            learnerFamQueryServiceMock.Setup(x => x.HasAnyLearnerFAMTypes(learner.LearnerFAMs, It.IsAny<IEnumerable<string>>())).Returns(true);
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(testLearner.LearnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(false);
 
-            var rule = NewRule(validationErrorHandlerMock.Object, learnerFamQueryServiceMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            NewRule(learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).LearnerFAMsConditionMet(null).Should().BeFalse();
         }
 
-        private LearnFAMType_16Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILearnerFAMQueryService learnerFamQueryService = null)
+        [Fact]
+        public void ConditionMet_True()
         {
-            return new LearnFAMType_16Rule(validationErrorHandler, learnerFamQueryService);
+            TestLearner testLearner = new TestLearner
+            {
+                LearnerFAMs = new TestLearnerFAM[]
+                {
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 1,
+                        LearnFAMType = LearnerFAMTypeConstants.ECF
+                    }
+                }
+            };
+
+            IEnumerable<string> learnerFAMTypes = new HashSet<string>() { LearnerFAMTypeConstants.SEN, LearnerFAMTypeConstants.EHC };
+            var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(testLearner.LearnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(true);
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasAnyLearnerFAMTypes(testLearner.LearnerFAMs, learnerFAMTypes)).Returns(false);
+
+            NewRule(learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).LearnerFAMsConditionMet(testLearner.LearnerFAMs).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Validate_Error()
+        {
+            TestLearner testLearner = new TestLearner
+            {
+                LearnerFAMs = new TestLearnerFAM[]
+                {
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 1,
+                        LearnFAMType = LearnerFAMTypeConstants.ECF
+                    }
+                }
+            };
+
+            IEnumerable<string> learnerFAMTypes = new HashSet<string>() { LearnerFAMTypeConstants.SEN, LearnerFAMTypeConstants.EHC };
+            var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(testLearner.LearnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(true);
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasAnyLearnerFAMTypes(testLearner.LearnerFAMs, learnerFAMTypes)).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
+        {
+            TestLearner testLearner = new TestLearner
+            {
+                LearnerFAMs = new TestLearnerFAM[]
+                {
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 1,
+                        LearnFAMType = LearnerFAMTypeConstants.ECF
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 2,
+                        LearnFAMType = LearnerFAMTypeConstants.SEN
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 3,
+                        LearnFAMType = LearnerFAMTypeConstants.EHC
+                    }
+                }
+            };
+
+            IEnumerable<string> learnerFAMTypes = new HashSet<string>() { LearnerFAMTypeConstants.SEN, LearnerFAMTypeConstants.EHC };
+            var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(testLearner.LearnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(false);
+            learnerFAMsQueryServiceMock.Setup(dd => dd.HasAnyLearnerFAMTypes(testLearner.LearnerFAMs, learnerFAMTypes)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void BuilderErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMCode, "1")).Verifiable();
+            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.ECF)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(LearnerFAMTypeConstants.ECF, "1");
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private LearnFAMType_16Rule NewRule(
+            ILearnerFAMQueryService learnerFAMQueryService = null,
+            IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new LearnFAMType_16Rule(learnerFAMQueryService, validationErrorHandler);
         }
     }
 }

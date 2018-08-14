@@ -37,8 +37,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS
 
         public bool LearningDeliveryHEConditionMet(ILearningDeliveryHE learningDeliveryHE)
         {
-            return learningDeliveryHE == null
-                || (learningDeliveryHE != null && learningDeliveryHE.PCFLDCSNullable == null);
+            return learningDeliveryHE != null
+                && learningDeliveryHE.PCFLDCSNullable == null;
         }
 
         public bool LARSLearningDeliveryConditionMet(string learnAimRef)

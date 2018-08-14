@@ -40,5 +40,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             new DateTimeQueryService().DaysBetween(DateTime.Parse(start), DateTime.Parse(end)).Should().Be(days);
         }
+
+        [Theory]
+        [InlineData("2002-04-12", 16, "2018-04-12")]
+        [InlineData("2002-04-12", 0, "2002-04-12")]
+        [InlineData("2002-04-12", -1, "2001-04-12")]
+        public void DateAddYears(string date, int yearsToAdd, string newDate)
+        {
+            new DateTimeQueryService().DateAddYears(DateTime.Parse(date), yearsToAdd).Should().Be(DateTime.Parse(newDate));
+        }
     }
 }
