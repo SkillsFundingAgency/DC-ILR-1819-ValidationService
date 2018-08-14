@@ -180,6 +180,7 @@
         public const string ULN_06 = "ULN_06";
         public const string ULN_07 = "ULN_07";
         public const string ULN_09 = "ULN_09";
+        public const string ULN_10 = "ULN_10";
         public const string ULN_12 = "ULN_12";
     }
 }
