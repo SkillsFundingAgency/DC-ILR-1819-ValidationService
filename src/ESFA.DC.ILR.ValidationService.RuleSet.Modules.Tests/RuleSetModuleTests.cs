@@ -118,6 +118,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(DateOfBirth_30Rule),
                 typeof(DateOfBirth_32Rule),
                 typeof(DateOfBirth_35Rule),
+                typeof(DateOfBirth_36Rule),
                 typeof(DateOfBirth_38Rule),
                 typeof(DateOfBirth_39Rule),
                 typeof(DateOfBirth_46Rule),
@@ -221,7 +222,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(139);
+            rules.Should().HaveCount(140);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

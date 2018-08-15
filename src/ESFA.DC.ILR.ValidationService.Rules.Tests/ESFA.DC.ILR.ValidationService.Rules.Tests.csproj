@@ -135,6 +135,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_29RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_36RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_38RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_39RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_47RuleTests.cs" />
