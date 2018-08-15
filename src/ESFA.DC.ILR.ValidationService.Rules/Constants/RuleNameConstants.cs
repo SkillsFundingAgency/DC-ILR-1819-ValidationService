@@ -73,6 +73,7 @@
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
+        public const string EmpStat_08 = "EmpStat_08";
         public const string EmpStat_12 = "EmpStat_12";
 
         public const string FamilyName_01 = "FamilyName_01";
