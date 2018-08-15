@@ -135,11 +135,14 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_29RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_38RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_39RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_47RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_46RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_53RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_04RuleTests.cs" />
@@ -151,6 +154,7 @@
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule02Tests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02RuleTests.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04RuleTests.cs" />
     <Compile Include="Learner\PMUKPRN\PMUKPRN_01RuleTests.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_01RuleTests.cs" />
@@ -170,6 +174,8 @@
     <Compile Include="Learner\ULN\ULN_06RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_07RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_09RuleTests.cs" />
+    <Compile Include="Learner\ULN\ULN_10RuleTests.cs" />
+    <Compile Include="Learner\ULN\ULN_12RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_10RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_09RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_07RuleTests.cs" />

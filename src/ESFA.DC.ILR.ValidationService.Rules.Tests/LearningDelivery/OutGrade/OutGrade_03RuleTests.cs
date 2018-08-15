@@ -72,19 +72,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelMatchForLearnAimRef(learnAimRef, "E")).Returns(true);
             larsDataServiceMock.Setup(ds => ds.BasicSkillsMatchForLearnAimRef(learnAimRef, 1)).Returns(true);
 
             NewRule(larsDataServiceMock.Object).LARSConditionMet(learnAimRef).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData("LearnAimRef", 2)]
-        [InlineData("NotLearnAimRef", 1)]
-        public void LARSConditionMet_False(string learnAimRef, int basicSkills)
+        [InlineData("LearnAimRef", "E", 2, true, false)]
+        [InlineData("LearnAimRef", "F", 2, false, false)]
+        [InlineData("LearnAimRef", "F", 1, false, true)]
+        [InlineData("NotLearnAimRef", "E", 1, false, false)]
+        public void LARSConditionMet_False(string learnAimRef, string level, int basicSkills, bool mock1, bool mock2)
         {
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            larsDataServiceMock.Setup(ds => ds.BasicSkillsMatchForLearnAimRef(learnAimRef, basicSkills)).Returns(false);
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelMatchForLearnAimRef(learnAimRef, level)).Returns(mock1);
+            larsDataServiceMock.Setup(ds => ds.BasicSkillsMatchForLearnAimRef(learnAimRef, basicSkills)).Returns(mock2);
 
             NewRule(larsDataServiceMock.Object).LARSConditionMet("LearnAimRef").Should().BeFalse();
         }
@@ -98,23 +102,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelMatchForLearnAimRef(learnAimRef, "E")).Returns(true);
             larsDataServiceMock.Setup(ds => ds.BasicSkillsMatchForLearnAimRef(learnAimRef, 1)).Returns(true);
 
             NewRule(larsDataServiceMock.Object).ConditionMet(outcome, outGrade, learnAimRef).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(2, "FM1", "LearnAimRef", true)]
-        [InlineData(null, "FM1", "LearnAimRef", true)]
-        [InlineData(1, "EL1", "LearnAimRef", true)]
-        [InlineData(1, "EL1", "LearnAimRef", false)]
-        public void ConditionMet_False(int? outcome, string outGrade, string learnAimRef, bool mockValue)
+        [InlineData(true, true, false)]
+        [InlineData(true, false, true)]
+        [InlineData(false, true, true)]
+        [InlineData(false, false, true)]
+        [InlineData(false, false, false)]
+        public void ConditionMet_False(bool mock1, bool mock2, bool mock3)
         {
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            var outcome = 1;
+            var outGrade = "FM1";
+            var learnAimRef = "LearnAimRef";
 
-            larsDataServiceMock.Setup(ds => ds.BasicSkillsMatchForLearnAimRef("LearnAimRef", 1)).Returns(mockValue);
+            var rule = NewRuleMock();
 
-            NewRule(larsDataServiceMock.Object).ConditionMet(outcome, outGrade, learnAimRef).Should().BeFalse();
+            rule.Setup(r => r.OutcomeCondtionMet(outcome)).Returns(mock1);
+            rule.Setup(r => r.OutGradeCondtionMet(outGrade)).Returns(mock2);
+            rule.Setup(r => r.LARSConditionMet(learnAimRef)).Returns(mock3);
+
+            rule.Object.ConditionMet(outcome, outGrade, learnAimRef).Should().BeFalse();
         }
 
         [Fact]
@@ -139,6 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelMatchForLearnAimRef("LearnAimRef", "E")).Returns(true);
             larsDataServiceMock.Setup(ds => ds.BasicSkillsMatchForLearnAimRef("LearnAimRef", 1)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -169,6 +182,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelMatchForLearnAimRef("LearnAimRef", "E")).Returns(true);
             larsDataServiceMock.Setup(ds => ds.BasicSkillsMatchForLearnAimRef("LearnAimRef", 1)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())

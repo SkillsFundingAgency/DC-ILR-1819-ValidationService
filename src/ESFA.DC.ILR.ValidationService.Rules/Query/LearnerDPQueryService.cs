@@ -7,14 +7,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class LearnerDPQueryService : ILearnerDPQueryService
     {
-        public bool HasULNForLearnRefNumber(string learnRefNumber, long uln, IEnumerable<ILearnerDestinationAndProgression> learnerDestinationAndProgressions)
+        public bool HasULNForLearnRefNumber(string learnRefNumber, long uln, ILearnerDestinationAndProgression learnerDestinationAndProgression)
         {
-            if (learnerDestinationAndProgressions == null)
+            if (learnerDestinationAndProgression == null)
             {
                 return false;
             }
 
-            return learnerDestinationAndProgressions.Any(dp => dp.LearnRefNumber == learnRefNumber && dp.ULN == uln);
+            return learnerDestinationAndProgression.LearnRefNumber == learnRefNumber
+                && learnerDestinationAndProgression.ULN == uln;
         }
     }
 }
