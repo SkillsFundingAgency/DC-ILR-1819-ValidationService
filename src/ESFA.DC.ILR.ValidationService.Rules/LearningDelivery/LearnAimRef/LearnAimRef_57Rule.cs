@@ -86,15 +86,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public virtual bool EsmConditionMet(DateTime learnStartDate, IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return (_learnerEmploymentStatusMonitoringQueryService.HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "BSI", 3)
-                && learnerEmploymentStatuses
+            bool bsiThree = false;
+            bool bsiFour = false;
+
+            if (_learnerEmploymentStatusMonitoringQueryService.HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "BSI", 3))
+            {
+                bsiThree = learnerEmploymentStatuses
                     .Where(esm => esm.EmploymentStatusMonitorings.Any(esmt => esmt.ESMType == "BSI" && esmt.ESMCode == 3))
-                    .Select(les => les.DateEmpStatApp).First() <= learnStartDate)
-                || (_learnerEmploymentStatusMonitoringQueryService.HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "BSI", 4)
-                && !_learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "LDM", "318")
+                    .Select(les => les.DateEmpStatApp).First() <= learnStartDate;
+            }
+
+            if (_learnerEmploymentStatusMonitoringQueryService.HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "BSI", 4))
+            {
+                bsiFour =
+                !_learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "LDM", "318")
                 && (learnerEmploymentStatuses
                   .Where(esm => esm.EmploymentStatusMonitorings.Any(esmt => esmt.ESMType == "BSI" && esmt.ESMCode == 4))
-                  .Select(les => les.DateEmpStatApp).First() <= learnStartDate));
+                  .Select(les => les.DateEmpStatApp).First() <= learnStartDate);
+            }
+
+            return bsiThree || bsiFour;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnAimRef, DateTime learnStartDate)

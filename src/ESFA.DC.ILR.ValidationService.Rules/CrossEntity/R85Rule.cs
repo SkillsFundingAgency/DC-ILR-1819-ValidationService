@@ -31,14 +31,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public bool ConditionMet(string learnRefNumber, long uln)
         {
-            if (_fileDataCache.LearnerDestinationAndProgressions != null)
-            {
-                var learnerDP = _fileDataCache.LearnerDestinationAndProgressions.Where(l => l.LearnRefNumber == learnRefNumber);
+            //if (_fileDataCache.LearnerDestinationAndProgressions.Where(l => l.LearnRefNumber == learnRefNumber) != null)
+            //{
+            //    var learners = _fileDataCache.LearnerDestinationAndProgressions.Select(l => l.LearnRefNumber).ToList();
 
-                return !_learnerDPQueryService.HasULNForLearnRefNumber(learnRefNumber, uln, learnerDP);
-            }
+            //    var learnerDP = _fileDataCache.LearnerDestinationAndProgressions.Where(l => l.LearnRefNumber == learnRefNumber);
 
-            return false;
+            //    return !_learnerDPQueryService.HasULNForLearnRefNumber(learnRefNumber, uln, learnerDP);
+            //}
+
+            //return false;
+
+            var learnerDP = _fileDataCache.LearnerDestinationAndProgressions.Where(l => l.LearnRefNumber == learnRefNumber).FirstOrDefault();
+
+            return learnerDP == null ? false : !_learnerDPQueryService.HasULNForLearnRefNumber(learnRefNumber, uln, learnerDP);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln)

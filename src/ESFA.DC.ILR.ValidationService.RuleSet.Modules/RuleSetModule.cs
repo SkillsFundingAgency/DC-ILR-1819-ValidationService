@@ -102,9 +102,12 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_30Rule),
                 typeof(DateOfBirth_32Rule),
                 typeof(DateOfBirth_35Rule),
+                typeof(DateOfBirth_38Rule),
+                typeof(DateOfBirth_39Rule),
                 typeof(DateOfBirth_46Rule),
                 typeof(DateOfBirth_47Rule),
                 typeof(DateOfBirth_48Rule),
+                typeof(DateOfBirth_53Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
@@ -165,6 +168,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PCFLDCS_02Rule),
                 typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),
+                typeof(PlanLearnHours_03Rule),
                 typeof(PlanLearnHours_04Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(Postcode_14Rule),
@@ -190,6 +194,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_06Rule),
                 typeof(ULN_07Rule),
                 typeof(ULN_09Rule),
+                typeof(ULN_10Rule),
+                typeof(ULN_12Rule),
             };
         }
     }

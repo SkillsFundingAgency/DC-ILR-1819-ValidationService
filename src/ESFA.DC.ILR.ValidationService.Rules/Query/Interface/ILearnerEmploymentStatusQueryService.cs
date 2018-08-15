@@ -7,5 +7,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
     public interface ILearnerEmploymentStatusQueryService
     {
         int? EmpStatForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateEmpStatApp);
+
+        IEnumerable<int> EmpStatsForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateEmpStatApp);
     }
 }

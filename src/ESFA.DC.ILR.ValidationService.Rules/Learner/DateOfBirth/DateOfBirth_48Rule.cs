@@ -52,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 
                 if (ConditionMet(learningDelivery.ProgTypeNullable, dd04Date, lastFridayInJuneForAcademicYear))
                 {
-                    HandleValidationError(learningDelivery.LearnAimRef, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable, learningDelivery.LearnStartDate));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable, learningDelivery.LearnStartDate));
                 }
             }
         }

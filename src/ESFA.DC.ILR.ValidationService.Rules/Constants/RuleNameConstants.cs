@@ -55,9 +55,12 @@
         public const string DateOfBirth_30 = "DateOfBirth_30";
         public const string DateOfBirth_32 = "DateOfBirth_32";
         public const string DateOfBirth_35 = "DateOfBirth_35";
+        public const string DateOfBirth_38 = "DateOfBirth_38";
+        public const string DateOfBirth_39 = "DateOfBirth_39";
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
+        public const string DateOfBirth_53 = "DateOfBirth_53";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
@@ -139,6 +142,7 @@
 
         public const string PlanLearnHours_01 = "PlanLearnHours_01";
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
+        public const string PlanLearnHours_03 = "PlanLearnHours_03";
         public const string PlanLearnHours_04 = "PlanLearnHours_04";
 
         public const string PMUKPRN_01 = "PMUKPRN_01";
@@ -176,5 +180,7 @@
         public const string ULN_06 = "ULN_06";
         public const string ULN_07 = "ULN_07";
         public const string ULN_09 = "ULN_09";
+        public const string ULN_10 = "ULN_10";
+        public const string ULN_12 = "ULN_12";
     }
 }
