@@ -71,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         public void DD07ConditionMet_False(int? progType)
         {
             var dd07Mock = new Mock<IDD07>();
-            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
         }
@@ -80,9 +80,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         public void DD07ConditionMet_True()
         {
             var dd07Mock = new Mock<IDD07>();
-            dd07Mock.Setup(dd => dd.IsApprenticeship(23)).Returns(false);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(23)).Returns(true);
 
-            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(23).Should().BeFalse();
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(23).Should().BeTrue();
         }
 
         [Fact]
