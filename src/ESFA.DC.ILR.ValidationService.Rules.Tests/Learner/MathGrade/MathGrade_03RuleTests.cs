@@ -4,44 +4,34 @@ using System.Linq.Expressions;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
 {
-    public class MathGrade_03RuleTests
+    public class MathGrade_03RuleTests : AbstractRuleTests<MathGrade_03Rule>
     {
-        [Theory]
-        [InlineData("D")]
-        [InlineData("DD")]
-        [InlineData("DE")]
-        [InlineData("E")]
-        [InlineData("EE")]
-        [InlineData("EF")]
-        [InlineData("F")]
-        [InlineData("FF")]
-        [InlineData("FG")]
-        [InlineData("G")]
-        [InlineData("GG")]
-        [InlineData("N")]
-        [InlineData("U")]
-    public void ConditionMet_True(string mathGrade)
+        [Fact]
+        public void RuleName()
         {
-            var learnerFamQueryService = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryService.Setup(x => x.HasLearnerFAMCodeForType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>(), It.IsAny<long>()))
-                .Returns(false);
-
-            var rule = new MathGrade_03Rule(null, learnerFamQueryService.Object);
-
-            rule.ConditionMet(mathGrade, It.IsAny<IReadOnlyCollection<ILearnerFAM>>()).Should().BeTrue();
+            NewRule().RuleName.Should().Be("MathGrade_03");
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
+        [InlineData("AA")]
+        public void LearnerMathGradeConditionMet_False(string mathGrade)
+        {
+            NewRule().LearnerMathGradeConditionMet(mathGrade).Should().BeFalse();
+        }
+
+        [Theory]
         [InlineData("D")]
         [InlineData("DD")]
         [InlineData("DE")]
@@ -55,75 +45,225 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
         [InlineData("GG")]
         [InlineData("N")]
         [InlineData("U")]
-        public void ConditionMet_False(string mathGrade)
+        public void LearnerMathGradeConditionMet_True(string mathGrade)
         {
-            var learnerFamQueryService = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryService.Setup(x => x.HasLearnerFAMCodeForType(It.IsAny<IEnumerable<ILearnerFAM>>(), "EDF", 1))
-                                    .Returns(true);
+            NewRule().LearnerMathGradeConditionMet(mathGrade).Should().BeTrue();
+        }
 
-            var rule = new MathGrade_03Rule(null, learnerFamQueryService.Object);
-            var learnerFams = new[]
+        [Fact]
+        public void LearnerFAMsConditionMet_False()
+        {
+            IEnumerable<TestLearnerFAM> learnerFAMs = new[]
             {
-                new TestLearnerFAM
+                new TestLearnerFAM()
                 {
-                    LearnFAMType = "EDF",
-                    LearnFAMCodeNullable = 1
+                    LearnFAMType = LearnerFAMTypeConstants.EDF,
+                    LearnFAMCode = 1
                 },
-                new TestLearnerFAM
+                new TestLearnerFAM()
                 {
-                    LearnFAMType = "XYZ",
-                    LearnFAMCodeNullable = 2
+                    LearnFAMType = LearnerFAMTypeConstants.HNS,
+                    LearnFAMCode = 101
                 }
             };
 
-            rule.ConditionMet(mathGrade, learnerFams).Should().BeFalse();
+            var learnerFAMQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+
+            learnerFAMQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.EDF, 1)).Returns(true);
+
+            NewRule(learnerFAMQueryService: learnerFAMQueryServiceMock.Object).LearnerFAMsConditionMet(learnerFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnerFAMsConditionMet_True()
+        {
+            IEnumerable<TestLearnerFAM> learnerFAMs = new[]
+            {
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.DLA,
+                    LearnFAMCode = 20
+                },
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.HNS,
+                    LearnFAMCode = 101
+                }
+            };
+
+            var learnerFAMQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+
+            learnerFAMQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.EDF, 1)).Returns(false);
+
+            NewRule(learnerFAMQueryService: learnerFAMQueryServiceMock.Object).LearnerFAMsConditionMet(learnerFAMs).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnerFAMsConditionMet_True_Null()
+        {
+            IEnumerable<TestLearnerFAM> learnerFAMs = new[]
+            {
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.DLA,
+                    LearnFAMCode = 20
+                },
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.HNS,
+                    LearnFAMCode = 101
+                }
+            };
+
+            var learnerFAMQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+
+            learnerFAMQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.EDF, 1)).Returns(false);
+
+            NewRule(learnerFAMQueryService: learnerFAMQueryServiceMock.Object).LearnerFAMsConditionMet(null).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData("D")]
+        [InlineData("DD")]
+        [InlineData("DE")]
+        [InlineData("E")]
+        [InlineData("EE")]
+        [InlineData("EF")]
+        [InlineData("F")]
+        [InlineData("FF")]
+        [InlineData("FG")]
+        [InlineData("G")]
+        [InlineData("GG")]
+        [InlineData("N")]
+        [InlineData("U")]
+        public void ConditionMet_True(string mathGrade)
+        {
+            IEnumerable<TestLearnerFAM> learnerFAMs = new[]
+            {
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.DLA,
+                    LearnFAMCode = 20
+                },
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.HNS,
+                    LearnFAMCode = 101
+                }
+            };
+
+            var learnerFAMQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+            learnerFAMQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.EHC, 25)).Returns(false);
+
+            NewRule(learnerFAMQueryService: learnerFAMQueryServiceMock.Object).ConditionMet(mathGrade, learnerFAMs).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("AA")]
+        public void ConditionMet_False(string mathGrade)
+        {
+            IEnumerable<TestLearnerFAM> learnerFAMs = new[]
+            {
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.ECF,
+                    LearnFAMCode = 1
+                },
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.HNS,
+                    LearnFAMCode = 101
+                }
+            };
+
+            var learnerFAMQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+            learnerFAMQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(learnerFAMs, "EDF", 1)).Returns(true);
+
+            NewRule(learnerFAMQueryService: learnerFAMQueryServiceMock.Object).ConditionMet(mathGrade, learnerFAMs).Should().BeFalse();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var learner = SetupLearner("D");
+            IReadOnlyCollection<TestLearnerFAM> learnerFAMs = new[]
+            {
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.EDF,
+                    LearnFAMCode = 2
+                },
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.HNS,
+                    LearnFAMCode = 101
+                }
+            };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("MathGrade_03", null, null, null);
+            var learner = new TestLearner()
+            {
+                MathGrade = "D",
+                LearnerFAMs = learnerFAMs
+            };
 
-            var learnerFamQueryService = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryService.Setup(x => x.HasLearnerFAMCodeForType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>(), It.IsAny<long>()))
-                .Returns(false);
+            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
 
-            var rule = new MathGrade_03Rule(validationErrorHandlerMock.Object, learnerFamQueryService.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            learnerFamQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.DLA, 5)).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(learnerFAMQueryService: learnerFamQueryServiceMock.Object, validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
         public void Validate_NoError()
         {
-            var learner = SetupLearner("FF");
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("MathGrade_03", null, null, null);
-
-            var learnerFamQueryService = new Mock<ILearnerFAMQueryService>();
-            learnerFamQueryService.Setup(x => x.HasLearnerFAMCodeForType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>(), It.IsAny<long>()))
-                .Returns(true);
-
-            var rule = new MathGrade_03Rule(validationErrorHandlerMock.Object, learnerFamQueryService.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
-        }
-
-        private static TestLearner SetupLearner(string mathGrade)
-        {
-            var learner = new TestLearner()
-            {
-                MathGrade = mathGrade,
-                LearnerFAMs = new[]
+            IReadOnlyCollection<TestLearnerFAM> learnerFAMs = new[]
+           {
+                new TestLearnerFAM()
                 {
-                    new TestLearnerFAM()
+                    LearnFAMType = LearnerFAMTypeConstants.ECF,
+                    LearnFAMCode = 1
+                },
+                new TestLearnerFAM()
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.HNS,
+                    LearnFAMCode = 101
                 }
             };
-            return learner;
+
+            var learner = new TestLearner()
+            {
+                MathGrade = "AA",
+                LearnerFAMs = learnerFAMs
+            };
+
+            var learnerFamQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+            learnerFamQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.ECF, 1)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, learnerFAMQueryService: learnerFamQueryServiceMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorHandlerParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.MathGrade, "D")).Verifiable();
+            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.EDF)).Verifiable();
+            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMCode, 1));
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters("D", LearnerFAMTypeConstants.EDF, 1);
+            validationErrorHandlerMock.Verify();
+        }
+
+        private MathGrade_03Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILearnerFAMQueryService learnerFAMQueryService = null)
+        {
+            return new MathGrade_03Rule(validationErrorHandler: validationErrorHandler, learnerFAMQueryService: learnerFAMQueryService);
         }
     }
 }
