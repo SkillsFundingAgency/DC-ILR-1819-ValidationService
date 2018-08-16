@@ -21,7 +21,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     {
         private readonly IPopulationService _preValidationPopulationService;
         private readonly ILearnerPerActorService _learnerPerActorService;
-        // private readonly IMessageValidationService<U> _messageValidationService;
         private readonly ICache<IMessage> _messageCache;
         private readonly IJsonSerializationService _jsonSerializationService;
         private readonly IInternalDataCache _internalDataCache;
@@ -37,7 +36,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
             ILearnerPerActorService learnerPerActorService,
-            //IMessageValidationService<U> messageValidationService,
             IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
@@ -50,7 +48,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         {
             _preValidationPopulationService = preValidationPopulationService;
             _learnerPerActorService = learnerPerActorService;
-            // _messageValidationService = messageValidationService;
             _messageCache = messageCache;
             _jsonSerializationService = jsonSerializationService;
             _internalDataCache = internalDataCache;
@@ -76,9 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             var ilrMessage = _messageCache.Item;
 
             // Message Validation
-            var message = _validationItemProviderService.Provide();
-
-            var r = _ruleSetOrchestrationService.Execute();
+            _ruleSetOrchestrationService.Execute();
 
             // Get L/A and split the learners into separate lists
             var messageShards = _learnerPerActorService.Process();

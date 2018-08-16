@@ -80,7 +80,6 @@
     <Compile Include="IDateTimeProvider.cs" />
     <Compile Include="IErrorMessageParameter.cs" />
     <Compile Include="ILearnerPerActorService.cs" />
-    <Compile Include="IMessageValidationService.cs" />
     <Compile Include="IPreValidationContext.cs" />
     <Compile Include="IPreValidationOrchestrationService.cs" />
     <Compile Include="IRule.cs" />

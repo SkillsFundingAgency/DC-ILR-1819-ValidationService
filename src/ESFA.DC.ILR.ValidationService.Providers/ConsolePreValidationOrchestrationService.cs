@@ -13,26 +13,25 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="U"></typeparam>
-    public class ConsolePreValidationOrchestrationService<T, U> : IPreValidationOrchestrationService<U>
-        where T : class
+    public class ConsolePreValidationOrchestrationService<U> : IPreValidationOrchestrationService<U>
     {
         private readonly IPopulationService _preValidationPopulationService;
         private readonly ICache<IMessage> _messageCache;
-        private readonly IMessageValidationService<U> _messageValidationService;
-        private readonly IRuleSetOrchestrationService<T, U> _ruleSetOrchestrationService;
+        private readonly IRuleSetOrchestrationService<ILearner, U> _learnerRuleSetOrchestrationService;
+        private readonly IRuleSetOrchestrationService<IMessage, U> _messageRuleSetOrchestrationService;
         private readonly IValidationOutputService<U> _validationOutputService;
 
         public ConsolePreValidationOrchestrationService(
             IPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
-            IMessageValidationService<U> messageValidationService,
-            IRuleSetOrchestrationService<T, U> ruleSetOrchestrationService,
+            IRuleSetOrchestrationService<ILearner, U> learnerRuleSetOrchestrationService,
+            IRuleSetOrchestrationService<IMessage, U> messageRuleSetOrchestrationService,
             IValidationOutputService<U> validationOutputService)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _messageCache = messageCache;
-            _messageValidationService = messageValidationService;
-            _ruleSetOrchestrationService = ruleSetOrchestrationService;
+            _learnerRuleSetOrchestrationService = learnerRuleSetOrchestrationService;
+            _messageRuleSetOrchestrationService = messageRuleSetOrchestrationService;
             _validationOutputService = validationOutputService;
         }
 
@@ -44,8 +43,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             // get the learners
             var ilrMessage = _messageCache.Item;
 
-            _messageValidationService.Execute(ilrMessage);
-            _ruleSetOrchestrationService.Execute();
+            _messageRuleSetOrchestrationService.Execute();
+            _learnerRuleSetOrchestrationService.Execute();
 
             return _validationOutputService.Process();
         }
