@@ -128,6 +128,7 @@
     <Compile Include="Learner\LearnFAMType\LearnFAMType_16Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_01Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_02Rule.cs" />
+    <Compile Include="Learner\MathGrade\MathGrade_03Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03Rule.cs" />
