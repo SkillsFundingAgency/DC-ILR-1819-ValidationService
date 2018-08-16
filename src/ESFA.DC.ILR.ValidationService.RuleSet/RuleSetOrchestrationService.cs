@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
             _validationErrorCache = validationErrorCache;
         }
 
-        public IEnumerable<U> Execute(IValidationContext validationContext)
+        public IEnumerable<U> Execute()
         {
             var ruleSet = _ruleSetResolutionService.Resolve().ToList();
 

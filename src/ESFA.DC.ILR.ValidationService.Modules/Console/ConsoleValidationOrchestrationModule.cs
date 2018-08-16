@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Console
 
             builder.RegisterType<MessageValidationServiceStub<IValidationError>>().As<IMessageValidationService<IValidationError>>().InstancePerLifetimeScope();
             builder.RegisterType<FileSystemFileContentStringProviderService>().As<IMessageStringProviderService>().InstancePerLifetimeScope();
-            builder.RegisterType<MessageProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
+            builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
 
             builder.RegisterType<SixHundredRuleRulesetResolutionService<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
             builder.RegisterType<OneHundredThousandLearnerProvider>().As<IValidationItemProviderService<IEnumerable<ILearner>>>();

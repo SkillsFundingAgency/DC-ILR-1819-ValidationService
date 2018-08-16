@@ -24,9 +24,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             NewService(xmlSerializationService.Object, stringProviderServiceMock.Object).Provide().Should().BeSameAs(message);
         }
 
-        private MessageProviderService NewService(IXmlSerializationService xmlSerializationService = null, IMessageStringProviderService stringProviderService = null)
+        private MessageFileProviderService NewService(IXmlSerializationService xmlSerializationService = null, IMessageStringProviderService stringProviderService = null)
         {
-            return new MessageProviderService(xmlSerializationService, stringProviderService);
+            return new MessageFileProviderService(xmlSerializationService, stringProviderService);
         }
     }
 }

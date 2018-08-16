@@ -44,13 +44,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             // get the learners
             var ilrMessage = _messageCache.Item;
 
-            var validationContext = new ValidationContext()
-            {
-                Input = ilrMessage
-            };
-
             _messageValidationService.Execute(ilrMessage);
-            _ruleSetOrchestrationService.Execute(validationContext);
+            _ruleSetOrchestrationService.Execute();
 
             return _validationOutputService.Process();
         }

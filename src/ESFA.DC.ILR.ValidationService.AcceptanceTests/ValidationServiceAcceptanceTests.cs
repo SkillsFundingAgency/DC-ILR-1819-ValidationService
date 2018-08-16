@@ -129,7 +129,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
                 var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                return ruleSetOrchestrationService.Execute(validationContext);
+                return ruleSetOrchestrationService.Execute();
             }
         }
 
