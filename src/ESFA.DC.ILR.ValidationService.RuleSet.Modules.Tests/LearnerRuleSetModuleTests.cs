@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
@@ -44,17 +47,31 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
-using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
+using FluentAssertions;
+using Moq;
+using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 {
-    public class RuleSetModule : AbstractRuleSetModule
+    public class LearnerRuleSetModuleTests
     {
-        public RuleSetModule()
+        [Fact]
+        public void LearnerRuleSet()
         {
-            RuleSetType = typeof(IRule<ILearner>);
+            var builder = new ContainerBuilder();
 
-            Rules = new List<Type>()
+            RegisterDependencies(builder);
+
+            builder.RegisterModule<BaseDataModule>();
+            builder.RegisterModule<LearnerRuleSetModule>();
+
+            var container = builder.Build();
+
+            var rules = container.Resolve<IEnumerable<IRule<ILearner>>>().ToList();
+
+            rules.Should().ContainItemsAssignableTo<IRule<ILearner>>();
+
+            var ruleTypes = new List<Type>()
             {
                 typeof(AchDate_02Rule),
                 typeof(AchDate_03Rule),
@@ -80,7 +97,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(CompStatus_05Rule),
                 typeof(CompStatus_06Rule),
                 typeof(ConRefNumber_01Rule),
-                typeof(ConRefNumber_03Rule),
                 typeof(DateOfBirth_01Rule),
                 typeof(DateOfBirth_02Rule),
                 typeof(DateOfBirth_03Rule),
@@ -108,6 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_47Rule),
                 typeof(DateOfBirth_48Rule),
                 typeof(DateOfBirth_53Rule),
+                typeof(ConRefNumber_03Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
@@ -125,6 +142,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FundModel_05Rule),
                 typeof(FundModel_06Rule),
                 typeof(FundModel_07Rule),
+                typeof(FundModel_08Rule),
                 typeof(FundModel_08Rule),
                 typeof(FundModel_09Rule),
                 typeof(FworkCode_01Rule),
@@ -174,6 +192,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(Postcode_14Rule),
                 typeof(PostcodePrior_01Rule),
                 typeof(PrevUKPRN_01Rule),
+                typeof(PrimaryLLDD_02Rule),
                 typeof(PrimaryLLDD_01Rule),
                 typeof(PrimaryLLDD_02Rule),
                 typeof(PrimaryLLDD_03Rule),
@@ -197,6 +216,18 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_10Rule),
                 typeof(ULN_12Rule),
             };
+
+            foreach (var ruleType in ruleTypes)
+            {
+                rules.Should().ContainSingle(r => r.GetType() == ruleType);
+            }
+
+            rules.Should().HaveCount(140);
+        }
+
+        private void RegisterDependencies(ContainerBuilder builder)
+        {
+            builder.RegisterInstance(new Mock<IValidationErrorHandler>().Object).As<IValidationErrorHandler>();
         }
     }
 }

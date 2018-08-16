@@ -9,7 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 {
     public class OneHundredThousandLearnerProvider : LearnerProviderService, IValidationItemProviderService<IEnumerable<ILearner>>
     {
-        private const int LearnerCount = 100000;
+        private const int LearnerCount = 10;
 
         public OneHundredThousandLearnerProvider(ICache<IMessage> messageCache)
             : base(messageCache)

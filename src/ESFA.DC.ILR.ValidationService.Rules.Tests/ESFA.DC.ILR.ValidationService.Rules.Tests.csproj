@@ -245,6 +245,7 @@
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01RuleTests.cs" />
     <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01RuleTests.cs" />
+    <Compile Include="Message\UKPRN\UKPRN_03RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryServiceTests.cs" />
