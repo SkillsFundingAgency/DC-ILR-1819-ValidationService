@@ -1,6 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.HE;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using FluentAssertions;
@@ -36,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
         }
 
         /// <summary>
-        /// Rule name 2, matches the constant.
+        /// Rule name 3 test, account for potential false positives.
         /// </summary>
         [Fact]
         public void RuleName2()
@@ -45,20 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
             var sut = NewRule();
 
             // act/assert
-            sut.RuleName.Should().Be(RuleNameConstants.LearnerHE_02);
-        }
-
-        /// <summary>
-        /// Rule name 3 test, account for potential false positives.
-        /// </summary>
-        [Fact]
-        public void RuleName3()
-        {
-            // arrange
-            var sut = NewRule();
-
-            // act/assert
-            sut.RuleName.Should().NotBe(RuleNameConstants.LearnFAMType_16);
+            sut.RuleName.Should().NotBe("SomeOtherRuleName_07");
         }
 
         /// <summary>
@@ -219,7 +205,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == RuleNameConstants.LearnerHE_02),
+                Moq.It.Is<string>(y => y == "LearnerHE_02"),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 null,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
