@@ -1,5 +1,10 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
+    public enum ValidatonMessageID
+    {
+        AchDate_02,
+    }
+
     public static class RuleNameConstants
     {
         public const string AchDate_02 = "AchDate_02";
@@ -176,5 +181,7 @@
         public const string ULN_06 = "ULN_06";
         public const string ULN_07 = "ULN_07";
         public const string ULN_09 = "ULN_09";
+
+        public const string LearnerHE_02 = "LearnerHE_02";
     }
 }

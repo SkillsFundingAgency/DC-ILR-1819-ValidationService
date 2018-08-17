@@ -83,6 +83,7 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
     <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
+    <Compile Include="HE\LearnerHE_02Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
@@ -238,6 +239,9 @@
     <Compile Include="Query\LearnerQueryService.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\LearningDeliveryQueryService.cs" />
+    <Compile Include="Utility\Collection.cs" />
+    <Compile Include="Utility\Guard.cs" />
+    <Compile Include="Utility\It.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
