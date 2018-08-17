@@ -38,7 +38,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat
 
         public bool ConditionMet(int llddCat, IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return !_llddCatDataService.IsDateValidForLLDDCat(llddCat, _dd06.Derive(learningDeliveries));
+            return _llddCatDataService.Exists(llddCat)
+                && !_llddCatDataService.IsDateValidForLLDDCat(llddCat, _dd06.Derive(learningDeliveries));
         }
     }
 }

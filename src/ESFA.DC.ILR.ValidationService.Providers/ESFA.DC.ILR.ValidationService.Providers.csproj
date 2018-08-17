@@ -168,10 +168,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureStorageFileContentStringProviderService.cs" />
+    <Compile Include="MessageProviderService.cs" />
     <Compile Include="LearnerProviderService.cs" />
     <Compile Include="ConsolePreValidationOrchestrationService.cs" />
     <Compile Include="FileSystemFileContentStringProviderService.cs" />
-    <Compile Include="MessageProviderService.cs" />
+    <Compile Include="MessageFileProviderService.cs" />
     <Compile Include="Output\ValidationErrorCachePassThroughOutputService.cs" />
     <Compile Include="Output\ValidationOutputService.cs" />
     <Compile Include="PreValidationOrchestrationSfService.cs" />

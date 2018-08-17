@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -24,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
         private readonly ILARSDataService _larsDataService;
         private readonly IOrganisationDataService _organisationDataService;
-        private readonly IFileDataCache _fileDataCache;
+        private readonly IFileDataService _fileDataService;
 
         public DateOfBirth_32Rule(
             IDD07 dd07,
@@ -32,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             ILARSDataService larsDataService,
             IOrganisationDataService organisationDataService,
-            IFileDataCache fileDataCache,
+            IFileDataService fileDataService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_32)
         {
@@ -41,12 +42,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
             _larsDataService = larsDataService;
             _organisationDataService = organisationDataService;
-            _fileDataCache = fileDataCache;
+            _fileDataService = fileDataService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            var ukprn = _fileDataCache.UKPRN;
+            var ukprn = _fileDataService.UKPRN();
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {

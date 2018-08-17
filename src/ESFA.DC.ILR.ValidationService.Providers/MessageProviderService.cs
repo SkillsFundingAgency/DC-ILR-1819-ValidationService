@@ -1,24 +1,27 @@
-﻿using ESFA.DC.ILR.Model;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.Serialization.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
-    public class MessageProviderService : IValidationItemProviderService<IMessage>
+    public class MessageProviderService : IValidationItemProviderService<IEnumerable<IMessage>>
     {
-        private readonly IXmlSerializationService _xmlSerializationService;
-        private readonly IMessageStringProviderService _stringProvider;
+        private readonly ICache<IMessage> _messageCache;
 
-        public MessageProviderService(IXmlSerializationService xmlSerializationService, IMessageStringProviderService stringProvider)
+        public MessageProviderService(ICache<IMessage> messageCache)
         {
-            _xmlSerializationService = xmlSerializationService;
-            _stringProvider = stringProvider;
+            _messageCache = messageCache;
         }
 
-        public IMessage Provide()
+        public IEnumerable<IMessage> Provide()
         {
-            return _xmlSerializationService.Deserialize<Message>(_stringProvider.Provide());
+            return new List<IMessage>
+            {
+                _messageCache.Item
+            };
         }
     }
 }

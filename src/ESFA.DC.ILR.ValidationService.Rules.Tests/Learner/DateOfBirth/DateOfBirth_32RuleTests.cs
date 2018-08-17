@@ -4,6 +4,7 @@ using System.Linq;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -306,7 +307,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(25);
@@ -315,7 +316,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES")).Returns(false);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", ldmCodes)).Returns(false);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, orgType)).Returns(false);
-            fileDataCacheMock.Setup(fc => fc.UKPRN).Returns(ukprn);
+            fileDataServiceMock.Setup(fc => fc.UKPRN()).Returns(ukprn);
 
             NewRule(
                 dd07Mock.Object,
@@ -323,7 +324,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 learningDeliveryFAMQueryServiceMock.Object,
                 larsDataServiceMock.Object,
                 organisationDataServiceMock.Object,
-                fileDataCacheMock.Object).ConditionMet(fundModel, progType, learnStartDate, dateOfBirth, learnAimRef, learningDeliveryFAMs, ukprn).Should().BeTrue();
+                fileDataServiceMock.Object).ConditionMet(fundModel, progType, learnStartDate, dateOfBirth, learnAimRef, learningDeliveryFAMs, ukprn).Should().BeTrue();
         }
 
         [Fact]
@@ -355,7 +356,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(25);
@@ -364,7 +365,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES")).Returns(false);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", ldmCodes)).Returns(false);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, orgType)).Returns(false);
-            fileDataCacheMock.Setup(fc => fc.UKPRN).Returns(ukprn);
+            fileDataServiceMock.Setup(fc => fc.UKPRN()).Returns(ukprn);
 
             NewRule(
                 dd07Mock.Object,
@@ -372,7 +373,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 learningDeliveryFAMQueryServiceMock.Object,
                 larsDataServiceMock.Object,
                 organisationDataServiceMock.Object,
-                fileDataCacheMock.Object).ConditionMet(fundModel, progType, learnStartDate, dateOfBirth, learnAimRef, learningDeliveryFAMs, ukprn).Should().BeFalse();
+                fileDataServiceMock.Object).ConditionMet(fundModel, progType, learnStartDate, dateOfBirth, learnAimRef, learningDeliveryFAMs, ukprn).Should().BeFalse();
         }
 
         [Fact]
@@ -420,7 +421,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(25);
@@ -429,7 +430,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES")).Returns(false);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", ldmCodes)).Returns(false);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, orgType)).Returns(false);
-            fileDataCacheMock.Setup(fc => fc.UKPRN).Returns(ukprn);
+            fileDataServiceMock.Setup(fc => fc.UKPRN()).Returns(ukprn);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -439,7 +440,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                     learningDeliveryFAMQueryServiceMock.Object,
                     larsDataServiceMock.Object,
                     organisationDataServiceMock.Object,
-                    fileDataCacheMock.Object,
+                    fileDataServiceMock.Object,
                     validationErrorHandlerMock.Object)
                     .Validate(learner);
             }
@@ -490,7 +491,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(25);
@@ -499,7 +500,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES")).Returns(true);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", ldmCodes)).Returns(false);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, orgType)).Returns(false);
-            fileDataCacheMock.Setup(fc => fc.UKPRN).Returns(ukprn);
+            fileDataServiceMock.Setup(fc => fc.UKPRN()).Returns(ukprn);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -509,7 +510,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                     learningDeliveryFAMQueryServiceMock.Object,
                     larsDataServiceMock.Object,
                     organisationDataServiceMock.Object,
-                    fileDataCacheMock.Object,
+                    fileDataServiceMock.Object,
                     validationErrorHandlerMock.Object)
                     .Validate(learner);
             }
@@ -534,7 +535,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
             ILARSDataService larsDataService = null,
             IOrganisationDataService organisationDataService = null,
-            IFileDataCache fileDataCache = null,
+            IFileDataService fileDataService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
             return new DateOfBirth_32Rule(
@@ -543,7 +544,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 learningDeliveryFAMQueryService,
                 larsDataService,
                 organisationDataService,
-                fileDataCache,
+                fileDataService,
                 validationErrorHandler);
         }
     }

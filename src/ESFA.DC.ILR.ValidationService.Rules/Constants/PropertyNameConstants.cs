@@ -34,6 +34,7 @@
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnStartDate = "LearnStartDate";
         public const string LLDDCat = "LLDDCat";
+        public const string MathGrade = "MathGrade";
         public const string MODESTUD = "MODESTUD";
         public const string NETFEE = "NETFEE";
         public const string OtherFundAdj = "OtherFundAdj";

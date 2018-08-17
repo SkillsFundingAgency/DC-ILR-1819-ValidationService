@@ -23,5 +23,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 
             return firstDayOfNextMonth.AddDays(-vector);
         }
+
+        public DateTime AugustThirtyFirstOfLearnStartDate(DateTime dateLearnStartDate)
+        {
+            return new DateTime(dateLearnStartDate.Year, 08, 31);
+        }
     }
 }

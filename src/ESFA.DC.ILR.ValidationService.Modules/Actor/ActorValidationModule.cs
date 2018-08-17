@@ -9,7 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Actor
         {
             builder.RegisterModule<ActorValidationOrchestrationModule>();
             builder.RegisterModule<BaseDataModule>();
-            builder.RegisterModule<RuleSetModule>();
+            builder.RegisterModule<LearnerRuleSetModule>();
 
             builder.RegisterModule<DataServiceModule>();
             builder.RegisterModule<ActorStubsModule>();

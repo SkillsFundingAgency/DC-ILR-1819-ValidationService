@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
@@ -15,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             var learnerDPs = SetupLearnerDPs();
 
-            NewService().HasULNForLearnRefNumber("Learner1", 9999999999, learnerDPs).Should().BeTrue();
+            NewService().HasULNForLearnRefNumber("Learner1", 9999999999, learnerDPs[0]).Should().BeTrue();
         }
 
         [Fact]
@@ -23,7 +22,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             var learnerDPs = SetupLearnerDPs();
 
-            NewService().HasULNForLearnRefNumber("Learner1", 1000000000, learnerDPs).Should().BeFalse();
+            NewService().HasULNForLearnRefNumber("Learner1", 1000000000, learnerDPs[0]).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyLearnerFAMCodesForType_False_MisMatch()
+        {
+            var learnerDPs = SetupLearnerDPs();
+
+            NewService().HasULNForLearnRefNumber("Learner3", 1000000000, learnerDPs[0]).Should().BeFalse();
         }
 
         [Fact]

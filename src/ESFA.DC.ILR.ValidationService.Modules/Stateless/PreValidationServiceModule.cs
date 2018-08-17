@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ESFA.DC.ILR.ValidationService.RuleSet.Modules;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
 {
@@ -8,6 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
         {
             builder.RegisterModule<PreValidationOrchestrationModule>();
             builder.RegisterModule<PreValidationDataModule>();
+            builder.RegisterModule<MessageRuleSetModule>();
         }
     }
 }

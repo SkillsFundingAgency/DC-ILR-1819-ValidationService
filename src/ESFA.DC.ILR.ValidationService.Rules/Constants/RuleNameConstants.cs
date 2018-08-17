@@ -1,10 +1,5 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
-    public enum ValidatonMessageID
-    {
-        AchDate_02,
-    }
-
     public static class RuleNameConstants
     {
         public const string AchDate_02 = "AchDate_02";
@@ -60,9 +55,13 @@
         public const string DateOfBirth_30 = "DateOfBirth_30";
         public const string DateOfBirth_32 = "DateOfBirth_32";
         public const string DateOfBirth_35 = "DateOfBirth_35";
+        public const string DateOfBirth_36 = "DateOfBirth_36";
+        public const string DateOfBirth_38 = "DateOfBirth_38";
+        public const string DateOfBirth_39 = "DateOfBirth_39";
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
+        public const string DateOfBirth_53 = "DateOfBirth_53";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
@@ -74,6 +73,7 @@
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
+        public const string EmpStat_08 = "EmpStat_08";
         public const string EmpStat_12 = "EmpStat_12";
 
         public const string FamilyName_01 = "FamilyName_01";
@@ -128,6 +128,8 @@
         public const string LLDDCat_01 = "LLDDCat_01";
         public const string LLDDCat_02 = "LLDDCat_02";
 
+        public const string MathGrade_03 = "MathGrade_03";
+
         public const string NETFEE_01 = "NETFEE_01";
         public const string NETFEE_02 = "NETFEE_02";
         public const string NUMHUS_01 = "NUMHUS_01";
@@ -144,6 +146,7 @@
 
         public const string PlanLearnHours_01 = "PlanLearnHours_01";
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
+        public const string PlanLearnHours_03 = "PlanLearnHours_03";
         public const string PlanLearnHours_04 = "PlanLearnHours_04";
 
         public const string PMUKPRN_01 = "PMUKPRN_01";
@@ -172,6 +175,7 @@
 
         public const string TTACCOM_04 = "TTACCOM_04";
 
+        public const string UKPRN_03 = "UKPRN_03";
         public const string UKPRN_06 = "UKPRN_06";
 
         public const string ULN_02 = "ULN_02";
@@ -181,7 +185,7 @@
         public const string ULN_06 = "ULN_06";
         public const string ULN_07 = "ULN_07";
         public const string ULN_09 = "ULN_09";
-
-        public const string LearnerHE_02 = "LearnerHE_02";
+        public const string ULN_10 = "ULN_10";
+        public const string ULN_12 = "ULN_12";
     }
 }
