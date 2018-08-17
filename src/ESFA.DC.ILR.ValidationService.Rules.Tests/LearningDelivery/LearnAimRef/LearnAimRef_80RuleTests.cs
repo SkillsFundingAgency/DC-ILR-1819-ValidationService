@@ -400,20 +400,49 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [Fact]
         public void Validate_NoErrors()
         {
+            var learnAimRef = "LearnAimRef";
+            var progType = 1;
+            var ukprn = 1;
+            var learningDeliveryFams = new List<TestLearningDeliveryFAM>();
+
             var learner = new TestLearner()
             {
+                PriorAttainNullable = 3,
                 LearningDeliveries = new List<TestLearningDelivery>()
                 {
                     new TestLearningDelivery()
                     {
-                        LearnStartDate = new DateTime(2011, 1, 1)
+                        LearnStartDate = new DateTime(2017, 1, 1),
+                        FundModel = 35,
+                        LearnAimRef = learnAimRef,
+                        ProgTypeNullable = progType,
+                        LearningDeliveryFAMs = learningDeliveryFams,
                     }
                 }
             };
 
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+            var dd07Mock = new Mock<IDD07>();
+            var organisationDataServiceMock = new Mock<IOrganisationDataService>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
+            var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(false);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
+            fileDataServiceMock.Setup(c => c.UKPRN()).Returns(ukprn);
+            organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, "USDC")).Returns(false);
+            learningDeliveryFamQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFams, "RES")).Returns(false);
+
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(
+                    larsDataServiceMock.Object,
+                    organisationDataServiceMock.Object,
+                    learningDeliveryFamQueryServiceMock.Object,
+                    dd07Mock.Object,
+                    fileDataServiceMock.Object,
+                    validationErrorHandlerMock.Object)
+                    .Validate(learner);
             }
         }
 
