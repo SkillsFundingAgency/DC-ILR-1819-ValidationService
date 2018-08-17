@@ -4,7 +4,7 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
@@ -27,6 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [Fact]
         public void ConditionMet_True()
         {
+            var ukprn = 1;
             var fundModel = 1;
             var priorAttain = 1;
             var learnStartDate = new DateTime(2018, 1, 1);
@@ -41,15 +42,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
             ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(true);
             ruleMock.Setup(r => r.LevelConditionMet(learnAimRef)).Returns(true);
-            ruleMock.Setup(r => r.OrganisationConditionMet()).Returns(true);
+            ruleMock.Setup(r => r.OrganisationConditionMet(ukprn)).Returns(true);
             ruleMock.Setup(r => r.RestartConditionMet(learningDeliveryFams)).Returns(true);
 
-            ruleMock.Object.ConditionMet(fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeTrue();
+            ruleMock.Object.ConditionMet(ukprn, fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False_FundModel()
         {
+            var ukprn = 1;
             var fundModel = 1;
             var priorAttain = 1;
             var learnStartDate = new DateTime(2018, 1, 1);
@@ -61,12 +63,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(false);
 
-            ruleMock.Object.ConditionMet(fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
+            ruleMock.Object.ConditionMet(ukprn, fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_PriorAttain()
         {
+            var ukprn = 1;
             var fundModel = 1;
             var priorAttain = 1;
             var learnStartDate = new DateTime(2018, 1, 1);
@@ -79,12 +82,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(true);
             ruleMock.Setup(r => r.PriorAttainmentConditionMet(priorAttain)).Returns(false);
 
-            ruleMock.Object.ConditionMet(fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
+            ruleMock.Object.ConditionMet(ukprn, fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_LearnStartDate()
         {
+            var ukprn = 1;
             var fundModel = 1;
             var priorAttain = 1;
             var learnStartDate = new DateTime(2018, 1, 1);
@@ -98,12 +102,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             ruleMock.Setup(r => r.PriorAttainmentConditionMet(priorAttain)).Returns(true);
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(false);
 
-            ruleMock.Object.ConditionMet(fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
+            ruleMock.Object.ConditionMet(ukprn, fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_Apprenticeship()
         {
+            var ukprn = 1;
             var fundModel = 1;
             var priorAttain = 1;
             var learnStartDate = new DateTime(2018, 1, 1);
@@ -118,12 +123,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
             ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(false);
 
-            ruleMock.Object.ConditionMet(fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
+            ruleMock.Object.ConditionMet(ukprn, fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_Level()
         {
+            var ukprn = 1;
             var fundModel = 1;
             var priorAttain = 1;
             var learnStartDate = new DateTime(2018, 1, 1);
@@ -138,15 +144,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
             ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(true);
             ruleMock.Setup(r => r.LevelConditionMet(learnAimRef)).Returns(false);
-            ruleMock.Setup(r => r.OrganisationConditionMet()).Returns(true);
+            ruleMock.Setup(r => r.OrganisationConditionMet(ukprn)).Returns(true);
             ruleMock.Setup(r => r.RestartConditionMet(learningDeliveryFams)).Returns(true);
 
-            ruleMock.Object.ConditionMet(fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
+            ruleMock.Object.ConditionMet(ukprn, fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_Organisation()
         {
+            var ukprn = 1;
             var fundModel = 1;
             var priorAttain = 1;
             var learnStartDate = new DateTime(2018, 1, 1);
@@ -161,14 +168,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
             ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(true);
             ruleMock.Setup(r => r.LevelConditionMet(learnAimRef)).Returns(true);
-            ruleMock.Setup(r => r.OrganisationConditionMet()).Returns(false);
+            ruleMock.Setup(r => r.OrganisationConditionMet(ukprn)).Returns(false);
 
-            ruleMock.Object.ConditionMet(fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
+            ruleMock.Object.ConditionMet(ukprn, fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False_Restart()
         {
+            var ukprn = 1;
             var fundModel = 1;
             var priorAttain = 1;
             var learnStartDate = new DateTime(2018, 1, 1);
@@ -183,10 +191,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
             ruleMock.Setup(r => r.ApprenticeshipConditionMet(progType)).Returns(true);
             ruleMock.Setup(r => r.LevelConditionMet(learnAimRef)).Returns(true);
-            ruleMock.Setup(r => r.OrganisationConditionMet()).Returns(true);
+            ruleMock.Setup(r => r.OrganisationConditionMet(ukprn)).Returns(true);
             ruleMock.Setup(r => r.RestartConditionMet(learningDeliveryFams)).Returns(false);
 
-            ruleMock.Object.ConditionMet(fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
+            ruleMock.Object.ConditionMet(ukprn, fundModel, priorAttain, learnStartDate, progType, learnAimRef, learningDeliveryFams).Should().BeFalse();
         }
 
         [Fact]
@@ -317,13 +325,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             var ukprn = 1;
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
 
-            fileDataCacheMock.SetupGet(c => c.UKPRN).Returns(ukprn);
+            fileDataServiceMock.Setup(c => c.UKPRN()).Returns(ukprn);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, "USDC")).Returns(false);
 
-            NewRule(organisationDataService: organisationDataServiceMock.Object, fileDataCache: fileDataCacheMock.Object).OrganisationConditionMet().Should().BeTrue();
+            NewRule(organisationDataService: organisationDataServiceMock.Object, fileDataService: fileDataServiceMock.Object).OrganisationConditionMet(ukprn).Should().BeTrue();
         }
 
         [Fact]
@@ -331,13 +339,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             var ukprn = 1;
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
 
-            fileDataCacheMock.SetupGet(c => c.UKPRN).Returns(ukprn);
+            fileDataServiceMock.Setup(c => c.UKPRN()).Returns(ukprn);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, "USDC")).Returns(true);
 
-            NewRule(organisationDataService: organisationDataServiceMock.Object, fileDataCache: fileDataCacheMock.Object).OrganisationConditionMet().Should().BeFalse();
+            NewRule(organisationDataService: organisationDataServiceMock.Object, fileDataService: fileDataServiceMock.Object).OrganisationConditionMet(ukprn).Should().BeFalse();
         }
 
         [Fact]
@@ -367,12 +375,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var dd07Mock = new Mock<IDD07>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(true);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            fileDataCacheMock.SetupGet(c => c.UKPRN).Returns(ukprn);
+            fileDataServiceMock.Setup(c => c.UKPRN()).Returns(ukprn);
             organisationDataServiceMock.Setup(ds => ds.LegalOrgTypeMatchForUkprn(ukprn, "USDC")).Returns(false);
             learningDeliveryFamQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMType(learningDeliveryFams, "RES")).Returns(false);
 
@@ -383,7 +391,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                     organisationDataServiceMock.Object,
                     learningDeliveryFamQueryServiceMock.Object,
                     dd07Mock.Object,
-                    fileDataCacheMock.Object,
+                    fileDataServiceMock.Object,
                     validationErrorHandlerMock.Object)
                     .Validate(learner);
             }
@@ -434,7 +442,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             IOrganisationDataService organisationDataService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService = null,
             IDD07 dd07 = null,
-            IFileDataCache fileDataCache = null,
+            IFileDataService fileDataService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
             return new LearnAimRef_80Rule(
@@ -442,7 +450,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 organisationDataService,
                 learningDeliveryFamQueryService,
                 dd07,
-                fileDataCache,
+                fileDataService,
                 validationErrorHandler);
         }
     }
