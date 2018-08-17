@@ -103,7 +103,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RuleSetModuleTests.cs" />
+    <Compile Include="MessageRuleSetModuleTests.cs" />
+    <Compile Include="LearnerRuleSetModuleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

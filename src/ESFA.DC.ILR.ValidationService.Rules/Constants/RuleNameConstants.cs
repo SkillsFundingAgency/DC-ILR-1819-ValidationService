@@ -176,6 +176,7 @@
 
         public const string TTACCOM_04 = "TTACCOM_04";
 
+        public const string UKPRN_03 = "UKPRN_03";
         public const string UKPRN_06 = "UKPRN_06";
 
         public const string ULN_02 = "ULN_02";

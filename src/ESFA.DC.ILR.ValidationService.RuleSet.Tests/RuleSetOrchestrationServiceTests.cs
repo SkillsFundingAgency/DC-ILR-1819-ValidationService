@@ -27,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, validationErrorCache: validationErrorCacheMock.Object);
 
-            service.Execute(validationContextMock.Object).Should().BeSameAs(output);
+            service.Execute().Should().BeSameAs(output);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, ruleSetExecutionServiceMock.Object, validationErrorCacheMock.Object);
 
-            service.Execute(validationContextMock.Object).Should().BeSameAs(output);
+            service.Execute().Should().BeSameAs(output);
 
             ruleSetExecutionServiceMock.Verify();
         }

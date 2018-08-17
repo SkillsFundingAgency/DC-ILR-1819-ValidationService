@@ -36,6 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.ValidationErrorsLookup);
             jobContextMessage.KeyValuePairs[JobContextMessageKey.FundingAlbOutput] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.FundingAlbOutput);
             jobContextMessage.KeyValuePairs[JobContextMessageKey.FundingFm35Output] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.FundingFm35Output);
+            jobContextMessage.KeyValuePairs[JobContextMessageKey.FundingFm25Output] = keyGenerator.GenerateKey(ukprn, jobContextMessage.JobId, TaskKeys.FundingFm25Output);
 
             using (var childLifeTimeScope = _parentLifeTimeScope
                 .BeginLifetimeScope(c =>

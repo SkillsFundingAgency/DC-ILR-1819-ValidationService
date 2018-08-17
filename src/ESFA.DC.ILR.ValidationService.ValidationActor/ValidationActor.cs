@@ -83,7 +83,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     var preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                    var errors = preValidationOrchestrationService.Execute(validationContext);
+                    var errors = preValidationOrchestrationService.Execute();
                     logger.LogDebug($"actor {executionContext.TaskKey} validation done");
 
                     var errorString = jsonSerializationService.Serialize(errors);

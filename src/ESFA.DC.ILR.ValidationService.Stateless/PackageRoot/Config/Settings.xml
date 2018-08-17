@@ -17,28 +17,27 @@
     <Parameter Name="FundingCalcSqlFilterValue" Value="" />
   </Section>
 
-
   <Section Name="LoggerSection">
     <Parameter Name="LoggerConnectionstring" Value="" />
   </Section>
 
   <Section  Name="AzureStorageSection">
     <Parameter Name="AzureBlobConnectionString" Value="" />
+    <Parameter Name="AzureBlobContainerName" Value="" />
   </Section>
   
   <Section  Name="ReferenceDataSection">
     <Parameter Name="LARSConnectionString" Value="" />
+    <Parameter Name="LargeEmployersConnectionString" Value="" />
     <Parameter Name="PostcodesConnectionString" Value="" />
     <Parameter Name="ULNConnectionstring" Value="" />
     <Parameter Name="ValidationErrorsConnectionString" Value="" />
     <Parameter Name="OrganisationsConnectionString" Value="" />
   </Section>
 
-
   <Section  Name="AzureRedisSection">
     <Parameter Name="RedisCacheConnectionString" Value="" />
   </Section>
-
 
   <Section Name="DataTransportSettings">
     <Parameter Name="MaxMessageSize" Value="1073741824" MustOverride="true"/>

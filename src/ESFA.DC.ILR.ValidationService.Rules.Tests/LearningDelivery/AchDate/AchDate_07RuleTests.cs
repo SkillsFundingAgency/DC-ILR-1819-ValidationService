@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -51,13 +51,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
                 }
             };
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataCacheMock.SetupGet(fdc => fdc.FilePreparationDate).Returns(new DateTime(2018, 1, 1));
+            fileDataServiceMock.Setup(fdc => fdc.FilePreparationDate()).Returns(new DateTime(2018, 1, 1));
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(fileDataCacheMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -74,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(new Mock<IFileDataCache>().Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(new Mock<IFileDataService>().Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -90,9 +90,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AchDate
             validationErrorHandlerMock.Verify();
         }
 
-        private AchDate_07Rule NewRule(IFileDataCache fileDataCache = null, IValidationErrorHandler validationErrorHandler = null)
+        private AchDate_07Rule NewRule(IFileDataService fileDataService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new AchDate_07Rule(fileDataCache, validationErrorHandler);
+            return new AchDate_07Rule(fileDataService, validationErrorHandler);
         }
     }
 }

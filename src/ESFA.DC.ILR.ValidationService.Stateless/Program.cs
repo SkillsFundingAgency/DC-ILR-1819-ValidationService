@@ -7,6 +7,7 @@ using Autofac.Integration.ServiceFabric;
 using ESFA.DC.Auditing;
 using ESFA.DC.Auditing.Dto;
 using ESFA.DC.Auditing.Interface;
+using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Modules.Stateless;
 using ESFA.DC.ILR.ValidationService.Stateless.Configuration;
@@ -132,7 +133,8 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                     new QueueSubscriptionService<JobContextDto>(
                         queueSubscriptionConfig,
                         c.Resolve<IJsonSerializationService>(),
-                        c.Resolve<ILogger>());
+                        c.Resolve<ILogger>(),
+                        c.Resolve<IDateTimeProvider>());
                 return queueSubscriptionService;
             }).As<IQueueSubscriptionService<JobContextDto>>();
 

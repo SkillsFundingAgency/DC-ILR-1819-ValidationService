@@ -73,7 +73,8 @@
     <Compile Include="Abstract\AbstractRuleSetModule.cs" />
     <Compile Include="Common\DerivedDataModule.cs" />
     <Compile Include="Common\QueryServiceModule.cs" />
-    <Compile Include="RuleSetModule.cs" />
+    <Compile Include="MessageRuleSetModule.cs" />
+    <Compile Include="LearnerRuleSetModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
