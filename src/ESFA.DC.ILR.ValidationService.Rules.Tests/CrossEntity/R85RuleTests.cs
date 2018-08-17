@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
@@ -25,21 +25,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learnRefNumber = "Learner3";
             var uln = 9999999999;
-            IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
+            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
+            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
+            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
+            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+
+            IEnumerable <ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
             {
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 },
+                learnerDP1,
+                learnerDP2,
+                learnerDP3,
+                learnerDP4
             };
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
 
-            fileDataCacheMock.Setup(dc => dc.LearnerDestinationAndProgressions).Returns(learnerDPs);
+            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDP3);
             learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(false);
 
-            NewRule(fileDataCacheMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeTrue();
+            NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeTrue();
         }
 
         [Fact]
@@ -47,21 +52,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learnRefNumber = "Learner1";
             var uln = 9999999999;
+            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
+            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
+            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
+            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+
             IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
             {
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner2", ULN = 9999999998 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 },
+                learnerDP1,
+                learnerDP2,
+                learnerDP3,
+                learnerDP4
             };
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
 
-            fileDataCacheMock.Setup(dc => dc.LearnerDestinationAndProgressions).Returns(learnerDPs);
+            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDP1);
             learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(true);
 
-            NewRule(fileDataCacheMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
+            NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
         }
 
         [Fact]
@@ -69,20 +79,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learnRefNumber = "Learner1";
             var uln = 9999999999;
+            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
+            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+
             IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
             {
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner2", ULN = 9999999998 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 },
+                learnerDP3,
+                learnerDP4
             };
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
 
-            fileDataCacheMock.Setup(dc => dc.LearnerDestinationAndProgressions).Returns(learnerDPs);
+            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns((ILearnerDestinationAndProgression)null);
             learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(false);
 
-            NewRule(fileDataCacheMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
+            NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
         }
 
         [Fact]
@@ -90,14 +102,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learnRefNumber = "Learner1";
             var uln = 9999999999;
-            TestLearnerDestinationAndProgression learnerDPs = null;
+            TestLearnerDestinationAndProgression learnerDP = null;
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
 
-            learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, learnerDPs)).Returns(false);
+            learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, learnerDP)).Returns(false);
 
-            NewRule(fileDataCacheMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
+            NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
         }
 
         [Fact]
@@ -105,12 +117,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learnRefNumber = "Learner3";
             var uln = 9999999999;
+            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
+            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
+            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
+            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+
             IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
             {
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 },
+                learnerDP1,
+                learnerDP2,
+                learnerDP3,
+                learnerDP4
             };
 
             var learner = new TestLearner
@@ -119,15 +136,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 ULN = uln
             };
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
 
-            fileDataCacheMock.Setup(dc => dc.LearnerDestinationAndProgressions).Returns(learnerDPs);
+            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDP3);
             learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(fileDataCacheMock.Object, learnerDPQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -136,12 +153,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learnRefNumber = "Learner3";
             var uln = 9999999999;
+            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
+            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
+            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999999 };
+            var learnerDlearnerDP3P4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+
             IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
             {
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 },
-                new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 },
+                learnerDP1,
+                learnerDP2,
+                learnerDP3
             };
 
             var learner = new TestLearner
@@ -150,15 +171,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 ULN = uln
             };
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
 
-            fileDataCacheMock.Setup(dc => dc.LearnerDestinationAndProgressions).Returns(learnerDPs);
+            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDP3);
             learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(fileDataCacheMock.Object, learnerDPQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -174,9 +195,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             validationErrorHandlerMock.Verify();
         }
 
-        private R85Rule NewRule(IFileDataCache fileDataCache = null, ILearnerDPQueryService learnerDPQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        private R85Rule NewRule(IFileDataService fileDataService = null, ILearnerDPQueryService learnerDPQueryService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new R85Rule(fileDataCache, learnerDPQueryService, validationErrorHandler);
+            return new R85Rule(fileDataService, learnerDPQueryService, validationErrorHandler);
         }
     }
 }

@@ -68,6 +68,7 @@
     <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
+    <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="Derived\DD01.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Derived\Interface\IDD04.cs" />
     <Compile Include="Derived\Interface\IDD06.cs" />
     <Compile Include="Derived\Interface\IDD07.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_08Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_25Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_29Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_36Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_38Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_39Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_47Rule.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Learner\LearnFAMType\LearnFAMType_16Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_01Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_02Rule.cs" />
+    <Compile Include="Learner\MathGrade\MathGrade_03Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03Rule.cs" />
@@ -233,7 +237,6 @@
     <Compile Include="Query\Interface\ILearningDeliveryAppFinRecordQueryService.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerFAMQueryService.cs" />
-    <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\ValidationConstants.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryQueryService.cs" />
     <Compile Include="Query\Interface\IPostcodeQueryService.cs" />
