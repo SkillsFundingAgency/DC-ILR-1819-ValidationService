@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -13,21 +13,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 {
     public class ULN_09Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IFileDataCache _fileDataCache;
+        private readonly IFileDataService _fileDataService;
         private readonly IAcademicYearDataService _academicYearDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public ULN_09Rule(IFileDataCache fileDataCache, IAcademicYearDataService academicYearDataService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+        public ULN_09Rule(IFileDataService fileDataService, IAcademicYearDataService academicYearDataService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.ULN_09)
         {
-            _fileDataCache = fileDataCache;
+            _fileDataService = fileDataService;
             _academicYearDataService = academicYearDataService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            var filePrepDate = _fileDataCache.FilePreparationDate;
+            var filePrepDate = _fileDataService.FilePreparationDate();
             var januraryFirst = _academicYearDataService.JanuaryFirst();
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
