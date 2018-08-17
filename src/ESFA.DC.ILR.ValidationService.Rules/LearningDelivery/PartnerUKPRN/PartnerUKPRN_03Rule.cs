@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -10,28 +9,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN
 {
     public class PartnerUKPRN_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IFileDataCache _fileDataCache;
+        private readonly IFileDataService _fileDataService;
 
-        public PartnerUKPRN_03Rule(IFileDataCache fileDataCache, IValidationErrorHandler validationErrorHandler)
+        public PartnerUKPRN_03Rule(IFileDataService fileDatService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.PartnerUKPRN_03)
         {
-            _fileDataCache = fileDataCache;
+            _fileDataService = fileDatService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
+            var ukprn = _fileDataService.UKPRN();
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.PartnerUKPRNNullable))
+                if (ConditionMet(ukprn, learningDelivery.PartnerUKPRNNullable))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(_fileDataCache.UKPRN, learningDelivery.PartnerUKPRNNullable));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(ukprn, learningDelivery.PartnerUKPRNNullable));
                 }
             }
         }
 
-        public bool ConditionMet(long? partnerUKPRN)
+        public bool ConditionMet(int ukprn, long? partnerUKPRN)
         {
-            return NullConditionMet(partnerUKPRN) && UKPRNConditionMet((long)partnerUKPRN);
+            return NullConditionMet(partnerUKPRN) && UKPRNConditionMet(ukprn, (long)partnerUKPRN);
         }
 
         public bool NullConditionMet(long? partnerUKPRN)
@@ -39,9 +40,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN
             return partnerUKPRN.HasValue;
         }
 
-        public bool UKPRNConditionMet(long partnerUKPRN)
+        public bool UKPRNConditionMet(int ukprn, long partnerUKPRN)
         {
-            return _fileDataCache.UKPRN == partnerUKPRN;
+            return ukprn == partnerUKPRN;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long learningProiderUKPRN, long? partnerUKPRN)

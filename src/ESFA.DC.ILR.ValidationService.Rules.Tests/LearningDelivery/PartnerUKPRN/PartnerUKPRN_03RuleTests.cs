@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -33,51 +33,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PartnerUKPR
         [Fact]
         public void UKPRNConditionMet_False()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.Setup(ds => ds.UKPRN).Returns(1);
-
-            NewRule(fileDataCacheMock.Object).UKPRNConditionMet(2).Should().BeFalse();
+            NewRule().UKPRNConditionMet(1, 2).Should().BeFalse();
         }
 
         [Fact]
         public void UKPRNConditionMet_True()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.Setup(ds => ds.UKPRN).Returns(2);
-
-            NewRule(fileDataCacheMock.Object).UKPRNConditionMet(2).Should().BeTrue();
+            NewRule().UKPRNConditionMet(1, 1).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.Setup(ds => ds.UKPRN).Returns(2);
-
-            NewRule(fileDataCacheMock.Object).ConditionMet(1).Should().BeFalse();
+            NewRule().ConditionMet(1, 2).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_True()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.Setup(ds => ds.UKPRN).Returns(2);
-
-            NewRule(fileDataCacheMock.Object).ConditionMet(2).Should().BeTrue();
+            NewRule().ConditionMet(1, 1).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False_NullUkprn()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.Setup(ds => ds.UKPRN).Returns(2);
-
-            NewRule(fileDataCacheMock.Object).ConditionMet(null).Should().BeFalse();
+            NewRule().ConditionMet(1, null).Should().BeFalse();
         }
 
         [Fact]
@@ -94,13 +74,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PartnerUKPR
                 }
             };
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataCacheMock.Setup(ds => ds.UKPRN).Returns(1);
+            fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(1);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(fileDataCacheMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -118,13 +98,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PartnerUKPR
                 }
             };
 
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataCacheMock.Setup(ds => ds.UKPRN).Returns(2);
+            fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(2);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(fileDataCacheMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -144,9 +124,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PartnerUKPR
             validationErrorHandlerMock.Verify();
         }
 
-        private PartnerUKPRN_03Rule NewRule(IFileDataCache fileDataCache = null, IValidationErrorHandler validationErrorHandler = null)
+        private PartnerUKPRN_03Rule NewRule(IFileDataService fileDatService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new PartnerUKPRN_03Rule(fileDataCache, validationErrorHandler);
+            return new PartnerUKPRN_03Rule(fileDatService, validationErrorHandler);
         }
     }
 }
