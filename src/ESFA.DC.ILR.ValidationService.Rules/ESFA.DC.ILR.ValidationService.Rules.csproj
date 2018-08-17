@@ -225,6 +225,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_44Rule.cs" />
     <Compile Include="LearningDelivery\OtherFundAdj\OtherFundAdj_01Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_03Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03Rule.cs" />
