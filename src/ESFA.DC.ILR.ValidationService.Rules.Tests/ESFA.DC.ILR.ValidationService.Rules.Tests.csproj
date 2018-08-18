@@ -116,6 +116,7 @@
     <Compile Include="HE\QUALENT3\QUALENT3_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01RuleTests.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01RuleTests.cs" />
+    <Compile Include="HE\TTACCOM\TTACCOM_01RuleTests.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04RuleTests.cs" />
     <Compile Include="HE\LearnerHE_02RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01RuleTests.cs" />

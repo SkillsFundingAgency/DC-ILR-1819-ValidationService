@@ -1,6 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.HE;
+using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using FluentAssertions;
 using Moq;
@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
 {
-    public class LearnerHE_02RuleTests
+    public class TTACCOM_01RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
-            Assert.Throws<ArgumentNullException>(() => new LearnerHE_02Rule(null));
+            Assert.Throws<ArgumentNullException>(() => new TTACCOM_01Rule(null));
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
             var sut = NewRule();
 
             // act/assert
-            sut.RuleName.Should().Be("LearnerHE_02");
+            sut.RuleName.Should().Be("TTACCOM_01");
         }
 
         /// <summary>
@@ -61,123 +61,60 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
         }
 
         /// <summary>
-        /// Condition met with null learning HE returns true.
+        /// Condition met with null TTAccom returns true.
         /// </summary>
         [Fact]
-        public void ConditionMetWithNullLearningHEReturnsTrue()
+        public void ConditionMetWithNullTTAccomReturnsTrue()
         {
             // arrange
             var sut = NewRule();
 
             // act
-            var result = sut.ConditionMet(null, null);
+            var result = sut.ConditionMet(null);
 
             // assert
             Assert.True(result);
         }
 
         /// <summary>
-        /// Condition met with null learning deliveries returns false.
+        /// Condition met with out of range TTAccom returns false.
         /// </summary>
-        [Fact]
-        public void ConditionMetWithNullLearningDeliveriesReturnsFalse()
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(TermTimeAccommodation.InstitutionMaintainedProperty - 1)] // 0
+        [InlineData(TermTimeAccommodation.PrivateSectorHalls + 1)] // 10
+        public void ConditionMetWithOutOfRangeTTAccomReturnsFalse(int candidate)
         {
             // arrange
             var sut = NewRule();
-            var mock = new Mock<ILearnerHE>();
 
             // act
-            var result = sut.ConditionMet(mock.Object, null);
+            var result = sut.ConditionMet(candidate);
 
             // assert
             Assert.False(result);
         }
 
         /// <summary>
-        /// Condition met with no learning deliveries returns false.
+        /// Condition met with valid TTAccom code returns true.
         /// </summary>
-        [Fact]
-        public void ConditionMetWithNoLearningDeliveriesReturnsFalse()
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(TermTimeAccommodation.InstitutionMaintainedProperty)]
+        [InlineData(TermTimeAccommodation.NotInAttendanceAtTheInstitution)]
+        [InlineData(TermTimeAccommodation.NotKnown)]
+        [InlineData(TermTimeAccommodation.Other)]
+        [InlineData(TermTimeAccommodation.OtherRentedAccommodation)]
+        [InlineData(TermTimeAccommodation.OwnResidence)]
+        [InlineData(TermTimeAccommodation.ParentaOrGuardianHome)]
+        [InlineData(TermTimeAccommodation.PrivateSectorHalls)]
+        public void ConditionMetWithLearningDeliveriesAndHEMatchReturnsTrue(int candidate)
         {
             // arrange
             var sut = NewRule();
-            var mock = new Mock<ILearnerHE>();
-            var learningDeliveries = Collection.EmptyAndReadOnly<ILearningDelivery>();
 
             // act
-            var result = sut.ConditionMet(mock.Object, learningDeliveries);
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
-        /// Condition met with learning deliveries and no HE match returns false.
-        /// </summary>
-        [Fact]
-        public void ConditionMetWithLearningDeliveriesAndNoHEMatchReturnsFalse()
-        {
-            // arrange
-            var sut = NewRule();
-            var mock = new Mock<ILearnerHE>();
-
-            var mockDelivery = new Mock<ILearningDelivery>();
-
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
-
-            // act
-            var result = sut.ConditionMet(mock.Object, deliveries.AsSafeReadOnlyList());
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
-        /// Condition met with learning deliveries and HE match returns true.
-        /// </summary>
-        [Fact]
-        public void ConditionMetWithLearningDeliveriesAndHEMatchReturnsTrue()
-        {
-            // arrange
-            var sut = NewRule();
-            var mock = new Mock<ILearnerHE>();
-
-            var mockDelivery = new Mock<ILearningDelivery>();
-            var mockDeliveryHE = new Mock<ILearningDeliveryHE>();
-
-            mockDelivery.SetupGet(x => x.LearningDeliveryHEEntity)
-                .Returns(mockDeliveryHE.Object);
-
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
-
-            // act
-            var result = sut.ConditionMet(mock.Object, deliveries.AsSafeReadOnlyList());
-
-            // assert
-            Assert.True(result);
-        }
-
-        /// <summary>
-        /// Condition met with null HE and learning deliveries returns true.
-        /// </summary>
-        [Fact]
-        public void ConditionMetWithNullHEAndLearningDeliveriesReturnsTrue()
-        {
-            // arrange
-            var sut = NewRule();
-            var mockDelivery = new Mock<ILearningDelivery>();
-            var mockDeliveryHE = new Mock<ILearningDeliveryHE>();
-
-            mockDelivery.SetupGet(x => x.LearningDeliveryHEEntity)
-                .Returns(mockDeliveryHE.Object);
-
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
-
-            // act
-            var result = sut.ConditionMet(null, deliveries.AsSafeReadOnlyList());
+            var result = sut.ConditionMet(candidate);
 
             // assert
             Assert.True(result);
@@ -186,8 +123,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
         /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
-        [Fact]
-        public void InvalidItemRaisesValidationMessage()
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(TermTimeAccommodation.InstitutionMaintainedProperty - 1)] // 0
+        [InlineData(TermTimeAccommodation.PrivateSectorHalls + 1)] // 10
+        [InlineData(3)] // TermTimeAccommodation.OwnHome
+        public void InvalidItemRaisesValidationMessage(int candidate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -196,6 +137,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
             mock.SetupGet(x => x.LearnRefNumber).Returns(LearnRefNumber);
 
             var mockHE = new Mock<ILearnerHE>();
+            mockHE.SetupGet(x => x.TTACCOMNullable).Returns(candidate);
             mock.SetupGet(x => x.LearnerHEEntity).Returns(mockHE.Object);
 
             var mockDelivery = new Mock<ILearningDelivery>();
@@ -205,18 +147,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == "LearnerHE_02"),
+                Moq.It.Is<string>(y => y == "TTACCOM_01"),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 null,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
-
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == LearnerHE_02Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == mockHE.Object)))
+                    Moq.It.Is<string>(y => y == TTACCOM_01Rule.MessagePropertyName),
+                    Moq.It.Is<int>(y => y == candidate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var sut = new LearnerHE_02Rule(mockHandler.Object);
+            var sut = new TTACCOM_01Rule(mockHandler.Object);
 
             // act
             sut.Validate(mock.Object);
@@ -228,8 +169,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
         /// <summary>
         /// Valid item does not raise a validation message.
         /// </summary>
-        [Fact]
-        public void ValidItemDoesNotRaiseAValidationMessage()
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(null)]
+        [InlineData(TermTimeAccommodation.InstitutionMaintainedProperty)]
+        [InlineData(TermTimeAccommodation.NotInAttendanceAtTheInstitution)]
+        [InlineData(TermTimeAccommodation.NotKnown)]
+        [InlineData(TermTimeAccommodation.Other)]
+        [InlineData(TermTimeAccommodation.OtherRentedAccommodation)]
+        [InlineData(TermTimeAccommodation.OwnResidence)]
+        [InlineData(TermTimeAccommodation.ParentaOrGuardianHome)]
+        [InlineData(TermTimeAccommodation.PrivateSectorHalls)]
+        public void ValidItemDoesNotRaiseAValidationMessage(int? candidate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -238,6 +189,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
             mock.SetupGet(x => x.LearnRefNumber).Returns(LearnRefNumber);
 
             var mockHE = new Mock<ILearnerHE>();
+            mockHE.SetupGet(x => x.TTACCOMNullable).Returns(candidate);
             mock.SetupGet(x => x.LearnerHEEntity).Returns(mockHE.Object);
 
             var mockDelivery = new Mock<ILearningDelivery>();
@@ -252,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var sut = new LearnerHE_02Rule(mockHandler.Object);
+            var sut = new TTACCOM_01Rule(mockHandler.Object);
 
             // act
             sut.Validate(mock.Object);
@@ -265,11 +217,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public LearnerHE_02Rule NewRule()
+        public TTACCOM_01Rule NewRule()
         {
             var mock = new Mock<IValidationErrorHandler>();
 
-            return new LearnerHE_02Rule(mock.Object);
+            return new TTACCOM_01Rule(mock.Object);
         }
     }
 }

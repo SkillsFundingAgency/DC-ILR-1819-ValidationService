@@ -2,23 +2,22 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.HE
+namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
 {
     /// <summary>
     /// from version 0.7.1 validation spread sheet
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class LearnerHE_02Rule :
-            IRule<ILearner>
+    public class TTACCOM_01Rule :
+        IRule<ILearner>
     {
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "LearnerHE";
+        public const string MessagePropertyName = "TTACCOM";
 
         /// <summary>
         /// The message handler
@@ -26,10 +25,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LearnerHE_02Rule"/> class.
+        /// Initializes a new instance of the <see cref="TTACCOM_01Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public LearnerHE_02Rule(IValidationErrorHandler validationErrorHandler)
+        public TTACCOM_01Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -40,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public string RuleName => "LearnerHE_02";
+        public string RuleName => "TTACCOM_01";
 
         /// <summary>
         /// Validates the specified object.
@@ -53,26 +52,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
             var learnerHE = objectToValidate.LearnerHEEntity;
-            var learningDeliveries = objectToValidate.LearningDeliveries;
+            var tTAccom = learnerHE?.TTACCOMNullable;
 
-            var failedValidation = !ConditionMet(learnerHE, learningDeliveries);
+            var failedValidation = !ConditionMet(tTAccom);
 
             if (failedValidation)
             {
-                RaiseValidationMessage(learnRefNumber, learnerHE);
+                RaiseValidationMessage(learnRefNumber, tTAccom.Value);
             }
         }
 
         /// <summary>
         /// Condition met.
         /// </summary>
-        /// <param name="learnerHE">The learner he.</param>
-        /// <param name="learningDeliveries">The learning deliveries.</param>
-        /// <returns>true if any any point the conditions are met</returns>
-        public bool ConditionMet(ILearnerHE learnerHE, IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        /// <param name="tTAccom">The term time accomodation.</param>
+        /// <returns>
+        /// true if any any point the conditions are met
+        /// </returns>
+        public bool ConditionMet(int? tTAccom)
         {
-            return It.Has(learnerHE)
-                ? It.HasValues(learningDeliveries) && learningDeliveries.Any(d => It.Has(d.LearningDeliveryHEEntity))
+            return It.Has(tTAccom)
+                ? TermTimeAccommodation.AsASet.Contains(tTAccom.Value)
                 : true;
         }
 
@@ -80,11 +80,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE
         /// Raises the validation message.
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <param name="learnerHE">The learner HE.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearnerHE learnerHE)
+        /// <param name="tTAccom">term time accomodation.</param>
+        public void RaiseValidationMessage(string learnRefNumber, int tTAccom)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, learnerHE));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, tTAccom));
 
             _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
         }
