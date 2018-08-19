@@ -85,6 +85,9 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
     <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
+    <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
+    <Compile Include="HE\FinancialSupport\FINTYPE\TypeOfFinancialSupport.cs" />
+    <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
     <Compile Include="HE\LearnerHE_02Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_05Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_10Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_12Rule.cs" />
     <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02Rule.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_01Rule.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_05Rule.cs" />

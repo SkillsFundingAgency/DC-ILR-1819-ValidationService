@@ -2,27 +2,28 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
+namespace ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE
 {
     /// <summary>
     /// from version 0.7.1 validation spread sheet
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class TTACCOM_01Rule :
+    public class FINTYPE_02Rule :
         IRule<ILearner>
     {
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "TTACCOM";
+        public const string MessagePropertyName = "FINTYPE";
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "TTACCOM_01";
+        public const string Name = "FINTYPE_02";
 
         /// <summary>
         /// The message handler
@@ -30,10 +31,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TTACCOM_01Rule"/> class.
+        /// Initializes a new instance of the <see cref="FINTYPE_02Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public TTACCOM_01Rule(IValidationErrorHandler validationErrorHandler)
+        public FINTYPE_02Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -57,27 +58,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
             var learnerHE = objectToValidate.LearnerHEEntity;
-            var tTAccom = learnerHE?.TTACCOMNullable;
+            var financialSupport = learnerHE?.LearnerHEFinancialSupports;
 
-            var failedValidation = !ConditionMet(tTAccom);
+            var failedValidation = !ConditionMet(financialSupport);
 
             if (failedValidation)
             {
-                RaiseValidationMessage(learnRefNumber, tTAccom.Value);
+                RaiseValidationMessage(learnRefNumber, financialSupport);
             }
         }
 
         /// <summary>
         /// Condition met.
         /// </summary>
-        /// <param name="tTAccom">The term time accomodation.</param>
+        /// <param name="financialSupport">The financial support.</param>
         /// <returns>
         /// true if any any point the conditions are met
         /// </returns>
-        public bool ConditionMet(int? tTAccom)
+        public bool ConditionMet(IReadOnlyCollection<ILearnerHEFinancialSupport> financialSupport)
         {
-            return It.Has(tTAccom)
-                ? TermTimeAccommodation.AsASet.Contains(tTAccom.Value)
+            return It.HasValues(financialSupport)
+                ? TypeOfFinancialSupport.AsASet.All(x => financialSupport.Count(y => y.FINTYPE == x) <= 1)
                 : true;
         }
 
@@ -85,11 +86,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         /// Raises the validation message.
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <param name="tTAccom">term time accomodation.</param>
-        public void RaiseValidationMessage(string learnRefNumber, int tTAccom)
+        /// <param name="financialSupport">The financial support.</param>
+        public void RaiseValidationMessage(string learnRefNumber, IReadOnlyCollection<ILearnerHEFinancialSupport> financialSupport)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, tTAccom));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, financialSupport));
 
             _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
         }

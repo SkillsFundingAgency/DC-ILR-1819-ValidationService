@@ -10,6 +10,9 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
 {
+    /// <summary>
+    /// from version 0.7.1 validation spread sheet
+    /// </summary>
     public class TTACCOM_01RuleTests
     {
         /// <summary>
@@ -35,10 +38,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         }
 
         /// <summary>
-        /// Rule name 3 test, account for potential false positives.
+        /// Rule name 2, matches the constant.
         /// </summary>
         [Fact]
         public void RuleName2()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act/assert
+            sut.RuleName.Should().Be(TTACCOM_01Rule.Name);
+        }
+
+        /// <summary>
+        /// Rule name 3 test, account for potential false positives.
+        /// </summary>
+        [Fact]
+        public void RuleName3()
         {
             // arrange
             var sut = NewRule();
@@ -147,7 +163,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == "TTACCOM_01"),
+                Moq.It.Is<string>(y => y == TTACCOM_01Rule.Name),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 null,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));

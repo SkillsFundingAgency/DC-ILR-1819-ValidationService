@@ -21,6 +21,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE
         public const string MessagePropertyName = "LearnerHE";
 
         /// <summary>
+        /// Gets the name of the rule.
+        /// </summary>
+        public const string Name = "LearnerHE_02";
+
+        /// <summary>
         /// The message handler
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
@@ -40,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public string RuleName => "LearnerHE_02";
+        public string RuleName => Name;
 
         /// <summary>
         /// Validates the specified object.

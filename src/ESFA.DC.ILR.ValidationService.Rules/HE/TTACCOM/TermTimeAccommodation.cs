@@ -1,8 +1,7 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
 {
     /// <summary>
-    /// type of term time accomodation
-    /// this type maps to directly integer values
+    /// types of term time accomodation
     /// </summary>
     public static class TermTimeAccommodation
     {

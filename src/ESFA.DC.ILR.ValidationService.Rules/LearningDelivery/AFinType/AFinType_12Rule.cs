@@ -4,25 +4,40 @@ using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using System;
 using System.Linq;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
+namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 {
     /// <summary>
     /// from version 0.7.1 validation spread sheet
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class TTACCOM_01Rule :
+    public class AFinType_12Rule :
         IRule<ILearner>
     {
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "TTACCOM";
+        public const string MessagePropertyName = "AFINTYPE";
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "TTACCOM_01";
+        public const string Name = "AFinType_12";
+
+        /// <summary>
+        /// The apprenticeships (fund model)
+        /// </summary>
+        public const int ApprenticeshipsFundModel = 36;
+
+        /// <summary>
+        /// The programme aim (type)
+        /// </summary>
+        public const int ProgrammeAim = 1;
+
+        /// <summary>
+        /// The total negotiated price (apprenticeship financial type)
+        /// </summary>
+        public const string TotalNegotiatedPrice = "TNP";
 
         /// <summary>
         /// The message handler
@@ -30,10 +45,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TTACCOM_01Rule"/> class.
+        /// Initializes a new instance of the <see cref="AFinType_12Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public TTACCOM_01Rule(IValidationErrorHandler validationErrorHandler)
+        public AFinType_12Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -56,28 +71,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
-            var learnerHE = objectToValidate.LearnerHEEntity;
-            var tTAccom = learnerHE?.TTACCOMNullable;
+            var learningDeliveries = objectToValidate.LearningDeliveries;
+            var thisDelivery = learningDeliveries?.FirstOrDefault(d => d.FundModel == ApprenticeshipsFundModel && d.AimType == ProgrammeAim);
 
-            var failedValidation = !ConditionMet(tTAccom);
+            var failedValidation = !ConditionMet(thisDelivery);
 
             if (failedValidation)
             {
-                RaiseValidationMessage(learnRefNumber, tTAccom.Value);
+                RaiseValidationMessage(learnRefNumber, thisDelivery);
             }
         }
 
         /// <summary>
         /// Condition met.
         /// </summary>
-        /// <param name="tTAccom">The term time accomodation.</param>
+        /// <param name="thisDelivery">this learning delivery.</param>
         /// <returns>
         /// true if any any point the conditions are met
         /// </returns>
-        public bool ConditionMet(int? tTAccom)
+        public bool ConditionMet(ILearningDelivery thisDelivery)
         {
-            return It.Has(tTAccom)
-                ? TermTimeAccommodation.AsASet.Contains(tTAccom.Value)
+            return It.Has(thisDelivery)
+                ? thisDelivery.AppFinRecords?.Any(afr => afr.AFinType == TotalNegotiatedPrice) ?? false
                 : true;
         }
 
@@ -85,11 +100,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         /// Raises the validation message.
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <param name="tTAccom">term time accomodation.</param>
-        public void RaiseValidationMessage(string learnRefNumber, int tTAccom)
+        /// <param name="thisDelivery">this learning delivery.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, tTAccom));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
 
             _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
         }
