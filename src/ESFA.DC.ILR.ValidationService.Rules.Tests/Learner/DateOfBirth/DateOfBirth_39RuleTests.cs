@@ -98,8 +98,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData("01/06/2017", null)]
-        [InlineData("01/06/2017", "01/07/2018")]
+        [InlineData("2017-06-01", null)]
+        [InlineData("2017-06-01", "2018-07-01")]
         public void ApprenticeshipDurationConditionMet_False(string learnStartDateString, string learnActEndDateString)
         {
             DateTime learnStartDate = DateTime.Parse(learnStartDateString);
@@ -183,11 +183,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(FundModelConstants.Apprenticeships, null, "01/12/2016", null, 2, null, null)]
-        [InlineData(FundModelConstants.Apprenticeships, "01/05/2002", "01/12/2016", null, 3, null, null)]
-        [InlineData(FundModelConstants.Apprenticeships, "01/05/2002", "01/12/2016", 25, 3, null, null)]
-        [InlineData(FundModelConstants.Apprenticeships, "01/05/2002", "01/12/2016", 25, 3, "01/10/2016", null)]
-        [InlineData(FundModelConstants.Apprenticeships, "01/05/2002", "01/12/2016", 25, 3, "01/10/2016", 3)]
+        [InlineData(FundModelConstants.Apprenticeships, null, "2016-12-01", null, 2, null, null)]
+        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", null, 3, null, null)]
+        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", 25, 3, null, null)]
+        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", 25, 3, "2016-10-01", null)]
+        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", 25, 3, "2016-10-01", 3)]
         public void ConditionMet_False(
             int fundModel,
             string dateOfBirthString,
@@ -223,8 +223,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills, "01/01/1994", "01/12/2016", 23, 1, "01/03/2017", 1)]
-        [InlineData(FundModelConstants.OtherAdult, "01/05/1994", "01/12/2016", 23, 1, "01/03/2017", 1)]
+        [InlineData(FundModelConstants.AdultSkills, "1994-01-01", "2016-12-01", 23, 1, "2017-03-01", 1)]
+        [InlineData(FundModelConstants.OtherAdult, "1994-05-01", "2016-12-01", 23, 1, "2017-03-01", 1)]
         public void ConditionMet_True(
             int fundModel,
             string dateOfBirthString,

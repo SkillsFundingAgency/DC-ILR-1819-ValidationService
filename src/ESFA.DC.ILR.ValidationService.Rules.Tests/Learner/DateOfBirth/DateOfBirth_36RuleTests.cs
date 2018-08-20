@@ -40,8 +40,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(null, "01/01/2012")]
-        [InlineData("01/01/1994", "01/01/2012")]
+        [InlineData(null, "2012-01-01")]
+        [InlineData("1994-01-01", "2012-01-01")]
         public void DateOfBirthConditionMet_False(string dateOfBirthString, string learnStartDateString)
         {
             DateTime? dateOfBirth = string.IsNullOrEmpty(dateOfBirthString) ? (DateTime?)null : DateTime.Parse(dateOfBirthString);
@@ -167,9 +167,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(FundModelConstants.Apprenticeships, null, "01/12/2016", null, 2, "01/10/2016")]
-        [InlineData(FundModelConstants.Apprenticeships, "01/05/2002", "01/12/2016", null, 3, "01/10/2016")]
-        [InlineData(FundModelConstants.Apprenticeships, "01/05/2002", "01/12/2016", 25, 3, "01/10/2016")]
+        [InlineData(FundModelConstants.Apprenticeships, null, "2016-01-12", null, 2, "2016-01-10")]
+        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", null, 3, "2016-10-01")]
+        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", 25, 3, "2016-10-01")]
         public void ConditionMet_False(
             int fundModel,
             string dateOfBirthString,
@@ -204,8 +204,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills, "01/01/2001", "01/01/2018", 23, 1, "01/03/2018")]
-        [InlineData(FundModelConstants.OtherAdult, "01/05/2001", "01/01/2018", 23, 1, "01/03/2018")]
+        [InlineData(FundModelConstants.AdultSkills, "2001-01-01", "2018-01-01", 23, 1, "2018-03-01")]
+        [InlineData(FundModelConstants.OtherAdult, "2001-01-05", "2018-01-01", 23, 1, "2018-03-01")]
         public void ConditionMet_True(
             int fundModel,
             string dateOfBirthString,
