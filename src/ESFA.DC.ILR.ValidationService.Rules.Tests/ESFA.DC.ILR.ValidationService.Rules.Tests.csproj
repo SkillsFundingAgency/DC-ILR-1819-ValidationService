@@ -196,6 +196,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_05RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_10RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_12RuleTests.cs" />
     <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02RuleTests.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_01RuleTests.cs" />
