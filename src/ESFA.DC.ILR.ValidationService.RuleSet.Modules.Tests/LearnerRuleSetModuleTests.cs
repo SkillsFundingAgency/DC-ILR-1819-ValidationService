@@ -102,6 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(CompStatus_05Rule),
                 typeof(CompStatus_06Rule),
                 typeof(ConRefNumber_01Rule),
+                typeof(ConRefNumber_03Rule),
                 typeof(DateOfBirth_01Rule),
                 typeof(DateOfBirth_02Rule),
                 typeof(DateOfBirth_03Rule),
@@ -130,7 +131,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(DateOfBirth_47Rule),
                 typeof(DateOfBirth_48Rule),
                 typeof(DateOfBirth_53Rule),
-                typeof(ConRefNumber_03Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
@@ -151,7 +151,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(FundModel_05Rule),
                 typeof(FundModel_06Rule),
                 typeof(FundModel_07Rule),
-                typeof(FundModel_08Rule),
                 typeof(FundModel_08Rule),
                 typeof(FundModel_09Rule),
                 typeof(FworkCode_01Rule),
@@ -203,7 +202,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(Postcode_14Rule),
                 typeof(PostcodePrior_01Rule),
                 typeof(PrevUKPRN_01Rule),
-                typeof(PrimaryLLDD_02Rule),
                 typeof(PrimaryLLDD_01Rule),
                 typeof(PrimaryLLDD_02Rule),
                 typeof(PrimaryLLDD_03Rule),
@@ -234,7 +232,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(143);
+            rules.Should().HaveCount(ruleTypes.Count);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)
