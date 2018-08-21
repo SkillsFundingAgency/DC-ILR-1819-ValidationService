@@ -13,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
     /// <summary>
     /// from version 1.1 validation spread sheet
     /// </summary>
-    public class ProgType_01RuleTests
+    public class ProgType_02RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
-            Assert.Throws<ArgumentNullException>(() => new ProgType_01Rule(null));
+            Assert.Throws<ArgumentNullException>(() => new ProgType_02Rule(null));
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var sut = NewRule();
 
             // act/assert
-            sut.RuleName.Should().Be("ProgType_01");
+            sut.RuleName.Should().Be("ProgType_02");
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var sut = NewRule();
 
             // act/assert
-            sut.RuleName.Should().Be(ProgType_01Rule.Name);
+            sut.RuleName.Should().Be(ProgType_02Rule.Name);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// Condition met with learning delivery and null prog type returns false.
         /// </summary>
         [Fact]
-        public void ConditionMetWithLearningDeliveryNullProgTypeReturnsFalse()
+        public void ConditionMetWithLearningDeliveryNullProgTypeReturnsTrue()
         {
             // arrange
             var sut = NewRule();
@@ -106,14 +106,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var result = sut.ConditionMet(mockDelivery.Object);
 
             // assert
-            Assert.False(result);
+            Assert.True(result);
         }
 
         /// <summary>
-        /// Condition met with learning delivery and prog type returns true.
+        /// Condition met with learning delivery and prog type returns false.
         /// </summary>
         [Fact]
-        public void ConditionMetWithLearningDeliveryAndProgTypeReturnsTrue()
+        public void ConditionMetWithLearningDeliveryAndProgTypeReturnsFalse()
         {
             // arrange
             var sut = NewRule();
@@ -124,7 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var result = sut.ConditionMet(mockDelivery.Object);
 
             // assert
-            Assert.True(result);
+            Assert.False(result);
         }
 
         /// <summary>
@@ -134,8 +134,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <param name="aimSeqNumber">The aim seq number.</param>
         /// <param name="progType">Programme type</param>
         [Theory]
-        [InlineData(TypeOfAim.ProgrammeAim, 1, null)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 2, null)]
+        [InlineData(TypeOfAim.AimNotPartOfAProgramme, 2, 1)]
         public void InvalidItemRaisesValidationMessage(int aimType, int aimSeqNumber, int? progType)
         {
             // arrange
@@ -165,18 +164,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == ProgType_01Rule.Name),
+                Moq.It.Is<string>(y => y == ProgType_02Rule.Name),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 aimSeqNumber,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
 
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ProgType_01Rule.MessagePropertyName),
+                    Moq.It.Is<string>(y => y == ProgType_02Rule.MessagePropertyName),
                     Moq.It.Is<object>(y => y == mockDelivery.Object)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var sut = new ProgType_01Rule(mockHandler.Object);
+            var sut = new ProgType_02Rule(mockHandler.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -192,12 +191,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <param name="aimSeqNumber">The aim seq number.</param>
         /// <param name="progType">Programme type</param>
         [Theory]
-        [InlineData(TypeOfAim.ProgrammeAim, 1, 2)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 2, 3)]
-        [InlineData(TypeOfAim.AimNotPartOfAProgramme, 3, 5)] // valid because it's 'out of scope'
-        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, 4, 1)] // valid because it's 'out of scope'
-        [InlineData(TypeOfAim.AimNotPartOfAProgramme, 5, null)] // valid because it's 'out of scope'
-        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, 6, null)] // valid because it's 'out of scope'
+        [InlineData(TypeOfAim.ProgrammeAim, 1, 2)] // valid because it's 'out of scope'
+        [InlineData(TypeOfAim.ComponentAimInAProgramme, 2, 3)] // valid because it's 'out of scope'
+        [InlineData(TypeOfAim.ProgrammeAim, 3, null)] // valid because it's 'out of scope'
+        [InlineData(TypeOfAim.ComponentAimInAProgramme, 4, null)] // valid because it's 'out of scope'
+        [InlineData(TypeOfAim.AimNotPartOfAProgramme, 5, null)]
+        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, 6, 1)] // valid because it's 'out of scope'
+        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, 7, null)] // valid because it's 'out of scope'
         public void ValidItemDoesNotRaiseAValidationMessage(int aimType, int aimSeqNumber, int? progType)
         {
             // arrange
@@ -227,7 +227,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var sut = new ProgType_01Rule(mockHandler.Object);
+            var sut = new ProgType_02Rule(mockHandler.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -240,11 +240,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public ProgType_01Rule NewRule()
+        public ProgType_02Rule NewRule()
         {
             var mock = new Mock<IValidationErrorHandler>();
 
-            return new ProgType_01Rule(mock.Object);
+            return new ProgType_02Rule(mock.Object);
         }
     }
 }

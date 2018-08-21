@@ -194,6 +194,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PriorAttain_02Rule),
                 typeof(PriorLearnFundAdj_01Rule),
                 typeof(ProgType_01Rule),
+                typeof(ProgType_02Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(R07Rule),
