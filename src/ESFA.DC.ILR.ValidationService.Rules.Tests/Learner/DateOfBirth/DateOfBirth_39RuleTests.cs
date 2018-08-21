@@ -40,8 +40,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(null, "01/01/2012")]
-        [InlineData("01/01/1994", "01/01/2010")]
+        [InlineData(null, "2012-01-01")]
+        [InlineData("1994-01-01", "2010-01-01")]
         public void DateOfBirthConditionMet_False(string dateOfBirthString, string learnStartDateString)
         {
             DateTime? dateOfBirth = string.IsNullOrEmpty(dateOfBirthString) ? (DateTime?)null : DateTime.Parse(dateOfBirthString);
