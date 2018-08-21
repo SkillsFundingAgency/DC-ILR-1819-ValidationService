@@ -231,6 +231,8 @@
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01Rule.cs" />
     <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_01Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\TypeOfAim.cs" />
     <Compile Include="Message\UKPRN\UKPRN_03Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />

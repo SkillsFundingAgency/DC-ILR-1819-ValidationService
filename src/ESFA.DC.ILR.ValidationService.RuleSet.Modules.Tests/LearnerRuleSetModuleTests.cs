@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 
             foreach (var ruleType in assemblyItems)
             {
-                if (registeredItems.Where(x => x.GetType().Name == ruleType.Name).Count() != 1)
+                if (registeredItems.Count(x => x.GetType().Name == ruleType.Name) != 1)
                 {
                     issues.Add(ruleType);
                 }
