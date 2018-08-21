@@ -1,63 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
-using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
-using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
-using ESFA.DC.ILR.ValidationService.Rules.HE;
-using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
-using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
-using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
-using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
-using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
-using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
-using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.PMUKPRN;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.PostcodePrior;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 {
     public class LearnerRuleSetModuleTests
     {
+        /// <summary>
+        /// Assembly and registration rule cardinality is correct.
+        /// </summary>
+        [Fact]
+        public void AssemblyAndRegistrationRuleCardinalityIsCorrect()
+        {
+            var registeredItems = GetContainerRuleSet();
+            var assemblyItems = GetAssemblyRuleSet();
+
+            var issues = new List<object>();
+
+            foreach (var ruleType in assemblyItems)
+            {
+                if (registeredItems.Where(x => x.GetType().Name == ruleType.Name).Count() != 1)
+                {
+                    issues.Add(ruleType);
+                }
+            }
+
+            Assert.Empty(issues);
+        }
+
+        /// <summary>
+        /// Assembly and the registration counts match.
+        /// </summary>
+        [Fact]
+        public void AssemblyAndRegistrationCountsMatch()
+        {
+            var registeredItems = GetContainerRuleSet();
+            var assemblyItems = GetAssemblyRuleSet();
+
+            registeredItems.Should().HaveCount(assemblyItems.Count());
+        }
+
+        /// <summary>
+        /// Gets the assembly rule set.
+        /// </summary>
+        /// <returns>a collection of <see cref="Type"/></returns>
+        public IReadOnlyCollection<Type> GetAssemblyRuleSet()
+        {
+            var path = Assembly.GetExecutingAssembly().Location;
+            var asm = Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, "ESFA.DC.ILR.ValidationService.Rules.dll"));
+            return asm.GetTypes().Where(x => typeof(IRule<ILearner>).IsAssignableFrom(x)).ToList();
+        }
+
+        /// <summary>
+        /// Gets the container rule set.
+        /// </summary>
+        /// <returns>a collection of <see cref="IRule{ILearner}"/></returns>
+        public IReadOnlyCollection<IRule<ILearner>> GetContainerRuleSet()
+        {
+            var builder = new ContainerBuilder();
+
+            RegisterDependencies(builder);
+
+            builder.RegisterModule<BaseDataModule>();
+            builder.RegisterModule<LearnerRuleSetModule>();
+
+            var container = builder.Build();
+
+            return container.Resolve<IEnumerable<IRule<ILearner>>>().ToList();
+        }
+
+        /// <summary>
+        /// Registers the dependencies.
+        /// </summary>
+        /// <param name="builder">The builder.</param>
+        private void RegisterDependencies(ContainerBuilder builder)
+        {
+            builder.RegisterInstance(new Mock<IValidationErrorHandler>().Object).As<IValidationErrorHandler>();
+        }
+
+        /*
         [Fact]
         public void LearnerRuleSet()
         {
@@ -234,10 +264,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 
             rules.Should().HaveCount(ruleTypes.Count);
         }
-
-        private void RegisterDependencies(ContainerBuilder builder)
-        {
-            builder.RegisterInstance(new Mock<IValidationErrorHandler>().Object).As<IValidationErrorHandler>();
-        }
+         */
     }
 }
