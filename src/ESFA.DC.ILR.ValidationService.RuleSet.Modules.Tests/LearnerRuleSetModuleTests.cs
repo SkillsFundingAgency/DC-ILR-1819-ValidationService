@@ -2,7 +2,6 @@
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
-using FluentAssertions;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -21,11 +20,13 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
         [Fact]
         public void AssemblyAndRegistrationRuleCardinalityIsCorrect()
         {
+            // arrange
             var registeredItems = GetContainerRuleSet();
             var assemblyItems = GetAssemblyRuleSet();
 
             var issues = new List<object>();
 
+            // act
             foreach (var ruleType in assemblyItems)
             {
                 if (registeredItems.Count(x => x.GetType().Name == ruleType.Name) != 1)
@@ -34,6 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 }
             }
 
+            // assert
             Assert.Empty(issues);
         }
 
@@ -43,10 +45,16 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
         [Fact]
         public void AssemblyAndRegistrationCountsMatch()
         {
+            // arrange
             var registeredItems = GetContainerRuleSet();
             var assemblyItems = GetAssemblyRuleSet();
 
-            registeredItems.Should().HaveCount(assemblyItems.Count());
+            // act
+            var registeredCount = registeredItems.Count();
+            var assemblyCount = assemblyItems.Count();
+
+            // assert
+            Assert.Equal(registeredCount, assemblyCount);
         }
 
         /// <summary>

@@ -2,7 +2,6 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
-using FluentAssertions;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -33,8 +32,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
             // arrange
             var sut = NewRule();
 
-            // act/assert
-            sut.RuleName.Should().Be("FINTYPE_01");
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal("FINTYPE_01", result);
         }
 
         /// <summary>
@@ -46,8 +48,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
             // arrange
             var sut = NewRule();
 
-            // act/assert
-            sut.RuleName.Should().Be(FINTYPE_01Rule.Name);
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal(FINTYPE_01Rule.Name, result);
         }
 
         /// <summary>
@@ -59,8 +64,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
             // arrange
             var sut = NewRule();
 
-            // act/assert
-            sut.RuleName.Should().NotBe("SomeOtherRuleName_07");
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.NotEqual("SomeOtherRuleName_07", result);
         }
 
         /// <summary>
