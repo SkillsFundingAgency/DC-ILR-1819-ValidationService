@@ -101,65 +101,42 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         }
 
         /// <summary>
-        /// Condition met with empty learning deliveries returns true.
+        /// Condition met with learning delivery containing null prog type returns false.
         /// </summary>
         [Fact]
-        public void ConditionMetWithEmptyLearningDeliveriesReturnsTrue()
+        public void ConditionMetWithLearningDeliveryContainingNullProgTypeReturnsFalse()
         {
             // arrange
             var sut = NewRule();
-            var deliveries = Collection.EmptyAndReadOnly<ILearningDelivery>();
-
-            // act
-            var result = sut.ConditionMet(deliveries);
-
-            // assert
-            Assert.True(result);
-        }
-
-        /// <summary>
-        /// Condition met with learning deliveries containing null prog types returns true.
-        /// </summary>
-        [Fact]
-        public void ConditionMetWithLearningDeliveriesContainingNullProgTypesReturnsTrue()
-        {
-            // arrange
-            var sut = NewRule();
-            var deliveries = Collection.Empty<ILearningDelivery>();
             var mockDelivery = new Mock<ILearningDelivery>();
 
-            deliveries.Add(mockDelivery.Object);
-
             // act
-            var result = sut.ConditionMet(deliveries.AsSafeReadOnlyList());
+            var result = sut.ConditionMet(mockDelivery.Object);
 
             // assert
-            Assert.True(result);
+            Assert.False(result);
         }
 
         /// <summary>
         /// Condition met with learning deliveries containing invalid prog types returns false.
         /// </summary>
-        /// <param name="progTypes">The programme types.</param>
+        /// <param name="progType">The programme type.</param>
         [Theory]
-        [InlineData(1, 4, 19, 26)]
-        public void ConditionMetWithLearningDeliveriesContainingInvalidProgTypesReturnsFalse(params int[] progTypes)
+        [InlineData(1)]
+        [InlineData(4)]
+        [InlineData(19)]
+        [InlineData(26)]
+        public void ConditionMetWithLearningDeliveriesContainingInvalidProgTypesReturnsFalse(int progType)
         {
             // arrange
             var sut = NewRule();
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            progTypes.ForEach(x =>
-            {
-                var mockDelivery = new Mock<ILearningDelivery>();
-                mockDelivery
-                    .SetupGet(y => y.ProgTypeNullable)
-                    .Returns(x);
-
-                deliveries.Add(mockDelivery.Object);
-            });
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.ProgTypeNullable)
+                .Returns(progType);
 
             // act
-            var result = sut.ConditionMet(deliveries.AsSafeReadOnlyList());
+            var result = sut.ConditionMet(mockDelivery.Object);
 
             // assert
             Assert.False(result);
@@ -168,30 +145,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <summary>
         /// Condition met with learning deliveries containing null prog types returns true.
         /// </summary>
-        /// <param name="progTypes">The programme types.</param>
+        /// <param name="progType">The programme type.</param>
         [Theory]
-        [InlineData(TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.HigherApprenticeshipLevel4, TypeOfProgramme.HigherApprenticeshipLevel6)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel7Plus, TypeOfProgramme.HigherApprenticeshipLevel4)]
-        [InlineData(TypeOfProgramme.IntermediateLevelApprenticeship, TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.HigherApprenticeshipLevel6, TypeOfProgramme.ApprenticeshipStandard)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel4, TypeOfProgramme.HigherApprenticeshipLevel6)]
-        [InlineData(TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.IntermediateLevelApprenticeship)]
-        public void ConditionMetWithLearningDeliveriesContainingValidProgTypesReturnsTrue(params int[] progTypes)
+        [InlineData(TypeOfProgramme.AdvancedLevelApprenticeship)]
+        [InlineData(TypeOfProgramme.ApprenticeshipStandard)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel4)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel5)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel6)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel7Plus)]
+        [InlineData(TypeOfProgramme.IntermediateLevelApprenticeship)]
+        [InlineData(TypeOfProgramme.Traineeship)]
+        public void ConditionMetWithLearningDeliveriesContainingValidProgTypesReturnsTrue(int progType)
         {
             // arrange
             var sut = NewRule();
             var deliveries = Collection.Empty<ILearningDelivery>();
-            progTypes.ForEach(x =>
-            {
-                var mockDelivery = new Mock<ILearningDelivery>();
-                mockDelivery
-                    .SetupGet(y => y.ProgTypeNullable)
-                    .Returns(x);
-
-                deliveries.Add(mockDelivery.Object);
-            });
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.ProgTypeNullable)
+                .Returns(progType);
 
             // act
-            var result = sut.ConditionMet(deliveries.AsSafeReadOnlyList());
+            var result = sut.ConditionMet(mockDelivery.Object);
 
             // assert
             Assert.True(result);
@@ -224,22 +199,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 deliveries.Add(mockDelivery.Object);
             });
 
-            var readonlyDeliveries = deliveries.AsSafeReadOnlyList();
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
-                .Returns(readonlyDeliveries);
+                .Returns(deliveries.AsSafeReadOnlyList());
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
                 Moq.It.Is<string>(y => y == ProgType_03Rule.Name),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
-                null,
+                0,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
 
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
                     Moq.It.Is<string>(y => y == ProgType_03Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == readonlyDeliveries)))
+                    Moq.It.IsAny<ILearningDelivery>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new ProgType_03Rule(mockHandler.Object);

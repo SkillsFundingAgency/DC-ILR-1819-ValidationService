@@ -2,7 +2,6 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
@@ -59,27 +58,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
             var learnRefNumber = objectToValidate.LearnRefNumber;
             var learningDeliveries = objectToValidate.LearningDeliveries;
 
-            var failedValidation = !ConditionMet(learningDeliveries);
+            var deliveries = learningDeliveries?
+                .Where(x => It.Has(x.ProgTypeNullable))
+                .AsSafeReadOnlyList();
 
-            if (failedValidation)
+            deliveries.ForEach(x =>
             {
-                RaiseValidationMessage(learnRefNumber, learningDeliveries);
-            }
+                var failedValidation = !ConditionMet(x);
+
+                if (failedValidation)
+                {
+                    RaiseValidationMessage(learnRefNumber, x);
+                }
+            });
         }
 
         /// <summary>
         /// Condition met.
+        /// as this juncture the prog type cannot be null...
         /// </summary>
-        /// <param name="theseDeliveries">these deliveries.</param>
+        /// <param name="thisDelivery">this delivery.</param>
         /// <returns>
         /// true if any any point the conditions are met
         /// </returns>
-        public bool ConditionMet(IReadOnlyCollection<ILearningDelivery> theseDeliveries)
+        public bool ConditionMet(ILearningDelivery thisDelivery)
         {
-            return It.HasValues(theseDeliveries)
-                ? theseDeliveries
-                    .Where(x => It.Has(x.ProgTypeNullable))
-                    .All(x => TypeOfProgramme.AsASet.Contains((int)x.ProgTypeNullable))
+            return It.Has(thisDelivery)
+                ? It.Has(thisDelivery.ProgTypeNullable) && TypeOfProgramme.AsASet.Contains((int)thisDelivery.ProgTypeNullable)
                 : true;
         }
 
@@ -87,13 +92,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         /// Raises the validation message.
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <param name="theseDeliveries">these deliveries.</param>
-        public void RaiseValidationMessage(string learnRefNumber, IReadOnlyCollection<ILearningDelivery> theseDeliveries)
+        /// <param name="thisDelivery">this delivery.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, theseDeliveries));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
 
-            _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
+            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
     }
 }

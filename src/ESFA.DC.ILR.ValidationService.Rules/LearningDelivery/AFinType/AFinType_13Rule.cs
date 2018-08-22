@@ -71,16 +71,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
-            var learningDeliveries = objectToValidate.LearningDeliveries;
-            var thisDelivery = learningDeliveries?.FirstOrDefault(d => d.FundModel == ApprenticeshipsFundModel && d.AimType == ProgrammeAim);
-            var thisFinancialRecord = thisDelivery?.AppFinRecords?.FirstOrDefault(afr => afr.AFinType == TotalNegotiatedPrice);
+            var deliveries = objectToValidate.LearningDeliveries?
+                .Where(d => d.FundModel == ApprenticeshipsFundModel && d.AimType == ProgrammeAim)
+                .AsSafeReadOnlyList();
 
-            var failedValidation = !ConditionMet(thisDelivery, thisFinancialRecord);
-
-            if (failedValidation)
+            deliveries.ForEach(x =>
             {
-                RaiseValidationMessage(learnRefNumber, thisDelivery, thisFinancialRecord);
-            }
+                var finRecords = x.AppFinRecords?
+                    .Where(afr => afr.AFinType == TotalNegotiatedPrice)
+                    .AsSafeReadOnlyList();
+
+                finRecords.ForEach(y =>
+                {
+                    var failedValidation = !ConditionMet(x, y);
+
+                    if (failedValidation)
+                    {
+                        RaiseValidationMessage(learnRefNumber, x, y);
+                    }
+                });
+            });
         }
 
         /// <summary>
@@ -112,7 +122,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
             parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
             parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisFinancialRecord));
 
-            _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
+            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
     }
 }

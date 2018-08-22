@@ -216,13 +216,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
-            mockLearner.SetupGet(x => x.LearningDeliveries).Returns(deliveries.AsSafeReadOnlyList());
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries.AsSafeReadOnlyList());
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
                 Moq.It.Is<string>(y => y == AFinType_13Rule.Name),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
-                null,
+                0,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(

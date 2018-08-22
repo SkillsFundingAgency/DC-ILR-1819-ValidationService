@@ -58,14 +58,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
             var learnRefNumber = objectToValidate.LearnRefNumber;
             var learningDeliveries = objectToValidate.LearningDeliveries;
 
-            var thisDelivery = learningDeliveries?.FirstOrDefault(d => d.AimType == TypeOfAim.AimNotPartOfAProgramme);
+            var deliveries = learningDeliveries?
+                .Where(d => d.AimType == TypeOfAim.AimNotPartOfAProgramme)
+                .AsSafeReadOnlyList();
 
-            var failedValidation = !ConditionMet(thisDelivery);
-
-            if (failedValidation)
+            deliveries.ForEach(x =>
             {
-                RaiseValidationMessage(learnRefNumber, thisDelivery);
-            }
+                var failedValidation = !ConditionMet(x);
+
+                if (failedValidation)
+                {
+                    RaiseValidationMessage(learnRefNumber, x);
+                }
+            });
         }
 
         /// <summary>
