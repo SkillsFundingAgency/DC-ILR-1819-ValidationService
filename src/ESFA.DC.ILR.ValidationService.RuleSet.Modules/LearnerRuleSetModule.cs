@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
@@ -49,6 +47,8 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
+using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
@@ -195,6 +195,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PriorLearnFundAdj_01Rule),
                 typeof(ProgType_01Rule),
                 typeof(ProgType_02Rule),
+                typeof(ProgType_03Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(R07Rule),

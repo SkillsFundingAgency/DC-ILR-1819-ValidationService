@@ -1,7 +1,7 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
 {
     /// <summary>
-    /// types of learning programme
+    /// types of learning aim
     /// </summary>
     public static class TypeOfAim
     {
