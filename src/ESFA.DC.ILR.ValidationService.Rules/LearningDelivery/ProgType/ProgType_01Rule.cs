@@ -7,7 +7,7 @@ using System.Linq;
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
 {
     /// <summary>
-    /// from version 0.7.1 validation spread sheet
+    /// from version 1.1 validation spread sheet
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
@@ -56,21 +56,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
-            var learningDeliveries = objectToValidate.LearningDeliveries;
 
-            var deliveries = learningDeliveries?
+            objectToValidate.LearningDeliveries?
                 .Where(d => TypeOfAim.InAProgramme.Contains(d.AimType))
-                .AsSafeReadOnlyList();
-
-            deliveries.ForEach(x =>
-            {
-                var failedValidation = !ConditionMet(x);
-
-                if (failedValidation)
+                .ForEach(x =>
                 {
-                    RaiseValidationMessage(learnRefNumber, x);
-                }
-            });
+                    var failedValidation = !ConditionMet(x);
+
+                    if (failedValidation)
+                    {
+                        RaiseValidationMessage(learnRefNumber, x);
+                    }
+                });
         }
 
         /// <summary>

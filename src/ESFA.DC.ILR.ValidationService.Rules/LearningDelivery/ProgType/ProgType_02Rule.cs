@@ -7,7 +7,7 @@ using System.Linq;
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
 {
     /// <summary>
-    /// from version 0.7.1 validation spread sheet
+    /// from version 1.1 validation spread sheet
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />

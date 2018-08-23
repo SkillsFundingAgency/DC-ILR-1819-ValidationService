@@ -71,26 +71,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
-            var deliveries = objectToValidate.LearningDeliveries?
+
+            objectToValidate.LearningDeliveries?
                 .Where(d => d.FundModel == ApprenticeshipsFundModel && d.AimType == ProgrammeAim)
-                .AsSafeReadOnlyList();
-
-            deliveries.ForEach(x =>
-            {
-                var finRecords = x.AppFinRecords?
-                    .Where(afr => afr.AFinType == TotalNegotiatedPrice)
-                    .AsSafeReadOnlyList();
-
-                finRecords.ForEach(y =>
+                .ForEach(x =>
                 {
-                    var failedValidation = !ConditionMet(x, y);
+                    var finRecords = x.AppFinRecords?
+                        .Where(afr => afr.AFinType == TotalNegotiatedPrice)
+                        .AsSafeReadOnlyList();
 
-                    if (failedValidation)
+                    finRecords.ForEach(y =>
                     {
-                        RaiseValidationMessage(learnRefNumber, x, y);
-                    }
+                        var failedValidation = !ConditionMet(x, y);
+
+                        if (failedValidation)
+                        {
+                            RaiseValidationMessage(learnRefNumber, x, y);
+                        }
+                    });
                 });
-            });
         }
 
         /// <summary>

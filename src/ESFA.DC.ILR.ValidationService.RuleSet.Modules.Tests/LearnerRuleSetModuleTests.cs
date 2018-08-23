@@ -24,14 +24,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
             var registeredItems = GetContainerRuleSet();
             var assemblyItems = GetAssemblyRuleSet();
 
-            var issues = new List<object>();
+            var issues = new List<string>();
 
             // act
             foreach (var ruleType in assemblyItems)
             {
                 if (registeredItems.Count(x => x.GetType().Name == ruleType.Name) != 1)
                 {
-                    issues.Add(ruleType);
+                    issues.Add(ruleType.Name);
                 }
             }
 
