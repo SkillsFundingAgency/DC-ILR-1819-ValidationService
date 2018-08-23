@@ -118,15 +118,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         }
 
         /// <summary>
-        /// Condition met with learning deliveries containing invalid prog types returns false.
+        /// Condition met with learning deliveries containing prog type meets expectation.
         /// </summary>
-        /// <param name="progType">The programme type.</param>
+        /// <param name="progType">The programme type</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(1)]
-        [InlineData(4)]
-        [InlineData(19)]
-        [InlineData(26)]
-        public void ConditionMetWithLearningDeliveriesContainingInvalidProgTypesReturnsFalse(int progType)
+        [InlineData(1, false)]
+        [InlineData(4, false)]
+        [InlineData(19, false)]
+        [InlineData(26, false)]
+        [InlineData(TypeOfProgramme.AdvancedLevelApprenticeship, true)]
+        [InlineData(TypeOfProgramme.ApprenticeshipStandard, true)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel4, true)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel5, true)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel6, true)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel7Plus, true)]
+        [InlineData(TypeOfProgramme.IntermediateLevelApprenticeship, true)]
+        [InlineData(TypeOfProgramme.Traineeship, true)]
+        public void ConditionMetWithLearningDeliveriesContainingProgTypeMeetsExpectation(int progType, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -139,37 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var result = sut.ConditionMet(mockDelivery.Object);
 
             // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
-        /// Condition met with learning deliveries containing null prog types returns true.
-        /// </summary>
-        /// <param name="progType">The programme type.</param>
-        [Theory]
-        [InlineData(TypeOfProgramme.AdvancedLevelApprenticeship)]
-        [InlineData(TypeOfProgramme.ApprenticeshipStandard)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel4)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel5)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel6)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel7Plus)]
-        [InlineData(TypeOfProgramme.IntermediateLevelApprenticeship)]
-        [InlineData(TypeOfProgramme.Traineeship)]
-        public void ConditionMetWithLearningDeliveriesContainingValidProgTypesReturnsTrue(int progType)
-        {
-            // arrange
-            var sut = NewRule();
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            var mockDelivery = new Mock<ILearningDelivery>();
-            mockDelivery
-                .SetupGet(y => y.ProgTypeNullable)
-                .Returns(progType);
-
-            // act
-            var result = sut.ConditionMet(mockDelivery.Object);
-
-            // assert
-            Assert.True(result);
+            Assert.Equal(expectation, result);
         }
 
         /// <summary>
@@ -178,6 +157,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <param name="progTypes">The programme types.</param>
         [Theory]
         [InlineData(1, 4, 19, 26)]
+        [InlineData(1, TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.HigherApprenticeshipLevel4, TypeOfProgramme.HigherApprenticeshipLevel6)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel7Plus, 4, TypeOfProgramme.HigherApprenticeshipLevel4)]
+        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel4, TypeOfProgramme.HigherApprenticeshipLevel6, 19)]
+        [InlineData(TypeOfProgramme.IntermediateLevelApprenticeship, TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.HigherApprenticeshipLevel6, 26, TypeOfProgramme.ApprenticeshipStandard)]
         public void InvalidItemRaisesValidationMessage(params int[] progTypes)
         {
             // arrange
