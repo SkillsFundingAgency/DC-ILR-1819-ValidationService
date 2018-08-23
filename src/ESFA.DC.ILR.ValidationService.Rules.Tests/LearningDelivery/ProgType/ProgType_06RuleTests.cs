@@ -208,11 +208,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// Valid item does not raise a validation message.
         /// </summary>
         /// <param name="fundModel">The fund model.</param>
+        /// <param name="programmeType">Type of the programme.</param>
         [Theory]
-        [InlineData(TypeOfFunding.NotFundedByESFA)]
-        [InlineData(TypeOfFunding.OtherAdult)]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017)]
-        public void ValidItemDoesNotRaiseAValidationMessage(int fundModel)
+        [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfProgramme.ApprenticeshipStandard)]
+        [InlineData(TypeOfFunding.OtherAdult, TypeOfProgramme.ApprenticeshipStandard)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfProgramme.ApprenticeshipStandard)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, null)]
+        [InlineData(TypeOfFunding.CommunityLearning, null)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, null)]
+        [InlineData(TypeOfFunding.AdultSkills, null)]
+        [InlineData(TypeOfFunding.Other16To19, null)]
+        public void ValidItemDoesNotRaiseAValidationMessage(int fundModel, int? programmeType)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -228,7 +234,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 .Returns(fundModel);
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfProgramme.ApprenticeshipStandard);
+                .Returns(programmeType);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
