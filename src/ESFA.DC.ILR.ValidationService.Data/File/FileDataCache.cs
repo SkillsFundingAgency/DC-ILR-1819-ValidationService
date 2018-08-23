@@ -12,5 +12,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.File
         public int UKPRN { get; set; }
 
         public IEnumerable<ILearnerDestinationAndProgression> LearnerDestinationAndProgressions { get; set; }
+
+        public string FileName { get; set; }
+
+        public int? FileNameUKPRN
+        {
+            get
+            {
+                try
+                {
+                    return int.Parse(FileName.Split('-')[1]);
+                }
+                catch (Exception)
+                {
+                }
+
+                return null;
+            }
+        }
     }
 }

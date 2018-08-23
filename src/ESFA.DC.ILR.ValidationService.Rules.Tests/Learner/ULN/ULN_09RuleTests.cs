@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
@@ -215,17 +215,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             };
 
             var academicDataQueryServiceMock = new Mock<IAcademicYearDataService>();
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             academicDataQueryServiceMock.Setup(qs => qs.JanuaryFirst()).Returns(new DateTime(2019, 01, 01));
-            fileDataCacheMock.Setup(fd => fd.FilePreparationDate).Returns(new DateTime(2019, 01, 01));
+            fileDataServiceMock.Setup(fd => fd.FilePreparationDate()).Returns(new DateTime(2019, 01, 01));
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "LDM", "034")).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(
-                    fileDataCacheMock.Object,
+                    fileDataServiceMock.Object,
                     academicDataQueryServiceMock.Object,
                     learningDeliveryFAMQueryServiceMock.Object,
                     validationErrorHandlerMock.Object)
@@ -257,17 +257,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             };
 
             var academicDataQueryServiceMock = new Mock<IAcademicYearDataService>();
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             academicDataQueryServiceMock.Setup(qs => qs.JanuaryFirst()).Returns(new DateTime(2019, 01, 01));
-            fileDataCacheMock.Setup(fd => fd.FilePreparationDate).Returns(new DateTime(2019, 01, 01));
+            fileDataServiceMock.Setup(fd => fd.FilePreparationDate()).Returns(new DateTime(2019, 01, 01));
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, "LDM", "034")).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(
-                    fileDataCacheMock.Object,
+                    fileDataServiceMock.Object,
                     academicDataQueryServiceMock.Object,
                     learningDeliveryFAMQueryServiceMock.Object,
                     validationErrorHandlerMock.Object)
@@ -289,12 +289,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         }
 
         private ULN_09Rule NewRule(
-            IFileDataCache fileDataCache = null,
+            IFileDataService fileDataService = null,
             IAcademicYearDataService academicDataQueryService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
-            return new ULN_09Rule(fileDataCache, academicDataQueryService, learningDeliveryFAMQueryService, validationErrorHandler);
+            return new ULN_09Rule(fileDataService, academicDataQueryService, learningDeliveryFAMQueryService, validationErrorHandler);
         }
     }
 }
