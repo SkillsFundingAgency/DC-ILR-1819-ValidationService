@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -14,8 +14,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 {
     public class ULN_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IFileDataCache _fileDataCache;
-        private readonly IAcademicYearDataService _academicYearDataService;
+        private readonly IFileDataService _fileDataService;
+        private readonly IAcademicYearDataService _academicDataQueryService;
         private readonly ILearnerQueryService _learnerQueryService;
 
         private readonly IEnumerable<long> _fundModels =
@@ -29,11 +29,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
                 FundModelConstants.ESF,
             };
 
-        public ULN_03Rule(IFileDataCache fileDataCache, IAcademicYearDataService academicYearDataService, ILearnerQueryService learnerQueryService, IValidationErrorHandler validationErrorHandler)
+        public ULN_03Rule(IFileDataService fileDataService, IAcademicYearDataService academicDataQueryService, ILearnerQueryService learnerQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.ULN_03)
         {
-            _fileDataCache = fileDataCache;
-            _academicYearDataService = academicYearDataService;
+            _fileDataService = fileDataService;
+            _academicDataQueryService = academicDataQueryService;
             _learnerQueryService = learnerQueryService;
         }
 
@@ -41,11 +41,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
         {
             if (LearnerConditionMet(objectToValidate.ULN))
             {
+                var filePrepDate = _fileDataService.FilePreparationDate();
+                var januaryFirst = _academicDataQueryService.JanuaryFirst();
+
                 foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
-                    if (ConditionMet(learningDelivery.FundModel, _fileDataCache.FilePreparationDate, _academicYearDataService.JanuaryFirst()) && LearningDeliveryFAMConditionMet(objectToValidate))
+                    if (ConditionMet(learningDelivery.FundModel, filePrepDate, januaryFirst) && LearningDeliveryFAMConditionMet(objectToValidate))
                     {
-                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.ULN, _fileDataCache.FilePreparationDate));
+                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.ULN, filePrepDate));
                         return;
                     }
                 }

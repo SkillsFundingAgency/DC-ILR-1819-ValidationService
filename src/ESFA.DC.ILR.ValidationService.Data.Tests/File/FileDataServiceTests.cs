@@ -73,6 +73,28 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.File
             NewService(fileDataCacheMock.Object).LearnerDestinationAndProgressionsForLearnRefNumber("111111").Should().BeEquivalentTo(learnerDP);
         }
 
+        [Fact]
+        public void FileName()
+        {
+            var fileName = "ILR_11223344";
+
+            var fileDataCacheMock = new Mock<IFileDataCache>();
+            fileDataCacheMock.SetupGet(fdc => fdc.FileName).Returns(fileName);
+
+            NewService(fileDataCacheMock.Object).FileName().Should().Be(fileName);
+        }
+
+        [Fact]
+        public void FileNameUKPRN()
+        {
+            var fileNameUKPRN = 11223344;
+
+            var fileDataCacheMock = new Mock<IFileDataCache>();
+            fileDataCacheMock.SetupGet(fdc => fdc.FileNameUKPRN).Returns(fileNameUKPRN);
+
+            NewService(fileDataCache: fileDataCacheMock.Object).FileNameUKPRN().Should().Be(fileNameUKPRN);
+        }
+
         public FileDataService NewService(IFileDataCache fileDataCache = null)
         {
             return new FileDataService(fileDataCache);

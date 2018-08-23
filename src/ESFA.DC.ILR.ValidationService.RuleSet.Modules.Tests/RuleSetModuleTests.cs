@@ -1,10 +1,13 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Autofac;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
-using ESFA.DC.ILR.ValidationService.Rules.HE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
-using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
@@ -45,20 +48,31 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
-using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
-using System;
-using System.Collections.Generic;
+using FluentAssertions;
+using Moq;
+using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 {
-    public class LearnerRuleSetModule : AbstractRuleSetModule
+    public class RuleSetModuleTests
     {
-        public LearnerRuleSetModule()
+        [Fact]
+        public void RuleSet()
         {
-            RuleSetType = typeof(IRule<ILearner>);
+            var builder = new ContainerBuilder();
 
-            Rules = new List<Type>()
+            RegisterDependencies(builder);
+
+            builder.RegisterModule<BaseDataModule>();
+            builder.RegisterModule<RuleSetModule>();
+
+            var container = builder.Build();
+
+            var rules = container.Resolve<IEnumerable<IRule<ILearner>>>().ToList();
+
+            rules.Should().ContainItemsAssignableTo<IRule<ILearner>>();
+
+            var ruleTypes = new List<Type>()
             {
                 typeof(AchDate_02Rule),
                 typeof(AchDate_03Rule),
@@ -73,8 +87,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_05Rule),
                 typeof(AddHours_06Rule),
                 typeof(AFinType_10Rule),
-                typeof(AFinType_12Rule),
-                typeof(AFinType_13Rule),
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
@@ -86,7 +98,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(CompStatus_05Rule),
                 typeof(CompStatus_06Rule),
                 typeof(ConRefNumber_01Rule),
-                typeof(ConRefNumber_03Rule),
                 typeof(DateOfBirth_01Rule),
                 typeof(DateOfBirth_02Rule),
                 typeof(DateOfBirth_03Rule),
@@ -115,6 +126,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_47Rule),
                 typeof(DateOfBirth_48Rule),
                 typeof(DateOfBirth_53Rule),
+                typeof(ConRefNumber_03Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
@@ -127,14 +139,13 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FamilyName_01Rule),
                 typeof(FamilyName_02Rule),
                 typeof(FamilyName_04Rule),
-                typeof(FINTYPE_01Rule),
-                typeof(FINTYPE_02Rule),
                 typeof(FundModel_01Rule),
                 typeof(FundModel_03Rule),
                 typeof(FundModel_04Rule),
                 typeof(FundModel_05Rule),
                 typeof(FundModel_06Rule),
                 typeof(FundModel_07Rule),
+                typeof(FundModel_08Rule),
                 typeof(FundModel_08Rule),
                 typeof(FundModel_09Rule),
                 typeof(FworkCode_01Rule),
@@ -164,7 +175,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_02Rule),
                 typeof(LearnDelFAMType_03Rule),
                 typeof(LearnDelFAMType_39Rule),
-                typeof(LearnerHE_02Rule),
                 typeof(LearnDelFAMType_44Rule),
                 typeof(LearnFAMType_16Rule),
                 typeof(LLDDCat_01Rule),
@@ -187,6 +197,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(Postcode_14Rule),
                 typeof(PostcodePrior_01Rule),
                 typeof(PrevUKPRN_01Rule),
+                typeof(PrimaryLLDD_02Rule),
                 typeof(PrimaryLLDD_01Rule),
                 typeof(PrimaryLLDD_02Rule),
                 typeof(PrimaryLLDD_03Rule),
@@ -194,15 +205,10 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
                 typeof(PriorLearnFundAdj_01Rule),
-                typeof(ProgType_01Rule),
-                typeof(ProgType_02Rule),
-                typeof(ProgType_03Rule),
-                typeof(ProgType_06Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(R07Rule),
                 typeof(R85Rule),
-                typeof(TTACCOM_01Rule),
                 typeof(TTACCOM_04Rule),
                 typeof(UKPRN_06Rule),
                 typeof(ULN_02Rule),
@@ -215,6 +221,18 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_10Rule),
                 typeof(ULN_12Rule),
             };
+
+            foreach (var ruleType in ruleTypes)
+            {
+                rules.Should().ContainSingle(r => r.GetType() == ruleType);
+            }
+
+            rules.Should().HaveCount(144);
+        }
+
+        private void RegisterDependencies(ContainerBuilder builder)
+        {
+            builder.RegisterInstance(new Mock<IValidationErrorHandler>().Object).As<IValidationErrorHandler>();
         }
     }
 }
