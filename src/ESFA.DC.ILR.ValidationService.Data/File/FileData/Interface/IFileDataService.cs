@@ -14,5 +14,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface
         IEnumerable<ILearnerDestinationAndProgression> LearnerDestinationAndProgressions();
 
         ILearnerDestinationAndProgression LearnerDestinationAndProgressionsForLearnRefNumber(string learnRefNumber);
+
+        string FileName();
+
+        int? FileNameUKPRN();
     }
 }

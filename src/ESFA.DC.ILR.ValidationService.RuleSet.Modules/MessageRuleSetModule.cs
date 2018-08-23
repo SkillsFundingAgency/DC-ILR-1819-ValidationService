@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Message.FileLevel.Header;
 using ESFA.DC.ILR.ValidationService.Rules.Message.UKPRN;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 
@@ -16,6 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
             Rules = new List<Type>()
             {
                 typeof(UKPRN_03Rule),
+                typeof(Header_3Rule),
             };
         }
     }

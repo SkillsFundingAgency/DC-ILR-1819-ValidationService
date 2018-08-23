@@ -37,5 +37,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.File.FileData
                 .Where(dp => dp.LearnRefNumber == learnRefNumber)
                 .Select(dp => dp).FirstOrDefault();
         }
+
+        public string FileName()
+        {
+            return _fileDataCache.FileName;
+        }
+
+        public int? FileNameUKPRN()
+        {
+            return _fileDataCache.FileNameUKPRN;
+        }
     }
 }

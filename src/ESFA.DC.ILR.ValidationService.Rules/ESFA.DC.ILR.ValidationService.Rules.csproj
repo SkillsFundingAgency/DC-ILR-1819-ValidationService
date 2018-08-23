@@ -232,6 +232,7 @@
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01Rule.cs" />
     <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01Rule.cs" />
+    <Compile Include="Message\FileLevel\Header\Header_3Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_06Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_03Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_02Rule.cs" />

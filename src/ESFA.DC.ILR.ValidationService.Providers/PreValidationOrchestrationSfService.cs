@@ -72,6 +72,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             // get the learners
             var ilrMessage = _messageCache.Item;
 
+            // get the filename
+            _fileDataCache.FileName = validationContext.Input;
+
             // Message Validation
             _ruleSetOrchestrationService.Execute();
 
