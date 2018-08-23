@@ -20,19 +20,22 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IRuleSetOrchestrationService<ILearner, U> _learnerRuleSetOrchestrationService;
         private readonly IRuleSetOrchestrationService<IMessage, U> _messageRuleSetOrchestrationService;
         private readonly IValidationOutputService<U> _validationOutputService;
+        private readonly IFileDataCache _fileDataCache;
 
         public ConsolePreValidationOrchestrationService(
             IPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
             IRuleSetOrchestrationService<ILearner, U> learnerRuleSetOrchestrationService,
             IRuleSetOrchestrationService<IMessage, U> messageRuleSetOrchestrationService,
-            IValidationOutputService<U> validationOutputService)
+            IValidationOutputService<U> validationOutputService,
+            IFileDataCache fileDataCache)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _messageCache = messageCache;
             _learnerRuleSetOrchestrationService = learnerRuleSetOrchestrationService;
             _messageRuleSetOrchestrationService = messageRuleSetOrchestrationService;
             _validationOutputService = validationOutputService;
+            _fileDataCache = fileDataCache;
         }
 
         public IEnumerable<U> Execute(IPreValidationContext preValidationContext)
@@ -42,6 +45,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             // get the learners
             var ilrMessage = _messageCache.Item;
+
+            // get the file name
+            _fileDataCache.FileName = preValidationContext.Input;
 
             _messageRuleSetOrchestrationService.Execute();
             _learnerRuleSetOrchestrationService.Execute();

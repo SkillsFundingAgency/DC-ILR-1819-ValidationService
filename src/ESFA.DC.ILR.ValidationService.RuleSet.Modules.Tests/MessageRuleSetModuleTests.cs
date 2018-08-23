@@ -5,6 +5,7 @@ using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
+using ESFA.DC.ILR.ValidationService.Rules.Message.FileLevel.Header;
 using ESFA.DC.ILR.ValidationService.Rules.Message.UKPRN;
 using FluentAssertions;
 using Moq;
@@ -32,7 +33,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
 
             var ruleTypes = new List<Type>()
             {
-                typeof(UKPRN_03Rule)
+                typeof(UKPRN_03Rule),
+                typeof(Header_3Rule)
             };
 
             foreach (var ruleType in ruleTypes)
@@ -40,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(1);
+            rules.Should().HaveCount(2);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

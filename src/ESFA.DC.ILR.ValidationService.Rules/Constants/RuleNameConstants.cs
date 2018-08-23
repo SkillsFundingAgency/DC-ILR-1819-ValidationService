@@ -97,6 +97,8 @@
         public const string GivenNames_02 = "GivenNames_02";
         public const string GivenNames_04 = "GivenNames_04";
 
+        public const string Header_3 = "Header_3";
+
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
 
