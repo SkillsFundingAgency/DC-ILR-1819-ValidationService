@@ -161,7 +161,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Utility
         /// <returns>true or false</returns>
         public static bool IsUsable(string value, out int parsedOut, int min = int.MinValue, int max = int.MaxValue)
         {
-            return int.TryParse(value, out parsedOut) && IsInRange(parsedOut, min, max);
+            return int.TryParse(value, out parsedOut) && IsBetween(parsedOut, min, max);
         }
 
         /// <summary>
@@ -176,18 +176,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Utility
         {
             var values = target.AsSafeList();
             return values.Contains(source);
-        }
-
-        /// <summary>
-        /// Determines whether [is in range] [the specified candidate].
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="min">The minimum.</param>
-        /// <param name="max">The maximum.</param>
-        /// <returns>true or false</returns>
-        public static bool IsInRange(int candidate, int min = int.MinValue, int max = int.MaxValue)
-        {
-            return candidate >= min && candidate <= max;
         }
 
         /// <summary>
@@ -206,35 +194,63 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Utility
         }
 
         /// <summary>
+        /// Determines whether [is in range] [the specified source].
+        /// </summary>
+        /// <typeparam name="T">of value type</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>true or false</returns>
+        public static bool IsInRange<T>(T? source, params T[] target)
+            where T : struct, IComparable, IFormattable
+        {
+            var values = target.AsSafeList();
+            return Has(source) && values.Contains(source.Value);
+        }
+
+        /// <summary>
+        /// Determines whether [is out of range] [the specified source].
+        /// </summary>
+        /// <typeparam name="T">of value type</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>
+        ///   <c>true</c> if [is out of range] [the specified source]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsOutOfRange<T>(T? source, params T[] target)
+            where T : struct, IComparable, IFormattable
+        {
+            var values = target.AsSafeList();
+            return Has(source) && !values.Contains(source.Value);
+        }
+
+        /// <summary>
+        /// Determines whether [is in range] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        /// <param name="includeBoundaries">if set to <c>true</c> [include boundaries].</param>
+        /// <returns>
+        /// true or false
+        /// </returns>
+        public static bool IsBetween(int candidate, int min, int max, bool includeBoundaries = true)
+        {
+            return candidate >= min && candidate <= max;
+        }
+
+        /// <summary>
         /// Determines whether [is out of range] [the specified candidate].
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="min">The minimum.</param>
         /// <param name="max">The maximum.</param>
-        /// <returns>true or false</returns>
-        public static bool IsOutOfRange(int candidate, int min = int.MinValue, int max = int.MaxValue)
+        /// <param name="includeBoundaries">if set to <c>true</c> [include boundaries].</param>
+        /// <returns>
+        /// true or false
+        /// </returns>
+        public static bool IsNotBetween(int candidate, int min, int max, bool includeBoundaries = true)
         {
-            return !IsInRange(candidate, min, max);
-        }
-
-        /// <summary>
-        /// Determines whether the specified value is even.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>true or false</returns>
-        public static bool IsEven(int value)
-        {
-            return value % 2 == 0;
-        }
-
-        /// <summary>
-        /// Determines whether the specified value is odd.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>true or false</returns>
-        public static bool IsOdd(int value)
-        {
-            return !IsEven(value);
+            return !IsBetween(candidate, min, max, includeBoundaries);
         }
 
         /// <summary>
@@ -249,16 +265,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Utility
             var enumerable = values.AsSafeList();
             return enumerable.Count == expectedCount;
         }
-
-        ///// <summary>
-        ///// Determines whether [is database null] [the specified item].
-        ///// </summary>
-        ///// <param name="item">The item.</param>
-        ///// <returns>true or false</returns>
-        //public static bool IsDBNull(object item)
-        //{
-        //    return item is DBNull;
-        //}
 
         /// <summary>
         /// Determines whether the strings are the same.

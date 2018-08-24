@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
     /// <summary>
     /// from version 1.1 validation spread sheet
     /// </summary>
-    public class ProgType_06RuleTests
+    public class ProgType_07RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
-            Assert.Throws<ArgumentNullException>(() => new ProgType_06Rule(null));
+            Assert.Throws<ArgumentNullException>(() => new ProgType_07Rule(null));
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("ProgType_06", result);
+            Assert.Equal("ProgType_07", result);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(ProgType_06Rule.Name, result);
+            Assert.Equal(ProgType_07Rule.Name, result);
         }
 
         /// <summary>
@@ -118,27 +118,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         }
 
         /// <summary>
-        /// Condition met with learning deliveries containing fund models meets expectation.
+        /// Condition met with learning deliveries containing start and planned end dates meets expectation.
         /// </summary>
-        /// <param name="fundModel">The fund model.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(TypeOfFunding.EuropeanSocialFund, false)]
-        [InlineData(TypeOfFunding.CommunityLearning, false)]
-        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, false)]
-        [InlineData(TypeOfFunding.AdultSkills, false)]
-        [InlineData(TypeOfFunding.Other16To19, false)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, true)]
-        [InlineData(TypeOfFunding.OtherAdult, true)]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, true)]
-        public void ConditionMetWithLearningDeliveriesContainingFundModelsMeetsExpectation(int fundModel, bool expectation)
+        [InlineData("2017-08-01", "2017-09-30", true)]
+        [InlineData("2016-09-01", "2017-09-30", false)]
+        [InlineData("2017-01-01", "2017-06-30", true)]
+        [InlineData("2017-02-01", "2017-07-31", true)]
+        [InlineData("2017-02-26", "2017-09-30", false)]
+        [InlineData("2017-03-14", "2017-09-30", false)]
+        [InlineData("2017-03-31", "2017-09-30", false)]
+        [InlineData("2017-04-01", "2017-09-30", true)]
+        [InlineData("2017-04-01", "2017-10-01", false)]
+        public void ConditionMetWithLearningDeliveriesContainingFundModelsMeetsExpectation(string startDate, string endDate, bool expectation)
         {
             // arrange
             var sut = NewRule();
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(fundModel);
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse(startDate));
+
+            mockDelivery
+                .SetupGet(y => y.LearnPlanEndDate)
+                .Returns(DateTime.Parse(endDate));
 
             // act
             var result = sut.ConditionMet(mockDelivery.Object);
@@ -150,14 +156,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
-        /// <param name="fundModel">The fund model.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
         [Theory]
-        [InlineData(TypeOfFunding.EuropeanSocialFund)]
-        [InlineData(TypeOfFunding.CommunityLearning)]
-        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships)]
-        [InlineData(TypeOfFunding.AdultSkills)]
-        [InlineData(TypeOfFunding.Other16To19)]
-        public void InvalidItemRaisesValidationMessage(int fundModel)
+        [InlineData("2016-08-01", "2017-09-30")]
+        [InlineData("2016-01-01", "2017-06-30")]
+        [InlineData("2016-02-01", "2017-07-31")]
+        public void InvalidItemRaisesValidationMessage(string startDate, string endDate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -169,8 +174,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(fundModel);
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse(startDate));
+            mockDelivery
+                .SetupGet(y => y.LearnPlanEndDate)
+                .Returns(DateTime.Parse(endDate));
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
                 .Returns(TypeOfProgramme.ApprenticeshipStandard);
@@ -184,18 +192,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == ProgType_06Rule.Name),
+                Moq.It.Is<string>(y => y == ProgType_07Rule.Name),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 0,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
 
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ProgType_06Rule.MessagePropertyName),
+                    Moq.It.Is<string>(y => y == ProgType_07Rule.MessagePropertyName),
                     Moq.It.IsAny<ILearningDelivery>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var sut = new ProgType_06Rule(mockHandler.Object);
+            var sut = new ProgType_07Rule(mockHandler.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -207,21 +215,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <summary>
         /// Valid item does not raise a validation message.
         /// </summary>
-        /// <param name="fundModel">The fund model.</param>
-        /// <param name="programmeType">Type of the programme.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
         [Theory]
-        [InlineData(TypeOfFunding.NotFundedByESFA, 26)]
-        [InlineData(TypeOfFunding.OtherAdult, 27)]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, 28)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfProgramme.ApprenticeshipStandard)]
-        [InlineData(TypeOfFunding.OtherAdult, TypeOfProgramme.ApprenticeshipStandard)]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfProgramme.ApprenticeshipStandard)]
-        [InlineData(TypeOfFunding.EuropeanSocialFund, null)]
-        [InlineData(TypeOfFunding.CommunityLearning, null)]
-        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, null)]
-        [InlineData(TypeOfFunding.AdultSkills, null)]
-        [InlineData(TypeOfFunding.Other16To19, null)]
-        public void ValidItemDoesNotRaiseAValidationMessage(int fundModel, int? programmeType)
+        [InlineData("2017-08-01", "2017-09-30")]
+        [InlineData("2017-01-01", "2017-06-30")]
+        [InlineData("2017-02-01", "2017-07-31")]
+        public void ValidItemDoesNotRaiseAValidationMessage(string startDate, string endDate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -233,11 +233,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(fundModel);
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse(startDate));
+            mockDelivery
+                .SetupGet(y => y.LearnPlanEndDate)
+                .Returns(DateTime.Parse(endDate));
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
-                .Returns(programmeType);
+                .Returns(TypeOfProgramme.ApprenticeshipStandard);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -248,7 +251,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var sut = new ProgType_06Rule(mockHandler.Object);
+            var sut = new ProgType_07Rule(mockHandler.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -261,11 +264,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public ProgType_06Rule NewRule()
+        public ProgType_07Rule NewRule()
         {
             var mock = new Mock<IValidationErrorHandler>();
 
-            return new ProgType_06Rule(mock.Object);
+            return new ProgType_07Rule(mock.Object);
         }
     }
 }

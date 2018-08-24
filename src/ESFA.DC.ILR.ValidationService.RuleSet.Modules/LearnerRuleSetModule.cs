@@ -198,6 +198,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ProgType_02Rule),
                 typeof(ProgType_03Rule),
                 typeof(ProgType_06Rule),
+                typeof(ProgType_07Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(R07Rule),
