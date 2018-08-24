@@ -18,6 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
             Rules = new List<Type>()
             {
                 typeof(Entity_1Rule),
+                typeof(Header_2Rule),
                 typeof(Header_3Rule),
                 typeof(UKPRN_03Rule),
             };
