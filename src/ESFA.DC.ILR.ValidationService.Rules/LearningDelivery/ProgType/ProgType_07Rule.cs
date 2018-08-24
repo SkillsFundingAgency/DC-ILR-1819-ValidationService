@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class ProgType_06Rule :
+    public class ProgType_07Rule :
         IRule<ILearner>
     {
         /// <summary>
@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "ProgType_06";
+        public const string Name = "ProgType_07";
 
         /// <summary>
         /// The message handler
@@ -30,16 +30,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProgType_06Rule"/> class.
+        /// Initializes a new instance of the <see cref="ProgType_07Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public ProgType_06Rule(IValidationErrorHandler validationErrorHandler)
+        public ProgType_07Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
 
             _messageHandler = validationErrorHandler;
         }
+
+        /// <summary>
+        /// Gets the maximum duration of the planned.
+        /// </summary>
+        public TimeSpan MaximumPlannedDuration => new TimeSpan(182, 0, 0, 0);
 
         /// <summary>
         /// Gets the name of the rule.
@@ -80,7 +85,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? It.IsInRange(thisDelivery.FundModel, TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfFunding.OtherAdult, TypeOfFunding.NotFundedByESFA)
+                ? (thisDelivery.LearnStartDate > DateTime.MinValue) && ((thisDelivery.LearnPlanEndDate - thisDelivery.LearnStartDate) <= MaximumPlannedDuration)
                 : true;
         }
 
