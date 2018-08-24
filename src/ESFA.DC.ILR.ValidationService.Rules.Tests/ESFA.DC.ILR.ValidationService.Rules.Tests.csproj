@@ -255,6 +255,7 @@
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01RuleTests.cs" />
     <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01RuleTests.cs" />
+    <Compile Include="Message\FileLevel\Entity\Entity_1RuleTests.cs" />
     <Compile Include="Message\FileLevel\Header\Header_3RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_06RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_03RuleTests.cs" />
