@@ -210,6 +210,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <param name="fundModel">The fund model.</param>
         /// <param name="programmeType">Type of the programme.</param>
         [Theory]
+        [InlineData(TypeOfFunding.NotFundedByESFA, 26)]
+        [InlineData(TypeOfFunding.OtherAdult, 27)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, 28)]
         [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfProgramme.ApprenticeshipStandard)]
         [InlineData(TypeOfFunding.OtherAdult, TypeOfProgramme.ApprenticeshipStandard)]
         [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfProgramme.ApprenticeshipStandard)]
