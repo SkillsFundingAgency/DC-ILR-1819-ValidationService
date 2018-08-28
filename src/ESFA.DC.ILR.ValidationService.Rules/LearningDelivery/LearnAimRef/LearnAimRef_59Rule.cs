@@ -113,8 +113,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public virtual bool Level3QualificationConditionMet(int? priorAttain, string learnAimRef, DateTime learnStartDate)
         {
-            return (priorAttain.HasValue && _priorAttains.Contains(priorAttain.Value))
-                || !_larsDataService.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, 100m);
+            return _larsDataService.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)
+                && ((priorAttain.HasValue && _priorAttains.Contains(priorAttain.Value))
+                || !_larsDataService.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, 100m));
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnAimRef, DateTime? dateOfBirth, DateTime learnStartDate)
