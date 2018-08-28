@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
@@ -48,12 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             internalDataCacheMock.SetupGet(c => c.LLDDCats)
                 .Returns(new Dictionary<int, ValidityPeriods>()
                 {
-                    { 1, new ValidityPeriods
-                        {
-                            ValidFrom = new DateTime(2000, 01, 01),
-                            ValidTo = new DateTime(2019, 01, 01)
-                        }
-                    }
+                    [1] = new ValidityPeriods(validFrom: new DateTime(2000, 01, 01), validTo: new DateTime(2019, 01, 01))
                 });
 
             return new LLDDCatDataService(internalDataCacheMock.Object);

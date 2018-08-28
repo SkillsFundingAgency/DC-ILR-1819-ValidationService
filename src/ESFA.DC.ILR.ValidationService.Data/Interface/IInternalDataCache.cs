@@ -19,5 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IDictionary<int, ValidityPeriods> LLDDCats { get; }
 
         IReadOnlyCollection<string> QUALENT3s { get; }
+
+        IDictionary<int, ValidityPeriods> TTAccoms { get; }
     }
 }

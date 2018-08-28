@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.TTAccom;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using System;
 
@@ -11,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class TTACCOM_01Rule :
+    public class TTACCOM_02Rule :
         IRule<ILearner>
     {
         /// <summary>
@@ -22,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "TTACCOM_01";
+        public const string Name = "TTACCOM_02";
 
         /// <summary>
         /// The message handler
@@ -35,19 +36,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         private readonly IProvideTermTimeAccomodationDetails _accomodationDetails;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TTACCOM_01Rule" /> class.
+        /// The derived data06
+        /// </summary>
+        private readonly IDD06 _derivedData06;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TTACCOM_02Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="accomodationDetails">The accomodation details.</param>
-        public TTACCOM_01Rule(IValidationErrorHandler validationErrorHandler, IProvideTermTimeAccomodationDetails accomodationDetails)
+        /// <param name="derivedData06">The derived data 06.</param>
+        public TTACCOM_02Rule(IValidationErrorHandler validationErrorHandler, IProvideTermTimeAccomodationDetails accomodationDetails, IDD06 derivedData06)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(accomodationDetails)
                 .AsGuard<ArgumentNullException>(nameof(accomodationDetails));
+            It.IsNull(derivedData06)
+                .AsGuard<ArgumentNullException>(nameof(derivedData06));
 
             _messageHandler = validationErrorHandler;
             _accomodationDetails = accomodationDetails;
+            _derivedData06 = derivedData06;
         }
 
         /// <summary>
@@ -67,8 +77,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
             var learnRefNumber = objectToValidate.LearnRefNumber;
             var learnerHE = objectToValidate.LearnerHEEntity;
             var tTAccom = learnerHE?.TTACCOMNullable;
-
-            var failedValidation = !ConditionMet(tTAccom);
+            var referenceDate = _derivedData06.Derive(objectToValidate.LearningDeliveries);
+            var failedValidation = !ConditionMet(tTAccom, referenceDate);
 
             if (failedValidation)
             {
@@ -79,14 +89,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         /// <summary>
         /// Condition met.
         /// </summary>
-        /// <param name="tTAccom">The term time accomodation.</param>
+        /// <param name="tTAccom">The term time accomodation (code).</param>
+        /// <param name="referenceDate">The reference date.</param>
         /// <returns>
         /// true if any any point the conditions are met
         /// </returns>
-        public bool ConditionMet(int? tTAccom)
+        public bool ConditionMet(int? tTAccom, DateTime referenceDate)
         {
             return It.Has(tTAccom)
-                ? _accomodationDetails.Contains(tTAccom.Value)
+                ? _accomodationDetails.IsCurrent((int)tTAccom, referenceDate)
                 : true;
         }
 

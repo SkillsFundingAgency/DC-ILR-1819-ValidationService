@@ -1,18 +1,19 @@
-﻿using System;
+﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal;
-using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model;
-using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
-using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population
 {
-    public class InternalDataCachePopulationService : IInternalDataCachePopulationService
+    public class InternalDataCachePopulationService :
+        IInternalDataCachePopulationService
     {
         private readonly string resourceName = "ESFA.DC.ILR.ValidationService.Data.Population.Files.Lookups.xml";
         private readonly IInternalDataCache _internalDataCache;
@@ -25,25 +26,25 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         public void Populate()
         {
             var internalDataCache = (InternalDataCache)_internalDataCache;
-
-            XElement lookups;
-
             var assembly = Assembly.GetAssembly(typeof(InternalDataCachePopulationService));
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
             {
-                lookups = XElement.Load(stream);
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    var lookups = XElement.Load(stream);
+
+                    internalDataCache.AcademicYear = BuildAcademicYear();
+
+                    internalDataCache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));
+                    internalDataCache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
+                    internalDataCache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
+                    internalDataCache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
+                    internalDataCache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "LLDDCat"));
+                    internalDataCache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
+                    internalDataCache.TTAccoms = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "TTAccom"));
+                }
             }
-
-            internalDataCache.AcademicYear = BuildAcademicYear();
-
-            internalDataCache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));
-            internalDataCache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
-            internalDataCache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
-            internalDataCache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
-            internalDataCache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "LLDDCat"));
-            internalDataCache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
         }
 
         private AcademicYear BuildAcademicYear()
@@ -72,11 +73,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             return lookups
                  .Descendants(type)
                  .Descendants("option")
-                 .ToDictionary(c => int.Parse(c.Attribute("code").Value), v => new ValidityPeriods
-                 {
-                     ValidFrom = DateTime.Parse(v.Attribute("validFrom").Value),
-                     ValidTo = DateTime.Parse(v.Attribute("validTo").Value)
-                 });
+                 .ToDictionary(c => int.Parse(c.Attribute("code").Value), v => new ValidityPeriods(
+                     validFrom: DateTime.Parse(v.Attribute("validFrom").Value),
+                     validTo: DateTime.Parse(v.Attribute("validTo").Value)));
         }
     }
 }
