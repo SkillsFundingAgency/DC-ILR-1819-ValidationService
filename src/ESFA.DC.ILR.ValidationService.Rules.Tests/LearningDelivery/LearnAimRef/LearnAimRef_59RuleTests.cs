@@ -291,7 +291,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         [Fact]
-        public void Level3QualificationConditionMet_True_LARS()
+        public void Level3QualificationConditionMet_True_LARSLevel3()
         {
             int? priorAttain = 20;
             var learnAimRef = "LearnAimRef";
@@ -300,6 +300,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, percentValue)).Returns(false);
 
             NewRule(larsDataService: larsDataServiceMock.Object)
@@ -316,6 +317,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, percentValue)).Returns(true);
 
             NewRule(larsDataService: larsDataServiceMock.Object)
@@ -323,7 +325,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         [Fact]
-        public void Level3QualificationConditionMet_False()
+        public void Level3QualificationConditionMet_False_Level3Percent()
         {
             int? priorAttain = 20;
             var learnAimRef = "LearnAimRef";
@@ -332,6 +334,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
+            larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, percentValue)).Returns(true);
+
+            NewRule(larsDataService: larsDataServiceMock.Object)
+                .Level3QualificationConditionMet(priorAttain, learnAimRef, learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Level3QualificationConditionMet_False_LarsEffectiveDates()
+        {
+            int? priorAttain = 20;
+            var learnAimRef = "LearnAimRef";
+            var learnStartDate = new DateTime(2015, 8, 1);
+            var percentValue = 100m;
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(false);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, percentValue)).Returns(true);
 
             NewRule(larsDataService: larsDataServiceMock.Object)
@@ -442,6 +462,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(25);
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
             larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(true);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, 100m)).Returns(false);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
@@ -506,6 +527,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(25);
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
             larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(true);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, 100m)).Returns(false);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);

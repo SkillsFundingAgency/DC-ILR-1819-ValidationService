@@ -12,6 +12,107 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
     public class LARSDataServiceTests
     {
         [Fact]
+        public void EffectiveDatesValidforLearnAimRef_True()
+        {
+            var learnAimRef = "LearnAimRef";
+            var effectiveFrom = new DateTime(2018, 01, 01);
+            var effectiveTo = new DateTime(2019, 01, 01);
+            var date = new DateTime(2018, 01, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery
+                    {
+                        LearnAimRef = learnAimRef,
+                        EffectiveFrom = effectiveFrom,
+                        EffectiveTo = effectiveTo
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).EffectiveDatesValidforLearnAimRef(learnAimRef, date).Should().BeTrue();
+        }
+
+        [Fact]
+        public void EffectiveDatesValidforLearnAimRef_True_EffectiveToNull()
+        {
+            var learnAimRef = "LearnAimRef";
+            var effectiveFrom = new DateTime(2018, 01, 01);
+            var date = new DateTime(2018, 01, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery
+                    {
+                        LearnAimRef = learnAimRef,
+                        EffectiveFrom = effectiveFrom
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).EffectiveDatesValidforLearnAimRef(learnAimRef, date).Should().BeTrue();
+        }
+
+        [Fact]
+        public void EffectiveDatesValidforLearnAimRef_False()
+        {
+            var learnAimRef = "LearnAimRef";
+            var effectiveFrom = new DateTime(2018, 01, 01);
+            var effectiveTo = new DateTime(2019, 01, 01);
+            var date = new DateTime(2020, 01, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery
+                    {
+                        LearnAimRef = learnAimRef,
+                        EffectiveFrom = effectiveFrom,
+                        EffectiveTo = effectiveTo
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).EffectiveDatesValidforLearnAimRef(learnAimRef, date).Should().BeFalse();
+        }
+
+        [Fact]
+        public void EffectiveDatesValidforLearnAimRef_False_LearningDeliveryNull()
+        {
+            var learnAimRef = "LearnAimRef";
+            var effectiveFrom = new DateTime(2018, 01, 01);
+            var effectiveTo = new DateTime(2019, 01, 01);
+            var date = new DateTime(2020, 01, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).EffectiveDatesValidforLearnAimRef(learnAimRef, date).Should().BeFalse();
+        }
+
+        [Fact]
         public void FrameworkCodeExistsForFrameworkAims_True()
         {
             var learnAimRef = "LearnAimRef";

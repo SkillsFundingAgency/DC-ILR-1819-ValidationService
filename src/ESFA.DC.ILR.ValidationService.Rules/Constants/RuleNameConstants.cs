@@ -76,6 +76,8 @@
         public const string EmpStat_08 = "EmpStat_08";
         public const string EmpStat_12 = "EmpStat_12";
 
+        public const string Entity_1 = "Entity_1";
+
         public const string FamilyName_01 = "FamilyName_01";
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
@@ -97,6 +99,7 @@
         public const string GivenNames_02 = "GivenNames_02";
         public const string GivenNames_04 = "GivenNames_04";
 
+        public const string Header_2 = "Header_2";
         public const string Header_3 = "Header_3";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
