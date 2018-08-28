@@ -15,6 +15,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             _externalDataCache = externalDataCache;
         }
 
+        public bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.EffectiveFrom <= date
+                && (learningDelivery.EffectiveTo != null ? date <= learningDelivery.EffectiveTo : date <= DateTime.MaxValue);
+        }
+
         public bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
             return _externalDataCache
