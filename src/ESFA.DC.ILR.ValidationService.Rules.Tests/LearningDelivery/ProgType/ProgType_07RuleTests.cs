@@ -133,6 +133,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         [InlineData("2017-03-31", "2017-09-30", false)]
         [InlineData("2017-04-01", "2017-09-30", true)]
         [InlineData("2017-04-01", "2017-10-01", false)]
+        [InlineData("2015-04-01", "2017-10-01", false)]
+        [InlineData("2015-07-31", "2015-10-01", false)]
+        [InlineData("2015-08-01", "2016-02-01", false)]
+        [InlineData("2015-08-01", "2016-01-30", true)]
         public void ConditionMetWithLearningDeliveriesContainingFundModelsMeetsExpectation(string startDate, string endDate, bool expectation)
         {
             // arrange

@@ -47,6 +47,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public TimeSpan MaximumPlannedDuration => new TimeSpan(182, 0, 0, 0);
 
         /// <summary>
+        /// The mininum viable date
+        /// </summary>
+        public DateTime MininumViableDate = new DateTime(2015, 08, 01);
+
+        /// <summary>
         /// Gets the name of the rule.
         /// </summary>
         public string RuleName => Name;
@@ -85,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? (thisDelivery.LearnStartDate > DateTime.MinValue) && ((thisDelivery.LearnPlanEndDate - thisDelivery.LearnStartDate) <= MaximumPlannedDuration)
+                ? (thisDelivery.LearnStartDate >= MininumViableDate) && ((thisDelivery.LearnPlanEndDate - thisDelivery.LearnStartDate) <= MaximumPlannedDuration)
                 : true;
         }
 
