@@ -185,7 +185,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 .Returns(DateTime.Parse(endDate));
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfProgramme.ApprenticeshipStandard);
+                .Returns(TypeOfProgramme.Traineeship);
+            mockDelivery
+                .SetupGet(y => y.AimType)
+                .Returns(TypeOfAim.ProgrammeAim);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -200,7 +203,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 0,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
-
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
                     Moq.It.Is<string>(y => y == ProgType_07Rule.MessagePropertyName),
@@ -244,7 +246,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 .Returns(DateTime.Parse(endDate));
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfProgramme.ApprenticeshipStandard);
+                .Returns(TypeOfProgramme.Traineeship);
+            mockDelivery
+                .SetupGet(y => y.AimType)
+                .Returns(TypeOfAim.ProgrammeAim);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
