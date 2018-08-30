@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -60,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _logger = logger;
         }
 
-        public IEnumerable<U> Execute(IPreValidationContext validationContext)
+        public IEnumerable<U> Execute(IPreValidationContext validationContext, CancellationToken cancellationToken)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -68,6 +69,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             // get ILR data from file
             _preValidationPopulationService.Populate();
             _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             // get the learners
             var ilrMessage = _messageCache.Item;
@@ -77,6 +80,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             // Message Validation
             _ruleSetOrchestrationService.Execute();
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             // Get L/A and split the learners into separate lists
             var messageShards = _learnerPerActorService.Process();
@@ -107,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     FileDataCache = fileDataCacheAsBytes,
                 };
 
-                actorTasks.Add(Task.Run(() => actor.Validate(validationActorModel)));
+                actorTasks.Add(Task.Run(() => actor.Validate(validationActorModel, cancellationToken), cancellationToken));
             }
 
             _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
@@ -115,6 +120,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             Task.WaitAll(actorTasks.ToArray());
 
             _logger.LogDebug("all Actors completed");
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             foreach (var actorTask in actorTasks)
             {
@@ -125,6 +132,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     _validationErrorCache.Add(error);
                 }
             }
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             _logger.LogDebug($"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
             _validationOutputService.Process();

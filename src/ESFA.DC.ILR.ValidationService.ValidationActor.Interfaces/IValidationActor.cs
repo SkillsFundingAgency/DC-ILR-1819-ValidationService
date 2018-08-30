@@ -1,4 +1,5 @@
 ﻿using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
 using Microsoft.ServiceFabric.Actors;
@@ -13,6 +14,6 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces
     public interface IValidationActor : IActor
     {
         [OperationContract]
-        Task<string> Validate(ValidationActorModel validationActorModel);
+        Task<string> Validate(ValidationActorModel validationActorModel, CancellationToken cancellationToken);
     }
 }
