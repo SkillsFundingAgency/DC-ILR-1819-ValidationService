@@ -77,8 +77,8 @@
     <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
-    <Reference Include="ESFA.DC.IO.Interfaces, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.IO.Interfaces.0.1.2-beta0001\lib\netstandard2.0\ESFA.DC.IO.Interfaces.dll</HintPath>
+    <Reference Include="ESFA.DC.IO.Interfaces, Version=0.1.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.IO.Interfaces.0.1.12-beta0001\lib\netstandard2.0\ESFA.DC.IO.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ESFA.DC.IO.Redis, Version=0.1.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.IO.Redis.0.1.10-beta0001\lib\netstandard2.0\ESFA.DC.IO.Redis.dll</HintPath>
@@ -418,6 +418,10 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Modules\ESFA.DC.ILR.ValidationService.Modules.csproj">
       <Project>{0D9D2578-347B-4DAB-85AD-C3A271A31209}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Modules</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Providers\ESFA.DC.ILR.ValidationService.Providers.csproj">
+      <Project>{A14B4498-EF4C-4457-BA09-E9ABA42FACE0}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Providers</Name>
     </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.RuleSet.Modules\ESFA.DC.ILR.ValidationService.RuleSet.Modules.csproj">
       <Project>{E2D0F0D5-D9C8-41FE-B0DF-481DD5AA77CF}</Project>

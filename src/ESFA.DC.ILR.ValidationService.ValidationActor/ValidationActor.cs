@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Threading;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
 using ESFA.DC.ILR.ValidationService.Data.File;
@@ -50,7 +51,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             _actorId = actorId;
         }
 
-        public Task<string> Validate(ValidationActorModel validationActorModel)
+        public Task<string> Validate(ValidationActorModel validationActorModel, CancellationToken cancellationToken)
         {
             var jsonSerializationService = _parentLifeTimeScope.Resolve<IJsonSerializationService>();
 
