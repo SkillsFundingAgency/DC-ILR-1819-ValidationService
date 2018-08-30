@@ -52,9 +52,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                             fileContentString = reader.ReadToEnd();
                         }
 
-                        stream.Position = 0;
-                        _streamableKeyValuePersistenceService.SaveAsync(
-                           _preValidationContext.Input.Replace(".zip", ".xml"), stream);
+                       // stream.Position = 0;
+                        _streamableKeyValuePersistenceService.SaveAsync(zippedFile.Name, stream);
                     }
                 }
             }

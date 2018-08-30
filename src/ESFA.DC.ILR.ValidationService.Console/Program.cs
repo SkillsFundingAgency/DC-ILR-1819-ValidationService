@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Autofac;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules.Console;
@@ -40,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
             {
                 var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<IValidationError>>();
 
-                var errors = preValidationOrchestrationService.Execute(preValidationContext);
+                var errors = preValidationOrchestrationService.Execute(preValidationContext, CancellationToken.None);
 
                 OutputResultsToFile(errors, $"{preValidationContext.Output}");
             }

@@ -29,12 +29,23 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             using (var childLifeTimeScope = _parentLifeTimeScope
                 .BeginLifetimeScope(c =>
                 {
-                    c.RegisterType<AzureStorageFileContentStringProviderService>().As<IMessageStringProviderService>();
+                    var fileName = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString();
+                    if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        c.RegisterType<AzureStorageCompressedFileContentStringProviderService>()
+                            .As<IMessageStringProviderService>();
+                    }
+                    else
+                    {
+                        c.RegisterType<AzureStorageFileContentStringProviderService>()
+                            .As<IMessageStringProviderService>();
+                    }
+
                     c.RegisterInstance(
                         new PreValidationContext
                         {
                             JobId = jobContextMessage.JobId.ToString(),
-                            Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
+                            Input = fileName,
                             InvalidLearnRefNumbersKey = jobContextMessage
                                 .KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers].ToString(),
                             ValidLearnRefNumbersKey =

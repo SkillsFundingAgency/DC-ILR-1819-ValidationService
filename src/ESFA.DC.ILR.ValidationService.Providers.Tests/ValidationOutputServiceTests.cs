@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
@@ -108,10 +109,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             preValidationContextMock.SetupGet(c => c.ValidationErrorsKey).Returns(validationErrorsKey);
             preValidationContextMock.SetupGet(c => c.ValidationErrorMessageLookupKey).Returns(validationErrorMessageLookupsKey);
 
-            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validLearnRefNumbersKey, serializedValidLearners)).Returns(Task.CompletedTask).Verifiable();
-            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(invalidLearnRefNumbersKey, serializedInvalidLearners)).Returns(Task.CompletedTask).Verifiable();
-            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorsKey, serializedValidationErrors)).Returns(Task.CompletedTask).Verifiable();
-            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorMessageLookupsKey, serializedValidationErrorMessageLookups)).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validLearnRefNumbersKey, serializedValidLearners, default(CancellationToken))).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(invalidLearnRefNumbersKey, serializedInvalidLearners, default(CancellationToken))).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorsKey, serializedValidationErrors, default(CancellationToken))).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorMessageLookupsKey, serializedValidationErrorMessageLookups, default(CancellationToken))).Returns(Task.CompletedTask).Verifiable();
 
             var service = NewService(
                 keyValuePersistenceService: keyValuePersistenceServiceMock.Object,

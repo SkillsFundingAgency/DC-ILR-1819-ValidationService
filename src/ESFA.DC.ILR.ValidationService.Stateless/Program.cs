@@ -14,6 +14,7 @@ using ESFA.DC.ILR.ValidationService.Stateless.Configuration;
 using ESFA.DC.ILR.ValidationService.Stateless.Handlers;
 using ESFA.DC.ILR.ValidationService.Stateless.Mapper;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.IO.AzureStorage.Config.Interfaces;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.IO.Redis;
 using ESFA.DC.IO.Redis.Config;
@@ -88,6 +89,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             var azureStorageOptions =
                 configHelper.GetSectionValues<AzureStorageModel>("AzureStorageSection");
             containerBuilder.RegisterInstance(azureStorageOptions).As<AzureStorageModel>().SingleInstance();
+            containerBuilder.RegisterInstance(azureStorageOptions).As<IAzureStorageKeyValuePersistenceServiceConfig>().SingleInstance();
 
             Console.WriteLine($"BuildContainer:4");
             // register logger

@@ -10,6 +10,8 @@ using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules;
 using ESFA.DC.ILR.ValidationService.Stubs;
+using ESFA.DC.IO.AzureStorage;
+using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 using ESFA.DC.Serialization.Json;
 using ESFA.DC.Serialization.Xml;
@@ -22,6 +24,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
         {
             builder.RegisterType<PreValidationOrchestrationSfService<IValidationError>>().As<IPreValidationOrchestrationService<IValidationError>>().InstancePerLifetimeScope();
             //builder.RegisterType<AzureStorageFileContentStringProviderService>().As<IMessageStringProviderService>();
+            builder.RegisterType<AzureStorageKeyValuePersistenceService>().As<IStreamableKeyValuePersistenceService>().InstancePerLifetimeScope();
+
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationOutputService>().As<IValidationOutputService<IValidationError>>().InstancePerLifetimeScope();
             builder.RegisterType<LearnerPerActorServiceStub>().As<ILearnerPerActorService>().InstancePerLifetimeScope();
