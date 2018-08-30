@@ -419,6 +419,10 @@
       <Project>{0D9D2578-347B-4DAB-85AD-C3A271A31209}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Modules</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Providers\ESFA.DC.ILR.ValidationService.Providers.csproj">
+      <Project>{A14B4498-EF4C-4457-BA09-E9ABA42FACE0}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Providers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.RuleSet.Modules\ESFA.DC.ILR.ValidationService.RuleSet.Modules.csproj">
       <Project>{E2D0F0D5-D9C8-41FE-B0DF-481DD5AA77CF}</Project>
       <Name>ESFA.DC.ILR.ValidationService.RuleSet.Modules</Name>
