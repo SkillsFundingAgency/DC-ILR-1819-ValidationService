@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
@@ -20,7 +21,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
-            Assert.Throws<ArgumentNullException>(() => new FINTYPE_01Rule(null));
+            // arrange
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new FINTYPE_01Rule(null, provider.Object));
+        }
+
+        /// <summary>
+        /// New rule with null provider throws.
+        /// </summary>
+        [Fact]
+        public void NewRuleWithNullProviderThrows()
+        {
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new FINTYPE_01Rule(handler.Object, null));
         }
 
         /// <summary>
@@ -107,13 +125,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
         public void ConditionMetWithEmptyFinancialSupportReturnsTrue()
         {
             // arrange
-            var sut = NewRule();
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+
+            var sut = new FINTYPE_01Rule(handler.Object, provider.Object);
 
             // act
             var result = sut.ConditionMet(Collection.EmptyAndReadOnly<ILearnerHEFinancialSupport>());
 
             // assert
             Assert.True(result);
+            handler.VerifyAll();
+            provider.VerifyAll();
         }
 
         /// <summary>
@@ -121,23 +144,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
         /// </summary>
         /// <param name="candidates">The candidates.</param>
         [Theory]
-        [InlineData(TypeOfFinancialSupport.Cash, TypeOfFinancialSupport.NearCash)]
-        [InlineData(TypeOfFinancialSupport.Cash, TypeOfFinancialSupport.Other)]
-        [InlineData(TypeOfFinancialSupport.Cash, TypeOfFinancialSupport.AccommodationDiscount)]
-        [InlineData(TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.NearCash)]
-        [InlineData(TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.Other)]
-        [InlineData(TypeOfFinancialSupport.NearCash, TypeOfFinancialSupport.Other)]
-        [InlineData(TypeOfFinancialSupport.Cash, TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.NearCash, TypeOfFinancialSupport.Other)]
+        [InlineData(1, 1)]
+        [InlineData(1, 2, 2)]
+        [InlineData(1, 2, 3, 1)]
+        [InlineData(1, 2, 3, 4, 3)]
         public void ConditionMetWithValidFinancialSupportCombinationsReturnsTrue(params int[] candidates)
         {
             // arrange
-            var sut = NewRule();
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.Contains(LookupSimpleKey.FINTYPE, Moq.It.IsAny<int>()))
+                .Returns(true);
+
+            var sut = new FINTYPE_01Rule(handler.Object, provider.Object);
 
             // act
             var result = sut.ConditionMet(GetFinancialSupport(candidates));
 
             // assert
             Assert.True(result);
+            handler.VerifyAll();
+            provider.VerifyAll();
         }
 
         /// <summary>
@@ -145,36 +173,41 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
         /// </summary>
         /// <param name="candidates">The candidates.</param>
         [Theory]
-        [InlineData(TypeOfFinancialSupport.Cash, 51)]
-        [InlineData(16, TypeOfFinancialSupport.Other)]
-        [InlineData(TypeOfFinancialSupport.AccommodationDiscount, 9)]
-        [InlineData(0, TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.NearCash)]
-        [InlineData(TypeOfFinancialSupport.NearCash, 12, TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.Other)]
+        [InlineData(1, 1)]
+        [InlineData(1, 2, 2)]
+        [InlineData(1, 2, 3, 1)]
+        [InlineData(1, 2, 3, 4, 3)]
         public void ConditionMetWithInvalidFinancialSupportCombinationsReturnsFalse(params int[] candidates)
         {
             // arrange
-            var sut = NewRule();
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.Contains(LookupSimpleKey.FINTYPE, Moq.It.IsAny<int>()))
+                .Returns(false);
+
+            var sut = new FINTYPE_01Rule(handler.Object, provider.Object);
 
             // act
             var result = sut.ConditionMet(GetFinancialSupport(candidates));
 
             // assert
             Assert.False(result);
+            handler.VerifyAll();
+            provider.VerifyAll();
         }
 
         /// <summary>
         /// Valid item does not raise a validation message.
         /// </summary>
-        /// <param name="candidates">The candidates.</param>
+        /// <param name="candidate">The candidate.</param>
         [Theory]
-        [InlineData(TypeOfFinancialSupport.Cash, TypeOfFinancialSupport.NearCash)]
-        [InlineData(TypeOfFinancialSupport.Cash, TypeOfFinancialSupport.Other)]
-        [InlineData(TypeOfFinancialSupport.Cash, TypeOfFinancialSupport.AccommodationDiscount)]
-        [InlineData(TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.NearCash)]
-        [InlineData(TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.Other)]
-        [InlineData(TypeOfFinancialSupport.NearCash, TypeOfFinancialSupport.Other)]
-        [InlineData(TypeOfFinancialSupport.Cash, TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.NearCash, TypeOfFinancialSupport.Other)]
-        public void ValidItemDoesNotRaiseAValidationMessage(params int[] candidates)
+        [InlineData(51)]
+        [InlineData(16)]
+        [InlineData(9)]
+        [InlineData(0)]
+        [InlineData(12)]
+        public void ValidItemDoesNotRaiseAValidationMessage(int candidate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -183,7 +216,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
             mock.SetupGet(x => x.LearnRefNumber).Returns(LearnRefNumber);
 
             var mockHE = new Mock<ILearnerHE>();
-            mockHE.SetupGet(x => x.LearnerHEFinancialSupports).Returns(GetFinancialSupport(candidates));
+            mockHE.SetupGet(x => x.LearnerHEFinancialSupports).Returns(GetFinancialSupport(candidate));
             mock.SetupGet(x => x.LearnerHEEntity).Returns(mockHE.Object);
 
             var mockDelivery = new Mock<ILearningDelivery>();
@@ -196,28 +229,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
             deliveries.Add(mockDelivery.Object);
             mock.SetupGet(x => x.LearningDeliveries).Returns(deliveries.AsSafeReadOnlyList());
 
-            var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var sut = new FINTYPE_01Rule(mockHandler.Object);
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.Contains(LookupSimpleKey.FINTYPE, candidate))
+                .Returns(true);
+
+            var sut = new FINTYPE_01Rule(handler.Object, provider.Object);
 
             // act
             sut.Validate(mock.Object);
 
             // assert
-            mockHandler.VerifyAll();
+            handler.VerifyAll();
+            provider.VerifyAll();
         }
 
         /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
-        /// <param name="candidates">The candidates.</param>
+        /// <param name="candidate">The candidate.</param>
         [Theory]
-        [InlineData(TypeOfFinancialSupport.Cash, 51)]
-        [InlineData(16, TypeOfFinancialSupport.Other)]
-        [InlineData(TypeOfFinancialSupport.AccommodationDiscount, 9)]
-        [InlineData(0, TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.NearCash)]
-        [InlineData(TypeOfFinancialSupport.NearCash, 12, TypeOfFinancialSupport.AccommodationDiscount, TypeOfFinancialSupport.Other)]
-        public void InvalidItemRaisesValidationMessage(params int[] candidates)
+        [InlineData(51)]
+        [InlineData(16)]
+        [InlineData(9)]
+        [InlineData(0)]
+        [InlineData(12)]
+        public void InvalidItemRaisesValidationMessage(int candidate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -226,7 +265,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
             mock.SetupGet(x => x.LearnRefNumber).Returns(LearnRefNumber);
 
             var mockHE = new Mock<ILearnerHE>();
-            mockHE.SetupGet(x => x.LearnerHEFinancialSupports).Returns(GetFinancialSupport(candidates));
+            mockHE.SetupGet(x => x.LearnerHEFinancialSupports).Returns(GetFinancialSupport(candidate));
             mock.SetupGet(x => x.LearnerHEEntity).Returns(mockHE.Object);
 
             var mockDelivery = new Mock<ILearningDelivery>();
@@ -246,13 +285,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
                     Moq.It.IsAny<IReadOnlyCollection<ILearnerHEFinancialSupport>>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var sut = new FINTYPE_01Rule(mockHandler.Object);
+            var mockProvider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+            mockProvider
+                .Setup(x => x.Contains(LookupSimpleKey.FINTYPE, candidate))
+                .Returns(false);
+
+            var sut = new FINTYPE_01Rule(mockHandler.Object, mockProvider.Object);
 
             // act
             sut.Validate(mock.Object);
 
             // assert
             mockHandler.VerifyAll();
+            mockProvider.VerifyAll();
         }
 
         /// <summary>
@@ -275,14 +320,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FinancialSupport.FINTYPE
         }
 
         /// <summary>
+        /// Gets the financial support.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        /// a collection of mocks built from the candidate "Fin Types"
+        /// </returns>
+        public IReadOnlyCollection<ILearnerHEFinancialSupport> GetFinancialSupport(int candidate)
+        {
+            var collection = Collection.Empty<ILearnerHEFinancialSupport>();
+
+            var mock = new Mock<ILearnerHEFinancialSupport>();
+            mock.SetupGet(y => y.FINTYPE).Returns(candidate);
+            collection.Add(mock.Object);
+
+            return collection.AsSafeReadOnlyList();
+        }
+
+        /// <summary>
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
         public FINTYPE_01Rule NewRule()
         {
-            var mock = new Mock<IValidationErrorHandler>();
+            var handler = new Mock<IValidationErrorHandler>();
+            var provider = new Mock<IProvideLookupDetails>();
 
-            return new FINTYPE_01Rule(mock.Object);
+            return new FINTYPE_01Rule(handler.Object, provider.Object);
         }
     }
 }

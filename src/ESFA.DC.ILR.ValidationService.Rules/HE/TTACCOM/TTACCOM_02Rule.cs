@@ -1,5 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.TTAccom;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
@@ -31,9 +31,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// The accomodation details (provider)
+        /// The lookup details (provider)
         /// </summary>
-        private readonly IProvideTermTimeAccomodationDetails _accomodationDetails;
+        private readonly IProvideLookupDetails _lookupDetails;
 
         /// <summary>
         /// The derived data06
@@ -44,19 +44,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         /// Initializes a new instance of the <see cref="TTACCOM_02Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        /// <param name="accomodationDetails">The accomodation details.</param>
+        /// <param name="lookupDetails">The lookup details (provider).</param>
         /// <param name="derivedData06">The derived data 06.</param>
-        public TTACCOM_02Rule(IValidationErrorHandler validationErrorHandler, IProvideTermTimeAccomodationDetails accomodationDetails, IDD06 derivedData06)
+        public TTACCOM_02Rule(IValidationErrorHandler validationErrorHandler, IProvideLookupDetails lookupDetails, IDD06 derivedData06)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-            It.IsNull(accomodationDetails)
-                .AsGuard<ArgumentNullException>(nameof(accomodationDetails));
+            It.IsNull(lookupDetails)
+                .AsGuard<ArgumentNullException>(nameof(lookupDetails));
             It.IsNull(derivedData06)
                 .AsGuard<ArgumentNullException>(nameof(derivedData06));
 
             _messageHandler = validationErrorHandler;
-            _accomodationDetails = accomodationDetails;
+            _lookupDetails = lookupDetails;
             _derivedData06 = derivedData06;
         }
 
@@ -97,7 +97,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         public bool ConditionMet(int? tTAccom, DateTime referenceDate)
         {
             return It.Has(tTAccom)
-                ? _accomodationDetails.IsCurrent((int)tTAccom, referenceDate)
+                ? _lookupDetails.IsCurrent(LookupTimeRestrictedKey.TTAccom, tTAccom.Value, referenceDate)
                 : true;
         }
 

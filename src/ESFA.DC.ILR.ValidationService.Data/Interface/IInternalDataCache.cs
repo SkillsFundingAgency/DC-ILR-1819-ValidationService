@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
+﻿using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
+using System.Collections.Generic;
 using IAcademicYear = ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface.IAcademicYear;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Interface
@@ -20,6 +20,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
 
         IReadOnlyCollection<string> QUALENT3s { get; }
 
-        IDictionary<int, ValidityPeriods> TTAccoms { get; }
+        /// <summary>
+        /// Gets the simple lookups.
+        /// </summary>
+        IDictionary<LookupSimpleKey, IReadOnlyCollection<int>> SimpleLookups { get; }
+
+        /// <summary>
+        /// Gets the coded lookups.
+        /// </summary>
+        IDictionary<LookupCodedKey, IReadOnlyCollection<string>> CodedLookups { get; }
+
+        /// <summary>
+        /// Gets the time restricted lookups.
+        /// </summary>
+        IDictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> LimitedLifeLookups { get; }
     }
 }

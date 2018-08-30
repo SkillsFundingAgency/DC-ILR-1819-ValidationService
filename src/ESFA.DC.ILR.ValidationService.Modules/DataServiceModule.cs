@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ESFA.DC.ILR.ValidationService.Data;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
@@ -10,6 +11,7 @@ using ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AimType;
@@ -24,7 +26,6 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3;
 using ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.TTAccom;
 using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules
@@ -47,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<FundModelDataService>().As<IFundModelDataService>().InstancePerLifetimeScope();
             builder.RegisterType<LLDDCatDataService>().As<ILLDDCatDataService>().InstancePerLifetimeScope();
             builder.RegisterType<QUALENT3DataService>().As<IQUALENT3DataService>().InstancePerLifetimeScope();
-            builder.RegisterType<TermTimeAccomodationDetailsProvider>().As<IProvideTermTimeAccomodationDetails>().InstancePerLifetimeScope();
+            builder.RegisterType<LookupDetailsProvider>().As<IProvideLookupDetails>().InstancePerLifetimeScope();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.TTAccom;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange
-            var mockService = new Mock<IProvideTermTimeAccomodationDetails>(MockBehavior.Strict);
+            var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new TTACCOM_01Rule(null, mockService.Object));
@@ -110,7 +110,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         {
             // arrange
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var mockService = new Mock<IProvideTermTimeAccomodationDetails>(MockBehavior.Strict);
+            var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             var sut = new TTACCOM_01Rule(mockHandler.Object, mockService.Object);
 
             // act
@@ -138,9 +138,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         {
             // arrange
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var mockService = new Mock<IProvideTermTimeAccomodationDetails>(MockBehavior.Strict);
+            var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.Contains(candidate))
+                .Setup(x => x.Contains(LookupTimeRestrictedKey.TTAccom, candidate))
                 .Returns(expectation);
 
             var sut = new TTACCOM_01Rule(mockHandler.Object, mockService.Object);
@@ -191,9 +191,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
                     Moq.It.Is<int>(y => y == candidate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var mockService = new Mock<IProvideTermTimeAccomodationDetails>(MockBehavior.Strict);
+            var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.Contains(candidate))
+                .Setup(x => x.Contains(LookupTimeRestrictedKey.TTAccom, candidate))
                 .Returns(false);
 
             var sut = new TTACCOM_01Rule(mockHandler.Object, mockService.Object);
@@ -238,9 +238,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             mock.SetupGet(x => x.LearningDeliveries).Returns(deliveries.AsSafeReadOnlyList());
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var mockService = new Mock<IProvideTermTimeAccomodationDetails>(MockBehavior.Strict);
+            var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.Contains(candidate))
+                .Setup(x => x.Contains(LookupTimeRestrictedKey.TTAccom, candidate))
                 .Returns(true);
 
             var sut = new TTACCOM_01Rule(mockHandler.Object, mockService.Object);
@@ -260,7 +260,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         public TTACCOM_01Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>();
-            var service = new Mock<IProvideTermTimeAccomodationDetails>();
+            var service = new Mock<IProvideLookupDetails>();
 
             return new TTACCOM_01Rule(handler.Object, service.Object);
         }

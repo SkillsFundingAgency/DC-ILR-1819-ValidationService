@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using System;
@@ -31,15 +32,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FINTYPE_02Rule"/> class.
+        /// The lookup details (provider)
+        /// </summary>
+        private readonly IProvideLookupDetails _lookupDetails;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FINTYPE_02Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public FINTYPE_02Rule(IValidationErrorHandler validationErrorHandler)
+        /// <param name="lookupDetails">The lookup details.</param>
+        public FINTYPE_02Rule(IValidationErrorHandler validationErrorHandler, IProvideLookupDetails lookupDetails)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            It.IsNull(lookupDetails)
+                .AsGuard<ArgumentNullException>(nameof(lookupDetails));
 
             _messageHandler = validationErrorHandler;
+            _lookupDetails = lookupDetails;
         }
 
         /// <summary>
@@ -78,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE
         public bool ConditionMet(IReadOnlyCollection<ILearnerHEFinancialSupport> financialSupport)
         {
             return It.HasValues(financialSupport)
-                ? TypeOfFinancialSupport.AsASet.All(x => financialSupport.Count(y => y.FINTYPE == x) <= 1)
+                ? _lookupDetails.AsASet(LookupSimpleKey.FINTYPE).All(x => financialSupport.Count(y => y.FINTYPE == x) <= 1)
                 : true;
         }
 
