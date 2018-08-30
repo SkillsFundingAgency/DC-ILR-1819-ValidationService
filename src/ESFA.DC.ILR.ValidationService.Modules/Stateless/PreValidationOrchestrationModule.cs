@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<PreValidationOrchestrationSfService<IValidationError>>().As<IPreValidationOrchestrationService<IValidationError>>().InstancePerLifetimeScope();
-            builder.RegisterType<AzureStorageFileContentStringProviderService>().As<IMessageStringProviderService>();
+            //builder.RegisterType<AzureStorageFileContentStringProviderService>().As<IMessageStringProviderService>();
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationOutputService>().As<IValidationOutputService<IValidationError>>().InstancePerLifetimeScope();
             builder.RegisterType<LearnerPerActorServiceStub>().As<ILearnerPerActorService>().InstancePerLifetimeScope();
