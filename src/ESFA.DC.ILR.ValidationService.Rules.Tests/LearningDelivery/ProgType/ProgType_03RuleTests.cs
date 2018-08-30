@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using Moq;
@@ -127,14 +128,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         [InlineData(4, false)]
         [InlineData(19, false)]
         [InlineData(26, false)]
-        [InlineData(TypeOfProgramme.AdvancedLevelApprenticeship, true)]
-        [InlineData(TypeOfProgramme.ApprenticeshipStandard, true)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel4, true)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel5, true)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel6, true)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel7Plus, true)]
-        [InlineData(TypeOfProgramme.IntermediateLevelApprenticeship, true)]
-        [InlineData(TypeOfProgramme.Traineeship, true)]
+        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, true)]
+        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, true)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, true)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel5, true)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel6, true)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, true)]
+        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, true)]
+        [InlineData(TypeOfLearningProgramme.Traineeship, true)]
         public void ConditionMetWithLearningDeliveriesContainingProgTypeMeetsExpectation(int progType, bool expectation)
         {
             // arrange
@@ -157,10 +158,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <param name="progTypes">The programme types.</param>
         [Theory]
         [InlineData(1, 4, 19, 26)]
-        [InlineData(1, TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.HigherApprenticeshipLevel4, TypeOfProgramme.HigherApprenticeshipLevel6)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel7Plus, 4, TypeOfProgramme.HigherApprenticeshipLevel4)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel4, TypeOfProgramme.HigherApprenticeshipLevel6, 19)]
-        [InlineData(TypeOfProgramme.IntermediateLevelApprenticeship, TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.HigherApprenticeshipLevel6, 26, TypeOfProgramme.ApprenticeshipStandard)]
+        [InlineData(1, TypeOfLearningProgramme.AdvancedLevelApprenticeship, TypeOfLearningProgramme.HigherApprenticeshipLevel4, TypeOfLearningProgramme.HigherApprenticeshipLevel6)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, 4, TypeOfLearningProgramme.HigherApprenticeshipLevel4)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, TypeOfLearningProgramme.HigherApprenticeshipLevel6, 19)]
+        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, TypeOfLearningProgramme.AdvancedLevelApprenticeship, TypeOfLearningProgramme.HigherApprenticeshipLevel6, 26, TypeOfLearningProgramme.ApprenticeshipStandard)]
         public void InvalidItemRaisesValidationMessage(params int[] progTypes)
         {
             // arrange
@@ -213,11 +214,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// </summary>
         /// <param name="progTypes">The programme types.</param>
         [Theory]
-        [InlineData(TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.HigherApprenticeshipLevel4, TypeOfProgramme.HigherApprenticeshipLevel6)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel7Plus, TypeOfProgramme.HigherApprenticeshipLevel4)]
-        [InlineData(TypeOfProgramme.IntermediateLevelApprenticeship, TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.HigherApprenticeshipLevel6, TypeOfProgramme.ApprenticeshipStandard)]
-        [InlineData(TypeOfProgramme.HigherApprenticeshipLevel4, TypeOfProgramme.HigherApprenticeshipLevel6)]
-        [InlineData(TypeOfProgramme.AdvancedLevelApprenticeship, TypeOfProgramme.IntermediateLevelApprenticeship)]
+        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, TypeOfLearningProgramme.HigherApprenticeshipLevel4, TypeOfLearningProgramme.HigherApprenticeshipLevel6)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, TypeOfLearningProgramme.HigherApprenticeshipLevel4)]
+        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, TypeOfLearningProgramme.AdvancedLevelApprenticeship, TypeOfLearningProgramme.HigherApprenticeshipLevel6, TypeOfLearningProgramme.ApprenticeshipStandard)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, TypeOfLearningProgramme.HigherApprenticeshipLevel6)]
+        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, TypeOfLearningProgramme.IntermediateLevelApprenticeship)]
         public void ValidItemDoesNotRaiseAValidationMessage(params int[] progTypes)
         {
             // arrange

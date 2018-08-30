@@ -1,9 +1,9 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
+﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
     /// types of learning programme
     /// </summary>
-    public static class TypeOfProgramme
+    public static class TypeOfLearningProgramme
     {
         /// <summary>
         /// The advanced level apprenticeship

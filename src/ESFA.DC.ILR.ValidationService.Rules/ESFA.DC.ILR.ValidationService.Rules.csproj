@@ -69,6 +69,7 @@
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
+    <Compile Include="Constants\TypeOfLearningProgramme.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="Derived\DD01.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_05Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_10Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_09Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_13Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_12Rule.cs" />
     <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02Rule.cs" />
@@ -239,9 +241,8 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_03Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_02Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_01Rule.cs" />
-    <Compile Include="LearningDelivery\ProgType\TypeOfFunding.cs" />
-    <Compile Include="LearningDelivery\ProgType\TypeOfProgramme.cs" />
-    <Compile Include="LearningDelivery\ProgType\TypeOfAim.cs" />
+    <Compile Include="Constants\TypeOfFunding.cs" />
+    <Compile Include="Constants\TypeOfAim.cs" />
     <Compile Include="Message\UKPRN\UKPRN_03Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />

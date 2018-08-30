@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using Moq;
@@ -185,7 +186,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 .Returns(DateTime.Parse(endDate));
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfProgramme.Traineeship);
+                .Returns(TypeOfLearningProgramme.Traineeship);
             mockDelivery
                 .SetupGet(y => y.AimType)
                 .Returns(TypeOfAim.ProgrammeAim);
@@ -246,7 +247,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 .Returns(DateTime.Parse(endDate));
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfProgramme.Traineeship);
+                .Returns(TypeOfLearningProgramme.Traineeship);
             mockDelivery
                 .SetupGet(y => y.AimType)
                 .Returns(TypeOfAim.ProgrammeAim);

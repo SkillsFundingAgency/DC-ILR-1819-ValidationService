@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using System;
 using System.Linq;
@@ -81,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? It.Has(thisDelivery.ProgTypeNullable) && TypeOfProgramme.AsASet.Contains((int)thisDelivery.ProgTypeNullable)
+                ? It.Has(thisDelivery.ProgTypeNullable) && TypeOfLearningProgramme.AsASet.Contains((int)thisDelivery.ProgTypeNullable)
                 : true;
         }
 

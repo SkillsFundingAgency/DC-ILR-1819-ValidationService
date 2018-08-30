@@ -1,4 +1,4 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
+﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
     /// types of funding
