@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ESFA.DC.ILR.ValidationService.Data;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
@@ -8,6 +9,9 @@ using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ULN;
 using ESFA.DC.ILR.ValidationService.Data.External.ULN.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AimType;
@@ -30,6 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<FileDataService>().As<IFileDataService>().InstancePerLifetimeScope();
             builder.RegisterType<LARSDataService>().As<ILARSDataService>().InstancePerLifetimeScope();
             builder.RegisterType<OrganisationDataService>().As<IOrganisationDataService>().InstancePerLifetimeScope();
             builder.RegisterType<ULNDataService>().As<IULNDataService>().InstancePerLifetimeScope();
@@ -43,6 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<FundModelDataService>().As<IFundModelDataService>().InstancePerLifetimeScope();
             builder.RegisterType<LLDDCatDataService>().As<ILLDDCatDataService>().InstancePerLifetimeScope();
             builder.RegisterType<QUALENT3DataService>().As<IQUALENT3DataService>().InstancePerLifetimeScope();
+            builder.RegisterType<LookupDetailsProvider>().As<IProvideLookupDetails>().InstancePerLifetimeScope();
         }
     }
 }

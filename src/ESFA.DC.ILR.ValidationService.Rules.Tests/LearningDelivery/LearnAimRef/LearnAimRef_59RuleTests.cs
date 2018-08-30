@@ -37,24 +37,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         [Fact]
-        public void PriorAttainConditionMet_True()
-        {
-            NewRule().PriorAttainConditionMet(3).Should().BeTrue();
-        }
-
-        [Fact]
-        public void PriorAttainConditionMet_False()
-        {
-            NewRule().PriorAttainConditionMet(99).Should().BeFalse();
-        }
-
-        [Fact]
-        public void PriorAttainConditionMet_False_Null()
-        {
-            NewRule().PriorAttainConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
         public void DD07ConditionMet_True()
         {
             var progType = 24;
@@ -309,33 +291,71 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         [Fact]
-        public void LARSAnnualValueConditionMet_True()
+        public void Level3QualificationConditionMet_True_LARSLevel3()
         {
+            int? priorAttain = 20;
             var learnAimRef = "LearnAimRef";
             var learnStartDate = new DateTime(2015, 8, 1);
             var percentValue = 100m;
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, percentValue)).Returns(false);
 
             NewRule(larsDataService: larsDataServiceMock.Object)
-                .LARSAnnualValueConditionMet(learnAimRef, learnStartDate).Should().BeTrue();
+                .Level3QualificationConditionMet(priorAttain, learnAimRef, learnStartDate).Should().BeTrue();
         }
 
         [Fact]
-        public void LARSAnnualValueConditionMet_False()
+        public void Level3QualificationConditionMet_True_PriorAttain()
         {
+            int? priorAttain = 3;
             var learnAimRef = "LearnAimRef";
             var learnStartDate = new DateTime(2015, 8, 1);
             var percentValue = 100m;
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, percentValue)).Returns(true);
 
             NewRule(larsDataService: larsDataServiceMock.Object)
-                .LARSAnnualValueConditionMet(learnAimRef, learnStartDate).Should().BeFalse();
+                .Level3QualificationConditionMet(priorAttain, learnAimRef, learnStartDate).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Level3QualificationConditionMet_False_Level3Percent()
+        {
+            int? priorAttain = 20;
+            var learnAimRef = "LearnAimRef";
+            var learnStartDate = new DateTime(2015, 8, 1);
+            var percentValue = 100m;
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
+            larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, percentValue)).Returns(true);
+
+            NewRule(larsDataService: larsDataServiceMock.Object)
+                .Level3QualificationConditionMet(priorAttain, learnAimRef, learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Level3QualificationConditionMet_False_LarsEffectiveDates()
+        {
+            int? priorAttain = 20;
+            var learnAimRef = "LearnAimRef";
+            var learnStartDate = new DateTime(2015, 8, 1);
+            var percentValue = 100m;
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(false);
+            larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, percentValue)).Returns(true);
+
+            NewRule(larsDataService: larsDataServiceMock.Object)
+                .Level3QualificationConditionMet(priorAttain, learnAimRef, learnStartDate).Should().BeFalse();
         }
 
         [Fact]
@@ -352,29 +372,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var ruleMock = NewRuleMock();
 
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(true);
-            ruleMock.Setup(r => r.PriorAttainConditionMet(priorAttain)).Returns(true);
             ruleMock.Setup(r => r.DD07ConditionMet(priorAttain)).Returns(true);
             ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(true);
             ruleMock.Setup(r => r.AgeConditionMet(dateOfBirth, learnStartDate)).Returns(true);
             ruleMock.Setup(r => r.LearningDeliveryFAMConditionMet(learningDeliveryFams)).Returns(true);
             ruleMock.Setup(r => r.LARSCategoryConditionMet(learnAimRef)).Returns(true);
             ruleMock.Setup(r => r.LARSNVQLevel2ConditionMet(learnAimRef)).Returns(true);
-            ruleMock.Setup(r => r.LARSAnnualValueConditionMet(learnAimRef, learnStartDate)).Returns(true);
+            ruleMock.Setup(r => r.Level3QualificationConditionMet(priorAttain, learnAimRef, learnStartDate)).Returns(true);
 
             ruleMock.Object.ConditionMet(fundModel, priorAttain, progType, learnAimRef, dateOfBirth, learnStartDate, learningDeliveryFams).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(false, true, true, true, true, true, true, true, true)]
-        [InlineData(true, false, true, true, true, true, true, true, true)]
-        [InlineData(true, true, false, true, true, true, true, true, true)]
-        [InlineData(true, true, true, false, true, true, true, true, true)]
-        [InlineData(true, true, true, true, false, true, true, true, true)]
-        [InlineData(true, true, true, true, true, false, true, true, true)]
-        [InlineData(true, true, true, true, true, true, false, true, true)]
-        [InlineData(true, true, true, true, true, true, true, false, true)]
-        [InlineData(true, true, true, true, true, true, true, true, false)]
-        public void ConditionMet_False(bool mock1, bool mock2, bool mock3, bool mock4, bool mock5, bool mock6, bool mock7, bool mock8, bool mock9)
+        [InlineData(false, true, true, true, true, true, true, true)]
+        [InlineData(true, false, true, true, true, true, true, true)]
+        [InlineData(true, true, false, true, true, true, true, true)]
+        [InlineData(true, true, true, false, true, true, true, true)]
+        [InlineData(true, true, true, true, false, true, true, true)]
+        [InlineData(true, true, true, true, true, false, true, true)]
+        [InlineData(true, true, true, true, true, true, false, true)]
+        [InlineData(true, true, true, true, true, true, true, false)]
+        public void ConditionMet_False(bool mock1, bool mock2, bool mock3, bool mock4, bool mock5, bool mock6, bool mock7, bool mock8)
         {
             var fundModel = 1;
             var priorAttain = 1;
@@ -387,14 +405,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var ruleMock = NewRuleMock();
 
             ruleMock.Setup(r => r.FundModelConditionMet(fundModel)).Returns(mock1);
-            ruleMock.Setup(r => r.PriorAttainConditionMet(priorAttain)).Returns(mock2);
-            ruleMock.Setup(r => r.DD07ConditionMet(priorAttain)).Returns(mock3);
-            ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(mock4);
-            ruleMock.Setup(r => r.AgeConditionMet(dateOfBirth, learnStartDate)).Returns(mock5);
-            ruleMock.Setup(r => r.LearningDeliveryFAMConditionMet(learningDeliveryFams)).Returns(mock6);
-            ruleMock.Setup(r => r.LARSCategoryConditionMet(learnAimRef)).Returns(mock7);
-            ruleMock.Setup(r => r.LARSNVQLevel2ConditionMet(learnAimRef)).Returns(mock8);
-            ruleMock.Setup(r => r.LARSAnnualValueConditionMet(learnAimRef, learnStartDate)).Returns(mock9);
+            ruleMock.Setup(r => r.DD07ConditionMet(priorAttain)).Returns(mock2);
+            ruleMock.Setup(r => r.LearnStartDateConditionMet(learnStartDate)).Returns(mock3);
+            ruleMock.Setup(r => r.AgeConditionMet(dateOfBirth, learnStartDate)).Returns(mock4);
+            ruleMock.Setup(r => r.LearningDeliveryFAMConditionMet(learningDeliveryFams)).Returns(mock5);
+            ruleMock.Setup(r => r.LARSCategoryConditionMet(learnAimRef)).Returns(mock6);
+            ruleMock.Setup(r => r.LARSNVQLevel2ConditionMet(learnAimRef)).Returns(mock7);
+            ruleMock.Setup(r => r.Level3QualificationConditionMet(priorAttain, learnAimRef, learnStartDate)).Returns(mock8);
 
             ruleMock.Object.ConditionMet(fundModel, priorAttain, progType, learnAimRef, dateOfBirth, learnStartDate, learningDeliveryFams).Should().BeFalse();
         }
@@ -445,6 +462,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(25);
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
             larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(true);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, 100m)).Returns(false);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
@@ -509,6 +527,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
 
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, learnStartDate)).Returns(25);
+            larsDataServiceMock.Setup(ds => ds.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)).Returns(true);
             larsDataServiceMock.Setup(ds => ds.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3")).Returns(true);
             larsDataServiceMock.Setup(ds => ds.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, 100m)).Returns(false);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);

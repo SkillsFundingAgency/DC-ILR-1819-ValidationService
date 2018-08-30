@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -12,13 +13,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 {
     public class EmpStat_12Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<string> _famCOdes = new HashSet<string> { "353", "354", "355" };
+        private readonly HashSet<string> _famCodes = new HashSet<string> { "353", "354", "355" };
 
         private readonly ILearnerEmploymentStatusQueryService _learnerEmploymentStatusQueryService;
         private readonly IDD07 _dd07;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
-
-        private int _empStat;
 
         public EmpStat_12Rule(
             ILearnerEmploymentStatusQueryService learnerEmploymentStatusQueryService,
@@ -43,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
                     objectToValidate.LearnerEmploymentStatuses,
                     learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(_empStat, learningDelivery.LearnStartDate));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(learningDelivery.LearnStartDate));
                     return;
                 }
             }
@@ -76,11 +75,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         {
             if (learnerEmploymentStatuses != null)
             {
-                var empStat = _learnerEmploymentStatusQueryService.EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate);
+                var empStats = _learnerEmploymentStatusQueryService.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate);
 
-                if (empStat.HasValue && empStat != 10)
+                if (empStats.Any(es => es != 10))
                 {
-                    _empStat = empStat.Value;
                     return true;
                 }
             }
@@ -90,14 +88,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return !_learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", _famCOdes);
+            return !_learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", _famCodes);
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int empStat, DateTime learnStartDate)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.EmpStat, empStat),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
             };
         }

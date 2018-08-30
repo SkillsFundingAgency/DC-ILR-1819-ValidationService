@@ -4,7 +4,7 @@ using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -24,14 +24,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         private readonly IOrganisationDataService _organisationDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
         private readonly IDD07 _dd07;
-        private readonly IFileDataCache _fileDataCache;
+        private readonly IFileDataService _fileDataService;
 
         public LearnAimRef_80Rule(
             ILARSDataService larsDataService,
             IOrganisationDataService organisationDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService,
             IDD07 dd07,
-            IFileDataCache fileDataCache,
+            IFileDataService fileDataService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LearnAimRef_80)
         {
@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             _organisationDataService = organisationDataService;
             _learningDeliveryFamQueryService = learningDeliveryFamQueryService;
             _dd07 = dd07;
-            _fileDataCache = fileDataCache;
+            _fileDataService = fileDataService;
         }
 
         public LearnAimRef_80Rule()
@@ -49,9 +49,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public void Validate(ILearner objectToValidate)
         {
+            var ukprn = _fileDataService.UKPRN();
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 if (ConditionMet(
+                    ukprn,
                     learningDelivery.FundModel,
                     objectToValidate.PriorAttainNullable,
                     learningDelivery.LearnStartDate,
@@ -71,14 +74,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             }
         }
 
-        public bool ConditionMet(int fundModel, int? priorAttain, DateTime learnStartDate, int? progType, string learnAimRef, IEnumerable<ILearningDeliveryFAM> learningDeliveryFams)
+        public bool ConditionMet(int ukprn, int fundModel, int? priorAttain, DateTime learnStartDate, int? progType, string learnAimRef, IEnumerable<ILearningDeliveryFAM> learningDeliveryFams)
         {
             return FundModelConditionMet(fundModel)
                    && PriorAttainmentConditionMet(priorAttain)
                    && LearnStartDateConditionMet(learnStartDate)
                    && ApprenticeshipConditionMet(progType)
                    && LevelConditionMet(learnAimRef)
-                   && OrganisationConditionMet()
+                   && OrganisationConditionMet(ukprn)
                    && RestartConditionMet(learningDeliveryFams);
         }
 
@@ -112,9 +115,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             return !_learningDeliveryFamQueryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.RES);
         }
 
-        public virtual bool OrganisationConditionMet()
+        public virtual bool OrganisationConditionMet(int ukprn)
         {
-            return !_organisationDataService.LegalOrgTypeMatchForUkprn(_fileDataCache.UKPRN, _legalOrgType);
+            return !_organisationDataService.LegalOrgTypeMatchForUkprn(ukprn, _legalOrgType);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? priorAttain, string learnAimRef, DateTime learnStartDate, int fundModel)

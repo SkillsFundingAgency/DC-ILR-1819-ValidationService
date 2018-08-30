@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -40,9 +40,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnActEnd
         [Fact]
         public void Validate_Error()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataCacheMock.SetupGet(c => c.FilePreparationDate).Returns(new DateTime(2017, 1, 1));
+            fileDataServiceMock.Setup(c => c.FilePreparationDate()).Returns(new DateTime(2017, 1, 1));
 
             var learner = new TestLearner()
             {
@@ -57,16 +57,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnActEnd
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(fileDataCacheMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Fact]
         public void Validate_NoErrors()
         {
-            var fileDataCacheMock = new Mock<IFileDataCache>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataCacheMock.SetupGet(c => c.FilePreparationDate).Returns(new DateTime(2017, 1, 1));
+            fileDataServiceMock.Setup(c => c.FilePreparationDate()).Returns(new DateTime(2017, 1, 1));
 
             var learner = new TestLearner()
             {
@@ -80,7 +80,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnActEnd
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(fileDataCacheMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(fileDataServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -96,9 +96,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnActEnd
             validationErrorHandlerMock.Verify();
         }
 
-        private LearnActEndDate_04Rule NewRule(IFileDataCache fileDataCache = null, IValidationErrorHandler validationErrorHandler = null)
+        private LearnActEndDate_04Rule NewRule(IFileDataService fileDataService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new LearnActEndDate_04Rule(fileDataCache, validationErrorHandler);
+            return new LearnActEndDate_04Rule(fileDataService, validationErrorHandler);
         }
     }
 }

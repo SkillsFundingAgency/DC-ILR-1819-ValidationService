@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -16,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
     {
         private readonly IAcademicYearDataService _academicDataQueryService;
         private readonly IDateTimeQueryService _dateTimeQueryService;
-        private readonly IFileDataCache _fileDataCache;
+        private readonly IFileDataService _fileDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         private readonly IEnumerable<int> _fundModels = new HashSet<int> { 25, 35, 36, 70, 81, 82 };
@@ -24,20 +25,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
         public ULN_06Rule(
             IAcademicYearDataService academicDataQueryService,
             IDateTimeQueryService dateTimeQueryService,
-            IFileDataCache fileDataCache,
+            IFileDataService fileDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.ULN_06)
         {
             _academicDataQueryService = academicDataQueryService;
             _dateTimeQueryService = dateTimeQueryService;
-            _fileDataCache = fileDataCache;
+            _fileDataService = fileDataService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            var filePrepDate = _fileDataCache.FilePreparationDate;
+            var filePrepDate = _fileDataService.FilePreparationDate();
             var januaryFirst = _academicDataQueryService.JanuaryFirst();
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)

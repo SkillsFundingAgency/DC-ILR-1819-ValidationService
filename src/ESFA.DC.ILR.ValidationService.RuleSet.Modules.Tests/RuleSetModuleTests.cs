@@ -5,6 +5,7 @@ using Autofac;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules;
+using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
@@ -15,7 +16,9 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PMUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode;
@@ -41,8 +44,10 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -114,8 +119,13 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(DateOfBirth_30Rule),
                 typeof(DateOfBirth_32Rule),
                 typeof(DateOfBirth_35Rule),
+                typeof(DateOfBirth_36Rule),
+                typeof(DateOfBirth_38Rule),
+                typeof(DateOfBirth_39Rule),
                 typeof(DateOfBirth_46Rule),
                 typeof(DateOfBirth_47Rule),
+                typeof(DateOfBirth_48Rule),
+                typeof(DateOfBirth_53Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
@@ -124,6 +134,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(EmpOutcome_01Rule),
                 typeof(EmpOutcome_02Rule),
                 typeof(EmpOutcome_03Rule),
+                typeof(EmpStat_08Rule),
                 typeof(EmpStat_12Rule),
                 typeof(FamilyName_01Rule),
                 typeof(FamilyName_02Rule),
@@ -164,11 +175,15 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(LearnDelFAMType_02Rule),
                 typeof(LearnDelFAMType_03Rule),
                 typeof(LearnDelFAMType_39Rule),
+                typeof(LearnDelFAMType_44Rule),
+                typeof(LearnFAMType_16Rule),
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
+                typeof(MathGrade_03Rule),
                 typeof(NETFEE_01Rule),
                 typeof(NETFEE_02Rule),
                 typeof(NUMHUS_01Rule),
+                typeof(OtherFundAdj_01Rule),
                 typeof(OutGrade_03Rule),
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
@@ -176,6 +191,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(PCFLDCS_02Rule),
                 typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),
+                typeof(PlanLearnHours_03Rule),
                 typeof(PlanLearnHours_04Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(Postcode_14Rule),
@@ -188,8 +204,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(PrimaryLLDD_04Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
+                typeof(PriorLearnFundAdj_01Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
+                typeof(R07Rule),
+                typeof(R85Rule),
                 typeof(TTACCOM_04Rule),
                 typeof(UKPRN_06Rule),
                 typeof(ULN_02Rule),
@@ -199,6 +218,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 typeof(ULN_06Rule),
                 typeof(ULN_07Rule),
                 typeof(ULN_09Rule),
+                typeof(ULN_10Rule),
+                typeof(ULN_12Rule),
             };
 
             foreach (var ruleType in ruleTypes)
@@ -206,7 +227,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
                 rules.Should().ContainSingle(r => r.GetType() == ruleType);
             }
 
-            rules.Should().HaveCount(128);
+            rules.Should().HaveCount(144);
         }
 
         private void RegisterDependencies(ContainerBuilder builder)

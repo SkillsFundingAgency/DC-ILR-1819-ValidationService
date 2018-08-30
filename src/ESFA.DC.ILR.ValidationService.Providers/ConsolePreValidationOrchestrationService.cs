@@ -13,24 +13,29 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="U"></typeparam>
-    public class ConsolePreValidationOrchestrationService<T, U> : IPreValidationOrchestrationService<U>
-        where T : class
+    public class ConsolePreValidationOrchestrationService<U> : IPreValidationOrchestrationService<U>
     {
         private readonly IPopulationService _preValidationPopulationService;
         private readonly ICache<IMessage> _messageCache;
-        private readonly IRuleSetOrchestrationService<T, U> _ruleSetOrchestrationService;
+        private readonly IRuleSetOrchestrationService<ILearner, U> _learnerRuleSetOrchestrationService;
+        private readonly IRuleSetOrchestrationService<IMessage, U> _messageRuleSetOrchestrationService;
         private readonly IValidationOutputService<U> _validationOutputService;
+        private readonly IFileDataCache _fileDataCache;
 
         public ConsolePreValidationOrchestrationService(
             IPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
-            IRuleSetOrchestrationService<T, U> ruleSetOrchestrationService,
-            IValidationOutputService<U> validationOutputService)
+            IRuleSetOrchestrationService<ILearner, U> learnerRuleSetOrchestrationService,
+            IRuleSetOrchestrationService<IMessage, U> messageRuleSetOrchestrationService,
+            IValidationOutputService<U> validationOutputService,
+            IFileDataCache fileDataCache)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _messageCache = messageCache;
-            _ruleSetOrchestrationService = ruleSetOrchestrationService;
+            _learnerRuleSetOrchestrationService = learnerRuleSetOrchestrationService;
+            _messageRuleSetOrchestrationService = messageRuleSetOrchestrationService;
             _validationOutputService = validationOutputService;
+            _fileDataCache = fileDataCache;
         }
 
         public IEnumerable<U> Execute(IPreValidationContext preValidationContext)
@@ -41,12 +46,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             // get the learners
             var ilrMessage = _messageCache.Item;
 
-            var validationContext = new ValidationContext()
-            {
-                Input = ilrMessage
-            };
+            // get the file name
+            _fileDataCache.FileName = preValidationContext.Input;
 
-            _ruleSetOrchestrationService.Execute(validationContext);
+            _messageRuleSetOrchestrationService.Execute();
+            _learnerRuleSetOrchestrationService.Execute();
 
             return _validationOutputService.Process();
         }

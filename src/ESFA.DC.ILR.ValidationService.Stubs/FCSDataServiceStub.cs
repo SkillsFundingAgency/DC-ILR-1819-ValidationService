@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
         public bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes)
         {
-            //TODO: check condition ContractAllocation.FundingStreamPeriodCode = AEBC1819 (will be passed in parameter fundingStreamPeriodCodes)
+            // TODO: check condition ContractAllocation.FundingStreamPeriodCode = AEBC1819 (will be passed in parameter fundingStreamPeriodCodes)
             return true;
         }
     }

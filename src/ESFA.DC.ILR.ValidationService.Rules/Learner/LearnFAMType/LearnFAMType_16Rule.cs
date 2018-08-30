@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -7,42 +11,50 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
 {
-    /// <summary>
-    /// If the learner is exempt from English GCSE condition of funding due to learning difficulties or disabilities, they must have  Special Educational Needs (SEN)  or Education health care plan (EHC plan)
-    /// </summary>
     public class LearnFAMType_16Rule : AbstractRule, IRule<ILearner>
     {
         private readonly ILearnerFAMQueryService _learnerFAMQueryService;
-        private readonly IEnumerable<string> _senOrEhcFamStrings = new[] { LearnerFamTypeConstants.SEN, LearnerFamTypeConstants.EHC };
+        private readonly IEnumerable<string> _learnerFAMTypes = new HashSet<string>() { LearnerFAMTypeConstants.SEN, LearnerFAMTypeConstants.EHC };
 
-        public LearnFAMType_16Rule(IValidationErrorHandler validationErrorHandler, ILearnerFAMQueryService learnerFAMQueryService)
-            : base(validationErrorHandler)
+        public LearnFAMType_16Rule(ILearnerFAMQueryService learnerFAMQueryService, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.LearnFAMType_16)
         {
             _learnerFAMQueryService = learnerFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate.LearnerFAMs == null)
+            {
+                return;
+            }
+
             if (ConditionMet(objectToValidate.LearnerFAMs))
             {
-                HandleValidationError(RuleNameConstants.LearnFAMType_16Rule, objectToValidate.LearnRefNumber);
+                HandleValidationError(
+                    learnRefNumber: objectToValidate.LearnRefNumber,
+                    errorMessageParameters: BuildErrorMessageParameters(LearnerFAMTypeConstants.ECF, "1"));
             }
         }
 
-        public bool ConditionMet(IReadOnlyCollection<ILearnerFAM> learnerFams)
+        public bool ConditionMet(IEnumerable<ILearnerFAM> learnerFAMs)
         {
-            return ConditionMetForValidFamType(learnerFams) &&
-                   ConditionMetSENOrEHCNotFound(learnerFams);
+            return LearnerFAMsConditionMet(learnerFAMs);
         }
 
-        public bool ConditionMetSENOrEHCNotFound(IReadOnlyCollection<ILearnerFAM> learnerFams)
+        public bool LearnerFAMsConditionMet(IEnumerable<ILearnerFAM> learnerFAMs)
         {
-            return !_learnerFAMQueryService.HasAnyLearnerFAMTypes(learnerFams, _senOrEhcFamStrings);
+            return _learnerFAMQueryService.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.ECF, 1)
+                && !_learnerFAMQueryService.HasAnyLearnerFAMTypes(learnerFAMs, _learnerFAMTypes);
         }
 
-        public bool ConditionMetForValidFamType(IReadOnlyCollection<ILearnerFAM> learnerFams)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnFAMType, string learnFAMCode)
         {
-            return _learnerFAMQueryService.HasLearnerFAMCodeForType(learnerFams, LearnerFamTypeConstants.ECF, 1);
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, learnFAMType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnFAMCode, learnFAMCode)
+            };
         }
     }
 }

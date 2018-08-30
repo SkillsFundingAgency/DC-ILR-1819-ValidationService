@@ -1,7 +1,9 @@
-﻿using System;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Rules.Derived;
+using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using FluentAssertions;
+using System;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
@@ -32,6 +34,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             Action action = () => NewDD().Derive(null);
 
             action.Should().Throw<ArgumentNullException>();
+        }
+
+        /// <summary>
+        /// Derive using empty collection thows invalid operation exception.
+        /// i don't think it should be allowed to do this... so, what's the policy?
+        /// </summary>
+        [Fact]
+        public void DeriveUsingEmptyCollectionThrowsInvalidOperationException()
+        {
+            // arrange
+            var rule = NewDD();
+
+            // act / assert
+            Assert.Throws<InvalidOperationException>(() => rule.Derive(Collection.Empty<ILearningDelivery>()));
         }
 
         private DD06 NewDD()

@@ -23,5 +23,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         {
             return (end - start).TotalDays;
         }
+
+        public DateTime DateAddYears(DateTime date, int yearsToAdd)
+        {
+            return date.AddYears(yearsToAdd);
+        }
     }
 }

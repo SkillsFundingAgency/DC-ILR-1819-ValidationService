@@ -64,25 +64,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         public bool ConditionMet(int fundModel, int? priorAttain, int? progType, string learnAimRef, DateTime? dateOfBirth, DateTime learnStartDate,  IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return FundModelConditionMet(fundModel)
-                && PriorAttainConditionMet(priorAttain)
                 && DD07ConditionMet(progType)
                 && LearnStartDateConditionMet(learnStartDate)
                 && AgeConditionMet(dateOfBirth, learnStartDate)
                 && LearningDeliveryFAMConditionMet(learningDeliveryFAMs)
                 && LARSCategoryConditionMet(learnAimRef)
                 && LARSNVQLevel2ConditionMet(learnAimRef)
-                && LARSAnnualValueConditionMet(learnAimRef, learnStartDate);
+                && Level3QualificationConditionMet(priorAttain, learnAimRef, learnStartDate);
         }
 
         public virtual bool FundModelConditionMet(int fundModel)
         {
             return fundModel == 35;
-        }
-
-        public virtual bool PriorAttainConditionMet(int? priorAttain)
-        {
-            return priorAttain.HasValue
-                && _priorAttains.Contains(priorAttain.Value);
         }
 
         public virtual bool DD07ConditionMet(int? progType)
@@ -118,9 +111,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             return _larsDataService.NotionalNVQLevelV2MatchForLearnAimRefAndLevel(learnAimRef, "3");
         }
 
-        public virtual bool LARSAnnualValueConditionMet(string learnAimRef, DateTime learnStartDate)
+        public virtual bool Level3QualificationConditionMet(int? priorAttain, string learnAimRef, DateTime learnStartDate)
         {
-            return !_larsDataService.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, 100m);
+            return _larsDataService.EffectiveDatesValidforLearnAimRef(learnAimRef, learnStartDate)
+                && ((priorAttain.HasValue && _priorAttains.Contains(priorAttain.Value))
+                || !_larsDataService.FullLevel3PercentForLearnAimRefAndDateAndPercentValue(learnAimRef, learnStartDate, 100m));
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnAimRef, DateTime? dateOfBirth, DateTime learnStartDate)

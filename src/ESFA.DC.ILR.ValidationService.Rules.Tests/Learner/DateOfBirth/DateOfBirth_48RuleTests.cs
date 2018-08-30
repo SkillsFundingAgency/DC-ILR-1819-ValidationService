@@ -1,147 +1,232 @@
 ﻿using System;
-using System.Linq.Expressions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 {
-    public class DateOfBirth_48RuleTests
+    public class DateOfBirth_48RuleTests : AbstractRuleTests<DateOfBirth_48Rule>
     {
         [Fact]
-        public void Exclude_True()
+        public void RuleName()
         {
-            NewRule().Exclude(25).Should().BeTrue();
-        }
-
-        [Fact]
-        public void Exclude_False()
-        {
-            NewRule().Exclude(24).Should().BeFalse();
+            NewRule().RuleName.Should().Be("DateOfBirth_48");
         }
 
         [Fact]
         public void LearnerConditionMet_True()
         {
-            NewRule().LearnerConditionMet(new DateTime(2018, 1, 1)).Should().BeTrue();
+            NewRule().LearnerConditionMet(new DateTime(2001, 8, 10)).Should().BeFalse();
         }
 
         [Fact]
         public void LearnerConditionMet_False()
         {
-            NewRule().LearnerConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void DD04ConditionMet_True()
-        {
-            NewRule().DD04ConditionMet(new DateTime(2017, 12, 1), new DateTime(2017, 8, 1), new DateTime(2018, 6, 1)).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(2015, 1, 1)]
-        [InlineData(2019, 1, 1)]
-        public void DD04ConditionMet_False(int year, int month, int day)
-        {
-            NewRule().DD04ConditionMet(new DateTime(year, month, day), new DateTime(2017, 8, 1), new DateTime(2018, 6, 1)).Should().BeFalse();
-        }
-
-        [Fact]
-        public void DD04ConditionMet_Null()
-        {
-            NewRule().DD04ConditionMet(null, new DateTime(2017, 8, 1), new DateTime(2018, 6, 1)).Should().BeFalse();
+            NewRule().LearnerConditionMet(null).Should().BeTrue();
         }
 
         [Fact]
         public void DD07ConditionMet_True()
         {
-            NewRule().DD07ConditionMet("Y").Should().BeTrue();
-        }
+            var progType = 23;
 
-        [Theory]
-        [InlineData("N")]
-        [InlineData("AnythingElse")]
-        public void DD07ConditionMet_False(string dd07)
-        {
-            NewRule().DD07ConditionMet(dd07).Should().BeFalse();
-        }
+            var dd07Mock = new Mock<IDD07>();
 
-        [Theory]
-        [InlineData("1988-2-10", 30, "2018-2-10")]
-        [InlineData("2018-1-1", 0, "2018-1-1")]
-        [InlineData("2018-1-1", -1, "2017-1-1")]
-        [InlineData("2018-1-1", 1, "2019-1-1")]
-        [InlineData("1996-2-29", 1, "1997-2-28")]
-        [InlineData("1996-2-29", 4, "2000-2-29")]
-        public void BirthdayAt(string dateOfBirth, int age, string birthday)
-        {
-            NewRule().BirthdayAt(DateTime.Parse(dateOfBirth), age).Should().Be(DateTime.Parse(birthday));
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
+
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
         }
 
         [Fact]
-        public void BirthdayAt_DateOfBirthNull()
+        public void DD07ConditionMet_False()
         {
-            NewRule().BirthdayAt(null, 30).Should().BeNull();
+            var progType = 25;
+
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
+
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_NoErrors()
+        public void DD07ConditionMet_False_Null()
         {
-            var learner = new TestLearner();
+            var dd07Mock = new Mock<IDD07>();
 
-            NewRule().Validate(learner);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(null)).Returns(false);
+
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void DD04ConditionMet_True()
+        {
+            NewRule().DD04ConditionMet(new DateTime(2016, 9, 1), new DateTime(2016, 9, 2)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void DD04ConditionMet_False()
+        {
+            NewRule().DD04ConditionMet(new DateTime(2017, 9, 1), new DateTime(2016, 10, 1)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void DD04ConditionMet_Null()
+        {
+            NewRule().DD04ConditionMet(null, new DateTime(2016, 6, 30)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_True()
+        {
+            int? progType = 23;
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
+
+            NewRule(dd07: dd07Mock.Object).ConditionMet(progType, new DateTime(2016, 9, 1), new DateTime(2016, 9, 2)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ConditionMet_False()
+        {
+            int? progType = 25;
+            NewRule().ConditionMet(progType, new DateTime(2016, 7, 1), new DateTime(2016, 9, 2)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_Null()
+        {
+            NewRule().ConditionMet(null, null, new DateTime(2016, 9, 2)).Should().BeFalse();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var learningDelivery = new TestLearningDelivery()
-            {
-                ProgTypeNullable = 1,
-                AimTypeNullable = 1,
-                LearnStartDateNullable = new DateTime(2017, 1, 1),
-            };
+            DateTime dateOfBirth = new DateTime(2000, 9, 2);
+            DateTime dd04Date = new DateTime(2016, 9, 1);
+            DateTime lastFridayOfJune = new DateTime(2017, 9, 2);
 
-            var dateOfBirth = new DateTime(2002, 1, 1);
-
-            var learner = new TestLearner()
+            ILearner learner = new TestLearner()
             {
                 DateOfBirthNullable = dateOfBirth,
                 LearningDeliveries = new TestLearningDelivery[]
                 {
-                    learningDelivery
+                    new TestLearningDelivery()
+                    {
+                        ProgTypeNullable = 23,
+                        AimType = 1,
+                        FworkCodeNullable = 2,
+                        PwayCodeNullable = 1,
+                        LearnStartDate = new DateTime(2016, 8, 1)
+                    }
                 }
             };
 
-            var dd04Mock = new Mock<IDD04>();
             var dd07Mock = new Mock<IDD07>();
-            var validationDataServiceMock = new Mock<IValidationDataService>();
-            var academicYearCalendarServiceMock = new Mock<IAcademicYearCalendarService>();
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var dd04Mock = new Mock<IDD04>();
+            var datetimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
 
-            dd04Mock.Setup(dd => dd.Derive(learner.LearningDeliveries, learningDelivery)).Returns(new DateTime(2017, 1, 1));
-            dd07Mock.Setup(dd => dd.Derive(1)).Returns("Y");
-            validationDataServiceMock.SetupGet(vds => vds.ApprencticeProgAllowedStartDate).Returns(new DateTime(2016, 8, 1));
-            academicYearCalendarServiceMock.Setup(aycs => aycs.LastFridayInJuneForDateInAcademicYear(dateOfBirth.AddYears(16))).Returns(new DateTime(2018, 6, 29));
+            dd07Mock.Setup(dd => dd.IsApprenticeship(23)).Returns(true);
+            dd04Mock.Setup(dd => dd.Derive(learner.LearningDeliveries, learner.LearningDeliveries.FirstOrDefault())).Returns(dd04Date);
+            datetimeQueryServiceMock.Setup(dd => dd.DateAddYears(dateOfBirth, 16)).Returns(dd04Date);
+            academicYearQueryServiceMock.Setup(dd => dd.LastFridayInJuneForDateInAcademicYear(dd04Date)).Returns(lastFridayOfJune);
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("DateOfBirth_48", null, null, null);
-
-            validationErrorHandlerMock.Setup(handle);
-
-            var rule = new DateOfBirth_48Rule(dd04Mock.Object, dd07Mock.Object, validationDataServiceMock.Object, academicYearCalendarServiceMock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validateionErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(
+                    dd04: dd04Mock.Object,
+                    dd07: dd07Mock.Object,
+                    dateTimeQueryService: datetimeQueryServiceMock.Object,
+                    academicYearQueryService: academicYearQueryServiceMock.Object,
+                    validationErrorHandler: validateionErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
-        private DateOfBirth_48Rule NewRule(IDD04 dd04 = null, IDD07 dd07 = null, IValidationDataService validationDataService = null, IAcademicYearCalendarService academicYearCalendarService = null, IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void Validate_NoError()
         {
-            return new DateOfBirth_48Rule(dd04, dd07, validationDataService, academicYearCalendarService, validationErrorHandler);
+            DateTime dateOfBirth = new DateTime(2004, 9, 2);
+            DateTime dd04Date = new DateTime(2018, 9, 1);
+            DateTime lastFridayOfJune = new DateTime(2019, 9, 2);
+
+            ILearner learner = new TestLearner()
+            {
+                DateOfBirthNullable = dateOfBirth,
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        ProgTypeNullable = 25,
+                        AimType = 1,
+                        FworkCodeNullable = 2,
+                        PwayCodeNullable = 1,
+                        LearnStartDate = new DateTime(2018, 8, 1)
+                    }
+                }
+            };
+
+            var dd07Mock = new Mock<IDD07>();
+            var dd04Mock = new Mock<IDD04>();
+            var datetimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(23)).Returns(true);
+            dd04Mock.Setup(dd => dd.Derive(learner.LearningDeliveries, learner.LearningDeliveries.FirstOrDefault())).Returns(dd04Date);
+            datetimeQueryServiceMock.Setup(dd => dd.DateAddYears(dateOfBirth, 16)).Returns(dd04Date);
+            academicYearQueryServiceMock.Setup(dd => dd.LastFridayInJuneForDateInAcademicYear(dd04Date)).Returns(lastFridayOfJune);
+
+            using (var validateionErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(
+                    dd04: dd04Mock.Object,
+                    dd07: dd07Mock.Object,
+                    dateTimeQueryService: datetimeQueryServiceMock.Object,
+                    academicYearQueryService: academicYearQueryServiceMock.Object,
+                    validationErrorHandler: validateionErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, "01/01/2001")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, "01/08/2016")).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2001, 1, 1), new DateTime(2016, 08, 01));
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private DateOfBirth_48Rule NewRule(
+            IDD07 dd07 = null,
+            IDD04 dd04 = null,
+            IDateTimeQueryService dateTimeQueryService = null,
+            IAcademicYearQueryService academicYearQueryService = null,
+            IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new DateOfBirth_48Rule(
+                dd07: dd07,
+                dd04: dd04,
+                dateTimeQueryService: dateTimeQueryService,
+                academicYearQueryService: academicYearQueryService,
+                validationErrorHandler: validationErrorHandler);
         }
     }
 }

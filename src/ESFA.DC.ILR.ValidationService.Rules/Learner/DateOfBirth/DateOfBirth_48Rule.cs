@@ -1,79 +1,94 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_48Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD04 _dd04;
+        private readonly DateTime _augustFirst2016 = new DateTime(2016, 08, 01);
+        private readonly IAcademicYearQueryService _academicYearQueryService;
+        private readonly IDateTimeQueryService _datetimeQueryService;
         private readonly IDD07 _dd07;
-        private readonly IValidationDataService _validationDataService;
-        private readonly IAcademicYearCalendarService _academicYearCalendarService;
+        private readonly IDD04 _dd04;
 
-        public DateOfBirth_48Rule(IDD04 dd04, IDD07 dd07, IValidationDataService validationDataService, IAcademicYearCalendarService academicYearCalendarService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+        public DateOfBirth_48Rule(
+            IDD07 dd07,
+            IDD04 dd04,
+            IAcademicYearQueryService academicYearQueryService,
+            IDateTimeQueryService dateTimeQueryService,
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.DateOfBirth_48)
         {
-            _dd04 = dd04;
             _dd07 = dd07;
-            _validationDataService = validationDataService;
-            _academicYearCalendarService = academicYearCalendarService;
+            _dd04 = dd04;
+            _academicYearQueryService = academicYearQueryService;
+            _datetimeQueryService = dateTimeQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (!LearnerConditionMet(objectToValidate.DateOfBirthNullable))
+            if (objectToValidate.LearningDeliveries == null
+                || LearnerConditionMet(objectToValidate.DateOfBirthNullable))
             {
                 return;
             }
 
-            if (objectToValidate.LearningDeliveries != null)
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                var sixteenthBirthday = BirthdayAt(objectToValidate.DateOfBirthNullable, 16);
-                var lastFridayJuneAcademicYearLearnerSixteen =
-                    _academicYearCalendarService.LastFridayInJuneForDateInAcademicYear(sixteenthBirthday.Value);
+                DateTime? dd04Date = _dd04.Derive(objectToValidate.LearningDeliveries, learningDelivery);
+                DateTime sixteenthBirthDate = _datetimeQueryService.DateAddYears((DateTime)objectToValidate.DateOfBirthNullable, 16);
+                DateTime lastFridayInJuneForAcademicYear = _academicYearQueryService.LastFridayInJuneForDateInAcademicYear(sixteenthBirthDate);
 
-                foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld =>
-                    !Exclude(ld.ProgTypeNullable)))
+                if (ConditionMet(learningDelivery.ProgTypeNullable, dd04Date, lastFridayInJuneForAcademicYear))
                 {
-                    if (DD07ConditionMet(_dd07.Derive(learningDelivery.ProgTypeNullable))
-                        && DD04ConditionMet(_dd04.Derive(objectToValidate.LearningDeliveries, learningDelivery), _validationDataService.ApprencticeProgAllowedStartDate, lastFridayJuneAcademicYearLearnerSixteen))
-                    {
-                        HandleValidationError(RuleNameConstants.DateOfBirth_48, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
-                    }
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable, learningDelivery.LearnStartDate));
                 }
             }
         }
 
-        public bool Exclude(long? progType)
+        public bool ConditionMet(int? progType, DateTime? dd04Date, DateTime lastFridayInJune)
         {
-            return progType == 25;
+            return DD07ConditionMet(progType)
+                && DD04ConditionMet(dd04Date, lastFridayInJune);
         }
 
         public bool LearnerConditionMet(DateTime? dateOfBirth)
         {
-            return dateOfBirth.HasValue;
+            return !dateOfBirth.HasValue;
         }
 
-        public bool DD07ConditionMet(string dd07)
+        public bool DD07ConditionMet(int? progType)
         {
-            return dd07 == ValidationConstants.Y;
+            return progType.HasValue
+                && progType != 25
+                && _dd07.IsApprenticeship(progType);
         }
 
-        public bool DD04ConditionMet(DateTime? dd04, DateTime apprenticeshipProgrammeAllowedStartDate, DateTime lastFridayJuneAcademicYearLearnerSixteen)
+        public bool DD04ConditionMet(DateTime? dd04, DateTime lastFridayJuneAcademicYearLearnerSixteen)
         {
             return dd04.HasValue
-                && dd04 >= apprenticeshipProgrammeAllowedStartDate
+                && dd04 >= _augustFirst2016
                 && dd04 <= lastFridayJuneAcademicYearLearnerSixteen;
         }
 
-        public DateTime? BirthdayAt(DateTime? dateOfBirth, int age)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth, DateTime learnStartDate)
         {
-            return dateOfBirth?.AddYears(age);
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth?.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
+            };
         }
     }
 }

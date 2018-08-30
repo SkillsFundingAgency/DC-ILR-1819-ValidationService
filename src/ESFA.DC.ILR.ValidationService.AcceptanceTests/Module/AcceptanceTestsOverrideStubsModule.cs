@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ESFA.DC.ILR.ValidationService.AcceptanceTests.Stubs;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
@@ -13,6 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
 
             builder.RegisterType<AcceptanceTestsExternalDataCachePopulationServiceStub>().As<IExternalDataCachePopulationService>().InstancePerLifetimeScope();
             builder.RegisterType<InternalDataCachePopulationService>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<InternalDataCachePopulationService>().As<ICreateInternalDataCache>().InstancePerLifetimeScope();
         }
     }
 }

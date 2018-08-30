@@ -3,7 +3,7 @@ using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.FileData
+namespace ESFA.DC.ILR.ValidationService.Data.Population
 {
     public class FileDataCachePopulationService : IFileDataCachePopulationService
     {
@@ -24,6 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.FileData
 
             fileDataCache.FilePreparationDate = message.HeaderEntity.CollectionDetailsEntity.FilePreparationDate;
             fileDataCache.UKPRN = message.LearningProviderEntity.UKPRN;
+            fileDataCache.LearnerDestinationAndProgressions = message.LearnerDestinationAndProgressions;
         }
     }
 }
