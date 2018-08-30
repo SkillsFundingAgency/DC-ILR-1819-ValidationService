@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Providers;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.JobContext;
 using ESFA.DC.JobContext.Interface;
@@ -39,16 +40,23 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 
             using (var childLifeTimeScope = _parentLifeTimeScope
                 .BeginLifetimeScope(c =>
-                    c.RegisterInstance(
-                new PreValidationContext
                 {
-                    JobId = jobContextMessage.JobId.ToString(),
-                    Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
-                    InvalidLearnRefNumbersKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers].ToString(),
-                    ValidLearnRefNumbersKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers].ToString(),
-                    ValidationErrorsKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors].ToString(),
-                    ValidationErrorMessageLookupKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrorLookups].ToString()
-                }).As<IPreValidationContext>()))
+                    c.RegisterType<AzureStorageFileContentStringProviderService>().As<IMessageStringProviderService>();
+                    c.RegisterInstance(
+                        new PreValidationContext
+                        {
+                            JobId = jobContextMessage.JobId.ToString(),
+                            Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
+                            InvalidLearnRefNumbersKey = jobContextMessage
+                                .KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers].ToString(),
+                            ValidLearnRefNumbersKey =
+                                jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbers].ToString(),
+                            ValidationErrorsKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors]
+                                .ToString(),
+                            ValidationErrorMessageLookupKey = jobContextMessage
+                                .KeyValuePairs[JobContextMessageKey.ValidationErrorLookups].ToString()
+                        }).As<IPreValidationContext>();
+                }))
             {
                 var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
                 executionContext.JobId = jobContextMessage.JobId.ToString();
