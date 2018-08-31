@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Logging.Interfaces;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -12,14 +15,17 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     public class AzureStorageFileContentStringProviderService : IMessageStringProviderService
     {
         private readonly IPreValidationContext _preValidationContext;
-        private readonly AzureStorageModel _azureStorageModel;
         private readonly ILogger _logger;
+        private readonly IKeyValuePersistenceService _keyValuePersistenceService;
 
-        public AzureStorageFileContentStringProviderService(IPreValidationContext preValidationContext, AzureStorageModel azureStorageModel, ILogger logger)
+        public AzureStorageFileContentStringProviderService(
+            IPreValidationContext preValidationContext,
+            [KeyFilter(PersistenceStorageKeys.AzureStorage)]IKeyValuePersistenceService keyValuePersistenceService,
+            ILogger logger)
         {
             _preValidationContext = preValidationContext;
-            _azureStorageModel = azureStorageModel;
             _logger = logger;
+            _keyValuePersistenceService = keyValuePersistenceService;
         }
 
         public string Provide()
@@ -27,38 +33,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             var startDateTime = DateTime.UtcNow;
 
             var stopwatch = new Stopwatch();
-
             stopwatch.Start();
-
-            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_azureStorageModel.AzureBlobConnectionString);
-
-            var cloudStorageAccountElapsed = stopwatch.ElapsedMilliseconds;
-
-            CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
-
-            var cloudBlobClientElapsed = stopwatch.ElapsedMilliseconds;
-
-            CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_azureStorageModel.AzureContainerReference);
-
-            var cloudBlobContainerElapsed = stopwatch.ElapsedMilliseconds;
-
-            CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(_preValidationContext.Input);
-
-            var cloudBlockBlobElapsed = stopwatch.ElapsedMilliseconds;
-
-            var fileContentString = cloudBlockBlob.DownloadText();
-
-            var blobDownloadElapsed = stopwatch.ElapsedMilliseconds;
-
-            stopwatch.Restart();
+            var fileContentString = _keyValuePersistenceService.GetAsync(_preValidationContext.Input).GetAwaiter().GetResult();
 
             var processTimes = new StringBuilder();
 
             processTimes.AppendLine($"Start Time : {startDateTime}");
-            processTimes.AppendLine($"Blob Client : {cloudBlobClientElapsed}");
-            processTimes.AppendLine($"Blob Container : {cloudBlobContainerElapsed}");
-            processTimes.AppendLine($"Blob Block Blob : {cloudBlockBlobElapsed}");
-            processTimes.AppendLine($"Blob Download Text : {blobDownloadElapsed}");
             processTimes.AppendLine($"Total Time : {(DateTime.UtcNow - startDateTime).TotalMilliseconds}");
 
             _logger.LogDebug($"Blob download :{processTimes} ");
