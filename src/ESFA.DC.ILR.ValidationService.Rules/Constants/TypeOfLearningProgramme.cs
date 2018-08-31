@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
+﻿using System;
+
+namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
     /// types of learning programme
@@ -46,6 +48,16 @@
         public const int ApprenticeshipStandard = 25;
 
         /// <summary>
+        /// Gets the maximum traning duration.
+        /// </summary>
+        public static TimeSpan MaximumTrainingDuration => new TimeSpan(182, 0, 0, 0);
+
+        /// <summary>
+        /// Gets the mininum viable training start date.
+        /// </summary>
+        public static DateTime MininumViableTrainingStartDate => new DateTime(2015, 08, 01);
+
+        /// <summary>
         /// Gets as a set.
         /// </summary>
         public static int[] AsASet => new[]
@@ -59,5 +71,24 @@
             Traineeship,
             ApprenticeshipStandard
         };
+
+        /// <summary>
+        /// Determines whether [is viable apprenticeship] [for the specified start (date)].
+        /// </summary>
+        /// <param name="forThisStart">For this start.</param>
+        /// <returns>
+        ///   <c>true</c> if [is viable apprenticeship] [for the specified start (date)]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsViableApprenticeship(DateTime forThisStart) => forThisStart >= MininumViableTrainingStartDate;
+
+        /// <summary>
+        /// Within maxmimum training duration.
+        /// </summary>
+        /// <param name="fromStart">From start.</param>
+        /// <param name="toFinish">To finish.</param>
+        /// <returns>
+        ///   <c>true</c> if [within maxmimum training duration] [from start to finish]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool WithinMaxmimumTrainingDuration(DateTime fromStart, DateTime toFinish) => (toFinish - fromStart) <= MaximumTrainingDuration;
     }
 }
