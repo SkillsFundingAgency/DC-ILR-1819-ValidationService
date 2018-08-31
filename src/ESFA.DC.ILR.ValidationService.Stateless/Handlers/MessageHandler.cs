@@ -77,6 +77,9 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 
                     preValidationOrchestrationService.Execute(validationContext, cancellationToken);
 
+                    //Update the file name, as it could have been a zip which we have extracted now so needs updating in the message
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename] = validationContext.Input;
+
                     // populate the keys into jobcontextmessage
                     jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] = validationContext.InvalidLearnRefNumbersCount;
                     jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbersCount] = validationContext.ValidLearnRefNumbersCount;

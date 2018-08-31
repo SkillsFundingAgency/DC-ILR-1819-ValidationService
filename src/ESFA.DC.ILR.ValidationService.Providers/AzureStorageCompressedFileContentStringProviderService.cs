@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.IO.Interfaces;
@@ -20,7 +21,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly ILogger _logger;
         private readonly IStreamableKeyValuePersistenceService _streamableKeyValuePersistenceService;
 
-        public AzureStorageCompressedFileContentStringProviderService(IPreValidationContext preValidationContext,  ILogger logger, IStreamableKeyValuePersistenceService streamableKeyValuePersistenceService)
+        public AzureStorageCompressedFileContentStringProviderService(
+            IPreValidationContext preValidationContext,
+            ILogger logger,
+            IStreamableKeyValuePersistenceService streamableKeyValuePersistenceService)
         {
             _preValidationContext = preValidationContext;
             _logger = logger;
@@ -32,30 +36,46 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             var startDateTime = DateTime.UtcNow;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            string fileContentString = string.Empty;
+            var fileContentString = string.Empty;
 
-            using (var memoryStream = new MemoryStream())
+            try
             {
-                _streamableKeyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream).GetAwaiter().GetResult();
-
-                var archive = new ZipArchive(memoryStream);
-                var xmlFiles = archive.Entries.Where(x =>
-                    x.Name.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase));
-
-                if (xmlFiles.Count() == 1)
+                using (var memoryStream = new MemoryStream())
                 {
-                    var zippedFile = xmlFiles.First();
-                    using (var stream = zippedFile.Open())
-                    {
-                        using (var reader = new StreamReader(stream))
-                        {
-                            fileContentString = reader.ReadToEnd();
-                        }
+                    _streamableKeyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream)
+                        .GetAwaiter().GetResult();
 
-                       // stream.Position = 0;
-                        _streamableKeyValuePersistenceService.SaveAsync(zippedFile.Name, stream);
+                    var archive = new ZipArchive(memoryStream);
+                    var xmlFiles = archive.Entries.Where(x =>
+                        x.Name.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase)).ToList();
+
+                    if (xmlFiles.Count == 1)
+                    {
+                        var zippedFile = xmlFiles.First();
+                        using (var stream = zippedFile.Open())
+                        {
+                            using (var reader = new StreamReader(stream))
+                            {
+                                fileContentString = reader.ReadToEnd();
+                            }
+
+                            var xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
+                            _preValidationContext.Input = xmlFileName;
+                            _streamableKeyValuePersistenceService.SaveAsync(xmlFileName, stream);
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogWarning(
+                            $"Zip file contains either more than one file will or no xml file, return empty string: jobId : {_preValidationContext.JobId}, file name :{_preValidationContext.Input}");
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    $"Failed to extract the zip file from storage : jobId : {_preValidationContext.JobId}, file name :{_preValidationContext.Input}",
+                    ex);
             }
 
             stopwatch.Stop();
@@ -68,6 +88,16 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _logger.LogDebug($"Blob download :{processTimes} ");
 
             return fileContentString;
+        }
+
+        public string ExtractUkrpn(string fileName)
+        {
+            if (fileName.Contains("/"))
+            {
+                return fileName.Split('/')[0];
+            }
+
+            return string.Empty;
         }
     }
 }

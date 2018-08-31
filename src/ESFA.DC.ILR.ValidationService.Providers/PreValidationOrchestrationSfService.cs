@@ -74,70 +74,82 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             // get the learners
             var ilrMessage = _messageCache.Item;
-
-            // get the filename
-            _fileDataCache.FileName = validationContext.Input;
-
-            // Message Validation
-            _ruleSetOrchestrationService.Execute();
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            // Get L/A and split the learners into separate lists
-            var messageShards = _learnerPerActorService.Process();
-            stopWatch.Restart();
-
-            var actorTasks = new List<Task<string>>();
-
-            foreach (var messageShard in messageShards)
+            if (ilrMessage == null)
             {
-                _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
-
-                // create actors for each Shard.
-                var actor = GetValidationActor();
-
-                // TODO:get reference data per each shard and send it to Actors
-                var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
-
-                var internalDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
-                var externalDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
-                var fileDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
-
-                var validationActorModel = new ValidationActorModel()
-                {
-                    JobId = validationContext.JobId,
-                    Message = ilrMessageAsBytes,
-                    InternalDataCache = internalDataCacheAsBytes,
-                    ExternalDataCache = externalDataCacheAsBytes,
-                    FileDataCache = fileDataCacheAsBytes,
-                };
-
-                actorTasks.Add(Task.Run(() => actor.Validate(validationActorModel, cancellationToken), cancellationToken));
+                _logger.LogWarning($"ILR Message is null, will not execute any Learner validation Job Id :{validationContext.Input}");
             }
-
-            _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
-
-            Task.WaitAll(actorTasks.ToArray());
-
-            _logger.LogDebug("all Actors completed");
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            foreach (var actorTask in actorTasks)
+            else
             {
-                var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
+                // get the filename
+                _fileDataCache.FileName = validationContext.Input;
 
-                foreach (var error in errors)
+                // Message Validation
+                _ruleSetOrchestrationService.Execute();
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                // Get L/A and split the learners into separate lists
+                var messageShards = _learnerPerActorService.Process();
+                stopWatch.Restart();
+
+                var actorTasks = new List<Task<string>>();
+
+                foreach (var messageShard in messageShards)
                 {
-                    _validationErrorCache.Add(error);
+                    _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
+
+                    // create actors for each Shard.
+                    var actor = GetValidationActor();
+
+                    // TODO:get reference data per each shard and send it to Actors
+                    var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
+
+                    var internalDataCacheAsBytes =
+                        Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
+                    var externalDataCacheAsBytes =
+                        Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
+                    var fileDataCacheAsBytes =
+                        Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
+
+                    var validationActorModel = new ValidationActorModel()
+                    {
+                        JobId = validationContext.JobId,
+                        Message = ilrMessageAsBytes,
+                        InternalDataCache = internalDataCacheAsBytes,
+                        ExternalDataCache = externalDataCacheAsBytes,
+                        FileDataCache = fileDataCacheAsBytes,
+                    };
+
+                    actorTasks.Add(Task.Run(
+                        () => actor.Validate(validationActorModel, cancellationToken),
+                        cancellationToken));
                 }
+
+                _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
+
+                Task.WaitAll(actorTasks.ToArray());
+
+                _logger.LogDebug("all Actors completed");
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                foreach (var actorTask in actorTasks)
+                {
+                    var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
+
+                    foreach (var error in errors)
+                    {
+                        _validationErrorCache.Add(error);
+                    }
+                }
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                _logger.LogDebug(
+                    $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
+                _validationOutputService.Process();
+                _logger.LogDebug($"Validation Final results persisted {stopWatch.ElapsedMilliseconds}");
             }
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            _logger.LogDebug($"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
-            _validationOutputService.Process();
-            _logger.LogDebug($"Validation Final results persisted {stopWatch.ElapsedMilliseconds}");
 
             return null;
         }

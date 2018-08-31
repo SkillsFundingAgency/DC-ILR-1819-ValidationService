@@ -18,7 +18,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
         public IMessage Provide()
         {
-            return _xmlSerializationService.Deserialize<Message>(_stringProvider.Provide());
+            var fileContent = _stringProvider.Provide();
+            return string.IsNullOrEmpty(fileContent) ? null : _xmlSerializationService.Deserialize<Message>(fileContent);
         }
     }
 }
