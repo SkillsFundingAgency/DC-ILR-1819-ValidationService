@@ -54,10 +54,6 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             containerBuilder.RegisterInstance(loggerOptions).As<LoggerOptions>().SingleInstance();
             containerBuilder.RegisterModule<LoggerModule>();
 
-            var azureStorageOptions =
-                configHelper.GetSectionValues<AzureStorageModel>("AzureStorageSection");
-            containerBuilder.RegisterInstance(azureStorageOptions).As<AzureStorageModel>().SingleInstance();
-
             return containerBuilder;
         }
     }

@@ -63,7 +63,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 
                 try
                 {
-                    // Todo: Delete me when Azure code is switched to IO library
                     var azureStorageModel = childLifeTimeScope.Resolve<AzureStorageModel>();
                     azureStorageModel.AzureContainerReference =
                         jobContextMessage.KeyValuePairs[JobContextMessageKey.Container].ToString();
