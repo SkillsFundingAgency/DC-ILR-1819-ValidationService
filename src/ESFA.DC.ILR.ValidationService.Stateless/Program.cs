@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using Autofac.Integration.ServiceFabric;
 using ESFA.DC.Auditing;
 using ESFA.DC.Auditing.Dto;
@@ -107,7 +108,10 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 ConnectionString = azureRedisCacheOptions.RedisCacheConnectionString,
                 KeyExpiry = new TimeSpan(14, 0, 0, 0)
             }).As<IRedisKeyValuePersistenceServiceConfig>().SingleInstance();
-            containerBuilder.RegisterType<RedisKeyValuePersistenceService>().As<IKeyValuePersistenceService>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<RedisKeyValuePersistenceService>()
+                .Keyed<IKeyValuePersistenceService>(PersistenceStorageKeys.Redis)
+                .As<IKeyValuePersistenceService>()
+                .InstancePerLifetimeScope();
             containerBuilder.RegisterType<AzureStorageKeyValuePersistenceService>()
                 .Keyed<IKeyValuePersistenceService>(PersistenceStorageKeys.AzureStorage)
                 .As<IKeyValuePersistenceService>()

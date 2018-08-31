@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -27,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
         public ValidationOutputService(
             IValidationErrorCache<IValidationError> validationErrorCache,
             ICache<IMessage> messageCache,
-            IKeyValuePersistenceService keyValuePersistenceService,
+            [KeyFilter(PersistenceStorageKeys.Redis)] IKeyValuePersistenceService keyValuePersistenceService,
             IPreValidationContext validationContext,
             IJsonSerializationService serializationService,
             IValidationErrorsDataService validationErrorsDataService)
