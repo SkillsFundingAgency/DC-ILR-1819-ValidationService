@@ -4,8 +4,10 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules.Actor;
 using ESFA.DC.ILR.ValidationService.Providers;
+using ESFA.DC.ILR.ValidationService.Providers.PreValidation;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.Stubs;
+using ESFA.DC.Logging.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Console
 {
@@ -19,6 +21,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Console
                 .As<IPreValidationOrchestrationService<IValidationError>>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<ValidateXMLSchemaService>().As<IValidateXMLSchemaService>().InstancePerLifetimeScope();
+            builder.RegisterType<SchemaFileContentStringProviderService>().As<ISchemaStringProviderService>().InstancePerLifetimeScope();
             builder.RegisterType<FileSystemFileContentStringProviderService>().As<IMessageStringProviderService>().InstancePerLifetimeScope();
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
             builder.RegisterType<RuleSetOrchestrationService<IMessage, IValidationError>>().As<IRuleSetOrchestrationService<IMessage, IValidationError>>();

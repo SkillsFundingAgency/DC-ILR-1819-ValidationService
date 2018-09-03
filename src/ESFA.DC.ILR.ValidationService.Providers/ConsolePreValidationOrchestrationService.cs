@@ -15,6 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     /// <typeparam name="U"></typeparam>
     public class ConsolePreValidationOrchestrationService<U> : IPreValidationOrchestrationService<U>
     {
+        private readonly IValidateXMLSchemaService _validateXMLSchemaService;
         private readonly IPopulationService _preValidationPopulationService;
         private readonly ICache<IMessage> _messageCache;
         private readonly IRuleSetOrchestrationService<ILearner, U> _learnerRuleSetOrchestrationService;
@@ -23,6 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IFileDataCache _fileDataCache;
 
         public ConsolePreValidationOrchestrationService(
+            IValidateXMLSchemaService validateXMLSchemaService,
             IPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
             IRuleSetOrchestrationService<ILearner, U> learnerRuleSetOrchestrationService,
@@ -30,6 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IValidationOutputService<U> validationOutputService,
             IFileDataCache fileDataCache)
         {
+            _validateXMLSchemaService = validateXMLSchemaService;
             _preValidationPopulationService = preValidationPopulationService;
             _messageCache = messageCache;
             _learnerRuleSetOrchestrationService = learnerRuleSetOrchestrationService;
@@ -40,17 +43,22 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
         public IEnumerable<U> Execute(IPreValidationContext preValidationContext)
         {
-            // get ILR data from file
-            _preValidationPopulationService.Populate();
-
-            // get the learners
-            var ilrMessage = _messageCache.Item;
-
             // get the file name
             _fileDataCache.FileName = preValidationContext.Input;
 
-            _messageRuleSetOrchestrationService.Execute();
-            _learnerRuleSetOrchestrationService.Execute();
+            // get ILR data from file
+            _preValidationPopulationService.Populate();
+
+            // xsd schema validations first; if failed then erturn.
+            // TODO: Load only what is required in _preValidationPopulationService.Populate()
+            if (_validateXMLSchemaService.Validate())
+            {
+                // get the learners
+                var ilrMessage = _messageCache.Item;
+
+                _messageRuleSetOrchestrationService.Execute();
+                _learnerRuleSetOrchestrationService.Execute();
+            }
 
             return _validationOutputService.Process();
         }

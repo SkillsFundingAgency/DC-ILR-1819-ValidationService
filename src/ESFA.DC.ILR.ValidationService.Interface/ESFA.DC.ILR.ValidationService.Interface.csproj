@@ -86,6 +86,8 @@
     <Compile Include="IRuleSetOrchestrationService.cs" />
     <Compile Include="IRuleSetResolutionService.cs" />
     <Compile Include="IMessageStringProviderService.cs" />
+    <Compile Include="ISchemaStringProviderService.cs" />
+    <Compile Include="IValidateXMLSchemaService.cs" />
     <Compile Include="IValidationContext.cs" />
     <Compile Include="IValidationError.cs" />
     <Compile Include="IValidationErrorCache.cs" />
