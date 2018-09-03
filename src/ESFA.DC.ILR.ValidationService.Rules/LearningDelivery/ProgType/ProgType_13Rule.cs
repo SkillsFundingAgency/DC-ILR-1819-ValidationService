@@ -31,6 +31,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
 
+        /// <summary>
+        /// The file data (service)
+        /// </summary>
         private readonly IFileDataService _fileData;
 
         /// <summary>
