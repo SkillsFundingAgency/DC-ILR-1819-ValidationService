@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public IEnumerable<string> UniqueLearnAimRefsFromMessage(IMessage message)
         {
-            return message
+            return message?
                        .Learners?
                        .Where(l => l.LearningDeliveries != null)
                        .SelectMany(l => l.LearningDeliveries)

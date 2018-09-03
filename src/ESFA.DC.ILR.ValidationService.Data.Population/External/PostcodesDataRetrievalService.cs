@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public virtual IEnumerable<string> UniqueLearnerPostcodesFromMessage(IMessage message)
         {
-            return message
+            return message?
                         .Learners?
                         .Where(l => l.Postcode != null)
                         .Select(l => l.Postcode)
@@ -51,7 +51,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public virtual IEnumerable<string> UniqueLearnerPostcodePriorsFromMessage(IMessage message)
         {
-            return message
+            return message?
                        .Learners?
                        .Where(l => l.PostcodePrior != null)
                        .Select(l => l.PostcodePrior)
@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public virtual IEnumerable<string> UniqueLearningDeliveryLocationPostcodesFromMessage(IMessage message)
         {
-            return message
+            return message?
                        .Learners?
                        .Where(l => l.LearningDeliveries != null)
                        .SelectMany(l => l.LearningDeliveries)

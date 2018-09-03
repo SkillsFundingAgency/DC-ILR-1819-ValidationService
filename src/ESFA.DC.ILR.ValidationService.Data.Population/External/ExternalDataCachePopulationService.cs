@@ -41,15 +41,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         public void Populate()
         {
             var externalDataCache = (ExternalDataCache)_externalDataCache;
-            if (_messageCache.Item != null)
-            {
-                externalDataCache.LearningDeliveries = _larsLearningDeliveryDataRetrievalService.Retrieve();
-                externalDataCache.Frameworks = _larsFrameworkDataRetrievalService.Retrieve().ToList();
-                externalDataCache.ULNs = new HashSet<long>(_ulnDataRetrievalService.Retrieve());
-                externalDataCache.Postcodes = new HashSet<string>(_postcodesDataRetrievalService.Retrieve());
-                externalDataCache.Organisations = _organisationsDataRetrievalService.Retrieve();
-                externalDataCache.ValidationErrors = _validationErrorsDataRetrievalService.Retrieve();
-            }
+
+            externalDataCache.LearningDeliveries = _larsLearningDeliveryDataRetrievalService.Retrieve();
+            externalDataCache.Frameworks = _larsFrameworkDataRetrievalService.Retrieve().ToList();
+            externalDataCache.ULNs = new HashSet<long>(_ulnDataRetrievalService.Retrieve());
+            externalDataCache.Postcodes = new HashSet<string>(_postcodesDataRetrievalService.Retrieve());
+            externalDataCache.Organisations = _organisationsDataRetrievalService.Retrieve();
+            externalDataCache.ValidationErrors = _validationErrorsDataRetrievalService.Retrieve();
         }
     }
 }
