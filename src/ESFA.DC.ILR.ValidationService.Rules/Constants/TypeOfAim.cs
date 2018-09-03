@@ -26,6 +26,11 @@
         public const int CoreAim16To19ExcludingApprenticeships = 5;
 
         /// <summary>
+        /// The industry placement code
+        /// </summary>
+        public const string IndustryPlacementCode = "ZWRKX002";
+
+        /// <summary>
         /// Gets as a set.
         /// </summary>
         public static int[] AsASet => new[]
