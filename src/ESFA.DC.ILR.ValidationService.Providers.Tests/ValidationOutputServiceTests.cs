@@ -58,6 +58,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         {
             var invalidLearnRefNumbers = new List<string>() { "a", "b" };
 
+            var validationErrors = new List<IValidationError>()
+            {
+                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "XYZ"),
+            };
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
+
             var message = new TestMessage()
             {
                 Learners = new List<TestLearner>()
@@ -74,8 +81,37 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
 
-            NewService(messageCache: messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
+            NewService(validationErrorCacheMock.Object, messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
         }
+
+        [Fact]
+        public void BuildValidLearnRefNumbers_No_ValidLearners()
+        {
+            var invalidLearnRefNumbers = new List<string>();
+
+            var validationErrors = new List<IValidationError>()
+            {
+                new RuleSet.ErrorHandler.Model.ValidationError("HEADER", string.Empty),
+            };
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
+
+            var message = new TestMessage()
+            {
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner() { LearnRefNumber = "a" },
+                    new TestLearner() { LearnRefNumber = "b" },
+                }
+            };
+
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+
+            NewService(validationErrorCacheMock.Object, messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEmpty();
+        }
+
 
         [Fact]
         public async Task SaveAsync()
