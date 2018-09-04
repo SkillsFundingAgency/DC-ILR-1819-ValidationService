@@ -176,12 +176,18 @@
     <Compile Include="Output\ValidationErrorCachePassThroughOutputService.cs" />
     <Compile Include="Output\ValidationOutputService.cs" />
     <Compile Include="PreValidationOrchestrationSfService.cs" />
+    <Compile Include="PreValidation\ValidateXMLSchemaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchemaFileContentStringProviderService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="ESFA.DC.ILR.ValidationService.Providers.ruleset">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Files\ILR-2018-19-v2.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
@@ -201,6 +207,10 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.IO.Model\ESFA.DC.ILR.ValidationService.IO.Model.csproj">
       <Project>{3F170AA8-982A-453B-899D-DC9F54AAC8C1}</Project>
       <Name>ESFA.DC.ILR.ValidationService.IO.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Rules\ESFA.DC.ILR.ValidationService.Rules.csproj">
+      <Project>{621B61D1-339D-4910-8C86-8A64AF8822F5}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Rules</Name>
     </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Stateless.Models\ESFA.DC.ILR.ValidationService.Stateless.Models.csproj">
       <Project>{eb94fed6-6895-488d-822a-60254bd32fc7}</Project>

@@ -95,9 +95,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         public bool DD07ConditionMet(int? progType)
         {
-            return progType.HasValue
+            return !progType.HasValue
+                || (progType.HasValue
                 && progType != 24
-                && !_dd07.IsApprenticeship(progType);
+                && !_dd07.IsApprenticeship(progType));
         }
 
         public bool LearningDeliveryFAMsConditionMet(int fundModel, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)

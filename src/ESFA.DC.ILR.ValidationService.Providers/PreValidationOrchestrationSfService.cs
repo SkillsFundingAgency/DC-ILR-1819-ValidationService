@@ -19,6 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 {
     public class PreValidationOrchestrationSfService<U> : IPreValidationOrchestrationService<U>
     {
+        private readonly IValidateXMLSchemaService _validateXMLSchemaService;
         private readonly IPopulationService _preValidationPopulationService;
         private readonly ILearnerPerActorService _learnerPerActorService;
         private readonly ICache<IMessage> _messageCache;
@@ -33,6 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly ILogger _logger;
 
         public PreValidationOrchestrationSfService(
+            IValidateXMLSchemaService validateXMLSchemaService,
             IPopulationService preValidationPopulationService,
             ICache<IMessage> messageCache,
             ILearnerPerActorService learnerPerActorService,
@@ -46,6 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IRuleSetOrchestrationService<IMessage, U> ruleSetOrchestrationService,
             ILogger logger)
         {
+            _validateXMLSchemaService = validateXMLSchemaService;
             _preValidationPopulationService = preValidationPopulationService;
             _learnerPerActorService = learnerPerActorService;
             _messageCache = messageCache;
@@ -65,64 +68,69 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
+            // get the filename for file level validations
+            _fileDataCache.FileName = validationContext.Input;
+
             // get ILR data from file
             _preValidationPopulationService.Populate();
             _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
 
-            // get the learners
-            var ilrMessage = _messageCache.Item;
-
-            // get the filename
-            _fileDataCache.FileName = validationContext.Input;
-
-            // Message Validation
-            _ruleSetOrchestrationService.Execute();
-
-            // Get L/A and split the learners into separate lists
-            var messageShards = _learnerPerActorService.Process();
-            stopWatch.Restart();
-
-            var actorTasks = new List<Task<string>>();
-
-            foreach (var messageShard in messageShards)
+            // xsd schema validations first; if failed then erturn.
+            // TODO: Load only what is required in _preValidationPopulationService.Populate()
+            if (_validateXMLSchemaService.Validate())
             {
-                _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
+                // get the learners
+                var ilrMessage = _messageCache.Item;
 
-                // create actors for each Shard.
-                var actor = GetValidationActor();
+                // Message Validation
+                _ruleSetOrchestrationService.Execute();
 
-                // TODO:get reference data per each shard and send it to Actors
-                var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
+                // Get L/A and split the learners into separate lists
+                var messageShards = _learnerPerActorService.Process();
+                stopWatch.Restart();
 
-                var internalDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
-                var externalDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
-                var fileDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
+                var actorTasks = new List<Task<string>>();
 
-                var validationActorModel = new ValidationActorModel()
+                foreach (var messageShard in messageShards)
                 {
-                    JobId = validationContext.JobId,
-                    Message = ilrMessageAsBytes,
-                    InternalDataCache = internalDataCacheAsBytes,
-                    ExternalDataCache = externalDataCacheAsBytes,
-                    FileDataCache = fileDataCacheAsBytes,
-                };
+                    _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
 
-                actorTasks.Add(Task.Run(() => actor.Validate(validationActorModel)));
-            }
+                    // create actors for each Shard.
+                    var actor = GetValidationActor();
 
-            _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
+                    // TODO:get reference data per each shard and send it to Actors
+                    var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
 
-            Task.WaitAll(actorTasks.ToArray());
+                    var internalDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
+                    var externalDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
+                    var fileDataCacheAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
 
-            _logger.LogDebug("all Actors completed");
+                    var validationActorModel = new ValidationActorModel()
+                    {
+                        JobId = validationContext.JobId,
+                        Message = ilrMessageAsBytes,
+                        InternalDataCache = internalDataCacheAsBytes,
+                        ExternalDataCache = externalDataCacheAsBytes,
+                        FileDataCache = fileDataCacheAsBytes,
+                    };
 
-            foreach (var actorTask in actorTasks)
-            {
-                var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
+                    actorTasks.Add(Task.Run(() => actor.Validate(validationActorModel)));
+                }
 
-                foreach (var error in errors)
+                _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
+
+                Task.WaitAll(actorTasks.ToArray());
+
+                _logger.LogDebug("all Actors completed");
+
+                foreach (var actorTask in actorTasks)
                 {
-                    _validationErrorCache.Add(error);
+                    var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
+
+                    foreach (var error in errors)
+                    {
+                        _validationErrorCache.Add(error);
+                    }
                 }
             }
 
