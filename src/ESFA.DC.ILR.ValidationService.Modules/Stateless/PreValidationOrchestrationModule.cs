@@ -27,7 +27,6 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
             builder.RegisterType<ValidateXMLSchemaService>().As<IValidateXMLSchemaService>().InstancePerLifetimeScope();
             builder.RegisterType<SchemaFileContentStringProviderService>().As<ISchemaStringProviderService>().InstancePerLifetimeScope();
             builder.RegisterType<PreValidationOrchestrationSfService<IValidationError>>().As<IPreValidationOrchestrationService<IValidationError>>().InstancePerLifetimeScope();
-            //builder.RegisterType<AzureStorageFileContentStringProviderService>().As<IMessageStringProviderService>();
             builder.RegisterType<AzureStorageKeyValuePersistenceService>().As<IStreamableKeyValuePersistenceService>().InstancePerLifetimeScope();
 
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();

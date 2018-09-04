@@ -33,6 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IValidationItemProviderService<IEnumerable<IMessage>> _validationItemProviderService;
         private readonly IRuleSetOrchestrationService<IMessage, U> _ruleSetOrchestrationService;
         private readonly ILogger _logger;
+        private readonly IValidateXMLSchemaService _validateXmlSchemaService;
 
         public PreValidationOrchestrationSfService(
             IPopulationService preValidationPopulationService,
@@ -46,7 +47,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IValidationOutputService<U> validationOutputService,
             IValidationItemProviderService<IEnumerable<IMessage>> validationItemProviderService,
             IRuleSetOrchestrationService<IMessage, U> ruleSetOrchestrationService,
-            ILogger logger)
+            ILogger logger,
+            IValidateXMLSchemaService validateXMLSchemaService)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _learnerPerActorService = learnerPerActorService;
@@ -60,6 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _validationItemProviderService = validationItemProviderService;
             _ruleSetOrchestrationService = ruleSetOrchestrationService;
             _logger = logger;
+            _validateXmlSchemaService = validateXMLSchemaService;
         }
 
         public IEnumerable<U> Execute(IPreValidationContext validationContext, CancellationToken cancellationToken)
@@ -84,7 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             else
             {
                 //Call XSD validation
-                //validateXMLSchemaService.Validate();
+                _validateXmlSchemaService.Validate();
 
                 if (!_validationErrorCache.ValidationErrors.Any())
                 {
