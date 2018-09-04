@@ -119,6 +119,92 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         }
 
         /// <summary>
+        /// Determines whether [is viable meets expectation] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The start date.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("2017-08-01", true)]
+        [InlineData("2016-09-01", true)]
+        [InlineData("2017-01-01", true)]
+        [InlineData("2017-04-01", true)]
+        [InlineData("2015-04-01", false)]
+        [InlineData("2015-07-31", false)]
+        [InlineData("2015-08-01", true)]
+        public void IsViableMeetsExpectation(string candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse(candidate));
+
+            // act
+            var result = sut.IsViable(mockDelivery.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
+        /// Determines whether [is trainee meets expectation] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(null, false)]
+        [InlineData(TypeOfLearningProgramme.Traineeship, true)]
+        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, false)]
+        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel5, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel6, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, false)]
+        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, false)]
+        public void IsTraineeMeetsExpectation(int? candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.ProgTypeNullable)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsTrainee(mockDelivery.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
+        /// Determines whether [is in a programme meets expectation] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(TypeOfAim.ProgrammeAim, true)]
+        [InlineData(TypeOfAim.AimNotPartOfAProgramme, false)]
+        [InlineData(TypeOfAim.ComponentAimInAProgramme, false)]
+        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, false)]
+        public void IsInAProgrammeMeetsExpectation(int candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.AimType)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsInAProgramme(mockDelivery.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// Condition met with learning deliveries containing start and planned end dates meets expectation.
         /// </summary>
         /// <param name="startDate">The start date.</param>
