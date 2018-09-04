@@ -16,6 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<InternalDataCache>().As<IInternalDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<FileDataCache>().As<IFileDataCache>().InstancePerLifetimeScope();
             builder.RegisterType<Cache<IMessage>>().As<ICache<IMessage>>().InstancePerLifetimeScope();
+            builder.RegisterType<Cache<string>>().As<ICache<string>>().InstancePerLifetimeScope();
         }
     }
 }
