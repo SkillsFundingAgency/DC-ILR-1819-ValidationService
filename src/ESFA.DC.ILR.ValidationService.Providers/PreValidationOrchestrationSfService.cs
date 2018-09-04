@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,73 +75,40 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             // get the learners
             var ilrMessage = _messageCache.Item;
+
+            //Possible the zip file was corrupt so we dont have message at this point
             if (ilrMessage == null)
             {
                 _logger.LogWarning($"ILR Message is null, will not execute any Learner validation Job Id :{validationContext.Input}");
             }
             else
             {
-                // get the filename
-                _fileDataCache.FileName = validationContext.Input;
+                //Call XSD validation
+                //validateXMLSchemaService.Validate();
 
-                // Message Validation
-                _ruleSetOrchestrationService.Execute();
-
-                cancellationToken.ThrowIfCancellationRequested();
-
-                // Get L/A and split the learners into separate lists
-                var messageShards = _learnerPerActorService.Process();
-                stopWatch.Restart();
-
-                var actorTasks = new List<Task<string>>();
-
-                foreach (var messageShard in messageShards)
+                if (!_validationErrorCache.ValidationErrors.Any())
                 {
-                    _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
+                    // get the filename
+                    _fileDataCache.FileName = validationContext.Input;
 
-                    // create actors for each Shard.
-                    var actor = GetValidationActor();
+                    // Message Validation
+                    _ruleSetOrchestrationService.Execute();
 
-                    // TODO:get reference data per each shard and send it to Actors
-                    var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                    var internalDataCacheAsBytes =
-                        Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
-                    var externalDataCacheAsBytes =
-                        Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
-                    var fileDataCacheAsBytes =
-                        Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
-
-                    var validationActorModel = new ValidationActorModel()
+                    if (!_validationErrorCache.ValidationErrors.Any())
                     {
-                        JobId = validationContext.JobId,
-                        Message = ilrMessageAsBytes,
-                        InternalDataCache = internalDataCacheAsBytes,
-                        ExternalDataCache = externalDataCacheAsBytes,
-                        FileDataCache = fileDataCacheAsBytes,
-                    };
-
-                    actorTasks.Add(Task.Run(
-                        () => actor.Validate(validationActorModel, cancellationToken),
-                        cancellationToken));
-                }
-
-                _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
-
-                Task.WaitAll(actorTasks.ToArray());
-
-                _logger.LogDebug("all Actors completed");
-
-                cancellationToken.ThrowIfCancellationRequested();
-
-                foreach (var actorTask in actorTasks)
-                {
-                    var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
-
-                    foreach (var error in errors)
-                    {
-                        _validationErrorCache.Add(error);
+                        ExecuteValidationActors(validationContext, cancellationToken);
                     }
+                    else
+                    {
+                        _logger.LogDebug(
+                            $"Header validation failed, so will not execute learner validation actors , error count : {_validationErrorCache.ValidationErrors.Count}");
+                    }
+                }
+                else
+                {
+                    _logger.LogDebug($"possible xsd validation failure : {_validationErrorCache.ValidationErrors.Count}");
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -159,6 +127,63 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             return ActorProxy.Create<IValidationActor>(
                 ActorId.CreateRandom(),
                 new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"));
+        }
+
+        private void ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
+        {
+            // Get L/A and split the learners into separate lists
+            var messageShards = _learnerPerActorService.Process();
+
+            var actorTasks = new List<Task<string>>();
+
+            foreach (var messageShard in messageShards)
+            {
+                _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
+
+                // create actors for each Shard.
+                var actor = GetValidationActor();
+
+                // TODO:get reference data per each shard and send it to Actors
+                var ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
+
+                var internalDataCacheAsBytes =
+                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
+                var externalDataCacheAsBytes =
+                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
+                var fileDataCacheAsBytes =
+                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
+
+                var validationActorModel = new ValidationActorModel()
+                {
+                    JobId = validationContext.JobId,
+                    Message = ilrMessageAsBytes,
+                    InternalDataCache = internalDataCacheAsBytes,
+                    ExternalDataCache = externalDataCacheAsBytes,
+                    FileDataCache = fileDataCacheAsBytes,
+                };
+
+                actorTasks.Add(Task.Run(
+                    () => actor.Validate(validationActorModel, cancellationToken),
+                    cancellationToken));
+            }
+
+            _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
+
+            Task.WaitAll(actorTasks.ToArray());
+
+            _logger.LogDebug("all Actors completed");
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            foreach (var actorTask in actorTasks)
+            {
+                var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
+
+                foreach (var error in errors)
+                {
+                    _validationErrorCache.Add(error);
+                }
+            }
         }
     }
 }
