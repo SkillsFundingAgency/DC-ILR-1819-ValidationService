@@ -172,7 +172,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Utility
         /// <param name="target">The target.</param>
         /// <returns>true or false</returns>
         public static bool IsInRange<T>(T source, params T[] target)
-            where T : struct, IComparable, IFormattable
+            where T : IComparable
         {
             var values = target.AsSafeList();
             return values.Contains(source);
@@ -188,7 +188,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Utility
         ///   <c>true</c> if [is out of range] [the specified source]; otherwise, <c>false</c>.
         /// </returns>
         public static bool IsOutOfRange<T>(T source, params T[] target)
-            where T : struct, IComparable, IFormattable
+            where T : IComparable
         {
             return !IsInRange(source, target);
         }
