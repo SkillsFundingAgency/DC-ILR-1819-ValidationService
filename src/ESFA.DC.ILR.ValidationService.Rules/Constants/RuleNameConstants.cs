@@ -179,6 +179,8 @@
         public const string R07 = "R07";
         public const string R85 = "R85";
 
+        public const string Schema = "Schema";
+
         public const string TTACCOM_04 = "TTACCOM_04";
 
         public const string UKPRN_03 = "UKPRN_03";

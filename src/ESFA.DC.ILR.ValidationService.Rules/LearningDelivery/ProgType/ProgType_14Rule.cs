@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class ProgType_07Rule :
+    public class ProgType_14Rule :
         IRule<ILearner>
     {
         /// <summary>
@@ -23,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "ProgType_07";
+        public const string Name = "ProgType_14";
 
         /// <summary>
         /// The message handler
@@ -31,10 +31,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProgType_07Rule"/> class.
+        /// Initializes a new instance of the <see cref="ProgType_14Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public ProgType_07Rule(IValidationErrorHandler validationErrorHandler)
+        public ProgType_14Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries?
-                .Where(x => It.IsInRange(x.ProgTypeNullable, TypeOfLearningProgramme.Traineeship) && It.IsInRange(x.AimType, TypeOfAim.ProgrammeAim))
+                .Where(x => It.IsInRange(x.ProgTypeNullable, TypeOfLearningProgramme.Traineeship))
                 .ForEach(x =>
                 {
                     var failedValidation = !ConditionMet(x);
@@ -81,8 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? TypeOfLearningProgramme.IsViableApprenticeship(thisDelivery.LearnStartDate)
-                    && TypeOfLearningProgramme.WithinMaxmimumTrainingDuration(thisDelivery.LearnStartDate, thisDelivery.LearnPlanEndDate)
+                ? It.IsDifferent(thisDelivery.LearnAimRef, TypeOfAim.IndustryPlacementCode)
                 : true;
         }
 

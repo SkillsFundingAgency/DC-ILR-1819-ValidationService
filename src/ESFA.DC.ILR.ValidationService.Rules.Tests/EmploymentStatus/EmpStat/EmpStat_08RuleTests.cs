@@ -138,7 +138,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         [Theory]
-        [InlineData(null)]
         [InlineData(24)]
         [InlineData(2)]
         public void DD07ConditionMet_False(int? progType)
@@ -149,13 +148,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
         }
 
-        [Fact]
-        public void DD07ConditionMet_True()
+        [Theory]
+        [InlineData(null)]
+        [InlineData(4)]
+        public void DD07ConditionMet_True(int? progType)
         {
             var dd07Mock = new Mock<IDD07>();
-            dd07Mock.Setup(dd => dd.IsApprenticeship(4)).Returns(false);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
-            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(4).Should().BeTrue();
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
         }
 
         [Theory]
@@ -260,7 +261,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Theory]
         [InlineData(FundModelConstants.AdultSkills, "1997-08-31", "2017-08-31", 4, LearningDeliveryFAMTypeConstants.ACT, "022")]
         [InlineData(FundModelConstants.OtherAdult, "1997-08-31", "2017-08-31", 5, LearningDeliveryFAMTypeConstants.ADL, "022")]
-        [InlineData(FundModelConstants.NonFunded, "1997-08-31", "2017-08-31", 6, LearningDeliveryFAMTypeConstants.RES, "022")]
+        [InlineData(FundModelConstants.NonFunded, "1997-08-31", "2017-08-31", null, LearningDeliveryFAMTypeConstants.RES, "022")]
         public void ConditionMet_True(
            int fundModel,
            string dateOfBirthString,

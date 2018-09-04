@@ -7,6 +7,7 @@ using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers;
 using ESFA.DC.ILR.ValidationService.Providers.Output;
+using ESFA.DC.ILR.ValidationService.Providers.PreValidation;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules;
@@ -23,6 +24,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<ValidateXMLSchemaService>().As<IValidateXMLSchemaService>().InstancePerLifetimeScope();
+            builder.RegisterType<SchemaFileContentStringProviderService>().As<ISchemaStringProviderService>().InstancePerLifetimeScope();
             builder.RegisterType<PreValidationOrchestrationSfService<IValidationError>>().As<IPreValidationOrchestrationService<IValidationError>>().InstancePerLifetimeScope();
             //builder.RegisterType<AzureStorageFileContentStringProviderService>().As<IMessageStringProviderService>();
             builder.RegisterType<AzureStorageKeyValuePersistenceService>().As<IStreamableKeyValuePersistenceService>().InstancePerLifetimeScope();

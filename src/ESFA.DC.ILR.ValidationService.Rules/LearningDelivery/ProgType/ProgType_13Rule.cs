@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
@@ -12,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class ProgType_07Rule :
+    public class ProgType_13Rule :
         IRule<ILearner>
     {
         /// <summary>
@@ -23,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "ProgType_07";
+        public const string Name = "ProgType_13";
 
         /// <summary>
         /// The message handler
@@ -31,15 +32,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProgType_07Rule"/> class.
+        /// The file data (service)
+        /// </summary>
+        private readonly IFileDataService _fileData;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProgType_13Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public ProgType_07Rule(IValidationErrorHandler validationErrorHandler)
+        /// <param name="fileData">The file data (service).</param>
+        public ProgType_13Rule(IValidationErrorHandler validationErrorHandler, IFileDataService fileData)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            It.IsNull(fileData)
+                .AsGuard<ArgumentNullException>(nameof(fileData));
 
             _messageHandler = validationErrorHandler;
+            _fileData = fileData;
         }
 
         /// <summary>
@@ -80,9 +90,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         /// </returns>
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
-            return It.Has(thisDelivery)
-                ? TypeOfLearningProgramme.IsViableApprenticeship(thisDelivery.LearnStartDate)
-                    && TypeOfLearningProgramme.WithinMaxmimumTrainingDuration(thisDelivery.LearnStartDate, thisDelivery.LearnPlanEndDate)
+            return It.Has(thisDelivery) && It.IsEmpty(thisDelivery.LearnActEndDateNullable)
+                ? TypeOfLearningProgramme.WithinMaxmimumOpenTrainingDuration(_fileData.FilePreparationDate(), thisDelivery.LearnStartDate)
                 : true;
         }
 

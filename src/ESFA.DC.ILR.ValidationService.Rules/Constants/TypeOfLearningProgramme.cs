@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
+﻿using System;
+
+namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
     /// types of learning programme
@@ -46,6 +48,21 @@
         public const int ApprenticeshipStandard = 25;
 
         /// <summary>
+        /// Gets the maximum traning duration.
+        /// </summary>
+        public static TimeSpan MaximumTrainingDuration => new TimeSpan(182, 0, 0, 0);
+
+        /// <summary>
+        /// Gets the maximum open duration for training.
+        /// </summary>
+        public static TimeSpan MaximumOpenTrainingDuration => new TimeSpan(243, 0, 0, 0);
+
+        /// <summary>
+        /// Gets the mininum viable training start date.
+        /// </summary>
+        public static DateTime MininumViableTrainingStartDate => new DateTime(2015, 08, 01);
+
+        /// <summary>
         /// Gets as a set.
         /// </summary>
         public static int[] AsASet => new[]
@@ -59,5 +76,34 @@
             Traineeship,
             ApprenticeshipStandard
         };
+
+        /// <summary>
+        /// Determines whether [is viable apprenticeship] [for the specified start (date)].
+        /// </summary>
+        /// <param name="forThisStart">For this start.</param>
+        /// <returns>
+        ///   <c>true</c> if [is viable apprenticeship] [for the specified start (date)]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsViableApprenticeship(DateTime forThisStart) => forThisStart >= MininumViableTrainingStartDate;
+
+        /// <summary>
+        /// Within maxmimum training duration (6 months, 182 dyas).
+        /// </summary>
+        /// <param name="fromStart">From start.</param>
+        /// <param name="toFinish">To finish.</param>
+        /// <returns>
+        ///   <c>true</c> if [within maxmimum training duration] [from start to finish]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool WithinMaxmimumTrainingDuration(DateTime fromStart, DateTime toFinish) => (toFinish - fromStart) <= MaximumTrainingDuration;
+
+        /// <summary>
+        /// Within (the) maximum open training duration (8 months, 243 days).
+        /// </summary>
+        /// <param name="fromStart">From start (the file preparation date).</param>
+        /// <param name="toFinish">To finish (the start of the learning).</param>
+        /// <returns>
+        ///   <c>true</c> if [within maxmimum training duration] [from start to finish]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool WithinMaxmimumOpenTrainingDuration(DateTime fromStart, DateTime toFinish) => (toFinish - fromStart) <= MaximumOpenTrainingDuration;
     }
 }
