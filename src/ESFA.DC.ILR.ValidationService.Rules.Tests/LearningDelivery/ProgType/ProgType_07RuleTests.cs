@@ -21,6 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
+            // arrange / act / assert
             Assert.Throws<ArgumentNullException>(() => new ProgType_07Rule(null));
         }
 
@@ -81,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             // arrange
             var sut = NewRule();
 
-            // act/assert
+            // act / assert
             Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
         }
 

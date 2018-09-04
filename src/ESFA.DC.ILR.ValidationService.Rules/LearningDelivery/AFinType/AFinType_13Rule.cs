@@ -80,6 +80,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
                         .Where(afr => afr.AFinType == TotalNegotiatedPrice)
                         .AsSafeReadOnlyList();
 
+                    /* candidate change - under discussion with mark / sanjeev
+                    var failedValidation = !finRecords.Any(y => ConditionMet(x, y));
+
+                    if (failedValidation)
+                    {
+                        RaiseValidationMessage(learnRefNumber, x, y);
+                    }
+                    */
+
                     finRecords.ForEach(y =>
                     {
                         var failedValidation = !ConditionMet(x, y);

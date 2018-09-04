@@ -21,6 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
+            // arrange / act / assert
             Assert.Throws<ArgumentNullException>(() => new PriorLearnFundAdj_02Rule(null));
         }
 
@@ -109,6 +110,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         [InlineData(2, false)]
         public void IsComponentAimMeetsExpectation(int candidate, bool expectation)
         {
+            // arrange
             var sut = NewRule();
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
@@ -138,6 +140,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         [InlineData(TypeOfFunding.OtherAdult, false)]
         public void IsRightFundModelMeetsExpectation(int candidate, bool expectation)
         {
+            // arrange
             var sut = NewRule();
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
@@ -163,6 +166,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         [InlineData(LearningDeliveryFAMTypeConstants.SOF, false)]
         public void IsRestartMeetsExpectation(string candidate, bool expectation)
         {
+            // arrange
             var sut = NewRule();
             var mockFam = new Mock<ILearningDeliveryFAM>();
             mockFam
@@ -177,6 +181,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
 
             // assert
             Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
+        /// Determines whether [is restart with null fams returns false].
+        /// </summary>
+        [Fact]
+        public void IsRestartWithNullFAMsReturnsFalse()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.IsRestart(null);
+
+            // assert
+            Assert.False(result);
         }
 
         /// <summary>
