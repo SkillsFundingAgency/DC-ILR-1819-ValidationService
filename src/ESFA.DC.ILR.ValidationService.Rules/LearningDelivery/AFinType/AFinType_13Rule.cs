@@ -86,24 +86,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
                         .Where(afr => afr.AFinType == TypeOfAppFinRec.TotalNegotiatedPrice)
                         .AsSafeReadOnlyList();
 
-                    /* candidate change - under discussion with mark / sanjeev
                     var failedValidation = !finRecords.Any(y => ConditionMet(x, y));
 
                     if (failedValidation)
                     {
-                        RaiseValidationMessage(learnRefNumber, x, y);
+                        RaiseValidationMessage(learnRefNumber, x);
                     }
-                    */
-
-                    finRecords.ForEach(y =>
-                    {
-                        var failedValidation = !ConditionMet(x, y);
-
-                        if (failedValidation)
-                        {
-                            RaiseValidationMessage(learnRefNumber, x, y);
-                        }
-                    });
                 });
         }
 
@@ -130,11 +118,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         /// <param name="learnRefNumber">The learn reference number.</param>
         /// <param name="thisDelivery">this learning delivery.</param>
         /// <param name="thisFinancialRecord">this financial record.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery, IAppFinRecord thisFinancialRecord)
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
             parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisFinancialRecord));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
