@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
@@ -57,6 +58,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         {
             var invalidLearnRefNumbers = new List<string>() { "a", "b" };
 
+            var validationErrors = new List<IValidationError>()
+            {
+                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "XYZ"),
+            };
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
+
             var message = new TestMessage()
             {
                 Learners = new List<TestLearner>()
@@ -73,8 +81,37 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
 
-            NewService(messageCache: messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
+            NewService(validationErrorCacheMock.Object, messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
         }
+
+        [Fact]
+        public void BuildValidLearnRefNumbers_No_ValidLearners()
+        {
+            var invalidLearnRefNumbers = new List<string>();
+
+            var validationErrors = new List<IValidationError>()
+            {
+                new RuleSet.ErrorHandler.Model.ValidationError("HEADER", string.Empty),
+            };
+            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
+            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
+
+            var message = new TestMessage()
+            {
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner() { LearnRefNumber = "a" },
+                    new TestLearner() { LearnRefNumber = "b" },
+                }
+            };
+
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+
+            NewService(validationErrorCacheMock.Object, messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEmpty();
+        }
+
 
         [Fact]
         public async Task SaveAsync()
@@ -108,10 +145,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             preValidationContextMock.SetupGet(c => c.ValidationErrorsKey).Returns(validationErrorsKey);
             preValidationContextMock.SetupGet(c => c.ValidationErrorMessageLookupKey).Returns(validationErrorMessageLookupsKey);
 
-            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validLearnRefNumbersKey, serializedValidLearners)).Returns(Task.CompletedTask).Verifiable();
-            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(invalidLearnRefNumbersKey, serializedInvalidLearners)).Returns(Task.CompletedTask).Verifiable();
-            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorsKey, serializedValidationErrors)).Returns(Task.CompletedTask).Verifiable();
-            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorMessageLookupsKey, serializedValidationErrorMessageLookups)).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validLearnRefNumbersKey, serializedValidLearners, default(CancellationToken))).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(invalidLearnRefNumbersKey, serializedInvalidLearners, default(CancellationToken))).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorsKey, serializedValidationErrors, default(CancellationToken))).Returns(Task.CompletedTask).Verifiable();
+            keyValuePersistenceServiceMock.Setup(ps => ps.SaveAsync(validationErrorMessageLookupsKey, serializedValidationErrorMessageLookups, default(CancellationToken))).Returns(Task.CompletedTask).Verifiable();
 
             var service = NewService(
                 keyValuePersistenceService: keyValuePersistenceServiceMock.Object,

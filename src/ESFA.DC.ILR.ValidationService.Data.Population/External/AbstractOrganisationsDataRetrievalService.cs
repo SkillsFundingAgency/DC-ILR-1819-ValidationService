@@ -26,13 +26,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             return
                 new List<long>
                 {
-                    message.LearningProviderEntity.UKPRN
+                   message == null ? 0 : message.LearningProviderEntity.UKPRN
                 };
         }
 
         public virtual IEnumerable<long> UniqueLearnerPrevUKPRNsFromMessage(IMessage message)
         {
-            return message
+            return message?
                        .Learners?
                        .Where(l => l.PrevUKPRNNullable != null)
                        .Select(l => (long)l.PrevUKPRNNullable)
@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public virtual IEnumerable<long> UniqueLearnerPMUKPRNsFromMessage(IMessage message)
         {
-            return message
+            return message?
                        .Learners?
                        .Where(l => l.PMUKPRNNullable != null)
                        .Select(l => (long)l.PMUKPRNNullable)
@@ -52,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public virtual IEnumerable<long> UniqueLearningDeliveryPartnerUKPRNsFromMessage(IMessage message)
         {
-            return message
+            return message?
                        .Learners?
                        .Where(l => l.LearningDeliveries != null)
                        .SelectMany(l => l.LearningDeliveries)

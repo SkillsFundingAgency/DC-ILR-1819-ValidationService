@@ -2,7 +2,7 @@
 {
     public interface IPreValidationContext
     {
-        string Input { get; }
+        string Input { get; set; }
 
         string Output { get; }
 

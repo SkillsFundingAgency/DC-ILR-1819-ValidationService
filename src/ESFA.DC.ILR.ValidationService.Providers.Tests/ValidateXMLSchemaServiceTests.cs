@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers.PreValidation;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -35,16 +36,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             var xmlFileContentString = File.ReadAllText(IlrValidXmlFilePath);
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            var messageStringProviderServiceMock = new Mock<IMessageStringProviderService>();
             var schemaStringProviderServiceMock = new Mock<ISchemaStringProviderService>();
-            
-            messageStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xmlFileContentString);
+
+            var fileCacheMock = new Mock<ICache<string>>();
+            fileCacheMock.SetupGet(sp => sp.Item).Returns(xmlFileContentString);
+
             schemaStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xsdFileContentString);
 
-            NewService(
-                messageStringProviderService: messageStringProviderServiceMock.Object,
-                schemaStringProviderService: schemaStringProviderServiceMock.Object,
-                validationErrorHandler: validationErrorHandlerMock.Object).Validate().Should().BeTrue();
+            NewService(validationErrorHandlerMock.Object, fileCacheMock.Object, schemaStringProviderServiceMock.Object).Validate().Should().BeTrue();
         }
 
         [Fact]
@@ -53,17 +52,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             var xsdFileContentString = File.ReadAllText(schemaFilePath);
             var xmlFileContentString = File.ReadAllText(IlrInValidXmlFilePath);
 
-            var messageStringProviderServiceMock = new Mock<IMessageStringProviderService>();
+            var fileCacheMock = new Mock<ICache<string>>();
+            fileCacheMock.SetupGet(sp => sp.Item).Returns(xmlFileContentString);
             var schemaStringProviderServiceMock = new Mock<ISchemaStringProviderService>();
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            messageStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xmlFileContentString);
             schemaStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xsdFileContentString);
-            
-            NewService(
-                messageStringProviderService: messageStringProviderServiceMock.Object,
-                schemaStringProviderService: schemaStringProviderServiceMock.Object,
-                validationErrorHandler: validationErrorHandlerMock.Object).Validate().Should().BeFalse();
+
+            NewService(validationErrorHandlerMock.Object, fileCacheMock.Object, schemaStringProviderServiceMock.Object).Validate().Should().BeFalse();
         }
 
         [Fact]
@@ -76,19 +72,16 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             XmlReader xmlReader = XmlReader.Create(new StringReader(xmlFileContentString));
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            var messageStringProviderServiceMock = new Mock<IMessageStringProviderService>();
+            var fileCacheMock = new Mock<ICache<string>>();
+            fileCacheMock.SetupGet(sp => sp.Item).Returns(xmlFileContentString);
             var schemaStringProviderServiceMock = new Mock<ISchemaStringProviderService>();
 
             validationErrorHandlerMock
                 .Setup(veh => veh.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()))
                 .Throws(new Exception("Validation Error should not be Handled."));
-            messageStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xmlFileContentString);
             schemaStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xsdFileContentString);
-            
-            NewService(
-                messageStringProviderService: messageStringProviderServiceMock.Object,
-                schemaStringProviderService: schemaStringProviderServiceMock.Object,
-                validationErrorHandler: validationErrorHandlerMock.Object).ValidateSchema(xsdReader, xmlReader);
+
+            NewService(validationErrorHandlerMock.Object, fileCacheMock.Object, schemaStringProviderServiceMock.Object).ValidateSchema(xsdReader, xmlReader);
 
             validationErrorHandlerMock.Verify();
         }
@@ -106,17 +99,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             XmlReader xmlReader = XmlReader.Create(new StringReader(xmlFileContentString));
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            var messageStringProviderServiceMock = new Mock<IMessageStringProviderService>();
+            var fileCacheMock = new Mock<ICache<string>>();
+            fileCacheMock.SetupGet(sp => sp.Item).Returns(xmlFileContentString);
             var schemaStringProviderServiceMock = new Mock<ISchemaStringProviderService>();
 
-            messageStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xmlFileContentString);
             schemaStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xsdFileContentString);
             validationErrorHandlerMock.Setup(ve => ve.Handle("Schema", null, null, errorMessageParameters));
 
-            NewService(
-                messageStringProviderService: messageStringProviderServiceMock.Object,
-                schemaStringProviderService: schemaStringProviderServiceMock.Object,
-                validationErrorHandler: validationErrorHandlerMock.Object).ValidateSchema(xsdReader, xmlReader);
+            NewService(validationErrorHandlerMock.Object, fileCacheMock.Object, schemaStringProviderServiceMock.Object).ValidateSchema(xsdReader, xmlReader);
 
             validationErrorHandlerMock.Verify();
         }
@@ -149,12 +139,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
         public ValidateXMLSchemaService NewService(
             IValidationErrorHandler validationErrorHandler = null,
-            IMessageStringProviderService messageStringProviderService = null,
+            ICache<string> fileCache = null,
             ISchemaStringProviderService schemaStringProviderService = null)
         {
             return new ValidateXMLSchemaService(
                 validationErrorHandler: validationErrorHandler,
-                messageStringProviderService: messageStringProviderService,
+                fileContentCache: fileCache,
                 schemaFileContentStringProviderService: schemaStringProviderService);
         }
     }

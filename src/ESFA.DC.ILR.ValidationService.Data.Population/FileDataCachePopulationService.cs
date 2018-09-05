@@ -21,10 +21,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             var fileDataCache = (FileDataCache)_fileDataCache;
 
             var message = _messageCache.Item;
-
-            fileDataCache.FilePreparationDate = message.HeaderEntity.CollectionDetailsEntity.FilePreparationDate;
-            fileDataCache.UKPRN = message.LearningProviderEntity.UKPRN;
-            fileDataCache.LearnerDestinationAndProgressions = message.LearnerDestinationAndProgressions;
+            if (message != null)
+            {
+                fileDataCache.FilePreparationDate = message.HeaderEntity.CollectionDetailsEntity.FilePreparationDate;
+                fileDataCache.UKPRN = message.LearningProviderEntity.UKPRN;
+                fileDataCache.LearnerDestinationAndProgressions = message.LearnerDestinationAndProgressions;
+            }
         }
     }
 }

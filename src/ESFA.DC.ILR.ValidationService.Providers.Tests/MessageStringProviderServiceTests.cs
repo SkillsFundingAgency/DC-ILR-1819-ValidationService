@@ -1,4 +1,6 @@
 ﻿using ESFA.DC.ILR.Model;
+using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.Serialization.Interfaces;
 using FluentAssertions;
@@ -18,15 +20,17 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             var stringProviderServiceMock = new Mock<IMessageStringProviderService>();
             stringProviderServiceMock.Setup(sps => sps.Provide()).Returns(ilrString);
 
+            var fileCacheMock = new Cache<string>();
+
             var xmlSerializationService = new Mock<IXmlSerializationService>();
             xmlSerializationService.Setup(s => s.Deserialize<Message>(ilrString)).Returns(message);
 
-            NewService(xmlSerializationService.Object, stringProviderServiceMock.Object).Provide().Should().BeSameAs(message);
+            NewService(xmlSerializationService.Object, stringProviderServiceMock.Object, fileCacheMock).Provide().Should().BeSameAs(message);
         }
 
-        private MessageFileProviderService NewService(IXmlSerializationService xmlSerializationService = null, IMessageStringProviderService stringProviderService = null)
+        private MessageFileProviderService NewService(IXmlSerializationService xmlSerializationService = null, IMessageStringProviderService stringProviderService = null, ICache<string> fileCache = null)
         {
-            return new MessageFileProviderService(xmlSerializationService, stringProviderService);
+            return new MessageFileProviderService(xmlSerializationService, stringProviderService, fileCache);
         }
     }
 }
