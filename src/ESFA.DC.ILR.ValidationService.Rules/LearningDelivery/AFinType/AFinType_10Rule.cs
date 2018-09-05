@@ -42,6 +42,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         /// </summary>
         public string RuleName => Name;
 
+        /// <summary>
+        /// Determines whether the specified delivery is funded.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified delivery is funded; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsFunded(ILearningDelivery delivery) =>
             TypeOfFunding.AsAFundedSet.Contains(delivery.FundModel);
 
