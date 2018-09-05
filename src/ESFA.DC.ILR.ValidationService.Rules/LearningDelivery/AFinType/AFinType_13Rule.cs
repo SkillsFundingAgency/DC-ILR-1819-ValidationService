@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using System;
 using System.Linq;
@@ -25,21 +26,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public const string Name = "AFinType_13";
 
         /// <summary>
-        /// The apprenticeships (fund model)
-        /// </summary>
-        public const int ApprenticeshipsFundModel = 36;
-
-        /// <summary>
-        /// The programme aim (type)
-        /// </summary>
-        public const int ProgrammeAim = 1;
-
-        /// <summary>
-        /// The total negotiated price (apprenticeship financial type)
-        /// </summary>
-        public const string TotalNegotiatedPrice = "TNP";
-
-        /// <summary>
         /// The message handler
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
@@ -62,6 +48,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public string RuleName => Name;
 
         /// <summary>
+        /// Determines whether the specified delivery is apprencticeship.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified delivery is apprencticeship; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsApprenticeshipFunded(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.FundModel, TypeOfFunding.ApprenticeshipsFrom1May2017);
+
+        /// <summary>
+        /// Determines whether [is right fund model] [for the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is right fund model] [for the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInAProgramme(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.AimType, TypeOfAim.ProgrammeAim);
+
+        /// <summary>
         /// Validates the specified object.
         /// </summary>
         /// <param name="objectToValidate">The object to validate.</param>
@@ -73,11 +79,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries?
-                .Where(d => d.FundModel == ApprenticeshipsFundModel && d.AimType == ProgrammeAim)
+                .Where(d => IsApprenticeshipFunded(d) && IsInAProgramme(d))
                 .ForEach(x =>
                 {
                     var finRecords = x.AppFinRecords?
-                        .Where(afr => afr.AFinType == TotalNegotiatedPrice)
+                        .Where(afr => afr.AFinType == TypeOfAppFinRec.TotalNegotiatedPrice)
                         .AsSafeReadOnlyList();
 
                     /* candidate change - under discussion with mark / sanjeev

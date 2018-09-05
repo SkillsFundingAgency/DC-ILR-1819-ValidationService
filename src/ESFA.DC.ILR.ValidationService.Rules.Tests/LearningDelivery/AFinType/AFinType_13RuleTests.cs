@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType;
 using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using Moq;
@@ -192,10 +193,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.AimType)
-                .Returns(AFinType_13Rule.ProgrammeAim);
+                .Returns(TypeOfAim.ProgrammeAim);
             mockDelivery
                 .SetupGet(x => x.FundModel)
-                .Returns(AFinType_13Rule.ApprenticeshipsFundModel);
+                .Returns(TypeOfFunding.ApprenticeshipsFrom1May2017);
             mockDelivery
                 .SetupGet(x => x.LearnStartDate)
                 .Returns(DateTime.Parse(learnDate));
@@ -203,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinType)
-                .Returns(AFinType_13Rule.TotalNegotiatedPrice);
+                .Returns(TypeOfAppFinRec.TotalNegotiatedPrice);
             mockFinRec
                 .SetupGet(x => x.AFinDate)
                 .Returns(DateTime.Parse(finDate));
@@ -267,10 +268,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.AimType)
-                .Returns(AFinType_13Rule.ProgrammeAim);
+                .Returns(TypeOfAim.ProgrammeAim);
             mockDelivery
                 .SetupGet(x => x.FundModel)
-                .Returns(AFinType_13Rule.ApprenticeshipsFundModel);
+                .Returns(TypeOfFunding.ApprenticeshipsFrom1May2017);
             mockDelivery
                 .SetupGet(x => x.LearnStartDate)
                 .Returns(DateTime.Parse(learnDate));
@@ -278,7 +279,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinType)
-                .Returns(AFinType_13Rule.TotalNegotiatedPrice);
+                .Returns(TypeOfAppFinRec.TotalNegotiatedPrice);
             mockFinRec
                 .SetupGet(x => x.AFinDate)
                 .Returns(DateTime.Parse(finDate));

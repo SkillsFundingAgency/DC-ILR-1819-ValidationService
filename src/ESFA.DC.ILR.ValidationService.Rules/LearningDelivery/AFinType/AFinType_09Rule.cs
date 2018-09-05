@@ -26,16 +26,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public const string Name = "AFinType_09";
 
         /// <summary>
-        /// The programme aim (type)
-        /// </summary>
-        public const int ProgrammeAim = 1;
-
-        /// <summary>
-        /// The total negotiated price (apprenticeship financial type)
-        /// </summary>
-        public const string TotalNegotiatedPrice = "TNP";
-
-        /// <summary>
         /// The message handler
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;

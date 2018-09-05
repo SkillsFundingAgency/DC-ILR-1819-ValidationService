@@ -59,5 +59,27 @@
             Other16To19,
             NotFundedByESFA
         };
+
+        /// <summary>
+        /// Gets as a funded set.
+        /// </summary>
+        public static int[] AsAFundedSet => new[]
+        {
+            CommunityLearning,
+            Age16To19ExcludingApprenticeships,
+            AdultSkills,
+            ApprenticeshipsFrom1May2017,
+            EuropeanSocialFund,
+            OtherAdult,
+            Other16To19
+        };
+
+        /// <summary>
+        /// Gets as a non funded set.
+        /// </summary>
+        public static int[] AsANonFundedSet => new[]
+        {
+            NotFundedByESFA
+        };
     }
 }

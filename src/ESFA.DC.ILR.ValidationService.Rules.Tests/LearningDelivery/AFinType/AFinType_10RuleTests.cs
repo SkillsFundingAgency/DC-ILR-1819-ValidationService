@@ -1,227 +1,386 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using FluentAssertions;
+using ESFA.DC.ILR.ValidationService.Rules.Utility;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 {
-    public class AFinType_10RuleTests : AbstractRuleTests<AFinType_10Rule>
+    public class AFinType_10RuleTests
     {
+        /// <summary>
+        /// New rule with null message handler throws.
+        /// </summary>
         [Fact]
-        public void RuleName()
+        public void NewRuleWithNullMessageHandlerThrows()
         {
-            NewRule().RuleName.Should().Be("AFinType_10");
+            Assert.Throws<ArgumentNullException>(() => new AFinType_10Rule(null));
         }
 
+        /// <summary>
+        /// Rule name 1, matches a literal.
+        /// </summary>
         [Fact]
-        public void FundModelConditionMet_True()
+        public void RuleName1()
         {
-            NewRule().FundModelConditionMet(35).Should().BeTrue();
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal("AFinType_10", result);
         }
 
+        /// <summary>
+        /// Rule name 2, matches the constant.
+        /// </summary>
         [Fact]
-        public void FundModelConditionMet_False()
+        public void RuleName2()
         {
-            NewRule().FundModelConditionMet(99).Should().BeFalse();
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal(AFinType_10Rule.Name, result);
         }
 
+        /// <summary>
+        /// Rule name 3 test, account for potential false positives.
+        /// </summary>
         [Fact]
-        public void ApprenticeshipStandardConditionMet_True()
+        public void RuleName3()
         {
-            NewRule().ApprenticeshipStandardConditionMet(25, 1).Should().BeTrue();
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.NotEqual("SomeOtherRuleName_07", result);
         }
 
+        /// <summary>
+        /// Validate with null learner throws.
+        /// </summary>
         [Fact]
-        public void ApprenticeshipStandardConditionMet_False()
+        public void ValidateWithNullLearnerThrows()
         {
-            NewRule().ApprenticeshipStandardConditionMet(20, 1).Should().BeFalse();
+            // arrange
+            var sut = NewRule();
+
+            // act/assert
+            Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
         }
 
+        /// <summary>
+        /// Condition met with null financial record returns true.
+        /// </summary>
         [Fact]
-        public void ApprenticeshipStandardConditionMet_False_NullProgType()
+        public void ConditionMetWithNullFinancialRecordReturnsTrue()
         {
-            NewRule().ApprenticeshipStandardConditionMet(null, 1).Should().BeFalse();
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.ConditionMet(null);
+
+            // assert
+            Assert.True(result);
         }
 
-        [Fact]
-        public void AppFinRecordConditionMet_True()
-        {
-            var aFinCodes = new List<int> { 2, 4 };
-
-            var aFinRecords = new List<TestAppFinRecord>
-            {
-                new TestAppFinRecord
-                {
-                    AFinType = "TNP",
-                    AFinCode = 1
-                }
-            };
-
-            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-
-            learningDeliveryAppFinRecordQueryServiceMock.Setup(afm => afm.HasAnyLearningDeliveryAFinCodesForType(aFinRecords, "TNP", aFinCodes)).Returns(false);
-
-            NewRule(learningDeliveryAppFinRecordQueryServiceMock.Object).AppFinRecordConditionMet(aFinRecords).Should().BeTrue();
-        }
-
+        /// <summary>
+        /// Determines whether [is target apprenticeship meets expectation] [(for) the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData("TNP", 2)]
-        [InlineData("PMR", 2)]
-        [InlineData("PMR", 3)]
-        public void AppFinRecordConditionMet_False(string aFinType, int aFinCode)
+        [InlineData(null, false)]
+        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, false)]
+        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, true)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel5, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel6, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, false)]
+        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, false)]
+        [InlineData(TypeOfLearningProgramme.Traineeship, false)]
+        public void IsTargetApprenticeshipMeetsExpectation(int? candidate, bool expectation)
         {
-            var aFinCodes = new List<int> { 2, 4 };
+            // arrange
+            var sut = NewRule();
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.ProgTypeNullable)
+                .Returns(candidate);
 
-            var aFinRecords = new List<TestAppFinRecord>
-            {
-                new TestAppFinRecord
-                {
-                    AFinType = aFinType,
-                    AFinCode = aFinCode
-                }
-            };
+            // act
+            var result = sut.IsTargetApprencticeship(mockDelivery.Object);
 
-            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-
-            learningDeliveryAppFinRecordQueryServiceMock.Setup(afm => afm.HasAnyLearningDeliveryAFinCodesForType(aFinRecords, "TNP", aFinCodes)).Returns(true);
-
-            NewRule(learningDeliveryAppFinRecordQueryServiceMock.Object).AppFinRecordConditionMet(aFinRecords).Should().BeFalse();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
+        /// <summary>
+        /// Determines whether [is in a programme meets expectation] [(for) the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(35, 25, 1, "TNP", 1)]
-        [InlineData(35, 25, 1, "TNP", 3)]
-        [InlineData(35, 25, 1, "PMR", 2)]
-        public void ConditionMet_True(int fundModel, int? progType, int aimType, string aFinType, int aFinCode)
+        [InlineData(TypeOfAim.AimNotPartOfAProgramme, false)]
+        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, false)]
+        [InlineData(TypeOfAim.ProgrammeAim, true)]
+        [InlineData(TypeOfAim.ComponentAimInAProgramme, false)]
+        [InlineData(2, false)]
+        public void IsInAProgrammeMeetsExpectation(int candidate, bool expectation)
         {
-            var aFinCodes = new List<int> { 2, 4 };
+            // arrange
+            var sut = NewRule();
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.AimType)
+                .Returns(candidate);
 
-            var aFinRecords = new List<TestAppFinRecord>
-            {
-                new TestAppFinRecord
-                {
-                    AFinType = aFinType,
-                    AFinCode = aFinCode
-                }
-            };
+            // act
+            var result = sut.IsInAProgramme(mockDelivery.Object);
 
-            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-
-            learningDeliveryAppFinRecordQueryServiceMock.Setup(afm => afm.HasAnyLearningDeliveryAFinCodesForType(aFinRecords, "TNP", aFinCodes)).Returns(false);
-
-            NewRule(learningDeliveryAppFinRecordQueryServiceMock.Object).ConditionMet(fundModel, progType, aimType, aFinRecords).Should().BeTrue();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
+        /// <summary>
+        /// Determines whether [is funded meets expectation] [(for) the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(99, 25, 1, "TNP", 2)]
-        [InlineData(35, 20, 1, "TNP", 2)]
-        [InlineData(35, 25, 2, "TNP", 2)]
-        [InlineData(35, 25, 1, "TNP", 2)]
-        public void ConditionMet_False(int fundModel, int? progType, int aimType, string aFinType, int aFinCode)
+        [InlineData(TypeOfFunding.AdultSkills, true)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, true)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, true)]
+        [InlineData(TypeOfFunding.CommunityLearning, true)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, true)]
+        [InlineData(TypeOfFunding.NotFundedByESFA, false)]
+        [InlineData(TypeOfFunding.Other16To19, true)]
+        [InlineData(TypeOfFunding.OtherAdult, true)]
+        public void IsFundedMeetsExpectation(int candidate, bool expectation)
         {
-            var aFinCodes = new List<int> { 2, 4 };
+            // arrange
+            var sut = NewRule();
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.FundModel)
+                .Returns(candidate);
 
-            var aFinRecords = new List<TestAppFinRecord>
-            {
-                new TestAppFinRecord
-                {
-                    AFinType = aFinType,
-                    AFinCode = aFinCode
-                }
-            };
+            // act
+            var result = sut.IsFunded(mockDelivery.Object);
 
-            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-
-            learningDeliveryAppFinRecordQueryServiceMock.Setup(afm => afm.HasAnyLearningDeliveryAFinCodesForType(aFinRecords, "TNP", aFinCodes)).Returns(true);
-
-            NewRule(learningDeliveryAppFinRecordQueryServiceMock.Object).ConditionMet(fundModel, progType, aimType, aFinRecords).Should().BeFalse();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
-        [Fact]
-        public void Validate_Error()
+        /// <summary>
+        /// Conditions the met with financial record meets expectation.
+        /// </summary>
+        /// <param name="candidateType">Type of the candidate.</param>
+        /// <param name="candidateCode">The candidate code.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(null, 1, false)]
+        [InlineData(null, 2, false)]
+        [InlineData(null, 3, false)]
+        [InlineData(null, 4, false)]
+        [InlineData("", 1, false)]
+        [InlineData("", 2, false)]
+        [InlineData("", 3, false)]
+        [InlineData("", 4, false)]
+        [InlineData(TypeOfAppFinRec.PaymentRecord, 1, false)]
+        [InlineData(TypeOfAppFinRec.PaymentRecord, 2, false)]
+        [InlineData(TypeOfAppFinRec.PaymentRecord, 3, false)]
+        [InlineData(TypeOfAppFinRec.PaymentRecord, 4, false)]
+        [InlineData(TypeOfAppFinRec.TotalNegotiatedPrice, 1, false)]
+        [InlineData(TypeOfAppFinRec.TotalNegotiatedPrice, 2, true)]
+        [InlineData(TypeOfAppFinRec.TotalNegotiatedPrice, 3, false)]
+        [InlineData(TypeOfAppFinRec.TotalNegotiatedPrice, 4, true)]
+        public void ConditionMetWithFinancialRecordMeetsExpectation(string candidateType, int candidateCode, bool expectation)
         {
-            var aFinCodes = new List<int> { 2, 4 };
+            // arrange
+            var sut = NewRule();
+            var mockFinRec = new Mock<IAppFinRecord>();
+            mockFinRec
+                .SetupGet(x => x.AFinType)
+                .Returns(candidateType);
+            mockFinRec
+                .SetupGet(x => x.AFinCode)
+                .Returns(candidateCode);
 
-            var learner = new TestLearner()
-            {
-                LearningDeliveries = new List<TestLearningDelivery>()
-                {
-                    new TestLearningDelivery()
-                    {
-                        FundModel = 35,
-                        ProgTypeNullable = 25,
-                        AimType = 1,
-                        AppFinRecords = new List<TestAppFinRecord>()
-                        {
-                            new TestAppFinRecord()
-                            {
-                                AFinType = "TNP",
-                                AFinCode = 1
-                            }
-                        }
-                    }
-                }
-            };
+            // act
+            var result = sut.ConditionMet(mockFinRec.Object);
 
-            var aFinRecords = learner.LearningDeliveries.SelectMany(ld => ld.AppFinRecords);
-
-            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-
-            learningDeliveryAppFinRecordQueryServiceMock.Setup(afm => afm.HasAnyLearningDeliveryAFinCodesForType(aFinRecords, "TNP", aFinCodes)).Returns(false);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(learningDeliveryAppFinRecordQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
+            // assert
+            Assert.Equal(expectation, result);
         }
 
-        [Fact]
-        public void Validate_NoError()
+        /// <summary>
+        /// Invalid item raises validation message.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        [Theory]
+        [InlineData("PMR1", "PMR2")]
+        [InlineData("TNP1", "TNP3")]
+        [InlineData("PMR1", "TNP1", "PMR2", "TNP3")]
+        [InlineData("PMR1", "TNP1", "TNP3", "PMR2", "PMR3")]
+        public void InvalidItemRaisesValidationMessage(params string[] candidates)
         {
-            var aFinCodes = new List<int> { 2, 4 };
+            // arrange
+            const string LearnRefNumber = "123456789X";
 
-            var learner = new TestLearner()
+            var records = Collection.Empty<IAppFinRecord>();
+            candidates.ForEach(x =>
             {
-                LearningDeliveries = new List<TestLearningDelivery>()
-                {
-                    new TestLearningDelivery()
-                    {
-                        FundModel = 35,
-                        ProgTypeNullable = 25,
-                        AimType = 1,
-                        AppFinRecords = new List<TestAppFinRecord>()
-                        {
-                            new TestAppFinRecord()
-                            {
-                                AFinType = "TNP",
-                                AFinCode = 2
-                            }
-                        }
-                    }
-                }
-            };
+                var candidateType = x.Substring(0, 3);
+                var candidateCode = int.Parse(x.Substring(3));
 
-            var aFinRecords = learner.LearningDeliveries.SelectMany(ld => ld.AppFinRecords);
+                var mockFinRec = new Mock<IAppFinRecord>();
+                mockFinRec
+                    .SetupGet(y => y.AFinType)
+                    .Returns(candidateType);
+                mockFinRec
+                    .SetupGet(y => y.AFinCode)
+                    .Returns(candidateCode);
 
-            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
+                records.Add(mockFinRec.Object);
+            });
 
-            learningDeliveryAppFinRecordQueryServiceMock.Setup(afm => afm.HasAnyLearningDeliveryAFinCodesForType(aFinRecords, "TNP", aFinCodes)).Returns(true);
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(x => x.ProgTypeNullable)
+                .Returns(TypeOfLearningProgramme.ApprenticeshipStandard);
+            mockDelivery
+                .SetupGet(x => x.AimType)
+                .Returns(TypeOfAim.ProgrammeAim);
+            mockDelivery
+                .SetupGet(x => x.FundModel)
+                .Returns(TypeOfFunding.ApprenticeshipsFrom1May2017);
+            mockDelivery
+                .SetupGet(x => x.AppFinRecords)
+                .Returns(records.AsSafeReadOnlyList());
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(learningDeliveryAppFinRecordQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
+            var deliveries = Collection.Empty<ILearningDelivery>();
+            deliveries.Add(mockDelivery.Object);
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries.AsSafeReadOnlyList());
+
+            var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            mockHandler.Setup(x => x.Handle(
+                Moq.It.Is<string>(y => y == AFinType_10Rule.Name),
+                Moq.It.Is<string>(y => y == LearnRefNumber),
+                0,
+                Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == AFinType_10Rule.MessagePropertyName),
+                    Moq.It.Is<object>(y => y == mockDelivery.Object)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            var sut = new AFinType_10Rule(mockHandler.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            mockHandler.VerifyAll();
         }
 
-        private AFinType_10Rule NewRule(ILearningDeliveryAppFinRecordQueryService learningDeliveryAppFinRecordQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        /// <summary>
+        /// Valid item does not raise a validation message.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        [Theory]
+        [InlineData("PMR1", "PMR2", "TNP2")]
+        [InlineData("TNP1", "TNP3", "TNP4")]
+        [InlineData("PMR1", "TNP4", "TNP1", "PMR2", "TNP3")]
+        [InlineData("PMR1", "TNP1", "TNP3", "TNP2", "PMR2", "PMR3")]
+        public void ValidItemDoesNotRaiseAValidationMessage(params string[] candidates)
         {
-            return new AFinType_10Rule(learningDeliveryAppFinRecordQueryService, validationErrorHandler);
+            // arrange
+            const string LearnRefNumber = "123456789X";
+
+            var records = Collection.Empty<IAppFinRecord>();
+            candidates.ForEach(x =>
+            {
+                var candidateType = x.Substring(0, 3);
+                var candidateCode = int.Parse(x.Substring(3));
+
+                var mockFinRec = new Mock<IAppFinRecord>();
+                mockFinRec
+                    .SetupGet(y => y.AFinType)
+                    .Returns(candidateType);
+                mockFinRec
+                    .SetupGet(y => y.AFinCode)
+                    .Returns(candidateCode);
+
+                records.Add(mockFinRec.Object);
+            });
+
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(x => x.ProgTypeNullable)
+                .Returns(TypeOfLearningProgramme.ApprenticeshipStandard);
+            mockDelivery
+                .SetupGet(x => x.AimType)
+                .Returns(TypeOfAim.ProgrammeAim);
+            mockDelivery
+                .SetupGet(x => x.FundModel)
+                .Returns(TypeOfFunding.ApprenticeshipsFrom1May2017);
+            mockDelivery
+                .SetupGet(x => x.AppFinRecords)
+                .Returns(records.AsSafeReadOnlyList());
+
+            var deliveries = Collection.Empty<ILearningDelivery>();
+            deliveries.Add(mockDelivery.Object);
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries.AsSafeReadOnlyList());
+
+            var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var sut = new AFinType_10Rule(mockHandler.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            mockHandler.VerifyAll();
+        }
+
+        /// <summary>
+        /// New rule.
+        /// </summary>
+        /// <returns>a constructed and mocked up validation rule</returns>
+        public AFinType_10Rule NewRule()
+        {
+            var mock = new Mock<IValidationErrorHandler>();
+
+            return new AFinType_10Rule(mock.Object);
         }
     }
 }

@@ -1,69 +1,120 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Utility;
+using System;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 {
-    public class AFinType_10Rule : AbstractRule, IRule<ILearner>
+    public class AFinType_10Rule :
+        IRule<ILearner>
     {
-        private readonly IEnumerable<int> _aFinCodes = new HashSet<int> { 2, 4 };
+        /// <summary>
+        /// Gets the name of the message property.
+        /// </summary>
+        public const string MessagePropertyName = "AFinType";
 
-        private readonly ILearningDeliveryAppFinRecordQueryService _learningDeliveryAppFinRecordQueryService;
+        /// <summary>
+        /// Gets the name of the rule.
+        /// </summary>
+        public const string Name = "AFinType_10";
 
-        public AFinType_10Rule(ILearningDeliveryAppFinRecordQueryService learningDeliveryAppFinRecordQueryService, IValidationErrorHandler validationErrorHandler)
-           : base(validationErrorHandler, RuleNameConstants.AFinType_10)
+        /// <summary>
+        /// The message handler
+        /// </summary>
+        private readonly IValidationErrorHandler _messageHandler;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AFinType_10Rule"/> class.
+        /// </summary>
+        /// <param name="validationErrorHandler">The validation error handler.</param>
+        public AFinType_10Rule(IValidationErrorHandler validationErrorHandler)
         {
-            _learningDeliveryAppFinRecordQueryService = learningDeliveryAppFinRecordQueryService;
+            It.IsNull(validationErrorHandler)
+                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+
+            _messageHandler = validationErrorHandler;
         }
 
+        /// <summary>
+        /// Gets the name of the rule.
+        /// </summary>
+        public string RuleName => Name;
+
+        public bool IsFunded(ILearningDelivery delivery) =>
+            TypeOfFunding.AsAFundedSet.Contains(delivery.FundModel);
+
+        /// <summary>
+        /// Determines whether the specified delivery is apprencticeship.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified delivery is apprencticeship; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsTargetApprencticeship(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.ApprenticeshipStandard);
+
+        /// <summary>
+        /// Determines whether [is right fund model] [for the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is right fund model] [for the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInAProgramme(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.AimType, TypeOfAim.ProgrammeAim);
+
+        /// <summary>
+        /// Validates the specified object.
+        /// </summary>
+        /// <param name="objectToValidate">The object to validate.</param>
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
-            {
-                if (learningDelivery.AppFinRecords != null)
+            It.IsNull(objectToValidate)
+                .AsGuard<ArgumentNullException>(nameof(objectToValidate));
+
+            var learnRefNumber = objectToValidate.LearnRefNumber;
+
+            objectToValidate.LearningDeliveries?
+                .Where(x => IsFunded(x) && IsTargetApprencticeship(x) && IsInAProgramme(x))
+                .ForEach(x =>
                 {
-                    if (ConditionMet(
-                        learningDelivery.FundModel,
-                        learningDelivery.ProgTypeNullable,
-                        learningDelivery.AimType,
-                        learningDelivery.AppFinRecords))
+                    var finRecords = x.AppFinRecords.AsSafeReadOnlyList();
+                    var failedValidation = !finRecords.Any(y => ConditionMet(y));
+
+                    if (failedValidation)
                     {
-                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
+                        RaiseValidationMessage(learnRefNumber, x);
                     }
-                }
-            }
+                });
         }
 
-        public bool ConditionMet(int fundModel, int? progType, int aimType, IEnumerable<IAppFinRecord> appFinRecords)
+        /// <summary>
+        /// Condition met.
+        /// </summary>
+        /// <param name="financialRecord">The financial record.</param>
+        /// <returns>
+        /// true if any any point the conditions are met
+        /// </returns>
+        public bool ConditionMet(IAppFinRecord financialRecord)
         {
-            return FundModelConditionMet(fundModel)
-                && ApprenticeshipStandardConditionMet(progType, aimType)
-                && AppFinRecordConditionMet(appFinRecords);
+            return It.Has(financialRecord)
+                ? It.IsInRange($"{financialRecord.AFinType}{financialRecord.AFinCode}", TypeOfAppFinRec.TotalAssessmentPrice, TypeOfAppFinRec.ResidualAssessmentPrice)
+                : true;
         }
 
-        public bool FundModelConditionMet(int fundModel)
+        /// <summary>
+        /// Raises the validation message.
+        /// </summary>
+        /// <param name="learnRefNumber">The learn reference number.</param>
+        /// <param name="thisDelivery">this delivery.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            return fundModel != 99;
-        }
+            var parameters = Collection.Empty<IErrorMessageParameter>();
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
 
-        public bool ApprenticeshipStandardConditionMet(int? progType, int aimType)
-        {
-            if (progType != null)
-            {
-                return progType == 25 && aimType == 1;
-            }
-
-            return false;
-        }
-
-        public bool AppFinRecordConditionMet(IEnumerable<IAppFinRecord> appFinRecords)
-        {
-            return !_learningDeliveryAppFinRecordQueryService.HasAnyLearningDeliveryAFinCodesForType(appFinRecords, "TNP", _aFinCodes);
+            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
     }
 }

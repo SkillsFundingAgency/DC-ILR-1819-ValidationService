@@ -69,6 +69,7 @@
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
+    <Compile Include="Constants\TypeOfAppFinRec.cs" />
     <Compile Include="Constants\TypeOfLearningProgramme.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
