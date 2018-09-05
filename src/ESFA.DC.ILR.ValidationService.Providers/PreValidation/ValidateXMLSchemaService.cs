@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -17,18 +18,17 @@ namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
     public class ValidateXMLSchemaService : AbstractRule, IValidateXMLSchemaService
     {
         private readonly IList<string> _validationErrors = new List<string>();
-
-        private readonly IMessageStringProviderService _messageStringProviderService;
         private readonly ISchemaStringProviderService _schemaFileContentStringProviderService;
+        private readonly ICache<string> _fileContentCache;
 
         public ValidateXMLSchemaService(
             IValidationErrorHandler validationErrorHandler,
-            IMessageStringProviderService messageStringProviderService,
-            ISchemaStringProviderService schemaFileContentStringProviderService)
+            ISchemaStringProviderService schemaFileContentStringProviderService,
+            ICache<string> fileContentCache)
             : base(validationErrorHandler, RuleNameConstants.Schema)
         {
-            _messageStringProviderService = messageStringProviderService;
             _schemaFileContentStringProviderService = schemaFileContentStringProviderService;
+            _fileContentCache = fileContentCache;
         }
 
         public bool Validate()
@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
             try
             {
                 string xsdFileContent = _schemaFileContentStringProviderService.Provide();
-                string xmlFileContent = _messageStringProviderService.Provide();
+                string xmlFileContent = _fileContentCache.Item;
 
                 XmlReader xsdReader = XmlReader.Create(new StringReader(xsdFileContent));
                 XmlReader xmlReader = XmlReader.Create(new StringReader(xmlFileContent));

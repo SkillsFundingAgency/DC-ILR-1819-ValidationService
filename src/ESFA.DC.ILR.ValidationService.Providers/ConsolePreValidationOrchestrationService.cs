@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
@@ -41,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _fileDataCache = fileDataCache;
         }
 
-        public IEnumerable<U> Execute(IPreValidationContext preValidationContext)
+        public IEnumerable<U> Execute(IPreValidationContext preValidationContext, CancellationToken cancellationToken)
         {
             // get the file name
             _fileDataCache.FileName = preValidationContext.Input;

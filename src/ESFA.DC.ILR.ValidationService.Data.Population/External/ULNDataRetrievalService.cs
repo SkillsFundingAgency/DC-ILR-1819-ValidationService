@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public IEnumerable<long> UniqueULNsFromMessage(IMessage message)
         {
-            return message
+            return message?
                        .Learners?
                        .Select(l => l.ULN)
                        .Distinct()

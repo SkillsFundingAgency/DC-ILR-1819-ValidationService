@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers;
@@ -15,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         {
             builder.RegisterType<ContextMessageStringProviderService>().As<IMessageStringProviderService>();
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>();
-            builder.RegisterType<ValidationErrorCachePassThroughOutputService>().As<IValidationOutputService<IValidationError>>();
+            builder.RegisterType<ValidationErrorCachePassThroughOutputService>().As<IValidationOutputService<IValidationError>>().WithAttributeFiltering();
             builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>().As<IRuleSetOrchestrationService<ILearner, IValidationError>>();
             builder.RegisterType<AutoFacRuleSetResolutionService<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
             builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();

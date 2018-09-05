@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -27,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
         public ValidationOutputService(
             IValidationErrorCache<IValidationError> validationErrorCache,
             ICache<IMessage> messageCache,
-            IKeyValuePersistenceService keyValuePersistenceService,
+            [KeyFilter(PersistenceStorageKeys.Redis)] IKeyValuePersistenceService keyValuePersistenceService,
             IPreValidationContext validationContext,
             IJsonSerializationService serializationService,
             IValidationErrorsDataService validationErrorsDataService)
@@ -80,6 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
         {
             return _validationErrorCache
                 .ValidationErrors
+                .Where(x => !string.IsNullOrEmpty(x.LearnerReferenceNumber))
                 .Select(ve => ve.LearnerReferenceNumber)
                 .Distinct();
         }
@@ -87,12 +89,16 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
         public IEnumerable<string> BuildValidLearnRefNumbers(IEnumerable<string> invalidLearnRefNumbers)
         {
             var invalidLearnRefNumbersHashSet = new HashSet<string>(invalidLearnRefNumbers);
+            if (_validationErrorCache.ValidationErrors.Any(x => !string.IsNullOrEmpty(x.LearnerReferenceNumber)))
+            {
+                return _messageCache
+                    .Item
+                    .Learners
+                    .Select(l => l.LearnRefNumber)
+                    .Where(lrn => !invalidLearnRefNumbersHashSet.Contains(lrn));
+            }
 
-            return _messageCache
-                .Item
-                .Learners
-                .Select(l => l.LearnRefNumber)
-                .Where(lrn => !invalidLearnRefNumbersHashSet.Contains(lrn));
+            return invalidLearnRefNumbersHashSet;
         }
 
         public async Task SaveAsync(IEnumerable<string> validLearnerRefNumbers, IEnumerable<string> invalidLearnerRefNumbers, IEnumerable<ValidationError> validationErrors, IEnumerable<ValidationErrorMessageLookup> validationErrorMessageLookups)

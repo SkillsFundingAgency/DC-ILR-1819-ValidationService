@@ -3,17 +3,21 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using Autofac.Integration.ServiceFabric;
 using ESFA.DC.Auditing;
 using ESFA.DC.Auditing.Dto;
 using ESFA.DC.Auditing.Interface;
 using ESFA.DC.DateTimeProvider.Interface;
+using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Modules.Stateless;
 using ESFA.DC.ILR.ValidationService.Stateless.Configuration;
 using ESFA.DC.ILR.ValidationService.Stateless.Handlers;
 using ESFA.DC.ILR.ValidationService.Stateless.Mapper;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.IO.AzureStorage;
+using ESFA.DC.IO.AzureStorage.Config.Interfaces;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.IO.Redis;
 using ESFA.DC.IO.Redis.Config;
@@ -88,6 +92,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             var azureStorageOptions =
                 configHelper.GetSectionValues<AzureStorageModel>("AzureStorageSection");
             containerBuilder.RegisterInstance(azureStorageOptions).As<AzureStorageModel>().SingleInstance();
+            containerBuilder.RegisterInstance(azureStorageOptions).As<IAzureStorageKeyValuePersistenceServiceConfig>().SingleInstance();
 
             Console.WriteLine($"BuildContainer:4");
             // register logger
@@ -103,7 +108,14 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 ConnectionString = azureRedisCacheOptions.RedisCacheConnectionString,
                 KeyExpiry = new TimeSpan(14, 0, 0, 0)
             }).As<IRedisKeyValuePersistenceServiceConfig>().SingleInstance();
-            containerBuilder.RegisterType<RedisKeyValuePersistenceService>().As<IKeyValuePersistenceService>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<RedisKeyValuePersistenceService>()
+                .Keyed<IKeyValuePersistenceService>(PersistenceStorageKeys.Redis)
+                .As<IKeyValuePersistenceService>()
+                .InstancePerLifetimeScope();
+            containerBuilder.RegisterType<AzureStorageKeyValuePersistenceService>()
+                .Keyed<IKeyValuePersistenceService>(PersistenceStorageKeys.AzureStorage)
+                .As<IKeyValuePersistenceService>()
+                .InstancePerLifetimeScope();
 
             Console.WriteLine($"BuildContainer:6");
             // service bus queue configuration
