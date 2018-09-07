@@ -41,9 +41,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         {
             var validationErrors = new List<IValidationError>()
             {
-                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "a"),
-                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "a"),
-                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "b"),
+                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "a", severity: Severity.Error),
+                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "a", severity: Severity.Error),
+                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "b", severity: Severity.Error),
+                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "b", severity: Severity.Warning),
+                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "c", severity: Severity.Warning),
+                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "c", severity: Severity.Warning),
             };
 
             var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
