@@ -81,7 +81,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
         {
             return _validationErrorCache
                 .ValidationErrors
-                .Where(x => !string.IsNullOrEmpty(x.LearnerReferenceNumber))
+                .Where(x => !string.IsNullOrEmpty(x.LearnerReferenceNumber)
+                    && x.Severity == Severity.Error)
                 .Select(ve => ve.LearnerReferenceNumber)
                 .Distinct();
         }
