@@ -140,5 +140,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && learningDelivery.AnnualValues
                     .Where(av => av.BasicSkills == basicSkills).Any();
         }
+
+        public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && learningDelivery.AnnualValues != null
+                && learningDelivery.AnnualValues.Where(
+                    a => basicSkillsType.Contains(a.BasicSkillsType ?? -9999)
+                    && (learnStartDate >= a.EffectiveFrom
+                    && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null))).Count() > 0;
+        }
     }
 }

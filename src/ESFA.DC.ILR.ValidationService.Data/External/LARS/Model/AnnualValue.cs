@@ -12,6 +12,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
 
         public int? BasicSkills { get; set; }
 
+        public int? BasicSkillsType { get; set; }
+
         public int? FullLevel2EntitlementCategory { get; set; }
 
         public int? FullLevel3EntitlementCategory { get; set; }
