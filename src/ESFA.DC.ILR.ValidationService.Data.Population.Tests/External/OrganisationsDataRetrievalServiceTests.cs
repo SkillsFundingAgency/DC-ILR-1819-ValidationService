@@ -463,6 +463,103 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             organisations.Where(k => k.Key == 2).Select(v => v.Value.PartnerUKPRN).Single().Should().BeFalse();
         }
 
+        [Fact]
+        public void Retrieve_UKPRN_Mismatch()
+        {
+            var message = new TestMessage
+            {
+                LearningProviderEntity = new TestLearningProvider
+                {
+                    UKPRN = 1
+                },
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner
+                    {
+                        PrevUKPRNNullable = 2,
+                        LearningDeliveries = new List<TestLearningDelivery>
+                        {
+                            new TestLearningDelivery
+                            {
+                                PartnerUKPRNNullable = 22
+                            }
+                        }
+                    },
+                    new TestLearner
+                    {
+                        PMUKPRNNullable = 3,
+                        LearningDeliveries = new List<TestLearningDelivery>
+                        {
+                            new TestLearningDelivery
+                            {
+                                PartnerUKPRNNullable = 33
+                            }
+                        }
+                    },
+                }
+            };
+
+            var organisationsMock = new Mock<IOrganisations>();
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            IEnumerable<MasterOrganisation> masterOrgList = new List<MasterOrganisation>
+            {
+                new MasterOrganisation
+                {
+                    UKPRN = 1,
+                    Org_Details = new Org_Details
+                    {
+                        UKPRN = 1,
+                        LegalOrgType = "LegalType1"
+                    },
+                    Org_PartnerUKPRN = new List<Org_PartnerUKPRN>
+                    {
+                        new Org_PartnerUKPRN
+                        {
+                            UKPRN = 1,
+                            NameLegal = "NameLegal1"
+                        }
+                    }
+                },
+                new MasterOrganisation
+                {
+                    UKPRN = 2,
+                    Org_Details = new Org_Details
+                    {
+                        UKPRN = 2,
+                        LegalOrgType = "LegalType2"
+                    }
+                },
+                 new MasterOrganisation
+                {
+                    UKPRN = 3
+                },
+            };
+
+            var masterOrgMock = IEnumerableExtensions.AsMockDbSet(masterOrgList);
+
+            organisationsMock.Setup(o => o.MasterOrganisations).Returns(masterOrgMock);
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+
+            var organisations = NewService(organisationsMock.Object, messageCacheMock.Object).Retrieve();
+
+            organisations.Select(k => k.Key).Should().HaveCount(3);
+            organisations.Select(k => k.Key).Should().Contain(new List<long> { 1, 2, 3 });
+
+            organisations.Where(k => k.Key == 1).Select(v => v.Value.UKPRN).Single().Should().Be(1);
+            organisations.Where(k => k.Key == 1).Select(v => v.Value.LegalOrgType).Single().Should().Be("LegalType1");
+            organisations.Where(k => k.Key == 1).Select(v => v.Value.PartnerUKPRN).Single().Should().BeTrue();
+
+            organisations.Where(k => k.Key == 2).Select(v => v.Value.UKPRN).Single().Should().Be(2);
+            organisations.Where(k => k.Key == 2).Select(v => v.Value.LegalOrgType).Single().Should().Be("LegalType2");
+            organisations.Where(k => k.Key == 2).Select(v => v.Value.PartnerUKPRN).Single().Should().BeFalse();
+
+            organisations.Where(k => k.Key == 3).Select(v => v.Value.UKPRN).Single().Should().BeNull();
+            organisations.Where(k => k.Key == 3).Select(v => v.Value.LegalOrgType).Single().Should().BeNull();
+            organisations.Where(k => k.Key == 3).Select(v => v.Value.PartnerUKPRN).Single().Should().BeFalse();
+        }
+
         private OrganisationsDataRetrievalService NewService(IOrganisations organisations = null, ICache<IMessage> messageCache = null)
         {
             return new OrganisationsDataRetrievalService(organisations, messageCache);

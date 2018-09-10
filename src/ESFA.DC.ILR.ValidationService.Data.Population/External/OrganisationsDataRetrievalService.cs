@@ -36,8 +36,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     o => o.UKPRN,
                     o => new Organisation()
                     {
-                        UKPRN = o.Org_Details.UKPRN,
-                        LegalOrgType = o.Org_Details.LegalOrgType,
+                        UKPRN = o.Org_Details?.UKPRN,
+                        LegalOrgType = o.Org_Details?.LegalOrgType,
                         PartnerUKPRN = o.Org_PartnerUKPRN.Any(op => op.UKPRN == o.UKPRN)
                     });
         }
