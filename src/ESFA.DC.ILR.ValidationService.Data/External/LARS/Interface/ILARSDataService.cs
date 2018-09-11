@@ -3,8 +3,18 @@ using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
+    /// <summary>
+    /// the lars data service
+    /// </summary>
     public interface ILARSDataService
     {
+        /// <summary>
+        /// Gets the deliveries for.
+        /// </summary>
+        /// <param name="forThisAimRef">this aim reference.</param>
+        /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
+        IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef);
+
         bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date);
 
         bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);

@@ -28,6 +28,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         int? BasicSkills { get; }
 
         /// <summary>
+        /// Gets the type of the basic skills.
+        /// </summary>
+        int? BasicSkillsType { get; }
+
+        /// <summary>
         /// Gets the full level 2 entitlement category.
         /// </summary>
         int? FullLevel2EntitlementCategory { get; }
