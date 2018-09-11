@@ -2,7 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Utility;
+using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM

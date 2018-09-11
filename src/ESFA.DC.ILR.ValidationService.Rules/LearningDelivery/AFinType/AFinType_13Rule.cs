@@ -1,7 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Utility;
+using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Linq;
 
@@ -117,7 +117,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
         /// <param name="thisDelivery">this learning delivery.</param>
-        /// <param name="thisFinancialRecord">this financial record.</param>
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();

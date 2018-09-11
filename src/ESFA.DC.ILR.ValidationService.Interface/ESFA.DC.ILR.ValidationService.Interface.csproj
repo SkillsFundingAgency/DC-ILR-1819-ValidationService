@@ -97,6 +97,9 @@
     <Compile Include="IValidationItemProviderService.cs" />
     <Compile Include="IValidationOutputService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\Collection.cs" />
+    <Compile Include="Utility\Guard.cs" />
+    <Compile Include="Utility\It.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ESFA.DC.ILR.ValidationService.Interface.ruleset">
