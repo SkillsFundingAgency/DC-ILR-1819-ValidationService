@@ -1,8 +1,10 @@
-﻿using System;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+using System;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
 {
-    public class AnnualValue
+    public class AnnualValue :
+        ILARSAnnualValue
     {
         public string LearnAimRef { get; set; }
 

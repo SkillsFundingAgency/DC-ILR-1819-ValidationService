@@ -65,14 +65,20 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ContPrefTypeConstants.cs" />
+    <Compile Include="Constants\DeliveryMonitoring.cs" />
+    <Compile Include="Constants\EmploymentStatusMonitoring.cs" />
     <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\TypeOfAppFinRec.cs" />
+    <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
+    <Compile Include="Constants\TypeOfLARSCategory.cs" />
     <Compile Include="Constants\TypeOfLearningProgramme.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
+    <Compile Include="Derived\DerivedData_29Rule.cs" />
+    <Compile Include="Derived\DerivedData_21Rule.cs" />
     <Compile Include="Derived\DD01.cs" />
     <Compile Include="Derived\DD04.cs" />
     <Compile Include="Derived\DD06.cs" />
@@ -81,6 +87,8 @@
     <Compile Include="Derived\Interface\IDD04.cs" />
     <Compile Include="Derived\Interface\IDD06.cs" />
     <Compile Include="Derived\Interface\IDD07.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_29Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
@@ -224,6 +232,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_01Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_03Rule.cs" />
@@ -274,9 +283,6 @@
     <Compile Include="Query\LearnerQueryService.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\LearningDeliveryQueryService.cs" />
-    <Compile Include="Utility\Collection.cs" />
-    <Compile Include="Utility\Guard.cs" />
-    <Compile Include="Utility\It.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
