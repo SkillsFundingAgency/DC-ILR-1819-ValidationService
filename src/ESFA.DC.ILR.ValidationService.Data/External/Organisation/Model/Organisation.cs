@@ -2,10 +2,13 @@
 {
     public class Organisation
     {
-        public long UKPRN { get; set; }
+        // Org Details
+        public long? UKPRN { get; set; }
 
+        // Org Details
         public string LegalOrgType { get; set; }
 
-        public bool PartnerUKPRN { get; set; }
+        // Org Partner UKPRN
+        public bool? PartnerUKPRN { get; set; }
     }
 }

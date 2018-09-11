@@ -1001,6 +1001,77 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRef(learnAimRef, 2).Should().BeFalse();
         }
 
+        [Theory]
+        [InlineData(3, "00100309", "2018-06-01")]
+        [InlineData(1, "00100310", "2018-06-01")]
+        [InlineData(1, "00100309", "2017-01-01")]
+        [InlineData(3, "00100310", "2017-01-01")]
+        public void BasicSkillsMatchForLearnAimRefAndStartDate_False(int basicSkillType, string learnAimRef, string learnStartDateString)
+        {
+            IEnumerable<int> basicSkillsTypes = new List<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
+            DateTime.TryParse(learnStartDateString, out DateTime learnStartDate);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkillsType = basicSkillType,
+                                EffectiveFrom = new DateTime(2018, 03, 01),
+                                EffectiveTo = new DateTime(2018, 09, 01)
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", learnStartDate).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(1, "00100309", "2018-06-01", "2018-09-01")]
+        [InlineData(13, "00100309", "2018-06-01", null)]
+        public void BasicSkillsMatchForLearnAimRefAndStartDate_True(int basicSkillType, string learnAimRef, string learnStartDateString, string larsEffectiveToDateString)
+        {
+            IEnumerable<int> basicSkillsTypes = new List<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
+            DateTime.TryParse(learnStartDateString, out DateTime learnStartDate);
+            DateTime? larsEffectiveToDate = string.IsNullOrEmpty(larsEffectiveToDateString) ? (DateTime?)null : DateTime.Parse(larsEffectiveToDateString);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkillsType = basicSkillType,
+                                EffectiveFrom = new DateTime(2018, 03, 01),
+                                EffectiveTo = larsEffectiveToDate
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", learnStartDate).Should().BeTrue();
+        }
+
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
         {
             return new LARSDataService(externalDataCache);

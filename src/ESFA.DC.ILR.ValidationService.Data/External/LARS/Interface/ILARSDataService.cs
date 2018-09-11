@@ -30,5 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef);
 
         bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills);
+
+        bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate);
     }
 }
