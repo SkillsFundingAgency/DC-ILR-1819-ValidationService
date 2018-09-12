@@ -122,8 +122,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <summary>
         /// Condition met with learning deliveries containing open training meet expectation.
         /// </summary>
-        /// <param name="filePreparationDate">The file preparation date.</param>
         /// <param name="startDate">The start date.</param>
+        /// <param name="filePreparationDate">The file preparation date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
         [InlineData("2017-08-01", "2017-09-30", true)]
@@ -138,7 +138,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         [InlineData("2015-07-31", "2015-10-01", true)]
         [InlineData("2015-08-01", "2016-03-31", true)]
         [InlineData("2015-08-01", "2016-04-01", false)]
-        public void ConditionMetWithLearningDeliveriesContainingOpenTrainingMeetExpectation(string filePreparationDate, string startDate, bool expectation)
+        public void ConditionMetWithLearningDeliveriesContainingOpenTrainingMeetExpectation(string startDate, string filePreparationDate, bool expectation)
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
@@ -167,21 +167,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
-        /// <param name="filePreparationDate">The file preparation date.</param>
         /// <param name="startDate">The start date.</param>
+        /// <param name="filePreparationDate">The file preparation date.</param>
         [Theory]
         [InlineData("2016-08-01", "2017-09-30")]
         [InlineData("2016-01-01", "2017-06-30")]
         [InlineData("2016-02-01", "2017-07-31")]
-        public void InvalidItemRaisesValidationMessage(string filePreparationDate, string startDate)
+        public void InvalidItemRaisesValidationMessage(string startDate, string filePreparationDate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
-
-            var mockLearner = new Mock<ILearner>();
-            mockLearner
-                .SetupGet(x => x.LearnRefNumber)
-                .Returns(LearnRefNumber);
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
@@ -197,6 +192,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
 
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
@@ -233,28 +232,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// Valid item does not raise a validation message.
         /// </summary>
         /// <param name="startDate">The start date.</param>
-        /// <param name="endDate">The end date.</param>
+        /// <param name="filePreparationDate">The file preparation date.</param>
         [Theory]
         [InlineData("2017-08-01", "2017-09-30")]
         [InlineData("2017-01-01", "2017-06-30")]
         [InlineData("2017-02-01", "2017-07-31")]
-        public void ValidItemDoesNotRaiseAValidationMessage(string startDate, string endDate)
+        public void ValidItemDoesNotRaiseAValidationMessage(string startDate, string filePreparationDate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
-
-            var mockLearner = new Mock<ILearner>();
-            mockLearner
-                .SetupGet(x => x.LearnRefNumber)
-                .Returns(LearnRefNumber);
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(y => y.LearnStartDate)
                 .Returns(DateTime.Parse(startDate));
-            mockDelivery
-                .SetupGet(y => y.LearnActEndDateNullable)
-                .Returns(DateTime.Parse(endDate));
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
                 .Returns(TypeOfLearningProgramme.Traineeship);
@@ -265,12 +256,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
 
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
             var service = new Mock<IFileDataService>(MockBehavior.Strict);
+            service
+                .Setup(x => x.FilePreparationDate())
+                .Returns(DateTime.Parse(filePreparationDate));
 
             var sut = new ProgType_13Rule(handler.Object, service.Object);
 

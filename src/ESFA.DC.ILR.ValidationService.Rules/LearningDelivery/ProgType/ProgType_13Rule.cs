@@ -91,7 +91,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery) && It.IsEmpty(thisDelivery.LearnActEndDateNullable)
-                ? TypeOfLearningProgramme.WithinMaxmimumOpenTrainingDuration(_fileData.FilePreparationDate(), thisDelivery.LearnStartDate)
+                ? TypeOfLearningProgramme.WithinMaxmimumOpenTrainingDuration(thisDelivery.LearnStartDate, _fileData.FilePreparationDate())
                 : true;
         }
 
