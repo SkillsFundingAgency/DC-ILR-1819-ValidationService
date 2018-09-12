@@ -112,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? It.IsEmpty(thisDelivery.PriorLearnFundAdjNullable)
+                ? It.Has(thisDelivery.PriorLearnFundAdjNullable)
                 : true;
         }
 
