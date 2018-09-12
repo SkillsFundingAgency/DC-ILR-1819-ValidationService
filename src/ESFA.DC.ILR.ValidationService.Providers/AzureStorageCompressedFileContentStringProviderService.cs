@@ -1,21 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Logging.Interfaces;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
-    public class AzureStorageCompressedFileContentStringProviderService : IMessageStringProviderService
+    public class AzureStorageCompressedFileContentStringProviderService : IMessageStreamProviderService
     {
         private readonly IPreValidationContext _preValidationContext;
         private readonly ILogger _logger;
@@ -31,12 +27,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _streamableKeyValuePersistenceService = streamableKeyValuePersistenceService;
         }
 
-        public string Provide()
+        public Stream Provide()
         {
             var startDateTime = DateTime.UtcNow;
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var fileContentString = string.Empty;
+
+            MemoryStream outputStream = new MemoryStream();
 
             try
             {
@@ -45,21 +42,18 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     _streamableKeyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream)
                         .GetAwaiter().GetResult();
 
-                    var archive = new ZipArchive(memoryStream);
-                    var xmlFiles = archive.Entries.Where(x =>
+                    ZipArchive archive = new ZipArchive(memoryStream);
+                    List<ZipArchiveEntry> xmlFiles = archive.Entries.Where(x =>
                         x.Name.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase)).ToList();
 
                     if (xmlFiles.Count == 1)
                     {
-                        var zippedFile = xmlFiles.First();
-                        using (var stream = zippedFile.Open())
+                        ZipArchiveEntry zippedFile = xmlFiles.First();
+                        using (Stream stream = zippedFile.Open())
                         {
-                            using (var reader = new StreamReader(stream))
-                            {
-                                fileContentString = reader.ReadToEnd();
-                            }
+                            stream.CopyTo(outputStream);
 
-                            var xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
+                            string xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
                             _preValidationContext.Input = xmlFileName;
                             _streamableKeyValuePersistenceService.SaveAsync(xmlFileName, stream);
                         }
@@ -87,10 +81,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             _logger.LogDebug($"Blob download :{processTimes} ");
 
-            return fileContentString;
+            return outputStream;
         }
 
-        public string ExtractUkrpn(string fileName)
+        private string ExtractUkrpn(string fileName)
         {
             if (fileName.Contains("/"))
             {

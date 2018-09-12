@@ -115,6 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterType<AzureStorageKeyValuePersistenceService>()
                 .Keyed<IKeyValuePersistenceService>(PersistenceStorageKeys.AzureStorage)
                 .As<IKeyValuePersistenceService>()
+                .As<IStreamableKeyValuePersistenceService>()
                 .InstancePerLifetimeScope();
 
             Console.WriteLine($"BuildContainer:6");

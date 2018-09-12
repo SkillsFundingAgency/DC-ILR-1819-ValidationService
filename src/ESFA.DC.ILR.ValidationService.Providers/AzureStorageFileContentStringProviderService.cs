@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
-using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Interface.Enum;
-using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Logging.Interfaces;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
-    public class AzureStorageFileContentStringProviderService : IMessageStringProviderService
+    public class AzureStorageFileContentStringProviderService : IMessageStreamProviderService
     {
         private readonly IPreValidationContext _preValidationContext;
         private readonly ILogger _logger;
-        private readonly IKeyValuePersistenceService _keyValuePersistenceService;
+        private readonly IStreamableKeyValuePersistenceService _keyValuePersistenceService;
 
         public AzureStorageFileContentStringProviderService(
             IPreValidationContext preValidationContext,
-            [KeyFilter(PersistenceStorageKeys.AzureStorage)]IKeyValuePersistenceService keyValuePersistenceService,
+            IStreamableKeyValuePersistenceService keyValuePersistenceService,
             ILogger logger)
         {
             _preValidationContext = preValidationContext;
@@ -28,13 +24,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _keyValuePersistenceService = keyValuePersistenceService;
         }
 
-        public string Provide()
+        public Stream Provide()
         {
             var startDateTime = DateTime.UtcNow;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var fileContentString = _keyValuePersistenceService.GetAsync(_preValidationContext.Input).GetAwaiter().GetResult();
+            MemoryStream memoryStream = new MemoryStream();
+            _keyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream).GetAwaiter().GetResult();
 
             var processTimes = new StringBuilder();
 
@@ -43,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             _logger.LogDebug($"Blob download :{processTimes} ");
 
-            return fileContentString;
+            return memoryStream;
         }
     }
 }

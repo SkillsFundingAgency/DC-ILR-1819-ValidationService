@@ -33,12 +33,12 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
                     {
                         c.RegisterType<AzureStorageCompressedFileContentStringProviderService>()
-                            .As<IMessageStringProviderService>();
+                            .As<IMessageStreamProviderService>();
                     }
                     else
                     {
                         c.RegisterType<AzureStorageFileContentStringProviderService>()
-                            .As<IMessageStringProviderService>();
+                            .As<IMessageStreamProviderService>();
                     }
 
                     c.RegisterInstance(

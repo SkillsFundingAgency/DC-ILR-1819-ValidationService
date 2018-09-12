@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ContextMessageStringProviderService>().As<IMessageStringProviderService>();
+            builder.RegisterType<ContextMessageStringProviderService>().As<IMessageStreamProviderService>();
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>();
             builder.RegisterType<ValidationErrorCachePassThroughOutputService>().As<IValidationOutputService<IValidationError>>().WithAttributeFiltering();
             builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>().As<IRuleSetOrchestrationService<ILearner, IValidationError>>();
