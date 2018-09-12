@@ -205,8 +205,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(null, true)]
-        [InlineData(26, false)]
+        [InlineData(null, false)]
+        [InlineData(26, true)]
         public void ConditionMetForPriorLearnFundAdjMeetsExpectation(int? candidate, bool expectation)
         {
             // arrange
@@ -232,8 +232,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         /// <param name="priorAdjustment">The prior adjustment.</param>
         /// <param name="aimSeqNumber">The aim seq number.</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.ComponentAimInAProgramme, LearningDeliveryFAMTypeConstants.RES, 26, 1)]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.RES, 43, 2)]
+        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.ComponentAimInAProgramme, LearningDeliveryFAMTypeConstants.RES, null, 1)]
+        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.RES, null, 2)]
         public void InvalidItemRaisesValidationMessage(int typeofFunding, int typeOfAim, string famType, int? priorAdjustment, int aimSeqNumber)
         {
             // arrange
@@ -310,8 +310,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         /// <param name="famType">Type of the fam.</param>
         /// <param name="priorAdjustment">The prior adjustment.</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.ComponentAimInAProgramme, LearningDeliveryFAMTypeConstants.RES, null)]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.RES, null)]
         [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.ACT, 23)]
         [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.ASL, 23)]
         [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.CoreAim16To19ExcludingApprenticeships, LearningDeliveryFAMTypeConstants.RES, 23)]
@@ -320,6 +318,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.RES, 23)]
         [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.ComponentAimInAProgramme, LearningDeliveryFAMTypeConstants.RES, 23)]
         [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.RES, 23)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfAim.ComponentAimInAProgramme, LearningDeliveryFAMTypeConstants.RES, null)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.RES, null)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.ComponentAimInAProgramme, LearningDeliveryFAMTypeConstants.RES, null)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.RES, null)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfAim.ComponentAimInAProgramme, LearningDeliveryFAMTypeConstants.ACT, null)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.ACT, null)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.ComponentAimInAProgramme, LearningDeliveryFAMTypeConstants.ACT, null)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.AimNotPartOfAProgramme, LearningDeliveryFAMTypeConstants.ACT, null)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfAim.CoreAim16To19ExcludingApprenticeships, LearningDeliveryFAMTypeConstants.ACT, null)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.CoreAim16To19ExcludingApprenticeships, LearningDeliveryFAMTypeConstants.ACT, null)]
         public void ValidItemDoesNotRaiseAValidationMessage(int typeofFunding, int typeOfAim, string famType, int? priorAdjustment)
         {
             // arrange

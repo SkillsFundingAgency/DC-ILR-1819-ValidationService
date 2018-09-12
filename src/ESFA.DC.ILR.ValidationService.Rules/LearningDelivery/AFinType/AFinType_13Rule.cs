@@ -105,9 +105,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         /// </returns>
         public bool ConditionMet(ILearningDelivery thisDelivery, IAppFinRecord thisFinancialRecord)
         {
-            return It.Has(thisDelivery)
-                ? It.Has(thisFinancialRecord)
-                    && thisFinancialRecord.AFinDate > DateTime.MinValue
+            return It.Has(thisDelivery) && It.Has(thisFinancialRecord)
+                ? thisFinancialRecord.AFinDate > DateTime.MinValue
                     && thisDelivery.LearnStartDate == thisFinancialRecord.AFinDate
                 : true;
         }

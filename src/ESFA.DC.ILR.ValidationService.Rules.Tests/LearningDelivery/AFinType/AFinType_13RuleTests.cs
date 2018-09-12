@@ -102,10 +102,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         }
 
         /// <summary>
-        /// Condition met with learning delivery and null financial record returns false.
+        /// Condition met with learning delivery and null financial record returns true.
         /// </summary>
         [Fact]
-        public void ConditionMetWithLearningDeliveryAndNullFinancialRecordReturnsFalse()
+        public void ConditionMetWithLearningDeliveryAndNullFinancialRecordReturnsTrue()
         {
             // arrange
             var sut = NewRule();
@@ -115,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var result = sut.ConditionMet(mock.Object, null);
 
             // assert
-            Assert.False(result);
+            Assert.True(result);
         }
 
         /// <summary>
