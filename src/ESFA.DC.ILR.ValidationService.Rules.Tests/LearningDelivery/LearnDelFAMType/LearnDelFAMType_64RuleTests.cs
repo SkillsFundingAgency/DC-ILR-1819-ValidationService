@@ -244,6 +244,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             }
         }
 
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.AimType, 1)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, FundModelConstants.AdultSkills)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.ACT)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, FundModelConstants.AdultSkills, LearningDeliveryFAMTypeConstants.ACT);
+
+            validationErrorHandlerMock.Verify();
+        }
+
         public LearnDelFAMType_64Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,

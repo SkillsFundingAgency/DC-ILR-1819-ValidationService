@@ -71,6 +71,7 @@
     <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\TypeOfAppFinRec.cs" />
     <Compile Include="Constants\TypeOfLearningProgramme.cs" />
+    <Compile Include="CrossEntity\R108Rule.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="Derived\DD01.cs" />
