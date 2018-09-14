@@ -235,7 +235,43 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         public static bool IsBetween(int candidate, int min, int max, bool includeBoundaries = true)
         {
-            return candidate >= min && candidate <= max;
+            return includeBoundaries
+                ? candidate >= min && candidate <= max
+                : candidate > min && candidate < max;
+        }
+
+        /// <summary>
+        /// Determines whether the specified candidate is between.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        /// <param name="includeBoundaries">if set to <c>true</c> [include boundaries].</param>
+        /// <returns>
+        ///   <c>true</c> if the specified candidate is between; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsBetween(TimeSpan candidate, TimeSpan min, TimeSpan max, bool includeBoundaries = true)
+        {
+            return includeBoundaries
+                ? candidate >= min && candidate <= max
+                : candidate > min && candidate < max;
+        }
+
+        /// <summary>
+        /// Determines whether the specified candidate is between.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        /// <param name="includeBoundaries">if set to <c>true</c> [include boundaries].</param>
+        /// <returns>
+        ///   <c>true</c> if the specified candidate is between; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsBetween(DateTime candidate, DateTime min, DateTime max, bool includeBoundaries = true)
+        {
+            return includeBoundaries
+                ? candidate >= min && candidate <= max
+                : candidate > min && candidate < max;
         }
 
         /// <summary>

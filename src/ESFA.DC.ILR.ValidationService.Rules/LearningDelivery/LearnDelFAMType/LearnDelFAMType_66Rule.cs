@@ -1,6 +1,8 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Linq;
@@ -26,15 +28,63 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LearnDelFAMType_66Rule"/> class.
+        /// The lars data (service)
+        /// </summary>
+        private readonly ILARSDataService _larsData;
+
+        private readonly IDD07 _derivedData07;
+
+        /// <summary>
+        /// The derived data 21 (rule)
+        /// </summary>
+        private readonly IDerivedData_21Rule _derivedData21;
+
+        /// <summary>
+        /// The derived data 28 (rule)
+        /// </summary>
+        private readonly IDerivedData_28Rule _derivedData28;
+
+        /// <summary>
+        /// The derived data 29 (rule)
+        /// </summary>
+        private readonly IDerivedData_29Rule _derivedData29;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LearnDelFAMType_66Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public LearnDelFAMType_66Rule(IValidationErrorHandler validationErrorHandler)
+        /// <param name="larsData">The lars data.</param>
+        /// <param name="derivedData07">The derived data 07 rule.</param>
+        /// <param name="derivedData21">The derived data 21 rule.</param>
+        /// <param name="derivedData28">The derived data 28 rule.</param>
+        /// <param name="derivedData29">The derived data 29 rule.</param>
+        public LearnDelFAMType_66Rule(
+            IValidationErrorHandler validationErrorHandler,
+            ILARSDataService larsData,
+            IDD07 derivedData07,
+            IDerivedData_21Rule derivedData21,
+            IDerivedData_28Rule derivedData28,
+            IDerivedData_29Rule derivedData29)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            It.IsNull(larsData)
+                .AsGuard<ArgumentNullException>(nameof(larsData));
+            It.IsNull(derivedData07)
+                .AsGuard<ArgumentNullException>(nameof(derivedData07));
+            It.IsNull(derivedData21)
+                .AsGuard<ArgumentNullException>(nameof(derivedData21));
+            It.IsNull(derivedData28)
+                .AsGuard<ArgumentNullException>(nameof(derivedData28));
+            It.IsNull(derivedData29)
+                .AsGuard<ArgumentNullException>(nameof(derivedData29));
 
             _messageHandler = validationErrorHandler;
+            _larsData = larsData;
+            _derivedData07 = derivedData07;
+            _derivedData21 = derivedData21;
+            _derivedData28 = derivedData28;
+            _derivedData29 = derivedData29;
         }
 
         /// <summary>
@@ -50,7 +100,190 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// Gets the minimum viable age.
         /// </summary>
-        public TimeSpan MinimumViableAge => new TimeSpan(8765, 0, 0, 0);
+        public TimeSpan MinimumViableAge => new TimeSpan(6940, 0, 0, 0); // 19 years
+
+        /// <summary>
+        /// Gets the maximum viable age.
+        /// </summary>
+        public TimeSpan MaximumViableAge => new TimeSpan(8401, 0, 0, 0); // 23 years
+
+        /// <summary>
+        /// Determines whether [is learner in custody] [(for) the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is learner in custody] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsLearnerInCustody(ILearningDelivery delivery) =>
+            delivery.LearningDeliveryFAMs.SafeAny(IsLearnerInCustody);
+
+        /// <summary>
+        /// Determines whether [is learner in custody] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is learner in custody] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsLearnerInCustody(ILearningDeliveryFAM monitor) =>
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.OLASSOffendersInCustody);
+
+        /// <summary>
+        /// Determines whether [is released on temporary licence] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is release on temporary licence] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsReleasedOnTemporaryLicence(ILearningDelivery delivery) =>
+            delivery.LearningDeliveryFAMs.SafeAny(IsReleasedOnTemporaryLicence);
+
+        /// <summary>
+        /// Determines whether [is released on temporary licence] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is released on temporary licence] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsReleasedOnTemporaryLicence(ILearningDeliveryFAM monitor) =>
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.ReleasedOnTemporaryLicence);
+
+        /// <summary>
+        /// Determines whether the specified delivery is restart.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified delivery is restart; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsRestart(ILearningDelivery delivery) =>
+            delivery.LearningDeliveryFAMs.SafeAny(IsRestart);
+
+        /// <summary>
+        /// Determines whether the specified monitor is restart.
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified monitor is restart; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsRestart(ILearningDeliveryFAM monitor) =>
+            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.RestartIndicator);
+
+        /// <summary>
+        /// Determines whether [is basic skills learner] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is basic skills learner] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsBasicSkillsLearner(ILearningDelivery delivery)
+        {
+            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef)
+                .Where(x => It.IsBetween(delivery.LearnStartDate, x.EffectiveFrom, x.EffectiveTo ?? DateTime.MaxValue))
+                .AsSafeReadOnlyList();
+
+            return deliveries
+                .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
+                .Where(x => It.Has(x.BasicSkillsType))
+                .Any(IsBasicSkillsLearner);
+        }
+
+        /// <summary>
+        /// Determines whether [is basic skills learner] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is basic skills learner] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsBasicSkillsLearner(ILARSAnnualValue monitor) =>
+            TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills.Contains(monitor.BasicSkillsType.Value);
+
+        /// <summary>
+        /// Determines whether [is steel worker] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is steel worker] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsSteelWorkerRedundancyTraining(ILearningDelivery delivery) =>
+            delivery.LearningDeliveryFAMs.SafeAny(IsSteelWorkerRedundancyTraining);
+
+        /// <summary>
+        /// Determines whether [is steel worker] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is steel worker] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsSteelWorkerRedundancyTraining(ILearningDeliveryFAM monitor) =>
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.SteelIndustriesRedundancyTraining);
+
+        /// <summary>
+        /// Determines whether [in receipt of low wages] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is in receipt of low wages] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool InReceiptOfLowWages(ILearningDelivery delivery) =>
+            delivery.LearningDeliveryFAMs.SafeAny(InReceiptOfLowWages);
+
+        /// <summary>
+        /// Determines whether [in receipt of low wages] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is in receipt of low wages] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool InReceiptOfLowWages(ILearningDeliveryFAM monitor) =>
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.InReceiptOfLowWages);
+
+        /// <summary>
+        /// Determines whether [is adult funded unemployed with other state benefits] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [is adult funded unemployed with other state benefits] [the specified candidate]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsAdultFundedUnemployedWithOtherStateBenefits(ILearner candidate) =>
+            _derivedData21.IsAdultFundedUnemployedWithOtherStateBenefits(candidate);
+
+        /// <summary>
+        /// Determines whether [is adult funded unemployed with benefits] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [is adult funded unemployed with benefits] [the specified candidate]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsAdultFundedUnemployedWithBenefits(ILearner candidate) =>
+            _derivedData28.IsAdultFundedUnemployedWithBenefits(candidate);
+
+        /// <summary>
+        /// Determines whether [is inflexible element of training aim] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [is inflexible element of training aim] [the specified candidate]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInflexibleElementOfTrainingAim(ILearner candidate) =>
+            _derivedData29.IsInflexibleElementOfTrainingAim(candidate);
+
+        /// <summary>
+        /// Determines whether the specified delivery is apprenticeship.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified delivery is apprenticeship; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsApprenticeship(ILearningDelivery delivery) =>
+            _derivedData07.IsApprenticeship(delivery.ProgTypeNullable);
+
+        /// <summary>
+        /// Checks the learning deliveries.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="matchCondition">The matching condition.</param>
+        /// <returns>true if any of the deliveries match the condition</returns>
+        public bool CheckLearningDeliveries(ILearner candidate, Func<ILearningDelivery, bool> matchCondition) =>
+            candidate.LearningDeliveries.SafeAny(matchCondition);
 
         /// <summary>
         /// Determines whether the specified delivery is funded.
@@ -73,38 +306,50 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             delivery.LearnStartDate > MinimunViableStart;
 
         /// <summary>
-        /// Determines whether [is viable age] [the specified learner].
+        /// Determines whether [is target age group] [the specified learner].
         /// </summary>
         /// <param name="learner">The learner.</param>
         /// <param name="delivery">The delivery.</param>
         /// <returns>
-        ///   <c>true</c> if [is viable age] [the specified learner]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [is target age group] [the specified learner]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsViableAge(ILearner learner, ILearningDelivery delivery) =>
-            It.Has(learner.DateOfBirthNullable) && ((delivery.LearnStartDate - learner.DateOfBirthNullable) > MinimumViableAge);
+        public bool IsTargetAgeGroup(ILearner learner, ILearningDelivery delivery) =>
+            It.Has(learner.DateOfBirthNullable) && It.IsBetween(delivery.LearnStartDate - learner.DateOfBirthNullable.Value, MinimumViableAge, MaximumViableAge);
 
         /// <summary>
-        /// Determines whether [is low earner] [the specified fam].
+        /// Determines whether [is fully funded] [the specified monitor].
         /// </summary>
-        /// <param name="fam">The fam.</param>
+        /// <param name="monitor">The monitor.</param>
         /// <returns>
-        ///   <c>true</c> if [is low earner] [the specified fam]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [is fully funded] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsLowEarner(ILearningDeliveryFAM fam) =>
-            It.IsInRange(fam.LearnDelFAMType, LearningDeliveryFAMTypeConstants.LDM) && It.IsInRange(fam.LearnDelFAMCode, DeliveryMonitoring.InReceiptOfLowWages);
+        public bool IsFullyFunded(ILearningDeliveryFAM monitor) =>
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.FullyFundedLearningAim);
 
         /// <summary>
-        /// Determines whether [is steel worker] [the specified fam].
+        /// Determines whether [is fully funded] [the specified delivery].
         /// </summary>
-        /// <param name="fam">The fam.</param>
+        /// <param name="delivery">The delivery.</param>
         /// <returns>
-        ///   <c>true</c> if [is steel worker] [the specified fam]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [is fully funded] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsSteelWorker(ILearningDeliveryFAM fam) =>
-            It.IsInRange(fam.LearnDelFAMType, LearningDeliveryFAMTypeConstants.LDM) && It.IsInRange(fam.LearnDelFAMCode, DeliveryMonitoring.SteelIndustriesRedundancyTraining);
+        public bool IsFullyFunded(ILearningDelivery delivery) =>
+            delivery.LearningDeliveryFAMs.SafeAny(IsFullyFunded);
 
-        public bool IsUnemployed(ILearningDeliveryFAM fam) =>
-            It.IsInRange(fam.LearnDelFAMType, LearningDeliveryFAMTypeConstants.LDM) && It.IsInRange(fam.LearnDelFAMCode, DeliveryMonitoring.SteelIndustriesRedundancyTraining);
+        /// <summary>
+        /// Determines whether [is early stage NVQ] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is early stage NVQ] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsEarlyStageNVQ(ILearningDelivery delivery)
+        {
+            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
+
+            return deliveries
+                .Any(x => It.IsInRange(x.NotionalNVQLevelv2, LARSNotionalNVQLevelV2.EntryLevel, LARSNotionalNVQLevelV2.Level1, LARSNotionalNVQLevelV2.Level2));
+        }
 
         /// <summary>
         /// Validates the specified object.
@@ -115,34 +360,57 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             It.IsNull(objectToValidate)
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
 
-            var learnRefNumber = objectToValidate.LearnRefNumber;
+            if (!IsExcluded(objectToValidate))
+            {
+                var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearningDeliveries?
-                .Where(x => IsAdultFunding(x) && IsViableStart(x) && IsViableAge(objectToValidate, x))
-                .ForEach(x =>
-                {
-                    var famRecords = x.LearningDeliveryFAMs.AsSafeReadOnlyList();
-                    var failedValidation = !famRecords.Any(y => ConditionMet(y));
-
-                    if (failedValidation)
+                objectToValidate.LearningDeliveries?
+                    .Where(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(objectToValidate, x) && IsFullyFunded(x))
+                    .ForEach(x =>
                     {
-                        RaiseValidationMessage(learnRefNumber, x);
-                    }
-                });
+                        var failedValidation = !ConditionMet(x);
+
+                        if (failedValidation)
+                        {
+                            RaiseValidationMessage(learnRefNumber, x);
+                        }
+                    });
+            }
         }
 
         /// <summary>
         /// Condition met.
         /// </summary>
-        /// <param name="famRecord">The (learning delivery) fam record.</param>
+        /// <param name="candidate">The candidate.</param>
         /// <returns>
         /// true if any any point the conditions are met
         /// </returns>
-        public bool ConditionMet(ILearningDeliveryFAM famRecord)
+        public bool ConditionMet(ILearningDelivery candidate)
         {
-            return It.Has(famRecord)
-                ? IsLowEarner(famRecord) || IsSteelWorker(famRecord) || It.IsInRange(famRecord.LearnDelFAMType, LearningDeliveryFAMTypeConstants.SOF)
+            return It.Has(candidate)
+                ? !IsEarlyStageNVQ(candidate)
                 : true;
+        }
+
+        /// <summary>
+        /// Determines whether the specified candidate is excluded.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified candidate is excluded; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsExcluded(ILearner candidate)
+        {
+            return IsAdultFundedUnemployedWithOtherStateBenefits(candidate)
+                || IsAdultFundedUnemployedWithBenefits(candidate)
+                || IsInflexibleElementOfTrainingAim(candidate)
+                || CheckLearningDeliveries(candidate, IsApprenticeship)
+                || CheckLearningDeliveries(candidate, IsLearnerInCustody)
+                || CheckLearningDeliveries(candidate, IsReleasedOnTemporaryLicence)
+                || CheckLearningDeliveries(candidate, IsBasicSkillsLearner)
+                || CheckLearningDeliveries(candidate, IsRestart)
+                || CheckLearningDeliveries(candidate, IsSteelWorkerRedundancyTraining)
+                || CheckLearningDeliveries(candidate, InReceiptOfLowWages);
         }
 
         /// <summary>

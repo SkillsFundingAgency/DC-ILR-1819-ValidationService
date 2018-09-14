@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         ///   <c>true</c> if the specified delivery is traineeship; otherwise, <c>false</c>.
         /// </returns>
         public bool IsTraineeship(ILearningDelivery delivery) =>
-                    delivery.ProgTypeNullable == TypeOfLearningProgramme.Traineeship;
+            It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.Traineeship);
 
         /// <summary>
         /// Determines whether [is work experience] [the specified delivery].
@@ -52,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
             return deliveries
                 .SelectMany(x => x.LearningDeliveryCategories)
-                .Any(IsWorkExperience);
+                .SafeAny(IsWorkExperience);
         }
 
         /// <summary>

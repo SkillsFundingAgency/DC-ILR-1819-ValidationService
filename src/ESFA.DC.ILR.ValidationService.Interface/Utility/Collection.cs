@@ -60,6 +60,21 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
+        /// Safe any.
+        /// </summary>
+        /// <typeparam name="T">of type</typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="expression">The expression.</param>
+        /// <returns>
+        /// the result of the expression
+        /// </returns>
+        public static bool SafeAny<T>(this IEnumerable<T> list, Func<T, bool> expression)
+        {
+            var safeList = list.SafeReadOnlyList();
+            return safeList.Any(expression);
+        }
+
+        /// <summary>
         /// For each, to safe list and conducts the action
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
