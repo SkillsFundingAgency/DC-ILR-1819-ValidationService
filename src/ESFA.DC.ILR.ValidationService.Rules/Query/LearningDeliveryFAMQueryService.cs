@@ -33,5 +33,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
                    && famTypes != null
                    && learningDeliveryFAMs.Any(ldfam => famTypes.Contains(ldfam.LearnDelFAMType));
         }
+
+        public ILearningDeliveryFAM GetLearningDeliveryFAMByTypeAndLatestByDateFrom(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string learnDelFAMType)
+        {
+            return learningDeliveryFAMs?
+                .Where(f => f.LearnDelFAMType == learnDelFAMType)
+                .OrderByDescending(f => f.LearnDelFAMDateFromNullable)
+                .FirstOrDefault();
+        }
     }
 }
