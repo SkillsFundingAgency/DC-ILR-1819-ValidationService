@@ -1,8 +1,10 @@
-﻿using ESFA.DC.ILR.ValidationService.Interface;
+﻿using System.IO;
+using System.Text;
+using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class ContextMessageStringProviderService : IMessageStringProviderService
+    public class ContextMessageStringProviderService : IMessageStreamProviderService
     {
         private readonly IPreValidationContext _validationContext;
 
@@ -11,9 +13,9 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             _validationContext = validationContext;
         }
 
-        public string Provide()
+        public Stream Provide()
         {
-            return _validationContext.Input;
+            return new MemoryStream(Encoding.UTF8.GetBytes(_validationContext.Input));
         }
     }
 }

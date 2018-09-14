@@ -23,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Console
 
             builder.RegisterType<ValidateXMLSchemaService>().As<IValidateXMLSchemaService>().InstancePerLifetimeScope();
             builder.RegisterType<SchemaFileContentStringProviderService>().As<ISchemaStringProviderService>().InstancePerLifetimeScope();
-            builder.RegisterType<FileSystemFileContentStringProviderService>().As<IMessageStringProviderService>().InstancePerLifetimeScope();
+            builder.RegisterType<FileSystemFileContentStringProviderService>().As<IMessageStreamProviderService>().InstancePerLifetimeScope();
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
             builder.RegisterType<RuleSetOrchestrationService<IMessage, IValidationError>>().As<IRuleSetOrchestrationService<IMessage, IValidationError>>();
             builder.RegisterType<AutoFacRuleSetResolutionService<IMessage>>().As<IRuleSetResolutionService<IMessage>>();

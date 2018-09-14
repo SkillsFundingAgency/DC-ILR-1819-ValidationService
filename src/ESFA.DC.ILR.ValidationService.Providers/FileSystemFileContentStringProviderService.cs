@@ -3,7 +3,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
-    public class FileSystemFileContentStringProviderService : IMessageStringProviderService
+    public class FileSystemFileContentStringProviderService : IMessageStreamProviderService
     {
         private readonly IPreValidationContext _preValidationContext;
 
@@ -12,9 +12,9 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             _preValidationContext = preValidationContext;
         }
 
-        public string Provide()
+        public Stream Provide()
         {
-            return File.ReadAllText(_preValidationContext.Input);
+            return File.Open(_preValidationContext.Input, FileMode.Open);
         }
     }
 }

@@ -79,14 +79,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             // get the learners
             var ilrMessage = _messageCache.Item;
 
-            //Possible the zip file was corrupt so we dont have message at this point
+            // Possible the zip file was corrupt so we dont have message at this point
             if (ilrMessage == null)
             {
                 _logger.LogWarning($"ILR Message is null, will not execute any Learner validation Job Id :{validationContext.Input}");
             }
             else
             {
-                //Call XSD validation
+                // Call XSD validation
                 _validateXmlSchemaService.Validate();
 
                 if (!_validationErrorCache.ValidationErrors.Any())
