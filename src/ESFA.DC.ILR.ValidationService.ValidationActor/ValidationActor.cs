@@ -1,29 +1,28 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using Autofac;
 using ESFA.DC.ILR.Model;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.External;
 using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
+using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Stateless.Models;
+using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
+using ESFA.DC.Logging.Interfaces;
+using ESFA.DC.Serialization.Interfaces;
+using Microsoft.ServiceFabric.Actors;
+using Microsoft.ServiceFabric.Actors.Runtime;
+using ExecutionContext = ESFA.DC.Logging.ExecutionContext;
 
 namespace ESFA.DC.ILR.ValidationService.ValidationActor
 {
-    using System;
-    using System.Threading.Tasks;
-    using Autofac;
-    using ESFA.DC.ILR.Model.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.External;
-    using ESFA.DC.ILR.ValidationService.Interface;
-    using ESFA.DC.ILR.ValidationService.Stateless.Models;
-    using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
-    using ESFA.DC.Logging.Interfaces;
-    using ESFA.DC.Serialization.Interfaces;
-    using Microsoft.ServiceFabric.Actors;
-    using Microsoft.ServiceFabric.Actors.Runtime;
-    using ExecutionContext = ESFA.DC.Logging.ExecutionContext;
-
     /// <remarks>
     /// This class represents an actor.
     /// Every ActorID maps to an instance of this class.
@@ -51,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             _actorId = actorId;
         }
 
-        public Task<string> Validate(ValidationActorModel validationActorModel, CancellationToken cancellationToken)
+        public async Task<string> Validate(ValidationActorModel validationActorModel, CancellationToken cancellationToken)
         {
             var jsonSerializationService = _parentLifeTimeScope.Resolve<IJsonSerializationService>();
 
@@ -60,7 +59,9 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             var fileDataCache = jsonSerializationService.Deserialize<FileDataCache>(Encoding.UTF8.GetString(validationActorModel.FileDataCache));
             var message = jsonSerializationService.Deserialize<Message>(new MemoryStream(validationActorModel.Message));
 
-            var validationContext = new ValidationContext()
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var validationContext = new ValidationContext
             {
                 Input = message
             };
@@ -68,7 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c =>
             {
                 c.RegisterInstance(validationContext).As<IValidationContext>();
-                c.RegisterInstance(new Cache<IMessage>() { Item = message }).As<ICache<IMessage>>();
+                c.RegisterInstance(new Cache<IMessage> { Item = message }).As<ICache<IMessage>>();
                 c.RegisterInstance(internalDataCache).As<IInternalDataCache>();
                 c.RegisterInstance(externalDataCache).As<IExternalDataCache>();
                 c.RegisterInstance(fileDataCache).As<IFileDataCache>();
@@ -80,16 +81,16 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                 var logger = childLifeTimeScope.Resolve<ILogger>();
                 try
                 {
-                    logger.LogDebug($"Validation Actor {executionContext.TaskKey} started learners:{validationContext.Input.Learners.Count}");
+                    logger.LogDebug($"Validation Actor {executionContext.TaskKey} started learners: {validationContext.Input.Learners.Count}");
                     var preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                    var errors = preValidationOrchestrationService.Execute();
-                    logger.LogDebug($"actor {executionContext.TaskKey} validation done");
+                    var errors = preValidationOrchestrationService.Execute(cancellationToken);
+                    logger.LogDebug($"Validation Actor {executionContext.TaskKey} validation done");
 
                     var errorString = jsonSerializationService.Serialize(errors);
-                    logger.LogDebug("Actor completed job");
-                    return Task.Run(() => errorString);
+                    logger.LogDebug($"Validation Actor {executionContext.TaskKey} completed job");
+                    return errorString;
                 }
                 catch (Exception ex)
                 {
@@ -98,16 +99,6 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     throw;
                 }
             }
-        }
-
-        /// <summary>
-        /// This method is called whenever an actor is activated.
-        /// An actor is activated the first time any of its methods are invoked.
-        /// </summary>
-        protected override Task OnActivateAsync()
-        {
-            ActorEventSource.Current.ActorMessage(this, "Actor activated.");
-            return this.StateManager.TryAddStateAsync("count", 5);
         }
     }
 }

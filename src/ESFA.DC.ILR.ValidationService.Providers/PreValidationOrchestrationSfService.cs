@@ -95,7 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     _fileDataCache.FileName = validationContext.Input;
 
                     // Message Validation
-                    _ruleSetOrchestrationService.Execute();
+                    _ruleSetOrchestrationService.Execute(CancellationToken.None);
 
                     cancellationToken.ThrowIfCancellationRequested();
 

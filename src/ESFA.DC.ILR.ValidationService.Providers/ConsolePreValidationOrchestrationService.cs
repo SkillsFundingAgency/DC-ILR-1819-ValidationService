@@ -57,8 +57,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 // get the learners
                 var ilrMessage = _messageCache.Item;
 
-                _messageRuleSetOrchestrationService.Execute();
-                _learnerRuleSetOrchestrationService.Execute();
+                _messageRuleSetOrchestrationService.Execute(CancellationToken.None);
+                _learnerRuleSetOrchestrationService.Execute(CancellationToken.None);
             }
 
             return _validationOutputService.Process();
