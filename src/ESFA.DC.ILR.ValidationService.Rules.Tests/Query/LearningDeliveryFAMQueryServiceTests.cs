@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
 using Xunit;
@@ -162,6 +164,60 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         public void HasAnyLearningDeliveryFAMTypes_False_NullFAMTypes()
         {
             NewService().HasAnyLearningDeliveryFAMTypes(new List<ILearningDeliveryFAM>(), null);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMByTypeAndLatestByDateFrom_ValidReturn()
+        {
+            var learningDeliveryFAM = new TestLearningDeliveryFAM()
+            {
+                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                LearnDelFAMDateFromNullable = new DateTime(2018, 06, 01),
+                LearnDelFAMDateToNullable = new DateTime(2018, 06, 01)
+            };
+
+            var learningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    learningDeliveryFAM,
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL,
+                        LearnDelFAMDateFromNullable = new DateTime(2010, 02, 26),
+                        LearnDelFAMDateToNullable = new DateTime(2012, 02, 26)
+                    }
+                };
+
+            NewService().GetLearningDeliveryFAMByTypeAndLatestByDateFrom(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT).Should().Be(learningDeliveryFAM);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMByTypeAndLatestByDateFrom_NullReturn()
+        {
+            var learningDeliveryFAM = new TestLearningDeliveryFAM()
+            {
+                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LSF,
+                LearnDelFAMDateFromNullable = new DateTime(2018, 06, 01),
+                LearnDelFAMDateToNullable = new DateTime(2018, 06, 01)
+            };
+
+            var learningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    learningDeliveryFAM,
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL,
+                        LearnDelFAMDateFromNullable = new DateTime(2010, 02, 26),
+                        LearnDelFAMDateToNullable = new DateTime(2012, 02, 26)
+                    }
+                };
+
+            NewService().GetLearningDeliveryFAMByTypeAndLatestByDateFrom(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT).Should().BeNull();
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMByTypeAndLatestByDateFrom_NullParameterFAMs()
+        {
+            NewService().GetLearningDeliveryFAMByTypeAndLatestByDateFrom(null, LearningDeliveryFAMTypeConstants.ACT).Should().BeNull();
         }
 
         private LearningDeliveryFAMQueryService NewService()
