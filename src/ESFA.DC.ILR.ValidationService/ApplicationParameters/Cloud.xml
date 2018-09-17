@@ -3,14 +3,12 @@
   <Parameters>
     <Parameter Name="ESFA.DC.ILR.ValidationService.Stateless_InstanceCount" Value="-1" />
     <Parameter Name="AuditQueueName" Value="__AuditQueueName__" />
-    <Parameter Name="JobsQueueName" Value="__JobsQueueName__" />
     <Parameter Name="ServiceBusConnectionString" Value="__ServiceBusConnectionString__" />
     <Parameter Name="AzureBlobConnectionString" Value="__AzureBlobConnectionString__" />
     <Parameter Name="AzureBlobContainerName" Value="__AzureBlobContainerName__" />
     <Parameter Name="LoggerConnectionstring" Value="__LoggerConnectionString__" />
     <Parameter Name="TopicName" Value="__TopicName__" />
-    <Parameter Name="FundingCalcSubscriptionName" Value="__FundingCalcSubscriptionName__" />
-    <Parameter Name="FundingCalcSqlFilterValue" Value="__FundingCalcSqlFilterValue__" />
+    <Parameter Name="SubscriptionName" Value="__SubscriptionName__" />
     <Parameter Name="LARSConnectionString" Value="__LARSConnectionString__" />
     <Parameter Name="OrganisationsConnectionString" Value="__OrganisationsConnectionString__" />
     <Parameter Name="PostcodesConnectionString" Value="__PostcodesConnectionString__" />

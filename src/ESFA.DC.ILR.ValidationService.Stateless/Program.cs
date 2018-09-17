@@ -120,17 +120,10 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
             Console.WriteLine($"BuildContainer:6");
             // service bus queue configuration
-            var queueSubscriptionConfig = new ServiceBusQueueConfig(
-                serviceBusOptions.ServiceBusConnectionString,
-                serviceBusOptions.JobsQueueName,
-                Environment.ProcessorCount);
-
-            Console.WriteLine($"BuildContainer:7");
-            var topicPublishConfig = new ServiceBusTopicConfiguration(
+            var topicConfiguration = new ServiceBusTopicConfiguration(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.TopicName,
-                serviceBusOptions.FundingCalcSubscriptionName,
-                Environment.ProcessorCount);
+                serviceBusOptions.SubscriptionName);
 
             Console.WriteLine($"BuildContainer:8");
             var auditPublishConfig = new ServiceBusQueueConfig(
@@ -142,21 +135,21 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             // register queue services
             containerBuilder.Register(c =>
             {
-                var queueSubscriptionService =
-                    new QueueSubscriptionService<JobContextDto>(
-                        queueSubscriptionConfig,
+                var topicSubscriptionSevice =
+                    new TopicSubscriptionSevice<JobContextDto>(
+                        topicConfiguration,
                         c.Resolve<IJsonSerializationService>(),
                         c.Resolve<ILogger>(),
                         c.Resolve<IDateTimeProvider>());
-                return queueSubscriptionService;
-            }).As<IQueueSubscriptionService<JobContextDto>>();
+                return topicSubscriptionSevice;
+            }).As<ITopicSubscriptionService<JobContextDto>>();
 
             Console.WriteLine($"BuildContainer:10");
             containerBuilder.Register(c =>
             {
                 var topicPublishService =
                     new TopicPublishService<JobContextDto>(
-                        topicPublishConfig,
+                        topicConfiguration,
                         c.Resolve<IJsonSerializationService>());
                 return topicPublishService;
             }).As<ITopicPublishService<JobContextDto>>();
@@ -200,7 +193,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             // register the  callback handle when a new message is received from ServiceBus
             containerBuilder.Register<Func<JobContextMessage, CancellationToken, Task<bool>>>(c => c.Resolve<IMessageHandler>().Handle);
 
-            containerBuilder.RegisterType<JobContextManagerForQueue<JobContextMessage>>().As<IJobContextManager<JobContextMessage>>()
+            containerBuilder.RegisterType<JobContextManagerForTopics<JobContextMessage>>().As<IJobContextManager<JobContextMessage>>()
                 .InstancePerLifetimeScope();
 
             Console.WriteLine($"BuildContainer:19");
