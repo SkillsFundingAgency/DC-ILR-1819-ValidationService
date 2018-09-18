@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Data.External;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
@@ -34,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _validationErrorsDataRetrievalService = validationErrorsDataRetrievalService;
         }
 
-        public void Populate()
+        public async Task PopulateAsync(CancellationToken cancellationToken)
         {
             var externalDataCache = (ExternalDataCache)_externalDataCache;
 

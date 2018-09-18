@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -14,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _messageCache = messageCache;
         }
 
-        public IEnumerable<ILearner> Provide()
+        public async Task<IEnumerable<ILearner>> ProvideAsync(CancellationToken cancellationToken)
         {
             return _messageCache.Item.Learners;
         }

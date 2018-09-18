@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -11,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
     public class LearnerProviderServiceTests
     {
         [Fact]
-        public void Provide()
+        public async Task Provide()
         {
             var learners = new List<TestLearner>();
 
@@ -26,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
             var learnerProviderService = new LearnerProviderService(messageCacheMock.Object);
 
-            learnerProviderService.Provide().Should().BeSameAs(learners);
+            (await learnerProviderService.ProvideAsync(CancellationToken.None)).Should().BeSameAs(learners);
         }
     }
 }

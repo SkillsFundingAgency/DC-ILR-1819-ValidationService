@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population
 {
@@ -21,12 +23,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             _externalDataCachePopulationService = externalDataCachePopulationService;
         }
 
-        public void Populate()
+        public async Task PopulateAsync(CancellationToken cancellationToken)
         {
-            _messageCachePopulationService.Populate();
-            _fileDataCachePopulationService.Populate();
-            _internalDataCachePopulationService.Populate();
-            _externalDataCachePopulationService.Populate();
+            await Task.WhenAll(
+                _messageCachePopulationService.PopulateAsync(cancellationToken),
+                _fileDataCachePopulationService.PopulateAsync(cancellationToken),
+                _internalDataCachePopulationService.PopulateAsync(cancellationToken),
+                _externalDataCachePopulationService.PopulateAsync(cancellationToken));
         }
     }
 }

@@ -4,6 +4,8 @@ using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
@@ -11,18 +13,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
     public class InternalDataCachePopulationServiceTests
     {
         [Fact]
-        public void Populate()
+        public async Task Populate()
         {
             var internalDataCache = new InternalDataCache();
 
-            NewService(internalDataCache).Populate();
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
 
             var yearStart = new DateTime(2018, 8, 1);
             var fundModels = new List<int> { 10, 25, 35, 36, 70, 81, 82, 99 };
 
             internalDataCache.AcademicYear.Start.Should().BeSameDateAs(yearStart);
             internalDataCache.FundModels.Should().BeEquivalentTo(fundModels);
-            internalDataCache.QUALENT3s.Count().Should().Be(61);
+            internalDataCache.QUALENT3s.Count.Should().Be(61);
         }
 
         /// <summary>
@@ -53,13 +55,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupSimpleKey.TypeYr, 5)]
         [InlineData(LookupSimpleKey.WithdrawReason, 15)]
         [InlineData(LookupSimpleKey.WorkPlaceMode, 2)]
-        public void SimpleLookupsArePresentAndMatchExpectedCount(LookupSimpleKey thisKey, int expectedCount)
+        public async Task SimpleLookupsArePresentAndMatchExpectedCount(LookupSimpleKey thisKey, int expectedCount)
         {
             // arrange
             var internalDataCache = new InternalDataCache();
 
             // act
-            NewService(internalDataCache).Populate();
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
 
             // assert
             Assert.True(internalDataCache.SimpleLookups.ContainsKey(thisKey));
@@ -83,13 +85,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupCodedKey.QualEnt3, 61)]
         [InlineData(LookupCodedKey.Sex, 2)]
         [InlineData(LookupCodedKey.TBFinType, 2)]
-        public void CodedLookupsArePresentAndMatchExpectedCount(LookupCodedKey thisKey, int expectedCount)
+        public async Task CodedLookupsArePresentAndMatchExpectedCount(LookupCodedKey thisKey, int expectedCount)
         {
             // arrange
             var internalDataCache = new InternalDataCache();
 
             // act
-            NewService(internalDataCache).Populate();
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
 
             // assert
             Assert.True(internalDataCache.CodedLookups.ContainsKey(thisKey));
@@ -107,13 +109,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupTimeRestrictedKey.LLDDCat, 24)]
         [InlineData(LookupTimeRestrictedKey.MSTuFee, 50)]
         [InlineData(LookupTimeRestrictedKey.TTAccom, 9)]
-        public void TimeLimitedLookupsArePresentAndMatchExpectedCount(LookupTimeRestrictedKey thisKey, int expectedCount)
+        public async Task TimeLimitedLookupsArePresentAndMatchExpectedCount(LookupTimeRestrictedKey thisKey, int expectedCount)
         {
             // arrange
             var internalDataCache = new InternalDataCache();
 
             // act
-            NewService(internalDataCache).Populate();
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
 
             // assert
             Assert.True(internalDataCache.LimitedLifeLookups.ContainsKey(thisKey));

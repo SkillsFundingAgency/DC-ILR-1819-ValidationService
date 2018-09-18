@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Autofac;
 using DCT.TestDataGenerator;
 using ESFA.DC.ILR.Model;
@@ -25,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
         [Theory]
         [InlineData("FworkCode_05", false)]
-        public void TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
+        public async Task TestDataGenerator_ValidationServiceMatchesTestDataExpected(string rulename, bool valid)
         {
             var rules = new List<ActiveRuleValidity>(100)
             {
@@ -41,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
             foreach (var content in files)
             {
                 var fileValidationResult = RunValidation(content);
-                PopulateResultsCollectionsBasedOnResults(expectedResult, fileValidationResult);
+                PopulateResultsCollectionsBasedOnResults(expectedResult, await fileValidationResult);
             }
 
             _excludedLearnersFound.Should().BeEmpty();
@@ -102,7 +103,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
             _unexpectedLearnersFound = new List<string>();
         }
 
-        private IEnumerable<IValidationError> RunValidation(string messageString)
+        private async Task<IEnumerable<IValidationError>> RunValidation(string messageString)
         {
             var serializationService = new XmlSerializationService();
 
@@ -126,11 +127,11 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
             {
                 var preValidationPopulationService = scope.Resolve<IPopulationService>();
 
-                preValidationPopulationService.Populate();
+                await preValidationPopulationService.PopulateAsync(CancellationToken.None);
 
                 var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                return ruleSetOrchestrationService.Execute(CancellationToken.None);
+                return await ruleSetOrchestrationService.Execute(CancellationToken.None);
             }
         }
 

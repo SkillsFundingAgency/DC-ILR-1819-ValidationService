@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using Moq;
 using Xunit;
 
@@ -7,14 +9,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
     public class PreValidationPopulationServiceTests
     {
         [Fact]
-        public void Populate()
+        public async Task Populate()
         {
             var messageCachePopulationServiceMock = NewPopulationServiceMock<IMessageCachePopulationService>();
             var fileDataCachePopulationServiceMock = NewPopulationServiceMock<IFileDataCachePopulationService>();
             var internalDataCachePopulationServiceMock = NewPopulationServiceMock<IInternalDataCachePopulationService>();
             var externalDataCachePopulationServiceMock = NewPopulationServiceMock<IExternalDataCachePopulationService>();
 
-            NewService(messageCachePopulationServiceMock.Object, fileDataCachePopulationServiceMock.Object, internalDataCachePopulationServiceMock.Object, externalDataCachePopulationServiceMock.Object).Populate();
+            messageCachePopulationServiceMock.Setup(x => x.PopulateAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            fileDataCachePopulationServiceMock.Setup(x => x.PopulateAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            internalDataCachePopulationServiceMock.Setup(x => x.PopulateAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            externalDataCachePopulationServiceMock.Setup(x => x.PopulateAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            await NewService(messageCachePopulationServiceMock.Object, fileDataCachePopulationServiceMock.Object, internalDataCachePopulationServiceMock.Object, externalDataCachePopulationServiceMock.Object).PopulateAsync(CancellationToken.None);
 
             messageCachePopulationServiceMock.Verify();
             fileDataCachePopulationServiceMock.Verify();
@@ -27,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         {
             var mock = new Mock<T>();
 
-            mock.Setup(ps => ps.Populate()).Verifiable();
+            mock.Setup(ps => ps.PopulateAsync(It.IsAny<CancellationToken>())).Verifiable();
 
             return mock;
         }

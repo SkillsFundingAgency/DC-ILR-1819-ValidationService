@@ -5,6 +5,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Logging.Interfaces;
@@ -27,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _streamableKeyValuePersistenceService = streamableKeyValuePersistenceService;
         }
 
-        public Stream Provide()
+        public async Task<Stream> Provide(CancellationToken cancellationToken)
         {
             var startDateTime = DateTime.UtcNow;
             var stopwatch = new Stopwatch();
@@ -39,8 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    _streamableKeyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream)
-                        .GetAwaiter().GetResult();
+                    await _streamableKeyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream, cancellationToken);
 
                     ZipArchive archive = new ZipArchive(memoryStream);
                     List<ZipArchiveEntry> xmlFiles = archive.Entries.Where(x =>
@@ -51,11 +52,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                         ZipArchiveEntry zippedFile = xmlFiles.First();
                         using (Stream stream = zippedFile.Open())
                         {
-                            stream.CopyTo(outputStream);
+                            await stream.CopyToAsync(outputStream, 81920, cancellationToken);
 
                             string xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
                             _preValidationContext.Input = xmlFileName;
-                            _streamableKeyValuePersistenceService.SaveAsync(xmlFileName, stream);
+                            await _streamableKeyValuePersistenceService.SaveAsync(xmlFileName, stream, cancellationToken);
                         }
                     }
                     else

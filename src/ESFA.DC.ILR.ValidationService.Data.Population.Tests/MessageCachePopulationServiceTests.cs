@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -10,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
     public class MessageCachePopulationServiceTests
     {
         [Fact]
-        public void Populate()
+        public async Task Populate()
         {
             var message = new Mock<IMessage>().Object;
 
@@ -20,9 +22,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
 
             var messageValidationItemProviderServiceMock = new Mock<IValidationItemProviderService<IMessage>>();
 
-            messageValidationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(message);
+            messageValidationItemProviderServiceMock.Setup(ps => ps.ProvideAsync(It.IsAny<CancellationToken>())).ReturnsAsync(message);
 
-            NewService(messageCacheMock.Object, messageValidationItemProviderServiceMock.Object).Populate();
+            await NewService(messageCacheMock.Object, messageValidationItemProviderServiceMock.Object).PopulateAsync(CancellationToken.None);
 
             messageValidationItemProviderServiceMock.Verify();
             messageCacheMock.Verify();

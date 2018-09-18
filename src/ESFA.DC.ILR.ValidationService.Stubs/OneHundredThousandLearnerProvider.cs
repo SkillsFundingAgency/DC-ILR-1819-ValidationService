@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -16,13 +18,14 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         {
         }
 
-        public IEnumerable<ILearner> Provide()
+        public new async Task<IEnumerable<ILearner>> ProvideAsync(CancellationToken cancellationToken)
         {
-            var learnerList = base.Provide().ToList();
+            var learnerList = (await base.ProvideAsync(cancellationToken)).ToList();
 
             while (learnerList.Count < LearnerCount)
             {
-                learnerList.AddRange(learnerList);
+                var temp = learnerList;
+                learnerList.AddRange(temp);
             }
 
             return learnerList.Take(LearnerCount);
