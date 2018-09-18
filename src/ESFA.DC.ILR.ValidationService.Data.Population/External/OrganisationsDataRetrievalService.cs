@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.Data.Organisatons.Model.Interface;
 using ESFA.DC.ILR.Model.Interface;
@@ -25,21 +26,21 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _organisations = organisations;
         }
 
-        public IReadOnlyDictionary<long, Organisation> Retrieve()
+        public async Task<IReadOnlyDictionary<long, Organisation>> RetrieveAsync(CancellationToken cancellationToken)
         {
             var ukprns = UniqueUKPRNsFromMessage(_messageCache.Item).ToList();
 
-            return _organisations
+            return await _organisations
                 .MasterOrganisations
                 .Where(o => ukprns.Contains(o.UKPRN))
-                .ToDictionary(
+                .ToDictionaryAsync(
                     o => o.UKPRN,
-                    o => new Organisation()
+                    o => new Organisation
                     {
                         UKPRN = o.Org_Details?.UKPRN,
                         LegalOrgType = o.Org_Details?.LegalOrgType,
                         PartnerUKPRN = o.Org_PartnerUKPRN.Any(op => op.UKPRN == o.UKPRN)
-                    });
+                    }, cancellationToken);
         }
     }
 }

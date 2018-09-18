@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
             var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
 
-            IEnumerable <ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
+            IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
             {
                 learnerDP1,
                 learnerDP2,

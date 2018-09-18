@@ -85,7 +85,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     var preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                    var errors = preValidationOrchestrationService.Execute(cancellationToken);
+                    var errors = await preValidationOrchestrationService.Execute(cancellationToken);
                     logger.LogDebug($"Validation Actor {executionContext.TaskKey} validation done");
 
                     var errorString = jsonSerializationService.Serialize(errors);

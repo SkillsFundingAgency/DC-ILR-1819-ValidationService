@@ -158,7 +158,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
                 preValidationContext: preValidationContextMock.Object,
                 jsonSerializationService: serializationServiceMock.Object);
 
-            await service.SaveAsync(validLearnerRefNumbers, invalidLearnerRefNumbers, validationErrors, validationErrorMessageLookups);
+            await service.SaveAsync(validLearnerRefNumbers, invalidLearnerRefNumbers, validationErrors, validationErrorMessageLookups, CancellationToken.None);
 
             keyValuePersistenceServiceMock.VerifyAll();
         }

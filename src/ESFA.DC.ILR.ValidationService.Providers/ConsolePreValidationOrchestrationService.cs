@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 await _learnerRuleSetOrchestrationService.Execute(cancellationToken);
             }
 
-            return _validationOutputService.Process();
+            return await _validationOutputService.ProcessAsync(CancellationToken.None);
         }
     }
 }

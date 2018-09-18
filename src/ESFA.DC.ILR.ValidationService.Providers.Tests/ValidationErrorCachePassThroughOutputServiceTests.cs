@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers.Output;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
@@ -11,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
     public class ValidationErrorCachePassThroughOutputServiceTests
     {
         [Fact]
-        public void Process_Empty()
+        public async Task Process_Empty()
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorCache<IValidationError>>();
 
@@ -19,13 +21,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
             var service = NewService(validationErrorHandlerMock.Object);
 
-            var output = service.Process();
+            var output = await service.ProcessAsync(CancellationToken.None);
 
             output.Should().BeEmpty();
         }
 
         [Fact]
-        public void Process_Errors()
+        public async Task Process_Errors()
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorCache<IValidationError>>();
 
@@ -33,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
             var service = NewService(validationErrorHandlerMock.Object);
 
-            var output = service.Process();
+            var output = await service.ProcessAsync(CancellationToken.None);
 
             output.Should().HaveCount(3);
         }
