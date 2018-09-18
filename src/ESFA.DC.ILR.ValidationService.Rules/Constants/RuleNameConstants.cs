@@ -180,6 +180,7 @@
         public const string R07 = "R07";
         public const string R85 = "R85";
         public const string R108 = "R108";
+        public const string R112 = "R112";
 
         public const string Schema = "Schema";
 

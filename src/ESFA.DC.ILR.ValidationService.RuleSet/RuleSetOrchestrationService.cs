@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet
@@ -24,12 +25,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
             _validationErrorCache = validationErrorCache;
         }
 
-        public IEnumerable<U> Execute()
+        public IEnumerable<U> Execute(CancellationToken cancellationToken)
         {
             var ruleSet = _ruleSetResolutionService.Resolve().ToList();
 
             foreach (var validationItem in _validationItemProviderService.Provide())
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 _ruleSetExecutionService.Execute(ruleSet, validationItem);
             }
 

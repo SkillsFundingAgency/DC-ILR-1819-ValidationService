@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet.Tests.Rules;
 using FluentAssertions;
@@ -27,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, validationErrorCache: validationErrorCacheMock.Object);
 
-            service.Execute().Should().BeSameAs(output);
+            service.Execute(CancellationToken.None).Should().BeSameAs(output);
         }
 
         [Fact]
@@ -58,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, ruleSetExecutionServiceMock.Object, validationErrorCacheMock.Object);
 
-            service.Execute().Should().BeSameAs(output);
+            service.Execute(CancellationToken.None).Should().BeSameAs(output);
 
             ruleSetExecutionServiceMock.Verify();
         }

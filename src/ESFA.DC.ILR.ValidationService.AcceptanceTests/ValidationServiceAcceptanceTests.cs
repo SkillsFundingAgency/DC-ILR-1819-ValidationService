@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Autofac;
 using DCT.TestDataGenerator;
 using ESFA.DC.ILR.Model;
@@ -129,7 +130,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
                 var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                return ruleSetOrchestrationService.Execute();
+                return ruleSetOrchestrationService.Execute(CancellationToken.None);
             }
         }
 
