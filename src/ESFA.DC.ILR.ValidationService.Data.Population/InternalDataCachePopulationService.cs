@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population
@@ -42,7 +45,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// Populates this instance.
         /// and this routine needs to go... the pattern is wrong.
         /// </summary>
-        public void Populate()
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>A task</returns>
+        public async Task PopulateAsync(CancellationToken cancellationToken)
         {
             var internalDataCache = (InternalDataCache)_internalDataCache;
             Build(internalDataCache);
@@ -70,34 +75,31 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
 
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
-                using (var reader = new StreamReader(stream))
-                {
-                    var lookups = XElement.Load(stream);
+                var lookups = XElement.Load(stream);
 
-                    cache.AcademicYear = BuildAcademicYear();
+                cache.AcademicYear = BuildAcademicYear();
 
-                    // these are defunct; whilst i won't remove them, don't add to them either.
-                    cache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));
-                    cache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
-                    cache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
-                    cache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
-                    cache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "LLDDCat"));
-                    cache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
-                    cache.TTAccoms = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "TTAccom"));
+                // these are defunct; whilst i won't remove them, don't add to them either.
+                cache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));
+                cache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
+                cache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
+                cache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
+                cache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "LLDDCat"));
+                cache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
+                cache.TTAccoms = new Dictionary<int, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "TTAccom"));
 
-                    Enum.GetValues(typeof(LookupSimpleKey))
-                        .OfType<LookupSimpleKey>()
-                        .ToList()
-                        .ForEach(x => AddLookups(x, lookups, cache));
-                    Enum.GetValues(typeof(LookupCodedKey))
-                        .OfType<LookupCodedKey>()
-                        .ToList()
-                        .ForEach(x => AddLookups(x, lookups, cache));
-                    Enum.GetValues(typeof(LookupTimeRestrictedKey))
-                        .OfType<LookupTimeRestrictedKey>()
-                        .ToList()
-                        .ForEach(x => AddLookups(x, lookups, cache));
-                }
+                Enum.GetValues(typeof(LookupSimpleKey))
+                    .OfType<LookupSimpleKey>()
+                    .ToList()
+                    .ForEach(x => AddLookups(x, lookups, cache));
+                Enum.GetValues(typeof(LookupCodedKey))
+                    .OfType<LookupCodedKey>()
+                    .ToList()
+                    .ForEach(x => AddLookups(x, lookups, cache));
+                Enum.GetValues(typeof(LookupTimeRestrictedKey))
+                    .OfType<LookupTimeRestrictedKey>()
+                    .ToList()
+                    .ForEach(x => AddLookups(x, lookups, cache));
             }
         }
 

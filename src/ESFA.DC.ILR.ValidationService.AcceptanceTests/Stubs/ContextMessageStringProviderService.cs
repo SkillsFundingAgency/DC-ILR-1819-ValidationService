@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
@@ -13,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             _validationContext = validationContext;
         }
 
-        public Stream Provide()
+        public async Task<Stream> Provide(CancellationToken cancellationToken)
         {
             return new MemoryStream(Encoding.UTF8.GetBytes(_validationContext.Input));
         }

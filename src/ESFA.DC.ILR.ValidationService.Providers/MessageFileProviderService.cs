@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
@@ -25,11 +27,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _messageCache = messageCache;
         }
 
-        public IMessage Provide()
+        public async Task<IMessage> ProvideAsync(CancellationToken cancellationToken)
         {
             var fileContentCache = (Cache<string>)_messageCache;
 
-            Stream fileStream = _streamProvider.Provide();
+            Stream fileStream = await _streamProvider.Provide(cancellationToken);
 
             if (fileStream == null)
             {

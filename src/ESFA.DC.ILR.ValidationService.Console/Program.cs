@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Autofac;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Modules.Console;
@@ -9,7 +10,7 @@ using ESFA.DC.ILR.ValidationService.Stubs;
 
 namespace ESFA.DC.ILR.ValidationService.Console
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -20,10 +21,10 @@ namespace ESFA.DC.ILR.ValidationService.Console
                 argsList.Add(@"Files/ILR.xml");
             }
 
-            RunValidation(argsList.First());
+            RunValidation(argsList.First()).GetAwaiter().GetResult();
         }
 
-        private static void RunValidation(string filePath)
+        private static async Task RunValidation(string filePath)
         {
             var preValidationContext = new PreValidationContextStub
             {
@@ -41,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Console
             {
                 var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<IValidationError>>();
 
-                var errors = preValidationOrchestrationService.Execute(preValidationContext, CancellationToken.None);
+                var errors = await preValidationOrchestrationService.ExecuteAsync(preValidationContext, CancellationToken.None);
 
                 OutputResultsToFile(errors, $"{preValidationContext.Output}");
             }
@@ -55,12 +56,14 @@ namespace ESFA.DC.ILR.ValidationService.Console
             contents.AppendLine(@"Error\Warning,Learner Ref,Rule Name,Field Values,Error Message,Aim Sequence Number,Aim Reference Number,Software Supplier Aim ID,Funding Model,Subcontracted UKPRN,Provider Specified Learner Monitoring A,Provider Specified Learner Monitoring B,Provider Specified Learning Delivery Monitoring A,Provider Specified Learning Delivery Monitoring B,Provider Specified Learning Delivery Monitoring C,Provider Specified Learning Delivery Monitoring D,OFFICIAL-SENSITIVE");
             foreach (var error in errors)
             {
-                var errorFirst = string.Empty;
+                StringBuilder errorFirst = new StringBuilder();
                 if (error.ErrorMessageParameters != null)
                 {
-                    foreach (var s in error.ErrorMessageParameters)
+                    foreach (IErrorMessageParameter s in error.ErrorMessageParameters)
                     {
-                        errorFirst += s;
+                        errorFirst.Append(s.PropertyName);
+                        errorFirst.Append(":");
+                        errorFirst.Append(s.Value);
                     }
                 }
 

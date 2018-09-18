@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.RuleSet.Tests.Rules;
 using FluentAssertions;
@@ -11,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
     public class RuleSetOrchestrationServiceTests
     {
         [Fact]
-        public void Execute_NoValidationItems()
+        public async Task Execute_NoValidationItems()
         {
             var validationContextMock = new Mock<IValidationContext>();
 
@@ -19,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             ruleSetResolutionServiceMock.Setup(rs => rs.Resolve()).Returns(new List<IRule<string>>() { new RuleOne(), new RuleTwo() });
 
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
-            validationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(new List<string>());
+            validationItemProviderServiceMock.Setup(ps => ps.ProvideAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<string>());
 
             var output = new List<int>() { 1, 2, 3 };
 
@@ -28,11 +29,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, validationErrorCache: validationErrorCacheMock.Object);
 
-            service.Execute(CancellationToken.None).Should().BeSameAs(output);
+            (await service.Execute(CancellationToken.None)).Should().BeSameAs(output);
         }
 
         [Fact]
-        public void Execute()
+        public async Task Execute()
         {
             var validationContextMock = new Mock<IValidationContext>();
 
@@ -46,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
             var validationItems = new List<string>() { one, two };
 
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
-            validationItemProviderServiceMock.Setup(ps => ps.Provide()).Returns(validationItems);
+            validationItemProviderServiceMock.Setup(ps => ps.ProvideAsync(It.IsAny<CancellationToken>())).ReturnsAsync(validationItems);
 
             var ruleSetExecutionServiceMock = new Mock<IRuleSetExecutionService<string>>();
             ruleSetExecutionServiceMock.Setup(es => es.Execute(ruleSet, one)).Verifiable();
@@ -59,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
 
             var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, ruleSetExecutionServiceMock.Object, validationErrorCacheMock.Object);
 
-            service.Execute(CancellationToken.None).Should().BeSameAs(output);
+            (await service.Execute(CancellationToken.None)).Should().BeSameAs(output);
 
             ruleSetExecutionServiceMock.Verify();
         }

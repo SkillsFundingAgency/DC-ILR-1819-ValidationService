@@ -60,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public bool ConditionMet(
             int fundModel,
             DateTime learnStartDate,
-            IEnumerable<ILearningDeliveryFAM>learningDeliveryFAMs,
+            IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs,
             int aimType,
             int? progType)
         {

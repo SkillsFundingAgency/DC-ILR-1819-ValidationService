@@ -65,13 +65,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _validateXmlSchemaService = validateXMLSchemaService;
         }
 
-        public IEnumerable<U> Execute(IPreValidationContext validationContext, CancellationToken cancellationToken)
+        public async Task<IEnumerable<U>> ExecuteAsync(IPreValidationContext validationContext, CancellationToken cancellationToken)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
             // get ILR data from file
-            _preValidationPopulationService.Populate();
+            await _preValidationPopulationService.PopulateAsync(cancellationToken);
             _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -82,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             // Possible the zip file was corrupt so we dont have message at this point
             if (ilrMessage == null)
             {
-                _logger.LogWarning($"ILR Message is null, will not execute any Learner validation Job Id :{validationContext.Input}");
+                _logger.LogWarning($"ILR Message is null, will not execute any Learner validation Job Id: {validationContext.Input}");
             }
             else
             {
@@ -95,13 +95,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     _fileDataCache.FileName = validationContext.Input;
 
                     // Message Validation
-                    _ruleSetOrchestrationService.Execute(CancellationToken.None);
+                    await _ruleSetOrchestrationService.Execute(cancellationToken);
 
                     cancellationToken.ThrowIfCancellationRequested();
 
                     if (!_validationErrorCache.ValidationErrors.Any())
                     {
-                        ExecuteValidationActors(validationContext, cancellationToken);
+                        await ExecuteValidationActors(validationContext, cancellationToken);
                     }
                     else
                     {
@@ -132,7 +132,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"));
         }
 
-        private void ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
+        private async Task ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
         {
             // Get L/A and split the learners into separate lists
             var messageShards = _learnerPerActorService.Process();
@@ -156,7 +156,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 var fileDataCacheAsBytes =
                     Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
 
-                var validationActorModel = new ValidationActorModel()
+                var validationActorModel = new ValidationActorModel
                 {
                     JobId = validationContext.JobId,
                     Message = ilrMessageAsBytes,
@@ -165,14 +165,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     FileDataCache = fileDataCacheAsBytes,
                 };
 
-                actorTasks.Add(Task.Run(
-                    () => actor.Validate(validationActorModel, cancellationToken),
-                    cancellationToken));
+                actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
             }
 
             _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
 
-            Task.WaitAll(actorTasks.ToArray());
+            await Task.WhenAll(actorTasks.ToArray());
 
             _logger.LogDebug("all Actors completed");
 

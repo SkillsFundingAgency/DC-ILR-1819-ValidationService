@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.File;
@@ -14,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.FileData.Tests
     public class FileDataCachePopulationServiceTests
     {
         [Fact]
-        public void Populate()
+        public async Task Populate()
         {
             var filePreparationDate = new DateTime(2018, 1, 5);
             var ukprn = 1;
@@ -61,7 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.FileData.Tests
 
             var fileDataCachePopulationService = new FileDataCachePopulationService(fileDataCache, messageCacheMock.Object);
 
-            fileDataCachePopulationService.Populate();
+            await fileDataCachePopulationService.PopulateAsync(CancellationToken.None);
 
             fileDataCache.FilePreparationDate.Should().Be(filePreparationDate);
             fileDataCache.UKPRN.Should().Be(ukprn);

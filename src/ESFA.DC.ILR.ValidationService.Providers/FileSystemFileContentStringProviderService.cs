@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
@@ -12,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
             _preValidationContext = preValidationContext;
         }
 
-        public Stream Provide()
+        public async Task<Stream> Provide(CancellationToken cancellationToken)
         {
             return File.Open(_preValidationContext.Input, FileMode.Open);
         }

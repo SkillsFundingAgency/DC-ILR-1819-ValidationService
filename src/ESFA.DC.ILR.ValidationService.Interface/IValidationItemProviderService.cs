@@ -1,7 +1,10 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Interface
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace ESFA.DC.ILR.ValidationService.Interface
 {
-    public interface IValidationItemProviderService<out T>
+    public interface IValidationItemProviderService<T>
     {
-        T Provide();
+        Task<T> ProvideAsync(CancellationToken cancellationToken);
     }
 }
