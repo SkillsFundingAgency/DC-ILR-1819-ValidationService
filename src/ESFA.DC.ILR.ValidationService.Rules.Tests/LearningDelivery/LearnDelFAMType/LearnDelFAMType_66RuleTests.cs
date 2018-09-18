@@ -807,27 +807,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="filePreparationDate">The file preparation date.</param>
-        [Theory]
-        [InlineData("2016-08-01", "2017-09-30")]
-        [InlineData("2016-01-01", "2017-06-30")]
-        [InlineData("2016-02-01", "2017-07-31")]
-        public void InvalidItemRaisesValidationMessage(string startDate, string filePreparationDate)
+        [Fact]
+        public void InvalidItemRaisesValidationMessage()
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            const string learnAimRef = "salddfkjeifdnase";
+
+            var mockFAM = new Mock<ILearningDeliveryFAM>();
+            mockFAM
+                .SetupGet(x => x.LearnDelFAMType)
+                .Returns(DeliveryMonitoring.Types.FullOrCoFundingIndicator);
+            mockFAM
+                .SetupGet(x => x.LearnDelFAMCode)
+                .Returns("1");
+
+            var fams = Collection.Empty<ILearningDeliveryFAM>();
+            fams.Add(mockFAM.Object);
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
+                .SetupGet(y => y.LearnAimRef)
+                .Returns(learnAimRef);
+            mockDelivery
                 .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse(startDate));
+                .Returns(DateTime.Parse("2017-08-01"));
             mockDelivery
-                .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfLearningProgramme.Traineeship);
+                .SetupGet(y => y.FundModel)
+                .Returns(TypeOfFunding.AdultSkills);
             mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ProgrammeAim);
+                .SetupGet(y => y.LearningDeliveryFAMs)
+                .Returns(fams.AsSafeReadOnlyList());
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -836,6 +846,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             mockLearner
                 .SetupGet(x => x.LearnRefNumber)
                 .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.DateOfBirthNullable)
+                .Returns(DateTime.Parse("1993-07-01"));
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
@@ -853,7 +866,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                     Moq.It.IsAny<ILearningDelivery>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
+            var mock = new Mock<ILARSLearningDelivery>();
+            mock
+                .SetupGet(x => x.NotionalNVQLevelv2)
+                .Returns(LARSNotionalNVQLevelV2.EntryLevel);
+
+            var larsDeliveries = Collection.Empty<ILARSLearningDelivery>();
+            larsDeliveries.Add(mock.Object);
+
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+            service
+                .Setup(x => x.GetDeliveriesFor(learnAimRef))
+                .Returns(larsDeliveries.AsSafeReadOnlyList());
+
             var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
             var mockDDRule21 = new Mock<IDerivedData_21Rule>(MockBehavior.Strict);
             var mockDDRule28 = new Mock<IDerivedData_28Rule>(MockBehavior.Strict);
@@ -862,37 +887,52 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var sut = new LearnDelFAMType_66Rule(handler.Object, service.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object);
 
             // act
-            sut.Validate(mockLearner.Object);
+            sut.ValidateDeliveries(mockLearner.Object);
 
             // assert
             handler.VerifyAll();
             service.VerifyAll();
+            mockDDRule07.VerifyAll();
+            mockDDRule21.VerifyAll();
+            mockDDRule28.VerifyAll();
+            mockDDRule29.VerifyAll();
         }
 
         /// <summary>
-        /// Valid item does not raise a validation message.
+        /// Valid item does not raise validation message.
+        /// the conditions here will get you to the final check which will return false for 'IsEarlyStageNVQ'
         /// </summary>
-        /// <param name="startDate">The start date.</param>
-        /// <param name="filePreparationDate">The file preparation date.</param>
-        [Theory]
-        [InlineData("2017-08-01", "2017-09-30")]
-        [InlineData("2017-01-01", "2017-06-30")]
-        [InlineData("2017-02-01", "2017-07-31")]
-        public void ValidItemDoesNotRaiseAValidationMessage(string startDate, string filePreparationDate)
+        [Fact]
+        public void ValidItemRaisesValidationMessage()
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            const string learnAimRef = "salddfkjeifdnase";
+
+            var mockFAM = new Mock<ILearningDeliveryFAM>();
+            mockFAM
+                .SetupGet(x => x.LearnDelFAMType)
+                .Returns(DeliveryMonitoring.Types.FullOrCoFundingIndicator);
+            mockFAM
+                .SetupGet(x => x.LearnDelFAMCode)
+                .Returns("1");
+
+            var fams = Collection.Empty<ILearningDeliveryFAM>();
+            fams.Add(mockFAM.Object);
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
+                .SetupGet(y => y.LearnAimRef)
+                .Returns(learnAimRef);
+            mockDelivery
                 .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse(startDate));
+                .Returns(DateTime.Parse("2017-08-01"));
             mockDelivery
-                .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfLearningProgramme.Traineeship);
+                .SetupGet(y => y.FundModel)
+                .Returns(TypeOfFunding.AdultSkills);
             mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ProgrammeAim);
+                .SetupGet(y => y.LearningDeliveryFAMs)
+                .Returns(fams.AsSafeReadOnlyList());
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -902,11 +942,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .SetupGet(x => x.LearnRefNumber)
                 .Returns(LearnRefNumber);
             mockLearner
+                .SetupGet(x => x.DateOfBirthNullable)
+                .Returns(DateTime.Parse("1993-07-01"));
+            mockLearner
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+            service
+                .Setup(x => x.GetDeliveriesFor(learnAimRef))
+                .Returns(Collection.EmptyAndReadOnly<ILARSLearningDelivery>());
+
             var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
             var mockDDRule21 = new Mock<IDerivedData_21Rule>(MockBehavior.Strict);
             var mockDDRule28 = new Mock<IDerivedData_28Rule>(MockBehavior.Strict);
@@ -915,11 +962,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var sut = new LearnDelFAMType_66Rule(handler.Object, service.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object);
 
             // act
-            sut.Validate(mockLearner.Object);
+            sut.ValidateDeliveries(mockLearner.Object);
 
             // assert
             handler.VerifyAll();
             service.VerifyAll();
+            mockDDRule07.VerifyAll();
+            mockDDRule21.VerifyAll();
+            mockDDRule28.VerifyAll();
+            mockDDRule29.VerifyAll();
         }
 
         /// <summary>
