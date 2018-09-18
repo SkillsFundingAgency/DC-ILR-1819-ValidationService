@@ -69,14 +69,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj
             It.IsInRange(delivery.AimType, TypeOfAim.ComponentAimInAProgramme, TypeOfAim.AimNotPartOfAProgramme);
 
         /// <summary>
-        /// Determines whether [is a restart] [for the specified delivery].
+        /// Determines whether the specified delivery is restart.
         /// </summary>
-        /// <param name="fams">The fams.</param>
+        /// <param name="delivery">The delivery.</param>
         /// <returns>
-        ///   <c>true</c> if [is a restart] [for the specified delivery]; otherwise, <c>false</c>.
+        ///   <c>true</c> if the specified delivery is restart; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsRestart(IReadOnlyCollection<ILearningDeliveryFAM> fams) =>
-            fams?.Any(x => It.IsInRange(x.LearnDelFAMType, LearningDeliveryFAMTypeConstants.RES)) ?? false;
+        public bool IsRestart(ILearningDelivery delivery) =>
+            delivery.LearningDeliveryFAMs.SafeAny(IsRestart);
+
+        /// <summary>
+        /// Determines whether the specified monitor is restart.
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified monitor is restart; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsRestart(ILearningDeliveryFAM monitor) =>
+            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.RestartIndicator);
 
         /// <summary>
         /// Validates the specified object.
@@ -90,7 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries?
-                .Where(x => IsRightFundModel(x) && IsComponentAim(x) && IsRestart(x.LearningDeliveryFAMs))
+                .Where(x => IsRightFundModel(x) && IsComponentAim(x) && IsRestart(x))
                 .ForEach(x =>
                 {
                     var failedValidation = !ConditionMet(x);

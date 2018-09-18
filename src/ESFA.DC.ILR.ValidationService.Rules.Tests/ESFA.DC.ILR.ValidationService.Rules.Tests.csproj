@@ -104,6 +104,8 @@
     <Compile Include="CrossEntity\R112RuleTests.cs" />
     <Compile Include="CrossEntity\R85RuleTests.cs" />
     <Compile Include="CrossEntity\R07RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_28RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_29RuleTests.cs" />
     <Compile Include="Derived\DerivedData_21RuleTests.cs" />
     <Compile Include="Derived\DD01Tests.cs" />
     <Compile Include="Derived\DD04Tests.cs" />
@@ -256,6 +258,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_44RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_64RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66RuleTests.cs" />
     <Compile Include="LearningDelivery\OtherFundAdj\OtherFundAdj_01RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_03RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03RuleTests.cs" />

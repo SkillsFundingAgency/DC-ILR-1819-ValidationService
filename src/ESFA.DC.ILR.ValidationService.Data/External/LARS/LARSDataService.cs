@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 {
@@ -13,6 +14,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         public LARSDataService(IExternalDataCache externalDataCache)
         {
             _externalDataCache = externalDataCache;
+        }
+
+        /// <summary>
+        /// Gets the deliveries for.
+        /// </summary>
+        /// <param name="forThisAimRef">this aim reference.</param>
+        /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
+        public IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef)
+        {
+            return _externalDataCache.LearningDeliveries.Values
+                .Where(x => x.LearnAimRef == forThisAimRef)
+                .AsSafeReadOnlyList();
         }
 
         public bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date)

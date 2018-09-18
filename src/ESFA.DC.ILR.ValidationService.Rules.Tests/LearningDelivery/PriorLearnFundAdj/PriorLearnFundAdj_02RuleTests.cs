@@ -173,11 +173,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
                 .SetupGet(y => y.LearnDelFAMType)
                 .Returns(candidate);
 
-            var fams = Collection.Empty<ILearningDeliveryFAM>();
-            fams.Add(mockFam.Object);
-
             // act
-            var result = sut.IsRestart(fams.AsSafeReadOnlyList());
+            var result = sut.IsRestart(mockFam.Object);
 
             // assert
             Assert.Equal(expectation, result);
@@ -191,9 +188,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PriorLearnF
         {
             // arrange
             var sut = NewRule();
+            var mockItem = new Mock<ILearningDelivery>();
 
             // act
-            var result = sut.IsRestart(null);
+            var result = sut.IsRestart(mockItem.Object);
+
+            // assert
+            Assert.False(result);
+        }
+
+        /// <summary>
+        /// Determines whether [is restart with empty fam type returns false].
+        /// </summary>
+        [Fact]
+        public void IsRestartWithEmptyFAMTypeReturnsFalse()
+        {
+            // arrange
+            var sut = NewRule();
+            var mockFam = new Mock<ILearningDeliveryFAM>();
+
+            // act
+            var result = sut.IsRestart(mockFam.Object);
 
             // assert
             Assert.False(result);

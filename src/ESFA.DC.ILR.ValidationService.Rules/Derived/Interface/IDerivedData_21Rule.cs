@@ -8,6 +8,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived.Interface
     /// </summary>
     public interface IDerivedData_21Rule
     {
-        bool IsAdultSkillsFundedUnemployedLearner(ILearner candidate);
+        /// <summary>
+        /// Determines whether [is adult funded unemployed with other state benefits] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [is adult funded unemployed with other state benefits] [the specified candidate]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsAdultFundedUnemployedWithOtherStateBenefits(ILearner candidate);
     }
 }
