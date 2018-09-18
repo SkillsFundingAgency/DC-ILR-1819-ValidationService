@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ESFA.DC.ILR.ValidationService.Interface
 {
-    public interface IValidationOutputService<out T>
+    public interface IValidationOutputService<T>
     {
-        IEnumerable<T> Process();
+        Task<IEnumerable<T>> ProcessAsync(CancellationToken cancellationToken);
     }
 }

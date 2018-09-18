@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Providers.Output
@@ -12,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             _validationErrorCache = validationErrorCache;
         }
 
-        public IEnumerable<IValidationError> Process()
+        public async Task<IEnumerable<IValidationError>> ProcessAsync(CancellationToken cancellationToken)
         {
             return _validationErrorCache.ValidationErrors;
         }

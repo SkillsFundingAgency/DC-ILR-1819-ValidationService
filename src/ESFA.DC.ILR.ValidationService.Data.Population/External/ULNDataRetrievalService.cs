@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -18,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _uln = uln;
         }
 
-        public IEnumerable<long> Retrieve()
+        public async Task<IEnumerable<long>> RetrieveAsync(CancellationToken cancellationToken)
         {
             var uniqueULNs = UniqueULNsFromMessage(_messageCache.Item);
 
@@ -26,9 +29,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             var ulnShards = SplitList(uniqueULNs, 5000);
             foreach (var shard in ulnShards)
             {
-                result.AddRange(_uln.UniqueLearnerNumbers
+                result.AddRange(await _uln.UniqueLearnerNumbers
                 .Where(u => shard.Contains(u.ULN))
-                .Select(u => u.ULN));
+                .Select(u => u.ULN)
+                .ToListAsync(cancellationToken));
             }
 
             return result;

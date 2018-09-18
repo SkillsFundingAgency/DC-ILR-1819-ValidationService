@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.Data.LARS.Model;
 using ESFA.DC.Data.LARS.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
@@ -20,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _lars = lars;
         }
 
-        public IEnumerable<Framework> Retrieve()
+        public async Task<List<Framework>> RetrieveAsync(CancellationToken cancellationToken)
         {
             var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToList();
             var uniqueFrameworks = UniqueFrameworksFromMessage(_messageCache.Item).ToList();
@@ -36,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                         && fw.PwayCode == frameworkKey.PwayCode);
             }
 
-            return _lars.LARS_Framework.Where(condition)
+            return await _lars.LARS_Framework.Where(condition)
                 .Select(fw => new Framework()
                 {
                     FworkCode = fw.FworkCode,
@@ -66,7 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                             EffectiveFrom = fcc.EffectiveFrom,
                             EffectiveTo = fcc.EffectiveTo,
                         }).ToList(),
-                });
+                }).ToListAsync(cancellationToken);
         }
 
         public IEnumerable<FrameworkKey> UniqueFrameworksFromMessage(IMessage message)

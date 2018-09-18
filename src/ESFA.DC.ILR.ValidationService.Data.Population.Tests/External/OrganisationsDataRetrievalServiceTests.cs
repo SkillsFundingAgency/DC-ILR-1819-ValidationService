@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.Data.Organisatons.Model;
 using ESFA.DC.Data.Organisatons.Model.Interface;
 using ESFA.DC.ILR.Model.Interface;
@@ -374,7 +375,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
         }
 
         [Fact]
-        public void Retrieve()
+        public async Task Retrieve()
         {
             var message = new TestMessage
             {
@@ -442,13 +443,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 },
             };
 
-            var masterOrgMock = IEnumerableExtensions.AsMockDbSet(masterOrgList);
+            var masterOrgMock = masterOrgList.AsMockDbSet();
 
             organisationsMock.Setup(o => o.MasterOrganisations).Returns(masterOrgMock);
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
 
-            var organisations = NewService(organisationsMock.Object, messageCacheMock.Object).Retrieve();
+            var organisations = await NewService(organisationsMock.Object, messageCacheMock.Object).RetrieveAsync(CancellationToken.None);
 
             organisations.Select(k => k.Key).Should().HaveCount(2);
             organisations.Select(k => k.Key).Should().Contain(1);
@@ -464,7 +465,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
         }
 
         [Fact]
-        public void Retrieve_UKPRN_Mismatch()
+        public async Task Retrieve_UKPRN_Mismatch()
         {
             var message = new TestMessage
             {
@@ -542,7 +543,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
 
-            var organisations = NewService(organisationsMock.Object, messageCacheMock.Object).Retrieve();
+            var organisations = await NewService(organisationsMock.Object, messageCacheMock.Object).RetrieveAsync(CancellationToken.None);
 
             organisations.Select(k => k.Key).Should().HaveCount(3);
             organisations.Select(k => k.Key).Should().Contain(new List<long> { 1, 2, 3 });

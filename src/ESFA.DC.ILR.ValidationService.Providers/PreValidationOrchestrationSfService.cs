@@ -118,7 +118,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 _logger.LogDebug(
                     $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
-                _validationOutputService.Process();
+                await _validationOutputService.ProcessAsync(cancellationToken);
                 _logger.LogDebug($"Validation Final results persisted {stopWatch.ElapsedMilliseconds}");
             }
 
@@ -176,7 +176,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            foreach (var actorTask in actorTasks)
+            foreach (Task<string> actorTask in actorTasks)
             {
                 var errors = _jsonSerializationService.Deserialize<IEnumerable<U>>(actorTask.Result);
 

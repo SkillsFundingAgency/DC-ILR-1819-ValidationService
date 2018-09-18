@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.Data.LARS.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
@@ -18,14 +21,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _lars = lars;
         }
 
-        public IReadOnlyDictionary<string, LearningDelivery> Retrieve()
+        public async Task<IReadOnlyDictionary<string, LearningDelivery>> RetrieveAsync(CancellationToken cancellationToken)
         {
             var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToList();
 
-            return _lars
+            return await _lars
                 .LARS_LearningDelivery
                 .Where(ld => learnAimRefs.Contains(ld.LearnAimRef))
-                .ToDictionary(
+                .ToDictionaryAsync(
                     ld => ld.LearnAimRef,
                     ld => new LearningDelivery()
                     {
@@ -67,7 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 EffectiveFrom = ldc.EffectiveFrom,
                                 EffectiveTo = ldc.EffectiveTo,
                             }).ToList(),
-                    });
+                    }, cancellationToken);
         }
     }
 }

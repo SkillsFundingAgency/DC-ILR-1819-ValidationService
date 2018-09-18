@@ -3,12 +3,10 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using Autofac.Features.AttributeFilters;
 using Autofac.Integration.ServiceFabric;
 using ESFA.DC.Auditing;
 using ESFA.DC.Auditing.Dto;
 using ESFA.DC.Auditing.Interface;
-using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Modules.Stateless;
@@ -28,7 +26,6 @@ using ESFA.DC.JobContextManager;
 using ESFA.DC.JobContextManager.Interface;
 using ESFA.DC.JobStatus.Dto;
 using ESFA.DC.JobStatus.Interface;
-using ESFA.DC.KeyGenerator.Interface;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Mapping.Interface;
 using ESFA.DC.Queueing;
@@ -61,7 +58,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
                 using (var container = builder.Build())
                 {
-                    var audi = container.Resolve<IAuditor>();
                     ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(Stateless).Name);
 
                     // Prevents this host process from terminating so services keep running.
@@ -146,8 +142,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                     new QueueSubscriptionService<JobContextDto>(
                         queueSubscriptionConfig,
                         c.Resolve<IJsonSerializationService>(),
-                        c.Resolve<ILogger>(),
-                        c.Resolve<IDateTimeProvider>());
+                        c.Resolve<ILogger>());
                 return queueSubscriptionService;
             }).As<IQueueSubscriptionService<JobContextDto>>();
 
@@ -208,8 +203,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 .InstancePerLifetimeScope();
 
             Console.WriteLine($"BuildContainer:20");
-            // register key generator
-            containerBuilder.RegisterType<KeyGenerator.KeyGenerator>().As<IKeyGenerator>().SingleInstance();
 
             return containerBuilder;
         }
