@@ -107,7 +107,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <param name="aimReference">The aim reference.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(TypeOfAim.IndustryPlacementCode, false)]
+        [InlineData(TypeOfAim.References.IndustryPlacement, false)]
         [InlineData("asdflkasroas i", true)]
         [InlineData("w;oraeijwq rf;oiew ", true)]
         [InlineData(null, true)]
@@ -133,7 +133,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         /// <param name="aimReference">The aim reference.</param>
         /// <param name="typeOfProgramme">The type of programme.</param>
         [Theory]
-        [InlineData(TypeOfAim.IndustryPlacementCode, TypeOfLearningProgramme.Traineeship)]
+        [InlineData(TypeOfAim.References.IndustryPlacement, TypeOfLearningProgramme.Traineeship)]
         public void InvalidItemRaisesValidationMessage(string aimReference, int typeOfProgramme)
         {
             // arrange

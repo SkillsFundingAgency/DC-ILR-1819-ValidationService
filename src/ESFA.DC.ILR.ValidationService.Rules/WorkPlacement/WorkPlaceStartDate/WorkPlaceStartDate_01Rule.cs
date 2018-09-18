@@ -5,25 +5,25 @@ using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Linq;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
+namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
 {
     /// <summary>
     /// from version 1.1 validation spread sheet
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class ProgType_14Rule :
+    public class WorkPlaceStartDate_01Rule :
         IRule<ILearner>
     {
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "ProgType";
+        public const string MessagePropertyName = "WorkPlaceStartDate";
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "ProgType_14";
+        public const string Name = "WorkPlaceStartDate_01";
 
         /// <summary>
         /// The message handler
@@ -31,10 +31,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ProgType_14Rule"/> class.
+        /// Initializes a new instance of the <see cref="WorkPlaceStartDate_01Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public ProgType_14Rule(IValidationErrorHandler validationErrorHandler)
+        public WorkPlaceStartDate_01Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -48,6 +48,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public string RuleName => Name;
 
         /// <summary>
+        /// Gets the minimun viable start.
+        /// </summary>
+        public DateTime MinimunViableStart => new DateTime(2014, 07, 31);
+
+        /// <summary>
+        /// Determines whether [is viable start] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsViableStart(ILearningDelivery delivery) =>
+            delivery.LearnStartDate > MinimunViableStart;
+
+        /// <summary>
+        /// Determines whether [is work placement] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is work placement] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsWorkPlacement(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.LearnAimRef, TypeOfAim.References.AsWorkPlacementCodes);
+
+        /// <summary>
         /// Validates the specified object.
         /// </summary>
         /// <param name="objectToValidate">The object to validate.</param>
@@ -59,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries?
-                .Where(x => It.IsInRange(x.ProgTypeNullable, TypeOfLearningProgramme.Traineeship))
+                .Where(x => IsViableStart(x) && IsWorkPlacement(x))
                 .ForEach(x =>
                 {
                     var failedValidation = !ConditionMet(x);
@@ -81,7 +106,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? It.IsDifferent(thisDelivery.LearnAimRef, TypeOfAim.References.IndustryPlacement)
+                ? It.HasValues(thisDelivery.LearningDeliveryWorkPlacements)
                 : true;
         }
 
