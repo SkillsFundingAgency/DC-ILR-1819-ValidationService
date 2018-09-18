@@ -17,14 +17,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
             return learnerEmploymentStatuses.Where(les => les.DateEmpStatApp == dateEmpStatApp).Select(les => les.EmpStat).FirstOrDefault();
         }
 
-        public IEnumerable<int> EmpStatsForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateEmpStatApp)
+        public IEnumerable<int> EmpStatsForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateValue)
         {
             if (learnerEmploymentStatuses == null)
             {
                 return null;
             }
 
-            return learnerEmploymentStatuses.Where(les => les.DateEmpStatApp >= dateEmpStatApp).Select(les => les.EmpStat).ToList();
+            return learnerEmploymentStatuses.Where(les => dateValue >= les.DateEmpStatApp).Select(les => les.EmpStat).ToList();
         }
 
         public bool EmpStatsNotExistBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate)
