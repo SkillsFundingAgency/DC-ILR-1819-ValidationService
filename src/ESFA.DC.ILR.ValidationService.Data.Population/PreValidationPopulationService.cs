@@ -25,8 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
 
         public async Task PopulateAsync(CancellationToken cancellationToken)
         {
+            await _messageCachePopulationService.PopulateAsync(cancellationToken);
             await Task.WhenAll(
-                _messageCachePopulationService.PopulateAsync(cancellationToken),
                 _fileDataCachePopulationService.PopulateAsync(cancellationToken),
                 _internalDataCachePopulationService.PopulateAsync(cancellationToken),
                 _externalDataCachePopulationService.PopulateAsync(cancellationToken));

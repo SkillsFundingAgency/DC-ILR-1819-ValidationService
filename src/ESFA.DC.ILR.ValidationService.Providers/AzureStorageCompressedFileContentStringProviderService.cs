@@ -59,14 +59,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                             using (Stream stream = zippedFile.Open())
                             {
                                 await stream.CopyToAsync(outputStream, 81920, cancellationToken);
-
-                                string xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
-                                _preValidationContext.Input = xmlFileName;
-                                await _streamableKeyValuePersistenceService.SaveAsync(
-                                    xmlFileName,
-                                    stream,
-                                    cancellationToken);
                             }
+
+                            string xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
+                            _preValidationContext.Input = xmlFileName;
+                            await _streamableKeyValuePersistenceService.SaveAsync(
+                                xmlFileName,
+                                outputStream,
+                                cancellationToken);
                         }
                         else
                         {
