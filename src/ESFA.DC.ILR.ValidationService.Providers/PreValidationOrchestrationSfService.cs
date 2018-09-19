@@ -89,7 +89,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 // Call XSD validation
                 _validateXmlSchemaService.Validate();
 
-                if (!_validationErrorCache.ValidationErrors.Any())
+                if (!_validationErrorCache.ValidationErrors.Any(x => (((IValidationError)x).Severity ?? Interface.Enum.Severity.Error) == Interface.Enum.Severity.Error))
                 {
                     // get the filename
                     _fileDataCache.FileName = validationContext.Input;
@@ -99,7 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    if (!_validationErrorCache.ValidationErrors.Any())
+                    if (!_validationErrorCache.ValidationErrors.Any(x => (((IValidationError)x).Severity ?? Interface.Enum.Severity.Error) == Interface.Enum.Severity.Error))
                     {
                         ExecuteValidationActors(validationContext, cancellationToken);
                     }
