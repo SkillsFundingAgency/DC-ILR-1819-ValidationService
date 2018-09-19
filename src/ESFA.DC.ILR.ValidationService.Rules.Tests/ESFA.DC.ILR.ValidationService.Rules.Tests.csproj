@@ -223,6 +223,7 @@
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_02RuleTests.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01RuleTests.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_02RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_04RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_03RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_01RuleTests.cs" />

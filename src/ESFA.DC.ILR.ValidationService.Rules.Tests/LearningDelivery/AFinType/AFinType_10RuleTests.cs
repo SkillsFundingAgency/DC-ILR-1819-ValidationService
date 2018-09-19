@@ -201,14 +201,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         [InlineData("", 2, false)]
         [InlineData("", 3, false)]
         [InlineData("", 4, false)]
-        [InlineData(TypeOfAppFinRec.PaymentRecord, 1, false)]
-        [InlineData(TypeOfAppFinRec.PaymentRecord, 2, false)]
-        [InlineData(TypeOfAppFinRec.PaymentRecord, 3, false)]
-        [InlineData(TypeOfAppFinRec.PaymentRecord, 4, false)]
-        [InlineData(TypeOfAppFinRec.TotalNegotiatedPrice, 1, false)]
-        [InlineData(TypeOfAppFinRec.TotalNegotiatedPrice, 2, true)]
-        [InlineData(TypeOfAppFinRec.TotalNegotiatedPrice, 3, false)]
-        [InlineData(TypeOfAppFinRec.TotalNegotiatedPrice, 4, true)]
+        [InlineData(ApprenticeshipFinanicalRecord.Types.PaymentRecord, 1, false)]
+        [InlineData(ApprenticeshipFinanicalRecord.Types.PaymentRecord, 2, false)]
+        [InlineData(ApprenticeshipFinanicalRecord.Types.PaymentRecord, 3, false)]
+        [InlineData(ApprenticeshipFinanicalRecord.Types.PaymentRecord, 4, false)]
+        [InlineData(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 1, false)]
+        [InlineData(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 2, true)]
+        [InlineData(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 3, false)]
+        [InlineData(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 4, true)]
         public void ConditionMetWithFinancialRecordMeetsExpectation(string candidateType, int candidateCode, bool expectation)
         {
             // arrange

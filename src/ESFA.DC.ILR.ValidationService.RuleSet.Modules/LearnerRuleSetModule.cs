@@ -34,6 +34,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EPAOrgID;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
@@ -127,6 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(EmpOutcome_03Rule),
                 typeof(EmpStat_08Rule),
                 typeof(EmpStat_12Rule),
+                typeof(EPAOrgID_02Rule),
                 typeof(FamilyName_01Rule),
                 typeof(FamilyName_02Rule),
                 typeof(FamilyName_04Rule),

@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\AbstractRule.cs" />
+    <Compile Include="Constants\ApprenticeshipFinanicalRecord.cs" />
     <Compile Include="Constants\ContPrefTypeConstants.cs" />
     <Compile Include="Constants\DeliveryMonitoring.cs" />
     <Compile Include="Constants\EmploymentStatusMonitoring.cs" />
@@ -72,7 +73,6 @@
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
-    <Compile Include="Constants\TypeOfAppFinRec.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
@@ -209,6 +209,7 @@
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01Rule.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_02Rule.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_03Rule.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_02Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_01Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_03Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_04Rule.cs" />

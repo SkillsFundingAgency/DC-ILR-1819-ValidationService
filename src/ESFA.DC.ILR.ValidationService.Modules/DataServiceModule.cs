@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using ESFA.DC.ILR.ValidationService.Data;
+using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation;
+using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
@@ -37,6 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<FileDataService>().As<IFileDataService>().InstancePerLifetimeScope();
             builder.RegisterType<LARSDataService>().As<ILARSDataService>().InstancePerLifetimeScope();
             builder.RegisterType<OrganisationDataService>().As<IOrganisationDataService>().InstancePerLifetimeScope();
+            builder.RegisterType<EPAOrganisationDetailsProvider>().As<IProvideEPAOrganisationDetails>().InstancePerLifetimeScope();
             builder.RegisterType<ULNDataService>().As<IULNDataService>().InstancePerLifetimeScope();
             builder.RegisterType<PostcodesDataService>().As<IPostcodesDataService>();
             builder.RegisterType<ValidationErrorsDataService>().As<IValidationErrorsDataService>();

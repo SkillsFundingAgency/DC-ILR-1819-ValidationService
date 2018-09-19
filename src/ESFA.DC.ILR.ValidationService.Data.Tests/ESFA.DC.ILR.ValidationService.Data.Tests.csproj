@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="External\LARSDataServiceTests.cs" />
+    <Compile Include="External\EPAOrganisationDetailsProviderTests.cs" />
     <Compile Include="External\PostcodesDataServiceTests.cs" />
     <Compile Include="External\ValidationErrorsDataServiceTests.cs" />
     <Compile Include="File\FileDataServiceTests.cs" />
