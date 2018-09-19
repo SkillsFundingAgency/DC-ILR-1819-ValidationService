@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+**/ApplicationParameters/Local.1Node.xml
+**/ApplicationParameters/Local.5Node.xml
+
 # User-specific files
 *.suo
 *.user
@@ -286,3 +289,8 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+# service fabric local config
+src/ESFA.DC.ILR.ValidationService/ApplicationParameters/Local.1Node.xml
+src/ESFA.DC.ILR.ValidationService/ApplicationParameters/Local.5Node.xml
+

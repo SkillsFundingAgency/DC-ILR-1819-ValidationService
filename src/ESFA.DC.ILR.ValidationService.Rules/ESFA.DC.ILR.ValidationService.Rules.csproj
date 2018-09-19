@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{621B61D1-339D-4910-8C86-8A64AF8822F5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ESFA.DC.ILR.ValidationService.Rules</RootNamespace>
+    <AssemblyName>ESFA.DC.ILR.ValidationService.Rules</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ESFA.DC.ILR.ValidationService.Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstract\AbstractRule.cs" />
+    <Compile Include="Constants\ContPrefTypeConstants.cs" />
+    <Compile Include="Constants\DeliveryMonitoring.cs" />
+    <Compile Include="Constants\EmploymentStatusMonitoring.cs" />
+    <Compile Include="Constants\FundModelConstants.cs" />
+    <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
+    <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
+    <Compile Include="Constants\PropertyNameConstants.cs" />
+    <Compile Include="Constants\RuleNameConstants.cs" />
+    <Compile Include="Constants\TypeOfAppFinRec.cs" />
+    <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
+    <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
+    <Compile Include="Constants\TypeOfLARSCategory.cs" />
+    <Compile Include="Constants\TypeOfLearningProgramme.cs" />
+    <Compile Include="CrossEntity\R108Rule.cs" />
+    <Compile Include="CrossEntity\R112Rule.cs" />
+    <Compile Include="CrossEntity\R85Rule.cs" />
+    <Compile Include="CrossEntity\R07Rule.cs" />
+    <Compile Include="Derived\DerivedData_28Rule.cs" />
+    <Compile Include="Derived\DerivedData_29Rule.cs" />
+    <Compile Include="Derived\DerivedData_21Rule.cs" />
+    <Compile Include="Derived\DD01.cs" />
+    <Compile Include="Derived\DD04.cs" />
+    <Compile Include="Derived\DD06.cs" />
+    <Compile Include="Derived\DD07.cs" />
+    <Compile Include="Derived\Interface\IDD01.cs" />
+    <Compile Include="Derived\Interface\IDD04.cs" />
+    <Compile Include="Derived\Interface\IDD06.cs" />
+    <Compile Include="Derived\Interface\IDD07.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_28Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_29Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_08Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\LongExtensions.cs" />
+    <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
+    <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
+    <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
+    <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
+    <Compile Include="HE\LearnerHE_02Rule.cs" />
+    <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
+    <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
+    <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
+    <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
+    <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
+    <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
+    <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
+    <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
+    <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_32Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_30Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_27Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_03Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_04Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_06Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_07Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_12Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_13Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_14Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_20Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_23Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_26Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_25Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_24Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_29Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_36Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_38Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_39Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_47Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_46Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_48Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
+    <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
+    <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
+    <Compile Include="Learner\FamilyName\FamilyName_04Rule.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_01Rule.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_02Rule.cs" />
+    <Compile Include="Learner\GivenNames\GivenNames_04Rule.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_16Rule.cs" />
+    <Compile Include="Learner\LLDDCat\LLDDCat_01Rule.cs" />
+    <Compile Include="Learner\LLDDCat\LLDDCat_02Rule.cs" />
+    <Compile Include="Learner\MathGrade\MathGrade_03Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04Rule.cs" />
+    <Compile Include="Learner\PMUKPRN\PMUKPRN_01Rule.cs" />
+    <Compile Include="Learner\PostcodePrior\PostcodePrior_01Rule.cs" />
+    <Compile Include="Learner\Postcode\Postcode_14Rule.cs" />
+    <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01Rule.cs" />
+    <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_01Rule.cs" />
+    <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_02Rule.cs" />
+    <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_03Rule.cs" />
+    <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_04Rule.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
+    <Compile Include="Learner\UKPRN\UKPRN_06Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_02Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_03Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_04Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_05Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_06Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_07Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_09Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_10Rule.cs" />
+    <Compile Include="Learner\ULN\ULN_12Rule.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_10Rule.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_09Rule.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_07Rule.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_04Rule.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_03Rule.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_02Rule.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_02Rule.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_01Rule.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_04Rule.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_05Rule.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_06Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_10Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_09Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_13Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_12Rule.cs" />
+    <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02Rule.cs" />
+    <Compile Include="LearningDelivery\AimType\AimType_01Rule.cs" />
+    <Compile Include="LearningDelivery\AimType\AimType_05Rule.cs" />
+    <Compile Include="LearningDelivery\AimType\AimType_07Rule.cs" />
+    <Compile Include="LearningDelivery\CompStatus\CompStatus_01Rule.cs" />
+    <Compile Include="LearningDelivery\CompStatus\CompStatus_06Rule.cs" />
+    <Compile Include="LearningDelivery\CompStatus\CompStatus_05Rule.cs" />
+    <Compile Include="LearningDelivery\CompStatus\CompStatus_04Rule.cs" />
+    <Compile Include="LearningDelivery\CompStatus\CompStatus_03Rule.cs" />
+    <Compile Include="LearningDelivery\CompStatus\CompStatus_02Rule.cs" />
+    <Compile Include="LearningDelivery\ConRefNumber\ConRefNumber_03Rule.cs" />
+    <Compile Include="LearningDelivery\ConRefNumber\ConRefNumber_01Rule.cs" />
+    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_16Rule.cs" />
+    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_03Rule.cs" />
+    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_11Rule.cs" />
+    <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01Rule.cs" />
+    <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_02Rule.cs" />
+    <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_03Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_01Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_03Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_04Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_05Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_06Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_09Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_08Rule.cs" />
+    <Compile Include="LearningDelivery\FundModel\FundModel_07Rule.cs" />
+    <Compile Include="LearningDelivery\FworkCode\FworkCode_02Rule.cs" />
+    <Compile Include="LearningDelivery\FworkCode\FworkCode_01Rule.cs" />
+    <Compile Include="LearningDelivery\FworkCode\FworkCode_05Rule.cs" />
+    <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_04Rule.cs" />
+    <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_59Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_02Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_04Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_03Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_02Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_02Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_03Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_44Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_64Rule.cs" />
+    <Compile Include="LearningDelivery\OtherFundAdj\OtherFundAdj_01Rule.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_03Rule.cs" />
+    <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03Rule.cs" />
+    <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02Rule.cs" />
+    <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01Rule.cs" />
+    <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01Rule.cs" />
+    <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_02Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_14Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_13Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_08Rule.cs" />
+    <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01Rule.cs" />
+    <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_07Rule.cs" />
+    <Compile Include="Message\FileLevel\Header\Header_2Rule.cs" />
+    <Compile Include="Message\FileLevel\Header\Header_3Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_06Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_03Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_02Rule.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_01Rule.cs" />
+    <Compile Include="Constants\TypeOfFunding.cs" />
+    <Compile Include="Constants\TypeOfAim.cs" />
+    <Compile Include="Message\UKPRN\UKPRN_03Rule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\AcademicYearQueryService.cs" />
+    <Compile Include="Query\DateTimeQueryService.cs" />
+    <Compile Include="Query\LearnerDPQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerDPQueryService.cs" />
+    <Compile Include="Query\LearnerEmploymentStatusQueryService.cs" />
+    <Compile Include="Query\Interface\IAcademicYearQueryService.cs" />
+    <Compile Include="Query\Interface\IDateTimeQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerEmploymentStatusQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerQueryService.cs" />
+    <Compile Include="Query\Interface\ILearningDeliveryAppFinRecordQueryService.cs" />
+    <Compile Include="Query\Interface\ILearningDeliveryFAMQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerFAMQueryService.cs" />
+    <Compile Include="Constants\ValidationConstants.cs" />
+    <Compile Include="Query\Interface\ILearningDeliveryQueryService.cs" />
+    <Compile Include="Query\Interface\IPostcodeQueryService.cs" />
+    <Compile Include="Query\Interface\ILearnerEmploymentStatusMonitoringQueryService.cs" />
+    <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryService.cs" />
+    <Compile Include="Query\LearningDeliveryAppFinRecordQueryService.cs" />
+    <Compile Include="Query\PostcodeQueryService.cs" />
+    <Compile Include="Query\LearnerFAMQueryService.cs" />
+    <Compile Include="Query\LearnerQueryService.cs" />
+    <Compile Include="Query\LearningDeliveryFAMQueryService.cs" />
+    <Compile Include="Query\LearningDeliveryQueryService.cs" />
+    <Compile Include="WorkPlacement\WorkPlaceStartDate\WorkPlaceStartDate_01Rule.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
+      <Project>{FAACF863-EB2E-473F-8EF9-F7FA9613F556}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
+      <Project>{513C4F05-55F4-4AEF-B3EB-427C024DA043}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.RuleSet\ESFA.DC.ILR.ValidationService.RuleSet.csproj">
+      <Project>{EBE0154D-6F8B-4DBB-A18F-4929AB74D204}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.RuleSet</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ESFA.DC.ILR.ValidationService.Rules.ruleset">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Lindhart.Analyser.MissingAwaitWarning.1.0.1\analyzers\dotnet\cs\Lindhart.Analyser.MissingAwaitWarning.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
