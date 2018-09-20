@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -35,6 +36,8 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
     public class ValidationActor : Actor, IValidationActor
     {
         private readonly ILifetimeScope _parentLifeTimeScope;
+        private readonly IExecutionContext _executionContext;
+        private readonly IJsonSerializationService _jsonSerializationService;
         private readonly ActorId _actorId;
 
         /// <summary>
@@ -43,28 +46,57 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
         /// <param name="actorService">The Microsoft.ServiceFabric.Actors.Runtime.ActorService that will host this actor instance.</param>
         /// <param name="actorId">The Microsoft.ServiceFabric.Actors.ActorId for this actor instance.</param>
         /// <param name="parentLifeTimeScope">Autofac Parent Lifetime Scope</param>
-        public ValidationActor(ActorService actorService, ActorId actorId, ILifetimeScope parentLifeTimeScope)
+        /// <param name="executionContext">The logger execution context.</param>
+        /// <param name="jsonSerializationService">JSON serialiser.</param>
+        public ValidationActor(ActorService actorService, ActorId actorId, ILifetimeScope parentLifeTimeScope, IExecutionContext executionContext, IJsonSerializationService jsonSerializationService)
             : base(actorService, actorId)
         {
             _parentLifeTimeScope = parentLifeTimeScope;
+            _executionContext = executionContext;
+            _jsonSerializationService = jsonSerializationService;
             _actorId = actorId;
         }
 
         public async Task<string> Validate(ValidationActorModel validationActorModel, CancellationToken cancellationToken)
         {
-            var jsonSerializationService = _parentLifeTimeScope.Resolve<IJsonSerializationService>();
+            InternalDataCache internalDataCache;
+            ExternalDataCache externalDataCache;
+            FileDataCache fileDataCache;
+            Message message;
+            ValidationContext validationContext;
 
-            var internalDataCache = jsonSerializationService.Deserialize<InternalDataCache>(Encoding.UTF8.GetString(validationActorModel.InternalDataCache));
-            var externalDataCache = jsonSerializationService.Deserialize<ExternalDataCache>(Encoding.UTF8.GetString(validationActorModel.ExternalDataCache));
-            var fileDataCache = jsonSerializationService.Deserialize<FileDataCache>(Encoding.UTF8.GetString(validationActorModel.FileDataCache));
-            var message = jsonSerializationService.Deserialize<Message>(new MemoryStream(validationActorModel.Message));
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var validationContext = new ValidationContext
+            if (_executionContext is ExecutionContext executionContextObj)
             {
-                Input = message
-            };
+                executionContextObj.JobId = "-1";
+                executionContextObj.TaskKey = _actorId.ToString();
+            }
+
+            ILogger logger = _parentLifeTimeScope.Resolve<ILogger>();
+
+            try
+            {
+                logger.LogDebug($"Validation Actor {_actorId} starting");
+
+                internalDataCache = _jsonSerializationService.Deserialize<InternalDataCache>(Encoding.UTF8.GetString(validationActorModel.InternalDataCache));
+                externalDataCache = _jsonSerializationService.Deserialize<ExternalDataCache>(Encoding.UTF8.GetString(validationActorModel.ExternalDataCache));
+                fileDataCache = _jsonSerializationService.Deserialize<FileDataCache>(Encoding.UTF8.GetString(validationActorModel.FileDataCache));
+                message = _jsonSerializationService.Deserialize<Message>(new MemoryStream(validationActorModel.Message));
+
+                validationContext = new ValidationContext
+                {
+                    Input = message
+                };
+
+                logger.LogDebug($"Validation Actor {_actorId} finished getting input data");
+
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+            catch (Exception ex)
+            {
+                ActorEventSource.Current.ActorMessage(this, "Exception-{0}", ex.ToString());
+                logger.LogError("Error while processing Actor job", ex);
+                throw;
+            }
 
             using (var childLifeTimeScope = _parentLifeTimeScope.BeginLifetimeScope(c =>
             {
@@ -75,27 +107,27 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                 c.RegisterInstance(fileDataCache).As<IFileDataCache>();
             }))
             {
-                var executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
+                ExecutionContext executionContext = (ExecutionContext)childLifeTimeScope.Resolve<IExecutionContext>();
                 executionContext.JobId = validationActorModel.JobId;
                 executionContext.TaskKey = _actorId.ToString();
-                var logger = childLifeTimeScope.Resolve<ILogger>();
+                ILogger jobLogger = childLifeTimeScope.Resolve<ILogger>();
                 try
                 {
-                    logger.LogDebug($"Validation Actor {executionContext.TaskKey} started learners: {validationContext.Input.Learners.Count}");
-                    var preValidationOrchestrationService = childLifeTimeScope
+                    jobLogger.LogDebug($"Validation Actor {executionContext.TaskKey} started learners: {validationContext.Input.Learners.Count}");
+                    IRuleSetOrchestrationService<ILearner, IValidationError> preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                    var errors = await preValidationOrchestrationService.Execute(cancellationToken);
-                    logger.LogDebug($"Validation Actor {executionContext.TaskKey} validation done");
+                    IEnumerable<IValidationError> errors = await preValidationOrchestrationService.Execute(cancellationToken);
+                    jobLogger.LogDebug($"Validation Actor {executionContext.TaskKey} validation done");
 
-                    var errorString = jsonSerializationService.Serialize(errors);
-                    logger.LogDebug($"Validation Actor {executionContext.TaskKey} completed job");
+                    string errorString = _jsonSerializationService.Serialize(errors);
+                    jobLogger.LogDebug($"Validation Actor {executionContext.TaskKey} completed job");
                     return errorString;
                 }
                 catch (Exception ex)
                 {
                     ActorEventSource.Current.ActorMessage(this, "Exception-{0}", ex.ToString());
-                    logger.LogError("Error while processing Actor job", ex);
+                    jobLogger.LogError("Error while processing Actor job", ex);
                     throw;
                 }
             }

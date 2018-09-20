@@ -28,10 +28,6 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
 
                 using (var container = builder.Build())
                 {
-                    using (var childscope = container.BeginLifetimeScope())
-                    {
-                    }
-
                     Thread.Sleep(Timeout.Infinite);
                 }
             }
