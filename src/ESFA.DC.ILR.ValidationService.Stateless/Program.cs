@@ -135,8 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                     new TopicSubscriptionSevice<JobContextDto>(
                         topicConfiguration,
                         c.Resolve<IJsonSerializationService>(),
-                        c.Resolve<ILogger>(),
-                        c.Resolve<IDateTimeProvider>());
+                        c.Resolve<ILogger>());
                 return topicSubscriptionSevice;
             }).As<ITopicSubscriptionService<JobContextDto>>();
 
