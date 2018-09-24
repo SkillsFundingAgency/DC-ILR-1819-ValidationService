@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Logging.Interfaces;
@@ -16,20 +20,23 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IPreValidationContext _preValidationContext;
         private readonly ILogger _logger;
         private readonly IStreamableKeyValuePersistenceService _streamableKeyValuePersistenceService;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public AzureStorageCompressedFileContentStringProviderService(
             IPreValidationContext preValidationContext,
             ILogger logger,
-            IStreamableKeyValuePersistenceService streamableKeyValuePersistenceService)
+            IStreamableKeyValuePersistenceService streamableKeyValuePersistenceService,
+            IDateTimeProvider dateTimeProvider)
         {
             _preValidationContext = preValidationContext;
             _logger = logger;
             _streamableKeyValuePersistenceService = streamableKeyValuePersistenceService;
+            _dateTimeProvider = dateTimeProvider;
         }
 
-        public Stream Provide()
+        public async Task<Stream> Provide(CancellationToken cancellationToken)
         {
-            var startDateTime = DateTime.UtcNow;
+            var startDateTime = _dateTimeProvider.GetNowUtc();
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -39,36 +46,40 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    _streamableKeyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream)
-                        .GetAwaiter().GetResult();
+                    await _streamableKeyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream, cancellationToken);
 
-                    ZipArchive archive = new ZipArchive(memoryStream);
-                    List<ZipArchiveEntry> xmlFiles = archive.Entries.Where(x =>
-                        x.Name.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase)).ToList();
-
-                    if (xmlFiles.Count == 1)
+                    using (ZipArchive archive = new ZipArchive(memoryStream))
                     {
-                        ZipArchiveEntry zippedFile = xmlFiles.First();
-                        using (Stream stream = zippedFile.Open())
+                        List<ZipArchiveEntry> xmlFiles = archive.Entries.Where(x =>
+                            x.Name.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase)).ToList();
+
+                        if (xmlFiles.Count == 1)
                         {
-                            stream.CopyTo(outputStream);
+                            ZipArchiveEntry zippedFile = xmlFiles.First();
+                            using (Stream stream = zippedFile.Open())
+                            {
+                                await stream.CopyToAsync(outputStream, 81920, cancellationToken);
+                            }
 
                             string xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
                             _preValidationContext.Input = xmlFileName;
-                            _streamableKeyValuePersistenceService.SaveAsync(xmlFileName, stream);
+                            await _streamableKeyValuePersistenceService.SaveAsync(
+                                xmlFileName,
+                                outputStream,
+                                cancellationToken);
                         }
-                    }
-                    else
-                    {
-                        _logger.LogWarning(
-                            $"Zip file contains either more than one file will or no xml file, return empty string: jobId : {_preValidationContext.JobId}, file name :{_preValidationContext.Input}");
+                        else
+                        {
+                            _logger.LogWarning(
+                                $"Zip file contains either more than one file will or no xml file, returning empty stream: jobId: {_preValidationContext.JobId}, file name: {_preValidationContext.Input}");
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(
-                    $"Failed to extract the zip file from storage : jobId : {_preValidationContext.JobId}, file name :{_preValidationContext.Input}",
+                    $"Failed to extract the zip file from storage: jobId: {_preValidationContext.JobId}, file name: {_preValidationContext.Input}",
                     ex);
             }
 
@@ -76,10 +87,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             var processTimes = new StringBuilder();
 
-            processTimes.AppendLine($"Start Time : {startDateTime}");
-            processTimes.AppendLine($"Total Time : {(DateTime.UtcNow - startDateTime).TotalMilliseconds}");
+            processTimes.Append("Start Time: ");
+            processTimes.AppendLine(startDateTime.ToString(CultureInfo.InvariantCulture));
+            processTimes.Append("Total Time: ");
+            processTimes.AppendLine((DateTime.UtcNow - startDateTime).TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
-            _logger.LogDebug($"Blob download :{processTimes} ");
+            _logger.LogDebug($"Blob download: {processTimes}");
 
             return outputStream;
         }

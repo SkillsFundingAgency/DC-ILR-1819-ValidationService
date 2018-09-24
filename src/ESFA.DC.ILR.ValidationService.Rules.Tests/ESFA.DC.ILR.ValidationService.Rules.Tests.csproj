@@ -104,6 +104,8 @@
     <Compile Include="CrossEntity\R112RuleTests.cs" />
     <Compile Include="CrossEntity\R85RuleTests.cs" />
     <Compile Include="CrossEntity\R07RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_28RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_29RuleTests.cs" />
     <Compile Include="Derived\DerivedData_21RuleTests.cs" />
     <Compile Include="Derived\DD01Tests.cs" />
     <Compile Include="Derived\DD04Tests.cs" />
@@ -221,6 +223,7 @@
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_02RuleTests.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01RuleTests.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_02RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_04RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_03RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_01RuleTests.cs" />
@@ -256,6 +259,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_44RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_64RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66RuleTests.cs" />
     <Compile Include="LearningDelivery\OtherFundAdj\OtherFundAdj_01RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_03RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03RuleTests.cs" />
@@ -266,6 +270,7 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_14RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01RuleTests.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07RuleTests.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2RuleTests.cs" />
@@ -287,6 +292,7 @@
     <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryQueryServiceTests.cs" />
     <Compile Include="Query\PostcodeQueryServiceTests.cs" />
+    <Compile Include="WorkPlacement\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -313,6 +319,7 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\packages\Lindhart.Analyser.MissingAwaitWarning.1.0.1\analyzers\dotnet\cs\Lindhart.Analyser.MissingAwaitWarning.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
     <Analyzer Include="..\packages\xunit.analyzers.0.9.0\analyzers\dotnet\cs\xunit.analyzers.dll" />

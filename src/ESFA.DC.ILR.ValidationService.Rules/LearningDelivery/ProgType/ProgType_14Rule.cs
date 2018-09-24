@@ -81,7 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? It.IsDifferent(thisDelivery.LearnAimRef, TypeOfAim.IndustryPlacementCode)
+                ? It.IsDifferent(thisDelivery.LearnAimRef, TypeOfAim.References.IndustryPlacement)
                 : true;
         }
 

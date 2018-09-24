@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace ESFA.DC.ILR.ValidationService.Interface
 {
-    public interface IPreValidationOrchestrationService<out U>
+    public interface IPreValidationOrchestrationService<U>
     {
-        IEnumerable<U> Execute(IPreValidationContext validationContext, CancellationToken cancellationToken);
+        Task ExecuteAsync(IPreValidationContext validationContext, CancellationToken cancellationToken);
     }
 }

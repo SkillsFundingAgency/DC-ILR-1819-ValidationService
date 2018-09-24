@@ -7,9 +7,19 @@
     public static class DeliveryMonitoring
     {
         /// <summary>
-        /// in receipt of low wages
+        /// olass offenders in custody
         /// </summary>
-        public const string InReceiptOfLowWages = "LDM363";
+        public const string OLASSOffendersInCustody = "LDM034";
+
+        /// <summary>
+        /// released (from prison) on temporary licence
+        /// </summary>
+        public const string ReleasedOnTemporaryLicence = "LDM328";
+
+        /// <summary>
+        /// (DWP) mandated to skills training
+        /// </summary>
+        public const string MandationToSkillsTraining = "LDM318";
 
         /// <summary>
         /// steel industries redundancy training
@@ -17,9 +27,14 @@
         public const string SteelIndustriesRedundancyTraining = "LDM347";
 
         /// <summary>
-        /// (DWP) mandated to skills training
+        /// in receipt of low wages
         /// </summary>
-        public const string MandationToSkillsTraining = "LDM318";
+        public const string InReceiptOfLowWages = "LDM363";
+
+        /// <summary>
+        /// fully funded learning aim
+        /// </summary>
+        public const string FullyFundedLearningAim = "FFI1";
 
         public static class Types
         {

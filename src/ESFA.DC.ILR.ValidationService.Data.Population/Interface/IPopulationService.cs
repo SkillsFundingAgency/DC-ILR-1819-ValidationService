@@ -1,7 +1,10 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
 {
     public interface IPopulationService
     {
-        void Populate();
+        Task PopulateAsync(CancellationToken cancellationToken);
     }
 }

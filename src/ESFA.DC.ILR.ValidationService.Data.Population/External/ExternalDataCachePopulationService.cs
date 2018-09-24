@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Data.External;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
@@ -34,16 +35,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _validationErrorsDataRetrievalService = validationErrorsDataRetrievalService;
         }
 
-        public void Populate()
+        public async Task PopulateAsync(CancellationToken cancellationToken)
         {
             var externalDataCache = (ExternalDataCache)_externalDataCache;
 
-            externalDataCache.LearningDeliveries = _larsLearningDeliveryDataRetrievalService.Retrieve();
-            externalDataCache.Frameworks = _larsFrameworkDataRetrievalService.Retrieve().ToList();
-            externalDataCache.ULNs = new HashSet<long>(_ulnDataRetrievalService.Retrieve());
-            externalDataCache.Postcodes = new HashSet<string>(_postcodesDataRetrievalService.Retrieve());
-            externalDataCache.Organisations = _organisationsDataRetrievalService.Retrieve();
-            externalDataCache.ValidationErrors = _validationErrorsDataRetrievalService.Retrieve();
+            externalDataCache.LearningDeliveries = await _larsLearningDeliveryDataRetrievalService.RetrieveAsync(cancellationToken);
+            externalDataCache.Frameworks = await _larsFrameworkDataRetrievalService.RetrieveAsync(cancellationToken);
+            externalDataCache.ULNs = new HashSet<long>(await _ulnDataRetrievalService.RetrieveAsync(cancellationToken));
+            externalDataCache.Postcodes = new HashSet<string>(await _postcodesDataRetrievalService.RetrieveAsync(cancellationToken));
+            externalDataCache.Organisations = await _organisationsDataRetrievalService.RetrieveAsync(cancellationToken);
+            externalDataCache.ValidationErrors = await _validationErrorsDataRetrievalService.RetrieveAsync(cancellationToken);
         }
     }
 }

@@ -74,13 +74,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
 
         private void ValidationEventHandler(object sender, ValidationEventArgs validationEventArgs)
         {
-            XmlSeverityType xmlSeverityType = XmlSeverityType.Warning;
-            if (Enum.TryParse<XmlSeverityType>("Error", out xmlSeverityType))
+            if (validationEventArgs.Severity == XmlSeverityType.Error)
             {
-                if (xmlSeverityType == XmlSeverityType.Error)
-                {
-                    _validationErrors.Add(validationEventArgs.Message);
-                }
+                _validationErrors.Add(validationEventArgs.Message);
             }
         }
     }

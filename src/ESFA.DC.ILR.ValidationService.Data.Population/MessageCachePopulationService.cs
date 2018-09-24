@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
@@ -19,10 +21,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             _messageValidationItemProviderService = messageValidationItemProviderService;
         }
 
-        public void Populate()
+        public async Task PopulateAsync(CancellationToken cancellationToken)
         {
             var messageCache = (Cache<IMessage>)_messageCache;
-            messageCache.Item = _messageValidationItemProviderService.Provide();
+            messageCache.Item = await _messageValidationItemProviderService.ProvideAsync(cancellationToken);
         }
     }
 }

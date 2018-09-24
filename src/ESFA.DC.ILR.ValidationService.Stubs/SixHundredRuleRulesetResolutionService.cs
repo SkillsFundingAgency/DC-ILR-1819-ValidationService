@@ -16,13 +16,14 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         {
         }
 
-        public IEnumerable<IRule<T>> Resolve()
+        public new IEnumerable<IRule<T>> Resolve()
         {
             var rulesList = base.Resolve().ToList();
 
             while (rulesList.Count < RuleCount)
             {
-                rulesList.AddRange(rulesList);
+                var temp = rulesList;
+                rulesList.AddRange(temp);
             }
 
             return rulesList.Take(RuleCount);

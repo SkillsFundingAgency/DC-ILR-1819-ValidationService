@@ -14,6 +14,6 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces
     public interface IValidationActor : IActor
     {
         [OperationContract]
-        Task<string> Validate(ValidationActorModel validationActorModel, CancellationToken cancellationToken);
+        Task<string> Validate(ValidationActorModel actorModel, CancellationToken cancellationToken);
     }
 }

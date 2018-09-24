@@ -2,7 +2,7 @@
 
 namespace ESFA.DC.ILR.ValidationService.Stateless.Models
 {
-    //TODO: refactor this and use the storage config properly everywhere
+    // TODO: refactor this and use the storage config properly everywhere
     public class AzureStorageModel : IAzureStorageKeyValuePersistenceServiceConfig
     {
         public string AzureBlobConnectionString { get; set; }

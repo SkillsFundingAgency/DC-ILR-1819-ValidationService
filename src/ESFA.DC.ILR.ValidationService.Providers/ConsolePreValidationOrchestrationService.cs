@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Stateless.Models;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
@@ -12,8 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     /// This orchestration service will combine both Pre and actual validation orchestrations,
     /// this could be used for console app and FIS
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="U"></typeparam>
+    /// <typeparam name="U">The type.</typeparam>
     public class ConsolePreValidationOrchestrationService<U> : IPreValidationOrchestrationService<U>
     {
         private readonly IValidateXMLSchemaService _validateXMLSchemaService;
@@ -42,26 +41,25 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _fileDataCache = fileDataCache;
         }
 
-        public IEnumerable<U> Execute(IPreValidationContext preValidationContext, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(
+            IPreValidationContext preValidationContext,
+            CancellationToken cancellationToken)
         {
             // get the file name
             _fileDataCache.FileName = preValidationContext.Input;
 
             // get ILR data from file
-            _preValidationPopulationService.Populate();
+            await _preValidationPopulationService.PopulateAsync(cancellationToken);
 
             // xsd schema validations first; if failed then erturn.
             // TODO: Load only what is required in _preValidationPopulationService.Populate()
             if (_validateXMLSchemaService.Validate())
             {
-                // get the learners
-                var ilrMessage = _messageCache.Item;
-
-                _messageRuleSetOrchestrationService.Execute(CancellationToken.None);
-                _learnerRuleSetOrchestrationService.Execute(CancellationToken.None);
+                await _messageRuleSetOrchestrationService.Execute(cancellationToken);
+                await _learnerRuleSetOrchestrationService.Execute(cancellationToken);
             }
 
-            return _validationOutputService.Process();
+            await _validationOutputService.ProcessAsync(CancellationToken.None);
         }
     }
 }

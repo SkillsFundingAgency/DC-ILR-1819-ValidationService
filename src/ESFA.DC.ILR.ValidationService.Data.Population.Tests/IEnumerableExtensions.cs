@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using ESFA.DC.ILR.ValidationService.Data.Population.Tests.DbAsync;
 using Moq;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
@@ -14,7 +16,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
 
             var mockSet = new Mock<DbSet<T>>();
 
-            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(mockData.Provider);
+            mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(new TestDbAsyncQueryProvider<T>(mockData.Provider));
+            mockSet.As<IDbAsyncEnumerable<T>>().Setup(m => m.GetAsyncEnumerator()).Returns(new TestDbAsyncEnumerator<T>(mockData.GetEnumerator()));
+
             mockSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(mockData.Expression);
             mockSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(mockData.ElementType);
             mockSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(mockData.GetEnumerator());

@@ -74,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 
                     var validationContext = childLifeTimeScope.Resolve<IPreValidationContext>();
 
-                    preValidationOrchestrationService.Execute(validationContext, cancellationToken);
+                    await preValidationOrchestrationService.ExecuteAsync(validationContext, cancellationToken);
 
                     // Update the file name, as it could have been a zip which we have extracted now so needs updating in the message
                     jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename] = validationContext.Input;

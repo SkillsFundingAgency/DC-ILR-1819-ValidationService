@@ -107,7 +107,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public bool ConditionMet(IAppFinRecord financialRecord)
         {
             return It.Has(financialRecord)
-                ? It.IsInRange($"{financialRecord.AFinType}{financialRecord.AFinCode}", TypeOfAppFinRec.TotalAssessmentPrice, TypeOfAppFinRec.ResidualAssessmentPrice)
+                ? It.IsInRange($"{financialRecord.AFinType}{financialRecord.AFinCode}", ApprenticeshipFinanicalRecord.TotalAssessmentPrice, ApprenticeshipFinanicalRecord.ResidualAssessmentPrice)
                 : true;
         }
 

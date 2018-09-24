@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Logging.Interfaces;
@@ -24,14 +26,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _keyValuePersistenceService = keyValuePersistenceService;
         }
 
-        public Stream Provide()
+        public async Task<Stream> Provide(CancellationToken cancellationToken)
         {
             var startDateTime = DateTime.UtcNow;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             MemoryStream memoryStream = new MemoryStream();
-            _keyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream).GetAwaiter().GetResult();
+            await _keyValuePersistenceService.GetAsync(_preValidationContext.Input, memoryStream, cancellationToken);
 
             var processTimes = new StringBuilder();
 

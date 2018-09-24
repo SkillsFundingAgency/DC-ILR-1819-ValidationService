@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+**/ApplicationParameters/Local.1Node.xml
+**/ApplicationParameters/Local.5Node.xml
+
 # User-specific files
 *.suo
 *.user

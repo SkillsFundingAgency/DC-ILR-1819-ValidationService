@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.Data.Postcodes.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -22,13 +25,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _postcodes = postcodes;
         }
 
-        public IEnumerable<string> Retrieve()
+        public async Task<IEnumerable<string>> RetrieveAsync(CancellationToken cancellationToken)
         {
             var uniquePostcodes = UniquePostcodesFromMessage(_messageCache.Item).ToList();
 
-            return _postcodes.MasterPostcodes
+            return await _postcodes.MasterPostcodes
                 .Where(p => uniquePostcodes.Contains(p.Postcode))
-                .Select(p => p.Postcode);
+                .Select(p => p.Postcode)
+                .ToListAsync(cancellationToken);
         }
 
         public IEnumerable<string> UniquePostcodesFromMessage(IMessage message)

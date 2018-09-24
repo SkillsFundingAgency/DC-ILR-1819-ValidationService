@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ESFA.DC.ILR.ValidationService.Interface
 {
-    public interface IRuleSetOrchestrationService<T, out U>
+    public interface IRuleSetOrchestrationService<T, U>
         where T : class
     {
-        IEnumerable<U> Execute(CancellationToken cancellationToken);
+        Task<IEnumerable<U>> Execute(CancellationToken cancellationToken);
     }
 }

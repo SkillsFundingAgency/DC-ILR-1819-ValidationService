@@ -19,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             var sut = NewRule();
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => sut.IsAdultSkillsFundedUnemployedLearner(null));
+            Assert.Throws<ArgumentNullException>(() => sut.IsAdultFundedUnemployedWithOtherStateBenefits(null));
         }
 
         /// <summary>

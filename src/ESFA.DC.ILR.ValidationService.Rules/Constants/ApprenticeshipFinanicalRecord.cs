@@ -4,18 +4,8 @@
     /// types of apprenticeship financial record
     /// contains the list of valid type code combinations
     /// </summary>
-    public class TypeOfAppFinRec
+    public class ApprenticeshipFinanicalRecord
     {
-        /// <summary>
-        /// The total negotiated price
-        /// </summary>
-        public const string TotalNegotiatedPrice = "TNP";
-
-        /// <summary>
-        /// The payment record
-        /// </summary>
-        public const string PaymentRecord = "PMR";
-
         /// <summary>
         /// The total training price
         /// </summary>
@@ -50,5 +40,18 @@
         /// The employer payment reimbursed by provider
         /// </summary>
         public const string EmployerPaymentReimbursedByProvider = "PMR3";
+
+        public static class Types
+        {
+            /// <summary>
+            /// The total negotiated price
+            /// </summary>
+            public const string TotalNegotiatedPrice = "TNP";
+
+            /// <summary>
+            /// The payment record
+            /// </summary>
+            public const string PaymentRecord = "PMR";
+        }
     }
 }

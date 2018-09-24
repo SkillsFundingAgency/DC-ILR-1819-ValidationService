@@ -34,6 +34,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EPAOrgID;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnActEndDate;
@@ -46,6 +47,8 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSSupAimId;
+using ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 using System;
 using System.Collections.Generic;
@@ -125,6 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(EmpOutcome_03Rule),
                 typeof(EmpStat_08Rule),
                 typeof(EmpStat_12Rule),
+                typeof(EPAOrgID_02Rule),
                 typeof(FamilyName_01Rule),
                 typeof(FamilyName_02Rule),
                 typeof(FamilyName_04Rule),
@@ -213,6 +217,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R85Rule),
                 typeof(R108Rule),
                 typeof(R112Rule),
+                typeof(SWSSupAimId_01Rule),
                 typeof(TTACCOM_01Rule),
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
@@ -226,6 +231,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_09Rule),
                 typeof(ULN_10Rule),
                 typeof(ULN_12Rule),
+                typeof(WorkPlaceStartDate_01Rule)
             };
         }
     }

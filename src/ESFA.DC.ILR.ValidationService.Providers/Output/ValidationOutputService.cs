@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
 using ESFA.DC.ILR.Model.Interface;
@@ -7,7 +8,6 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.IO.Model;
-using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.IO.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 
@@ -41,21 +41,21 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             _validationErrorsDataService = validationErrorsDataService;
         }
 
-        public IEnumerable<IValidationError> Process()
+        public async Task<IEnumerable<IValidationError>> ProcessAsync(CancellationToken cancellationToken)
         {
             var invalidLearnerRefNumbers = BuildInvalidLearnRefNumbers().ToList();
             var validLearnerRefNumbers = BuildValidLearnRefNumbers(invalidLearnerRefNumbers).ToList();
 
             var validationErrors = _validationErrorCache
                 .ValidationErrors
-                .Select(ve => new ValidationError()
+                .Select(ve => new ValidationError
                 {
                     LearnerReferenceNumber = ve.LearnerReferenceNumber,
                     AimSequenceNumber = ve.AimSequenceNumber,
                     RuleName = ve.RuleName,
                     Severity = SeverityToString(ve.Severity),
                     ValidationErrorParameters = ve.ErrorMessageParameters?
-                    .Select(emp => new ValidationErrorParameter()
+                    .Select(emp => new ValidationErrorParameter
                     {
                         PropertyName = emp.PropertyName,
                         Value = emp.Value
@@ -66,13 +66,18 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                 .ValidationErrors
                 .Select(ve => ve.RuleName)
                 .Distinct()
-                .Select(rn => new ValidationErrorMessageLookup()
+                .Select(rn => new ValidationErrorMessageLookup
                 {
                     RuleName = rn,
                     Message = _validationErrorsDataService.MessageforRuleName(rn)
                 }).ToList();
 
-            SaveAsync(validLearnerRefNumbers, invalidLearnerRefNumbers, validationErrors, validationErrorMessageLookups).Wait();
+            await SaveAsync(
+                validLearnerRefNumbers,
+                invalidLearnerRefNumbers,
+                validationErrors,
+                validationErrorMessageLookups,
+                cancellationToken);
 
             return _validationErrorCache.ValidationErrors;
         }
@@ -102,7 +107,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             return invalidLearnRefNumbersHashSet;
         }
 
-        public async Task SaveAsync(IEnumerable<string> validLearnerRefNumbers, IEnumerable<string> invalidLearnerRefNumbers, IEnumerable<ValidationError> validationErrors, IEnumerable<ValidationErrorMessageLookup> validationErrorMessageLookups)
+        public async Task SaveAsync(
+            IEnumerable<string> validLearnerRefNumbers,
+            IEnumerable<string> invalidLearnerRefNumbers,
+            IEnumerable<ValidationError> validationErrors,
+            IEnumerable<ValidationErrorMessageLookup> validationErrorMessageLookups,
+            CancellationToken cancellationToken)
         {
             var validLearnRefNumbersKey = _validationContext.ValidLearnRefNumbersKey;
             var invalidLearnRefNumbersKey = _validationContext.InvalidLearnRefNumbersKey;
@@ -116,13 +126,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             validationContext.ValidationTotalWarningCount = validationErrors.Count(x => x.Severity == Warning);
 
             await Task.WhenAll(
-                new[]
-                {
-                    _keyValuePersistenceService.SaveAsync(validLearnRefNumbersKey, _serializationService.Serialize(validLearnerRefNumbers)),
-                    _keyValuePersistenceService.SaveAsync(invalidLearnRefNumbersKey, _serializationService.Serialize(invalidLearnerRefNumbers)),
-                    _keyValuePersistenceService.SaveAsync(validationErrorsKey, _serializationService.Serialize(validationErrors)),
-                    _keyValuePersistenceService.SaveAsync(validationErrorMessageLookupKey, _serializationService.Serialize(validationErrorMessageLookups)),
-                });
+                _keyValuePersistenceService.SaveAsync(validLearnRefNumbersKey, _serializationService.Serialize(validLearnerRefNumbers), cancellationToken),
+                _keyValuePersistenceService.SaveAsync(invalidLearnRefNumbersKey, _serializationService.Serialize(invalidLearnerRefNumbers), cancellationToken),
+                _keyValuePersistenceService.SaveAsync(validationErrorsKey, _serializationService.Serialize(validationErrors), cancellationToken),
+                _keyValuePersistenceService.SaveAsync(validationErrorMessageLookupKey, _serializationService.Serialize(validationErrorMessageLookups), cancellationToken));
         }
 
         public string SeverityToString(Severity? severity)

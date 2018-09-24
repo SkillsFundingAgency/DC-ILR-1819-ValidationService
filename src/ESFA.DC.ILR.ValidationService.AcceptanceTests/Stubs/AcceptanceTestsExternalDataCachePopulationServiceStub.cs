@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Data.External;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
@@ -12,14 +14,14 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests.Stubs
 {
     public class AcceptanceTestsExternalDataCachePopulationServiceStub : IExternalDataCachePopulationService
     {
-        private ExternalDataCache _dataCache;
+        private readonly ExternalDataCache _dataCache;
 
         public AcceptanceTestsExternalDataCachePopulationServiceStub(IExternalDataCache iCache)
         {
             _dataCache = (ExternalDataCache)iCache;
         }
 
-        public void Populate()
+        public async Task PopulateAsync(CancellationToken cancellationToken)
         {
             string content = File.ReadAllText(@"Files\AcceptanceTestsReferenceData.json");
             dynamic rhs = JObject.Parse(content);

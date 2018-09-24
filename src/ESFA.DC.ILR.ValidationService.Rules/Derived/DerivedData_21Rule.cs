@@ -11,6 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     /// <summary>
     /// derived data rule 21
     /// Adult skills funded unemployed learner on other state benefits on learning aim start date
+    /// IsAdultFundedUnemployedWithOtherStateBenefits
     /// </summary>
     public class DerivedData_21Rule :
         IDerivedData_21Rule
@@ -79,8 +80,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                     .OrderByDescending(x => x.DateEmpStatApp)
                     .FirstOrDefault();
 
-            var esms = candidate.EmploymentStatusMonitorings.AsSafeReadOnlyList();
-            return IsNotEmployed(candidate) && (esms.Any(InReceiptOfAnotherBenefit) || (esms.Any(InReceiptOfUniversalCredit) && monitoredAndNotMandated()));
+            var esms = candidate?.EmploymentStatusMonitorings.AsSafeReadOnlyList();
+            return IsNotEmployed(candidate) && (esms.SafeAny(InReceiptOfAnotherBenefit) || (esms.SafeAny(InReceiptOfUniversalCredit) && monitoredAndNotMandated()));
         }
 
         /// <summary>
@@ -128,13 +129,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             IsMonitored(fams) && !MandatedToSkillsTraining(fams);
 
         /// <summary>
-        /// Determines whether [is adult skills funded unemployed learner] [the specified candidate].
+        /// Determines whether [is adult funded unemployed with other state benefits] [the specified candidate].
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <returns>
-        ///   <c>true</c> if [is adult skills unemployed learner] [the specified candidate]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [is adult funded unemployed with other state benefits] [the specified candidate]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsAdultSkillsFundedUnemployedLearner(ILearner candidate)
+        public bool IsAdultFundedUnemployedWithOtherStateBenefits(ILearner candidate)
         {
             It.IsNull(candidate)
                 .AsGuard<ArgumentNullException>(nameof(candidate));
