@@ -4,7 +4,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Configuration
 {
     public class ServiceBusTopicConfiguration : TopicConfiguration
     {
-        public ServiceBusTopicConfiguration(string connectionString, string topicName, string subscriptionName, int maxConcurrentCalls, int minimumBackoffSeconds = 5, int maximumBackoffSeconds = 50, int maximumRetryCount = 10)
+        public ServiceBusTopicConfiguration(string connectionString, string topicName, string subscriptionName, int maxConcurrentCalls = 1, int minimumBackoffSeconds = 5, int maximumBackoffSeconds = 50, int maximumRetryCount = 10)
             : base(connectionString, topicName, subscriptionName, maxConcurrentCalls, minimumBackoffSeconds, maximumBackoffSeconds, maximumRetryCount)
         {
         }

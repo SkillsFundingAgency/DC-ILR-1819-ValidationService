@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _fileDataCache = fileDataCache;
         }
 
-        public async Task<IEnumerable<U>> ExecuteAsync(
+        public async Task ExecuteAsync(
             IPreValidationContext preValidationContext,
             CancellationToken cancellationToken)
         {
@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 await _learnerRuleSetOrchestrationService.Execute(cancellationToken);
             }
 
-            return await _validationOutputService.ProcessAsync(CancellationToken.None);
+            await _validationOutputService.ProcessAsync(CancellationToken.None);
         }
     }
 }

@@ -12,6 +12,6 @@
 
         public string TopicName { get; set; }
 
-        public string FundingCalcSubscriptionName { get; set; }
+        public string SubscriptionName { get; set; }
     }
 }
