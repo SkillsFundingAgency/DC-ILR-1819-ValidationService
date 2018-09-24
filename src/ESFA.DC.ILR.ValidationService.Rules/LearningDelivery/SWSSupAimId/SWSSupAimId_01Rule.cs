@@ -67,8 +67,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSSupAimId
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearningDeliveries?
-                .Where(x => It.Has(x.SWSupAimId))
+            objectToValidate.LearningDeliveries
+                .SafeWhere(x => It.Has(x.SWSupAimId))
                 .ForEach(x =>
                 {
                     var failedValidation = !ConditionMet(x);

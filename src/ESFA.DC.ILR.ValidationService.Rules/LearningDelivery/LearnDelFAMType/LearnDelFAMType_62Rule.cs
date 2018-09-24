@@ -381,7 +381,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public void ValidateDeliveries(ILearner candidate)
         {
             var learnRefNumber = candidate.LearnRefNumber;
-            var deliveries = candidate.LearningDeliveries.AsSafeReadOnlyList();
+            var higherAchiever = IsHigherAchiever(candidate);
 
             /*
             LearningDelivery.LearnStartDate > 2017-07-31                                                        <= for a delivery after the given date
@@ -393,10 +393,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 and Learner.PriorAttain <> 2, 3, 4, 5, 10, 11, 12, 13)                                          <= and is not a higher level of attainment
             */
 
-            var higherAchiever = IsHigherAchiever(candidate);
-
-            deliveries
-                .Where(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsCoFunded))
+            candidate.LearningDeliveries
+                .SafeWhere(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsCoFunded))
                 .ForEach(x =>
                 {
                     var failedValidation = !(higherAchiever && IsEntitledLevel2NVQ(x));

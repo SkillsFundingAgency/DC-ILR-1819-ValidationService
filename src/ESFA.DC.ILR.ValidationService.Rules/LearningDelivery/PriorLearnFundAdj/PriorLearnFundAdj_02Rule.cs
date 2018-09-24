@@ -99,8 +99,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearningDeliveries?
-                .Where(x => IsRightFundModel(x) && IsComponentAim(x) && IsRestart(x))
+            objectToValidate.LearningDeliveries
+                .SafeWhere(x => IsRightFundModel(x) && IsComponentAim(x) && IsRestart(x))
                 .ForEach(x =>
                 {
                     var failedValidation = !ConditionMet(x);

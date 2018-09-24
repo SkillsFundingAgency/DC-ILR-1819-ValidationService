@@ -98,8 +98,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EPAOrgID
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearningDeliveries?
-                .Where(HasAssessmentPrice)
+            objectToValidate.LearningDeliveries
+                .SafeWhere(HasAssessmentPrice)
                 .ForEach(x =>
                 {
                     var failedValidation = !IsKnown(x.EPAOrgID);

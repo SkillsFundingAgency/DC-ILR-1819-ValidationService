@@ -3,7 +3,6 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
 {
@@ -57,21 +56,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
-            var learningDeliveries = objectToValidate.LearningDeliveries;
 
-            var deliveries = learningDeliveries?
-                .Where(d => d.AimType == TypeOfAim.AimNotPartOfAProgramme)
-                .AsSafeReadOnlyList();
-
-            deliveries.ForEach(x =>
-            {
-                var failedValidation = !ConditionMet(x);
-
-                if (failedValidation)
+            objectToValidate.LearningDeliveries
+                .SafeWhere(d => d.AimType == TypeOfAim.AimNotPartOfAProgramme)
+                .ForEach(x =>
                 {
-                    RaiseValidationMessage(learnRefNumber, x);
-                }
-            });
+                    var failedValidation = !ConditionMet(x);
+
+                    if (failedValidation)
+                    {
+                        RaiseValidationMessage(learnRefNumber, x);
+                    }
+                });
         }
 
         /// <summary>

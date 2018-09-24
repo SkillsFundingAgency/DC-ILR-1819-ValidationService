@@ -344,10 +344,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public void ValidateDeliveries(ILearner candidate)
         {
             var learnRefNumber = candidate.LearnRefNumber;
-            var deliveries = candidate.LearningDeliveries.AsSafeReadOnlyList();
 
-            deliveries
-                .Where(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsFullyFunded))
+            candidate.LearningDeliveries
+                .SafeWhere(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsFullyFunded))
                 .ForEach(x =>
                 {
                     var failedValidation = IsEarlyStageNVQ(x);
