@@ -14,5 +14,10 @@
         /// work placement sfa funded
         /// </summary>
         public const int WorkPlacementSFAFunded = 4;
+
+        /// <summary>
+        /// legal entitlement level 2
+        /// </summary>
+        public const int LegalEntitlementLevel2 = 37;
     }
 }

@@ -36,6 +36,11 @@
         /// </summary>
         public const string FullyFundedLearningAim = "FFI1";
 
+        /// <summary>
+        /// co-funded learning aim
+        /// </summary>
+        public const string CoFundedLearningAim = "FFI2";
+
         public static class Types
         {
             /// <summary>

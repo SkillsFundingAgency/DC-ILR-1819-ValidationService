@@ -192,5 +192,19 @@
             InternationalGCSEMathematics,
             FreeStandingMathematicsQualification
         };
+
+        /// <summary>
+        /// As ESOL (English for Speakers of Other Languages) basic skills
+        /// </summary>
+        public static readonly int[] AsESOLBasicSkills = new int[]
+        {
+            QCFCertificateESOL,
+            QCFESOLSpeakListen,
+            QCFESOLReading,
+            QCFESOLWriting,
+            UnitESOLSpeakListen,
+            UnitESOLReading,
+            UnitESOLWriting
+        };
     }
 }
