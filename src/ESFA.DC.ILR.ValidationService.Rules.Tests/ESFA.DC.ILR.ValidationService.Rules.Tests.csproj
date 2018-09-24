@@ -223,6 +223,7 @@
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_02RuleTests.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01RuleTests.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_02RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_04RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_03RuleTests.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_01RuleTests.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_44RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_64RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_62RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66RuleTests.cs" />
     <Compile Include="LearningDelivery\OtherFundAdj\OtherFundAdj_01RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_03RuleTests.cs" />

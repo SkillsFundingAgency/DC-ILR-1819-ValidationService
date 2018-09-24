@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Interface
 {
@@ -14,6 +15,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IReadOnlyCollection<Framework> Frameworks { get; }
 
         IReadOnlyDictionary<long, Organisation> Organisations { get; }
+
+        /// <summary>
+        /// Gets the epa organisations.
+        /// </summary>
+        IReadOnlyCollection<IEPAOrganisation> EPAOrganisations { get; }
 
         IReadOnlyCollection<string> Postcodes { get; }
 

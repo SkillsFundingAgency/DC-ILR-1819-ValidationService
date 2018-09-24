@@ -63,12 +63,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearningDeliveries?
-                .Where(IsFunded)
+            objectToValidate.LearningDeliveries
+                .SafeWhere(IsFunded)
                 .ForEach(x =>
                 {
-                    var famRecords = x.LearningDeliveryFAMs.AsSafeReadOnlyList();
-                    var failedValidation = !famRecords.Any(y => ConditionMet(y));
+                    var failedValidation = !x.LearningDeliveryFAMs.SafeAny(y => ConditionMet(y));
 
                     if (failedValidation)
                     {

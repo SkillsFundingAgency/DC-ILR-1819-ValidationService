@@ -3,7 +3,6 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
 {
@@ -83,8 +82,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearningDeliveries?
-                .Where(x => IsViableStart(x) && IsWorkPlacement(x))
+            objectToValidate.LearningDeliveries
+                .SafeWhere(x => IsViableStart(x) && IsWorkPlacement(x))
                 .ForEach(x =>
                 {
                     var failedValidation = !ConditionMet(x);

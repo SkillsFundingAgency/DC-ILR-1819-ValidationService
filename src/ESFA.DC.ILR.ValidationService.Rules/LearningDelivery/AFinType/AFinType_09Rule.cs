@@ -87,8 +87,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearningDeliveries?
-                .Where(d => (IsInTraining(d) || IsApprenticeship(d)) && IsInAProgramme(d))
+            objectToValidate.LearningDeliveries
+                .SafeWhere(d => (IsInTraining(d) || IsApprenticeship(d)) && IsInAProgramme(d))
                 .ForEach(x =>
                 {
                     var failedValidation = !ConditionMet(x);

@@ -83,12 +83,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearningDeliveries?
-                .Where(x => IsFunded(x) && IsTargetApprencticeship(x) && IsInAProgramme(x))
+            objectToValidate.LearningDeliveries
+                .SafeWhere(x => IsFunded(x) && IsTargetApprencticeship(x) && IsInAProgramme(x))
                 .ForEach(x =>
                 {
-                    var finRecords = x.AppFinRecords.AsSafeReadOnlyList();
-                    var failedValidation = !finRecords.Any(y => ConditionMet(y));
+                    var failedValidation = !x.AppFinRecords.SafeAny(y => ConditionMet(y));
 
                     if (failedValidation)
                     {
@@ -107,7 +106,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public bool ConditionMet(IAppFinRecord financialRecord)
         {
             return It.Has(financialRecord)
-                ? It.IsInRange($"{financialRecord.AFinType}{financialRecord.AFinCode}", TypeOfAppFinRec.TotalAssessmentPrice, TypeOfAppFinRec.ResidualAssessmentPrice)
+                ? It.IsInRange($"{financialRecord.AFinType}{financialRecord.AFinCode}", ApprenticeshipFinanicalRecord.TotalAssessmentPrice, ApprenticeshipFinanicalRecord.ResidualAssessmentPrice)
                 : true;
         }
 

@@ -2,12 +2,10 @@
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="ESFA.DC.ILR.ValidationServiceType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="ESFA.DC.ILR.ValidationService.Stateless_InstanceCount" DefaultValue="-1" />
-    <Parameter Name="JobsQueueName" DefaultValue="dc-job-queue" />
     <Parameter Name="JobStatusQueueName" DefaultValue="jobstatusqueue" />
     <Parameter Name="AuditQueueName" DefaultValue="audit-queue" />
     <Parameter Name="TopicName" DefaultValue="TopicName" />
-    <Parameter Name="FundingCalcSubscriptionName" DefaultValue="" />
-    <Parameter Name="FundingCalcSqlFilterValue" DefaultValue="fundingcalc-init" />
+    <Parameter Name="SubscriptionName" DefaultValue="" />
     <Parameter Name="ServiceBusConnectionString" DefaultValue="" />
     <Parameter Name="MaxMessageSize" DefaultValue="1073741824" />
     <Parameter Name="LoggerConnectionstring" DefaultValue="Server=localhost;Database=logs;User Id=loguser;Password=password1;" />
@@ -49,13 +47,11 @@
       <ConfigOverride Name="Config">
         <Settings>
           <Section Name="ServiceBusSettings">
-            <Parameter Name="JobsQueueName" Value="[JobsQueueName]" />
             <Parameter Name="AuditQueueName" Value="[AuditQueueName]" />
             <Parameter Name="JobStatusQueueName" Value="[JobStatusQueueName]" />
             <Parameter Name="ServiceBusConnectionString" Value="[ServiceBusConnectionString]" />
             <Parameter Name="TopicName" Value="[TopicName]" />
-            <Parameter Name="FundingCalcSubscriptionName" Value="[FundingCalcSubscriptionName]" />
-            <Parameter Name="FundingCalcSqlFilterValue" Value="[FundingCalcSqlFilterValue]" />
+            <Parameter Name="SubscriptionName" Value="[SubscriptionName]" />
           </Section>
           <Section Name="DataTransportSettings">
             <Parameter Name="MaxMessageSize" Value="[MaxMessageSize]" />

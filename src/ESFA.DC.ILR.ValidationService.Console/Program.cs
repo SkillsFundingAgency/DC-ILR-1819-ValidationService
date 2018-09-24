@@ -42,9 +42,10 @@ namespace ESFA.DC.ILR.ValidationService.Console
             {
                 var preValidationOrchestrationService = scope.Resolve<IPreValidationOrchestrationService<IValidationError>>();
 
-                var errors = await preValidationOrchestrationService.ExecuteAsync(preValidationContext, CancellationToken.None);
+                await preValidationOrchestrationService.ExecuteAsync(preValidationContext, CancellationToken.None);
 
-                OutputResultsToFile(errors, $"{preValidationContext.Output}");
+                // Todo: Get errors from elsewhere
+                // OutputResultsToFile(errors, $"{preValidationContext.Output}"); -
             }
 
             System.Console.WriteLine($"{preValidationContext.Output}");

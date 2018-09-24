@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
-    public class LearnDelFAMType_66Rule :
+    public class LearnDelFAMType_62Rule :
         IRule<ILearner>
     {
         /// <summary>
@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "LearnDelFAMType_66";
+        public const string Name = "LearnDelFAMType_62";
 
         /// <summary>
         /// The message handler
@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private readonly IDerivedData_29Rule _derivedData29;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LearnDelFAMType_66Rule" /> class.
+        /// Initializes a new instance of the <see cref="LearnDelFAMType_62Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="larsData">The lars data.</param>
@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <param name="derivedData21">The derived data 21 rule.</param>
         /// <param name="derivedData28">The derived data 28 rule.</param>
         /// <param name="derivedData29">The derived data 29 rule.</param>
-        public LearnDelFAMType_66Rule(
+        public LearnDelFAMType_62Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
             IDD07 derivedData07,
@@ -103,7 +103,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// Gets the minimum viable age.
         /// </summary>
-        public TimeSpan MinimumViableAge => new TimeSpan(8766, 0, 0, 0); // 24 years
+        public TimeSpan MinimumViableAge => new TimeSpan(6940, 0, 0, 0); // 19 years
+
+        /// <summary>
+        /// Gets the maximum viable age.
+        /// </summary>
+        public TimeSpan MaximumViableAge => new TimeSpan(8401, 0, 0, 0); // 23 years
 
         /// <summary>
         /// Determines whether [is learner in custody] [the specified monitor].
@@ -146,16 +151,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.SteelIndustriesRedundancyTraining);
 
         /// <summary>
-        /// Determines whether [in receipt of low wages] [the specified monitor].
-        /// </summary>
-        /// <param name="monitor">The monitor.</param>
-        /// <returns>
-        ///   <c>true</c> if [is in receipt of low wages] [the specified monitor]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool InReceiptOfLowWages(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.InReceiptOfLowWages);
-
-        /// <summary>
         /// Determines whether [is basic skills learner] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
@@ -171,7 +166,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return deliveries
                 .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
                 .Where(x => It.Has(x.BasicSkillsType))
-                .Any(IsBasicSkillsLearner);
+                .Any(x => IsBasicSkillsLearner(x) || IsESOLBasicSkillsLearner(x));
         }
 
         /// <summary>
@@ -182,7 +177,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is basic skills learner] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsBasicSkillsLearner(ILARSAnnualValue monitor) =>
-            TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills.Contains(monitor.BasicSkillsType.Value);
+            It.IsInRange(monitor.BasicSkillsType.Value, TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills);
+
+        /// <summary>
+        /// Determines whether [is esol basic skills learner] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is esol basic skills learner] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsESOLBasicSkillsLearner(ILARSAnnualValue monitor) =>
+            It.IsInRange(monitor.BasicSkillsType.Value, TypeOfLARSBasicSkill.AsESOLBasicSkills);
 
         /// <summary>
         /// Determines whether [is adult funded unemployed with other state benefits] [the specified candidate].
@@ -271,32 +276,65 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is target age group] [the specified learner]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsTargetAgeGroup(ILearner learner, ILearningDelivery delivery) =>
-            It.Has(learner.DateOfBirthNullable) && (delivery.LearnStartDate - learner.DateOfBirthNullable.Value) >= MinimumViableAge;
+            It.Has(learner.DateOfBirthNullable) && It.IsBetween(delivery.LearnStartDate - learner.DateOfBirthNullable.Value, MinimumViableAge, MaximumViableAge);
 
         /// <summary>
-        /// Determines whether [is fully funded] [the specified monitor].
+        /// Determines whether [is co funded] [the specified monitor].
         /// </summary>
         /// <param name="monitor">The monitor.</param>
         /// <returns>
         ///   <c>true</c> if [is fully funded] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsFullyFunded(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.FullyFundedLearningAim);
+        public bool IsCoFunded(ILearningDeliveryFAM monitor) =>
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.CoFundedLearningAim);
 
         /// <summary>
-        /// Determines whether [is early stage NVQ] [the specified delivery].
+        /// Determines whether [is level 2 NVQ] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>
         ///   <c>true</c> if [is early stage NVQ] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsEarlyStageNVQ(ILearningDelivery delivery)
+        public bool IsEntitledLevel2NVQ(ILearningDelivery delivery)
         {
             var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
 
             return deliveries
-                .Any(x => It.IsInRange(x.NotionalNVQLevelv2, LARSNotionalNVQLevelV2.EntryLevel, LARSNotionalNVQLevelV2.Level1, LARSNotionalNVQLevelV2.Level2));
+                .Where(IsV2NotionalLevel2)
+                .SelectMany(x => x.LearningDeliveryCategories.AsSafeReadOnlyList())
+                .Any(IsLegallyEntitled);
         }
+
+        /// <summary>
+        /// Determines whether [is v2 notional level2] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is v2 notional level2] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsV2NotionalLevel2(ILARSLearningDelivery delivery) =>
+            It.IsInRange(delivery.NotionalNVQLevelv2, LARSNotionalNVQLevelV2.Level2);
+
+        /// <summary>
+        /// Determines whether [is legally entitled] [the specified category].
+        /// </summary>
+        /// <param name="category">The category.</param>
+        /// <returns>
+        ///   <c>true</c> if [is legally entitled] [the specified category]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsLegallyEntitled(ILARSLearningCategory category) =>
+            It.IsInRange(category.CategoryRef, TypeOfLARSCategory.LegalEntitlementLevel2);
+
+        /// <summary>
+        /// Determines whether [is higher achiever] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [is higher achiever] [the specified candidate]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsHigherAchiever(ILearner candidate) =>
+            It.Has(candidate.PriorAttainNullable)
+                && It.IsInRange(candidate.PriorAttainNullable.Value, TypeOfPriorAttainment.AsHigherLevelAchievements);
 
         /// <summary>
         /// Determines whether the specified candidate is excluded.
@@ -315,8 +353,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 || CheckLearningDeliveries(candidate, x => CheckDeliveryFAMs(x, IsLearnerInCustody))
                 || CheckLearningDeliveries(candidate, x => CheckDeliveryFAMs(x, IsReleasedOnTemporaryLicence))
                 || CheckLearningDeliveries(candidate, x => CheckDeliveryFAMs(x, IsRestart))
-                || CheckLearningDeliveries(candidate, x => CheckDeliveryFAMs(x, IsSteelWorkerRedundancyTraining))
-                || CheckLearningDeliveries(candidate, x => CheckDeliveryFAMs(x, InReceiptOfLowWages));
+                || CheckLearningDeliveries(candidate, x => CheckDeliveryFAMs(x, IsSteelWorkerRedundancyTraining));
         }
 
         /// <summary>
@@ -344,12 +381,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public void ValidateDeliveries(ILearner candidate)
         {
             var learnRefNumber = candidate.LearnRefNumber;
+            var higherAchiever = IsHigherAchiever(candidate);
+
+            /*
+            LearningDelivery.LearnStartDate > 2017-07-31                                                        <= for a delivery after the given date
+            and LearningDelivery.FundModel = 35                                                                 <= that is adult skills
+            and ((LearningDelivery.LearnStartDate - Learner.DateOfBirth) >= 19 years and <=23 years)            <= in target age group
+                and ((LearningDeliveryFAM.LearnDelFAMType = FFI and LearningDeliveryFAM.LearnDelFAMCode = 2)    <= is co funded
+                    and (LearningDelivery.LearnAimRef = LARS_LearnAimRef and LARS_NotionalNVQLevelv2 = 2)       <= is NVQ V2 level 2
+                    and LARS_CategoryRef  <> 37)                                                                <= is not legal entitlement level 2
+                and Learner.PriorAttain <> 2, 3, 4, 5, 10, 11, 12, 13)                                          <= and is not a higher level of attainment
+            */
 
             candidate.LearningDeliveries
-                .SafeWhere(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsFullyFunded))
+                .SafeWhere(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsCoFunded))
                 .ForEach(x =>
                 {
-                    var failedValidation = IsEarlyStageNVQ(x);
+                    var failedValidation = !(higherAchiever && IsEntitledLevel2NVQ(x));
 
                     if (failedValidation)
                     {
