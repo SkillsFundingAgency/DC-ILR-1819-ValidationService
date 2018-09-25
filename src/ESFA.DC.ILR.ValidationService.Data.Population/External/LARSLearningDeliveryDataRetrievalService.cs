@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using ESFA.DC.Data.LARS.Model.Interfaces;
+﻿using ESFA.DC.Data.LARS.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 {
@@ -69,6 +69,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 CategoryRef = ldc.CategoryRef,
                                 EffectiveFrom = ldc.EffectiveFrom,
                                 EffectiveTo = ldc.EffectiveTo,
+                            }).ToList(),
+                        LARSValidities = ld.LARS_Validity
+                            .Select(ldc => new LARSValidity
+                            {
+                                LearnAimRef = ldc.LearnAimRef,
+                                ValidityCategory = ldc.ValidityCategory,
+                                StartDate = ldc.StartDate,
+                                EndDate = ldc.EndDate
                             }).ToList(),
                     }, cancellationToken);
         }

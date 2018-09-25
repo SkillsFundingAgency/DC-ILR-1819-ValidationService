@@ -15,6 +15,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
         IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef);
 
+        /// <summary>
+        /// Gets the validities for.
+        /// </summary>
+        /// <param name="forThisAimRef">this aim reference.</param>
+        /// <returns>a collection of lars 'validities' for this learning aim reference</returns>
+        IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef);
+
         bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date);
 
         bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);

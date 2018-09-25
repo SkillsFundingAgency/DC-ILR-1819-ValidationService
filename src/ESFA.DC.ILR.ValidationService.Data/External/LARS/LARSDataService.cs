@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 {
@@ -24,6 +24,21 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         public IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef)
         {
             return _externalDataCache.LearningDeliveries.Values
+                .Where(x => x.LearnAimRef == forThisAimRef)
+                .AsSafeReadOnlyList();
+        }
+
+        /// <summary>
+        /// Gets the validities for.
+        /// </summary>
+        /// <param name="forThisAimRef">this aim reference.</param>
+        /// <returns>
+        /// a collection of lars 'validities' for this learning aim reference
+        /// </returns>
+        public IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef)
+        {
+            return _externalDataCache.LearningDeliveries.Values
+                .SelectMany(x => x.LARSValidities.AsSafeReadOnlyList())
                 .Where(x => x.LearnAimRef == forThisAimRef)
                 .AsSafeReadOnlyList();
         }

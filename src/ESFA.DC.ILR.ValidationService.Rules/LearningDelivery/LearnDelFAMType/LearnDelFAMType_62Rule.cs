@@ -98,7 +98,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// Gets the minimun viable start.
         /// </summary>
-        public DateTime MinimunViableStart => new DateTime(2017, 07, 31);
+        public DateTime MinimumViableStart => new DateTime(2017, 07, 31);
 
         /// <summary>
         /// Gets the minimum viable age.
@@ -138,7 +138,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if the specified monitor is restart; otherwise, <c>false</c>.
         /// </returns>
         public bool IsRestart(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.RestartIndicator);
+            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.Restart);
 
         /// <summary>
         /// Determines whether [is steel worker] [the specified monitor].
@@ -265,7 +265,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsViableStart(ILearningDelivery delivery) =>
-            delivery.LearnStartDate > MinimunViableStart;
+            delivery.LearnStartDate > MinimumViableStart;
 
         /// <summary>
         /// Determines whether [is target age group] [the specified learner].

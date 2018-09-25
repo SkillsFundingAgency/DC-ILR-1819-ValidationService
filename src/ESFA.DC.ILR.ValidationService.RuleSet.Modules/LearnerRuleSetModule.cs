@@ -153,6 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnAimRef_01Rule),
                 typeof(LearnAimRef_29Rule),
                 typeof(LearnAimRef_30Rule),
+                typeof(LearnAimRef_37Rule),
                 typeof(LearnAimRef_55Rule),
                 typeof(LearnAimRef_56Rule),
                 typeof(LearnAimRef_57Rule),

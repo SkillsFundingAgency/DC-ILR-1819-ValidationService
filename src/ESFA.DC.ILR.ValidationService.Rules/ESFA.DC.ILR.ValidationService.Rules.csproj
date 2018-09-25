@@ -76,6 +76,7 @@
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
+    <Compile Include="Constants\TypeOfLARSValidity.cs" />
     <Compile Include="Constants\TypeOfLearningProgramme.cs" />
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
     <Compile Include="CrossEntity\R108Rule.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_37Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_02Rule.cs" />

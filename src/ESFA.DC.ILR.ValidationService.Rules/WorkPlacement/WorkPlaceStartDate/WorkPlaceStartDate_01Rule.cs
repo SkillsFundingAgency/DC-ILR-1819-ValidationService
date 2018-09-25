@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
         /// <summary>
         /// Gets the minimun viable start.
         /// </summary>
-        public DateTime MinimunViableStart => new DateTime(2014, 07, 31);
+        public DateTime MinimumViableStart => new DateTime(2014, 07, 31);
 
         /// <summary>
         /// Determines whether [is viable start] [the specified delivery].
@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
         ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsViableStart(ILearningDelivery delivery) =>
-            delivery.LearnStartDate > MinimunViableStart;
+            delivery.LearnStartDate > MinimumViableStart;
 
         /// <summary>
         /// Determines whether [is work placement] [the specified delivery].

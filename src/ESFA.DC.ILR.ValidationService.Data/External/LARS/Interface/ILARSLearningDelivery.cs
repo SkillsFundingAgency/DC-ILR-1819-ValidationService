@@ -57,5 +57,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// Gets the annual values.
         /// </summary>
         IReadOnlyCollection<ILARSAnnualValue> AnnualValues { get; }
+
+        /// <summary>
+        /// Gets the lars validities.
+        /// </summary>
+        IReadOnlyCollection<ILARSValidity> LARSValidities { get; }
     }
 }

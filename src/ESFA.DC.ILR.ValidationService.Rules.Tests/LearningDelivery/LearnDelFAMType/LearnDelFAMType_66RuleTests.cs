@@ -253,19 +253,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
         [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoansIndicator, false)]
+        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoan, false)]
         [InlineData(DeliveryMonitoring.Types.ApprenticeshipContractType, false)]
         [InlineData(DeliveryMonitoring.Types.CommunityLearningProvisionType, false)]
         [InlineData(DeliveryMonitoring.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
         [InlineData(DeliveryMonitoring.Types.FamilyEnglishMathsAndLanguage, false)]
-        [InlineData(DeliveryMonitoring.Types.FullOrCoFundingIndicator, false)]
+        [InlineData(DeliveryMonitoring.Types.FullOrCoFunding, false)]
         [InlineData(DeliveryMonitoring.Types.HEMonitoring, false)]
         [InlineData(DeliveryMonitoring.Types.HouseholdSituation, false)]
         [InlineData(DeliveryMonitoring.Types.Learning, false)]
         [InlineData(DeliveryMonitoring.Types.LearningSupportFunding, false)]
         [InlineData(DeliveryMonitoring.Types.NationalSkillsAcademy, false)]
         [InlineData(DeliveryMonitoring.Types.PercentageOfOnlineDelivery, false)]
-        [InlineData(DeliveryMonitoring.Types.RestartIndicator, true)]
+        [InlineData(DeliveryMonitoring.Types.Restart, true)]
         [InlineData(DeliveryMonitoring.Types.SourceOfFunding, false)]
         [InlineData(DeliveryMonitoring.Types.WorkProgrammeParticipation, false)]
         public void IsRestartWithLearningDeliveryFAMMeetsExpectation(string candidate, bool expectation)
@@ -799,7 +799,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
                 .SetupGet(x => x.LearnDelFAMType)
-                .Returns(DeliveryMonitoring.Types.FullOrCoFundingIndicator);
+                .Returns(DeliveryMonitoring.Types.FullOrCoFunding);
             mockFAM
                 .SetupGet(x => x.LearnDelFAMCode)
                 .Returns("1");
@@ -894,7 +894,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
                 .SetupGet(x => x.LearnDelFAMType)
-                .Returns(DeliveryMonitoring.Types.FullOrCoFundingIndicator);
+                .Returns(DeliveryMonitoring.Types.FullOrCoFunding);
             mockFAM
                 .SetupGet(x => x.LearnDelFAMCode)
                 .Returns("1");

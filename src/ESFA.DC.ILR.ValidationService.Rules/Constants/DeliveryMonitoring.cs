@@ -49,9 +49,9 @@
             public const string SourceOfFunding = "SOF";
 
             /// <summary>
-            /// full or co funding indicator
+            /// full or co funding
             /// </summary>
-            public const string FullOrCoFundingIndicator = "FFI";
+            public const string FullOrCoFunding = "FFI";
 
             /// <summary>
             /// eligibility for enhanced apprenticeship funding
@@ -61,7 +61,7 @@
             /// <summary>
             /// restart indicator
             /// </summary>
-            public const string RestartIndicator = "RES";
+            public const string Restart = "RES";
 
             /// <summary>
             /// learning support funding
@@ -71,7 +71,7 @@
             /// <summary>
             /// advanced learner loans indicator
             /// </summary>
-            public const string AdvancedLearnerLoansIndicator = "ADL";
+            public const string AdvancedLearnerLoan = "ADL";
 
             /// <summary>
             /// advanced learner loans bursary funding

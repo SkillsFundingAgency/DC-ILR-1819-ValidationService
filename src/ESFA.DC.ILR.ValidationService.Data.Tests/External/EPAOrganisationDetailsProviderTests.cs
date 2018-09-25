@@ -69,14 +69,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         /// <returns>a <seealso cref="LookupDetailsProvider"/></returns>
         public EPAOrganisationDetailsProvider NewService()
         {
-            var cache = new ExternalDataCache();
-            cache.EPAOrganisations = new List<EPAOrganisation>
+            var cache = new ExternalDataCache
             {
-                new EPAOrganisation { ID = "EPA0001", Standard = "STD0001", EffectiveFrom = DateTime.Parse("2012-01-01"), EffectiveTo = DateTime.Parse("2014-12-31") },
-                new EPAOrganisation { ID = "EPA0002", Standard = "STD0002", EffectiveFrom = DateTime.Parse("2013-01-01"), EffectiveTo = DateTime.Parse("2015-12-31") },
-                new EPAOrganisation { ID = "EPA0003", Standard = "STD0003", EffectiveFrom = DateTime.Parse("2014-01-01"), EffectiveTo = DateTime.Parse("2016-12-31") },
-                new EPAOrganisation { ID = "EPA0004", Standard = "STD0004", EffectiveFrom = DateTime.Parse("2015-01-01"), EffectiveTo = DateTime.Parse("2099-12-31") },
-                new EPAOrganisation { ID = "EPA0005", Standard = "STD0005", EffectiveFrom = DateTime.Parse("2016-01-01"), EffectiveTo = DateTime.Parse("2099-12-31") },
+                EPAOrganisations = new List<EPAOrganisation>
+                {
+                    new EPAOrganisation { ID = "EPA0001", Standard = "STD0001", EffectiveFrom = DateTime.Parse("2012-01-01"), EffectiveTo = DateTime.Parse("2014-12-31") },
+                    new EPAOrganisation { ID = "EPA0002", Standard = "STD0002", EffectiveFrom = DateTime.Parse("2013-01-01"), EffectiveTo = DateTime.Parse("2015-12-31") },
+                    new EPAOrganisation { ID = "EPA0003", Standard = "STD0003", EffectiveFrom = DateTime.Parse("2014-01-01"), EffectiveTo = DateTime.Parse("2016-12-31") },
+                    new EPAOrganisation { ID = "EPA0004", Standard = "STD0004", EffectiveFrom = DateTime.Parse("2015-01-01"), EffectiveTo = DateTime.Parse("2099-12-31") },
+                    new EPAOrganisation { ID = "EPA0005", Standard = "STD0005", EffectiveFrom = DateTime.Parse("2016-01-01"), EffectiveTo = DateTime.Parse("2099-12-31") },
+                }
             };
 
             return new EPAOrganisationDetailsProvider(cache);
