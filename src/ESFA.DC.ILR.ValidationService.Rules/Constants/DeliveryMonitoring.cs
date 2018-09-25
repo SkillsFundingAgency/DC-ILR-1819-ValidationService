@@ -81,7 +81,7 @@
             /// <summary>
             /// community learning provision type
             /// </summary>
-            public const string CommunityLearningProvisionType = "ASL";
+            public const string CommunityLearningProvision = "ASL";
 
             /// <summary>
             /// family english, maths and language
@@ -121,7 +121,7 @@
             /// <summary>
             /// apprenticeship contract type
             /// </summary>
-            public const string ApprenticeshipContractType = "ACT";
+            public const string ApprenticeshipContract = "ACT";
         }
     }
 }

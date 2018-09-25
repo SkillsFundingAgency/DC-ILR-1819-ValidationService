@@ -127,6 +127,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             It.IsInRange(validity.ValidityCategory, TypeOfLARSValidity.Any);
 
         /// <summary>
+        /// Checks the delivery fams.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <param name="matchCondition">The match condition.</param>
+        /// <returns>true if any of the delivery fams match the condition</returns>
+        public bool CheckDeliveryFAMs(ILearningDelivery delivery, Func<ILearningDeliveryFAM, bool> matchCondition) =>
+            delivery.LearningDeliveryFAMs.SafeAny(matchCondition);
+
+        /// <summary>
+        /// Determines whether [is advanced learner loan] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is advanced learner loan] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsAdvancedLearnerLoan(ILearningDeliveryFAM monitor) =>
+            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.AdvancedLearnerLoan);
+
+        /// <summary>
         /// Validates the specified object.
         /// </summary>
         /// <param name="objectToValidate">The object to validate.</param>
@@ -138,7 +157,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(x => IsViableStart(x) && (IsApprenticeshipFunded(x) || IsOtherFunded(x)))
+                .SafeWhere(x => IsViableStart(x) && (IsApprenticeshipFunded(x) || IsOtherFunded(x)) && !CheckDeliveryFAMs(x, IsAdvancedLearnerLoan))
                 .ForEach(x =>
                 {
                     var failedValidation = !HasValidLearningAim(x);

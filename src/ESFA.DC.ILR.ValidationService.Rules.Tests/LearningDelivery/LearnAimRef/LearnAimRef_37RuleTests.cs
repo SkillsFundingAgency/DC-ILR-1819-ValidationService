@@ -306,6 +306,39 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         [Theory]
+        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoan, true)]
+        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, false)]
+        [InlineData(DeliveryMonitoring.Types.ApprenticeshipContract, false)]
+        [InlineData(DeliveryMonitoring.Types.CommunityLearningProvision, false)]
+        [InlineData(DeliveryMonitoring.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
+        [InlineData(DeliveryMonitoring.Types.FamilyEnglishMathsAndLanguage, false)]
+        [InlineData(DeliveryMonitoring.Types.FullOrCoFunding, false)]
+        [InlineData(DeliveryMonitoring.Types.HEMonitoring, false)]
+        [InlineData(DeliveryMonitoring.Types.HouseholdSituation, false)]
+        [InlineData(DeliveryMonitoring.Types.Learning, false)]
+        [InlineData(DeliveryMonitoring.Types.LearningSupportFunding, false)]
+        [InlineData(DeliveryMonitoring.Types.NationalSkillsAcademy, false)]
+        [InlineData(DeliveryMonitoring.Types.PercentageOfOnlineDelivery, false)]
+        [InlineData(DeliveryMonitoring.Types.Restart, false)]
+        [InlineData(DeliveryMonitoring.Types.SourceOfFunding, false)]
+        [InlineData(DeliveryMonitoring.Types.WorkProgrammeParticipation, false)]
+        public void IsAdvancedLearnerLoanMeetsExpectation(string candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockDelivery = new Mock<ILearningDeliveryFAM>();
+            mockDelivery
+                .SetupGet(y => y.LearnDelFAMType)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsAdvancedLearnerLoan(mockDelivery.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        [Theory]
         [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard)]
         [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfLearningProgramme.ApprenticeshipStandard)]
         [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfLearningProgramme.HigherApprenticeshipLevel5)]
