@@ -208,7 +208,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
 
         /// <summary>
         /// Valid item does not raise validation message.
-        /// the conditions here will get you to the final check which will return false for 'IsEarlyStageNVQ'
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         [Theory]
