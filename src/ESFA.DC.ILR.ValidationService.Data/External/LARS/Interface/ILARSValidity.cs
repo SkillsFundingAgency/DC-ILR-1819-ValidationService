@@ -26,5 +26,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// Gets the end date.
         /// </summary>
         DateTime? EndDate { get; }
+
+        /// <summary>
+        /// Gets the last new start date.
+        /// </summary>
+        DateTime? LastNewStartDate { get; }
     }
 }

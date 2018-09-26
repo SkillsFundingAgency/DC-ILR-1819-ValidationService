@@ -228,6 +228,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_01Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_38Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_59Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57Rule.cs" />

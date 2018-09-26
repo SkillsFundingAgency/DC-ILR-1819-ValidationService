@@ -29,5 +29,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// Gets or sets the end date.
         /// </summary>
         public DateTime? EndDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last new start date.
+        /// </summary>
+        public DateTime? LastNewStartDate { get; set; }
     }
 }

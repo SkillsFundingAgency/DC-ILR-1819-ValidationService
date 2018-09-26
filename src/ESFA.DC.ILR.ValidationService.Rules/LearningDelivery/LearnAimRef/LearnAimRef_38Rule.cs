@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 {
-    public class LearnAimRef_37Rule :
+    public class LearnAimRef_38Rule :
         IRule<ILearner>
     {
         /// <summary>
@@ -19,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "LearnAimRef_37";
+        public const string Name = "LearnAimRef_38";
 
         /// <summary>
         /// The message handler
@@ -32,11 +32,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         private readonly ILARSDataService _larsData;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LearnAimRef_37Rule" /> class.
+        /// Initializes a new instance of the <see cref="LearnAimRef_38Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="larsData">The lars data.</param>
-        public LearnAimRef_37Rule(
+        public LearnAimRef_38Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData)
         {
@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <summary>
         /// Gets the minimun viable start.
         /// </summary>
-        public DateTime MinimumViableStart => new DateTime(2011, 07, 31);
+        public DateTime MinimumViableStart => new DateTime(2013, 07, 31);
 
         /// <summary>
         /// Determines whether [is apprenticeship funded] [the specified delivery].
@@ -111,20 +111,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
 
             return validities
-                .Where(x => IsCurrent(x, delivery))
+                .Where(x => InValidStartRange(x, delivery))
                 .Any(HasQualifyingCategory);
         }
 
         /// <summary>
-        /// Determines whether the specified validity is current.
+        /// In valid start range.
         /// </summary>
         /// <param name="validity">The validity.</param>
         /// <param name="delivery">The delivery.</param>
         /// <returns>
-        ///   <c>true</c> if the specified validity is current; otherwise, <c>false</c>.
+        ///   <c>true</c> if [in valid start range] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsCurrent(ILARSValidity validity, ILearningDelivery delivery) =>
-            It.IsBetween(delivery.LearnStartDate, validity.StartDate, validity.EndDate ?? DateTime.MaxValue);
+        public bool InValidStartRange(ILARSValidity validity, ILearningDelivery delivery) =>
+            It.IsBetween(delivery.LearnStartDate, validity.StartDate, validity.LastNewStartDate ?? DateTime.MaxValue);
 
         /// <summary>
         /// Determines whether [has qualifying category] [the specified validity].
@@ -156,6 +156,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.AdvancedLearnerLoan);
 
         /// <summary>
+        /// Determines whether the specified monitor is restart.
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified monitor is restart; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsRestart(ILearningDeliveryFAM monitor) =>
+            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.Restart);
+
+        /// <summary>
         /// Determines whether the specified delivery is excluded.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
@@ -163,7 +173,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if the specified delivery is excluded; otherwise, <c>false</c>.
         /// </returns>
         public bool IsExcluded(ILearningDelivery delivery) =>
-            CheckDeliveryFAMs(delivery, IsAdvancedLearnerLoan);
+            CheckDeliveryFAMs(delivery, IsAdvancedLearnerLoan) || CheckDeliveryFAMs(delivery, IsRestart);
 
         /// <summary>
         /// Validates the specified object.

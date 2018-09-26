@@ -76,7 +76,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 LearnAimRef = ldc.LearnAimRef,
                                 ValidityCategory = ldc.ValidityCategory,
                                 StartDate = ldc.StartDate,
-                                EndDate = ldc.EndDate
+                                EndDate = ldc.EndDate,
+                                LastNewStartDate = ldc.LastNewStartDate
                             }).ToList(),
                     }, cancellationToken);
         }

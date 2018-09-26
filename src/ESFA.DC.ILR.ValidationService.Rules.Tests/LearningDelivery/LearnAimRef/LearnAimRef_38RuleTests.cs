@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
     /// <summary>
     /// from version 1.1 validation spread sheet
     /// </summary>
-    public class LearnAimRef_37RuleTests
+    public class LearnAimRef_38RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var mockService = new Mock<ILARSDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_37Rule(null, mockService.Object));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_38Rule(null, mockService.Object));
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_37Rule(mockHandler.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_38Rule(mockHandler.Object, null));
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("LearnAimRef_37", result);
+            Assert.Equal("LearnAimRef_38", result);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(LearnAimRef_37Rule.Name, result);
+            Assert.Equal(LearnAimRef_38Rule.Name, result);
         }
 
         /// <summary>
@@ -215,9 +215,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData("2010-08-01", false)]
-        [InlineData("2011-07-31", false)]
-        [InlineData("2011-08-01", true)]
+        [InlineData("2012-08-01", false)]
+        [InlineData("2013-07-31", false)]
+        [InlineData("2013-08-01", true)]
         [InlineData("2017-09-14", true)]
         public void IsViableStartMeetsExpectation(string candidate, bool expectation)
         {
@@ -249,16 +249,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", false)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", false)]
         [InlineData("2013-07-16", "2015-05-09", "2013-07-15", false)]
-        public void IsCurrentMeetsExpectation(string candidate, string startDate, string endDate, bool expectation)
+        public void InValidStartRangeMeetsExpectation(string candidate, string startDate, string endDate, bool expectation)
         {
             // arrange
             var sut = NewRule();
+
             var mockValidity = new Mock<ILARSValidity>();
             mockValidity
                 .SetupGet(x => x.StartDate)
                 .Returns(DateTime.Parse(startDate));
             mockValidity
-                .SetupGet(x => x.EndDate)
+                .SetupGet(x => x.LastNewStartDate)
                 .Returns(DateTime.Parse(endDate));
 
             var mockItem = new Mock<ILearningDelivery>();
@@ -267,7 +268,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(DateTime.Parse(candidate));
 
             // act
-            var result = sut.IsCurrent(mockValidity.Object, mockItem.Object);
+            var result = sut.InValidStartRange(mockValidity.Object, mockItem.Object);
 
             // assert
             Assert.Equal(expectation, result);
@@ -294,6 +295,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var sut = NewRule();
+
             var mockValidity = new Mock<ILARSValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
@@ -358,7 +360,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var sut = new LearnAimRef_37Rule(handler.Object, service.Object);
+            var sut = new LearnAimRef_38Rule(handler.Object, service.Object);
 
             // act
             var result = sut.HasValidLearningAim(mockDelivery.Object);
@@ -454,13 +456,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
                 .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == LearnAimRef_37Rule.Name),
+                    Moq.It.Is<string>(y => y == LearnAimRef_38Rule.Name),
                     Moq.It.Is<string>(y => y == LearnRefNumber),
                     0,
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == LearnAimRef_37Rule.MessagePropertyName),
+                    Moq.It.Is<string>(y => y == LearnAimRef_38Rule.MessagePropertyName),
                     Moq.It.IsAny<ILearningDelivery>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
@@ -471,7 +473,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var sut = new LearnAimRef_37Rule(handler.Object, service.Object);
+            var sut = new LearnAimRef_38Rule(handler.Object, service.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -497,7 +499,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         public void ValidItemDoesNotRaiseValidationMessage(int funding, int? progType)
         {
             // arrange
-            const string LearnRefNumber = "123456789X";
             const string learnAimRef = "salddfkjeifdnase";
 
             var mockDelivery = new Mock<ILearningDelivery>();
@@ -518,9 +519,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             deliveries.Add(mockDelivery.Object);
 
             var mockLearner = new Mock<ILearner>();
-            mockLearner
-                .SetupGet(x => x.LearnRefNumber)
-                .Returns(LearnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
@@ -543,7 +541,46 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var sut = new LearnAimRef_37Rule(handler.Object, service.Object);
+            var sut = new LearnAimRef_38Rule(handler.Object, service.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            service.VerifyAll();
+        }
+
+        [Theory]
+        [InlineData(DeliveryMonitoring.Types.Restart)]
+        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoan)]
+        public void ValidItemThroughExclusionDoesNotRaiseValidationMessage(string famType)
+        {
+            // arrange
+            var mockFAM = new Mock<ILearningDeliveryFAM>();
+            mockFAM
+                .SetupGet(y => y.LearnDelFAMType)
+                .Returns(famType);
+
+            var fams = Collection.Empty<ILearningDeliveryFAM>();
+            fams.Add(mockFAM.Object);
+
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.LearningDeliveryFAMs)
+                .Returns(fams.AsSafeReadOnlyList());
+
+            var deliveries = Collection.Empty<ILearningDelivery>();
+            deliveries.Add(mockDelivery.Object);
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+            var sut = new LearnAimRef_38Rule(handler.Object, service.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -557,12 +594,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public LearnAimRef_37Rule NewRule()
+        public LearnAimRef_38Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
 
-            return new LearnAimRef_37Rule(handler.Object, service.Object);
+            return new LearnAimRef_38Rule(handler.Object, service.Object);
         }
     }
 }
