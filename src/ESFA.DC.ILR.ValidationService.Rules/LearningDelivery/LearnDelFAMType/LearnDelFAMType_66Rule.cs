@@ -170,7 +170,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
             return deliveries
                 .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
-                .Where(x => It.Has(x.BasicSkillsType))
                 .Any(IsBasicSkillsLearner);
         }
 
@@ -182,7 +181,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is basic skills learner] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsBasicSkillsLearner(ILARSAnnualValue monitor) =>
-            TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills.Contains(monitor.BasicSkillsType.Value);
+            It.IsInRange(monitor.BasicSkillsType, TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills);
 
         /// <summary>
         /// Determines whether [is adult funded unemployed with other state benefits] [the specified candidate].

@@ -185,6 +185,62 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         /// <summary>
+        /// Is basic skills learner meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(TypeOfLARSBasicSkill.CertificateESOLS4L, false)]
+        [InlineData(TypeOfLARSBasicSkill.CertificateESOLS4LSpeakListen, false)]
+        [InlineData(TypeOfLARSBasicSkill.Certificate_AdultLiteracy, true)]
+        [InlineData(TypeOfLARSBasicSkill.Certificate_AdultNumeracy, true)]
+        [InlineData(TypeOfLARSBasicSkill.FreeStandingMathematicsQualification, true)]
+        [InlineData(TypeOfLARSBasicSkill.FunctionalSkillsEnglish, true)]
+        [InlineData(TypeOfLARSBasicSkill.FunctionalSkillsMathematics, true)]
+        [InlineData(TypeOfLARSBasicSkill.GCSE_EnglishLanguage, true)]
+        [InlineData(TypeOfLARSBasicSkill.GCSE_Mathematics, true)]
+        [InlineData(TypeOfLARSBasicSkill.InternationalGCSEEnglishLanguage, true)]
+        [InlineData(TypeOfLARSBasicSkill.InternationalGCSEMathematics, true)]
+        [InlineData(TypeOfLARSBasicSkill.KeySkill_ApplicationOfNumbers, true)]
+        [InlineData(TypeOfLARSBasicSkill.KeySkill_Communication, true)]
+        [InlineData(TypeOfLARSBasicSkill.NonNQF_QCFS4LESOL, false)]
+        [InlineData(TypeOfLARSBasicSkill.NonNQF_QCFS4LLiteracy, true)]
+        [InlineData(TypeOfLARSBasicSkill.NonNQF_QCFS4LNumeracy, true)]
+        [InlineData(TypeOfLARSBasicSkill.NotApplicable, false)]
+        [InlineData(TypeOfLARSBasicSkill.OtherS4LNotLiteracyNumeracyOrESOL, false)]
+        [InlineData(TypeOfLARSBasicSkill.QCFBasicSkillsEnglishLanguage, true)]
+        [InlineData(TypeOfLARSBasicSkill.QCFBasicSkillsMathematics, true)]
+        [InlineData(TypeOfLARSBasicSkill.QCFCertificateESOL, false)]
+        [InlineData(TypeOfLARSBasicSkill.QCFESOLReading, false)]
+        [InlineData(TypeOfLARSBasicSkill.QCFESOLSpeakListen, false)]
+        [InlineData(TypeOfLARSBasicSkill.QCFESOLWriting, false)]
+        [InlineData(TypeOfLARSBasicSkill.UnitESOLReading, false)]
+        [InlineData(TypeOfLARSBasicSkill.UnitESOLSpeakListen, false)]
+        [InlineData(TypeOfLARSBasicSkill.UnitESOLWriting, false)]
+        [InlineData(TypeOfLARSBasicSkill.UnitQCFBasicSkillsEnglishLanguage, true)]
+        [InlineData(TypeOfLARSBasicSkill.UnitQCFBasicSkillsMathematics, true)]
+        [InlineData(TypeOfLARSBasicSkill.UnitsOfTheCertificate_AdultLiteracy, true)]
+        [InlineData(TypeOfLARSBasicSkill.UnitsOfTheCertificate_AdultNumeracy, true)]
+        [InlineData(TypeOfLARSBasicSkill.UnitsOfTheCertificate_ESOLS4L, false)]
+        [InlineData(TypeOfLARSBasicSkill.Unknown, false)]
+        [InlineData(null, false)]
+        public void IsBasicSkillsLearnerMeetsExpectation(int? candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockDelivery = new Mock<ILARSAnnualValue>();
+            mockDelivery
+                .SetupGet(y => y.BasicSkillsType)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsBasicSkillsLearner(mockDelivery.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// Is learner in custody with learning delivery fam meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -196,7 +252,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
         [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, false)]
         [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, false)]
-        public void IsLearnerInCustodyWithLearningDeliveryFAMMeetsExpectation(string candidate, bool expectation)
+        public void IsLearnerInCustodyMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -227,7 +283,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
         [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, true)]
         [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, false)]
-        public void IsReleasedOnTemporaryLicenceWithLearningDeliveryFAMMeetsExpectation(string candidate, bool expectation)
+        public void IsReleasedOnTemporaryLicenceMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -268,7 +324,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [InlineData(DeliveryMonitoring.Types.Restart, true)]
         [InlineData(DeliveryMonitoring.Types.SourceOfFunding, false)]
         [InlineData(DeliveryMonitoring.Types.WorkProgrammeParticipation, false)]
-        public void IsRestartWithLearningDeliveryFAMMeetsExpectation(string candidate, bool expectation)
+        public void IsRestartMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -296,7 +352,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
         [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, false)]
         [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, true)]
-        public void IsSteelWorkerRedundancyTrainingWithLearningDeliveryFAMMeetsExpectation(string candidate, bool expectation)
+        public void IsSteelWorkerRedundancyTrainingMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -327,7 +383,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
         [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, false)]
         [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, false)]
-        public void InReceiptOfLowWagesWithLearningDeliveryFAMMeetsExpectation(string candidate, bool expectation)
+        public void InReceiptOfLowWagesMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -597,7 +653,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
         [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, false)]
         [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, false)]
-        public void IsFullyFundedWithLearningDeliveryFAMMeetsExpectation(string candidate, bool expectation)
+        public void IsFullyFundedMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
