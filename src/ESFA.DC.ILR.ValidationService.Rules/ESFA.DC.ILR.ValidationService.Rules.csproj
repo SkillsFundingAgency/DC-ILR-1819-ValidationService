@@ -298,7 +298,7 @@
     <Compile Include="Query\LearnerQueryService.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\LearningDeliveryQueryService.cs" />
-    <Compile Include="WorkPlacement\WorkPlaceStartDate\WorkPlaceStartDate_01Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_01Rule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">

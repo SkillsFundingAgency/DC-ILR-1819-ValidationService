@@ -4,7 +4,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
+namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate
 {
     /// <summary>
     /// from version 1.1 validation spread sheet

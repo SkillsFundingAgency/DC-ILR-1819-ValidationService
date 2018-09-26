@@ -296,7 +296,7 @@
     <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryQueryServiceTests.cs" />
     <Compile Include="Query\PostcodeQueryServiceTests.cs" />
-    <Compile Include="WorkPlacement\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
