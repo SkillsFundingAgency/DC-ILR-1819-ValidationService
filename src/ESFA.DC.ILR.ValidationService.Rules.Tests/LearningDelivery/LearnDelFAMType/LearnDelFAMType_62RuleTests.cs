@@ -190,13 +190,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(DeliveryMonitoring.OLASSOffendersInCustody, true)]
-        [InlineData(DeliveryMonitoring.FullyFundedLearningAim, false)]
-        [InlineData(DeliveryMonitoring.CoFundedLearningAim, false)]
-        [InlineData(DeliveryMonitoring.InReceiptOfLowWages, false)]
-        [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
-        [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, false)]
-        [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, false)]
+        [InlineData(Monitoring.Delivery.OLASSOffendersInCustody, true)]
+        [InlineData(Monitoring.Delivery.FullyFundedLearningAim, false)]
+        [InlineData(Monitoring.Delivery.CoFundedLearningAim, false)]
+        [InlineData(Monitoring.Delivery.InReceiptOfLowWages, false)]
+        [InlineData(Monitoring.Delivery.MandationToSkillsTraining, false)]
+        [InlineData(Monitoring.Delivery.ReleasedOnTemporaryLicence, false)]
+        [InlineData(Monitoring.Delivery.SteelIndustriesRedundancyTraining, false)]
         public void IsLearnerInCustodyMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
@@ -222,13 +222,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(DeliveryMonitoring.OLASSOffendersInCustody, false)]
-        [InlineData(DeliveryMonitoring.FullyFundedLearningAim, false)]
-        [InlineData(DeliveryMonitoring.CoFundedLearningAim, false)]
-        [InlineData(DeliveryMonitoring.InReceiptOfLowWages, false)]
-        [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
-        [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, true)]
-        [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, false)]
+        [InlineData(Monitoring.Delivery.OLASSOffendersInCustody, false)]
+        [InlineData(Monitoring.Delivery.FullyFundedLearningAim, false)]
+        [InlineData(Monitoring.Delivery.CoFundedLearningAim, false)]
+        [InlineData(Monitoring.Delivery.InReceiptOfLowWages, false)]
+        [InlineData(Monitoring.Delivery.MandationToSkillsTraining, false)]
+        [InlineData(Monitoring.Delivery.ReleasedOnTemporaryLicence, true)]
+        [InlineData(Monitoring.Delivery.SteelIndustriesRedundancyTraining, false)]
         public void IsReleasedOnTemporaryLicenceMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
@@ -254,22 +254,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoan, false)]
-        [InlineData(DeliveryMonitoring.Types.ApprenticeshipContract, false)]
-        [InlineData(DeliveryMonitoring.Types.CommunityLearningProvision, false)]
-        [InlineData(DeliveryMonitoring.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.FamilyEnglishMathsAndLanguage, false)]
-        [InlineData(DeliveryMonitoring.Types.FullOrCoFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.HEMonitoring, false)]
-        [InlineData(DeliveryMonitoring.Types.HouseholdSituation, false)]
-        [InlineData(DeliveryMonitoring.Types.Learning, false)]
-        [InlineData(DeliveryMonitoring.Types.LearningSupportFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.NationalSkillsAcademy, false)]
-        [InlineData(DeliveryMonitoring.Types.PercentageOfOnlineDelivery, false)]
-        [InlineData(DeliveryMonitoring.Types.Restart, true)]
-        [InlineData(DeliveryMonitoring.Types.SourceOfFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.WorkProgrammeParticipation, false)]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoan, false)]
+        [InlineData(Monitoring.Delivery.Types.ApprenticeshipContract, false)]
+        [InlineData(Monitoring.Delivery.Types.CommunityLearningProvision, false)]
+        [InlineData(Monitoring.Delivery.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.FamilyEnglishMathsAndLanguage, false)]
+        [InlineData(Monitoring.Delivery.Types.FullOrCoFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.HEMonitoring, false)]
+        [InlineData(Monitoring.Delivery.Types.HouseholdSituation, false)]
+        [InlineData(Monitoring.Delivery.Types.Learning, false)]
+        [InlineData(Monitoring.Delivery.Types.LearningSupportFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.NationalSkillsAcademy, false)]
+        [InlineData(Monitoring.Delivery.Types.PercentageOfOnlineDelivery, false)]
+        [InlineData(Monitoring.Delivery.Types.Restart, true)]
+        [InlineData(Monitoring.Delivery.Types.SourceOfFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.WorkProgrammeParticipation, false)]
         public void IsRestartMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
@@ -292,13 +292,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(DeliveryMonitoring.OLASSOffendersInCustody, false)]
-        [InlineData(DeliveryMonitoring.FullyFundedLearningAim, false)]
-        [InlineData(DeliveryMonitoring.CoFundedLearningAim, false)]
-        [InlineData(DeliveryMonitoring.InReceiptOfLowWages, false)]
-        [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
-        [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, false)]
-        [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, true)]
+        [InlineData(Monitoring.Delivery.OLASSOffendersInCustody, false)]
+        [InlineData(Monitoring.Delivery.FullyFundedLearningAim, false)]
+        [InlineData(Monitoring.Delivery.CoFundedLearningAim, false)]
+        [InlineData(Monitoring.Delivery.InReceiptOfLowWages, false)]
+        [InlineData(Monitoring.Delivery.MandationToSkillsTraining, false)]
+        [InlineData(Monitoring.Delivery.ReleasedOnTemporaryLicence, false)]
+        [InlineData(Monitoring.Delivery.SteelIndustriesRedundancyTraining, true)]
         public void IsSteelWorkerRedundancyTrainingMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
@@ -565,13 +565,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(DeliveryMonitoring.OLASSOffendersInCustody, false)]
-        [InlineData(DeliveryMonitoring.FullyFundedLearningAim, false)]
-        [InlineData(DeliveryMonitoring.InReceiptOfLowWages, false)]
-        [InlineData(DeliveryMonitoring.MandationToSkillsTraining, false)]
-        [InlineData(DeliveryMonitoring.ReleasedOnTemporaryLicence, false)]
-        [InlineData(DeliveryMonitoring.CoFundedLearningAim, true)]
-        [InlineData(DeliveryMonitoring.SteelIndustriesRedundancyTraining, false)]
+        [InlineData(Monitoring.Delivery.OLASSOffendersInCustody, false)]
+        [InlineData(Monitoring.Delivery.FullyFundedLearningAim, false)]
+        [InlineData(Monitoring.Delivery.InReceiptOfLowWages, false)]
+        [InlineData(Monitoring.Delivery.MandationToSkillsTraining, false)]
+        [InlineData(Monitoring.Delivery.ReleasedOnTemporaryLicence, false)]
+        [InlineData(Monitoring.Delivery.CoFundedLearningAim, true)]
+        [InlineData(Monitoring.Delivery.SteelIndustriesRedundancyTraining, false)]
         public void IsCoFundedMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
@@ -947,7 +947,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
                 .SetupGet(x => x.LearnDelFAMType)
-                .Returns(DeliveryMonitoring.Types.FullOrCoFunding);
+                .Returns(Monitoring.Delivery.Types.FullOrCoFunding);
             mockFAM
                 .SetupGet(x => x.LearnDelFAMCode)
                 .Returns("2");
@@ -1045,7 +1045,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
                 .SetupGet(x => x.LearnDelFAMType)
-                .Returns(DeliveryMonitoring.Types.FullOrCoFunding);
+                .Returns(Monitoring.Delivery.Types.FullOrCoFunding);
             mockFAM
                 .SetupGet(x => x.LearnDelFAMCode)
                 .Returns("2");

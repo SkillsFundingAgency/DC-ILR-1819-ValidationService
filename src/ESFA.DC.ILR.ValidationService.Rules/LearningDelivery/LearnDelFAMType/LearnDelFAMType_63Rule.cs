@@ -151,7 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is apprenticeship contract] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsApprenticeshipContract(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.ApprenticeshipContract);
+            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.ApprenticeshipContract);
 
         /// <summary>
         /// Determines whether [is apprenticeship contract] [the specified delivery].

@@ -34,8 +34,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         public bool InReceiptOfEmploymentSupport(IEmploymentStatusMonitoring employmentMonitoring) =>
             It.IsInRange(
                 $"{employmentMonitoring.ESMType}{employmentMonitoring.ESMCode}",
-                EmploymentStatusMonitoring.InReceiptOfJobSeekersAllowance,
-                EmploymentStatusMonitoring.InReceiptOfEmploymentAndSupportAllowance);
+                Monitoring.EmploymentStatus.InReceiptOfJobSeekersAllowance,
+                Monitoring.EmploymentStatus.InReceiptOfEmploymentAndSupportAllowance);
 
         /// <summary>
         /// Determines whether [has valid employment status] [the specified candidate].
@@ -94,8 +94,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         public bool InReceiptOfCredits(IEmploymentStatusMonitoring employmentMonitoring) =>
             It.IsInRange(
                 $"{employmentMonitoring.ESMType}{employmentMonitoring.ESMCode}",
-                EmploymentStatusMonitoring.InReceiptOfAnotherStateBenefit,
-                EmploymentStatusMonitoring.InReceiptOfUniversalCredit);
+                Monitoring.EmploymentStatus.InReceiptOfAnotherStateBenefit,
+                Monitoring.EmploymentStatus.InReceiptOfUniversalCredit);
 
         /// <summary>
         /// Determines whether [is not employed] [the specified candidate].
@@ -143,9 +143,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         public bool IsWorkingShortHours(IEmploymentStatusMonitoring monitor) =>
             It.IsInRange(
                 $"{monitor.ESMType}{monitor.ESMCode}",
-                EmploymentStatusMonitoring.EmployedForLessThan16HoursPW,
-                EmploymentStatusMonitoring.EmployedFor0To10HourPW,
-                EmploymentStatusMonitoring.EmployedFor11To20HoursPW);
+                Monitoring.EmploymentStatus.EmployedForLessThan16HoursPW,
+                Monitoring.EmploymentStatus.EmployedFor0To10HourPW,
+                Monitoring.EmploymentStatus.EmployedFor11To20HoursPW);
 
         /// <summary>
         /// Determines whether the specified candidate is employed.
@@ -199,17 +199,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                     // and has valid employment status
                     and LearnerEmploymentStatus.EmpStat = 10, 11, 12 or 98
                     // and in receipt of support at the time of starting the learning aim
-                    and (EmploymentStatusMonitoring.ESMType = BSI and EmploymentStatusMonitoring.ESMCode = 1 or 2)
+                    and (Monitoring.EmploymentStatus.ESMType = BSI and Monitoring.EmploymentStatus.ESMCode = 1 or 2)
                         (for the learner's Employment status on the LearningDelivery.LearnStartDate of the learning aim)
                 or
                     // or is not employed, and in receipt of benefits
                     LearnerEmploymentStatus.EmpStat = 11 or 12
-                    and (EmploymentStatusMonitoring.ESMType = BSI and EmploymentStatusMonitoring.ESMCode = 3 or 4)
+                    and (Monitoring.EmploymentStatus.ESMType = BSI and Monitoring.EmploymentStatus.ESMCode = 3 or 4)
                 or
                     // or is employed with workng short hours and in receipt of support
                     LearnerEmploymentStatus.EmpStat = 10
-                    and (EmploymentStatusMonitoring.ESMType = EII and EmploymentStatusMonitoring.ESMCode = 2, 5 or 6)
-                    and (EmploymentStatusMonitoring.ESMType = BSI and EmploymentStatusMonitoring.ESMCode = 3 or 4)
+                    and (Monitoring.EmploymentStatus.ESMType = EII and Monitoring.EmploymentStatus.ESMCode = 2, 5 or 6)
+                    and (Monitoring.EmploymentStatus.ESMType = BSI and Monitoring.EmploymentStatus.ESMCode = 3 or 4)
                         set to Y,
                         otherwise set to N
              */

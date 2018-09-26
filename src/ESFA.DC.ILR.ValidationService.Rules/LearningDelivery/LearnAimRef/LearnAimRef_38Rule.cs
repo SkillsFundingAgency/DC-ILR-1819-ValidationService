@@ -153,7 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is advanced learner loan] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsAdvancedLearnerLoan(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.AdvancedLearnerLoan);
+            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.AdvancedLearnerLoan);
 
         /// <summary>
         /// Determines whether the specified monitor is restart.
@@ -163,7 +163,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if the specified monitor is restart; otherwise, <c>false</c>.
         /// </returns>
         public bool IsRestart(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.Restart);
+            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.Restart);
 
         /// <summary>
         /// Determines whether the specified delivery is excluded.

@@ -104,15 +104,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="famType">Type of the fam.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(DeliveryMonitoring.Types.ApprenticeshipContract, false)]
-        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoan, false)]
-        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.CommunityLearningProvision, false)]
-        [InlineData(DeliveryMonitoring.Types.HouseholdSituation, false)]
-        [InlineData(DeliveryMonitoring.Types.Learning, false)]
-        [InlineData(DeliveryMonitoring.Types.LearningSupportFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.Restart, false)]
-        [InlineData(DeliveryMonitoring.Types.SourceOfFunding, true)]
+        [InlineData(Monitoring.Delivery.Types.ApprenticeshipContract, false)]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoan, false)]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.CommunityLearningProvision, false)]
+        [InlineData(Monitoring.Delivery.Types.HouseholdSituation, false)]
+        [InlineData(Monitoring.Delivery.Types.Learning, false)]
+        [InlineData(Monitoring.Delivery.Types.LearningSupportFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.Restart, false)]
+        [InlineData(Monitoring.Delivery.Types.SourceOfFunding, true)]
         public void ConditionMetWithFAMRecordMeetsExpectation(string famType, bool expectation)
         {
             // arrange
@@ -165,14 +165,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="fundingModel">The funding model.</param>
         /// <param name="candidates">The candidates.</param>
         [Theory]
-        [InlineData(TypeOfFunding.CommunityLearning, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.LearningSupportFunding)]
-        [InlineData(TypeOfFunding.EuropeanSocialFund, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
-        [InlineData(TypeOfFunding.Other16To19, DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
-        [InlineData(TypeOfFunding.OtherAdult, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
-        [InlineData(TypeOfFunding.AdultSkills, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
-        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
-        [InlineData(TypeOfFunding.EuropeanSocialFund, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
+        [InlineData(TypeOfFunding.CommunityLearning, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.LearningSupportFunding)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
+        [InlineData(TypeOfFunding.Other16To19, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
+        [InlineData(TypeOfFunding.OtherAdult, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
+        [InlineData(TypeOfFunding.AdultSkills, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
         public void InvalidItemRaisesValidationMessage(int fundingModel, params string[] candidates)
         {
             // arrange
@@ -235,18 +235,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="fundingModel">The funding model.</param>
         /// <param name="candidates">The candidates.</param>
         [Theory]
-        [InlineData(TypeOfFunding.CommunityLearning, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.EuropeanSocialFund, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
-        [InlineData(TypeOfFunding.Other16To19, DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.OtherAdult, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.AdultSkills, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.CommunityLearningProvision, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.EuropeanSocialFund, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart, DeliveryMonitoring.Types.SourceOfFunding)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, DeliveryMonitoring.Types.ApprenticeshipContract, DeliveryMonitoring.Types.AdvancedLearnerLoan, DeliveryMonitoring.Types.HouseholdSituation, DeliveryMonitoring.Types.Learning, DeliveryMonitoring.Types.LearningSupportFunding, DeliveryMonitoring.Types.Restart)]
+        [InlineData(TypeOfFunding.CommunityLearning, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.NotFundedByESFA, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.NotFundedByESFA, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
+        [InlineData(TypeOfFunding.Other16To19, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.OtherAdult, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.AdultSkills, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.CommunityLearningProvision, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.NotFundedByESFA, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart, Monitoring.Delivery.Types.SourceOfFunding)]
+        [InlineData(TypeOfFunding.NotFundedByESFA, Monitoring.Delivery.Types.ApprenticeshipContract, Monitoring.Delivery.Types.AdvancedLearnerLoan, Monitoring.Delivery.Types.HouseholdSituation, Monitoring.Delivery.Types.Learning, Monitoring.Delivery.Types.LearningSupportFunding, Monitoring.Delivery.Types.Restart)]
         public void ValidItemDoesNotRaiseAValidationMessage(int fundingModel, params string[] candidates)
         {
             // arrange

@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public bool ConditionMet(ILearningDeliveryFAM famRecord)
         {
             return It.Has(famRecord)
-                ? It.IsInRange(famRecord.LearnDelFAMType, DeliveryMonitoring.Types.SourceOfFunding)
+                ? It.IsInRange(famRecord.LearnDelFAMType, Monitoring.Delivery.Types.SourceOfFunding)
                 : true;
         }
 

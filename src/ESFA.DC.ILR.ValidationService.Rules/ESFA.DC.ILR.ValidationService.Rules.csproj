@@ -66,11 +66,10 @@
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ApprenticeshipFinanicalRecord.cs" />
     <Compile Include="Constants\ContPrefTypeConstants.cs" />
-    <Compile Include="Constants\DeliveryMonitoring.cs" />
-    <Compile Include="Constants\EmploymentStatusMonitoring.cs" />
     <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
+    <Compile Include="Constants\Monitoring.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
@@ -143,6 +142,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
+    <Compile Include="Learner\EngGrade\EngGrade_03Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_04Rule.cs" />

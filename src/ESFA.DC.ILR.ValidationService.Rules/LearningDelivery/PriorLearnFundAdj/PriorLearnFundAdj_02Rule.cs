@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj
         ///   <c>true</c> if the specified monitor is restart; otherwise, <c>false</c>.
         /// </returns>
         public bool IsRestart(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.Restart);
+            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.Restart);
 
         /// <summary>
         /// Validates the specified object.

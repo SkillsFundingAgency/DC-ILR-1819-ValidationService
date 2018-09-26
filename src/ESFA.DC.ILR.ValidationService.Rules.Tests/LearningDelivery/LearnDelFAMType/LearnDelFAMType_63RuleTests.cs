@@ -181,22 +181,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoan, false)]
-        [InlineData(DeliveryMonitoring.Types.AdvancedLearnerLoansBursaryFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.ApprenticeshipContract, true)]
-        [InlineData(DeliveryMonitoring.Types.CommunityLearningProvision, false)]
-        [InlineData(DeliveryMonitoring.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.FamilyEnglishMathsAndLanguage, false)]
-        [InlineData(DeliveryMonitoring.Types.FullOrCoFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.HEMonitoring, false)]
-        [InlineData(DeliveryMonitoring.Types.HouseholdSituation, false)]
-        [InlineData(DeliveryMonitoring.Types.Learning, false)]
-        [InlineData(DeliveryMonitoring.Types.LearningSupportFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.NationalSkillsAcademy, false)]
-        [InlineData(DeliveryMonitoring.Types.PercentageOfOnlineDelivery, false)]
-        [InlineData(DeliveryMonitoring.Types.Restart, false)]
-        [InlineData(DeliveryMonitoring.Types.SourceOfFunding, false)]
-        [InlineData(DeliveryMonitoring.Types.WorkProgrammeParticipation, false)]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoan, false)]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.ApprenticeshipContract, true)]
+        [InlineData(Monitoring.Delivery.Types.CommunityLearningProvision, false)]
+        [InlineData(Monitoring.Delivery.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.FamilyEnglishMathsAndLanguage, false)]
+        [InlineData(Monitoring.Delivery.Types.FullOrCoFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.HEMonitoring, false)]
+        [InlineData(Monitoring.Delivery.Types.HouseholdSituation, false)]
+        [InlineData(Monitoring.Delivery.Types.Learning, false)]
+        [InlineData(Monitoring.Delivery.Types.LearningSupportFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.NationalSkillsAcademy, false)]
+        [InlineData(Monitoring.Delivery.Types.PercentageOfOnlineDelivery, false)]
+        [InlineData(Monitoring.Delivery.Types.Restart, false)]
+        [InlineData(Monitoring.Delivery.Types.SourceOfFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.WorkProgrammeParticipation, false)]
         public void IsApprenticeshipContractMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
@@ -282,7 +282,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
                 .SetupGet(x => x.LearnDelFAMType)
-                .Returns(DeliveryMonitoring.Types.ApprenticeshipContract);
+                .Returns(Monitoring.Delivery.Types.ApprenticeshipContract);
 
             var fams = Collection.Empty<ILearningDeliveryFAM>();
             fams.Add(mockFAM.Object);
@@ -351,7 +351,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
                 .SetupGet(x => x.LearnDelFAMType)
-                .Returns(DeliveryMonitoring.Types.FullOrCoFunding);
+                .Returns(Monitoring.Delivery.Types.FullOrCoFunding);
 
             var fams = Collection.Empty<ILearningDeliveryFAM>();
             fams.Add(mockFAM.Object);
