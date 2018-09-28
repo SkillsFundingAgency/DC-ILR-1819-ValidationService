@@ -110,10 +110,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="progType">Type of the prog.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard, true)]
+        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard, false)]
         [InlineData(TypeOfFunding.AdultSkills, null, false)]
         [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLearningProgramme.ApprenticeshipStandard, false)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.ApprenticeshipStandard, true)]
         [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.AdvancedLevelApprenticeship, false)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, null, false)]
         [InlineData(TypeOfFunding.CommunityLearning, TypeOfLearningProgramme.HigherApprenticeshipLevel4, false)]
         [InlineData(TypeOfFunding.CommunityLearning, null, false)]
         [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfLearningProgramme.ApprenticeshipStandard, false)]
@@ -176,10 +178,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="progType">Type of the prog.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard, true)]
+        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard, false)]
         [InlineData(TypeOfFunding.AdultSkills, null, false)]
         [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLearningProgramme.ApprenticeshipStandard, false)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.ApprenticeshipStandard, true)]
         [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.AdvancedLevelApprenticeship, false)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, null, false)]
         [InlineData(TypeOfFunding.CommunityLearning, TypeOfLearningProgramme.HigherApprenticeshipLevel4, false)]
         [InlineData(TypeOfFunding.CommunityLearning, null, false)]
         [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfLearningProgramme.ApprenticeshipStandard, false)]
@@ -413,7 +417,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="funding">The funding.</param>
         /// <param name="progType">Type of the prog.</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.ApprenticeshipStandard)]
         [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfLearningProgramme.ApprenticeshipStandard)]
         [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfLearningProgramme.HigherApprenticeshipLevel5)]
         [InlineData(TypeOfFunding.NotFundedByESFA, null)]
@@ -487,7 +491,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="funding">The funding.</param>
         /// <param name="progType">Type of the prog.</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.ApprenticeshipStandard)]
         [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfLearningProgramme.ApprenticeshipStandard)]
         [InlineData(TypeOfFunding.NotFundedByESFA, TypeOfLearningProgramme.HigherApprenticeshipLevel5)]
         [InlineData(TypeOfFunding.NotFundedByESFA, null)]

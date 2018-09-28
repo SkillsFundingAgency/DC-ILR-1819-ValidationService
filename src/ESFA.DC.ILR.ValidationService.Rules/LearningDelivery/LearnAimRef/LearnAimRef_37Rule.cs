@@ -67,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is apprenticeship funded] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsApprenticeshipFunded(ILearningDelivery delivery) =>
-            It.IsInRange(delivery.FundModel, TypeOfFunding.AdultSkills) && It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.ApprenticeshipStandard);
+            It.IsInRange(delivery.FundModel, TypeOfFunding.ApprenticeshipsFrom1May2017) && It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.ApprenticeshipStandard);
 
         /// <summary>
         /// Determines whether [is other funded] [the specified delivery].
