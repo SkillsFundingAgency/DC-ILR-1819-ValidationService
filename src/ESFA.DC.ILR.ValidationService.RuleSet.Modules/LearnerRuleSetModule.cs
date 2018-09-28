@@ -236,6 +236,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_07Rule),
                 typeof(ULN_09Rule),
                 typeof(ULN_10Rule),
+                typeof(ULN_11Rule),
                 typeof(ULN_12Rule),
                 typeof(WorkPlaceStartDate_01Rule)
             };

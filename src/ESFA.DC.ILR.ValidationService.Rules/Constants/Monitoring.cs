@@ -118,6 +118,11 @@
             /// </summary>
             public const string CoFundedLearningAim = "FFI2";
 
+            /// <summary>
+            /// higher education funding council england
+            /// </summary>
+            public const string HigherEducationFundingCouncilEngland = "SOF1"; // HEFCE
+
             public static class Types
             {
                 /// <summary>
