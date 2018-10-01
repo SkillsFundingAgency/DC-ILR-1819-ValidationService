@@ -17,6 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
     {
         private const string Error = "E";
         private const string Warning = "W";
+        private const string Fail = "F";
 
         private readonly IValidationErrorCache<IValidationError> _validationErrorCache;
         private readonly ICache<IMessage> _messageCache;
@@ -140,6 +141,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                     return Error;
                 case Severity.Warning:
                     return Warning;
+                case Severity.Fail:
+                    return Fail;
                 case null:
                     return null;
                 default:

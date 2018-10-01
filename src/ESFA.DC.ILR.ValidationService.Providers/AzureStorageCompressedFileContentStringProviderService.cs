@@ -20,17 +20,20 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IPreValidationContext _preValidationContext;
         private readonly ILogger _logger;
         private readonly IStreamableKeyValuePersistenceService _streamableKeyValuePersistenceService;
+        private readonly IValidationErrorHandler _validationErrorHandler;
         private readonly IDateTimeProvider _dateTimeProvider;
 
         public AzureStorageCompressedFileContentStringProviderService(
             IPreValidationContext preValidationContext,
             ILogger logger,
             IStreamableKeyValuePersistenceService streamableKeyValuePersistenceService,
+            IValidationErrorHandler validationErrorHandler,
             IDateTimeProvider dateTimeProvider)
         {
             _preValidationContext = preValidationContext;
             _logger = logger;
             _streamableKeyValuePersistenceService = streamableKeyValuePersistenceService;
+            _validationErrorHandler = validationErrorHandler;
             _dateTimeProvider = dateTimeProvider;
         }
 
@@ -53,34 +56,45 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                         List<ZipArchiveEntry> xmlFiles = archive.Entries.Where(x =>
                             x.Name.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase)).ToList();
 
-                        if (xmlFiles.Count == 1)
-                        {
-                            ZipArchiveEntry zippedFile = xmlFiles.First();
-                            using (Stream stream = zippedFile.Open())
-                            {
-                                await stream.CopyToAsync(outputStream, 81920, cancellationToken);
-                            }
-
-                            string xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
-                            _preValidationContext.Input = xmlFileName;
-                            await _streamableKeyValuePersistenceService.SaveAsync(
-                                xmlFileName,
-                                outputStream,
-                                cancellationToken);
-                        }
-                        else
+                        if (xmlFiles.Count == 0)
                         {
                             _logger.LogWarning(
-                                $"Zip file contains either more than one file will or no xml file, returning empty stream: jobId: {_preValidationContext.JobId}, file name: {_preValidationContext.Input}");
+                                $"Zip file contains no xml file, throwing: jobId: {_preValidationContext.JobId}, file name: {_preValidationContext.Input}");
+                            _validationErrorHandler.Handle("ZIP_EMPTY");
+                            return null;
                         }
+
+                        if (xmlFiles.Count > 1)
+                        {
+                            _logger.LogWarning(
+                                $"Zip file contains more than one file, throwing: jobId: {_preValidationContext.JobId}, file name: {_preValidationContext.Input}");
+                            _validationErrorHandler.Handle("ZIP_TOO_MANY_FILES");
+                            return null;
+                        }
+
+                        ZipArchiveEntry zippedFile = xmlFiles.First();
+                        using (Stream stream = zippedFile.Open())
+                        {
+                            await stream.CopyToAsync(outputStream, 81920, cancellationToken);
+                        }
+
+                        string xmlFileName = $"{ExtractUkrpn(_preValidationContext.Input)}/{zippedFile.Name}";
+                        _preValidationContext.Input = xmlFileName;
+                        await _streamableKeyValuePersistenceService.SaveAsync(
+                            xmlFileName,
+                            outputStream,
+                            cancellationToken);
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(
-                    $"Failed to extract the zip file from storage: jobId: {_preValidationContext.JobId}, file name: {_preValidationContext.Input}",
+                    $"Failed to extract the zip file from storage, throwing: jobId: {_preValidationContext.JobId}, file name: {_preValidationContext.Input}",
                     ex);
+                // Todo: Missing story
+                _validationErrorHandler.Handle("ZIP_CORRUPT");
+                return null;
             }
 
             stopwatch.Stop();

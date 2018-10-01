@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
@@ -14,6 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
     {
         private const string Error = "E";
         private const string Warning = "W";
+        private const string Fail = "F";
         private readonly IValidationErrors _validationErrors;
 
         public ValidationErrorsDataRetrievalService(IValidationErrors validationErrors)
@@ -28,12 +30,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                 .ToListAsync(cancellationToken))
                 .ToDictionary(
                     ve => ve.Rulename,
-                    ve => new ValidationError()
+                    ve => new ValidationError
                     {
                         Message = ve.Message,
                         RuleName = ve.Rulename,
-                        Severity = ve.Severity == Warning ? Severity.Warning : Severity.Error
+                        Severity = GetSeverity(ve.Severity)
                     });
+        }
+
+        private Severity GetSeverity(string sev)
+        {
+            switch (sev)
+            {
+                case Error:
+                    return Severity.Error;
+                case Warning:
+                    return Severity.Warning;
+                case Fail:
+                    return Severity.Fail;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(sev));
+            }
         }
     }
 }
