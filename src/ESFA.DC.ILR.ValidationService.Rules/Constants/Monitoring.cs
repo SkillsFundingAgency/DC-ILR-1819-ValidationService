@@ -1,10 +1,13 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
-    /// type(s) of monitoring (learner and delivery)
+    /// type(s) of monitoring (learner, learning delivery and employment status)
     /// </summary>
     public static class Monitoring
     {
+        /// <summary>
+        /// learner funding and monitoring items
+        /// </summary>
         public static class Learner
         {
             /// <summary>
@@ -22,6 +25,9 @@
             /// </summary>
             public static readonly string[] Level1AndLowerGrades = new string[] { "D", "DD", "DE", "E", "EE", "EF", "F", "FF", "FG", "G", "GG", "N", "U" };
 
+            /// <summary>
+            /// learner monitoring types
+            /// </summary>
             public static class Types
             {
                 /// <summary>
@@ -81,6 +87,9 @@
             }
         }
 
+        /// <summary>
+        /// delivery funding and monitoring items
+        /// </summary>
         public static class Delivery
         {
             /// <summary>
@@ -123,6 +132,19 @@
             /// </summary>
             public const string HigherEducationFundingCouncilEngland = "SOF1"; // HEFCE
 
+            /// <summary>
+            /// esfa adult funding
+            /// </summary>
+            public const string ESFAAdultFunding = "SOF105";
+
+            /// <summary>
+            /// The esfa 16 to 19 funding
+            /// </summary>
+            public const string ESFA16To19Funding = "SOF107";
+
+            /// <summary>
+            /// funding and monitoring types
+            /// </summary>
             public static class Types
             {
                 /// <summary>
@@ -207,6 +229,9 @@
             }
         }
 
+        /// <summary>
+        /// employment status monitoring items
+        /// </summary>
         public static class EmploymentStatus
         {
             /// <summary>
@@ -330,7 +355,7 @@
             public const string SmallEmployer = "SEM1";
 
             /// <summary>
-            /// types of employment status monitoring
+            /// employment status monitoring types
             /// </summary>
             public static class Types
             {
