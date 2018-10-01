@@ -139,7 +139,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         /// <summary>
-        /// Is qualifying funding meets expectation
+        /// Is qualifying fund model meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
@@ -152,7 +152,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [InlineData(TypeOfFunding.NotFundedByESFA, false)]
         [InlineData(TypeOfFunding.Other16To19, false)]
         [InlineData(TypeOfFunding.OtherAdult, true)]
-        public void IsQualifyingFundingMeetsExpectation(int candidate, bool expectation)
+        public void IsQualifyingFundModelMeetsExpectation(int candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -162,7 +162,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Returns(candidate);
 
             // act
-            var result = sut.IsQualifyingFunding(mockDelivery.Object);
+            var result = sut.IsQualifyingFundModel(mockDelivery.Object);
 
             // assert
             Assert.Equal(expectation, result);

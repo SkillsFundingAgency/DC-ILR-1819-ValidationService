@@ -77,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <returns>
         ///   <c>true</c> if [is qualifying funding] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsQualifyingFunding(ILearningDelivery delivery) =>
+        public bool IsQualifyingFundModel(ILearningDelivery delivery) =>
             It.IsInRange(
                 delivery.FundModel,
                 TypeOfFunding.CommunityLearning,
@@ -98,7 +98,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(x => IsQualifyingFunding(x))
+                .SafeWhere(IsQualifyingFundModel)
                 .ForEach(x =>
                 {
                     var failedValidation = !HasESFAAdultFunding(x);
