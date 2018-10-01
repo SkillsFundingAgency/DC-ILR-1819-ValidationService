@@ -75,6 +75,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
             if (_validationErrorCache.ValidationErrors.Any())
             {
+                await _validationOutputService.ProcessAsync(cancellationToken).ConfigureAwait(false);
+                _logger.LogDebug($"Validation final results persisted early in: {stopWatch.ElapsedMilliseconds}");
                 return;
             }
 
@@ -123,7 +125,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 _logger.LogDebug(
                     $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
                 await _validationOutputService.ProcessAsync(cancellationToken).ConfigureAwait(false);
-                _logger.LogDebug($"Validation Final results persisted {stopWatch.ElapsedMilliseconds}");
+                _logger.LogDebug($"Validation final results persisted in {stopWatch.ElapsedMilliseconds}");
             }
         }
 
