@@ -65,12 +65,14 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ApprenticeshipFinanicalRecord.cs" />
+    <Compile Include="Constants\CompletionState.cs" />
     <Compile Include="Constants\ContPrefTypeConstants.cs" />
     <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\Monitoring.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
+    <Compile Include="Constants\ReasonForWithdrawal.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
@@ -265,6 +267,7 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_13Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08Rule.cs" />
     <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01Rule.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03Rule.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07Rule.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2Rule.cs" />
