@@ -49,6 +49,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSSupAimId;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 using System;
@@ -173,6 +174,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_01Rule),
                 typeof(LearnDelFAMType_02Rule),
                 typeof(LearnDelFAMType_03Rule),
+                typeof(LearnDelFAMType_09Rule),
                 typeof(LearnDelFAMType_39Rule),
                 typeof(LearnDelFAMType_62Rule),
                 typeof(LearnDelFAMType_63Rule),
@@ -238,7 +240,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_10Rule),
                 typeof(ULN_11Rule),
                 typeof(ULN_12Rule),
-                typeof(WorkPlaceStartDate_01Rule)
+                typeof(WorkPlaceStartDate_01Rule),
+                typeof(WithdrawReason_03Rule)
             };
         }
     }
