@@ -44,6 +44,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             externalDataCache.ULNs = new HashSet<long>(await _ulnDataRetrievalService.RetrieveAsync(cancellationToken));
             externalDataCache.Postcodes = new HashSet<string>(await _postcodesDataRetrievalService.RetrieveAsync(cancellationToken));
             externalDataCache.Organisations = await _organisationsDataRetrievalService.RetrieveAsync(cancellationToken);
+        }
+
+        public async Task PopulateErrorLookupsAsync(CancellationToken cancellationToken)
+        {
+            var externalDataCache = (ExternalDataCache)_externalDataCache;
+
             externalDataCache.ValidationErrors = await _validationErrorsDataRetrievalService.RetrieveAsync(cancellationToken);
         }
     }
