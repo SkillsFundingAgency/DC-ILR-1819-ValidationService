@@ -103,6 +103,7 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
+    <Compile Include="HE\Domicile\Domicile_01Rule.cs" />
     <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
