@@ -98,7 +98,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// Gets the minimun viable start.
         /// </summary>
-        public DateTime MinimunViableStart => new DateTime(2017, 07, 31);
+        public DateTime MinimumViableStart => new DateTime(2017, 07, 31);
 
         /// <summary>
         /// Gets the minimum viable age.
@@ -113,7 +113,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is learner in custody] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsLearnerInCustody(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.OLASSOffendersInCustody);
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.OLASSOffendersInCustody);
 
         /// <summary>
         /// Determines whether [is released on temporary licence] [the specified monitor].
@@ -123,7 +123,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is released on temporary licence] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsReleasedOnTemporaryLicence(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.ReleasedOnTemporaryLicence);
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.ReleasedOnTemporaryLicence);
 
         /// <summary>
         /// Determines whether the specified monitor is restart.
@@ -133,7 +133,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if the specified monitor is restart; otherwise, <c>false</c>.
         /// </returns>
         public bool IsRestart(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, DeliveryMonitoring.Types.RestartIndicator);
+            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.Restart);
 
         /// <summary>
         /// Determines whether [is steel worker] [the specified monitor].
@@ -143,7 +143,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is steel worker] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsSteelWorkerRedundancyTraining(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.SteelIndustriesRedundancyTraining);
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.SteelIndustriesRedundancyTraining);
 
         /// <summary>
         /// Determines whether [in receipt of low wages] [the specified monitor].
@@ -153,7 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is in receipt of low wages] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool InReceiptOfLowWages(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.InReceiptOfLowWages);
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.InReceiptOfLowWages);
 
         /// <summary>
         /// Determines whether [is basic skills learner] [the specified delivery].
@@ -170,7 +170,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
             return deliveries
                 .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
-                .Where(x => It.Has(x.BasicSkillsType))
                 .Any(IsBasicSkillsLearner);
         }
 
@@ -182,7 +181,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is basic skills learner] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsBasicSkillsLearner(ILARSAnnualValue monitor) =>
-            TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills.Contains(monitor.BasicSkillsType.Value);
+            It.IsInRange(monitor.BasicSkillsType, TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills);
 
         /// <summary>
         /// Determines whether [is adult funded unemployed with other state benefits] [the specified candidate].
@@ -260,7 +259,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsViableStart(ILearningDelivery delivery) =>
-            delivery.LearnStartDate > MinimunViableStart;
+            delivery.LearnStartDate > MinimumViableStart;
 
         /// <summary>
         /// Determines whether [is target age group] [the specified learner].
@@ -281,7 +280,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is fully funded] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsFullyFunded(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", DeliveryMonitoring.FullyFundedLearningAim);
+            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.FullyFundedLearningAim);
 
         /// <summary>
         /// Determines whether [is early stage NVQ] [the specified delivery].

@@ -26,7 +26,6 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests.Stubs
             string content = File.ReadAllText(@"Files\AcceptanceTestsReferenceData.json");
             dynamic rhs = JObject.Parse(content);
             _dataCache.ULNs = new List<long>();
-            _dataCache.ValidationErrors = new Dictionary<string, ValidationError>();
 
             PopulateOrganisations(rhs);
             PopulateFrameworksFrameworkAimsAndLearningDeliveries(rhs);

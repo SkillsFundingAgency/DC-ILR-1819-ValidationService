@@ -1,14 +1,14 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.WorkPlacement.WorkPlaceStartDate
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceStartDate
 {
     /// <summary>
     /// from version 1.1 validation spread sheet

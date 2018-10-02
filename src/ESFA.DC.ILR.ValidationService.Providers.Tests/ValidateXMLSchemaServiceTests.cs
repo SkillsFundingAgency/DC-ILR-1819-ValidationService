@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers.PreValidation;
@@ -19,6 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 {
     public class ValidateXMLSchemaServiceTests
     {
+        private readonly string _learnRefNumber = "LearnRefNumber";
         private readonly string schemaFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Files\ILR-2018-19-v2.xsd");
         private readonly string IlrValidXmlFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Files\ILR_Valid.xml");
         private readonly string IlrInValidXmlFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Files\ILR_InValid.xml");
@@ -112,29 +114,66 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         }
 
         [Fact]
-        public void BuildErrorMessageParameters()
+        public void GetLearnRefNumberFromXML_Valid()
         {
-            string validationError = "The XML is not well formed.";
-            IList<string> validationErrors = new List<string>() { validationError };
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            XElement XMLString = new XElement("Learner"
+                , new XElement("LearnRefNumber", "16Learner")
+                , new XElement("ULN", "1061484016")
+                , new XElement("FamilyName", "Smith"));
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("", validationError)).Verifiable();
-            
-            NewService(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(validationErrors);
-
-            validationErrorHandlerMock.Verify();
+            NewService().GetLearnRefNumberFromXML(XMLString).Should().Be("16Learner");
         }
 
         [Fact]
-        public void BuildErrorMessageParameters_Null()
+        public void GetLearnRefNumberFromXML_InValid()
         {
-            IList<string> validationErrors = null;
+            XElement XMLString = new XElement("Learner"
+                , new XElement("ULN", "1061484016")
+                , new XElement("FamilyName", "Smith"));
+
+            NewService().GetLearnRefNumberFromXML(XMLString).Should().Be(string.Empty);
+        }
+
+        [Fact]
+        public void GetLearnRefNumberFromXML_NullCheck()
+        {
+            NewService().GetLearnRefNumberFromXML(null).Should().Be(string.Empty);
+        }
+
+        [Fact]
+        public void GetLearnRefNumberFromElement_Valid()
+        {
+            XElement xElement = new XElement("LearnRefNumber", "16Learner");
+
+            NewService().GetLearnRefNumberFromElement(xElement).Should().Be("16Learner");
+        }
+
+        [Fact]
+        public void GetLearnRefNumberFromElement_InValid()
+        {
+            XElement xElement = new XElement("ULN", "123456789");
+
+            NewService().GetLearnRefNumberFromElement(xElement).Should().Be(string.Empty);
+        }
+
+        [Fact]
+        public void GetLearnRefNumberFromElement_NullCheck()
+        {
+            NewService().GetLearnRefNumberFromElement(null).Should().Be(string.Empty);
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            string validationError = "The XML is not well formed.";
+            string validationKey = string.Empty;
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("", "")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("", validationError)).Verifiable();
 
-            NewService(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(validationErrors).Should().BeNullOrEmpty();
+            NewService(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(validationKey, validationError);
 
+            validationErrorHandlerMock.Verify();
         }
 
         public ValidateXMLSchemaService NewService(

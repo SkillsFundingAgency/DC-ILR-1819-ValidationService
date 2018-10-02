@@ -31,6 +31,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         }
 
         [Fact]
+        public void SeverityToString_Fail()
+        {
+            NewService().SeverityToString(Severity.Fail).Should().Be("F");
+        }
+
+        [Fact]
         public void SeverityToString_Null()
         {
             NewService().SeverityToString(null).Should().BeNull();

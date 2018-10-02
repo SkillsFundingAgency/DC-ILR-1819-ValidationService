@@ -125,6 +125,10 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
                 c.RegisterInstance(preValidationContext).As<IPreValidationContext>();
             }))
             {
+                var errorLookupPopulationService = scope.Resolve<IErrorLookupPopulationService>();
+
+                await errorLookupPopulationService.PopulateAsync(CancellationToken.None);
+
                 var preValidationPopulationService = scope.Resolve<IPopulationService>();
 
                 await preValidationPopulationService.PopulateAsync(CancellationToken.None);

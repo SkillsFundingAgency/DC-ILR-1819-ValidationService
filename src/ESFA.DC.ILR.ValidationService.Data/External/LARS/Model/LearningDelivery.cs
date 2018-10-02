@@ -53,6 +53,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         public IEnumerable<LearningDeliveryCategory> LearningDeliveryCategories { get; set; }
 
         /// <summary>
+        /// Gets or sets the lars validities.
+        /// </summary>
+        public IEnumerable<LARSValidity> LARSValidities { get; set; }
+
+        /// <summary>
         /// Gets or sets the framework aims.
         /// </summary>
         public IEnumerable<FrameworkAim> FrameworkAims { get; set; }
@@ -76,5 +81,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// Gets the annual values.
         /// </summary>
         IReadOnlyCollection<ILARSAnnualValue> ILARSLearningDelivery.AnnualValues => AnnualValues.AsSafeReadOnlyList();
+
+        /// <summary>
+        /// Gets the lars validities.
+        /// </summary>
+        IReadOnlyCollection<ILARSValidity> ILARSLearningDelivery.LARSValidities => LARSValidities.AsSafeReadOnlyList();
     }
 }

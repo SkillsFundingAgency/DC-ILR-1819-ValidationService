@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         public bool InReceiptOfAnotherBenefit(IEmploymentStatusMonitoring employmentMonitoring) =>
             It.IsInRange(
                 $"{employmentMonitoring.ESMType}{employmentMonitoring.ESMCode}",
-                EmploymentStatusMonitoring.InReceiptOfAnotherStateBenefit);
+                Monitoring.EmploymentStatus.InReceiptOfAnotherStateBenefit);
 
         /// <summary>
         /// In receipt of universal credit.
@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         public bool InReceiptOfUniversalCredit(IEmploymentStatusMonitoring employmentMonitoring) =>
             It.IsInRange(
                 $"{employmentMonitoring.ESMType}{employmentMonitoring.ESMCode}",
-                EmploymentStatusMonitoring.InReceiptOfUniversalCredit);
+                Monitoring.EmploymentStatus.InReceiptOfUniversalCredit);
 
         /// <summary>
         /// Determines whether [is not employed] [the specified learner employment status].
@@ -92,7 +92,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         ///   <c>true</c> if the specified fam is monitored; otherwise, <c>false</c>.
         /// </returns>
         public bool IsMonitored(ILearningDeliveryFAM fam) =>
-            It.IsInRange(fam.LearnDelFAMType, DeliveryMonitoring.Types.Learning);
+            It.IsInRange(fam.LearnDelFAMType, Monitoring.Delivery.Types.Learning);
 
         /// <summary>
         /// Determines whether (any of) the specified fams are monitored.
@@ -110,7 +110,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         /// <param name="fam">The fam.</param>
         /// <returns>true if the condition is met</returns>
         public bool MandatedToSkillsTraining(ILearningDeliveryFAM fam) =>
-            It.IsInRange($"{fam.LearnDelFAMType}{fam.LearnDelFAMCode}", DeliveryMonitoring.MandationToSkillsTraining);
+            It.IsInRange($"{fam.LearnDelFAMType}{fam.LearnDelFAMCode}", Monitoring.Delivery.MandationToSkillsTraining);
 
         /// <summary>
         /// Mandated to skills training.
@@ -152,10 +152,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                     and     LearnerEmploymentStatus.EmpStat = 11 or 12 for the latest Employment Status on (or before) the LearningDelivery.LearnStartDate
 
                             // in receipt of another benefit.
-                    and     ((EmploymentStatusMonitoring.ESMType = BSI and EmploymentStatusMonitoring.ESMCode = 3)
+                    and     ((Monitoring.EmploymentStatus.ESMType = BSI and Monitoring.EmploymentStatus.ESMCode = 3)
                             or
                             // in receipt of universal credit.
-                            (EmploymentStatusMonitoring.ESMType = BSI and EmploymentStatusMonitoring.ESMCode = 4
+                            (Monitoring.EmploymentStatus.ESMType = BSI and Monitoring.EmploymentStatus.ESMCode = 4
                             // is learning delivery monitored
                             and LearningDeliveryFAM.LearnDelFAMType = LDM
                             // and not mandated to skills training

@@ -58,6 +58,9 @@
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.DateTimeProvider.Interface, Version=0.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.DateTimeProvider.Interface.0.1.6-beta0001\lib\netstandard2.0\ESFA.DC.DateTimeProvider.Interface.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
@@ -114,6 +117,7 @@
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
+    <Compile Include="HE\Domicile\Domicile_01RuleTests.cs" />
     <Compile Include="HE\ELQ\ELQ_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02RuleTests.cs" />
@@ -155,6 +159,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53RuleTests.cs" />
+    <Compile Include="Learner\EngGrade\EngGrade_03RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_04RuleTests.cs" />
@@ -188,6 +193,7 @@
     <Compile Include="Learner\ULN\ULN_07RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_09RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_10RuleTests.cs" />
+    <Compile Include="Learner\ULN\ULN_11RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_12RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_10RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_09RuleTests.cs" />
@@ -201,6 +207,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_04RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_05RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_03RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_10RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_12RuleTests.cs" />
@@ -240,11 +247,13 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_01RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_38RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_59RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_37RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_02RuleTests.cs" />
@@ -258,6 +267,8 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_44RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_09RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_63RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_64RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_62RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66RuleTests.cs" />
@@ -272,6 +283,7 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08RuleTests.cs" />
     <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03RuleTests.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07RuleTests.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2RuleTests.cs" />
@@ -293,7 +305,7 @@
     <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryQueryServiceTests.cs" />
     <Compile Include="Query\PostcodeQueryServiceTests.cs" />
-    <Compile Include="WorkPlacement\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

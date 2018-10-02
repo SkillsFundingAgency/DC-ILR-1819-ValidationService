@@ -4,25 +4,25 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
+namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason
 {
     /// <summary>
     /// from version 1.1 validation spread sheet
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class WorkPlaceStartDate_01Rule :
+    public class WithdrawReason_03Rule :
         IRule<ILearner>
     {
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "WorkPlaceStartDate";
+        public const string MessagePropertyName = "WithdrawReason";
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "WorkPlaceStartDate_01";
+        public const string Name = "WithdrawReason_03";
 
         /// <summary>
         /// The message handler
@@ -30,10 +30,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WorkPlaceStartDate_01Rule"/> class.
+        /// Initializes a new instance of the <see cref="WithdrawReason_03Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public WorkPlaceStartDate_01Rule(IValidationErrorHandler validationErrorHandler)
+        public WithdrawReason_03Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -47,29 +47,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
         public string RuleName => Name;
 
         /// <summary>
-        /// Gets the minimun viable start.
-        /// </summary>
-        public DateTime MinimunViableStart => new DateTime(2014, 07, 31);
-
-        /// <summary>
-        /// Determines whether [is viable start] [the specified delivery].
+        /// Determines whether the specified delivery has withdrawn.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>
-        ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
+        ///   <c>true</c> if the specified delivery has withdrawn; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsViableStart(ILearningDelivery delivery) =>
-            delivery.LearnStartDate > MinimunViableStart;
+        public bool HasWithdrawn(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.CompStatus, CompletionState.HasWithdrawn);
 
         /// <summary>
-        /// Determines whether [is work placement] [the specified delivery].
+        /// Determines whether [has withdraw reason] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>
-        ///   <c>true</c> if [is work placement] [the specified delivery]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [has withdraw reason] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsWorkPlacement(ILearningDelivery delivery) =>
-            It.IsInRange(delivery.LearnAimRef, TypeOfAim.References.AsWorkPlacementCodes);
+        public bool HasWithdrawReason(ILearningDelivery delivery) =>
+            It.Has(delivery.WithdrawReasonNullable);
 
         /// <summary>
         /// Validates the specified object.
@@ -83,30 +78,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.WorkPlacement.WorkPlaceStartDate
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(x => IsViableStart(x) && IsWorkPlacement(x))
+                .SafeWhere(HasWithdrawn)
                 .ForEach(x =>
                 {
-                    var failedValidation = !ConditionMet(x);
+                    var failedValidation = !HasWithdrawReason(x);
 
                     if (failedValidation)
                     {
                         RaiseValidationMessage(learnRefNumber, x);
                     }
                 });
-        }
-
-        /// <summary>
-        /// Condition met.
-        /// </summary>
-        /// <param name="thisDelivery">this delivery.</param>
-        /// <returns>
-        /// true if any any point the conditions are met
-        /// </returns>
-        public bool ConditionMet(ILearningDelivery thisDelivery)
-        {
-            return It.Has(thisDelivery)
-                ? It.HasValues(thisDelivery.LearningDeliveryWorkPlacements)
-                : true;
         }
 
         /// <summary>
