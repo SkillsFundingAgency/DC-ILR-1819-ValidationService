@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers.PreValidation;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
+using ESFA.DC.Logging.Interfaces;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -182,9 +179,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             ISchemaStringProviderService schemaStringProviderService = null)
         {
             return new ValidateXMLSchemaService(
-                validationErrorHandler: validationErrorHandler,
-                fileContentCache: fileCache,
-                schemaFileContentStringProviderService: schemaStringProviderService);
+                validationErrorHandler,
+                schemaStringProviderService,
+                fileCache,
+                new Mock<ILogger>().Object);
         }
     }
 }
