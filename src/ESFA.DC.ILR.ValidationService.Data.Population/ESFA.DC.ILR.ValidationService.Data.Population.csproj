@@ -90,6 +90,7 @@
     <Compile Include="External\AbstractDataRetrievalService.cs" />
     <Compile Include="External\AbstractOrganisationsDataRetrievalService.cs" />
     <Compile Include="External\AbstractLARSDataRetrievalService.cs" />
+    <Compile Include="External\ErrorLookupPopulationService.cs" />
     <Compile Include="External\ExternalDataCachePopulationService.cs" />
     <Compile Include="External\LARSFrameworkDataRetrievalService.cs" />
     <Compile Include="External\LARSLearningDeliveryDataRetrievalService.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="External\ULNDataRetrievalService.cs" />
     <Compile Include="External\ValidationErrorsDataRetrievalService.cs" />
     <Compile Include="FileDataCachePopulationService.cs" />
+    <Compile Include="Interface\IErrorLookupPopulationService.cs" />
     <Compile Include="Interface\IExternalDataCachePopulationService.cs" />
     <Compile Include="Interface\IExternalDataRetrievalService.cs" />
     <Compile Include="Interface\IFileDataCachePopulationService.cs" />
