@@ -34,7 +34,6 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ValidationActor\ESFA.DC.ILR.ValidationService.ValidationActor.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ApplicationParameters\Local.1Node.xml" />
     <Content Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
