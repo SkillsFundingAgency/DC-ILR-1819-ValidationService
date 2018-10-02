@@ -28,6 +28,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimSeqNumber;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType;
@@ -77,6 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_04Rule),
                 typeof(AddHours_05Rule),
                 typeof(AddHours_06Rule),
+                typeof(AFinDate_03Rule),
                 typeof(AFinType_09Rule),
                 typeof(AFinType_10Rule),
                 typeof(AFinType_12Rule),
