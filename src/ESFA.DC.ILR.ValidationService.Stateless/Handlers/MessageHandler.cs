@@ -80,10 +80,14 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename] = validationContext.Input;
 
                     // populate the keys into jobcontextmessage
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] = validationContext.InvalidLearnRefNumbersCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbersCount] = validationContext.ValidLearnRefNumbersCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalErrorCount] = validationContext.ValidationTotalErrorCount;
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalWarningCount] = validationContext.ValidationTotalWarningCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] =
+                        validationContext.InvalidLearnRefNumbersCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidLearnRefNumbersCount] =
+                        validationContext.ValidLearnRefNumbersCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalErrorCount] =
+                        validationContext.ValidationTotalErrorCount;
+                    jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationTotalWarningCount] =
+                        validationContext.ValidationTotalWarningCount;
 
                     logger.LogDebug("Validation complete");
                     ServiceEventSource.Current.ServiceMessage(_context, "Validation complete");
