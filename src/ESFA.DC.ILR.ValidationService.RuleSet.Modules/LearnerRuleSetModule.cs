@@ -128,6 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
                 typeof(Domicile_01Rule),
+                typeof(Domicile_02Rule),
                 typeof(ELQ_01Rule),
                 typeof(EngGrade_03Rule),
                 typeof(EmpOutcome_01Rule),
