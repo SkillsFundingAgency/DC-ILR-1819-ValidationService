@@ -35,7 +35,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IMessageStreamProviderService _streamProvider;
         private readonly IValidationErrorCache<U> _validationErrorCache;
         private readonly IValidationOutputService<U> _validationOutputService;
-        private readonly IValidationItemProviderService<IEnumerable<IMessage>> _validationItemProviderService;
         private readonly IRuleSetOrchestrationService<IMessage, U> _ruleSetOrchestrationService;
         private readonly ILogger _logger;
         private readonly IValidateXMLSchemaService _validateXmlSchemaService;
@@ -52,7 +51,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IMessageStreamProviderService streamProvider,
             IValidationErrorCache<U> validationErrorCache,
             IValidationOutputService<U> validationOutputService,
-            IValidationItemProviderService<IEnumerable<IMessage>> validationItemProviderService,
             IRuleSetOrchestrationService<IMessage, U> ruleSetOrchestrationService,
             ILogger logger,
             IValidateXMLSchemaService validateXMLSchemaService)
@@ -68,7 +66,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _streamProvider = streamProvider;
             _validationErrorCache = validationErrorCache;
             _validationOutputService = validationOutputService;
-            _validationItemProviderService = validationItemProviderService;
             _ruleSetOrchestrationService = ruleSetOrchestrationService;
             _logger = logger;
             _validateXmlSchemaService = validateXMLSchemaService;
@@ -79,39 +76,43 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            // get ILR data from file
-            await _errorLookupPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogDebug($"Error lookup service completed in: {stopWatch.ElapsedMilliseconds}");
-
-            // Todo: Remove this when XML is known to be schema valid
-            Stream fileStream = await _streamProvider.Provide(cancellationToken);
-
-            if (fileStream != null)
+            try
             {
-                fileStream.Seek(0, SeekOrigin.Begin);
-                UTF8Encoding utF8Encoding = new UTF8Encoding(false, true);
-                using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true, 1024, true))
+                // get ILR data from file
+                await _errorLookupPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
+                _logger.LogDebug($"Error lookup service completed in: {stopWatch.ElapsedMilliseconds}");
+
+                // Todo: Remove this when XML is known to be schema valid
+                Stream fileStream = await _streamProvider.Provide(cancellationToken);
+                if (fileStream != null)
                 {
-                    Cache<string> fileContentCache = (Cache<string>)_cache;
-                    fileContentCache.Item = reader.ReadToEnd();
+                    fileStream.Seek(0, SeekOrigin.Begin);
+                    UTF8Encoding utF8Encoding = new UTF8Encoding(false, true);
+                    using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true, 1024, true))
+                    {
+                        Cache<string> fileContentCache = (Cache<string>)_cache;
+                        fileContentCache.Item = reader.ReadToEnd();
+                    }
                 }
-            }
 
-            if (_validationErrorCache.ValidationErrors.Any())
-            {
-                await _validationOutputService.ProcessAsync(cancellationToken).ConfigureAwait(false);
-                _logger.LogDebug($"Validation final results persisted early in: {stopWatch.ElapsedMilliseconds}");
-                return;
-            }
+                if (_validationErrorCache.ValidationErrors.Any())
+                {
+                    return;
+                }
 
-            cancellationToken.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
 
-            // Call XSD validation
-            _validateXmlSchemaService.Validate();
-            _logger.LogDebug($"XML validation schema service completed in: {stopWatch.ElapsedMilliseconds}");
+                // Call XSD validation
+                _validateXmlSchemaService.Validate();
+                _logger.LogDebug($"XML validation schema service completed in: {stopWatch.ElapsedMilliseconds}");
 
-            if (!_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
-            {
+                if (_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
+                {
+                    _logger.LogDebug(
+                        $"Possible xsd validation failure: {_validationErrorCache.ValidationErrors.Count}");
+                    return;
+                }
+
                 await _preValidationPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
                 _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
 
@@ -123,27 +124,24 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (!_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
-                {
-                    await ExecuteValidationActors(validationContext, cancellationToken).ConfigureAwait(false);
-                }
-                else
+                if (_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
                 {
                     _logger.LogDebug(
-                        $"Header validation failed, so will not execute learner validation actors, error count : {_validationErrorCache.ValidationErrors.Count}");
+                        $"Header validation failed, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
+                    return;
                 }
+
+                await ExecuteValidationActors(validationContext, cancellationToken).ConfigureAwait(false);
+
+                _logger.LogDebug(
+                    $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
             }
-            else
+            finally
             {
-                _logger.LogDebug($"possible xsd validation failure: {_validationErrorCache.ValidationErrors.Count}");
+                cancellationToken.ThrowIfCancellationRequested();
+                await _validationOutputService.ProcessAsync(cancellationToken).ConfigureAwait(false);
+                _logger.LogDebug($"Validation final results persisted in {stopWatch.ElapsedMilliseconds}");
             }
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            _logger.LogDebug(
-                $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
-            await _validationOutputService.ProcessAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogDebug($"Validation final results persisted in {stopWatch.ElapsedMilliseconds}");
         }
 
         private IValidationActor GetValidationActor()
