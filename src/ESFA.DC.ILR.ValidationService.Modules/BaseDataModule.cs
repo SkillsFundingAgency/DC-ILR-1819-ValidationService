@@ -2,9 +2,8 @@
 using ESFA.DC.DateTimeProvider.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population;
+using ESFA.DC.ILR.ValidationService.Data.Population.External;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.IO.Dictionary;
 using ESFA.DC.IO.Interfaces;
 
@@ -17,6 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<FileDataCachePopulationService>().As<IFileDataCachePopulationService>().InstancePerLifetimeScope();
 
             builder.RegisterType<MessageCachePopulationService>().As<IMessageCachePopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<ErrorLookupPopulationService>().As<IErrorLookupPopulationService>().InstancePerLifetimeScope();
             builder.RegisterType<InternalDataCachePopulationService>().As<ICreateInternalDataCache>().InstancePerLifetimeScope();
 
             builder.RegisterType<DateTimeProvider.DateTimeProvider>().As<IDateTimeProvider>().InstancePerLifetimeScope();

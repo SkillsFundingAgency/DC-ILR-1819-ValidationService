@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Fabric;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Cache;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
 using ESFA.DC.Logging.Interfaces;
@@ -22,12 +25,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     public class PreValidationOrchestrationSfService<U> : IPreValidationOrchestrationService<U>
     {
         private readonly IPopulationService _preValidationPopulationService;
+        private readonly IErrorLookupPopulationService _errorLookupPopulationService;
         private readonly ILearnerPerActorService _learnerPerActorService;
-        private readonly ICache<IMessage> _messageCache;
         private readonly IJsonSerializationService _jsonSerializationService;
         private readonly IInternalDataCache _internalDataCache;
         private readonly IExternalDataCache _externalDataCache;
         private readonly IFileDataCache _fileDataCache;
+        private readonly ICache<string> _cache;
+        private readonly IMessageStreamProviderService _streamProvider;
         private readonly IValidationErrorCache<U> _validationErrorCache;
         private readonly IValidationOutputService<U> _validationOutputService;
         private readonly IValidationItemProviderService<IEnumerable<IMessage>> _validationItemProviderService;
@@ -37,12 +42,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
         public PreValidationOrchestrationSfService(
             IPopulationService preValidationPopulationService,
-            ICache<IMessage> messageCache,
+            IErrorLookupPopulationService errorLookupPopulationService,
             ILearnerPerActorService learnerPerActorService,
             IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
             IFileDataCache fileDataCache,
+            ICache<string> cache,
+            IMessageStreamProviderService streamProvider,
             IValidationErrorCache<U> validationErrorCache,
             IValidationOutputService<U> validationOutputService,
             IValidationItemProviderService<IEnumerable<IMessage>> validationItemProviderService,
@@ -51,12 +58,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IValidateXMLSchemaService validateXMLSchemaService)
         {
             _preValidationPopulationService = preValidationPopulationService;
+            _errorLookupPopulationService = errorLookupPopulationService;
             _learnerPerActorService = learnerPerActorService;
-            _messageCache = messageCache;
             _jsonSerializationService = jsonSerializationService;
             _internalDataCache = internalDataCache;
             _externalDataCache = externalDataCache;
             _fileDataCache = fileDataCache;
+            _cache = cache;
+            _streamProvider = streamProvider;
             _validationErrorCache = validationErrorCache;
             _validationOutputService = validationOutputService;
             _validationItemProviderService = validationItemProviderService;
@@ -71,8 +80,23 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             stopWatch.Start();
 
             // get ILR data from file
-            await _preValidationPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
-            _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
+            await _errorLookupPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
+            _logger.LogDebug($"Error lookup service completed in: {stopWatch.ElapsedMilliseconds}");
+
+            // Todo: Remove this when XML is known to be schema valid
+            Stream fileStream = await _streamProvider.Provide(cancellationToken);
+
+            if (fileStream != null)
+            {
+                fileStream.Seek(0, SeekOrigin.Begin);
+                UTF8Encoding utF8Encoding = new UTF8Encoding(false, true);
+                using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true, 1024, true))
+                {
+                    Cache<string> fileContentCache = (Cache<string>)_cache;
+                    fileContentCache.Item = reader.ReadToEnd();
+                }
+            }
+
             if (_validationErrorCache.ValidationErrors.Any())
             {
                 await _validationOutputService.ProcessAsync(cancellationToken).ConfigureAwait(false);
@@ -82,51 +106,44 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            // get the learners
-            IMessage ilrMessage = _messageCache.Item;
+            // Call XSD validation
+            _validateXmlSchemaService.Validate();
+            _logger.LogDebug($"XML validation schema service completed in: {stopWatch.ElapsedMilliseconds}");
 
-            // Possible the zip file was corrupt so we dont have message at this point
-            if (ilrMessage == null)
+            if (!_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
             {
-                _logger.LogWarning($"ILR Message is null, will not execute any Learner validation Job Id: {validationContext.Input}");
-            }
-            else
-            {
-                // Call XSD validation
-                _validateXmlSchemaService.Validate();
+                await _preValidationPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
+                _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
 
-                if (!_validationErrorCache.ValidationErrors.Any(x => (((IValidationError)x).Severity ?? Interface.Enum.Severity.Error) == Interface.Enum.Severity.Error))
-                {
-                    // get the filename
-                    _fileDataCache.FileName = validationContext.Input;
+                // Set the filename
+                _fileDataCache.FileName = validationContext.Input;
 
-                    // Message Validation
-                    await _ruleSetOrchestrationService.Execute(cancellationToken).ConfigureAwait(false);
-
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    if (!_validationErrorCache.ValidationErrors.Any(x => (((IValidationError)x).Severity ?? Interface.Enum.Severity.Error) == Interface.Enum.Severity.Error))
-                    {
-                        await ExecuteValidationActors(validationContext, cancellationToken).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        _logger.LogDebug(
-                            $"Header validation failed, so will not execute learner validation actors , error count : {_validationErrorCache.ValidationErrors.Count}");
-                    }
-                }
-                else
-                {
-                    _logger.LogDebug($"possible xsd validation failure : {_validationErrorCache.ValidationErrors.Count}");
-                }
+                // File Validation
+                await _ruleSetOrchestrationService.Execute(cancellationToken).ConfigureAwait(false);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                _logger.LogDebug(
-                    $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
-                await _validationOutputService.ProcessAsync(cancellationToken).ConfigureAwait(false);
-                _logger.LogDebug($"Validation final results persisted in {stopWatch.ElapsedMilliseconds}");
+                if (!_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
+                {
+                    await ExecuteValidationActors(validationContext, cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    _logger.LogDebug(
+                        $"Header validation failed, so will not execute learner validation actors, error count : {_validationErrorCache.ValidationErrors.Count}");
+                }
             }
+            else
+            {
+                _logger.LogDebug($"possible xsd validation failure: {_validationErrorCache.ValidationErrors.Count}");
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            _logger.LogDebug(
+                $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
+            await _validationOutputService.ProcessAsync(cancellationToken).ConfigureAwait(false);
+            _logger.LogDebug($"Validation final results persisted in {stopWatch.ElapsedMilliseconds}");
         }
 
         private IValidationActor GetValidationActor()
@@ -189,6 +206,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     _validationErrorCache.Add(error);
                 }
             }
+        }
+
+        private bool IsErrorOrFail(U item)
+        {
+            Severity severity = ((IValidationError)item).Severity ?? Severity.Error;
+            return severity == Severity.Error || severity == Severity.Fail;
         }
     }
 }

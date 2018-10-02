@@ -11,6 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<PreValidationPopulationService>().As<IPopulationService>().InstancePerLifetimeScope();
+            builder.RegisterType<AcceptanceTestsValidationErrorsCachePopulationServiceStub>().As<IErrorLookupPopulationService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AcceptanceTestsExternalDataCachePopulationServiceStub>().As<IExternalDataCachePopulationService>().InstancePerLifetimeScope();
             builder.RegisterType<InternalDataCachePopulationService>().As<IInternalDataCachePopulationService>().InstancePerLifetimeScope();

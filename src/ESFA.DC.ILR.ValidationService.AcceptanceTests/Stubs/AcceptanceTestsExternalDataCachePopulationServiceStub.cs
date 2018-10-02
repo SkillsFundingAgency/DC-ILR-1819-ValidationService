@@ -31,11 +31,6 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests.Stubs
             PopulateFrameworksFrameworkAimsAndLearningDeliveries(rhs);
         }
 
-        public async Task PopulateErrorLookupsAsync(CancellationToken cancellationToken)
-        {
-            _dataCache.ValidationErrors = new Dictionary<string, ValidationError>();
-        }
-
         private void PopulateFrameworksFrameworkAimsAndLearningDeliveries(dynamic rhs)
         {
             var frameworks = new List<Framework>();

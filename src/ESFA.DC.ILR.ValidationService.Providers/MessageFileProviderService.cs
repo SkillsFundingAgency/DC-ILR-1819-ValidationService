@@ -31,22 +31,27 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         {
             var fileContentCache = (Cache<string>)_messageCache;
 
-            Stream fileStream = await _streamProvider.Provide(cancellationToken);
-
-            if (fileStream == null)
+            if (string.IsNullOrEmpty(fileContentCache.Item))
             {
-                return null;
+                Stream fileStream = await _streamProvider.Provide(cancellationToken);
+
+                if (fileStream == null)
+                {
+                    return null;
+                }
+
+                fileStream.Seek(0, SeekOrigin.Begin);
+                UTF8Encoding utF8Encoding = new UTF8Encoding(false, true);
+                using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true, 1024, true))
+                {
+                    fileContentCache.Item = reader.ReadToEnd();
+                }
+
+                fileStream.Seek(0, SeekOrigin.Begin);
+                return _xmlSerializationService.Deserialize<Message>(fileStream);
             }
 
-            fileStream.Seek(0, SeekOrigin.Begin);
-            UTF8Encoding utF8Encoding = new UTF8Encoding(false, true);
-            using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true, 1024, true))
-            {
-                fileContentCache.Item = reader.ReadToEnd();
-            }
-
-            fileStream.Seek(0, SeekOrigin.Begin);
-            return _xmlSerializationService.Deserialize<Message>(fileStream);
+            return _xmlSerializationService.Deserialize<Message>(fileContentCache.Item);
         }
     }
 }
