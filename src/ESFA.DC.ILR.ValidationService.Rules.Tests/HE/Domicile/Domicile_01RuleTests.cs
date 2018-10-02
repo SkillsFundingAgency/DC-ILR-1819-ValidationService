@@ -83,6 +83,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
         }
 
         /// <summary>
+        /// Is qualifying start date meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("2013-08-01", true)]
+        [InlineData("2017-06-24", true)]
+        [InlineData("2013-07-31", false)]
+        [InlineData("2010-11-09", false)]
+        public void IsQualifyingStartDateMeetsExpectation(string candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<ILearningDelivery>();
+            mockItem
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse(candidate));
+
+            // act
+            var result = sut.IsQualifyingStartDate(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// Has domicile meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -156,6 +182,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
 
             var mockHE = new Mock<ILearningDeliveryHE>();
             var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse("2013-08-01"));
             mockDelivery
                 .SetupGet(y => y.LearningDeliveryHEEntity)
                 .Returns(mockHE.Object);

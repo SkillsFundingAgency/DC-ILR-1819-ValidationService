@@ -42,6 +42,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.Domicile
         public string RuleName => Name;
 
         /// <summary>
+        /// Gets the minimun viable start.
+        /// </summary>
+        public DateTime MinimumViableStart => new DateTime(2013, 07, 31);
+
+        public bool IsQualifyingStartDate(ILearningDelivery delivery) =>
+            delivery.LearnStartDate > MinimumViableStart;
+
+        /// <summary>
         /// Determines whether [has higher ed] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
@@ -52,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.Domicile
             It.Has(delivery.LearningDeliveryHEEntity);
 
         /// <summary>
-        /// Determines whether the specified he has domicile.
+        /// Determines whether the specified the HE has a domicile.
         /// </summary>
         /// <param name="he">The higher ed.</param>
         /// <returns>
@@ -73,15 +81,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.Domicile
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(HasHigherEd)
+                .SafeWhere(x => IsQualifyingStartDate(x) && HasHigherEd(x) && !HasDomicile(x.LearningDeliveryHEEntity))
                 .ForEach(x =>
                 {
-                    var failedValidation = !HasDomicile(x.LearningDeliveryHEEntity);
-
-                    if (failedValidation)
-                    {
-                        RaiseValidationMessage(learnRefNumber, x);
-                    }
+                    RaiseValidationMessage(learnRefNumber, x);
                 });
         }
 
