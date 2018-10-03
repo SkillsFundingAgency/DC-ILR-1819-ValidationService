@@ -116,6 +116,7 @@
     <Compile Include="Derived\DD07Tests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_01RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="HE\Domicile\Domicile_02RuleTests.cs" />
     <Compile Include="HE\Domicile\Domicile_01RuleTests.cs" />

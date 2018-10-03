@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
+using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType;
 using ESFA.DC.ILR.ValidationService.Rules.HE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.Domicile;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
@@ -135,6 +136,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(EmpOutcome_02Rule),
                 typeof(EmpOutcome_03Rule),
                 typeof(EmpStat_08Rule),
+                typeof(ESMType_01Rule),
                 typeof(EmpStat_12Rule),
                 typeof(EPAOrgID_02Rule),
                 typeof(FamilyName_01Rule),
