@@ -88,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 {
                     fileStream.Seek(0, SeekOrigin.Begin);
                     UTF8Encoding utF8Encoding = new UTF8Encoding(false, true);
-                    using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true, 1024, true))
+                    using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true))
                     {
                         Cache<string> fileContentCache = (Cache<string>)_cache;
                         fileContentCache.Item = reader.ReadToEnd();

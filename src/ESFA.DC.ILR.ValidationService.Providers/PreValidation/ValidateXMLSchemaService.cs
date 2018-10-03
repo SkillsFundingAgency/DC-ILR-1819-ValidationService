@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -22,15 +20,23 @@ namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
         private readonly IList<IErrorMessageParameter> _validationErrors = new List<IErrorMessageParameter>();
         private readonly ISchemaStringProviderService _schemaFileContentStringProviderService;
         private readonly ICache<string> _fileContentCache;
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// Flag indicating whether a generic error has occurred, and we should report it, but don't have any context to support it.
+        /// </summary>
+        private bool needRaiseError;
 
         public ValidateXMLSchemaService(
             IValidationErrorHandler validationErrorHandler,
             ISchemaStringProviderService schemaFileContentStringProviderService,
-            ICache<string> fileContentCache)
+            ICache<string> fileContentCache,
+            ILogger logger)
             : base(validationErrorHandler, RuleNameConstants.Schema)
         {
             _schemaFileContentStringProviderService = schemaFileContentStringProviderService;
             _fileContentCache = fileContentCache;
+            _logger = logger;
         }
 
         public bool Validate()
@@ -50,22 +56,26 @@ namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
 
                 ValidateSchema(xsdReader, xmlReader);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _validationErrors.Add(new ErrorMessageParameter(string.Empty, "The XML is not well formed."));
-                _validationErrors.Add(new ErrorMessageParameter(string.Empty, e.Message));
+                _logger.LogError("Schema validation caught unexpected exception, it will be reported to user", ex);
+                HandleValidationError();
             }
 
-            if (_validationErrors.Count() > 0)
+            if (_validationErrors.Any())
             {
-                bool errorExist = true;
-                foreach (var error in _validationErrors)
+                foreach (IErrorMessageParameter error in _validationErrors)
                 {
-                    HandleValidationError(null, null, BuildErrorMessageParameters(error.PropertyName, error.Value));
-                    errorExist = false;
+                    HandleValidationError(errorMessageParameters: BuildErrorMessageParameters(error.PropertyName, error.Value));
                 }
 
-                return errorExist;
+                return false;
+            }
+
+            if (needRaiseError)
+            {
+                HandleValidationError();
+                return false;
             }
 
             return true;
@@ -167,24 +177,35 @@ namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
 
         private void ValidationEventHandler(object sender, ValidationEventArgs validationEventArgs)
         {
-            if (validationEventArgs.Severity == XmlSeverityType.Error)
+            if (validationEventArgs.Severity != XmlSeverityType.Error)
             {
-                string learnRefNumber = string.Empty;
+                return;
+            }
+
+            needRaiseError = true;
+
+            if (!validationEventArgs.Message.Contains("has invalid child element"))
+            {
+                return;
+            }
+
+            string learnRefNumber = string.Empty;
+            try
+            {
                 if (sender != null
                     && sender.GetType() == typeof(XElement))
                 {
                     learnRefNumber = GetLearnRefNumberFromXML((XElement)sender);
                 }
-
-                if (validationEventArgs.Message.Contains("has invalid child element"))
-                {
-                    _validationErrors.Add(new ErrorMessageParameter(learnRefNumber, string.Format(
-                    "Line: {0} Position: {1} - {2}",
-                    validationEventArgs.Exception?.LineNumber,
-                    validationEventArgs.Exception?.LinePosition,
-                    validationEventArgs.Message)));
-                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError("Can't get learn ref number from invalid XML, will continue without it", ex);
+            }
+
+            _validationErrors.Add(new ErrorMessageParameter(
+                learnRefNumber,
+                $"Line: {validationEventArgs.Exception?.LineNumber} Position: {validationEventArgs.Exception?.LinePosition} - {validationEventArgs.Message}"));
         }
     }
 }
