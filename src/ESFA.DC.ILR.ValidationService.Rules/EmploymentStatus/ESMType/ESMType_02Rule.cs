@@ -68,24 +68,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
             It.IsInRange(employmentStatus.EmpStat, TypeOfEmploymentStatus.InPaidEmployment);
 
         /// <summary>
-        /// Determines whether [has intensity indicator] [the specified monitor].
+        /// Determines whether [has qualifying indicator] [the specified monitor].
         /// </summary>
         /// <param name="monitor">The monitor.</param>
         /// <returns>
-        ///   <c>true</c> if [is intensity indicator] [the specified monitor]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [has qualifying indicator] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasIntensityIndicator(IEmploymentStatusMonitoring monitor) =>
+        public bool HasQualifyingIndicator(IEmploymentStatusMonitoring monitor) =>
             It.IsInRange(monitor.ESMType, Monitoring.EmploymentStatus.Types.EmploymentIntensityIndicator);
 
         /// <summary>
-        /// Determines whether [has intensity indicator] [the specified employment status].
+        /// Determines whether [has qualifying indicator] [the specified employment status].
         /// </summary>
         /// <param name="employmentStatus">The employment status.</param>
         /// <returns>
-        ///   <c>true</c> if [has intensity indicator] [the specified employment status]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [has qualifying indicator] [the specified employment status]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasIntensityIndicator(ILearnerEmploymentStatus employmentStatus) =>
-            employmentStatus.EmploymentStatusMonitorings.SafeAny(HasIntensityIndicator);
+        public bool HasQualifyingIndicator(ILearnerEmploymentStatus employmentStatus) =>
+            employmentStatus.EmploymentStatusMonitorings.SafeAny(HasQualifyingIndicator);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified employment status].
@@ -95,7 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         ///   <c>true</c> if [is not valid] [the specified employment status]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(ILearnerEmploymentStatus employmentStatus) =>
-            IsQualifyingPeriod(employmentStatus) && IsQualifyingEmployment(employmentStatus) && !HasIntensityIndicator(employmentStatus);
+            IsQualifyingPeriod(employmentStatus) && IsQualifyingEmployment(employmentStatus) && !HasQualifyingIndicator(employmentStatus);
 
         /// <summary>
         /// Validates the specified object.

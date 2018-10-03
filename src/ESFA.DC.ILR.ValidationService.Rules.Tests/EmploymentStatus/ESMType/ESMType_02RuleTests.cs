@@ -136,7 +136,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         }
 
         /// <summary>
-        /// Has intensity indicator meets expectation
+        /// Has qualifying indicator meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
@@ -179,7 +179,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         [InlineData("SEI2", false)]
         [InlineData("SEM0", false)]
         [InlineData("SEM2", false)]
-        public void HasIntensityIndicatorMeetsExpectation(string candidate, bool expectation)
+        public void HasQualifyingIndicatorMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -192,34 +192,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
                 .Returns(int.Parse(candidate.Substring(3)));
 
             // act
-            var result = sut.HasIntensityIndicator(mockItem.Object);
+            var result = sut.HasQualifyingIndicator(mockItem.Object);
 
             // assert
             Assert.Equal(expectation, result);
         }
 
         /// <summary>
-        /// Has intensity indicator with null monitorings returns false
+        /// Has qualifying indicator with null monitorings returns false
         /// </summary>
         [Fact]
-        public void HasIntensityIndicatorWithNullMonitoringsReturnsFalse()
+        public void HasQualifyingIndicatorWithNullMonitoringsReturnsFalse()
         {
             // arrange
             var sut = NewRule();
             var mockItem = new Mock<ILearnerEmploymentStatus>();
 
             // act
-            var result = sut.HasIntensityIndicator(mockItem.Object);
+            var result = sut.HasQualifyingIndicator(mockItem.Object);
 
             // assert
             Assert.False(result);
         }
 
         /// <summary>
-        /// Has intensity indicator with empty monitorings returns false
+        /// Has qualifying indicator with empty monitorings returns false
         /// </summary>
         [Fact]
-        public void HasIntensityIndicatorWithEmptyMonitoringsReturnsFalse()
+        public void HasQualifyingIndicatorWithEmptyMonitoringsReturnsFalse()
         {
             // arrange
             var sut = NewRule();
@@ -231,7 +231,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
                 .Returns(monitorings);
 
             // act
-            var result = sut.HasIntensityIndicator(mockItem.Object);
+            var result = sut.HasQualifyingIndicator(mockItem.Object);
 
             // assert
             Assert.False(result);
