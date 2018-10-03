@@ -55,9 +55,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         public string RuleName => Name;
 
         /// <summary>
-        /// Gets the minimun viable start.
+        /// Gets the last inviable date.
         /// </summary>
-        public DateTime MinimumViableStart => new DateTime(2013, 07, 31);
+        public DateTime LastInviableDate => new DateTime(2013, 07, 31);
 
         /// <summary>
         /// Determines whether [is apprenticeship funded] [the specified delivery].
@@ -97,7 +97,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsViableStart(ILearningDelivery delivery) =>
-            delivery.LearnStartDate > MinimumViableStart;
+            delivery.LearnStartDate > LastInviableDate;
 
         /// <summary>
         /// Determines whether [has valid learning aim] [the specified delivery].

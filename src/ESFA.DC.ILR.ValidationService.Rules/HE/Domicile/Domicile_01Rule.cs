@@ -42,12 +42,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.Domicile
         public string RuleName => Name;
 
         /// <summary>
-        /// Gets the minimun viable start.
+        /// Gets the last inviable date.
         /// </summary>
-        public DateTime MinimumViableStart => new DateTime(2013, 07, 31);
+        public DateTime LastInviableDate => new DateTime(2013, 07, 31);
 
+        /// <summary>
+        /// Determines whether [is qualifying start date] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is qualifying start date] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsQualifyingStartDate(ILearningDelivery delivery) =>
-            delivery.LearnStartDate > MinimumViableStart;
+            delivery.LearnStartDate > LastInviableDate;
 
         /// <summary>
         /// Determines whether [has higher ed] [the specified delivery].
