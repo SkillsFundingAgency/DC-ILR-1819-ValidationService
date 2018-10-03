@@ -6,14 +6,15 @@ using Autofac;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Providers;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
-using ESFA.DC.JobContext;
 using ESFA.DC.JobContext.Interface;
+using ESFA.DC.JobContextManager.Interface;
+using ESFA.DC.JobContextManager.Model;
 using ESFA.DC.Logging.Interfaces;
 using ExecutionContext = ESFA.DC.Logging.ExecutionContext;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 {
-    public class MessageHandler : IMessageHandler
+    public class MessageHandler : IMessageHandler<JobContextMessage>
     {
         private readonly ILifetimeScope _parentLifeTimeScope;
         private readonly StatelessServiceContext _context;
@@ -24,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             _context = context;
         }
 
-        public async Task<bool> Handle(JobContextMessage jobContextMessage, CancellationToken cancellationToken)
+        public async Task<bool> HandleAsync(JobContextMessage jobContextMessage, CancellationToken cancellationToken)
         {
             using (var childLifeTimeScope = _parentLifeTimeScope
                 .BeginLifetimeScope(c =>
