@@ -118,14 +118,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var cache = new InternalDataCache();
             var finTypes = new List<int>() { 1, 2, 4, 5, 6, 9, 24, 25, 29, 45 };
             var codedTypes = new List<string>() { "TNP", "PMR", "AEC", "UI", "OT", "ME", "YOU" };
-            var tTAccomItems = new Dictionary<int, ValidityPeriods>()
+            var tTAccomItems = new Dictionary<string, ValidityPeriods>()
             {
-                [1] = new ValidityPeriods(validFrom: DateTime.Parse("2013-06-14"), validTo: DateTime.Parse("2020-06-14")),
-                [2] = new ValidityPeriods(validFrom: DateTime.Parse("2009-04-28"), validTo: DateTime.Parse("2020-06-14")),
-                [4] = new ValidityPeriods(validFrom: DateTime.Parse("2012-09-06"), validTo: DateTime.Parse("2015-02-28")),
-                [5] = new ValidityPeriods(validFrom: DateTime.Parse("2010-11-21"), validTo: DateTime.Parse("2020-06-14")),
-                [6] = new ValidityPeriods(validFrom: DateTime.Parse("2018-07-02"), validTo: DateTime.Parse("2020-06-14")),
-                [9] = new ValidityPeriods(validFrom: DateTime.Parse("2000-02-01"), validTo: DateTime.Parse("2008-08-26")),
+                ["1"] = new ValidityPeriods(validFrom: DateTime.Parse("2013-06-14"), validTo: DateTime.Parse("2020-06-14")),
+                ["2"] = new ValidityPeriods(validFrom: DateTime.Parse("2009-04-28"), validTo: DateTime.Parse("2020-06-14")),
+                ["4"] = new ValidityPeriods(validFrom: DateTime.Parse("2012-09-06"), validTo: DateTime.Parse("2015-02-28")),
+                ["5"] = new ValidityPeriods(validFrom: DateTime.Parse("2010-11-21"), validTo: DateTime.Parse("2020-06-14")),
+                ["6"] = new ValidityPeriods(validFrom: DateTime.Parse("2018-07-02"), validTo: DateTime.Parse("2020-06-14")),
+                ["9"] = new ValidityPeriods(validFrom: DateTime.Parse("2000-02-01"), validTo: DateTime.Parse("2008-08-26")),
             };
 
             cache.SimpleLookups.Add(LookupSimpleKey.FINTYPE, finTypes);

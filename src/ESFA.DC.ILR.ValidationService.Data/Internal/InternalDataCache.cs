@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         /// <summary>
         /// The time restricted lookups
         /// </summary>
-        private Dictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> _limitedLifeLookups;
+        private Dictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> _limitedLifeLookups;
 
         public IAcademicYear AcademicYear { get; set; }
 
@@ -65,12 +65,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         /// <summary>
         /// Gets the time limited lookups.
         /// </summary>
-        public IDictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> LimitedLifeLookups
+        public IDictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> LimitedLifeLookups
         {
             get
             {
                 return _limitedLifeLookups
-                  ?? (_limitedLifeLookups = new Dictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>>());
+                  ?? (_limitedLifeLookups = new Dictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>>());
             }
         }
     }
