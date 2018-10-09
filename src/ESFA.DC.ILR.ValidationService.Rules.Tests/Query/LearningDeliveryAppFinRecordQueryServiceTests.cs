@@ -60,6 +60,51 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             NewService().HasAnyLearningDeliveryAFinCodesForType(learningDeliveryAppFinRecords, "TypeOne", codes).Should().BeFalse();
         }
 
+        [Fact]
+        public void HasAnyLearningDeliveryAFinCodeForType_True()
+        {
+            var learningDeliveryAppFinRecords = new TestAppFinRecord[]
+            {
+                new TestAppFinRecord() { AFinType = "TypeOne", AFinCode = 1 },
+                new TestAppFinRecord() { AFinType = "TypeTwo", AFinCode = 2 },
+                new TestAppFinRecord() { AFinType = "TypeTwo", AFinCode = 3 },
+            };
+
+            NewService().HasAnyLearningDeliveryAFinCodeForType(learningDeliveryAppFinRecords, "TypeTwo", 2).Should().BeTrue();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryAFinCodeForType_FalseNull()
+        {
+            NewService().HasAnyLearningDeliveryAFinCodeForType(null, "TypeTwo", 1).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryAFinCodeForType_False_CodeNull()
+        {
+            var learningDeliveryAppFinRecords = new TestAppFinRecord[]
+           {
+                new TestAppFinRecord() { AFinType = "TypeOne", AFinCode = 1 },
+                new TestAppFinRecord() { AFinType = "TypeTwo", AFinCode = 2 },
+                new TestAppFinRecord() { AFinType = "TypeTwo", AFinCode = 3 },
+           };
+
+            NewService().HasAnyLearningDeliveryAFinCodeForType(learningDeliveryAppFinRecords, "TypeTwo", null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryAFinCodeForType_False_Mismatch()
+        {
+            var learningDeliveryAppFinRecords = new TestAppFinRecord[]
+           {
+                new TestAppFinRecord() { AFinType = "TypeOne", AFinCode = 1 },
+                new TestAppFinRecord() { AFinType = "TypeTwo", AFinCode = 2 },
+                new TestAppFinRecord() { AFinType = "TypeTwo", AFinCode = 3 },
+           };
+
+            NewService().HasAnyLearningDeliveryAFinCodeForType(learningDeliveryAppFinRecords, "TypeOne", 2).Should().BeFalse();
+        }
+
         private LearningDeliveryAppFinRecordQueryService NewService()
         {
             return new LearningDeliveryAppFinRecordQueryService();
