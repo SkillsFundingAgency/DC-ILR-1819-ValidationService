@@ -86,6 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AFinType_10Rule),
                 typeof(AFinType_12Rule),
                 typeof(AFinType_13Rule),
+                typeof(AFinType_14Rule),
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
