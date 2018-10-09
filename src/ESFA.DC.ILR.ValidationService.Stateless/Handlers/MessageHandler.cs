@@ -93,6 +93,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     ServiceEventSource.Current.ServiceMessage(_context, "Validation complete");
                     return true;
                 }
+                catch (OutOfMemoryException oom)
+                {
+                    Environment.FailFast("Validation Service Out Of Memory", oom);
+                    throw;
+                }
                 catch (Exception ex)
                 {
                     ServiceEventSource.Current.ServiceMessage(_context, "Exception-{0}", ex.ToString());
