@@ -35,7 +35,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="lookups">The lookups.</param>
         public ESMType_11Rule(
-            IValidationErrorHandler validationErrorHandler, IProvideLookupDetails lookups)
+            IValidationErrorHandler validationErrorHandler,
+            IProvideLookupDetails lookups)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
