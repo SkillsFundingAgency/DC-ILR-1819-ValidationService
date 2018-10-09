@@ -51,6 +51,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSSupAimId;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
@@ -238,6 +239,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R108Rule),
                 typeof(R112Rule),
                 typeof(SWSSupAimId_01Rule),
+                typeof(StdCode_01Rule),
                 typeof(TTACCOM_01Rule),
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
