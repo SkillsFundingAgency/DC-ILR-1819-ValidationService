@@ -83,6 +83,7 @@
     <Compile Include="Constants\TypeOfLARSValidity.cs" />
     <Compile Include="Constants\TypeOfLearningProgramme.cs" />
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
+    <Compile Include="CrossEntity\R107Rule.cs" />
     <Compile Include="CrossEntity\R108Rule.cs" />
     <Compile Include="CrossEntity\R70Rule.cs" />
     <Compile Include="CrossEntity\R112Rule.cs" />
