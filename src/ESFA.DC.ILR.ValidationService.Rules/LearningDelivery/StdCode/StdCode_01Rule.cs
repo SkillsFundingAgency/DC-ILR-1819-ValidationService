@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "StdCode";
+        public const string MessagePropertyName = PropertyNameConstants.ProgType;
 
         /// <summary>
         /// Gets the name of the rule.
@@ -96,7 +96,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery.ProgTypeNullable));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }

@@ -165,7 +165,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
                     Moq.It.Is<string>(y => y == StdCode_01Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    TypeOfLearningProgramme.ApprenticeshipStandard))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new StdCode_01Rule(handler.Object);

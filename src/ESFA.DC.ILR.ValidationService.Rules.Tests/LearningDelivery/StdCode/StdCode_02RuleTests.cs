@@ -187,7 +187,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
                     Moq.It.Is<string>(y => y == StdCode_02Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    candidate))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
