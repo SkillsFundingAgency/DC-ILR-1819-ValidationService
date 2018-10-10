@@ -242,6 +242,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(SWSSupAimId_01Rule),
                 typeof(StdCode_01Rule),
                 typeof(StdCode_02Rule),
+                typeof(StdCode_03Rule),
                 typeof(TTACCOM_01Rule),
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),

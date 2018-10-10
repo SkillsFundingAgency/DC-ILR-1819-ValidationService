@@ -290,6 +290,7 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_14RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\StdCode\StdCode_03RuleTests.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_02RuleTests.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_01RuleTests.cs" />
     <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01RuleTests.cs" />
