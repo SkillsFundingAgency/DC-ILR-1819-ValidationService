@@ -205,6 +205,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(NETFEE_02Rule),
                 typeof(NUMHUS_01Rule),
                 typeof(OrigLearnStartDate_02Rule),
+                typeof(OrigLearnStartDate_03Rule),
                 typeof(OtherFundAdj_01Rule),
                 typeof(OutGrade_03Rule),
                 typeof(PartnerUKPRN_01Rule),
