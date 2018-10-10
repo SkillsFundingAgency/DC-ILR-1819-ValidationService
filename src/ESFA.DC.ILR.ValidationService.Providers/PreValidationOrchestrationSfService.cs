@@ -153,12 +153,20 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
         private async Task DestroyValidationActorAsync(IValidationActor validationActor, CancellationToken cancellationToken)
         {
-            ActorId actorId = validationActor.GetActorId();
+            try
+            {
+                ActorId actorId = validationActor.GetActorId();
 
-            IActorService myActorServiceProxy = ActorServiceProxy.Create(
-                new Uri($"fabric:/{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"), actorId);
+                IActorService myActorServiceProxy = ActorServiceProxy.Create(
+                    new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"),
+                    actorId);
 
-            await myActorServiceProxy.DeleteActorAsync(actorId, cancellationToken);
+                await myActorServiceProxy.DeleteActorAsync(actorId, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Problem deleting actor", ex);
+            }
         }
 
         private async Task ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
