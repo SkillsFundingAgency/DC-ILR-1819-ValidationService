@@ -1,6 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
@@ -10,7 +10,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
 {
-    public class StdCode_01RuleTests
+    public class StdCode_02RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -18,8 +18,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
-            // arrange / act / assert
-            Assert.Throws<ArgumentNullException>(() => new StdCode_01Rule(null));
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new StdCode_02Rule(null, service.Object));
+        }
+
+        [Fact]
+        public void NewRuleWithNullDataServiceThrows()
+        {
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new StdCode_02Rule(handler.Object, null));
         }
 
         /// <summary>
@@ -35,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("StdCode_01", result);
+            Assert.Equal("StdCode_02", result);
         }
 
         /// <summary>
@@ -51,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(StdCode_01Rule.Name, result);
+            Assert.Equal(StdCode_02Rule.Name, result);
         }
 
         /// <summary>
@@ -104,45 +119,52 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
         }
 
         [Theory]
-        [InlineData(null, false)]
-        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, false)]
-        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, true)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, false)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel5, false)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel6, false)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, false)]
-        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, false)]
-        [InlineData(TypeOfLearningProgramme.Traineeship, false)]
-        public void IsQualifyingLearningProgrammeMeetsExpectation(int? candidate, bool expectation)
+        [InlineData(2)]
+        [InlineData(23)]
+        [InlineData(38)]
+        public void IsValidStandardCodeLARSDataServiceVerifiesOK(int candidate)
         {
             // arrange
-            var sut = NewRule();
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+            service
+                .Setup(x => x.GetStandardValidityFor(candidate))
+                .Returns(new Mock<ILARSStandardValidity>().Object);
+
+            var sut = new StdCode_02Rule(handler.Object, service.Object);
 
             var mockItem = new Mock<ILearningDelivery>();
             mockItem
-                .SetupGet(x => x.ProgTypeNullable)
+                .SetupGet(x => x.StdCodeNullable)
                 .Returns(candidate);
 
             // act
-            var result = sut.IsQualifyingLearningProgramme(mockItem.Object);
+            var result = sut.IsValidStandardCode(mockItem.Object);
 
             // assert
-            Assert.Equal(expectation, result);
+            Assert.True(result);
+            handler.VerifyAll();
+            service.VerifyAll();
         }
 
         /// <summary>
         /// Invalid item raises validation message.
+        /// 'failure' hinges on a null return for the standard validity on the lars data service
         /// </summary>
-        [Fact]
-        public void InvalidItemRaisesValidationMessage()
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(2)]
+        [InlineData(23)]
+        [InlineData(38)]
+        public void InvalidItemRaisesValidationMessage(int candidate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
-                .SetupGet(x => x.ProgTypeNullable)
-                .Returns(TypeOfLearningProgramme.ApprenticeshipStandard);
+                .SetupGet(x => x.StdCodeNullable)
+                .Returns(candidate);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -158,41 +180,49 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
                 .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == "StdCode_01"),
+                    Moq.It.Is<string>(y => y == "StdCode_02"),
                     Moq.It.Is<string>(y => y == LearnRefNumber),
                     0,
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == StdCode_01Rule.MessagePropertyName),
+                    Moq.It.Is<string>(y => y == StdCode_02Rule.MessagePropertyName),
                     Moq.It.IsAny<ILearningDelivery>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var sut = new StdCode_01Rule(handler.Object);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+            service
+                .Setup(x => x.GetStandardValidityFor(candidate))
+                .Returns((ILARSStandardValidity)null);
+
+            var sut = new StdCode_02Rule(handler.Object, service.Object);
 
             // act
             sut.Validate(mock.Object);
 
             // assert
             handler.VerifyAll();
+            service.VerifyAll();
         }
 
         /// <summary>
         /// Valid item does not raise a validation message.
+        /// 'success' hinges on a valid return for the standard validity on the lars data service
         /// </summary>
-        [Fact]
-        public void ValidItemDoesNotRaiseAValidationMessage()
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(2)]
+        [InlineData(23)]
+        [InlineData(38)]
+        public void ValidItemDoesNotRaiseAValidationMessage(int candidate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
-                .SetupGet(x => x.ProgTypeNullable)
-                .Returns(TypeOfLearningProgramme.ApprenticeshipStandard);
-            mockDelivery
                 .SetupGet(x => x.StdCodeNullable)
-                .Returns(2);
+                .Returns(candidate);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -206,25 +236,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
                 .Returns(deliveries.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+            service
+                .Setup(x => x.GetStandardValidityFor(candidate))
+                .Returns(new Mock<ILARSStandardValidity>().Object);
 
-            var sut = new StdCode_01Rule(handler.Object);
+            var sut = new StdCode_02Rule(handler.Object, service.Object);
 
             // act
             sut.Validate(mock.Object);
 
             // assert
             handler.VerifyAll();
+            service.VerifyAll();
         }
 
         /// <summary>
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public StdCode_01Rule NewRule()
+        public StdCode_02Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
 
-            return new StdCode_01Rule(handler.Object);
+            return new StdCode_02Rule(handler.Object, service.Object);
         }
     }
 }
