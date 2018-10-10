@@ -14,6 +14,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
 
         IReadOnlyCollection<Framework> Frameworks { get; }
 
+        /// <summary>
+        /// Gets the LARS standard validities.
+        /// </summary>
+        IReadOnlyCollection<LARSStandardValidity> StandardValidities { get; }
+
         IReadOnlyDictionary<long, Organisation> Organisations { get; }
 
         /// <summary>

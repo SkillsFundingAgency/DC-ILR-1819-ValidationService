@@ -8,6 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
     {
         private ExternalDataCachePopulationService NewService(
             IExternalDataCache externalDataCache = null,
+            ILARSStandardValidityDataRetrievalService larsStandardValidityDataRetrievalService = null,
             ILARSLearningDeliveryDataRetrievalService larsLearningDeliveryDataRetrievalService = null,
             ILARSFrameworkDataRetrievalService larsFrameworkDataRetrievalService = null,
             IULNDataRetrievalService ulnDataRetrievalService = null,
@@ -16,6 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
         {
             return new ExternalDataCachePopulationService(
                 externalDataCache,
+                larsStandardValidityDataRetrievalService,
                 larsLearningDeliveryDataRetrievalService,
                 larsFrameworkDataRetrievalService,
                 ulnDataRetrievalService,

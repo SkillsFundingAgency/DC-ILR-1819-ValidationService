@@ -93,8 +93,9 @@
     <Compile Include="External\ErrorLookupPopulationService.cs" />
     <Compile Include="External\ExternalDataCachePopulationService.cs" />
     <Compile Include="External\LARSFrameworkDataRetrievalService.cs" />
-    <Compile Include="External\LARSLearningDeliveryDataRetrievalService.cs" />
     <Compile Include="External\EPAOrganisationsDataRetrievalService.cs" />
+    <Compile Include="External\LARSLearningDeliveryDataRetrievalService.cs" />
+    <Compile Include="External\LARSStandardValidityDataRetrievalService.cs" />
     <Compile Include="External\OrganisationsDataRetrievalService.cs" />
     <Compile Include="External\PostcodesDataRetrievalService.cs" />
     <Compile Include="External\ULNDataRetrievalService.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Interface\IExternalDataRetrievalService.cs" />
     <Compile Include="Interface\IFileDataCachePopulationService.cs" />
     <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
+    <Compile Include="Interface\ILARSStandardValidityDataRetrievalService.cs" />
     <Compile Include="Interface\ILARSFrameworkDataRetrievalService.cs" />
     <Compile Include="Interface\ILARSLearningDeliveryDataRetrievalService.cs" />
     <Compile Include="Interface\IMessageCachePopulationService.cs" />
