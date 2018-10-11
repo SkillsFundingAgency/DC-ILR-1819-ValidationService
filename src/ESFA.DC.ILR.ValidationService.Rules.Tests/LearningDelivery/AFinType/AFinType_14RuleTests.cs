@@ -19,26 +19,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             NewRule().RuleName.Should().Be("AFinType_14");
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(3)]
-        public void TNPConditionMet_True(int? aFinCode)
+        [Fact]
+        public void AimTypeConditionMet_True()
         {
-            NewRule().TNPConditionMet(aFinCode).Should().BeTrue();
+            NewRule().AimTypeConditionMet(1).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(2)]
-        [InlineData(null)]
-        public void TNPConditionMet_False(int? aFinCode)
+        [Fact]
+        public void AimTypeConditionMet_False()
         {
-            NewRule().TNPConditionMet(aFinCode).Should().BeFalse();
+            NewRule().AimTypeConditionMet(3).Should().BeFalse();
         }
 
         [Fact]
         public void PMRConditionMet_True()
         {
-            var aimType = 1;
             var afinCode = 1;
             var aFinType = "PMR";
 
@@ -46,63 +41,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
 
-            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, afinCode)).Returns(false);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, afinCode)).Returns(true);
 
-            NewRule(appFinRecordQueryServiceMock.Object).PMRConditionMet(aimType, appFinRecords).Should().BeTrue();
+            NewRule(appFinRecordQueryServiceMock.Object).PMRConditionMet(appFinRecords).Should().BeTrue();
         }
 
         [Fact]
         public void PMRConditionMet_False()
         {
-            var aimType = 1;
-            var afinCode = 1;
-            var aFinType = "PMR";
-
-            var appFinRecords = new List<IAppFinRecord>();
-
-            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-
-            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, afinCode)).Returns(true);
-
-            NewRule(appFinRecordQueryServiceMock.Object).PMRConditionMet(aimType, appFinRecords).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_True()
-        {
-            var aimType = 1;
-            var afinCode = 1;
-            var aFinType = "PMR";
-
-            var appFinRecords = new List<IAppFinRecord>();
-
-            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-
-            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, afinCode)).Returns(false);
-
-            NewRule(appFinRecordQueryServiceMock.Object).ConditionMet(aimType, appFinRecords, afinCode).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMet_False_PMR()
-        {
-            var aimType = 1;
-            var afinCode = 1;
-            var aFinType = "PMR";
-
-            var appFinRecords = new List<IAppFinRecord>();
-
-            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-
-            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, afinCode)).Returns(true);
-
-            NewRule(appFinRecordQueryServiceMock.Object).ConditionMet(aimType, appFinRecords, afinCode).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False_TNP()
-        {
-            var aimType = 1;
             var afinCode = 2;
             var aFinType = "PMR";
 
@@ -112,15 +58,123 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, afinCode)).Returns(false);
 
-            NewRule(appFinRecordQueryServiceMock.Object).ConditionMet(aimType, appFinRecords, afinCode).Should().BeFalse();
+            NewRule(appFinRecordQueryServiceMock.Object).PMRConditionMet(appFinRecords).Should().BeFalse();
+        }
+
+        [Fact]
+        public void TNPConditionMet_True()
+        {
+            var aFinType = "TNP";
+            var aFinCodes = new int[] { 1, 3 };
+
+            var appFinRecords = new List<IAppFinRecord>();
+
+            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
+
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, aFinCodes)).Returns(false);
+
+            NewRule(appFinRecordQueryServiceMock.Object).TNPConditionMet(appFinRecords).Should().BeTrue();
+        }
+
+        [Fact]
+        public void TNPConditionMet_False()
+        {
+            var aFinType = "TNP";
+            var aFinCodes = new int[] { 1, 3 };
+
+            var appFinRecords = new List<IAppFinRecord>();
+
+            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
+
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, aFinCodes)).Returns(true);
+
+            NewRule(appFinRecordQueryServiceMock.Object).TNPConditionMet(appFinRecords).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_True()
+        {
+            var aimType = 1;
+            var afinCodePMR = 1;
+            var aFinTypePMR = "PMR";
+            var aFinCodesTNP = new int[] { 1, 3 };
+            var aFinTypeTNP = "TNP";
+
+            var appFinRecords = new List<IAppFinRecord>();
+
+            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
+
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypePMR, afinCodePMR)).Returns(true);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypeTNP, aFinCodesTNP)).Returns(false);
+
+            NewRule(appFinRecordQueryServiceMock.Object).ConditionMet(aimType, appFinRecords).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ConditionMet_False_PMR()
+        {
+            var aimType = 1;
+            var afinCodePMR = 1;
+            var aFinTypePMR = "PMR";
+            var aFinCodesTNP = new int[] { 1, 3 };
+            var aFinTypeTNP = "TNP";
+
+            var appFinRecords = new List<IAppFinRecord>();
+
+            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
+
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypePMR, afinCodePMR)).Returns(false);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypeTNP, aFinCodesTNP)).Returns(false);
+
+            NewRule(appFinRecordQueryServiceMock.Object).ConditionMet(aimType, appFinRecords).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_TNP()
+        {
+            var aimType = 1;
+            var afinCodePMR = 1;
+            var aFinTypePMR = "PMR";
+            var aFinCodesTNP = new int[] { 1, 3 };
+            var aFinTypeTNP = "TNP";
+
+            var appFinRecords = new List<IAppFinRecord>();
+
+            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
+
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypePMR, afinCodePMR)).Returns(true);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypeTNP, aFinCodesTNP)).Returns(true);
+
+            NewRule(appFinRecordQueryServiceMock.Object).ConditionMet(aimType, appFinRecords).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_AimType()
+        {
+            var aimType = 2;
+            var afinCodePMR = 1;
+            var aFinTypePMR = "PMR";
+            var aFinCodesTNP = new int[] { 1, 3 };
+            var aFinTypeTNP = "TNP";
+
+            var appFinRecords = new List<IAppFinRecord>();
+
+            var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
+
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypePMR, afinCodePMR)).Returns(false);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypeTNP, aFinCodesTNP)).Returns(false);
+
+            NewRule(appFinRecordQueryServiceMock.Object).ConditionMet(aimType, appFinRecords).Should().BeFalse();
         }
 
         [Fact]
         public void Validate_Error()
         {
             var aimType = 1;
-            var afinCode = 1;
-            var aFinType = "PMR";
+            var afinCodePMR = 1;
+            var aFinTypePMR = "PMR";
+            var aFinCodesTNP = new int[] { 1, 3 };
+            var aFinTypeTNP = "TNP";
 
             var learner = new TestLearner()
             {
@@ -133,8 +187,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
                         {
                             new TestAppFinRecord
                             {
-                                AFinCode = 1,
-                                AFinType = "TNP"
+                                AFinCode = afinCodePMR,
+                                AFinType = aFinTypePMR
                             }
                         }
                     }
@@ -145,7 +199,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
 
-            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, afinCode)).Returns(false);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypePMR, afinCodePMR)).Returns(true);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypeTNP, aFinCodesTNP)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -157,8 +212,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         public void Validate_NoError()
         {
             var aimType = 1;
-            var afinCode = 1;
-            var aFinType = "PMR";
+            var afinCodePMR = 1;
+            var aFinTypePMR = "PMR";
+            var aFinCodesTNP = new int[] { 1, 3 };
+            var aFinTypeTNP = "TNP";
 
             var learner = new TestLearner()
             {
@@ -171,13 +228,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
                         {
                             new TestAppFinRecord
                             {
-                                AFinCode = 1,
-                                AFinType = "TNP"
-                            },
-                            new TestAppFinRecord
-                            {
-                                AFinCode = 1,
-                                AFinType = "PMR"
+                                AFinCode = afinCodePMR,
+                                AFinType = aFinTypePMR
                             }
                         }
                     }
@@ -188,7 +240,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var appFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
 
-            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinType, afinCode)).Returns(true);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodeForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypePMR, afinCodePMR)).Returns(true);
+            appFinRecordQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), aFinTypeTNP, aFinCodesTNP)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
