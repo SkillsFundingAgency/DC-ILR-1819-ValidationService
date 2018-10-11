@@ -11,6 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
     public class AFinType_14Rule : AbstractRule, IRule<ILearner>
     {
         private readonly ILearningDeliveryAppFinRecordQueryService _learningDeliveryAppFinRecordQueryService;
+        private readonly int _aFinCodeForError = 1;
 
         public AFinType_14Rule(ILearningDeliveryAppFinRecordQueryService learningDeliveryAppFinRecordQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.AFinType_14)
@@ -22,39 +23,40 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         {
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                var aFinCode = learningDelivery.AppFinRecords?.
-                    Where(a => a.AFinType == ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice
-                    && (a.AFinCode == 1 || a.AFinCode == 3))
-                    .Select(a => a.AFinCode)
-                    .FirstOrDefault();
-
                 if (ConditionMet(
                     learningDelivery.AimType,
-                    learningDelivery.AppFinRecords,
-                    aFinCode))
+                    learningDelivery.AppFinRecords))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, aFinCode));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(ApprenticeshipFinanicalRecord.Types.PaymentRecord, _aFinCodeForError));
                 }
             }
         }
 
-        public bool ConditionMet(int aimType, IEnumerable<IAppFinRecord> appFinRecords, int? aFinCode)
+        public bool ConditionMet(int aimType, IEnumerable<IAppFinRecord> appFinRecords)
         {
-            return TNPConditionMet(aFinCode)
-                && PMRConditionMet(aimType, appFinRecords);
+            return AimTypeConditionMet(aimType)
+                && PMRConditionMet(appFinRecords)
+                && TNPConditionMet(appFinRecords);
         }
 
-        public bool TNPConditionMet(int? aFinCode)
+        public bool AimTypeConditionMet(int aimType)
         {
-            return aFinCode == 1 || aFinCode == 3;
+            return aimType == 1;
         }
 
-        public bool PMRConditionMet(int aimType, IEnumerable<IAppFinRecord> appFinRecords)
+        public bool PMRConditionMet(IEnumerable<IAppFinRecord> appFinRecords)
         {
+            return _learningDeliveryAppFinRecordQueryService
+                .HasAnyLearningDeliveryAFinCodeForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.PaymentRecord, 1);
+        }
+
+        public bool TNPConditionMet(IEnumerable<IAppFinRecord> appFinRecords)
+        {
+            var aFinCodes = new int[] { 1, 3 };
+
             return
-            !(_learningDeliveryAppFinRecordQueryService
-            .HasAnyLearningDeliveryAFinCodeForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.PaymentRecord, 1)
-              && aimType == 1);
+            !_learningDeliveryAppFinRecordQueryService
+            .HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, aFinCodes);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string aFinType, int? aFinCode)
