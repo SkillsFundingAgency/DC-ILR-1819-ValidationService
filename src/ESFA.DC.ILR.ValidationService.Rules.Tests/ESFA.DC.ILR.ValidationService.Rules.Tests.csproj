@@ -281,6 +281,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_62RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_12RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_04RuleTests.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_03RuleTests.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_02RuleTests.cs" />
     <Compile Include="LearningDelivery\OtherFundAdj\OtherFundAdj_01RuleTests.cs" />
