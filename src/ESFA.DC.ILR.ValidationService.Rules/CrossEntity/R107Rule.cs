@@ -77,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         ///   <c>true</c> if [has qualifying outcome] [the specified outcome]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasQualifyingOutcome(IDPOutcome outcome, DateTime actualEndDate) =>
-            actualEndDate < outcome.OutStartDate;
+            actualEndDate <= outcome.OutStartDate;
 
         /// <summary>
         /// Determines whether [has qualifying outcome] [the specified learner].

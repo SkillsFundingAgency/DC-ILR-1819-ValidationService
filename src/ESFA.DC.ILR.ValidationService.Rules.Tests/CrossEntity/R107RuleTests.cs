@@ -187,10 +187,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         /// <param name="oStartDate">outcome start date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
+        [InlineData("2012-08-31", "2012-07-30", false)]
         [InlineData("2012-07-31", "2012-07-30", false)]
-        [InlineData("2012-01-30", "2012-01-30", false)]
+        [InlineData("2012-01-30", "2012-01-30", true)]
         [InlineData("2012-07-29", "2012-07-30", true)]
-        [InlineData("2015-01-31", "2015-07-31", true)]
         public void HasQualifyingOutcomeMeetsExpectation(string aEndDate, string oStartDate, bool expectation)
         {
             // arrange
