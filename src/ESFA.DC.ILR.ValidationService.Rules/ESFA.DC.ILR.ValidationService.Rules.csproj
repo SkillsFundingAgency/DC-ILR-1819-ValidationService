@@ -103,6 +103,7 @@
     <Compile Include="Derived\Interface\IDerivedData_28Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_29Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
+    <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_11Rule.cs" />
