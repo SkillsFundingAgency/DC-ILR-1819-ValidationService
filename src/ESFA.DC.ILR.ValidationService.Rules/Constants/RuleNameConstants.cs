@@ -151,6 +151,8 @@
 
         public const string PCFLDCS_02 = "PCFLDCS_02";
 
+        public const string PCSLDCS_01 = "PCSLDCS_01";
+
         public const string PlanLearnHours_01 = "PlanLearnHours_01";
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
         public const string PlanLearnHours_03 = "PlanLearnHours_03";
