@@ -144,6 +144,8 @@
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
+        public const string OutCollDate_01 = "OutCollDate_01";
+
         public const string OutGrade_03 = "OutGrade_03";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
