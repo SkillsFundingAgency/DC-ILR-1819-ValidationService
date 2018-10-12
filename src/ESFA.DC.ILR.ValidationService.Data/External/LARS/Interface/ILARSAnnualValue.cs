@@ -46,5 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// Gets the full level 3 percentage.
         /// </summary>
         decimal? FullLevel3Percent { get; }
+
+        string LearnDirectClassSystemCode2 { get; }
     }
 }

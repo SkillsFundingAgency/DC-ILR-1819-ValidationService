@@ -48,6 +48,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         public string LearnDirectClassSystemCode1 { get; set; }
 
         /// <summary>
+        ///  Gets or sets the learn direct class system code 2
+        /// </summary>
+        public string LearnDirectClassSystemCode2 { get; set; }
+
+        /// <summary>
         /// Gets or sets the learning delivery categories.
         /// </summary>
         public IEnumerable<LearningDeliveryCategory> LearningDeliveryCategories { get; set; }

@@ -131,6 +131,7 @@
     <Compile Include="HE\NETFEE\NETFEE_01RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02RuleTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02RuleTests.cs" />
+    <Compile Include="HE\PCSLDCS\PCSLDCS_01RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01RuleTests.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01RuleTests.cs" />
