@@ -26,6 +26,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
             Assert.Throws<ArgumentNullException>(() => new StdCode_02Rule(null, service.Object));
         }
 
+        /// <summary>
+        /// New rule with null data service throws.
+        /// </summary>
         [Fact]
         public void NewRuleWithNullDataServiceThrows()
         {
