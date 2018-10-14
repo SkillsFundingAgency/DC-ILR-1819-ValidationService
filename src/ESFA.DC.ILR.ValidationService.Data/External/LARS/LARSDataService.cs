@@ -171,6 +171,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && learningDelivery.LearnDirectClassSystemCode1 != "NUL";
         }
 
+        public bool LearnDirectClassSystemCode2MatchForLearnAimRef(string learnAimRef)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && (!string.IsNullOrEmpty(learningDelivery.LearnDirectClassSystemCode2)
+                    && learningDelivery.LearnDirectClassSystemCode2.ToUpper() != "NUL");
+        }
+
         public bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);

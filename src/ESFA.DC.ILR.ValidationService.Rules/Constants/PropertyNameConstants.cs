@@ -40,6 +40,7 @@
         public const string MODESTUD = "MODESTUD";
         public const string NETFEE = "NETFEE";
         public const string OtherFundAdj = "OtherFundAdj";
+        public const string OutCollDate = "OutCollDate";
         public const string Outcome = "Outcome";
         public const string OutGrade = "OutGrade";
         public const string OutStartDate = "OutStartDate";

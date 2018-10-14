@@ -144,6 +144,8 @@
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
+        public const string OutCollDate_01 = "OutCollDate_01";
+
         public const string OutGrade_03 = "OutGrade_03";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
@@ -151,6 +153,8 @@
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
 
         public const string PCFLDCS_02 = "PCFLDCS_02";
+
+        public const string PCSLDCS_01 = "PCSLDCS_01";
 
         public const string PlanLearnHours_01 = "PlanLearnHours_01";
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
