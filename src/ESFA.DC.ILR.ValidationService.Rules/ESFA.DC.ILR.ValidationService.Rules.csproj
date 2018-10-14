@@ -289,6 +289,7 @@
     <Compile Include="LearningDelivery\StdCode\StdCode_01Rule.cs" />
     <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07Rule.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2Rule.cs" />
