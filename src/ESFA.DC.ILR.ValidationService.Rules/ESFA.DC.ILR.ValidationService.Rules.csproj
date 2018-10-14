@@ -208,7 +208,6 @@
     <Compile Include="LearningDelivery\AFinDate\AFinDate_03Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_14Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_10Rule.cs" />
-    <Compile Include="LearningDelivery\AFinType\AFinType_09Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_13Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_12Rule.cs" />
     <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02Rule.cs" />

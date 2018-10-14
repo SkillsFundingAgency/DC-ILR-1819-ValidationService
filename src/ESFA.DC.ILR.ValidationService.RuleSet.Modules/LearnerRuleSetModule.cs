@@ -65,7 +65,12 @@ using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
-    public class LearnerRuleSetModule : AbstractRuleSetModule
+    /// <summary>
+    /// the learner rule set module
+    /// </summary>
+    /// <seealso cref="AbstractRuleSetModule" />
+    public class LearnerRuleSetModule :
+        AbstractRuleSetModule
     {
         public LearnerRuleSetModule()
         {
@@ -86,7 +91,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_05Rule),
                 typeof(AddHours_06Rule),
                 typeof(AFinDate_03Rule),
-                typeof(AFinType_09Rule),
                 typeof(AFinType_10Rule),
                 typeof(AFinType_12Rule),
                 typeof(AFinType_13Rule),
