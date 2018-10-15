@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
             builder.Register(c => new ULN(c.Resolve<IReferenceDataOptions>().ULNConnectionstring)).As<IULN>().InstancePerLifetimeScope();
             builder.Register(c => new Postcodes(c.Resolve<IReferenceDataOptions>().PostcodesConnectionString)).As<IPostcodes>().InstancePerLifetimeScope();
             builder.Register(c => new Organisations(c.Resolve<IReferenceDataOptions>().OrganisationsConnectionString)).As<IOrganisations>().InstancePerLifetimeScope();
-            builder.Register(c => new FcsContext(c.Resolve<IReferenceDataOptions>().FCSConnectionstring)).As<IFcsContext>().InstancePerLifetimeScope();
+            builder.Register(c => new FcsContext(c.Resolve<IReferenceDataOptions>().FCSConnectionString)).As<IFcsContext>().InstancePerLifetimeScope();
             builder.Register(c => new ValidationErrors(c.Resolve<IReferenceDataOptions>().ValidationErrorsConnectionString)).As<IValidationErrors>();
 
             base.Load(builder);
