@@ -66,7 +66,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// <param name="learnRefNumber">The learn reference number.</param>
         /// <returns>the destination and progression record</returns>
         public ILearnerDestinationAndProgression GetDAndP(string learnRefNumber) =>
-            _fileData.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber);
+            _fileData.GetDestinationAndProgressions(x => x.LearnRefNumber == learnRefNumber)
+                .FirstOrDefault();
 
         /// <summary>
         /// Determines whether [has qualifying outcome] [the specified outcome].

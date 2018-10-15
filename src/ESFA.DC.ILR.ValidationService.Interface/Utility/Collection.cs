@@ -91,7 +91,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
-        /// Safes the where.
+        /// Safe where.
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
         /// <param name="list">The list.</param>

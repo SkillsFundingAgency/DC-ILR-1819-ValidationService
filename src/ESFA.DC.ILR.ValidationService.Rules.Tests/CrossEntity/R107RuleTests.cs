@@ -163,11 +163,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 .SetupGet(x => x.DPOutcomes)
                 .Returns(outcomes.AsSafeReadOnlyList());
 
+            var collection = Collection.Empty<ILearnerDestinationAndProgression>();
+            collection.Add(mockItem.Object);
+
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var provider = new Mock<IFileDataService>(MockBehavior.Strict);
+
+            // we can no longer check the learn ref number gets sent into here as the mock doesn't support it
             provider
-                .Setup(x => x.LearnerDestinationAndProgressionsForLearnRefNumber(learnRN))
-                .Returns(mockItem.Object);
+                .Setup(x => x.GetDestinationAndProgressions(Moq.It.IsAny<Func<ILearnerDestinationAndProgression, bool>>()))
+                .Returns(collection.AsSafeReadOnlyList());
 
             var sut = new R107Rule(handler.Object, provider.Object);
 
@@ -555,9 +560,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 .SetupGet(x => x.DPOutcomes)
                 .Returns(outcomes.AsSafeReadOnlyList());
 
+            var collection = Collection.Empty<ILearnerDestinationAndProgression>();
+            collection.Add(mockDAndP.Object);
+
+            // we can no longer check the learn ref number gets sent into here as the mock doesn't support it
             provider
-                .Setup(x => x.LearnerDestinationAndProgressionsForLearnRefNumber(LearnRefNumber))
-                .Returns(mockDAndP.Object);
+                .Setup(x => x.GetDestinationAndProgressions(Moq.It.IsAny<Func<ILearnerDestinationAndProgression, bool>>()))
+                .Returns(collection.AsSafeReadOnlyList());
 
             var sut = new R107Rule(handler.Object, provider.Object);
 
@@ -670,9 +679,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 .SetupGet(x => x.DPOutcomes)
                 .Returns(outcomes.AsSafeReadOnlyList());
 
+            var collection = Collection.Empty<ILearnerDestinationAndProgression>();
+            collection.Add(mockDAndP.Object);
+
+            // we can no longer check the learn ref number gets sent into here as the mock doesn't support it
             provider
-                .Setup(x => x.LearnerDestinationAndProgressionsForLearnRefNumber(LearnRefNumber))
-                .Returns(mockDAndP.Object);
+                .Setup(x => x.GetDestinationAndProgressions(Moq.It.IsAny<Func<ILearnerDestinationAndProgression, bool>>()))
+                .Returns(collection.AsSafeReadOnlyList());
 
             var sut = new R107Rule(handler.Object, provider.Object);
 
