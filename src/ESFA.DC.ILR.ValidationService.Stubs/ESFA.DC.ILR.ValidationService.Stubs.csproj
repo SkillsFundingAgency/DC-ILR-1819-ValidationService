@@ -91,7 +91,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FCSDataServiceStub.cs" />
     <Compile Include="LearnerPerActorServiceStub.cs" />
     <Compile Include="OneHundredThousandLearnerProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

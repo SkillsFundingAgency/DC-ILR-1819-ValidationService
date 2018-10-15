@@ -16,6 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         private readonly IULNDataRetrievalService _ulnDataRetrievalService;
         private readonly IPostcodesDataRetrievalService _postcodesDataRetrievalService;
         private readonly IOrganisationsDataRetrievalService _organisationsDataRetrievalService;
+        private readonly IFCSDataRetrievalService _fcsDataRetrievalService;
 
         public ExternalDataCachePopulationService(
             IExternalDataCache externalDataCache,
@@ -24,7 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             ILARSFrameworkDataRetrievalService larsFrameworkDataRetrievalService,
             IULNDataRetrievalService ulnDataRetrievalService,
             IPostcodesDataRetrievalService postcodesDataRetrievalService,
-            IOrganisationsDataRetrievalService organisationsDataRetrievalService)
+            IOrganisationsDataRetrievalService organisationsDataRetrievalService,
+            IFCSDataRetrievalService fcsDataRetrievalService)
         {
             _externalDataCache = externalDataCache;
             _larsStandardValidityDataRetrievalService = larsStandardValidityDataRetrievalService;
@@ -33,6 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _ulnDataRetrievalService = ulnDataRetrievalService;
             _postcodesDataRetrievalService = postcodesDataRetrievalService;
             _organisationsDataRetrievalService = organisationsDataRetrievalService;
+            _fcsDataRetrievalService = fcsDataRetrievalService;
         }
 
         public async Task PopulateAsync(CancellationToken cancellationToken)
@@ -45,6 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             externalDataCache.ULNs = new HashSet<long>(await _ulnDataRetrievalService.RetrieveAsync(cancellationToken));
             externalDataCache.Postcodes = new HashSet<string>(await _postcodesDataRetrievalService.RetrieveAsync(cancellationToken));
             externalDataCache.Organisations = await _organisationsDataRetrievalService.RetrieveAsync(cancellationToken);
+            externalDataCache.FCSContracts = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
         }
     }
 }
