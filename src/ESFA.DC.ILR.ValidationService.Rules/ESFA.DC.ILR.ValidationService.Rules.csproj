@@ -250,7 +250,6 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80Rule.cs" />
-    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_37Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_02Rule.cs" />
