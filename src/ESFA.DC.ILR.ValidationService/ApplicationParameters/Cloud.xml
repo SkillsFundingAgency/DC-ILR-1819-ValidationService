@@ -15,6 +15,7 @@
     <Parameter Name="ULNConnectionstring" Value="__ULNConnectionstring__" />
     <Parameter Name="RedisCacheConnectionString" Value="__RedisCacheConnectionString__" />
     <Parameter Name="LargeEmployersConnectionString" Value="__LargeEmployerDbConnectionString__ " />
+    <Parameter Name="FCSConnectionString" Value="__FCSDbConnectionString__ " />
     <Parameter Name="ValidationErrorsConnectionString" Value="__ValidationErrorsConnectionString__" />
     <Parameter Name="ProcessingServicePlacementConstraints" Value="__ProcessingServicePlacementConstraints__" />
   </Parameters>

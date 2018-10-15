@@ -14,6 +14,7 @@ using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Configuration;
 using ESFA.DC.ILR.ValidationService.Data.Population.Configuration.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ReferenceData.FCS.Model;
 using ESFA.DC.ServiceFabric.Helpers;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
@@ -36,6 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
             builder.Register(c => new ULN(c.Resolve<IReferenceDataOptions>().ULNConnectionstring)).As<IULN>().InstancePerLifetimeScope();
             builder.Register(c => new Postcodes(c.Resolve<IReferenceDataOptions>().PostcodesConnectionString)).As<IPostcodes>().InstancePerLifetimeScope();
             builder.Register(c => new Organisations(c.Resolve<IReferenceDataOptions>().OrganisationsConnectionString)).As<IOrganisations>().InstancePerLifetimeScope();
+            builder.Register(c => new FcsContext(c.Resolve<IReferenceDataOptions>().FCSConnectionstring)).As<IOrganisations>().InstancePerLifetimeScope();
             builder.Register(c => new ValidationErrors(c.Resolve<IReferenceDataOptions>().ValidationErrorsConnectionString)).As<IValidationErrors>();
 
             base.Load(builder);
