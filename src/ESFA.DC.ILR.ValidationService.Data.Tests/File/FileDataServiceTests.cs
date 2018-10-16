@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -51,6 +53,58 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.File
             fileDataCacheMock.SetupGet(c => c.LearnerDestinationAndProgressions).Returns(learnerDestinationAndProgressions);
 
             NewService(fileDataCacheMock.Object).LearnerDestinationAndProgressions().Should().BeEquivalentTo(learnerDestinationAndProgressions);
+        }
+
+        /// <summary>
+        /// Learner destination and progressions for learn reference number with no match returns null.
+        /// </summary>
+        [Fact]
+        public void LearnerDestinationAndProgressionsForLearnRefNumberWithNoMatchReturnsNull()
+        {
+            // arrange
+            var mockDest = new Mock<ILearnerDestinationAndProgression>();
+            mockDest
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns("111112");
+
+            var list = Collection.Empty<ILearnerDestinationAndProgression>();
+            list.Add(mockDest.Object);
+
+            var fileDataCacheMock = new Mock<IFileDataCache>();
+
+            fileDataCacheMock
+                .SetupGet(c => c.LearnerDestinationAndProgressions)
+                .Returns(list.AsSafeReadOnlyList());
+
+            var service = NewService(fileDataCacheMock.Object);
+
+            // act
+            var result = service.LearnerDestinationAndProgressionsForLearnRefNumber("111111");
+
+            // assert
+            Assert.Null(result);
+        }
+
+        /// <summary>
+        /// Learner destination and progressions for learn reference number with null d_and_p's returns null.
+        /// </summary>
+        [Fact]
+        public void LearnerDestinationAndProgressionsForLearnRefNumberWithNullDAndPsReturnsNull()
+        {
+            // arrange
+            var fileDataCacheMock = new Mock<IFileDataCache>();
+
+            fileDataCacheMock
+                .SetupGet(c => c.LearnerDestinationAndProgressions)
+                .Returns((IEnumerable<ILearnerDestinationAndProgression>)null);
+
+            var service = NewService(fileDataCacheMock.Object);
+
+            // act
+            var result = service.LearnerDestinationAndProgressionsForLearnRefNumber("111111");
+
+            // assert
+            Assert.Null(result);
         }
 
         [Fact]
