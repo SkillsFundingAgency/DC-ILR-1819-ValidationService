@@ -186,6 +186,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
 
             if (!validationEventArgs.Message.Contains("has invalid child element"))
             {
+                _validationErrors.Add(new ErrorMessageParameter(
+                    string.Empty,
+                    $"Line: {validationEventArgs.Exception?.LineNumber} Position: {validationEventArgs.Exception?.LinePosition} - {validationEventArgs.Message}"));
                 return;
             }
 
