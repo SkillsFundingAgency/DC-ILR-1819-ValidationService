@@ -12,6 +12,8 @@ using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ReferenceData.FCS.Model;
+using ESFA.DC.ReferenceData.FCS.Model.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Console
 {
@@ -31,6 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Console
             builder.RegisterType<ULN>().As<IULN>().InstancePerLifetimeScope();
             builder.RegisterType<Postcodes>().As<IPostcodes>().InstancePerLifetimeScope();
             builder.RegisterType<Organisations>().As<IOrganisations>().InstancePerLifetimeScope();
+            builder.RegisterType<FcsContext>().As<IFcsContext>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrors>().As<IValidationErrors>().InstancePerLifetimeScope();
 
             builder.RegisterModule<ExternalDataCachePopulationServiceModule>();

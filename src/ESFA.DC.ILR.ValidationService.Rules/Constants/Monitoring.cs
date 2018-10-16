@@ -143,6 +143,11 @@
             public const string ESFA16To19Funding = "SOF107";
 
             /// <summary>
+            /// local authority community learning funds
+            /// </summary>
+            public const string LocalAuthorityCommunityLearningFunds = "SOF108";
+
+            /// <summary>
             /// funding and monitoring types
             /// </summary>
             public static class Types

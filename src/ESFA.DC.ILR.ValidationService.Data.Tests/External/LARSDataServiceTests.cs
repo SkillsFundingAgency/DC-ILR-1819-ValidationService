@@ -1002,6 +1002,50 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Theory]
+        [InlineData("456", "NUL")]
+        [InlineData("456", "")]
+        public void LearnDirectClassSystemCode2MatchForLearnAimRef_False(string learnAimRef, string learnDirectClassSystemCode2)
+        {
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LearnDirectClassSystemCode2 = learnDirectClassSystemCode2
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object).LearnDirectClassSystemCode2MatchForLearnAimRef(learnAimRef).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnDirectClassSystemCode2MatchForLearnAimRef_True()
+        {
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    "123", new LearningDelivery()
+                    {
+                        LearnAimRef = "123",
+                        LearnDirectClassSystemCode2 = "CDE"
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object).LearnDirectClassSystemCode2MatchForLearnAimRef("123").Should().BeTrue();
+        }
+
+        [Theory]
         [InlineData(3, "00100309", "2018-06-01")]
         [InlineData(1, "00100310", "2018-06-01")]
         [InlineData(1, "00100309", "2017-01-01")]

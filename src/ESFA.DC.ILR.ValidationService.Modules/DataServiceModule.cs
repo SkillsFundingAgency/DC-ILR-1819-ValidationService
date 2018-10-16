@@ -2,6 +2,8 @@
 using ESFA.DC.ILR.ValidationService.Data;
 using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation;
 using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation;
@@ -43,6 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<ULNDataService>().As<IULNDataService>().InstancePerLifetimeScope();
             builder.RegisterType<PostcodesDataService>().As<IPostcodesDataService>();
             builder.RegisterType<ValidationErrorsDataService>().As<IValidationErrorsDataService>();
+            builder.RegisterType<FCSDataService>().As<IFCSDataService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AcademicYearDataService>().As<IAcademicYearDataService>().InstancePerLifetimeScope();
             builder.RegisterType<AimTypeDataService>().As<IAimTypeDataService>().InstancePerLifetimeScope();

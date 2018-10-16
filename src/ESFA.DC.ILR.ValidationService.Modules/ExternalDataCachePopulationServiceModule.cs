@@ -10,11 +10,13 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         {
             builder.RegisterType<ExternalDataCachePopulationService>().As<IExternalDataCachePopulationService>().InstancePerLifetimeScope();
 
+            builder.RegisterType<LARSStandardValidityDataRetrievalService>().As<ILARSStandardValidityDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<LARSLearningDeliveryDataRetrievalService>().As<ILARSLearningDeliveryDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<LARSFrameworkDataRetrievalService>().As<ILARSFrameworkDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<ULNDataRetrievalService>().As<IULNDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<PostcodesDataRetrievalService>().As<IPostcodesDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<OrganisationsDataRetrievalService>().As<IOrganisationsDataRetrievalService>().InstancePerLifetimeScope();
+            builder.RegisterType<FCSDataRetrievalService>().As<IFCSDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<EPAOrganisationsDataRetrievalService>().As<IEPAOrganisationsDataRetrievalService>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrorsDataRetrievalService>().As<IValidationErrorsDataRetrievalService>().InstancePerLifetimeScope();
         }

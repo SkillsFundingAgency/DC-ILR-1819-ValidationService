@@ -151,19 +151,43 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"));
         }
 
+        private async Task DestroyValidationActorAsync(IValidationActor validationActor, CancellationToken cancellationToken)
+        {
+            try
+            {
+                ActorId actorId = validationActor.GetActorId();
+
+                IActorService myActorServiceProxy = ActorServiceProxy.Create(
+                    new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"),
+                    actorId);
+
+                await myActorServiceProxy.DeleteActorAsync(actorId, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Problem deleting actor", ex);
+            }
+        }
+
         private async Task ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
         {
             // Get L/A and split the learners into separate lists
             IEnumerable<IMessage> messageShards = _learnerPerActorService.Process();
 
+            List<IValidationActor> actors = new List<IValidationActor>();
             List<Task<string>> actorTasks = new List<Task<string>>();
+            List<Task> actorDestroys = new List<Task>();
+
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
 
             foreach (IMessage messageShard in messageShards)
             {
-                _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
+                _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
 
                 // create actors for each Shard.
                 IValidationActor actor = GetValidationActor();
+                actors.Add(actor);
 
                 // TODO:get reference data per each shard and send it to Actors
                 byte[] ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
@@ -187,13 +211,15 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
             }
 
-            _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
+            _logger.LogDebug($"Starting {actorTasks.Count} validation actors after {stopWatch.ElapsedMilliseconds}ms prep time");
+            stopWatch.Restart();
 
             await Task.WhenAll(actorTasks.ToArray()).ConfigureAwait(false);
 
-            _logger.LogDebug("All Validation Actors completed");
-
             cancellationToken.ThrowIfCancellationRequested();
+
+            _logger.LogDebug($"Collating {actorTasks.Count} validation actors after {stopWatch.ElapsedMilliseconds}ms execution time");
+            stopWatch.Restart();
 
             foreach (Task<string> actorTask in actorTasks)
             {
@@ -204,6 +230,15 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     _validationErrorCache.Add(error);
                 }
             }
+
+            _logger.LogDebug($"Destroying {actorTasks.Count} validation actors after {stopWatch.ElapsedMilliseconds}ms collation time");
+
+            foreach (IValidationActor validationActor in actors)
+            {
+                actorDestroys.Add(DestroyValidationActorAsync(validationActor, cancellationToken));
+            }
+
+            await Task.WhenAll(actorDestroys.ToArray()).ConfigureAwait(false);
         }
 
         private bool IsErrorOrFail(U item)

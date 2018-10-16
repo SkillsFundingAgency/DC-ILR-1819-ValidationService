@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.File
 {
@@ -30,5 +30,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.File
                 return null;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the learners.
+        /// TODO: consider the wisdom of this....
+        /// </summary>
+        public IReadOnlyCollection<ILearner> Learners { get; set; }
     }
 }

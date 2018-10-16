@@ -31,16 +31,28 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         /// <summary>
         /// Gets the validities for.
         /// </summary>
-        /// <param name="forThisAimRef">this aim reference.</param>
+        /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>
         /// a collection of lars 'validities' for this learning aim reference
         /// </returns>
-        public IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef)
+        public IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string thisAimRef)
         {
             return _externalDataCache.LearningDeliveries.Values
                 .SelectMany(x => x.LARSValidities.AsSafeReadOnlyList())
-                .Where(x => x.LearnAimRef == forThisAimRef)
+                .Where(x => x.LearnAimRef == thisAimRef)
                 .AsSafeReadOnlyList();
+        }
+
+        /// <summary>
+        /// Gets the standard validity for.
+        /// </summary>
+        /// <param name="thisStandardCode">this standard code.</param>
+        /// <returns>a LARS Standard Validity</returns>
+        public ILARSStandardValidity GetStandardValidityFor(int thisStandardCode)
+        {
+            return _externalDataCache.StandardValidities
+                .Where(x => x.StandardCode == thisStandardCode)
+                .FirstOrDefault();
         }
 
         public bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date)
@@ -157,6 +169,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
             return learningDelivery != null
                 && learningDelivery.LearnDirectClassSystemCode1 != "NUL";
+        }
+
+        public bool LearnDirectClassSystemCode2MatchForLearnAimRef(string learnAimRef)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && (!string.IsNullOrEmpty(learningDelivery.LearnDirectClassSystemCode2)
+                    && learningDelivery.LearnDirectClassSystemCode2.ToUpper() != "NUL");
         }
 
         public bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills)

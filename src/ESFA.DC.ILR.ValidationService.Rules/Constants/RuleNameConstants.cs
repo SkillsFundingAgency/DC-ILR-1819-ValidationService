@@ -16,7 +16,10 @@
         public const string AddHours_05 = "AddHours_05";
         public const string AddHours_06 = "AddHours_06";
 
+        public const string AddLine1_03 = "AddLine1_03";
+
         public const string AFinType_10 = "AFinType_10";
+        public const string AFinType_14 = "AFinType_14";
 
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
 
@@ -126,6 +129,7 @@
 
         public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
+        public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -143,6 +147,8 @@
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
+        public const string OutCollDate_01 = "OutCollDate_01";
+
         public const string OutGrade_03 = "OutGrade_03";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
@@ -150,6 +156,8 @@
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
 
         public const string PCFLDCS_02 = "PCFLDCS_02";
+
+        public const string PCSLDCS_01 = "PCSLDCS_01";
 
         public const string PlanLearnHours_01 = "PlanLearnHours_01";
         public const string PlanLearnHours_02 = "PlanLearnHours_02";

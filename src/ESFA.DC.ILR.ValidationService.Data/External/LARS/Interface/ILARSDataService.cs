@@ -22,6 +22,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// <returns>a collection of lars 'validities' for this learning aim reference</returns>
         IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef);
 
+        /// <summary>
+        /// Gets the standard validity for.
+        /// </summary>
+        /// <param name="thisStandardCode">this standard code.</param>
+        /// <returns>a LARS Standard Validity</returns>
+        ILARSStandardValidity GetStandardValidityFor(int thisStandardCode);
+
         bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date);
 
         bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
@@ -45,6 +52,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         bool FullLevel3PercentForLearnAimRefAndDateAndPercentValue(string learnAimRef, DateTime learnStartDate, decimal percentValue);
 
         bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef);
+
+        bool LearnDirectClassSystemCode2MatchForLearnAimRef(string learnAimRef);
 
         bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills);
 
