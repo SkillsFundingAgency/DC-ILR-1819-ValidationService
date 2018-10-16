@@ -13,6 +13,7 @@
     <Parameter Name="OrganisationsConnectionString" Value="__OrganisationsConnectionString__" />
     <Parameter Name="PostcodesConnectionString" Value="__PostcodesConnectionString__" />
     <Parameter Name="ULNConnectionstring" Value="__ULNConnectionstring__" />
+    <Parameter Name="FCSConnectionString" Value="__FCSDbConnectionString__" />
     <Parameter Name="RedisCacheConnectionString" Value="__RedisCacheConnectionString__" />
     <Parameter Name="LargeEmployersConnectionString" Value="__LargeEmployerDbConnectionString__ " />
     <Parameter Name="ValidationErrorsConnectionString" Value="__ValidationErrorsConnectionString__" />

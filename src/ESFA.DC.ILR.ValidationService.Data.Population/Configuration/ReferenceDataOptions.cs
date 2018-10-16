@@ -12,6 +12,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Configuration
 
         public string ULNConnectionstring { get; set; }
 
+        public string FCSConnectionString { get; set; }
+
         public string ValidationErrorsConnectionString { get; set; }
     }
 }

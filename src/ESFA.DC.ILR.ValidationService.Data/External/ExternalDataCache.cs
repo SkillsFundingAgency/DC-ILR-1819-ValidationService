@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -29,5 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External
         public IReadOnlyCollection<string> Postcodes { get; set; }
 
         public IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; set; }
+
+        public IReadOnlyCollection<FcsContract> FCSContracts { get; set; }
     }
 }
