@@ -10,6 +10,7 @@
 
         public const string AddHours = "AddHours";
         public const string AchDate = "AchDate";
+        public const string AddLine1 = "AddLine1";
         public const string AFinCode = "AFinCode";
         public const string AFinType = "AFinType";
         public const string AimSeqNumber = "AimSeqNumber";
