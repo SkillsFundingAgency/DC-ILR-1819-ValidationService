@@ -57,6 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
         [Theory]
         [InlineData(LearningDeliveryFAMTypeConstants.SOF, "105")]
+        [InlineData(LearningDeliveryFAMTypeConstants.SOF, "107")]
         public void LearningDeliveryFAMsConditionMet_True(string learnDelFAMType, string learnDelFAMCode)
         {
             List<ILearningDeliveryFAM> learningDeliveryFAMs = new List<ILearningDeliveryFAM>()
@@ -92,6 +93,99 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             learningDeliveryFAMsQueryServiceMock.Setup(ldf => ldf.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ADL, new[] { "102", "103" })).Returns(false);
 
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).ConditionMet(99, learningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(LearningDeliveryFAMTypeConstants.SOF, "105")]
+        [InlineData(LearningDeliveryFAMTypeConstants.SOF, "107")]
+        public void ConditionMet_True(string learnDelFAMType, string learnDelFAMCode)
+        {
+            List<ILearningDeliveryFAM> learningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = learnDelFAMType,
+                    LearnDelFAMCode = learnDelFAMCode
+                }
+            };
+
+            var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMsQueryServiceMock.Setup(ldf => ldf.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, new[] { "105", "107" })).Returns(true);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).ConditionMet(99, learningDeliveryFAMs).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(LearningDeliveryFAMTypeConstants.SOF, "105")]
+        [InlineData(LearningDeliveryFAMTypeConstants.SOF, "107")]
+        public void Validate_Error(string learnDelFAMType, string learnDelFAMCode)
+        {
+            List<ILearningDeliveryFAM> learningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = learnDelFAMType,
+                    LearnDelFAMCode = learnDelFAMCode
+                }
+            };
+
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "16testLearner",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 99,
+                        LearningDeliveryFAMs = learningDeliveryFAMs
+                    }
+                }
+            };
+
+            var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMsQueryServiceMock.Setup(ldf => ldf.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, new[] { "105", "107" })).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
+        {
+            List<ILearningDeliveryFAM> learningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMCode = "350"
+                }
+            };
+
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "16testLearner",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 75,
+                        LearningDeliveryFAMs = learningDeliveryFAMs
+                    }
+                }
+            };
+
+            var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMsQueryServiceMock.Setup(ldf => ldf.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, new[] { "350" })).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).Validate(testLearner);
+            }
         }
 
         [Fact]
