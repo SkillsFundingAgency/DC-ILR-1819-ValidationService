@@ -45,6 +45,7 @@
         public const string Outcome = "Outcome";
         public const string OutGrade = "OutGrade";
         public const string OutStartDate = "OutStartDate";
+        public const string OutType = "OutType";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
