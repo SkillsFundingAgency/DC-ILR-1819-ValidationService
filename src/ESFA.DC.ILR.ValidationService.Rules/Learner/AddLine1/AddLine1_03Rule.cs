@@ -13,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
 
         public AddLine1_03Rule(IValidationErrorHandler validationErrorHandler, ILearningDeliveryFAMQueryService learningDeliveryFamQueryService)
-            : base(validationErrorHandler, RuleNameConstants.AddLine1_03)
+            : base(validationErrorHandler, RuleNameConstants.Addline1_03)
         {
             _learningDeliveryFamQueryService = learningDeliveryFamQueryService;
         }

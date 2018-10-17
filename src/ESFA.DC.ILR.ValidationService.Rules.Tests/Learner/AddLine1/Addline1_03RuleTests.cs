@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.AddLine1
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("AddLine1_03");
+            NewRule().RuleName.Should().Be("Addline1_03");
         }
 
         [Theory]
