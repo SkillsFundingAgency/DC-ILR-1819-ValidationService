@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
@@ -28,11 +29,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         public async Task<IEnumerable<string>> RetrieveAsync(CancellationToken cancellationToken)
         {
             var uniquePostcodes = UniquePostcodesFromMessage(_messageCache.Item).ToList();
+            List<string> result = new List<string>(uniquePostcodes.Count());
 
-            return await _postcodes.MasterPostcodes
-                .Where(p => uniquePostcodes.Contains(p.Postcode))
+            var postcodeShards = SplitList(uniquePostcodes, 5000);
+            foreach (var shard in postcodeShards)
+            {
+                result.AddRange(
+                    await _postcodes.MasterPostcodes
+                .Where(p => shard.Contains(p.Postcode))
                 .Select(p => p.Postcode)
-                .ToListAsync(cancellationToken);
+                .ToListAsync(cancellationToken));
+            }
+
+            return result;
         }
 
         public IEnumerable<string> UniquePostcodesFromMessage(IMessage message)
@@ -72,6 +81,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                        .Select(ld => ld.DelLocPostCode)
                        .Distinct()
                    ?? new List<string>();
+        }
+
+        private IEnumerable<IEnumerable<string>> SplitList(IEnumerable<string> postcodes, int nSize = 30)
+        {
+            var l = postcodes.ToList();
+
+            for (var i = 0; i < l.Count; i += nSize)
+            {
+                yield return l.GetRange(i, Math.Min(nSize, l.Count - i));
+            }
         }
     }
 }
