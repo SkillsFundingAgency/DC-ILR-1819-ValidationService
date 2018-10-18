@@ -186,6 +186,16 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             stopWatch.Start();
 
             _logger.LogDebug($"Validation will create {messageShards.Count()} actors");
+
+            byte[] internalDataCacheAsBytes =
+                Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
+            byte[] externalDataCacheAsBytes =
+                Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
+            byte[] fileDataCacheAsBytes =
+                Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
+
+            _logger.LogDebug($" actor will be given ExternalDataCache: {externalDataCacheAsBytes.Length} ");
+
             foreach (IMessage messageShard in messageShards)
             {
                 _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
@@ -198,13 +208,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 // TODO:get reference data per each shard and send it to Actors
                 byte[] ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
 
-                byte[] internalDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
-                byte[] externalDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
-                byte[] fileDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
-
                 ValidationActorModel validationActorModel = new ValidationActorModel
                 {
                     JobId = validationContext.JobId,
@@ -213,8 +216,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     ExternalDataCache = externalDataCacheAsBytes,
                     FileDataCache = fileDataCacheAsBytes,
                 };
-
-                _logger.LogDebug($" actor will be given Message: {validationActorModel.Message.Length} ExternalDataCache: {validationActorModel.ExternalDataCache.Length} ");
 
                 actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
             }
