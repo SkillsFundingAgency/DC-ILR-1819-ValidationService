@@ -40,6 +40,7 @@
         public const string MathGrade = "MathGrade";
         public const string MODESTUD = "MODESTUD";
         public const string NETFEE = "NETFEE";
+        public const string NINumber = "NINumber";
         public const string OtherFundAdj = "OtherFundAdj";
         public const string OutCollDate = "OutCollDate";
         public const string Outcome = "Outcome";

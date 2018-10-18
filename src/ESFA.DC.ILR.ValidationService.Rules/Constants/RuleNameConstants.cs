@@ -144,6 +144,9 @@
 
         public const string NETFEE_01 = "NETFEE_01";
         public const string NETFEE_02 = "NETFEE_02";
+
+        public const string NINumber_01 = "NINumber_01";
+
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";

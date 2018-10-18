@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -16,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.NiNumber
         private readonly Regex _regex = new Regex("^[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z]{1}[0-9]{6}[A-D]{0,1}$", RegexOptions.Compiled);
 
         public NINumber_01Rule(IValidationErrorHandler validationErrorHandler)
-           : base(validationErrorHandler)
+           : base(validationErrorHandler, RuleNameConstants.NINumber_01)
         {
         }
 
@@ -24,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.NiNumber
         {
             if (ConditionMet(objectToValidate.NINumber))
             {
-                HandleValidationError(RuleNameConstants.NINumber_01, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.NINumber));
             }
         }
 
@@ -32,6 +33,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.NiNumber
         {
             return !string.IsNullOrWhiteSpace(niNumber) &&
                     _regex.IsMatch(niNumber.Trim()) == false;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string niNumber)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.NINumber, niNumber),
+            };
         }
     }
 }
