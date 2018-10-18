@@ -182,6 +182,7 @@
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule01Tests.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule02Tests.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_03RuleTests.cs" />
+    <Compile Include="Learner\NINumber\NINumber_01Tests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03RuleTests.cs" />
