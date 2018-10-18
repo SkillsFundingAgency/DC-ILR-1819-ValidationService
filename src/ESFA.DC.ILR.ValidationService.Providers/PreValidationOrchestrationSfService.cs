@@ -187,14 +187,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             _logger.LogDebug($"Validation will create {messageShards.Count()} actors");
 
-            byte[] internalDataCacheAsBytes =
-                Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
-            byte[] externalDataCacheAsBytes =
-                Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
-            byte[] fileDataCacheAsBytes =
-                Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
+            string internalDataCacheAsString =
+                _jsonSerializationService.Serialize(_internalDataCache);
+            string externalDataCacheAsString =
+                _jsonSerializationService.Serialize(_externalDataCache);
+            string fileDataCacheAsString =
+                _jsonSerializationService.Serialize(_fileDataCache);
 
-            _logger.LogDebug($" actor will be given ExternalDataCache: {externalDataCacheAsBytes.Length} ");
+            _logger.LogDebug($" actor will be given ExternalDataCache: {externalDataCacheAsString.Length} ");
 
             foreach (IMessage messageShard in messageShards)
             {
@@ -206,15 +206,15 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 actors.Add(actor);
 
                 // TODO:get reference data per each shard and send it to Actors
-                byte[] ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
+                string ilrMessageAsString = _jsonSerializationService.Serialize(messageShard);
 
                 ValidationActorModel validationActorModel = new ValidationActorModel
                 {
                     JobId = validationContext.JobId,
-                    Message = ilrMessageAsBytes,
-                    InternalDataCache = internalDataCacheAsBytes,
-                    ExternalDataCache = externalDataCacheAsBytes,
-                    FileDataCache = fileDataCacheAsBytes,
+                    Message = ilrMessageAsString,
+                    InternalDataCache = internalDataCacheAsString,
+                    ExternalDataCache = externalDataCacheAsString,
+                    FileDataCache = fileDataCacheAsString,
                 };
 
                 actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
