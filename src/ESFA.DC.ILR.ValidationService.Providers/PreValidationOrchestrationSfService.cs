@@ -136,6 +136,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 _logger.LogDebug(
                     $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError("Validation Critical Error", ex);
+            }
             finally
             {
                 cancellationToken.ThrowIfCancellationRequested();
