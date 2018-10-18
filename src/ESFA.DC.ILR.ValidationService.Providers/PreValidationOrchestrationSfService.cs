@@ -181,6 +181,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
+            _logger.LogDebug($"Validation will create {messageShards.Count()} actors");
             foreach (IMessage messageShard in messageShards)
             {
                 _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
@@ -207,6 +208,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     ExternalDataCache = externalDataCacheAsBytes,
                     FileDataCache = fileDataCacheAsBytes,
                 };
+
+                _logger.LogDebug($" actor will be given Message: {validationActorModel.Message.Length} ExternalDataCache: {validationActorModel.ExternalDataCache.Length} ");
 
                 actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
             }
