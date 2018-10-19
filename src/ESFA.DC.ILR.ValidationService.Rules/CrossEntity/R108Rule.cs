@@ -109,7 +109,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             var lDAP = _fileDataService.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber);
 
-            if (lDAP != null)
+            if (lDAP == null)
+            {
+                conditionMet = true;
+            }
+            else
             {
                 ldapLearnRefNumber = lDAP.LearnRefNumber;
                 outStartDate = lDAP.DPOutcomes?.OrderByDescending(dp => dp.OutStartDate).Select(dp => dp.OutStartDate).FirstOrDefault();
