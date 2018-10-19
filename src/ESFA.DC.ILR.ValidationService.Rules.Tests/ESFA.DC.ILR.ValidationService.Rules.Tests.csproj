@@ -119,6 +119,7 @@
     <Compile Include="Derived\DD07Tests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_02RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpId\EmpId_13RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_01RuleTests.cs" />
