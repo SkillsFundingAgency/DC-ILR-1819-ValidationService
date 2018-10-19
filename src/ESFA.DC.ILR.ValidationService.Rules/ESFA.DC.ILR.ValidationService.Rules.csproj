@@ -87,6 +87,7 @@
     <Compile Include="CrossEntity\R06Rule.cs" />
     <Compile Include="CrossEntity\R107Rule.cs" />
     <Compile Include="CrossEntity\R108Rule.cs" />
+    <Compile Include="CrossEntity\R66Rule.cs" />
     <Compile Include="CrossEntity\R70Rule.cs" />
     <Compile Include="CrossEntity\R112Rule.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
