@@ -21,6 +21,10 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(Header_2Rule),
                 typeof(Header_3Rule),
                 typeof(UKPRN_03Rule),
+//                typeof(R06Rule), needs to move up to global rule set or something similar Hal - removed to test very large file dependency on the file data cache
+//                typeof(R85Rule),
+//                typeof(R107Rule),
+//                typeof(R108Rule),
             };
         }
     }

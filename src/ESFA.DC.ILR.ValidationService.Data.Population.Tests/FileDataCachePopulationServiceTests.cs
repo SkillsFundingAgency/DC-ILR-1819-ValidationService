@@ -67,7 +67,6 @@ namespace ESFA.DC.ILR.ValidationService.FileData.Tests
 
             fileDataCache.FilePreparationDate.Should().Be(filePreparationDate);
             fileDataCache.UKPRN.Should().Be(ukprn);
-            fileDataCache.LearnerDestinationAndProgressions.Should().BeEquivalentTo(learnerDestinationAndProgressions);
         }
     }
 }

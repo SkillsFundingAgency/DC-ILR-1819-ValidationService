@@ -84,12 +84,12 @@
     <Compile Include="Constants\TypeOfLARSValidity.cs" />
     <Compile Include="Constants\TypeOfLearningProgramme.cs" />
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
-    <Compile Include="CrossEntity\R06Rule.cs" />
-    <Compile Include="CrossEntity\R107Rule.cs" />
-    <Compile Include="CrossEntity\R108Rule.cs" />
+    <AdditionalFiles Include="CrossEntity\R06Rule.cs" />
+    <AdditionalFiles Include="CrossEntity\R107Rule.cs" />
+    <AdditionalFiles Include="CrossEntity\R108Rule.cs" />
     <Compile Include="CrossEntity\R70Rule.cs" />
     <Compile Include="CrossEntity\R112Rule.cs" />
-    <Compile Include="CrossEntity\R85Rule.cs" />
+    <AdditionalFiles Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="Derived\DerivedData_28Rule.cs" />
     <Compile Include="Derived\DerivedData_29Rule.cs" />

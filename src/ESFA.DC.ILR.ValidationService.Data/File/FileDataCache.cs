@@ -11,8 +11,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.File
 
         public int UKPRN { get; set; }
 
-        public IEnumerable<ILearnerDestinationAndProgression> LearnerDestinationAndProgressions { get; set; }
-
         public string FileName { get; set; }
 
         public int? FileNameUKPRN
@@ -30,11 +28,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.File
                 return null;
             }
         }
-
-        /// <summary>
-        /// Gets or sets the learners.
-        /// TODO: consider the wisdom of this....
-        /// </summary>
-        public IReadOnlyCollection<ILearner> Learners { get; set; }
     }
 }

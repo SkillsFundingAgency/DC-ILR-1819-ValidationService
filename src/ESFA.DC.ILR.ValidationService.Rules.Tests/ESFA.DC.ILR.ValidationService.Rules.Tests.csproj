@@ -103,13 +103,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
-    <Compile Include="CrossEntity\R06RuleTests.cs" />
-    <Compile Include="CrossEntity\R107RuleTests.cs" />
-    <Compile Include="CrossEntity\R108RuleTests.cs" />
+    <AdditionalFiles Include="CrossEntity\R06RuleTests.cs" />
+    <AdditionalFiles Include="CrossEntity\R107RuleTests.cs" />
+    <AdditionalFiles Include="CrossEntity\R108RuleTests.cs" />
     <Compile Include="CrossEntity\R70RuleTests.cs" />
     <Compile Include="CrossEntity\R112RuleTests.cs" />
-    <Compile Include="CrossEntity\R85RuleTests.cs" />
-    <Compile Include="CrossEntity\R07RuleTests.cs" />
+    <AdditionalFiles Include="CrossEntity\R85RuleTests.cs" />
+    <AdditionalFiles Include="CrossEntity\R07RuleTests.cs" />
     <Compile Include="Derived\DerivedData_28RuleTests.cs" />
     <Compile Include="Derived\DerivedData_29RuleTests.cs" />
     <Compile Include="Derived\DerivedData_21RuleTests.cs" />
