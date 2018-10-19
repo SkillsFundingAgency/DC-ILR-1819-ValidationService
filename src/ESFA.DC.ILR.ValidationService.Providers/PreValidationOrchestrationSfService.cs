@@ -200,7 +200,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             foreach (IMessage messageShard in messageShards)
             {
                 _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
-                _logger.LogDebug($" actor will be given Postcodes: {_externalDataCache.Postcodes.Count} : ULNs: {_externalDataCache.ULNs.Count} FCS: {_externalDataCache.FCSContracts.Count} EPA: {_externalDataCache.EPAOrganisations.Count} LARS: {_externalDataCache.LearningDeliveries.Count} Orgs: {_externalDataCache.Organisations}");
+                _logger.LogDebug($" actor will be given Postcodes: {_externalDataCache.Postcodes?.Count} : ULNs: {_externalDataCache.ULNs?.Count} FCS: {_externalDataCache.FCSContracts?.Count} EPA: {_externalDataCache.EPAOrganisations?.Count} LARS: {_externalDataCache.LearningDeliveries?.Count} Orgs: {_externalDataCache?.Organisations}");
 
                 // create actors for each Shard.
                 IValidationActor actor = GetValidationActor();
