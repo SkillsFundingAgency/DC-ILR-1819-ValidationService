@@ -180,6 +180,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeTrue();
         }
 
+        [Fact]
+        public void DPOutComeConditionMet_Null_True()
+        {
+            string learnRefNumber = "00100309";
+            string ldapLearnRefNumber = null;
+            DateTime? outStartDate = null;
+
+            ILearnerDestinationAndProgression learnerDestinationAndProgression = null;
+
+            var fileDataServiceMock = new Mock<IFileDataService>();
+
+            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
+
+            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeTrue();
+        }
+
         [Theory]
         [InlineData(24)]
         [InlineData(25)]
