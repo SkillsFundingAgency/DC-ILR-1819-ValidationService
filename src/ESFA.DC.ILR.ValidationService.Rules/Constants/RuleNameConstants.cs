@@ -194,6 +194,7 @@
         public const string QUALENT3_02 = "QUALENT3_02";
 
         public const string R07 = "R07";
+        public const string R66 = "R66";
         public const string R70 = "R70";
         public const string R85 = "R85";
         public const string R108 = "R108";
