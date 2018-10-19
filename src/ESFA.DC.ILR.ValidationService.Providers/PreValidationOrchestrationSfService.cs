@@ -189,12 +189,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
             string internalDataCacheAsString =
                 _jsonSerializationService.Serialize(_internalDataCache);
-            string externalDataCacheAsString =
-                _jsonSerializationService.Serialize(_externalDataCache);
+            _logger.LogDebug($"_internalDataCache {internalDataCacheAsString.Length}");
             string fileDataCacheAsString =
                 _jsonSerializationService.Serialize(_fileDataCache);
-
-            _logger.LogDebug($" actor will be given ExternalDataCache: {externalDataCacheAsString.Length} ");
+            _logger.LogDebug($"fileDataCacheAsString {fileDataCacheAsString.Length}");
+            string externalDataCacheAsString =
+                _jsonSerializationService.Serialize(_externalDataCache);
+            _logger.LogDebug($"ExternalDataCache: {externalDataCacheAsString.Length} ");
 
             foreach (IMessage messageShard in messageShards)
             {
