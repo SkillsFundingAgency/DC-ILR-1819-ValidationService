@@ -75,9 +75,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
 
         public bool LearnStartDateConditionMet(DateTime learnStartDate, DateTime filePrepDate)
         {
-            var days = new TimeSpan(60);
+            var days = 60;
 
-            return filePrepDate.Subtract(learnStartDate) > days;
+            return filePrepDate.Subtract(learnStartDate).Days > days;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate)
