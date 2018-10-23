@@ -72,6 +72,8 @@
 
         public const string ELQ_01 = "ELQ_01";
 
+        public const string EmpId_13 = "EmpId_13";
+
         public const string EmpOutcome_01 = "EmpOutcome_01";
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
@@ -193,6 +195,7 @@
 
         public const string R06 = "R06";
         public const string R07 = "R07";
+        public const string R66 = "R66";
         public const string R70 = "R70";
         public const string R85 = "R85";
         public const string R108 = "R108";

@@ -87,6 +87,7 @@
     <Compile Include="CrossEntity\R06Rule.cs" />
     <AdditionalFiles Include="CrossEntity\R107Rule.cs" />
     <Compile Include="CrossEntity\R108Rule.cs" />
+    <Compile Include="CrossEntity\R66Rule.cs" />
     <Compile Include="CrossEntity\R70Rule.cs" />
     <Compile Include="CrossEntity\R112Rule.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_02Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpId\EmpId_13Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_01Rule.cs" />
