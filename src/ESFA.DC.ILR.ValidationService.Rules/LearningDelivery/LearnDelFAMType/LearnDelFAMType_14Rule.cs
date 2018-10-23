@@ -47,9 +47,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public bool ConditionMet(int fundModel, int? progType, IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return FundModelConditionMet(fundModel)
-                && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)
-                && DD07ConditionMet(progType);
+            return (FundModelConditionMet(fundModel) || DD07ConditionMet(progType))
+                && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs);
         }
 
         public bool LearningDeliveryFAMsConditionMet(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)

@@ -96,10 +96,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills)]
-        [InlineData(FundModelConstants.Apprenticeships)]
-        [InlineData(FundModelConstants.OtherAdult)]
-        public void ConditionMet_False(int fundModel)
+        [InlineData(FundModelConstants.AdultSkills, false, true)]
+        [InlineData(FundModelConstants.Apprenticeships, true, false)]
+        [InlineData(FundModelConstants.OtherAdult, false, false)]
+        [InlineData(FundModelConstants.NonFunded, false, false)]
+        public void ConditionMet_False(int fundModel, bool dd07Result, bool famsResult)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
             {
@@ -112,14 +113,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var dd07Mock = new Mock<IDD07>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(lds => lds.HasLearningDeliveryFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ADL)).Returns(false);
-            dd07Mock.Setup(dd => dd.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard)).Returns(true);
+            learningDeliveryFAMsQueryServiceMock.Setup(lds => lds.HasLearningDeliveryFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ADL)).Returns(famsResult);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard)).Returns(dd07Result);
 
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object, dd07: dd07Mock.Object).ConditionMet(fundModel, TypeOfLearningProgramme.ApprenticeshipStandard, testLearningDeliveryFAMs).Should().BeFalse();
         }
 
-        [Fact]
-        public void ConditionMet_True()
+        [Theory]
+        [InlineData(FundModelConstants.AdultSkills, true, true)]
+        [InlineData(FundModelConstants.NonFunded, true, true)]
+        [InlineData(FundModelConstants.NonFunded, false, true)]
+        public void ConditionMet_True(int fundModel, bool dd07Result, bool famsResult)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
             {
@@ -132,10 +136,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var dd07Mock = new Mock<IDD07>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(lds => lds.HasLearningDeliveryFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF)).Returns(true);
-            dd07Mock.Setup(dd => dd.IsApprenticeship(null)).Returns(false);
+            learningDeliveryFAMsQueryServiceMock.Setup(lds => lds.HasLearningDeliveryFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF)).Returns(famsResult);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(null)).Returns(dd07Result);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object, dd07: dd07Mock.Object).ConditionMet(FundModelConstants.NonFunded, TypeOfLearningProgramme.ApprenticeshipStandard, testLearningDeliveryFAMs).Should().BeTrue();
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object, dd07: dd07Mock.Object).ConditionMet(fundModel, TypeOfLearningProgramme.ApprenticeshipStandard, testLearningDeliveryFAMs).Should().BeTrue();
         }
 
         [Fact]
