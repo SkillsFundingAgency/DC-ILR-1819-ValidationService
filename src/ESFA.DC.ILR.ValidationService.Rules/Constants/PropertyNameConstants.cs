@@ -35,6 +35,7 @@
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnRefNumber = "LearnRefNumber";
         public const string LearningDestinationAndProgressionLearnRefNumber = "LearnerDestinationandProgression.LearnRefNumber";
+        public const string LearningDestinationAndProgressionULN = "LearnerDestinationandProgression.ULN";
         public const string LearnStartDate = "LearnStartDate";
         public const string LLDDCat = "LLDDCat";
         public const string MathGrade = "MathGrade";

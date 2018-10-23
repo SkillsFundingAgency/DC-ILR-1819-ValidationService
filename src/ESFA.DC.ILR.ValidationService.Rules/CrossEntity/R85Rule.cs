@@ -9,38 +9,42 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
-    public class R85Rule : AbstractRule, IRule<ILearner>
+    public class R85Rule : AbstractRule, IRule<IMessage>
     {
-        private readonly IFileDataService _fileDataService;
-        private readonly ILearnerDPQueryService _learnerDPQueryService;
-
-        public R85Rule(IFileDataService fileDataService, ILearnerDPQueryService learnerDPQueryService, IValidationErrorHandler validationErrorHandler)
+        public R85Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R85)
         {
-            _fileDataService = fileDataService;
-            _learnerDPQueryService = learnerDPQueryService;
         }
 
-        public void Validate(ILearner objectToValidate)
+        public void Validate(IMessage message)
         {
-            if (ConditionMet(objectToValidate.LearnRefNumber, objectToValidate.ULN))
+            if (message.Learners != null && message.LearnerDestinationAndProgressions != null)
             {
-                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.ULN));
+                foreach (ILearner learner in message.Learners)
+                {
+                    bool ok = true;
+                    var matches = message.LearnerDestinationAndProgressions.
+                        Where(s => s.LearnRefNumber == learner.LearnRefNumber);
+                    if (matches.Count() > 0)
+                    {
+                        ok = matches.All(s => s.ULN == learner.ULN);
+                    }
+
+                    if (!ok)
+                    {
+                        HandleValidationError(learner.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learner.ULN, matches.First().ULN, matches.First().LearnRefNumber));
+                    }
+                }
             }
         }
 
-        public bool ConditionMet(string learnRefNumber, long uln)
-        {
-            var learnerDP = _fileDataService.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber);
-
-            return learnerDP == null ? false : !_learnerDPQueryService.HasULNForLearnRefNumber(learnRefNumber, uln, learnerDP);
-        }
-
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln, long dpUln, string dpLearnRefNumber)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.ULN, uln)
+                BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
+                BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionULN, dpUln),
+                BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, dpLearnRefNumber)
             };
         }
     }

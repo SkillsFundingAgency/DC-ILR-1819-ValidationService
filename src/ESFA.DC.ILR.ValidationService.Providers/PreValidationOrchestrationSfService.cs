@@ -124,10 +124,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
+                if (_validationErrorCache.ValidationErrors.Any(IsFail))
                 {
                     _logger.LogDebug(
-                        $"Header validation failed, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
+                        $"File schema catestrophic error, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
                     return;
                 }
 
@@ -200,7 +200,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             foreach (IMessage messageShard in messageShards)
             {
                 _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
-                _logger.LogDebug($" actor will be given Postcodes: {_externalDataCache.Postcodes?.Count} : ULNs: {_externalDataCache.ULNs?.Count} FCS: {_externalDataCache.FCSContracts?.Count} EPA: {_externalDataCache.EPAOrganisations?.Count} LARS: {_externalDataCache.LearningDeliveries?.Count} Orgs: {_externalDataCache?.Organisations}");
 
                 // create actors for each Shard.
                 IValidationActor actor = GetValidationActor();
@@ -255,6 +254,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         {
             Severity severity = ((IValidationError)item).Severity ?? Severity.Error;
             return severity == Severity.Error || severity == Severity.Fail;
+        }
+
+        private bool IsFail(U item)
+        {
+            Severity severity = ((IValidationError)item).Severity ?? Severity.Error;
+            return severity == Severity.Fail;
         }
     }
 }
