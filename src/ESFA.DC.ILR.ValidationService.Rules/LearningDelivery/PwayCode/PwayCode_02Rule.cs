@@ -12,11 +12,11 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PwayCode
 {
-    public class PwayCode_02 : AbstractRule, IRule<ILearner>
+    public class PwayCode_02Rule : AbstractRule, IRule<ILearner>
     {
         private readonly IDD07 _dd07;
 
-        public PwayCode_02(
+        public PwayCode_02Rule(
             IDD07 dd07,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.PwayCode_02)
