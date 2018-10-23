@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private readonly int _funModel = FundModelConstants.NonFunded;
 
         public R66Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.R108)
+            : base(validationErrorHandler, RuleNameConstants.R66)
         {
         }
 
@@ -84,12 +84,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             IEnumerable<ILearningDelivery> learningDeliveriesProgrammingAimType)
         {
             return aimType == TypeOfAim.ComponentAimInAProgramme
-                && !learningDeliveriesProgrammingAimType.Any(
-                    p => p.FundModel == fundModel
-                    && p.ProgTypeNullable == progTypeNullable
-                    && p.FworkCodeNullable == fworkCodeNullable
-                    && p.PwayCodeNullable == pwayCodeNullable
-                    && p.StdCodeNullable == stdCodeNullable);
+                && (learningDeliveriesProgrammingAimType == null
+                    || !learningDeliveriesProgrammingAimType.Any(
+                        p => p.FundModel == fundModel
+                        && p.ProgTypeNullable == progTypeNullable
+                        && p.FworkCodeNullable == fworkCodeNullable
+                        && p.PwayCodeNullable == pwayCodeNullable
+                        && p.StdCodeNullable == stdCodeNullable));
         }
 
         public bool FundModelConditionMet(int fundModel)
