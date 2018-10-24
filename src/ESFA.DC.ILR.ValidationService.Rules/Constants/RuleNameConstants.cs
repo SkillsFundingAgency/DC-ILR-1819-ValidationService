@@ -191,6 +191,7 @@
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
         public const string PwayCode_02 = "PwayCode_02";
+        public const string PwayCode_03 = "PwayCode_03";
 
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
