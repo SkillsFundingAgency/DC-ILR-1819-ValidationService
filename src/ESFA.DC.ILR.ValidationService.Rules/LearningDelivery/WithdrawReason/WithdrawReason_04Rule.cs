@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason
 
         public bool WithdrawReasonConditionMet(int? withdrawReason)
         {
-            return !withdrawReason.HasValue;
+            return withdrawReason.HasValue;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int compStatus, int? withdrawReason)
