@@ -1,72 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Ethnicity;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Ethnicity
 {
-    public class Ethnicity_01RuleTests
+    public class Ethnicity_01RuleTests : AbstractRuleTests<Ethnicity_01Rule>
     {
-        [Theory]
-        [InlineData(100)]
-        [InlineData(0)]
-        public void ConditionMet_True(long? ethnicity)
+        [Fact]
+        public void RuleName()
         {
-            var rule = NewRule();
-            rule.ConditionMet(ethnicity).Should().BeTrue();
+            NewRule().RuleName.Should().Be("Ethnicity_01");
         }
 
         [Fact]
-        public void ConditionMet_False()
+        public void Validate_Error()
         {
-            var rule = NewRule();
-            var validValues = new List<long?>() { 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 98, 99 };
-            foreach (var validValue in validValues)
+            var testLearner = new TestLearner()
             {
-                rule.ConditionMet(validValue).Should().BeFalse();
+                Ethnicity = -99
+            };
+
+            var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
+
+            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.Ethnicity, -99)).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, provideLookupDetails: provideLookupDetailsMockup.Object).Validate(testLearner);
             }
         }
 
         [Fact]
-        public void Validate_False()
+        public void Validate_NoError()
         {
-            var learner = new TestLearner()
+            var testLearner = new TestLearner()
             {
-                EthnicityNullable = 10
+                Ethnicity = TypeOfEthnicity.English_Welsh_Scottish_Northern_Irish_British
             };
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("Ethnicity_01", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
+            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.Ethnicity, TypeOfEthnicity.English_Welsh_Scottish_Northern_Irish_British)).Returns(true);
 
-        [Fact]
-        public void Validate_True()
-        {
-            var learner = new TestLearner()
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                EthnicityNullable = 31
-            };
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("Ethnicity_01", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, provideLookupDetails: provideLookupDetailsMockup.Object).Validate(testLearner);
+            }
         }
 
-        private Ethnicity_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        public Ethnicity_01Rule NewRule(
+            IValidationErrorHandler validationErrorHandler = null,
+            IProvideLookupDetails provideLookupDetails = null)
         {
-            return new Ethnicity_01Rule(validationErrorHandler);
+            return new Ethnicity_01Rule(validationErrorHandler: validationErrorHandler, provideLookupDetails: provideLookupDetails);
         }
     }
 }

@@ -17,6 +17,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.Ethnicity;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
@@ -145,6 +146,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DelLocPostCode_16Rule),
                 typeof(Domicile_01Rule),
                 typeof(Domicile_02Rule),
+                typeof(Ethnicity_01Rule),
                 typeof(ELQ_01Rule),
                 typeof(EngGrade_03Rule),
                 typeof(EmpId_13Rule),
