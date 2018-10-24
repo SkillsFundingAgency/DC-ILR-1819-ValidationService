@@ -53,11 +53,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// Gets the destination and progression (record) for the learner.
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <returns>the destination and progression record</returns>
-        public ILearnerDestinationAndProgression GetDAndP(string learnRefNumber) => null;
-             // _message.LearnerDestinationAndProgressions
-             //    .Where(x => x.LearnRefNumber == learnRefNumber)
-             //    .FirstOrDefault();
+        /// <param name="message">The message.</param>
+        /// <returns>
+        /// the destination and progression record
+        /// </returns>
+        public ILearnerDestinationAndProgression GetDAndP(string learnRefNumber, IMessage message) =>
+              message.LearnerDestinationAndProgressions
+                 .Where(x => x.LearnRefNumber == learnRefNumber)
+                 .FirstOrDefault();
 
         /// <summary>
         /// Determines whether [has qualifying outcome] [the specified outcome].
@@ -74,12 +77,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// Determines whether [has qualifying outcome] [the specified learner].
         /// </summary>
         /// <param name="learner">The learner.</param>
+        /// <param name="message">The message.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying outcome] [the specified learner]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasQualifyingOutcome(ILearner learner)
+        public bool HasQualifyingOutcome(ILearner learner, IMessage message)
         {
-            var dps = GetDAndP(learner.LearnRefNumber);
+            var dps = GetDAndP(learner.LearnRefNumber, message);
             var delivery = GetLastDelivery(learner);
 
             return It.Has(dps)
@@ -183,11 +187,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             It.IsNull(objectToValidate)
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
-
-            // if (RequiresQualifyingOutcome(objectToValidate) && !HasQualifyingOutcome(objectToValidate))
-            // {
-            //    RaiseValidationMessage(learnRefNumber);
-            // }
+            objectToValidate.Learners.ForEach(learner =>
+            {
+                if (RequiresQualifyingOutcome(learner) && !HasQualifyingOutcome(learner, objectToValidate))
+                {
+                    RaiseValidationMessage(learner.LearnRefNumber);
+                }
+            });
         }
 
         /// <summary>
