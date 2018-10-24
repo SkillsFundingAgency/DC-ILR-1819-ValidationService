@@ -13,13 +13,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         int? FileNameUKPRN { get; }
 
         int UKPRN { get; }
-
-        IEnumerable<ILearnerDestinationAndProgression> LearnerDestinationAndProgressions { get; }
-
-        /// <summary>
-        /// Gets the learners.
-        /// TODO: consider the wisdom of this....
-        /// </summary>
-        IReadOnlyCollection<ILearner> Learners { get; }
     }
 }

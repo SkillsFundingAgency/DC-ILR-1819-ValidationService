@@ -10,6 +10,7 @@
 
         public const string AddHours = "AddHours";
         public const string AchDate = "AchDate";
+        public const string AddLine1 = "AddLine1";
         public const string AFinCode = "AFinCode";
         public const string AFinType = "AFinType";
         public const string AimSeqNumber = "AimSeqNumber";
@@ -17,6 +18,7 @@
         public const string CompStatus = "CompStatus";
         public const string ConRefNumber = "ConRefNumber";
         public const string DelLocPostCode = "DelLocPostCode";
+        public const string EmpId = "EmpId";
         public const string EmpOutcome = "EmpOutcome";
         public const string EmpStat = "EmpStat";
         public const string FamilyName = "FamilyName";
@@ -34,16 +36,19 @@
         public const string LearnPlanEndDate = "LearnPlanEndDate";
         public const string LearnRefNumber = "LearnRefNumber";
         public const string LearningDestinationAndProgressionLearnRefNumber = "LearnerDestinationandProgression.LearnRefNumber";
+        public const string LearningDestinationAndProgressionULN = "LearnerDestinationandProgression.ULN";
         public const string LearnStartDate = "LearnStartDate";
         public const string LLDDCat = "LLDDCat";
         public const string MathGrade = "MathGrade";
         public const string MODESTUD = "MODESTUD";
         public const string NETFEE = "NETFEE";
+        public const string NINumber = "NINumber";
         public const string OtherFundAdj = "OtherFundAdj";
         public const string OutCollDate = "OutCollDate";
         public const string Outcome = "Outcome";
         public const string OutGrade = "OutGrade";
         public const string OutStartDate = "OutStartDate";
+        public const string OutType = "OutType";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";

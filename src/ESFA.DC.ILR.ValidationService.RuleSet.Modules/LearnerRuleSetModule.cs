@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
+using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType;
 using ESFA.DC.ILR.ValidationService.Rules.HE;
@@ -13,6 +14,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCSLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
@@ -20,6 +22,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.NiNumber;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PMUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode;
@@ -54,6 +57,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PwayCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSSupAimId;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason;
@@ -90,6 +94,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_04Rule),
                 typeof(AddHours_05Rule),
                 typeof(AddHours_06Rule),
+                typeof(AddLine1_03Rule),
                 typeof(AFinDate_03Rule),
                 typeof(AFinType_10Rule),
                 typeof(AFinType_12Rule),
@@ -142,6 +147,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(Domicile_02Rule),
                 typeof(ELQ_01Rule),
                 typeof(EngGrade_03Rule),
+                typeof(EmpId_13Rule),
                 typeof(EmpOutcome_01Rule),
                 typeof(EmpOutcome_02Rule),
                 typeof(EmpOutcome_03Rule),
@@ -194,7 +200,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_01Rule),
                 typeof(LearnDelFAMType_02Rule),
                 typeof(LearnDelFAMType_03Rule),
+                typeof(LearnDelFAMType_08Rule),
                 typeof(LearnDelFAMType_09Rule),
+                typeof(LearnDelFAMType_14Rule),
                 typeof(LearnDelFAMType_22Rule),
                 typeof(LearnDelFAMType_39Rule),
                 typeof(LearnDelFAMType_44Rule),
@@ -210,6 +218,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(MathGrade_03Rule),
                 typeof(NETFEE_01Rule),
                 typeof(NETFEE_02Rule),
+                typeof(NINumber_01Rule),
                 typeof(NUMHUS_01Rule),
                 typeof(OrigLearnStartDate_02Rule),
                 typeof(OrigLearnStartDate_03Rule),
@@ -245,14 +254,12 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ProgType_08Rule),
                 typeof(ProgType_13Rule),
                 typeof(ProgType_14Rule),
+                typeof(PwayCode_02Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
-                typeof(R06Rule),
                 typeof(R07Rule),
+                typeof(R66Rule),
                 typeof(R70Rule),
-                typeof(R85Rule),
-                typeof(R107Rule),
-                typeof(R108Rule),
                 typeof(R112Rule),
                 typeof(SWSSupAimId_01Rule),
                 typeof(StdCode_01Rule),

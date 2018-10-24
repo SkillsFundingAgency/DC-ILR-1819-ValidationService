@@ -74,6 +74,7 @@
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\Monitoring.cs" />
+    <Compile Include="Constants\OutTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\ReasonForWithdrawal.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="CrossEntity\R06Rule.cs" />
     <Compile Include="CrossEntity\R107Rule.cs" />
     <Compile Include="CrossEntity\R108Rule.cs" />
+    <Compile Include="CrossEntity\R66Rule.cs" />
     <Compile Include="CrossEntity\R70Rule.cs" />
     <Compile Include="CrossEntity\R112Rule.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
@@ -108,6 +110,8 @@
     <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_04Rule.cs" />
+    <Compile Include="DestinationAndProgression\OutType\OutType_02Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpId\EmpId_13Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_01Rule.cs" />
@@ -134,6 +138,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
+    <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
@@ -173,6 +178,7 @@
     <Compile Include="Learner\LLDDCat\LLDDCat_01Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_02Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_03Rule.cs" />
+    <Compile Include="Learner\NiNumber\NINumber_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03Rule.cs" />
@@ -263,7 +269,9 @@
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateTo\LearnDelFAMDateTo_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_08Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_09Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_14Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_63Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_62Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66Rule.cs" />
@@ -288,6 +296,7 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_14Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_13Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08Rule.cs" />
+    <Compile Include="LearningDelivery\PwayCode\PwayCode_02Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_03Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_02Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_01Rule.cs" />

@@ -16,6 +16,8 @@
         public const string AddHours_05 = "AddHours_05";
         public const string AddHours_06 = "AddHours_06";
 
+        public const string Addline1_03 = "Addline1_03";
+
         public const string AFinType_10 = "AFinType_10";
         public const string AFinType_14 = "AFinType_14";
 
@@ -69,6 +71,8 @@
         public const string DelLocPostCode_16 = "DelLocPostCode_16";
 
         public const string ELQ_01 = "ELQ_01";
+
+        public const string EmpId_13 = "EmpId_13";
 
         public const string EmpOutcome_01 = "EmpOutcome_01";
         public const string EmpOutcome_02 = "EmpOutcome_02";
@@ -127,6 +131,8 @@
 
         public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
+        public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
+        public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -140,6 +146,9 @@
 
         public const string NETFEE_01 = "NETFEE_01";
         public const string NETFEE_02 = "NETFEE_02";
+
+        public const string NINumber_01 = "NINumber_01";
+
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
@@ -147,6 +156,8 @@
         public const string OutCollDate_01 = "OutCollDate_01";
 
         public const string OutGrade_03 = "OutGrade_03";
+
+        public const string OutType_02 = "OutType_02";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
@@ -179,10 +190,14 @@
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
+        public const string PwayCode_02 = "PwayCode_02";
+
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
 
+        public const string R06 = "R06";
         public const string R07 = "R07";
+        public const string R66 = "R66";
         public const string R70 = "R70";
         public const string R85 = "R85";
         public const string R108 = "R108";

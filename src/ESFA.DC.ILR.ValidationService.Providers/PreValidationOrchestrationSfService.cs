@@ -124,10 +124,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
+                if (_validationErrorCache.ValidationErrors.Any(IsFail))
                 {
                     _logger.LogDebug(
-                        $"Header validation failed, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
+                        $"File schema catestrophic error, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
                     return;
                 }
 
@@ -135,6 +135,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 _logger.LogDebug(
                     $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Validation Critical Error", ex);
             }
             finally
             {
@@ -181,6 +185,18 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
+            _logger.LogDebug($"Validation will create {messageShards.Count()} actors");
+
+            string internalDataCacheAsString =
+                _jsonSerializationService.Serialize(_internalDataCache);
+            _logger.LogDebug($"_internalDataCache {internalDataCacheAsString.Length}");
+            string fileDataCacheAsString =
+                _jsonSerializationService.Serialize(_fileDataCache);
+            _logger.LogDebug($"fileDataCacheAsString {fileDataCacheAsString.Length}");
+            string externalDataCacheAsString =
+                _jsonSerializationService.Serialize(_externalDataCache);
+            _logger.LogDebug($"ExternalDataCache: {externalDataCacheAsString.Length} ");
+
             foreach (IMessage messageShard in messageShards)
             {
                 _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
@@ -190,22 +206,15 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 actors.Add(actor);
 
                 // TODO:get reference data per each shard and send it to Actors
-                byte[] ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
-
-                byte[] internalDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
-                byte[] externalDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
-                byte[] fileDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
+                string ilrMessageAsString = _jsonSerializationService.Serialize(messageShard);
 
                 ValidationActorModel validationActorModel = new ValidationActorModel
                 {
                     JobId = validationContext.JobId,
-                    Message = ilrMessageAsBytes,
-                    InternalDataCache = internalDataCacheAsBytes,
-                    ExternalDataCache = externalDataCacheAsBytes,
-                    FileDataCache = fileDataCacheAsBytes,
+                    Message = ilrMessageAsString,
+                    InternalDataCache = internalDataCacheAsString,
+                    ExternalDataCache = externalDataCacheAsString,
+                    FileDataCache = fileDataCacheAsString,
                 };
 
                 actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
@@ -245,6 +254,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         {
             Severity severity = ((IValidationError)item).Severity ?? Severity.Error;
             return severity == Severity.Error || severity == Severity.Fail;
+        }
+
+        private bool IsFail(U item)
+        {
+            Severity severity = ((IValidationError)item).Severity ?? Severity.Error;
+            return severity == Severity.Fail;
         }
     }
 }

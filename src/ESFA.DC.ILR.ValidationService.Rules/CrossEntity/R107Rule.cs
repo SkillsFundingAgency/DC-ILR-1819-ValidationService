@@ -22,26 +22,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// The lookup (details provider)
-        /// </summary>
-        private readonly IFileDataService _fileData;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="R107Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        /// <param name="fileData">The file data.</param>
         public R107Rule(
-            IValidationErrorHandler validationErrorHandler,
-            IFileDataService fileData)
+            IValidationErrorHandler validationErrorHandler
+            )
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-            It.IsNull(fileData)
-                .AsGuard<ArgumentNullException>(nameof(fileData));
 
             _messageHandler = validationErrorHandler;
-            _fileData = fileData;
         }
 
         /// <summary>
@@ -189,7 +180,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// Validates the specified object.
         /// </summary>
         /// <param name="objectToValidate">The object to validate.</param>
-        public void Validate(ILearner objectToValidate)
+        public void Validate(IMessage objectToValidate)
         {
             It.IsNull(objectToValidate)
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));

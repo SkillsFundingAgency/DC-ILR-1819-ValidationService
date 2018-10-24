@@ -116,10 +116,17 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
 
             Console.WriteLine($"BuildContainer:6");
             // service bus queue configuration
-            var topicConfiguration = new ServiceBusTopicConfiguration(
+            //var topicConfiguration = new ServiceBusTopicConfiguration(
+            //    serviceBusOptions.ServiceBusConnectionString,
+            //    serviceBusOptions.TopicName,
+            //    serviceBusOptions.SubscriptionName);
+
+            var topicSubscribeConfig = new TopicConfiguration(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.TopicName,
-                serviceBusOptions.SubscriptionName);
+                serviceBusOptions.SubscriptionName,
+                1,
+                maximumCallbackTimeSpan: TimeSpan.FromMinutes(20));
 
             Console.WriteLine($"BuildContainer:8");
             var auditPublishConfig = new ServiceBusQueueConfig(
@@ -133,7 +140,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             {
                 var topicSubscriptionSevice =
                     new TopicSubscriptionSevice<JobContextDto>(
-                        topicConfiguration,
+                        topicSubscribeConfig,
                         c.Resolve<IJsonSerializationService>(),
                         c.Resolve<ILogger>());
                 return topicSubscriptionSevice;
@@ -144,7 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             {
                 var topicPublishService =
                     new TopicPublishService<JobContextDto>(
-                        topicConfiguration,
+                        topicSubscribeConfig,
                         c.Resolve<IJsonSerializationService>());
                 return topicPublishService;
             }).As<ITopicPublishService<JobContextDto>>();
