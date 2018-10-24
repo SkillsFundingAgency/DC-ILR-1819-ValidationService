@@ -220,5 +220,7 @@
         public const string ULN_09 = "ULN_09";
         public const string ULN_10 = "ULN_10";
         public const string ULN_12 = "ULN_12";
+
+        public const string WithdrawReason_04 = "WithdrawReason_04";
     }
 }

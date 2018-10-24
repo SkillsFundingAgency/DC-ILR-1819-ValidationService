@@ -281,6 +281,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_11Rule),
                 typeof(ULN_12Rule),
                 typeof(WithdrawReason_03Rule),
+                typeof(WithdrawReason_04Rule),
                 typeof(WorkPlaceStartDate_01Rule),
                 typeof(WorkPlaceEmpId_04Rule),
             };
