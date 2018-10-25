@@ -19,6 +19,7 @@
         public const string ConRefNumber = "ConRefNumber";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string EmpId = "EmpId";
+        public const string Ethnicity = "Ethnicity";
         public const string EmpOutcome = "EmpOutcome";
         public const string EmpStat = "EmpStat";
         public const string FamilyName = "FamilyName";
@@ -63,5 +64,6 @@
         public const string PwayCode = "PwayCode";
         public const string QUALENT3 = "QUALENT3";
         public const string StdCode = "StdCode";
+        public const string WithdrawReason = "WithdrawReason";
     }
 }

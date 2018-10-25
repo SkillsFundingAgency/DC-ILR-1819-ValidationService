@@ -91,6 +91,11 @@
             public const string IndustryPlacement = "ZWRKX002";
 
             /// <summary>
+            /// esf learner start and assessment
+            /// </summary>
+            public const string ESFLearnerStartandAssessment = "ZESF0001";
+
+            /// <summary>
             /// Gets the work placement codes.
             /// </summary>
             public static string[] AsWorkPlacementCodes => new[]

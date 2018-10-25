@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
             OutTypeConstants.GapYear,
             OutTypeConstants.NotInPaidEmployment,
             OutTypeConstants.Other,
-            OutTypeConstants.SocialDesitination,
+            OutTypeConstants.SocialDestination,
             OutTypeConstants.VoluntaryWork
         };
 

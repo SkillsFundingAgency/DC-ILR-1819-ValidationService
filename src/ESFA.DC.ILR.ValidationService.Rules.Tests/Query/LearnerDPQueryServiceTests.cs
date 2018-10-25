@@ -51,7 +51,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 OutTypeConstants.GapYear,
                 OutTypeConstants.NotInPaidEmployment,
                 OutTypeConstants.Other,
-                OutTypeConstants.SocialDesitination,
+                OutTypeConstants.SocialDestination,
                 OutTypeConstants.VoluntaryWork
             };
 
@@ -92,7 +92,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 OutTypeConstants.GapYear,
                 OutTypeConstants.NotInPaidEmployment,
                 OutTypeConstants.Other,
-                OutTypeConstants.SocialDesitination,
+                OutTypeConstants.SocialDestination,
                 OutTypeConstants.VoluntaryWork
             };
 
@@ -135,7 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 OutTypeConstants.GapYear,
                 OutTypeConstants.NotInPaidEmployment,
                 OutTypeConstants.Other,
-                OutTypeConstants.SocialDesitination,
+                OutTypeConstants.SocialDestination,
                 OutTypeConstants.VoluntaryWork
             };
 

@@ -104,13 +104,14 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="CrossEntity\R06RuleTests.cs" />
-    <AdditionalFiles Include="CrossEntity\R107RuleTests.cs" />
+    <Compile Include="CrossEntity\R107RuleTests.cs" />
     <Compile Include="CrossEntity\R108RuleTests.cs" />
     <Compile Include="CrossEntity\R66RuleTests.cs" />
     <Compile Include="CrossEntity\R70RuleTests.cs" />
     <Compile Include="CrossEntity\R112RuleTests.cs" />
     <Compile Include="CrossEntity\R85RuleTests.cs" />
-    <AdditionalFiles Include="CrossEntity\R07RuleTests.cs" />
+    <Compile Include="CrossEntity\R07RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_22RuleTests.cs" />
     <Compile Include="Derived\DerivedData_28RuleTests.cs" />
     <Compile Include="Derived\DerivedData_29RuleTests.cs" />
     <Compile Include="Derived\DerivedData_21RuleTests.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_13RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_04RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_01RuleTests.cs" />
@@ -175,6 +177,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03RuleTests.cs" />
+    <Compile Include="Learner\Ethnicity\Ethnicity_01RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_04RuleTests.cs" />
@@ -304,11 +307,13 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08RuleTests.cs" />
     <Compile Include="LearningDelivery\PwayCode\PwayCode_02RuleTests.cs" />
+    <Compile Include="LearningDelivery\PwayCode\PwayCode_03RuleTests.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_03RuleTests.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_02RuleTests.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_01RuleTests.cs" />
     <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01RuleTests.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04RuleTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04RuleTests.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07RuleTests.cs" />

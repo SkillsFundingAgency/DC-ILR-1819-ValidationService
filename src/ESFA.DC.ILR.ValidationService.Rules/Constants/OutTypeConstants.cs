@@ -10,7 +10,7 @@
 
         public const string Other = "OTH";
 
-        public const string SocialDesitination = "SDE";
+        public const string SocialDestination = "SDE";
 
         public const string VoluntaryWork = "VOL";
     }

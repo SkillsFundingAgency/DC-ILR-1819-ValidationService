@@ -1,5 +1,4 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -54,6 +53,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// </summary>
         public string RuleName => Name;
 
+        /// <summary>
+        /// Gets the first viable date.
+        /// </summary>
         public DateTime FirstViableDate => new DateTime(2012, 07, 01);
 
         /// <summary>

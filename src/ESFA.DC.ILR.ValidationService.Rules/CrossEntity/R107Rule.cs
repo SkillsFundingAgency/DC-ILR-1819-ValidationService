@@ -1,5 +1,4 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
@@ -9,7 +8,7 @@ using System.Linq;
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R107Rule :
-        IRule<ILearner>
+        IRule<IMessage>
     {
         /// <summary>
         /// Gets the name of the rule.
@@ -25,9 +24,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// Initializes a new instance of the <see cref="R107Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public R107Rule(
-            IValidationErrorHandler validationErrorHandler
-            )
+        /// <param name="message">The message.</param>
+        public R107Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -55,10 +53,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// Gets the destination and progression (record) for the learner.
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <returns>the destination and progression record</returns>
-        public ILearnerDestinationAndProgression GetDAndP(string learnRefNumber) =>
-            _fileData.GetDestinationAndProgressions(x => x.LearnRefNumber == learnRefNumber)
-                .FirstOrDefault();
+        /// <param name="message">The message.</param>
+        /// <returns>
+        /// the destination and progression record
+        /// </returns>
+        public ILearnerDestinationAndProgression GetDAndP(string learnRefNumber, IMessage message) =>
+              message.LearnerDestinationAndProgressions
+                 .Where(x => x.LearnRefNumber == learnRefNumber)
+                 .FirstOrDefault();
 
         /// <summary>
         /// Determines whether [has qualifying outcome] [the specified outcome].
@@ -75,12 +77,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// Determines whether [has qualifying outcome] [the specified learner].
         /// </summary>
         /// <param name="learner">The learner.</param>
+        /// <param name="message">The message.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying outcome] [the specified learner]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasQualifyingOutcome(ILearner learner)
+        public bool HasQualifyingOutcome(ILearner learner, IMessage message)
         {
-            var dps = GetDAndP(learner.LearnRefNumber);
+            var dps = GetDAndP(learner.LearnRefNumber, message);
             var delivery = GetLastDelivery(learner);
 
             return It.Has(dps)
@@ -184,13 +187,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             It.IsNull(objectToValidate)
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
-
-            var learnRefNumber = objectToValidate.LearnRefNumber;
-
-            if (RequiresQualifyingOutcome(objectToValidate) && !HasQualifyingOutcome(objectToValidate))
+            objectToValidate.Learners.ForEach(learner =>
             {
-                RaiseValidationMessage(learnRefNumber);
-            }
+                if (RequiresQualifyingOutcome(learner) && !HasQualifyingOutcome(learner, objectToValidate))
+                {
+                    RaiseValidationMessage(learner.LearnRefNumber);
+                }
+            });
         }
 
         /// <summary>

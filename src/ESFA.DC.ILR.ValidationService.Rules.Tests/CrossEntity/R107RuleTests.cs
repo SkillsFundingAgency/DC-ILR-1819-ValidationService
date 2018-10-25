@@ -22,20 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var provider = new Mock<IFileDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new R107Rule(null, provider.Object));
-        }
-
-        /// <summary>
-        /// New rule with null provider throws.
-        /// </summary>
-        [Fact]
-        public void NewRuleWithNullProviderThrows()
-        {
-            // arrange
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-
-            // act / assert
-            Assert.Throws<ArgumentNullException>(() => new R107Rule(handler.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new R107Rule(null));
         }
 
         /// <summary>
@@ -160,6 +147,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var mockItem = new Mock<ILearnerDestinationAndProgression>();
             mockItem
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(learnRN);
+            mockItem
                 .SetupGet(x => x.DPOutcomes)
                 .Returns(outcomes.AsSafeReadOnlyList());
 
@@ -167,21 +157,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             collection.Add(mockItem.Object);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var provider = new Mock<IFileDataService>(MockBehavior.Strict);
+            var message = new Mock<IMessage>(MockBehavior.Strict);
 
             // we can no longer check the learn ref number gets sent into here as the mock doesn't support it
-            provider
-                .Setup(x => x.GetDestinationAndProgressions(Moq.It.IsAny<Func<ILearnerDestinationAndProgression, bool>>()))
+            message
+                .SetupGet(x => x.LearnerDestinationAndProgressions)
                 .Returns(collection.AsSafeReadOnlyList());
 
-            var sut = new R107Rule(handler.Object, provider.Object);
+            var sut = NewRule();
 
             // act
-            var result = sut.GetDAndP(learnRN);
+            var result = sut.GetDAndP(learnRN, message.Object);
 
             // assert
-            handler.VerifyAll();
-            provider.VerifyAll();
+            message.VerifyAll();
             Assert.Equal(candidateCount, result.DPOutcomes.Count);
         }
 
@@ -538,14 +527,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
 
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            handler
-                .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == R107Rule.Name),
-                    Moq.It.Is<string>(y => y == LearnRefNumber),
-                    null,
-                    null));
-            var provider = new Mock<IFileDataService>(MockBehavior.Strict);
+            var learners = Collection.Empty<ILearner>();
+            learners.Add(mockItem.Object);
 
             var outcome = new Mock<IDPOutcome>();
             outcome
@@ -563,19 +546,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var collection = Collection.Empty<ILearnerDestinationAndProgression>();
             collection.Add(mockDAndP.Object);
 
-            // we can no longer check the learn ref number gets sent into here as the mock doesn't support it
-            provider
-                .Setup(x => x.GetDestinationAndProgressions(Moq.It.IsAny<Func<ILearnerDestinationAndProgression, bool>>()))
+            var message = new Mock<IMessage>(MockBehavior.Strict);
+            message
+                .SetupGet(x => x.Learners)
+                .Returns(learners.AsSafeReadOnlyList());
+            message
+                .SetupGet(x => x.LearnerDestinationAndProgressions)
                 .Returns(collection.AsSafeReadOnlyList());
 
-            var sut = new R107Rule(handler.Object, provider.Object);
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle(
+                    Moq.It.Is<string>(y => y == R107Rule.Name),
+                    Moq.It.Is<string>(y => y == LearnRefNumber),
+                    null,
+                    null));
+
+            var sut = new R107Rule(handler.Object);
 
             // act
-            sut.Validate(mockItem.Object);
+            sut.Validate(message.Object);
 
             // assert
             handler.VerifyAll();
-            provider.VerifyAll();
+            message.VerifyAll();
         }
 
         /// <summary>
@@ -663,8 +657,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
 
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var provider = new Mock<IFileDataService>(MockBehavior.Strict);
+            var learners = Collection.Empty<ILearner>();
+            learners.Add(mockItem.Object);
 
             var outcome = new Mock<IDPOutcome>();
             outcome
@@ -682,19 +676,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var collection = Collection.Empty<ILearnerDestinationAndProgression>();
             collection.Add(mockDAndP.Object);
 
-            // we can no longer check the learn ref number gets sent into here as the mock doesn't support it
-            provider
-                .Setup(x => x.GetDestinationAndProgressions(Moq.It.IsAny<Func<ILearnerDestinationAndProgression, bool>>()))
+            var message = new Mock<IMessage>(MockBehavior.Strict);
+            message
+                .SetupGet(x => x.Learners)
+                .Returns(learners.AsSafeReadOnlyList());
+            message
+                .SetupGet(x => x.LearnerDestinationAndProgressions)
                 .Returns(collection.AsSafeReadOnlyList());
 
-            var sut = new R107Rule(handler.Object, provider.Object);
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle(
+                    Moq.It.Is<string>(y => y == R107Rule.Name),
+                    Moq.It.Is<string>(y => y == LearnRefNumber),
+                    null,
+                    null));
+
+            var sut = new R107Rule(handler.Object);
 
             // act
-            sut.Validate(mockItem.Object);
+            sut.Validate(message.Object);
 
             // assert
             handler.VerifyAll();
-            provider.VerifyAll();
+            message.VerifyAll();
         }
 
         /// <summary>
@@ -704,9 +709,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         public R107Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var provider = new Mock<IFileDataService>(MockBehavior.Strict);
 
-            return new R107Rule(handler.Object, provider.Object);
+            return new R107Rule(handler.Object);
         }
     }
 }
