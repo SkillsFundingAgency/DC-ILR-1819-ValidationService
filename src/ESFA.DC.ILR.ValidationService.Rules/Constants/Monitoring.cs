@@ -359,6 +359,7 @@
             /// </summary>
             public const string SmallEmployer = "SEM1";
 
+            // TODO: this should be removed now we have ESMTypedCodes in the lookup provider
             public static string[] AsASet => new string[]
             {
                 SelfEmployed,

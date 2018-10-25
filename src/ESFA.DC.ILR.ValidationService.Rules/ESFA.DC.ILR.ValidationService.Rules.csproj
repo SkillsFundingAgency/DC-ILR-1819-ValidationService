@@ -92,6 +92,7 @@
     <Compile Include="CrossEntity\R112Rule.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
+    <Compile Include="Derived\DerivedData_11Rule.cs" />
     <Compile Include="Derived\DerivedData_22Rule.cs" />
     <Compile Include="Derived\DerivedData_28Rule.cs" />
     <Compile Include="Derived\DerivedData_29Rule.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Derived\Interface\IDD04.cs" />
     <Compile Include="Derived\Interface\IDD06.cs" />
     <Compile Include="Derived\Interface\IDD07.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_11Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_22Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_28Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_29Rule.cs" />
@@ -256,6 +258,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_01Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRefRuleBase.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_59Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57Rule.cs" />
