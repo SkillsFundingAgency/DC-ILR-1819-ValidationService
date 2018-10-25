@@ -70,6 +70,8 @@
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
         public const string DelLocPostCode_16 = "DelLocPostCode_16";
 
+        public const string Ethnicity_01 = "Ethnicity_01";
+
         public const string ELQ_01 = "ELQ_01";
 
         public const string EmpId_13 = "EmpId_13";
@@ -191,6 +193,7 @@
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
         public const string PwayCode_02 = "PwayCode_02";
+        public const string PwayCode_03 = "PwayCode_03";
 
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";

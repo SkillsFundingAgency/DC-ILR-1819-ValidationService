@@ -79,6 +79,7 @@
     <Compile Include="Constants\ReasonForWithdrawal.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
+    <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
     <Compile Include="Constants\TypeOfLARSValidity.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03Rule.cs" />
+    <Compile Include="Learner\Ethnicity\Ethnicity_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_04Rule.cs" />
@@ -300,6 +302,7 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_13Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08Rule.cs" />
     <Compile Include="LearningDelivery\PwayCode\PwayCode_02Rule.cs" />
+    <Compile Include="LearningDelivery\PwayCode\PwayCode_03Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_03Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_02Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_01Rule.cs" />
