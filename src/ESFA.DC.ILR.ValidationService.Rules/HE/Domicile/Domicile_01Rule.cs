@@ -3,20 +3,20 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.HE.Domicile
+namespace ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE
 {
-    public class Domicile_01Rule :
+    public class DOMICILE_01Rule :
         IRule<ILearner>
     {
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "Domicile";
+        public const string MessagePropertyName = "DOMICILE";
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "Domicile_01";
+        public const string Name = "DOMICILE_01";
 
         /// <summary>
         /// The message handler
@@ -24,10 +24,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.Domicile
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Domicile_01Rule"/> class.
+        /// Initializes a new instance of the <see cref="DOMICILE_01Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public Domicile_01Rule(
+        public DOMICILE_01Rule(
             IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)

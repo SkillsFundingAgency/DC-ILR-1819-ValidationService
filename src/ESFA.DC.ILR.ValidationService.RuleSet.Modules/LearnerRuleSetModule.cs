@@ -5,7 +5,7 @@ using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType;
 using ESFA.DC.ILR.ValidationService.Rules.HE;
-using ESFA.DC.ILR.ValidationService.Rules.HE.Domicile;
+using ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
@@ -144,8 +144,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
-                typeof(Domicile_01Rule),
-                typeof(Domicile_02Rule),
+                typeof(DOMICILE_01Rule),
+                typeof(DOMICILE_02Rule),
                 typeof(Ethnicity_01Rule),
                 typeof(ELQ_01Rule),
                 typeof(EngGrade_03Rule),
