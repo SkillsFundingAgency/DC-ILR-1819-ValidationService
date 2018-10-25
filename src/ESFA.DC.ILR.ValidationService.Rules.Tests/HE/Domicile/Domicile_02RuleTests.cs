@@ -1,16 +1,16 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.HE.Domicile;
+using ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.DOMICILE
 {
-    public class Domicile_02RuleTests
+    public class DOMICILE_02RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var service = new Mock<IProvideLookupDetails>();
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new Domicile_02Rule(null, service.Object));
+            Assert.Throws<ArgumentNullException>(() => new DOMICILE_02Rule(null, service.Object));
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var handler = new Mock<IValidationErrorHandler>();
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new Domicile_02Rule(handler.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new DOMICILE_02Rule(handler.Object, null));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("Domicile_02", result);
+            Assert.Equal("DOMICILE_02", result);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(Domicile_02Rule.Name, result);
+            Assert.Equal(DOMICILE_02Rule.Name, result);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
                 .Setup(x => x.Contains(LookupCodedKey.Domicile, Moq.It.IsAny<string>()))
                 .Returns(expectation);
 
-            var sut = new Domicile_02Rule(handler.Object, service.Object);
+            var sut = new DOMICILE_02Rule(handler.Object, service.Object);
 
             var mockItem = new Mock<ILearningDeliveryHE>();
 
@@ -189,13 +189,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
                 .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == Domicile_02Rule.Name),
+                    Moq.It.Is<string>(y => y == DOMICILE_02Rule.Name),
                     Moq.It.Is<string>(y => y == LearnRefNumber),
                     0,
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == Domicile_02Rule.MessagePropertyName),
+                    Moq.It.Is<string>(y => y == DOMICILE_02Rule.MessagePropertyName),
                     Moq.It.IsAny<ILearningDelivery>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
@@ -204,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
                 .Setup(x => x.Contains(LookupCodedKey.Domicile, Moq.It.IsAny<string>()))
                 .Returns(false);
 
-            var sut = new Domicile_02Rule(handler.Object, service.Object);
+            var sut = new DOMICILE_02Rule(handler.Object, service.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -246,7 +246,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
                 .Setup(x => x.Contains(LookupCodedKey.Domicile, Moq.It.IsAny<string>()))
                 .Returns(true);
 
-            var sut = new Domicile_02Rule(handler.Object, service.Object);
+            var sut = new DOMICILE_02Rule(handler.Object, service.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -260,12 +260,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public Domicile_02Rule NewRule()
+        public DOMICILE_02Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
 
-            return new Domicile_02Rule(handler.Object, service.Object);
+            return new DOMICILE_02Rule(handler.Object, service.Object);
         }
     }
 }
