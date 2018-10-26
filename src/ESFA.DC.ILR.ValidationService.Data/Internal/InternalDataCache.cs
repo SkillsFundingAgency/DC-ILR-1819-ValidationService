@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
 
         public IDictionary<int, ValidityPeriods> LLDDCats { get; set; }
 
-        public IReadOnlyCollection<string> QUALENT3s { get; set; }
+        public IDictionary<string, ValidityPeriods> QUALENT3s { get; set; }
 
         public IDictionary<int, ValidityPeriods> TTAccoms { get; set; }
 

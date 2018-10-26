@@ -84,5 +84,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         ///   <c>true</c> if the specified lookup key is current; otherwise, <c>false</c>.
         /// </returns>
         bool IsCurrent(LookupTimeRestrictedKey lookupKey, string candidate, DateTime referenceDate);
+
+        /// <summary>
+        /// Checks whether the key exists and specified date (LearnStartDate) is less than valid to date of key.
+        /// </summary>
+        /// <param name="lookupKey">The Lookup list key</param>
+        /// <param name="candidate">The value to find in lookup list</param>
+        /// <param name="dateToCheck">The date (LearnStartDate) to compare</param>
+        /// <returns>
+        ///    <c>true</c> if the specified candidate key exist in lookup list and dateToCheck is before or equal to ValidTo date; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey lookupKey, string candidate, DateTime dateToCheck);
     }
 }

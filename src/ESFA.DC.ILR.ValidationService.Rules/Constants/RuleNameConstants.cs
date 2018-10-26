@@ -198,6 +198,7 @@
 
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
+        public const string QUALENT3_03 = "QUALENT3_03";
 
         public const string R06 = "R06";
         public const string R07 = "R07";

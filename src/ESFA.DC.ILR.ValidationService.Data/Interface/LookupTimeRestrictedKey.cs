@@ -32,6 +32,11 @@
         MSTuFee,
 
         /// <summary>
+        /// highest qualification on entry
+        /// </summary>
+        QualEnt3,
+
+        /// <summary>
         /// term time accomodation
         /// </summary>
         TTAccom,
