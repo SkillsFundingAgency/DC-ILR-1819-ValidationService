@@ -306,7 +306,7 @@
     <Compile Include="LearningDelivery\StdCode\StdCode_03Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_02Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_01Rule.cs" />
-    <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01Rule.cs" />
+    <Compile Include="LearningDelivery\SWSupAimId\SWSupAimId_01Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />

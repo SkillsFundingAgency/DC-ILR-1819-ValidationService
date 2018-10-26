@@ -2,27 +2,26 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
-using System.Linq;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSSupAimId
+namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId
 {
     /// <summary>
     /// from version 1.1 validation spread sheet
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class SWSSupAimId_01Rule :
+    public class SWSupAimId_01Rule :
         IRule<ILearner>
     {
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "SWSSupAimId";
+        public const string MessagePropertyName = "SWSupAimId";
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "SWSSupAimId_01";
+        public const string Name = "SWSupAimId_01";
 
         /// <summary>
         /// The message handler
@@ -30,10 +29,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSSupAimId
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SWSSupAimId_01Rule"/> class.
+        /// Initializes a new instance of the <see cref="SWSupAimId_01Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public SWSSupAimId_01Rule(IValidationErrorHandler validationErrorHandler)
+        public SWSupAimId_01Rule(IValidationErrorHandler validationErrorHandler)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));

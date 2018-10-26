@@ -1,19 +1,19 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSSupAimId;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSSupAimId
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSupAimId
 {
     /// <summary>
     /// from version 1.1 validation spread sheet
     /// </summary>
-    public class SWSSupAimId_01RuleTests
+    public class SWSupAimId_01RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSSupAimId
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
-            Assert.Throws<ArgumentNullException>(() => new SWSSupAimId_01Rule(null));
+            Assert.Throws<ArgumentNullException>(() => new SWSupAimId_01Rule(null));
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSSupAimId
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("SWSSupAimId_01", result);
+            Assert.Equal("SWSupAimId_01", result);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSSupAimId
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(SWSSupAimId_01Rule.Name, result);
+            Assert.Equal(SWSupAimId_01Rule.Name, result);
         }
 
         /// <summary>
@@ -154,17 +154,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSSupAimId
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == SWSSupAimId_01Rule.Name),
+                Moq.It.Is<string>(y => y == SWSupAimId_01Rule.Name),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 0,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == SWSSupAimId_01Rule.MessagePropertyName),
+                    Moq.It.Is<string>(y => y == SWSupAimId_01Rule.MessagePropertyName),
                     Moq.It.IsAny<ILearningDelivery>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var sut = new SWSSupAimId_01Rule(mockHandler.Object);
+            var sut = new SWSupAimId_01Rule(mockHandler.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -203,7 +203,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSSupAimId
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var sut = new SWSSupAimId_01Rule(mockHandler.Object);
+            var sut = new SWSupAimId_01Rule(mockHandler.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -216,11 +216,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSSupAimId
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public SWSSupAimId_01Rule NewRule()
+        public SWSupAimId_01Rule NewRule()
         {
             var mock = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            return new SWSSupAimId_01Rule(mock.Object);
+            return new SWSupAimId_01Rule(mock.Object);
         }
     }
 }
