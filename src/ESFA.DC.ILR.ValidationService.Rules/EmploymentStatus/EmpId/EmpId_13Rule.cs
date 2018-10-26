@@ -60,6 +60,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
 
         public bool EmpIdConditionMet(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses)
         {
+            if (learnerEmploymentStatuses == null)
+            {
+                return false;
+            }
+
             return learnerEmploymentStatuses.Any(x => x.EmpIdNullable == 999999999);
         }
 
