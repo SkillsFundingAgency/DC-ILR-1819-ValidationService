@@ -315,6 +315,7 @@
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03RuleTests.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04RuleTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02RuleTests.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07RuleTests.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2RuleTests.cs" />
@@ -335,6 +336,7 @@
     <Compile Include="Query\LearningDeliveryAppFinRecordQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryQueryServiceTests.cs" />
+    <Compile Include="Query\LearningDeliveryWorkPlacementQueryServicesTests.cs" />
     <Compile Include="Query\PostcodeQueryServiceTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
   </ItemGroup>

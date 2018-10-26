@@ -224,5 +224,7 @@
         public const string ULN_12 = "ULN_12";
 
         public const string WithdrawReason_04 = "WithdrawReason_04";
+
+        public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
     }
 }
