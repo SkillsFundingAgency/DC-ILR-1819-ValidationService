@@ -15,7 +15,6 @@
         LearnFAMType,
         OutGrade,
         OutType,
-        QualEnt3,
         Sex,
     }
 }

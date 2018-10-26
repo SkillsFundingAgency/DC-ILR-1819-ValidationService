@@ -85,6 +85,7 @@
     <Compile Include="Constants\TypeOfLARSValidity.cs" />
     <Compile Include="Constants\TypeOfLearningProgramme.cs" />
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
+    <Compile Include="Constants\TypeOfQualEnt3.cs" />
     <Compile Include="CrossEntity\R06Rule.cs" />
     <Compile Include="CrossEntity\R107Rule.cs" />
     <Compile Include="CrossEntity\R108Rule.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="HE\PCSLDCS\PCSLDCS_01Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
+    <Compile Include="HE\QUALENT3\QUALENT3_03Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />

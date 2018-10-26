@@ -83,7 +83,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                 cache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
                 cache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
                 cache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupAsIntWithValidityPeriods(lookups, "LLDDCat"));
-                cache.QUALENT3s = new HashSet<string>(BuildSimpleLookupEnumerable<string>(lookups, "QualEnt3"));
+                cache.QUALENT3s = new Dictionary<string, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "QualEnt3"));
                 cache.TTAccoms = new Dictionary<int, ValidityPeriods>(BuildLookupAsIntWithValidityPeriods(lookups, "TTAccom"));
 
                 Enum.GetValues(typeof(LookupSimpleKey))
@@ -186,8 +186,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                  .Descendants(type)
                  .Descendants("option")
                  .ToDictionary(c => c.Attribute("code").Value, v => new ValidityPeriods(
-                     validFrom: DateTime.Parse(v.Attribute("validFrom").Value),
-                     validTo: DateTime.Parse(v.Attribute("validTo").Value)));
+                     validFrom: DateTime.Parse(v.Attribute("validFrom") == null ? DateTime.MinValue.ToString() : v.Attribute("validFrom").Value),
+                     validTo: DateTime.Parse(v.Attribute("validTo") == null ? DateTime.MaxValue.ToString() : v.Attribute("validTo").Value)));
         }
 
         /// <summary>
