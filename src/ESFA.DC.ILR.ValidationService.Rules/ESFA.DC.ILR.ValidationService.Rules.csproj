@@ -115,6 +115,7 @@
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_04Rule.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_02Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_13Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_02Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_01Rule.cs" />
