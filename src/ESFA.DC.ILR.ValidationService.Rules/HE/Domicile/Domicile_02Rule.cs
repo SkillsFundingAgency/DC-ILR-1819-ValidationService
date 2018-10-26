@@ -4,20 +4,20 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.HE.Domicile
+namespace ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE
 {
-    public class Domicile_02Rule :
+    public class DOMICILE_02Rule :
         IRule<ILearner>
     {
         /// <summary>
         /// Gets the name of the message property.
         /// </summary>
-        public const string MessagePropertyName = "Domicile";
+        public const string MessagePropertyName = "DOMICILE";
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
-        public const string Name = "Domicile_02";
+        public const string Name = "DOMICILE_02";
 
         /// <summary>
         /// The message handler
@@ -30,11 +30,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.Domicile
         private readonly IProvideLookupDetails _lookups;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Domicile_02Rule" /> class.
+        /// Initializes a new instance of the <see cref="DOMICILE_02Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="lookups">The lookups.</param>
-        public Domicile_02Rule(
+        public DOMICILE_02Rule(
             IValidationErrorHandler validationErrorHandler,
             IProvideLookupDetails lookups)
         {

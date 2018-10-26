@@ -125,8 +125,8 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
-    <Compile Include="HE\Domicile\Domicile_02Rule.cs" />
-    <Compile Include="HE\Domicile\Domicile_01Rule.cs" />
+    <Compile Include="HE\DOMICILE\DOMICILE_02Rule.cs" />
+    <Compile Include="HE\DOMICILE\DOMICILE_01Rule.cs" />
     <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
@@ -308,6 +308,7 @@
     <Compile Include="LearningDelivery\StdCode\StdCode_01Rule.cs" />
     <Compile Include="LearningDelivery\SWSupAimId\SWSupAimId_01Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03Rule.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07Rule.cs" />

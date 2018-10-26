@@ -64,5 +64,6 @@
         public const string PwayCode = "PwayCode";
         public const string QUALENT3 = "QUALENT3";
         public const string StdCode = "StdCode";
+        public const string WithdrawReason = "WithdrawReason";
     }
 }

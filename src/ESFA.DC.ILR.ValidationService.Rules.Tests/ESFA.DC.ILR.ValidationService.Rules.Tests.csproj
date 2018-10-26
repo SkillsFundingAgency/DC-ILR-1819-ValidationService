@@ -131,8 +131,8 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
-    <Compile Include="HE\Domicile\Domicile_02RuleTests.cs" />
-    <Compile Include="HE\Domicile\Domicile_01RuleTests.cs" />
+    <Compile Include="HE\DOMICILE\DOMICILE_02RuleTests.cs" />
+    <Compile Include="HE\DOMICILE\DOMICILE_01RuleTests.cs" />
     <Compile Include="HE\ELQ\ELQ_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02RuleTests.cs" />
@@ -313,6 +313,7 @@
     <Compile Include="LearningDelivery\StdCode\StdCode_01RuleTests.cs" />
     <Compile Include="LearningDelivery\SWSupAimId\SWSupAimId_01RuleTests.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04RuleTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04RuleTests.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07RuleTests.cs" />
