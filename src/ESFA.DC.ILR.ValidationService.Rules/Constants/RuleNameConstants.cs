@@ -80,6 +80,7 @@
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
+        public const string EmpStat_02 = "EmpStat_02";
         public const string EmpStat_08 = "EmpStat_08";
         public const string EmpStat_12 = "EmpStat_12";
 
@@ -224,5 +225,7 @@
         public const string ULN_12 = "ULN_12";
 
         public const string WithdrawReason_04 = "WithdrawReason_04";
+
+        public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
     }
 }

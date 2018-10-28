@@ -115,6 +115,7 @@
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_04Rule.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_02Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_13Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_02Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_01Rule.cs" />
@@ -311,6 +312,7 @@
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02Rule.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07Rule.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2Rule.cs" />
@@ -325,6 +327,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
+    <Compile Include="Query\Interface\ILearningDeliveryWorkPlacementQueryService.cs" />
     <Compile Include="Query\LearnerDPQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerDPQueryService.cs" />
     <Compile Include="Query\LearnerEmploymentStatusQueryService.cs" />
@@ -341,6 +344,7 @@
     <Compile Include="Query\Interface\ILearnerEmploymentStatusMonitoringQueryService.cs" />
     <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryService.cs" />
     <Compile Include="Query\LearningDeliveryAppFinRecordQueryService.cs" />
+    <Compile Include="Query\LearningDeliveryWorkPlacementQueryService.cs" />
     <Compile Include="Query\PostcodeQueryService.cs" />
     <Compile Include="Query\LearnerFAMQueryService.cs" />
     <Compile Include="Query\LearnerQueryService.cs" />

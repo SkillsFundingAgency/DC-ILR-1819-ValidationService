@@ -139,6 +139,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             catch (Exception ex)
             {
                 _logger.LogError("Validation Critical Error", ex);
+                throw;
             }
             finally
             {

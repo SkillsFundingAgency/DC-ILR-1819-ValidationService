@@ -63,6 +63,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 using System;
@@ -154,6 +155,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(EmpOutcome_02Rule),
                 typeof(EmpOutcome_03Rule),
                 typeof(EmpStat_01Rule),
+                typeof(EmpStat_02Rule),
                 typeof(EmpStat_04Rule),
                 typeof(EmpStat_08Rule),
                 typeof(EmpStat_12Rule),
@@ -285,6 +287,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ULN_12Rule),
                 typeof(WithdrawReason_03Rule),
                 typeof(WithdrawReason_04Rule),
+                typeof(WorkPlaceEndDate_02Rule),
                 typeof(WorkPlaceStartDate_01Rule),
                 typeof(WorkPlaceEmpId_04Rule),
             };
