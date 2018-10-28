@@ -148,6 +148,11 @@
             public const string LocalAuthorityCommunityLearningFunds = "SOF108";
 
             /// <summary>
+            /// financed by advanced learner loans
+            /// </summary>
+            public const string FinancedByAdvancedLearnerLoans = "ADL1";
+
+            /// <summary>
             /// funding and monitoring types
             /// </summary>
             public static class Types
