@@ -442,17 +442,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         /// </summary>
         /// <param name="fundModel">The fund model.</param>
         /// <param name="learnStart">The learn start.</param>
+        /// <param name="previousYearEnd">The previous year end.</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, "2012-07-01")]
-        [InlineData(TypeOfFunding.NotFundedByESFA, "2012-07-01")]
-        [InlineData(TypeOfFunding.OtherAdult, "2012-07-01")]
-        [InlineData(TypeOfFunding.AdultSkills, "2013-12-31")]
-        [InlineData(TypeOfFunding.NotFundedByESFA, "2013-12-31")]
-        [InlineData(TypeOfFunding.OtherAdult, "2013-12-31")]
-        [InlineData(TypeOfFunding.AdultSkills, "2014-07-31")]
-        [InlineData(TypeOfFunding.NotFundedByESFA, "2014-07-31")]
-        [InlineData(TypeOfFunding.OtherAdult, "2014-07-31")]
-        public void InvalidItemRaisesValidationMessage(int fundModel, string learnStart)
+        [InlineData(TypeOfFunding.AdultSkills, "2012-07-01", "2011-07-31")]
+        [InlineData(TypeOfFunding.NotFundedByESFA, "2012-07-01", "2011-07-31")]
+        [InlineData(TypeOfFunding.OtherAdult, "2012-07-01", "2011-07-31")]
+        [InlineData(TypeOfFunding.AdultSkills, "2013-12-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.NotFundedByESFA, "2013-12-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.OtherAdult, "2013-12-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.AdultSkills, "2014-07-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.NotFundedByESFA, "2014-07-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.OtherAdult, "2014-07-31", "2013-07-31")]
+        public void InvalidItemRaisesValidationMessage(int fundModel, string learnStart, string previousYearEnd)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -531,11 +532,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Setup(x => x.IsApprenticeship(Moq.It.IsAny<int>()))
                 .Returns(false);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
-
-            // not very happy with this in a test...
             yearData
                 .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
-                .Returns(DateTime.Parse(Format.String(AcademicYearDates.PreviousYearEnd.GetDateFormat(), testDate.Month > 8 ? testDate.Year : testDate.Year - 1)));
+                .Returns(DateTime.Parse(previousYearEnd));
 
             var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object, yearData.Object);
 
@@ -553,17 +552,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         /// </summary>
         /// <param name="fundModel">The fund model.</param>
         /// <param name="learnStart">The learn start.</param>
+        /// <param name="previousYearEnd">The previous year end.</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, "2012-07-01")]
-        [InlineData(TypeOfFunding.NotFundedByESFA, "2012-07-01")]
-        [InlineData(TypeOfFunding.OtherAdult, "2012-07-01")]
-        [InlineData(TypeOfFunding.AdultSkills, "2013-12-31")]
-        [InlineData(TypeOfFunding.NotFundedByESFA, "2013-12-31")]
-        [InlineData(TypeOfFunding.OtherAdult, "2013-12-31")]
-        [InlineData(TypeOfFunding.AdultSkills, "2014-07-31")]
-        [InlineData(TypeOfFunding.NotFundedByESFA, "2014-07-31")]
-        [InlineData(TypeOfFunding.OtherAdult, "2014-07-31")]
-        public void ValidItemDoesNotRaiseValidationMessage(int fundModel, string learnStart)
+        [InlineData(TypeOfFunding.AdultSkills, "2012-07-01", "2011-07-31")]
+        [InlineData(TypeOfFunding.NotFundedByESFA, "2012-07-01", "2011-07-31")]
+        [InlineData(TypeOfFunding.OtherAdult, "2012-07-01", "2011-07-31")]
+        [InlineData(TypeOfFunding.AdultSkills, "2013-12-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.NotFundedByESFA, "2013-12-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.OtherAdult, "2013-12-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.AdultSkills, "2014-07-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.NotFundedByESFA, "2014-07-31", "2013-07-31")]
+        [InlineData(TypeOfFunding.OtherAdult, "2014-07-31", "2013-07-31")]
+        public void ValidItemDoesNotRaiseValidationMessage(int fundModel, string learnStart, string previousYearEnd)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -614,11 +614,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Setup(x => x.IsApprenticeship(Moq.It.IsAny<int>()))
                 .Returns(false);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
-
-            // not very happy with this in a test...
             yearData
                 .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
-                .Returns(DateTime.Parse(Format.String(AcademicYearDates.PreviousYearEnd.GetDateFormat(), testDate.Month > 8 ? testDate.Year : testDate.Year - 1)));
+                .Returns(DateTime.Parse(previousYearEnd));
 
             var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object, yearData.Object);
 
