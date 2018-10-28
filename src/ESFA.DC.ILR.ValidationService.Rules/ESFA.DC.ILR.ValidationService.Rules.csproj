@@ -257,6 +257,7 @@
     <Compile Include="LearningDelivery\FworkCode\FworkCode_05Rule.cs" />
     <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_04Rule.cs" />
     <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_01Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_88Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_01Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29Rule.cs" />

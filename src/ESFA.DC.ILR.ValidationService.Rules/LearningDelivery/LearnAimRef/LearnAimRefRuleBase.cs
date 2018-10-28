@@ -19,26 +19,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         public const string MessagePropertyName = "LearnAimRef";
 
         /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
-        /// <summary>
-        /// The lars data (service)
-        /// </summary>
-        private readonly ILARSDataService _larsData;
-
-        /// <summary>
-        /// The derived data 07 (rule)
-        /// </summary>
-        private readonly IDD07 _derivedData07;
-
-        /// <summary>
-        /// The derived data 11 (rule)
-        /// </summary>
-        private readonly IDerivedData_11Rule _derivedData11;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="LearnAimRefRuleBase" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
@@ -60,20 +40,46 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             It.IsNull(derivedData11)
                 .AsGuard<ArgumentNullException>(nameof(derivedData11));
 
-            _messageHandler = validationErrorHandler;
-            _larsData = larsData;
-            _derivedData07 = derivedData07;
-            _derivedData11 = derivedData11;
+            MessageHandler = validationErrorHandler;
+            LarsData = larsData;
+            DerivedData07 = derivedData07;
+            DerivedData11 = derivedData11;
         }
+
+        /// <summary>
+        /// Gets the apprenticeship minimum start.
+        /// </summary>
+        public static DateTime ApprenticeshipMinimumStart => new DateTime(2011, 08, 01);
+
+        /// <summary>
+        /// Gets the unemployed maximum start.
+        /// </summary>
+        public static DateTime UnemployedMaximumStart => new DateTime(2016, 08, 01);
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
         public string RuleName => GetName();
 
-        public DateTime ApprenticeshipMinimumStart => new DateTime(2011, 07, 31);
+        /// <summary>
+        /// Gets the message handler
+        /// </summary>
+        protected IValidationErrorHandler MessageHandler { get; }
 
-        public DateTime UnemployedMaximumStart => new DateTime(2011, 07, 31);
+        /// <summary>
+        /// Gets the lars data (service)
+        /// </summary>
+        protected ILARSDataService LarsData { get; }
+
+        /// <summary>
+        /// Gets the derived data 07 (rule)
+        /// </summary>
+        protected IDD07 DerivedData07 { get; }
+
+        /// <summary>
+        /// Gets the derived data 11 (rule)
+        /// </summary>
+        protected IDerivedData_11Rule DerivedData11 { get; }
 
         /// <summary>
         /// Gets the (rule) name.
@@ -99,7 +105,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [in receipt of benefits at start] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool InReceiptOfBenefitsAtStart(ILearningDelivery delivery, IReadOnlyCollection<ILearnerEmploymentStatus> employments) =>
-            _derivedData11.IsAdultFundedOnBenefitsAtStartOfAim(delivery, employments);
+            DerivedData11.IsAdultFundedOnBenefitsAtStartOfAim(delivery, employments);
 
         /// <summary>
         /// Determines whether [in apprenticeship] [the specified delivery].
@@ -109,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [in apprenticeship] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool InApprenticeship(ILearningDelivery delivery) =>
-            _derivedData07.IsApprenticeship(delivery.ProgTypeNullable);
+            DerivedData07.IsApprenticeship(delivery.ProgTypeNullable);
 
         /// <summary>
         /// Determines whether [in standard apprenticeship] [the specified delivery].
@@ -155,34 +161,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             It.IsBetween(delivery.LearnStartDate, minStart, maxStart);
 
         /// <summary>
-        /// Determines whether [has valid learning aim] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <param name="desiredCategories">The desired categories.</param>
-        /// <returns>
-        ///   <c>true</c> if [has valid learning aim] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool HasValidLearningAim(ILearningDelivery delivery, params string[] desiredCategories)
-        {
-            var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
-
-            return validities
-                .Where(x => InValidStartRange(x, delivery))
-                .Any(x => HasQualifyingCategory(x, desiredCategories));
-        }
-
-        /// <summary>
-        /// Determines whether [in valid start range] [the specified validity].
-        /// </summary>
-        /// <param name="validity">The validity.</param>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [in valid start range] [the specified validity]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool InValidStartRange(ILARSValidity validity, ILearningDelivery delivery) =>
-            It.IsBetween(delivery.LearnStartDate, validity.StartDate, validity.LastNewStartDate ?? DateTime.MaxValue);
-
-        /// <summary>
         /// Determines whether [has qualifying category] [the specified validity].
         /// </summary>
         /// <param name="validity">The validity.</param>
@@ -192,6 +170,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// </returns>
         public bool HasQualifyingCategory(ILARSValidity validity, params string[] desiredCategories) =>
             It.IsInRange(validity.ValidityCategory, desiredCategories);
+
+        /// <summary>
+        /// Determines whether [has qualifying category] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <param name="desiredCategories">The desired categories.</param>
+        /// <returns>
+        ///   <c>true</c> if [has qualifying category] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasQualifyingCategory(ILearningDelivery delivery, params string[] desiredCategories)
+        {
+            var validities = LarsData.GetValiditiesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
+
+            return validities
+                .Any(x => HasQualifyingCategory(x, desiredCategories));
+        }
 
         /// <summary>
         /// Determines whether [is advanced learner loan] [the specified monitor].
@@ -211,7 +205,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is advanced learner loan] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsAdvancedLearnerLoan(ILearningDelivery delivery) =>
-            CheckDeliveryFAMs(delivery, IsRestart);
+            CheckDeliveryFAMs(delivery, IsAdvancedLearnerLoan);
 
         /// <summary>
         /// Determines whether the specified monitor is restart.
@@ -251,7 +245,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is learner in custody] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsLearnerInCustody(ILearningDelivery delivery) =>
-            CheckDeliveryFAMs(delivery, IsRestart);
+            CheckDeliveryFAMs(delivery, IsLearnerInCustody);
 
         /// <summary>
         /// Determines whether [is valid adult skills (category)] [the specified delivery].
@@ -261,11 +255,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid adult skills (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidAdultSkills(ILearningDelivery delivery) =>
-            !IsRestart(delivery)
-            && !IsLearnerInCustody(delivery)
+            HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.AdultSkills)
+            && !IsRestart(delivery)
             && !InApprenticeship(delivery)
-            && HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.AdultSkills);
+            && !IsLearnerInCustody(delivery);
 
         /// <summary>
         /// Determines whether [is valid apprenticeship (category)] [the specified delivery].
@@ -275,13 +269,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid apprenticeship (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidApprenticeship(ILearningDelivery delivery) =>
-            !IsRestart(delivery)
+            HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills, TypeOfFunding.ApprenticeshipsFrom1May2017)
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.Apprenticeships)
+            && !IsRestart(delivery)
             && !InStandardApprenticeship(delivery)
             && InApprenticeship(delivery)
             && IsComponentOfAProgram(delivery)
-            && IsViableStart(delivery, ApprenticeshipMinimumStart, DateTime.Today)
-            && HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills, TypeOfFunding.ApprenticeshipsFrom1May2017)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.Apprenticeships);
+            && IsViableStart(delivery, ApprenticeshipMinimumStart, DateTime.Today);
 
         /// <summary>
         /// Determines whether [is valid unemployed (category)] [the specified delivery].
@@ -292,13 +286,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid unemployed (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidUnemployed(ILearningDelivery delivery, ILearner learner) =>
-            !IsRestart(delivery)
+            HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.Unemployed)
+            && !IsRestart(delivery)
             && !IsLearnerInCustody(delivery)
             && !InApprenticeship(delivery)
             && IsViableStart(delivery, DateTime.MinValue, UnemployedMaximumStart)
-            && InReceiptOfBenefitsAtStart(delivery, learner.LearnerEmploymentStatuses)
-            && HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.Unemployed);
+            && InReceiptOfBenefitsAtStart(delivery, learner.LearnerEmploymentStatuses);
 
         /// <summary>
         /// Determines whether [is valid 16 to 19 efa (category)] [the specified delivery].
@@ -308,9 +302,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid 16 to 19 efa (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValid16To19EFA(ILearningDelivery delivery) =>
-            !IsRestart(delivery)
-            && HasQualifyingFunding(delivery, TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfFunding.Other16To19)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.EFA16To19);
+            HasQualifyingFunding(delivery, TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfFunding.Other16To19)
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.EFA16To19)
+            && !IsRestart(delivery);
 
         /// <summary>
         /// Determines whether [is valid community learning (category)] [the specified delivery].
@@ -320,9 +314,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid community learning (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidCommunityLearning(ILearningDelivery delivery) =>
-            !IsRestart(delivery)
-            && HasQualifyingFunding(delivery, TypeOfFunding.CommunityLearning)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.CommunityLearning);
+            HasQualifyingFunding(delivery, TypeOfFunding.CommunityLearning)
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.CommunityLearning)
+            && !IsRestart(delivery);
 
         /// <summary>
         /// Determines whether [is valid olass (category)] [the specified delivery].
@@ -332,10 +326,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid olass (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidOLASS(ILearningDelivery delivery) =>
-            !IsRestart(delivery)
-            && IsLearnerInCustody(delivery)
-            && HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.OLASSAdult);
+            HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.OLASSAdult)
+            && !IsRestart(delivery)
+            && IsLearnerInCustody(delivery);
 
         /// <summary>
         /// Determines whether [is valid advanced learner loan (category)] [the specified delivery].
@@ -345,10 +339,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid advanced learner loan] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidAdvancedLearnerLoan(ILearningDelivery delivery) =>
-            !IsRestart(delivery)
-            && IsAdvancedLearnerLoan(delivery)
-            && HasQualifyingFunding(delivery, TypeOfFunding.NotFundedByESFA)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.AdvancedLearnerLoan);
+            HasQualifyingFunding(delivery, TypeOfFunding.NotFundedByESFA)
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.AdvancedLearnerLoan)
+            && !IsRestart(delivery)
+            && IsAdvancedLearnerLoan(delivery);
 
         /// <summary>
         /// Determines whether [is valid any (category)] [the specified delivery].
@@ -358,12 +352,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid any (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidAny(ILearningDelivery delivery) =>
-            !IsRestart(delivery)
-            && !IsAdvancedLearnerLoan(delivery)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.Any)
-            && (HasQualifyingFunding(delivery, TypeOfFunding.NotFundedByESFA, TypeOfFunding.OtherAdult)
+            (HasQualifyingFunding(delivery, TypeOfFunding.NotFundedByESFA, TypeOfFunding.OtherAdult)
                 || (HasQualifyingFunding(delivery, TypeOfFunding.ApprenticeshipsFrom1May2017)
-                    && InStandardApprenticeship(delivery)));
+                    && InStandardApprenticeship(delivery)))
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.Any)
+            && !IsRestart(delivery)
+            && !IsAdvancedLearnerLoan(delivery);
 
         /// <summary>
         /// Determines whether [is valid esf (category)] [the specified delivery].
@@ -373,9 +367,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is valid esf (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidESF(ILearningDelivery delivery) =>
-            !IsRestart(delivery)
-            && HasQualifyingFunding(delivery, TypeOfFunding.EuropeanSocialFund)
-            && HasValidLearningAim(delivery, TypeOfLARSValidity.EuropeanSocialFund);
+            HasQualifyingFunding(delivery, TypeOfFunding.EuropeanSocialFund)
+            && HasQualifyingCategory(delivery, TypeOfLARSValidity.EuropeanSocialFund)
+            && !IsRestart(delivery);
 
         /// <summary>
         /// Passes category restrictions.
@@ -437,9 +431,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery.LearnAimRef));
+            parameters.Add(MessageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery.LearnAimRef));
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+            MessageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
     }
 }
