@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -31,21 +32,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         private readonly IDD07 _derivedData07;
 
         /// <summary>
+        /// The (academic) year data (service)
+        /// </summary>
+        private readonly IAcademicYearDataService _yearData;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="EmpStat_01Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="derivedData07">The derived data 07 rule.</param>
+        /// <param name="yearData">The year data.</param>
         public EmpStat_01Rule(
             IValidationErrorHandler validationErrorHandler,
-            IDD07 derivedData07)
+            IDD07 derivedData07,
+            IAcademicYearDataService yearData)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(derivedData07)
                 .AsGuard<ArgumentNullException>(nameof(derivedData07));
+            It.IsNull(yearData)
+                .AsGuard<ArgumentNullException>(nameof(yearData));
 
             _messageHandler = validationErrorHandler;
             _derivedData07 = derivedData07;
+            _yearData = yearData;
         }
 
         /// <summary>
@@ -196,7 +207,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <param name="candidate">The candidate.</param>
         /// <returns>a date time representing the 31 august for the year of learning</returns>
         public DateTime GetYearOfLearningCommencementDate(DateTime candidate) =>
-            DateTime.Parse($"{(candidate.Month > 8 ? candidate.Year : candidate.Year - 1)}-08-31");
+            _yearData.GetAcademicYearOfLearningDate(candidate, AcademicYearDates.PreviousYearEnd);
 
         /// <summary>
         /// Determines whether [is qualifying age] [the specified learner].

@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -21,9 +22,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         {
             // arrange
             var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var yeardata = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpStat_01Rule(null, mockDDRule07.Object));
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_01Rule(null, mockDDRule07.Object, yeardata.Object));
         }
 
         /// <summary>
@@ -34,9 +36,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         {
             // arrange
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var yeardata = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpStat_01Rule(mockHandler.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_01Rule(mockHandler.Object, null, yeardata.Object));
+        }
+
+        /// <summary>
+        /// New rule with null year data throws.
+        /// </summary>
+        [Fact]
+        public void NewRuleWithNullYearDataThrows()
+        {
+            // arrange
+            var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var yeardata = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_01Rule(mockHandler.Object, mockDDRule07.Object, null));
         }
 
         /// <summary>
@@ -216,8 +234,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             mockDDRule07
                 .Setup(x => x.IsApprenticeship(null))
                 .Returns(expectation);
+            var yeardata = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
-            var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object);
+            var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object, yeardata.Object);
 
             // act
             var result = sut.IsApprenticeship(mockItem.Object);
@@ -323,29 +342,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         /// Get year of learning commencement date meets expectation.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">The expectation.</param>
         [Theory]
-        [InlineData("2017-08-26", "2016-08-31")]
-        [InlineData("2017-08-31", "2016-08-31")]
-        [InlineData("2017-09-01", "2017-08-31")]
-        [InlineData("2018-04-18", "2017-08-31")]
-        [InlineData("2018-02-06", "2017-08-31")]
-        [InlineData("2018-07-31", "2017-08-31")]
-        [InlineData("2018-09-18", "2018-08-31")]
-        [InlineData("2018-12-31", "2018-08-31")]
-        [InlineData("2019-01-01", "2018-08-31")]
-        public void GetYearOfLearningCommencementDateMeetsExpectation(string candidate, string expectation)
+        [InlineData("2017-08-26")]
+        [InlineData("2017-08-31")]
+        [InlineData("2017-09-01")]
+        public void GetYearOfLearningCommencementDateMeetsExpectation(string candidate)
         {
             // arrange
-            var sut = NewRule();
-
             var testDate = DateTime.Parse(candidate);
 
-            // act
-            var result = sut.GetYearOfLearningCommencementDate(testDate);
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
+            yearData
+                .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
+                .Returns(DateTime.Today);
+
+            var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object, yearData.Object);
+
+            // act, not interested in the result just that we hit a strict signature
+            sut.GetYearOfLearningCommencementDate(testDate);
 
             // assert
-            Assert.Equal(DateTime.Parse(expectation), result);
+            handler.VerifyAll();
+            mockDDRule07.VerifyAll();
+            yearData.VerifyAll();
         }
 
         /// <summary>
@@ -509,8 +530,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             mockDDRule07
                 .Setup(x => x.IsApprenticeship(Moq.It.IsAny<int>()))
                 .Returns(false);
+            var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
-            var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object);
+            // not very happy with this in a test...
+            yearData
+                .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
+                .Returns(DateTime.Parse(Format.String(AcademicYearDates.PreviousYearEnd.GetDateFormat(), testDate.Month > 8 ? testDate.Year : testDate.Year - 1)));
+
+            var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object, yearData.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -518,6 +545,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             // assert
             handler.VerifyAll();
             mockDDRule07.VerifyAll();
+            yearData.VerifyAll();
         }
 
         /// <summary>
@@ -585,8 +613,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             mockDDRule07
                 .Setup(x => x.IsApprenticeship(Moq.It.IsAny<int>()))
                 .Returns(false);
+            var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
-            var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object);
+            // not very happy with this in a test...
+            yearData
+                .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
+                .Returns(DateTime.Parse(Format.String(AcademicYearDates.PreviousYearEnd.GetDateFormat(), testDate.Month > 8 ? testDate.Year : testDate.Year - 1)));
+
+            var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object, yearData.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -594,6 +628,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             // assert
             handler.VerifyAll();
             mockDDRule07.VerifyAll();
+            yearData.VerifyAll();
         }
 
         /// <summary>
@@ -604,8 +639,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var yeardata = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
-            return new EmpStat_01Rule(handler.Object, mockDDRule07.Object);
+            return new EmpStat_01Rule(handler.Object, mockDDRule07.Object, yeardata.Object);
         }
     }
 }
