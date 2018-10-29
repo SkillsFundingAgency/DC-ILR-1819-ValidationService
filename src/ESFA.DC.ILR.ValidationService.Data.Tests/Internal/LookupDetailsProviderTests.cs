@@ -1,6 +1,8 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using FluentAssertions;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -108,6 +110,22 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             Assert.Equal(expectation, result);
         }
 
+        [Fact]
+        public void IsContainsAndDateBeforeValidToDate_False()
+        {
+            NewService().IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey.QualEnt3, "Z12345", new DateTime(2018, 10, 28)).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(TypeOfQualEnt3.CertificateOfHigherEducation, "2013/01/01")]
+        [InlineData(TypeOfQualEnt3.ProfessionalQualificationAtLevel3, "2013/07/31")]
+        public void IsContainsAndDateBeforeValidToDate_True(string qualent3, string dateToCheckString)
+        {
+            DateTime dateToCheck = DateTime.Parse(dateToCheckString);
+
+            NewService().IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey.QualEnt3, qualent3, dateToCheck).Should().BeTrue();
+        }
+
         /// <summary>
         /// New service.
         /// </summary>
@@ -127,10 +145,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
                 ["6"] = new ValidityPeriods(validFrom: DateTime.Parse("2018-07-02"), validTo: DateTime.Parse("2020-06-14")),
                 ["9"] = new ValidityPeriods(validFrom: DateTime.Parse("2000-02-01"), validTo: DateTime.Parse("2008-08-26")),
             };
+            var qualent3s = new Dictionary<string, ValidityPeriods>()
+            {
+                ["C20"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.MaxValue),
+                ["P69"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31")),
+                ["P70"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31"))
+            };
 
             cache.SimpleLookups.Add(LookupSimpleKey.FINTYPE, finTypes);
             cache.CodedLookups.Add(LookupCodedKey.AppFinRecord, codedTypes);
             cache.LimitedLifeLookups.Add(LookupTimeRestrictedKey.TTAccom, tTAccomItems);
+            cache.LimitedLifeLookups.Add(LookupTimeRestrictedKey.QualEnt3, qualent3s);
 
             cacheFactory
                 .Setup(c => c.Create())
