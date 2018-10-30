@@ -149,5 +149,22 @@ namespace ESFA.DC.ILR.ValidationService.Data
                     .Where(x => x.Key == candidate)
                     .Any(y => IsBetween(y.Value.ValidFrom, y.Value.ValidTo, referenceDate));
         }
+
+        /// <summary>
+        /// Checks whether the key exists and specified date (LearnStartDate) is less than valid to date of key.
+        /// </summary>
+        /// <param name="lookupKey">The Lookup list key</param>
+        /// <param name="candidate">The value to find in lookup list</param>
+        /// <param name="dateToCheck">The date (LearnStartDate) to compare</param>
+        /// <returns>
+        ///    <c>true</c> if the specified candidate key exist in lookup list and dateToCheck is before or equal to ValidTo date; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey lookupKey, string candidate, DateTime dateToCheck)
+        {
+            return Contains(lookupKey, candidate)
+                && (dateToCheck <= InternalCache.LimitedLifeLookups[lookupKey]
+                    .FirstOrDefault(k => k.Key == candidate)
+                    .Value.ValidTo);
+        }
     }
 }

@@ -136,6 +136,7 @@
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
+        public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -198,6 +199,7 @@
 
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
+        public const string QUALENT3_03 = "QUALENT3_03";
 
         public const string R06 = "R06";
         public const string R07 = "R07";
