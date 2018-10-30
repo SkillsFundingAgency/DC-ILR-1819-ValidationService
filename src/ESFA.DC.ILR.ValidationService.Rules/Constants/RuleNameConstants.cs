@@ -146,6 +146,8 @@
         public const string LLDDCat_01 = "LLDDCat_01";
         public const string LLDDCat_02 = "LLDDCat_02";
 
+        public const string LearnStartDate_06 = "LearnStartDate_06";
+
         public const string MathGrade_03 = "MathGrade_03";
 
         public const string NETFEE_01 = "NETFEE_01";
