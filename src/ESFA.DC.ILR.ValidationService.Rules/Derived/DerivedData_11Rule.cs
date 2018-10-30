@@ -10,7 +10,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 {
     /// <summary>
     /// derived data rule 11
-    /// Adult skills funded learner on benefits on learning aim start date
+    /// Adult skills funded learner on benefits at the start of the learning aim
     /// </summary>
     public class DerivedData_11Rule :
         IDerivedData_11Rule
@@ -42,6 +42,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             return esms.SafeAny(InReceiptOfBenefits);
         }
 
+        /// <summary>
+        /// In receipt of benefits.
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>true if the 'typed code' matches one from the set</returns>
         public bool InReceiptOfBenefits(IEmploymentStatusMonitoring monitor) =>
             It.IsInRange(
                 $"{monitor.ESMType}{monitor.ESMCode}",
@@ -50,6 +55,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                 Monitoring.EmploymentStatus.InReceiptOfEmploymentAndSupportAllowance,
                 Monitoring.EmploymentStatus.InReceiptOfJobSeekersAllowance);
 
+        /// <summary>
+        /// Determines whether [is adult funded on benefits at start of aim] [the specified candidate].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <param name="learnerEmployments">The learner employments.</param>
+        /// <returns>
+        ///   <c>true</c> if [is adult funded on benefits at start of aim] [the specified candidate]; otherwise, <c>false</c>.
+        /// </returns>
         public bool IsAdultFundedOnBenefitsAtStartOfAim(ILearningDelivery delivery, IReadOnlyCollection<ILearnerEmploymentStatus> learnerEmployments)
         {
             It.IsNull(delivery)
@@ -59,7 +72,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
             /*
                 if
-                    // is adult skills
                     LearningDelivery.FundModel = 35
                     and the learner's Employment status on the LearningDelivery.LearnStartDate of the learning aim
                     is (EmploymentStatusMonitoring.ESMType = BSI and EmploymentStatusMonitoring.ESMCode = 1, 2, 3 or 4)

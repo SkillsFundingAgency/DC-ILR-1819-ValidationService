@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived.Interface
 {
     /// <summary>
-    /// derived data rule 21
-    /// Adult skills funded unemployed learner on other state benefits on learning aim start date
+    /// derived data rule 11
+    /// Adult skills funded learner on benefits at the start of the learning aim
     /// </summary>
     public interface IDerivedData_11Rule
     {
