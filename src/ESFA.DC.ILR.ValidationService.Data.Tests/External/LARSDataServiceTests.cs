@@ -1116,6 +1116,107 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", learnStartDate).Should().BeTrue();
         }
 
+        [Fact]
+        public void LearnStartDateGreaterFrameworkThanEffectiveTo_True()
+        {
+            var effectiveTo = new DateTime(2018, 09, 01);
+
+            var learnStartDate = new DateTime(2018, 10, 01);
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    EffectiveTo = effectiveTo,
+                    ProgType = progType,
+                    FworkCode = fworkCode,
+                    PwayCode = pwayCode
+                },
+                new Framework()
+                {
+                    EffectiveTo = effectiveTo,
+                    ProgType = 15,
+                    FworkCode = 16,
+                    PwayCode = 0
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanFrameworkEffectiveTo(learnStartDate, progType, fworkCode, pwayCode).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanFrameworkEffectiveTo_False()
+        {
+            DateTime? effectiveTo = new DateTime(2018, 11, 01);
+
+            var learnStartDate = new DateTime(2018, 10, 01);
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    EffectiveTo = effectiveTo,
+                    ProgType = progType,
+                    FworkCode = fworkCode,
+                    PwayCode = pwayCode
+                },
+                new Framework()
+                {
+                    EffectiveTo = effectiveTo,
+                    ProgType = 15,
+                    FworkCode = 16,
+                    PwayCode = 0
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanFrameworkEffectiveTo(learnStartDate, progType, fworkCode, pwayCode).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanEffectiveTo_FalseNull()
+        {
+            DateTime? effectiveTo = null;
+
+            var learnStartDate = new DateTime(2018, 10, 01);
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    EffectiveTo = effectiveTo,
+                    ProgType = progType,
+                    FworkCode = fworkCode,
+                    PwayCode = pwayCode
+                },
+                new Framework()
+                {
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanFrameworkEffectiveTo(learnStartDate, null, null, null).Should().BeFalse();
+        }
+
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
         {
             return new LARSDataService(externalDataCache);

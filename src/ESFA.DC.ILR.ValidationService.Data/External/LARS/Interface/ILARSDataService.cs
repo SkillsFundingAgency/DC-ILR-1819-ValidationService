@@ -58,5 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills);
 
         bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate);
+
+        bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode);
     }
 }
