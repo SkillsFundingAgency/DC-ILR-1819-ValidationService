@@ -201,5 +201,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     && (learnStartDate >= a.EffectiveFrom
                     && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null))).Count() > 0;
         }
+
+        public bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode)
+        {
+            return _externalDataCache.Frameworks
+                .Where(f =>
+                    f.ProgType == progType
+                    && f.FworkCode == fWorkCode
+                    && f.PwayCode == pwayCode
+                    && f.EffectiveTo != null
+                    && learnStartDate > f.EffectiveTo)
+                .Any();
+        }
     }
 }
