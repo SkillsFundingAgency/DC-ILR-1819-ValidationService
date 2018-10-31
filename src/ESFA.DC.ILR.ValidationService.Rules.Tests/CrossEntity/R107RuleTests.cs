@@ -1,5 +1,4 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
@@ -18,10 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
-            // arrange
-            var provider = new Mock<IFileDataService>(MockBehavior.Strict);
-
-            // act / assert
+            // arrange / act / assert
             Assert.Throws<ArgumentNullException>(() => new R107Rule(null));
         }
 
