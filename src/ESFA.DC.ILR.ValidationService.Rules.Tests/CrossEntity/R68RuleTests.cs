@@ -378,10 +378,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var sut = new R68Rule(handler.Object);
 
+            var invocationCount = testCodes.Skip(deliveryCount).Distinct().Count();
+
             // act
             sut.Validate(mockItem.Object);
 
             // assert
+            handler
+                .Verify(x => x.BuildErrorMessageParameter(Moq.It.Is<string>(y => y == PropertyNameConstants.AFinType), Moq.It.Is<string>(y => y == "TestType")), Times.Exactly(invocationCount));
             handler.VerifyAll();
         }
 
