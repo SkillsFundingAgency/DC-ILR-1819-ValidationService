@@ -16,5 +16,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
                    && learnActEndDate != null
                    && learningDeliveryWorkPlacements.Any(ldwp => ldwp.WorkPlaceEndDateNullable > learnActEndDate);
         }
+
+        public bool HasAnyEmpIdNullAndStartDateNotNull(IEnumerable<ILearningDeliveryWorkPlacement> learningDeliveryWorkPlacements)
+        {
+            return learningDeliveryWorkPlacements != null
+                   && learningDeliveryWorkPlacements
+                       .Any(ldwp => ldwp.WorkPlaceEmpIdNullable == null && ldwp.WorkPlaceStartDate != null);
+        }
     }
 }

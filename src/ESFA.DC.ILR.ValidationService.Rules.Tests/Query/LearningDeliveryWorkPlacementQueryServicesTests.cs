@@ -55,6 +55,43 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             NewService().HasAnyWorkPlaceEndDatesGreaterThanLearnActEndDate(learningDeliveryWorkPlacements, learnActEndDate).Should().BeFalse();
         }
 
+        [Fact]
+        public void HasAnyEmpIdNullAndStartDateNotNull_True()
+        {
+            var learningDeliveryWorkPlacements = new TestLearningDeliveryWorkPlacement[]
+            {
+                new TestLearningDeliveryWorkPlacement() { WorkPlaceStartDate = new DateTime(2018, 10, 01) },
+                new TestLearningDeliveryWorkPlacement()
+                {
+                    WorkPlaceEmpIdNullable = 123456789,
+                    WorkPlaceStartDate = new DateTime(2018, 10, 01)
+                },
+            };
+
+            NewService().HasAnyEmpIdNullAndStartDateNotNull(learningDeliveryWorkPlacements).Should().BeTrue();
+        }
+
+        [Fact]
+        public void HasAnyEmpIdNullAndStartDateNotNull_False()
+        {
+            var learningDeliveryWorkPlacements = new TestLearningDeliveryWorkPlacement[]
+            {
+                new TestLearningDeliveryWorkPlacement()
+                {
+                    WorkPlaceStartDate = new DateTime(2018, 10, 01),
+                    WorkPlaceEmpIdNullable = 123456789
+                },
+            };
+
+            NewService().HasAnyEmpIdNullAndStartDateNotNull(learningDeliveryWorkPlacements).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyEmpIdNullAndStartDateNotNull_FalseNull()
+        {
+            NewService().HasAnyEmpIdNullAndStartDateNotNull(null).Should().BeFalse();
+        }
+
         private LearningDeliveryWorkPlacementQueryService NewService()
         {
             return new LearningDeliveryWorkPlacementQueryService();
