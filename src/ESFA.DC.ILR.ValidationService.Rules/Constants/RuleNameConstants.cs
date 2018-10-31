@@ -140,11 +140,14 @@
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
+        public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
         public const string LLDDCat_02 = "LLDDCat_02";
+
+        public const string LearnStartDate_06 = "LearnStartDate_06";
 
         public const string MathGrade_03 = "MathGrade_03";
 
@@ -227,6 +230,8 @@
         public const string ULN_12 = "ULN_12";
 
         public const string WithdrawReason_04 = "WithdrawReason_04";
+
+        public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
         public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
     }
