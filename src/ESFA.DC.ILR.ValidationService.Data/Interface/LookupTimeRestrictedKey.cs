@@ -27,7 +27,7 @@
         LLDDCat,
 
         /// <summary>
-        /// major ssource (of) tuition fees
+        /// major source (of) tuition fees
         /// </summary>
         MSTuFee,
 
