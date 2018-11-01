@@ -9,6 +9,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.IO.Model;
 using ESFA.DC.IO.Interfaces;
+using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Providers.Output
@@ -25,6 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
         private readonly IPreValidationContext _validationContext;
         private readonly IJsonSerializationService _serializationService;
         private readonly IValidationErrorsDataService _validationErrorsDataService;
+        private readonly ILogger _logger;
 
         public ValidationOutputService(
             IValidationErrorCache<IValidationError> validationErrorCache,
@@ -32,7 +34,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             [KeyFilter(PersistenceStorageKeys.Redis)] IKeyValuePersistenceService keyValuePersistenceService,
             IPreValidationContext validationContext,
             IJsonSerializationService serializationService,
-            IValidationErrorsDataService validationErrorsDataService)
+            IValidationErrorsDataService validationErrorsDataService,
+            ILogger logger)
         {
             _validationErrorCache = validationErrorCache;
             _messageCache = messageCache;
@@ -40,12 +43,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             _validationContext = validationContext;
             _serializationService = serializationService;
             _validationErrorsDataService = validationErrorsDataService;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<IValidationError>> ProcessAsync(CancellationToken cancellationToken)
         {
             var invalidLearnerRefNumbers = BuildInvalidLearnRefNumbers().ToList();
             var validLearnerRefNumbers = BuildValidLearnRefNumbers(invalidLearnerRefNumbers).ToList();
+            _logger.LogDebug($"ValidationOutputService invalid:{invalidLearnerRefNumbers.Count} valid:{validLearnerRefNumbers.Count}");
 
             var validationErrors = _validationErrorCache
                 .ValidationErrors
@@ -96,6 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
         public IEnumerable<string> BuildValidLearnRefNumbers(IEnumerable<string> invalidLearnRefNumbers)
         {
             var invalidLearnRefNumbersHashSet = new HashSet<string>(invalidLearnRefNumbers);
+            _logger.LogDebug($"BuildValidLearnRefNumbers {invalidLearnRefNumbersHashSet.Count}");
             if (_validationErrorCache.ValidationErrors.Any(x => !string.IsNullOrEmpty(x.LearnerReferenceNumber)))
             {
                 return _messageCache
@@ -105,7 +111,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                     .Where(lrn => !invalidLearnRefNumbersHashSet.Contains(lrn));
             }
 
-            return invalidLearnRefNumbersHashSet;
+            _logger.LogDebug($"BuildValidLearnRefNumbers: no errors in validationErrorCache have learner ref numbers {_messageCache.Item.Learners.Count}");
+            return _messageCache
+                    .Item
+                    .Learners
+                    .Select(l => l.LearnRefNumber).Distinct();
         }
 
         public async Task SaveAsync(
