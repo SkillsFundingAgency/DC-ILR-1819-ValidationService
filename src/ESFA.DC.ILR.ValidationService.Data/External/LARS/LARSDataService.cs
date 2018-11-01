@@ -213,5 +213,21 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     && learnStartDate > f.EffectiveTo)
                 .Any();
         }
+
+        public bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
+        {
+            return _externalDataCache
+                .Frameworks
+                .Where(f => f.FrameworkAims != null)
+                .SelectMany(f => f.FrameworkAims
+                    .Where(fa =>
+                        fa.LearnAimRef == learnAimRef
+                        && fa.ProgType == progType
+                        && fa.FworkCode == fworkCode
+                        && fa.PwayCode == pwayCode
+                        && fa.EffectiveTo != null
+                        && dd04Date > fa.EffectiveTo))
+                .Any();
+        }
     }
 }
