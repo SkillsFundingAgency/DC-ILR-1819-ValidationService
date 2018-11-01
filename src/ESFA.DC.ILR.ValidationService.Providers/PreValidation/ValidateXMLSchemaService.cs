@@ -39,6 +39,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
             _logger = logger;
         }
 
+        public IList<IErrorMessageParameter> ValidationErrors()
+        {
+            return _validationErrors;
+        }
+
         public bool Validate()
         {
             try

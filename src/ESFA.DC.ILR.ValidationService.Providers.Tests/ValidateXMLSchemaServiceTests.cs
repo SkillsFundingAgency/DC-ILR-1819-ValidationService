@@ -21,6 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         private readonly string schemaFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Files\ILR-2018-19-v2.xsd");
         private readonly string IlrValidXmlFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Files\ILR_Valid.xml");
         private readonly string IlrInValidXmlFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Files\ILR_InValid.xml");
+        private readonly string IlrInvalidULNWorkPlacementXmlFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Files\ILR_XSD_invalid_ULN_WorkPlacementHours.xml");
 
         [Fact]
         public void RuleName()
@@ -108,6 +109,36 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             NewService(validationErrorHandlerMock.Object, fileCacheMock.Object, schemaStringProviderServiceMock.Object).ValidateSchema(xsdReader, xmlReader);
 
             validationErrorHandlerMock.Verify();
+        }
+
+        /// <summary>
+        /// Three classes of "XSD" failure. ULN's too short, email address doesn't match regex and missing chuild element (WorkPlacementHours)
+        /// This test is almost a regression test for when the FD rules turn up and any chnages to do with how we deal with FD rules.
+        /// </summary>
+        [Fact]
+        public void ValidateSchema_Invalid_ULN_Email_WorkPlacementHours()
+        {
+            var xsdFileContentString = File.ReadAllText(schemaFilePath);
+            var xmlFileContentString = File.ReadAllText(IlrInvalidULNWorkPlacementXmlFilePath);
+            IEnumerable<IErrorMessageParameter> errorMessageParameters = new List<IErrorMessageParameter>()
+            {
+               new ErrorMessageParameter("", "")
+            };
+            XmlReader xsdReader = XmlReader.Create(new StringReader(xsdFileContentString));
+            XmlReader xmlReader = XmlReader.Create(new StringReader(xmlFileContentString));
+
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var fileCacheMock = new Mock<ICache<string>>();
+            fileCacheMock.SetupGet(sp => sp.Item).Returns(xmlFileContentString);
+            var schemaStringProviderServiceMock = new Mock<ISchemaStringProviderService>();
+
+            schemaStringProviderServiceMock.Setup(sp => sp.Provide()).Returns(xsdFileContentString);
+            validationErrorHandlerMock.Setup(ve => ve.Handle("Schema", null, null, errorMessageParameters));
+
+            var service = NewService(validationErrorHandlerMock.Object, fileCacheMock.Object, schemaStringProviderServiceMock.Object);
+            service.ValidateSchema(xsdReader, xmlReader);
+
+            service.ValidationErrors().Should().HaveCount(3);
         }
 
         [Fact]
