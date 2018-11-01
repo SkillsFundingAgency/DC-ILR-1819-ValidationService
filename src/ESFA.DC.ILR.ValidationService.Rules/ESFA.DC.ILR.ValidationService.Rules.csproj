@@ -298,6 +298,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_22Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_71Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_06Rule.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_07Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_12Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_04Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_02Rule.cs" />
