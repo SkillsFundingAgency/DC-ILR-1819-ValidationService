@@ -19,6 +19,7 @@
         public const string Addline1_03 = "Addline1_03";
 
         public const string AFinType_10 = "AFinType_10";
+        public const string AFinType_11 = "AFinType_11";
         public const string AFinType_14 = "AFinType_14";
 
         public const string AimSeqNumber_02 = "AimSeqNumber_02";

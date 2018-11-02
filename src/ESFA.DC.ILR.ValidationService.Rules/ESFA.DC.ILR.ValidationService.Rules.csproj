@@ -228,6 +228,7 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_05Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_03Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_11Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_14Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_10Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_13Rule.cs" />

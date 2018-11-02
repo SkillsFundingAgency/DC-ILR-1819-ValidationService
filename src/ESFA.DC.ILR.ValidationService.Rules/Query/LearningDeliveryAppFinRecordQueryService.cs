@@ -26,5 +26,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 
             return appFinRecords.Any(afr => afr.AFinType == aFinType && aFinCode == afr.AFinCode);
         }
+
+        public bool HasAnyLearningDeliveryAFinCodes(IEnumerable<IAppFinRecord> appFinRecords, IEnumerable<int> aFinCodes)
+        {
+            return appFinRecords != null
+                   && aFinCodes != null
+                   && appFinRecords.Any(afr => aFinCodes.Contains(afr.AFinCode));
+        }
     }
 }
