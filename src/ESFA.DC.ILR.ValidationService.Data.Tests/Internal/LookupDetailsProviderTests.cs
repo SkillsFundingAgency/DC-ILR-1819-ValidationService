@@ -44,6 +44,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             Assert.Equal(expectation, result);
         }
 
+        [Theory]
+        [InlineData(TypeOfQualEnt3.CertificateOfHigherEducation, "2013/01/01", true)]
+        [InlineData(TypeOfQualEnt3.ProfessionalQualificationAtLevel3, "2013/07/31", true)]
+        [InlineData(TypeOfQualEnt3.CambridgePreUDiploma31072013, "2014/07/31", false)]
+        [InlineData("Z12345", "2018/10/28", false)]
+        public void ProviderIsCurrentValuesMatchForQualent3(string qualent3, string dateToCheckString, bool expectedResult)
+        {
+            var dateToCheck = DateTime.Parse(dateToCheckString);
+
+            NewService().IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, dateToCheck).Should().Be(expectedResult);
+        }
+
         /// <summary>
         /// Provider contains value matches expectation.
         /// </summary>
@@ -108,22 +120,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
 
             // assert
             Assert.Equal(expectation, result);
-        }
-
-        [Fact]
-        public void IsContainsAndDateBeforeValidToDate_False()
-        {
-            NewService().IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey.QualEnt3, "Z12345", new DateTime(2018, 10, 28)).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(TypeOfQualEnt3.CertificateOfHigherEducation, "2013/01/01")]
-        [InlineData(TypeOfQualEnt3.ProfessionalQualificationAtLevel3, "2013/07/31")]
-        public void IsContainsAndDateBeforeValidToDate_True(string qualent3, string dateToCheckString)
-        {
-            DateTime dateToCheck = DateTime.Parse(dateToCheckString);
-
-            NewService().IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey.QualEnt3, qualent3, dateToCheck).Should().BeTrue();
         }
 
         /// <summary>

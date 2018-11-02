@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
         {
             var provideLookupDetailsMock = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMock.Setup(p => p.IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey.QualEnt3, TypeOfQualEnt3.CambridgePreUDiploma31072013, new DateTime(2019, 01, 01))).Returns(false);
+            provideLookupDetailsMock.Setup(p => p.IsCurrent(LookupTimeRestrictedKey.QualEnt3, TypeOfQualEnt3.CambridgePreUDiploma31072013, new DateTime(2019, 01, 01))).Returns(false);
 
             NewService(provideLookupDetails: provideLookupDetailsMock.Object).IsLearnStartDateBeforeValidTo(TypeOfQualEnt3.CambridgePreUDiploma31072013, new DateTime(2019, 01, 01)).Should().BeFalse();
         }
@@ -50,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
 
             var provideLookupDetailsMock = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMock.Setup(p => p.IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate)).Returns(true);
+            provideLookupDetailsMock.Setup(p => p.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate)).Returns(true);
 
             NewService(provideLookupDetails: provideLookupDetailsMock.Object).IsLearnStartDateBeforeValidTo(qualent3, learnStartDate).Should().BeTrue();
         }
