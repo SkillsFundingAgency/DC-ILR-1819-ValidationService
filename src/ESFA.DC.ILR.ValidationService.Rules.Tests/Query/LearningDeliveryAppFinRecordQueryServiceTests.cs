@@ -105,6 +105,57 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             NewService().HasAnyLearningDeliveryAFinCodeForType(learningDeliveryAppFinRecords, "TypeOne", 2).Should().BeFalse();
         }
 
+        [Fact]
+        public void HasAnyLearningDeliveryAFinCodes_True()
+        {
+            var appFinRecords = new TestAppFinRecord[]
+            {
+                new TestAppFinRecord() { AFinCode = 1 },
+                new TestAppFinRecord() { AFinCode = 2 },
+                new TestAppFinRecord() { AFinCode = 3 },
+            };
+
+            var codes = new int[] { 1, 3 };
+
+            NewService().HasAnyLearningDeliveryAFinCodes(appFinRecords, codes).Should().BeTrue();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryAFinCodes_False()
+        {
+            var appFinRecords = new TestAppFinRecord[]
+            {
+                new TestAppFinRecord() { AFinCode = 1 },
+                new TestAppFinRecord() { AFinCode = 2 },
+                new TestAppFinRecord() { AFinCode = 3 },
+            };
+
+            var codes = new int[] { 4, 5 };
+
+            NewService().HasAnyLearningDeliveryAFinCodes(appFinRecords, codes).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryAFinCodes_FalseNull()
+        {
+            var codes = new int[] { 4, 5 };
+
+            NewService().HasAnyLearningDeliveryAFinCodes(null, codes).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryAFinCodes_FalseCodeNull()
+        {
+            var appFinRecords = new TestAppFinRecord[]
+            {
+                new TestAppFinRecord() { AFinCode = 1 },
+                new TestAppFinRecord() { AFinCode = 2 },
+                new TestAppFinRecord() { AFinCode = 3 },
+            };
+
+            NewService().HasAnyLearningDeliveryAFinCodes(appFinRecords, null).Should().BeFalse();
+        }
+
         private LearningDeliveryAppFinRecordQueryService NewService()
         {
             return new LearningDeliveryAppFinRecordQueryService();
