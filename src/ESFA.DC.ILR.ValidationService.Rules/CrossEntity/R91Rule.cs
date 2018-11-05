@@ -38,11 +38,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public bool ConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
         {
-            return learningDeliveries.Where(l => l.FundModel == _fundModel
+            return !(learningDeliveries.Where(l => l.FundModel == _fundModel
                 && l.LearnAimRef == TypeOfAim.References.ESFLearnerStartandAssessment
                 && l.CompStatus == CompletionState.HasCompleted)
                 .ToList()?.GroupBy(l => l.ConRefNumber)
-                .Any(l => l.Count() > 1) ?? false;
+                .Select(g => Tuple.Create(g.Key, g.Count()))
+                .Any(l => l.Item2 > 1) ?? false);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, string conRefNumber, int compStatus)
