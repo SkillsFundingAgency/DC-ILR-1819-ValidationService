@@ -7,7 +7,6 @@ using ESFA.DC.ILR.ValidationService.Providers;
 using ESFA.DC.ILR.ValidationService.Providers.PreValidation;
 using ESFA.DC.ILR.ValidationService.RuleSet;
 using ESFA.DC.ILR.ValidationService.Stubs;
-using ESFA.DC.Logging.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Console
 {
