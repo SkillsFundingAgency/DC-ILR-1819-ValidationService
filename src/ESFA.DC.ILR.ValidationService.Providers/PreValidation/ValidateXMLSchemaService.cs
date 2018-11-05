@@ -10,6 +10,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.RuleSet.ErrorHandler.Model;
+using ESFA.DC.Logging.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Providers.PreValidation
 {
