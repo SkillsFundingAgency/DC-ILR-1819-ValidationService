@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -49,8 +45,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
         public bool AimConditionMet(int fundModel, int aimType, int? progType)
         {
-            return !(fundModel == 81 && progType == 25 && aimType == 1)
-                   || !(fundModel == 36 && aimType == 1);
+            return !(fundModel == 81 && aimType == 1 && progType == 25)
+                && !(fundModel == 36 && aimType == 1);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, int aimType, int? progType)
