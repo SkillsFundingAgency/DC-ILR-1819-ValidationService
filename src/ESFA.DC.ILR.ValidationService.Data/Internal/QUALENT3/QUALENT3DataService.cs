@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3.Interface;
 
@@ -6,16 +7,21 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3
 {
     public class QUALENT3DataService : IQUALENT3DataService
     {
-        private readonly IInternalDataCache _internalDataCache;
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public QUALENT3DataService(IInternalDataCache internalDataCache)
+        public QUALENT3DataService(IProvideLookupDetails provideLookupDetails)
         {
-            _internalDataCache = internalDataCache;
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public bool Exists(string qualent3)
         {
-            return _internalDataCache.QUALENT3s.Contains(qualent3);
+            return _provideLookupDetails.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3);
+        }
+
+        public bool IsLearnStartDateBeforeValidTo(string qualent3, DateTime learnStartDate)
+        {
+            return _provideLookupDetails.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate);
         }
     }
 }

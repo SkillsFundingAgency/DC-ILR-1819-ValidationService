@@ -75,7 +75,23 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
-        /// Safes the where.
+        /// Safe all.
+        /// be careful All returns true for empty lists
+        /// </summary>
+        /// <typeparam name="T">of type</typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="expression">The expression.</param>
+        /// <returns>
+        /// the result of the expression
+        /// </returns>
+        public static bool SafeAll<T>(this IEnumerable<T> list, Func<T, bool> expression)
+        {
+            var safeList = list.SafeReadOnlyList();
+            return safeList.All(expression);
+        }
+
+        /// <summary>
+        /// Safe where.
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
         /// <param name="list">The list.</param>
@@ -87,6 +103,21 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         {
             var safeList = list.SafeReadOnlyList();
             return safeList.Where(expression);
+        }
+
+        /// <summary>
+        /// Safe count.
+        /// </summary>
+        /// <typeparam name="T">of type</typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="expression">The expression.</param>
+        /// <returns>
+        /// the result of the expression
+        /// </returns>
+        public static int SafeCount<T>(this IEnumerable<T> list, Func<T, bool> expression)
+        {
+            var safeList = list.SafeReadOnlyList();
+            return safeList.Count(expression);
         }
 
         /// <summary>

@@ -10,6 +10,8 @@
 
         string ULNConnectionstring { get; }
 
+        string FCSConnectionString { get; }
+
         string ValidationErrorsConnectionString { get; }
     }
 }

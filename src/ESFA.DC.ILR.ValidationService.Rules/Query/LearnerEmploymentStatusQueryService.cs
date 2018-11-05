@@ -36,5 +36,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
 
             return learnerEmploymentStatuses.Where(les => les.DateEmpStatApp < dateLearnStartDate).Count() == 0;
         }
+
+        public bool EmpStatsNotExistOnOrBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate)
+        {
+            if (learnerEmploymentStatuses == null)
+            {
+                return true;
+            }
+
+            return learnerEmploymentStatuses.Where(les => les.DateEmpStatApp <= dateLearnStartDate).Count() == 0;
+        }
     }
 }

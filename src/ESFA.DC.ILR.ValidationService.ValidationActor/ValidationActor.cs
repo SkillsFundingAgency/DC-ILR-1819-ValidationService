@@ -90,10 +90,10 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             {
                 logger.LogDebug($"{nameof(ValidationActor)} {_actorId} {GC.GetGeneration(actorModel)} starting");
 
-                internalDataCache = _jsonSerializationService.Deserialize<InternalDataCache>(Encoding.UTF8.GetString(actorModel.InternalDataCache));
-                externalDataCache = _jsonSerializationService.Deserialize<ExternalDataCache>(Encoding.UTF8.GetString(actorModel.ExternalDataCache));
-                fileDataCache = _jsonSerializationService.Deserialize<FileDataCache>(Encoding.UTF8.GetString(actorModel.FileDataCache));
-                message = _jsonSerializationService.Deserialize<Message>(new MemoryStream(actorModel.Message));
+                internalDataCache = _jsonSerializationService.Deserialize<InternalDataCache>(actorModel.InternalDataCache);
+                externalDataCache = _jsonSerializationService.Deserialize<ExternalDataCache>(actorModel.ExternalDataCache);
+                fileDataCache = _jsonSerializationService.Deserialize<FileDataCache>(actorModel.FileDataCache);
+                message = _jsonSerializationService.Deserialize<Message>(actorModel.Message);
 
                 validationContext = new ValidationContext
                 {

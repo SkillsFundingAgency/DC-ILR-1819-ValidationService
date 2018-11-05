@@ -161,7 +161,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
         ///   <c>true</c> if [has exceed registration period] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasExceedRegistrationPeriod(ILearningDelivery delivery) =>
-            (delivery.LearnStartDate - _fileDataService.FilePreparationDate()) > SixtyDays;
+            (_fileDataService.FilePreparationDate() - delivery.LearnStartDate) > SixtyDays;
 
         /// <summary>
         /// Determines whether [is inside general registration threshold].

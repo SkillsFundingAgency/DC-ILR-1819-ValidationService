@@ -1,8 +1,9 @@
-﻿using System;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using FluentAssertions;
 using Moq;
+using System;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
@@ -67,6 +68,42 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             internalDataCacheMock.SetupGet(c => c.AcademicYear.Start).Returns(date);
 
             NewService(internalDataCacheMock.Object).Start().Should().Be(date);
+        }
+
+        /// <summary>
+        /// Get academic year of learning date meets expectation.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="forThisDate">For this date.</param>
+        /// <param name="expectation">The expectation.</param>
+        [Theory]
+        [InlineData("2017-08-26", AcademicYearDates.PreviousYearEnd, "2016-07-31")]
+        [InlineData("2017-08-26", AcademicYearDates.Commencment, "2016-08-01")]
+        [InlineData("2017-08-26", AcademicYearDates.August31, "2016-08-31")]
+        [InlineData("2017-08-31", AcademicYearDates.PreviousYearEnd, "2016-07-31")]
+        [InlineData("2017-08-31", AcademicYearDates.Commencment, "2016-08-01")]
+        [InlineData("2017-08-31", AcademicYearDates.August31, "2016-08-31")]
+        [InlineData("2017-09-01", AcademicYearDates.PreviousYearEnd, "2017-07-31")]
+        [InlineData("2017-09-01", AcademicYearDates.Commencment, "2017-08-01")]
+        [InlineData("2017-09-01", AcademicYearDates.August31, "2017-08-31")]
+        [InlineData("2018-02-06", AcademicYearDates.PreviousYearEnd, "2017-07-31")]
+        [InlineData("2018-02-06", AcademicYearDates.Commencment, "2017-08-01")]
+        [InlineData("2018-02-06", AcademicYearDates.August31, "2017-08-31")]
+        [InlineData("2018-07-31", AcademicYearDates.PreviousYearEnd, "2017-07-31")]
+        [InlineData("2018-07-31", AcademicYearDates.Commencment, "2017-08-01")]
+        [InlineData("2018-07-31", AcademicYearDates.August31, "2017-08-31")]
+        public void GetAcademicYearOfLearningDateMeetsExpectation(string candidate, AcademicYearDates forThisDate, string expectation)
+        {
+            // arrange
+            var sut = NewService();
+
+            var testDate = DateTime.Parse(candidate);
+
+            // act
+            var result = sut.GetAcademicYearOfLearningDate(testDate, forThisDate);
+
+            // assert
+            Assert.Equal(DateTime.Parse(expectation), result);
         }
 
         private AcademicYearDataService NewService(IInternalDataCache internalDataCache = null)

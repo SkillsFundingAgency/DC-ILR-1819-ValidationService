@@ -96,9 +96,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public string RuleName => Name;
 
         /// <summary>
-        /// Gets the minimun viable start.
+        /// Gets the last inviable date.
         /// </summary>
-        public DateTime MinimumViableStart => new DateTime(2017, 07, 31);
+        public DateTime LastInviableDate => new DateTime(2017, 07, 31);
 
         /// <summary>
         /// Gets the minimum viable age.
@@ -259,7 +259,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsViableStart(ILearningDelivery delivery) =>
-            delivery.LearnStartDate > MinimumViableStart;
+            delivery.LearnStartDate > LastInviableDate;
 
         /// <summary>
         /// Determines whether [is target age group] [the specified learner].

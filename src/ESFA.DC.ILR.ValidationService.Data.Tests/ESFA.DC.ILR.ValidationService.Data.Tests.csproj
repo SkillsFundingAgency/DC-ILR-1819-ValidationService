@@ -101,6 +101,7 @@
   <ItemGroup>
     <Compile Include="External\LARSDataServiceTests.cs" />
     <Compile Include="External\EPAOrganisationDetailsProviderTests.cs" />
+    <Compile Include="External\FCSDataServiceTests.cs" />
     <Compile Include="External\PostcodesDataServiceTests.cs" />
     <Compile Include="External\ValidationErrorsDataServiceTests.cs" />
     <Compile Include="File\FileDataServiceTests.cs" />
@@ -135,6 +136,10 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513C4F05-55F4-4AEF-B3EB-427C024DA043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Rules\ESFA.DC.ILR.ValidationService.Rules.csproj">
+      <Project>{621B61D1-339D-4910-8C86-8A64AF8822F5}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Rules</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

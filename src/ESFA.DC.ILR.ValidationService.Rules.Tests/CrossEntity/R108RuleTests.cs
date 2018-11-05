@@ -148,9 +148,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
+//            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
 
-            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeFalse();
+            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new List<TestLearnerDestinationAndProgression> { learnerDestinationAndProgression }, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeFalse();
         }
 
         [Fact]
@@ -172,9 +172,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
+//            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
 
-            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeTrue();
+            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new List<TestLearnerDestinationAndProgression> { learnerDestinationAndProgression }, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeTrue();
         }
 
         [Theory]
@@ -230,16 +230,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
+            var message = new TestMessage()
+            {
+                Learners = new TestLearner[] { learner },
+                LearnerDestinationAndProgressions = new TestLearnerDestinationAndProgression[]
+                    {
+                    learnerDestinationAndProgression
+                    }
+            };
+
             var fileDataServiceMock = new Mock<IFileDataService>();
 
             fileDataServiceMock.Setup(fds => fds.FilePreparationDate()).Returns(DateTime.Now.AddMonths(4));
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    fileDataService: fileDataServiceMock.Object).Validate(learner);
+                    fileDataService: fileDataServiceMock.Object).Validate(message);
             }
         }
 
@@ -280,16 +288,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
+            var message = new TestMessage()
+            {
+                Learners = new TestLearner[] { learner },
+                LearnerDestinationAndProgressions = new TestLearnerDestinationAndProgression[] { learnerDestinationAndProgression }
+            };
+
             var fileDataServiceMock = new Mock<IFileDataService>();
 
             fileDataServiceMock.Setup(fds => fds.FilePreparationDate()).Returns(new DateTime(2018, 03, 01));
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    fileDataService: fileDataServiceMock.Object).Validate(learner);
+                    fileDataService: fileDataServiceMock.Object).Validate(message);
             }
         }
 

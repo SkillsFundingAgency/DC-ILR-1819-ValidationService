@@ -232,8 +232,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         /// <summary>
         /// Has exceed registration period meets expectation
         /// </summary>
-        /// <param name="fileDate">The file (preparation) date.</param>
         /// <param name="startDate">The start date.</param>
+        /// <param name="fileDate">The file (preparation) date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
         [InlineData("2015-04-15", "2015-06-13", false)]
@@ -244,7 +244,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [InlineData("2016-06-15", "2016-08-15", true)]
         [InlineData("2016-06-16", "2016-08-15", false)]
         [InlineData("2016-06-17", "2016-08-15", false)]
-        public void HasExceedRegistrationPeriodMeetsExpectation(string fileDate, string startDate, bool expectation)
+        public void HasExceedRegistrationPeriodMeetsExpectation(string startDate, string fileDate, bool expectation)
         {
             // arrange
             var mockItem = new Mock<ILearningDelivery>();
@@ -386,10 +386,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
                 .Returns(fams.AsSafeReadOnlyList());
             mockDelivery
                 .SetupGet(x => x.LearnStartDate)
-                .Returns(DateTime.Parse("2019-04-02"));
+                .Returns(DateTime.Parse("2019-01-02"));
             mockDelivery
                 .SetupGet(x => x.LearnPlanEndDate)
-                .Returns(DateTime.Parse("2019-05-02"));
+                .Returns(DateTime.Parse("2019-02-02"));
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -421,7 +421,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             fileData
                 .Setup(xc => xc.FilePreparationDate())
-                .Returns(DateTime.Parse("2019-01-02"));
+                .Returns(DateTime.Parse("2019-04-02"));
 
             var yearService = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearService

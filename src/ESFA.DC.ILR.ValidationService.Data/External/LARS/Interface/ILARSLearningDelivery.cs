@@ -44,6 +44,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         string LearnDirectClassSystemCode1 { get; }
 
         /// <summary>
+        /// Gets teh learn direct class system code2
+        /// </summary>
+        string LearnDirectClassSystemCode2 { get; }
+
+        /// <summary>
         /// Gets the learning delivery categories.
         /// </summary>
         IReadOnlyCollection<ILARSLearningCategory> LearningDeliveryCategories { get; }

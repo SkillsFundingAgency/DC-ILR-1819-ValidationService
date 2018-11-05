@@ -31,16 +31,28 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         /// <summary>
         /// Gets the validities for.
         /// </summary>
-        /// <param name="forThisAimRef">this aim reference.</param>
+        /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>
         /// a collection of lars 'validities' for this learning aim reference
         /// </returns>
-        public IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef)
+        public IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string thisAimRef)
         {
             return _externalDataCache.LearningDeliveries.Values
                 .SelectMany(x => x.LARSValidities.AsSafeReadOnlyList())
-                .Where(x => x.LearnAimRef == forThisAimRef)
+                .Where(x => x.LearnAimRef == thisAimRef)
                 .AsSafeReadOnlyList();
+        }
+
+        /// <summary>
+        /// Gets the standard validity for.
+        /// </summary>
+        /// <param name="thisStandardCode">this standard code.</param>
+        /// <returns>a LARS Standard Validity</returns>
+        public ILARSStandardValidity GetStandardValidityFor(int thisStandardCode)
+        {
+            return _externalDataCache.StandardValidities
+                .Where(x => x.StandardCode == thisStandardCode)
+                .FirstOrDefault();
         }
 
         public bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date)
@@ -159,6 +171,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && learningDelivery.LearnDirectClassSystemCode1 != "NUL";
         }
 
+        public bool LearnDirectClassSystemCode2MatchForLearnAimRef(string learnAimRef)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                && (!string.IsNullOrEmpty(learningDelivery.LearnDirectClassSystemCode2)
+                    && learningDelivery.LearnDirectClassSystemCode2.ToUpper() != "NUL");
+        }
+
         public bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
@@ -179,6 +200,34 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     a => basicSkillsType.Contains(a.BasicSkillsType ?? -9999)
                     && (learnStartDate >= a.EffectiveFrom
                     && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null))).Count() > 0;
+        }
+
+        public bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode)
+        {
+            return _externalDataCache.Frameworks
+                .Where(f =>
+                    f.ProgType == progType
+                    && f.FworkCode == fWorkCode
+                    && f.PwayCode == pwayCode
+                    && f.EffectiveTo != null
+                    && learnStartDate > f.EffectiveTo)
+                .Any();
+        }
+
+        public bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
+        {
+            return _externalDataCache
+                .Frameworks
+                .Where(f => f.FrameworkAims != null)
+                .SelectMany(f => f.FrameworkAims
+                    .Where(fa =>
+                        fa.LearnAimRef == learnAimRef
+                        && fa.ProgType == progType
+                        && fa.FworkCode == fworkCode
+                        && fa.PwayCode == pwayCode
+                        && fa.EffectiveTo != null
+                        && dd04Date > fa.EffectiveTo))
+                .Any();
         }
     }
 }

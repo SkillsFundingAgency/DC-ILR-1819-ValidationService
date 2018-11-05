@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
 
         IDictionary<int, ValidityPeriods> LLDDCats { get; }
 
-        IReadOnlyCollection<string> QUALENT3s { get; }
+        IDictionary<string, ValidityPeriods> QUALENT3s { get; }
 
         /// <summary>
         /// Gets the simple lookups.
@@ -33,6 +33,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <summary>
         /// Gets the time restricted lookups.
         /// </summary>
-        IDictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> LimitedLifeLookups { get; }
+        IDictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> LimitedLifeLookups { get; }
     }
 }

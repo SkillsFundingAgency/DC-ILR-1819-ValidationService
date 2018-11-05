@@ -16,7 +16,12 @@
         public const string AddHours_05 = "AddHours_05";
         public const string AddHours_06 = "AddHours_06";
 
+        public const string Addline1_03 = "Addline1_03";
+
+        public const string AFinType_04 = "AFinType_04";
         public const string AFinType_10 = "AFinType_10";
+        public const string AFinType_11 = "AFinType_11";
+        public const string AFinType_14 = "AFinType_14";
 
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
 
@@ -67,12 +72,17 @@
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
         public const string DelLocPostCode_16 = "DelLocPostCode_16";
 
+        public const string Ethnicity_01 = "Ethnicity_01";
+
         public const string ELQ_01 = "ELQ_01";
+
+        public const string EmpId_13 = "EmpId_13";
 
         public const string EmpOutcome_01 = "EmpOutcome_01";
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
+        public const string EmpStat_02 = "EmpStat_02";
         public const string EmpStat_08 = "EmpStat_08";
         public const string EmpStat_12 = "EmpStat_12";
 
@@ -126,30 +136,46 @@
 
         public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
+        public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
+        public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
+        public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
+        public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
         public const string LLDDCat_02 = "LLDDCat_02";
 
+        public const string LearnStartDate_06 = "LearnStartDate_06";
+        public const string LearnStartDate_07 = "LearnStartDate_07";
+
         public const string MathGrade_03 = "MathGrade_03";
 
         public const string NETFEE_01 = "NETFEE_01";
         public const string NETFEE_02 = "NETFEE_02";
+
+        public const string NINumber_01 = "NINumber_01";
+
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
+        public const string OutCollDate_01 = "OutCollDate_01";
+
         public const string OutGrade_03 = "OutGrade_03";
+
+        public const string OutType_02 = "OutType_02";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
 
         public const string PCFLDCS_02 = "PCFLDCS_02";
+
+        public const string PCSLDCS_01 = "PCSLDCS_01";
 
         public const string PlanLearnHours_01 = "PlanLearnHours_01";
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
@@ -174,11 +200,19 @@
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
+        public const string PwayCode_02 = "PwayCode_02";
+        public const string PwayCode_03 = "PwayCode_03";
+
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
+        public const string QUALENT3_03 = "QUALENT3_03";
 
+        public const string R06 = "R06";
         public const string R07 = "R07";
+        public const string R66 = "R66";
+        public const string R70 = "R70";
         public const string R85 = "R85";
+        public const string R91 = "R91";
         public const string R108 = "R108";
         public const string R112 = "R112";
 
@@ -198,5 +232,11 @@
         public const string ULN_09 = "ULN_09";
         public const string ULN_10 = "ULN_10";
         public const string ULN_12 = "ULN_12";
+
+        public const string WithdrawReason_04 = "WithdrawReason_04";
+
+        public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
+
+        public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
     }
 }

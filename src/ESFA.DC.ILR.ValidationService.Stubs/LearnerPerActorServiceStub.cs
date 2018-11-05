@@ -45,10 +45,12 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
         private int CalculateLearnersPerActor(int totalMessagesCount)
         {
-            if (totalMessagesCount <= 500)
+            if (totalMessagesCount < 2000)
             {
-                return 100;
+                return 2000;
             }
+
+            return 1000;
 
             if (totalMessagesCount <= 1700)
             {

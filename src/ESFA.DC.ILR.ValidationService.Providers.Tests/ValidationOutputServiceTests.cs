@@ -9,6 +9,7 @@ using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.IO.Model;
 using ESFA.DC.ILR.ValidationService.Providers.Output;
 using ESFA.DC.IO.Interfaces;
+using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 using FluentAssertions;
 using Moq;
@@ -94,7 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         }
 
         [Fact]
-        public void BuildValidLearnRefNumbers_No_ValidLearners()
+        public void BuildValidLearnRefNumbers_No_InvalidLearners()
         {
             var invalidLearnRefNumbers = new List<string>();
 
@@ -118,7 +119,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
 
-            NewService(validationErrorCacheMock.Object, messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEmpty();
+            NewService(validationErrorCacheMock.Object, messageCacheMock.Object)
+                .BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().HaveCount(2);
         }
 
 
@@ -175,7 +177,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             IKeyValuePersistenceService keyValuePersistenceService = null,
             IPreValidationContext preValidationContext = null,
             IJsonSerializationService jsonSerializationService = null,
-            IValidationErrorsDataService validationErrorsDataService = null)
+            IValidationErrorsDataService validationErrorsDataService = null
+            )
         {
             return new ValidationOutputService(
                 validationErrorCache,
@@ -183,7 +186,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
                 keyValuePersistenceService,
                 preValidationContext,
                 jsonSerializationService,
-                validationErrorsDataService);
+                validationErrorsDataService,
+                new Mock<ILogger>().Object);
         }
     }
 }

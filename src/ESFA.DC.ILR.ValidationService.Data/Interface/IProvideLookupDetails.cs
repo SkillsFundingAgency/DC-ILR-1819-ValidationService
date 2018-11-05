@@ -54,11 +54,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         bool Contains(LookupTimeRestrictedKey lookupKey, int candidate);
 
         /// <summary>
-        /// As a set.
+        /// Determines whether [contains] [the specified lookup key].
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>
-        /// <returns>the domain of values pertinent to the coded lookup key</returns>
-        IDictionary<int, ValidityPeriods> AsASet(LookupTimeRestrictedKey lookupKey);
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [contains] [the specified lookup key]; otherwise, <c>false</c>.
+        /// </returns>
+        bool Contains(LookupTimeRestrictedKey lookupKey, string candidate);
 
         /// <summary>
         /// Determines whether [the specified lookup key] is current on the given date
@@ -70,5 +73,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         ///   <c>true</c> if [the specified lookup] [is current] for the given date; otherwise, <c>false</c>.
         /// </returns>
         bool IsCurrent(LookupTimeRestrictedKey lookupKey, int candidate, DateTime referenceDate);
+
+        /// <summary>
+        /// Determines whether the specified lookup key is current.
+        /// </summary>
+        /// <param name="lookupKey">The lookup key.</param>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="referenceDate">The reference date.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified lookup key is current; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsCurrent(LookupTimeRestrictedKey lookupKey, string candidate, DateTime referenceDate);
     }
 }

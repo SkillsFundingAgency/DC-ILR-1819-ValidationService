@@ -4,12 +4,12 @@
     {
         public string JobId { get; set; }
 
-        public byte[] Message { get; set; }
+        public string Message { get; set; }
 
-        public byte[] InternalDataCache { get; set; }
+        public string InternalDataCache { get; set; }
 
-        public byte[] ExternalDataCache { get; set; }
+        public string ExternalDataCache { get; set; }
 
-        public byte[] FileDataCache { get; set; }
+        public string FileDataCache { get; set; }
     }
 }
