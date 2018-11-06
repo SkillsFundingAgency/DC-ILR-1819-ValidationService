@@ -115,6 +115,7 @@
     <Compile Include="Derived\Interface\IDerivedData_29Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_11Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_17Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_10Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_09Rule.cs" />

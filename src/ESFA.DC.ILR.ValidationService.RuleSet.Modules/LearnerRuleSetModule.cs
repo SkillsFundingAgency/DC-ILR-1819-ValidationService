@@ -164,6 +164,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(EmpStat_08Rule),
                 typeof(EmpStat_09Rule),
                 typeof(EmpStat_10Rule),
+                typeof(EmpStat_11Rule),
                 typeof(EmpStat_12Rule),
                 typeof(EmpStat_17Rule),
                 typeof(ESMType_01Rule),
