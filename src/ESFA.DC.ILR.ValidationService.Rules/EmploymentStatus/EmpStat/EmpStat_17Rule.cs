@@ -68,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [in training] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool InTraining(ILearningDelivery delivery) =>
-            It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.Traineeship, TypeOfLearningProgramme.ApprenticeshipStandard);
+            It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.Traineeship);
 
         /// <summary>
         /// Determines whether [is right fund model] [for the specified delivery].

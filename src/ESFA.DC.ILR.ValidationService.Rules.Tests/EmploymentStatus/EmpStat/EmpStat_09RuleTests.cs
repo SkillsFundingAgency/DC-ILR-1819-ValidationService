@@ -101,6 +101,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         /// <summary>
+        /// Last inviable date meets expectation.
+        /// </summary>
+        [Fact]
+        public void LastInviableDateMeetsExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.LastInviableDate;
+
+            // assert
+            Assert.Equal(DateTime.Parse("2014-07-31"), result);
+        }
+
+        /// <summary>
         /// Is apprenticeship meets expectation
         /// </summary>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>

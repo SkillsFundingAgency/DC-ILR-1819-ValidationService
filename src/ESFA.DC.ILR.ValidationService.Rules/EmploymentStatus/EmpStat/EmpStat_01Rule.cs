@@ -67,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <summary>
         /// Gets the first viable date.
         /// </summary>
-        public DateTime FirstViableDate => new DateTime(2012, 07, 01);
+        public DateTime FirstViableDate => new DateTime(2012, 08, 01);
 
         /// <summary>
         /// Gets the last viable date.

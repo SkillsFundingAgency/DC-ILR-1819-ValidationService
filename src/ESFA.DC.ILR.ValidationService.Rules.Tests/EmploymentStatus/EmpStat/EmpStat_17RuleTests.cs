@@ -84,6 +84,52 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         /// <summary>
+        /// Last inviable date meets expectation.
+        /// </summary>
+        [Fact]
+        public void LastInviableDateMeetsExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.LastInviableDate;
+
+            // assert
+            Assert.Equal(DateTime.Parse("2016-07-31"), result);
+        }
+
+        /// <summary>
+        /// In training meets expectation.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, false)]
+        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel5, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel6, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, false)]
+        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, false)]
+        [InlineData(TypeOfLearningProgramme.Traineeship, true)]
+        public void InTrainingMeetsExpectation(int candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<ILearningDelivery>();
+            mockItem
+                .SetupGet(y => y.ProgTypeNullable)
+                .Returns(candidate);
+
+            // act
+            var result = sut.InTraining(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// Is viable start meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>

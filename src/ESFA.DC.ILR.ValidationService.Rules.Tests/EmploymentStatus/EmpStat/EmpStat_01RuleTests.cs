@@ -119,6 +119,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         /// <summary>
+        /// First viable date meets expectation.
+        /// </summary>
+        [Fact]
+        public void FirstViableDateMeetsExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.FirstViableDate;
+
+            // assert
+            Assert.Equal(DateTime.Parse("2012-08-01"), result);
+        }
+
+        /// <summary>
+        /// Last viable date meets expectation.
+        /// </summary>
+        [Fact]
+        public void LastViableDateMeetsExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.LastViableDate;
+
+            // assert
+            Assert.Equal(DateTime.Parse("2014-07-31"), result);
+        }
+
+        /// <summary>
         /// Is learner in custody with learning delivery fam meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -314,7 +346,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
         [InlineData("2012-06-30", false)]
-        [InlineData("2012-07-01", true)]
+        [InlineData("2012-08-01", true)]
         [InlineData("2012-09-19", true)]
         [InlineData("2013-02-14", true)]
         [InlineData("2013-12-31", true)]
@@ -444,21 +476,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         /// <param name="learnStart">The learn start.</param>
         /// <param name="previousYearEnd">The previous year end.</param>
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, "2012-07-01", "2011-07-31")]
-        [InlineData(TypeOfFunding.NotFundedByESFA, "2012-07-01", "2011-07-31")]
-        [InlineData(TypeOfFunding.OtherAdult, "2012-07-01", "2011-07-31")]
+        [InlineData(TypeOfFunding.AdultSkills, "2013-08-01", "2012-07-31")]
+        [InlineData(TypeOfFunding.NotFundedByESFA, "2013-08-01", "2012-07-31")]
+        [InlineData(TypeOfFunding.OtherAdult, "2013-08-01", "2012-07-31")]
         [InlineData(TypeOfFunding.AdultSkills, "2013-12-31", "2013-07-31")]
         [InlineData(TypeOfFunding.NotFundedByESFA, "2013-12-31", "2013-07-31")]
         [InlineData(TypeOfFunding.OtherAdult, "2013-12-31", "2013-07-31")]
         [InlineData(TypeOfFunding.AdultSkills, "2014-07-31", "2013-07-31")]
         [InlineData(TypeOfFunding.NotFundedByESFA, "2014-07-31", "2013-07-31")]
         [InlineData(TypeOfFunding.OtherAdult, "2014-07-31", "2013-07-31")]
-        public void InvalidItemRaisesValidationMessage(int fundModel, string learnStart, string previousYearEnd)
+        public void InvalidItemRaisesValidationMess_age(int fundModel, string learnStart, string previousYearEnd)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
 
             var testDate = DateTime.Parse(learnStart);
+            var previousYearEndDate = DateTime.Parse(previousYearEnd);
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
@@ -497,7 +530,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             // get the learner inside the qualifying date range
             mockLearner
                 .SetupGet(x => x.DateOfBirthNullable)
-                .Returns(testDate.AddYears(-20));
+                .Returns(previousYearEndDate.AddYears(-19));
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
@@ -524,7 +557,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
                     Moq.It.Is<string>(y => y == PropertyNameConstants.DateOfBirth),
-                    testDate.AddYears(-20)))
+                    previousYearEndDate.AddYears(-19)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
@@ -534,7 +567,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
                 .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
-                .Returns(DateTime.Parse(previousYearEnd));
+                .Returns(previousYearEndDate);
 
             var sut = new EmpStat_01Rule(handler.Object, mockDDRule07.Object, yearData.Object);
 

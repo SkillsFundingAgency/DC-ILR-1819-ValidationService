@@ -185,6 +185,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         /// <summary>
+        /// Last inviable date meets expectation.
+        /// </summary>
+        [Fact]
+        public void LastInviableDateMeetsExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.LastInviableDate;
+
+            // assert
+            Assert.Equal(DateTime.Parse("2017-07-31"), result);
+        }
+
+        /// <summary>
         /// Is basic skills learner meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
