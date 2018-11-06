@@ -27,6 +27,7 @@
         public const string FundModel = "FundModel";
         public const string FworkCode = "FworkCode";
         public const string GivenNames = "GivenNames";
+        public const string HEPostcode = "HEPostCode";
         public const string LearnActEndDate = "LearnActEndDate";
         public const string LearnAimRef = "LearnAimRef";
         public const string LearnDelFAMCode = "LearnDelFAMCode";
