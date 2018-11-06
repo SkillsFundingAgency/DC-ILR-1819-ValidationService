@@ -20,8 +20,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule().RuleName.Should().Be("R85");
         }
 
-        [Fact]
-        public void Validate_True()
+        [Theory]
+        [InlineData("Learner1", 9999999999)]
+        [InlineData("Learner5", 9999999999)]
+        public void Validate_Error(string learnRefNumber, long uln)
         {
             var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
             var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
@@ -42,8 +44,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestLearner()
                     {
-                        LearnRefNumber = "Learner3",
-                        ULN = 9999999999
+                        LearnRefNumber = learnRefNumber,
+                        ULN = uln
                     }
                 },
                 LearnerDestinationAndProgressions = learnerDPs
@@ -56,40 +58,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void Validate_False()
-        {
-            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
-            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
-            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
-            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
-
-            var learnerDPs = new TestLearnerDestinationAndProgression[]
-            {
-                learnerDP1,
-                learnerDP2,
-                learnerDP3,
-                learnerDP4
-            };
-
-            var message = new TestMessage()
-            {
-                Learners = new TestLearner[] { new TestLearner { LearnRefNumber = "Learner1", ULN = 9999999999 } },
-                LearnerDestinationAndProgressions = learnerDPs
-            };
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(validationErrorHandlerMock.Object).Validate(message);
-            }
-        }
-
-        [Fact]
-        public void Validate_MisMatch()
+        public void Validate_NoError()
         {
             var learner = new TestLearner()
             {
                 LearnRefNumber = "Learner1",
-                ULN = 9999999999
+                ULN = 9999999996
             };
             var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
             var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };

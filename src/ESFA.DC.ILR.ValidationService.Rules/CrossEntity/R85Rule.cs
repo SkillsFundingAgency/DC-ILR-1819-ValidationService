@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -22,17 +24,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 foreach (ILearner learner in message.Learners)
                 {
-                    bool ok = true;
-                    var matches = message.LearnerDestinationAndProgressions.
-                        Where(s => s.LearnRefNumber == learner.LearnRefNumber);
-                    if (matches.Count() > 0)
+                    var misMatched = message.LearnerDestinationAndProgressions.Where(ldap => ldap.LearnRefNumber == learner.LearnRefNumber && ldap.ULN != learner.ULN);
+                    if (misMatched.Count() == 0)
                     {
-                        ok = matches.All(s => s.ULN == learner.ULN);
+                        misMatched = message.LearnerDestinationAndProgressions
+                            .Where(ldap => ldap.ULN == learner.ULN && ldap.LearnRefNumber != learner.LearnRefNumber);
                     }
 
-                    if (!ok)
+                    if (misMatched.Count() > 0)
                     {
-                        HandleValidationError(learner.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learner.ULN, matches.First().ULN, matches.First().LearnRefNumber));
+                        HandleValidationError(learner.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learner.ULN, misMatched.First().ULN, misMatched.First().LearnRefNumber));
                     }
                 }
             }
