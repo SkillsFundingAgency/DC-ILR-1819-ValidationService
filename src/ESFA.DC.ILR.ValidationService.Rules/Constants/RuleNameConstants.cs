@@ -240,5 +240,7 @@
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
         public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
+
+        public const string WorkPlaceStartDate_03 = "WorkPlaceStartDate_03";
     }
 }
