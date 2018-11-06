@@ -327,6 +327,7 @@
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_05Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_03Rule.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07Rule.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2Rule.cs" />
