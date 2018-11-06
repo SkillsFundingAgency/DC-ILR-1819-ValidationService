@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3
 
         public bool IsLearnStartDateBeforeValidTo(string qualent3, DateTime learnStartDate)
         {
-            return _provideLookupDetails.IsContainsAndDateBeforeValidToDate(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate);
+            return _provideLookupDetails.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate);
         }
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;

@@ -2,8 +2,8 @@
 using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
-using ESFA.DC.JobContext;
 using ESFA.DC.JobContextManager.Interface;
+using ESFA.DC.JobContextManager.Model;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless
@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             bool initialised = false;
             try
             {
-                await _jobContextManager.OpenAsync(cancellationToken);
+                _jobContextManager.OpenAsync(cancellationToken);
                 initialised = true;
                 await Task.Delay(Timeout.Infinite, cancellationToken);
             }
@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             {
                 if (initialised)
                 {
-                    await _jobContextManager.CloseAsync(CancellationToken.None);
+                    await _jobContextManager.CloseAsync();
                 }
             }
         }

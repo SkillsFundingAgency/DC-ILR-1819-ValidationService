@@ -1,7 +1,7 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
-    /// types of funding
+    /// types of funding / Fund Models
     /// </summary>
     public static class TypeOfFunding
     {

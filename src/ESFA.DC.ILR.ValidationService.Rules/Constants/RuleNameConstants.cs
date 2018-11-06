@@ -18,7 +18,9 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinType_04 = "AFinType_04";
         public const string AFinType_10 = "AFinType_10";
+        public const string AFinType_11 = "AFinType_11";
         public const string AFinType_14 = "AFinType_14";
 
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
@@ -109,6 +111,8 @@
 
         public const string Header_2 = "Header_2";
         public const string Header_3 = "Header_3";
+
+        public const string HEPostCode_02 = "HEPostCode_02";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
@@ -210,6 +214,7 @@
         public const string R66 = "R66";
         public const string R70 = "R70";
         public const string R85 = "R85";
+        public const string R91 = "R91";
         public const string R108 = "R108";
         public const string R112 = "R112";
 

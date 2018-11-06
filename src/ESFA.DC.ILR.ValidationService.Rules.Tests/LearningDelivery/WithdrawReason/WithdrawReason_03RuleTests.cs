@@ -2,7 +2,6 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
