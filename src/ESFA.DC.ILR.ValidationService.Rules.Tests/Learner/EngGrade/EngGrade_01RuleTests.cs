@@ -1,97 +1,124 @@
-﻿using System;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
 {
-    public class EngGrade_01RuleTests
+    public class EngGrade_01RuleTests : AbstractRuleTests<EngGrade_01Rule>
     {
-        [Theory]
-        [InlineData(null, 25)]
-        [InlineData(null, 82)]
-        [InlineData(" ", 82)]
-        [InlineData("", 25)]
-        public void ConditionMet_True(string engGrade, long? fundModel)
+        [Fact]
+        public void RuleName()
         {
-            NewRule().ConditionMet(engGrade, fundModel).Should().BeTrue();
+            NewRule().RuleName.Should().Be("EngGrade_01");
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void EngGradeConditionMet_True(string engGrade)
+        {
+            NewRule().EngGradeConditionMet(engGrade).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False()
+        public void EngGradeConditionMet_False()
         {
-            NewRule().ConditionMet("X", 82).Should().BeFalse();
+            var engGrade = "A";
+
+            NewRule().EngGradeConditionMet(engGrade).Should().BeFalse();
         }
 
         [Theory]
         [InlineData(25)]
         [InlineData(82)]
-        public void FundModelCondition_True(long? fundModel)
+        public void FundModelConditionMet_True(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(15)]
-        [InlineData(null)]
-        public void FundModelCondition_False(long? fundModel)
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(100)]
+        public void FundModelConditionMet_False(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
         }
 
-        [Fact]
-        public void Validate_Error()
+        [Theory]
+        [InlineData(null, 25)]
+        [InlineData(null, 82)]
+        [InlineData("", 25)]
+        [InlineData("", 82)]
+        [InlineData(" ", 25)]
+        [InlineData(" ", 82)]
+        public void ValidateError(string engGrade, int fundModel)
         {
-            var learner = SetupLearner(string.Empty);
+            var learner = new TestLearner
+            {
+                EngGrade = engGrade,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = fundModel
+                    }
+                }
+            };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("EngGrade_01", null, null, null);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
+        [Theory]
+        [InlineData("A", 25)]
+        [InlineData("A", 82)]
+        [InlineData(null, 1)]
+        [InlineData("", 1)]
+        [InlineData(" ", 1)]
+        public void ValidateNoError(string engGrade, int fundModel)
+        {
+            var learner = new TestLearner
+            {
+                EngGrade = engGrade,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = fundModel
+                    }
+                }
+            };
 
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_NoError()
+        public void BuildErrorMessageParameters()
         {
-            var learner = SetupLearner("A");
-
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("EngGrade_01", null, null, null);
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FundModel", 25)).Verifiable();
 
-            rule.Validate(learner);
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(25);
 
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            validationErrorHandlerMock.Verify();
         }
 
         private EngGrade_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
             return new EngGrade_01Rule(validationErrorHandler);
-        }
-
-        private ILearner SetupLearner(string engGrade)
-        {
-            return new TestLearner
-            {
-                EngGrade = engGrade,
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        FundModelNullable = 25
-                    }
-                }
-            };
         }
     }
 }
