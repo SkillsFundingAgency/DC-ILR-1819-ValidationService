@@ -1,96 +1,119 @@
-﻿using System;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
 {
-    public class MathGrade_01RuleTests
+    public class MathGrade_01RuleTests : AbstractRuleTests<MathGrade_01Rule>
     {
-        [Theory]
-        [InlineData(null, 25)]
-        [InlineData(null, 82)]
-        [InlineData(" ", 82)]
-        [InlineData("", 25)]
-        public void ConditionMet_True(string mathGrade, long? fundModel)
+        [Fact]
+        public void RuleName()
         {
-            NewRule().ConditionMet(mathGrade, fundModel).Should().BeTrue();
+            NewRule().RuleName.Should().Be("MathGrade_01");
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData(null)]
+        public void MathGradeConditionMet_True(string mathGrade)
+        {
+            NewRule().MathGradeConditionMet(mathGrade).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False()
+        public void MathGradeConditionMet_False()
         {
-            NewRule().ConditionMet("X", 82).Should().BeFalse();
+            var mathGrade = "A";
+
+            NewRule().MathGradeConditionMet(mathGrade).Should().BeFalse();
         }
 
         [Theory]
         [InlineData(25)]
         [InlineData(82)]
-        public void FundModelConditionMet_True(long? fundModel)
+        public void FundModelConditionMet_True(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(15)]
-        [InlineData(null)]
-        public void FundModelConditionMet_False(long? fundModel)
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(100)]
+        public void FundModelConditionMet_False(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
         }
 
-        [Fact]
-        public void Validate_Error()
+        [Theory]
+        [InlineData(null, 25)]
+        [InlineData(null, 82)]
+        [InlineData("", 25)]
+        [InlineData("", 82)]
+        [InlineData(" ", 25)]
+        [InlineData(" ", 82)]
+        public void ValidateError(string mathGrade, int fundModel)
         {
-            var learner = SetupLearner(string.Empty);
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("MathGrade_01", null, null, null);
-
-            var rule = NewRule(validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
-
-        [Fact]
-        public void Validate_NoError()
-        {
-            var learner = SetupLearner("A");
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("MathGrade_01", null, null, null);
-
-            var rule = NewRule(validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Never);
-        }
-
-        private ILearner SetupLearner(string mathGrade)
-        {
-            var learner = new TestLearner()
+            var learner = new TestLearner
             {
                 MathGrade = mathGrade,
-                LearningDeliveries = new TestLearningDelivery[]
+                LearningDeliveries = new List<TestLearningDelivery>()
                 {
                     new TestLearningDelivery()
                     {
-                        FundModelNullable = 25
+                        FundModel = fundModel
                     }
                 }
             };
 
-            return learner;
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Theory]
+        [InlineData("A", 25)]
+        [InlineData("A", 82)]
+        [InlineData(null, 1)]
+        [InlineData("", 1)]
+        [InlineData(" ", 1)]
+        public void ValidateNoError(string mathGrade, int fundModel)
+        {
+            var learner = new TestLearner
+            {
+                MathGrade = mathGrade,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = fundModel
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FundModel", 25)).Verifiable();
+
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(25);
+
+            validationErrorHandlerMock.Verify();
         }
 
         private MathGrade_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
