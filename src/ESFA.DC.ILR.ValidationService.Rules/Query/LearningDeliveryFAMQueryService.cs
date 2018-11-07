@@ -41,5 +41,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
                 .OrderByDescending(f => f.LearnDelFAMDateFromNullable)
                 .FirstOrDefault();
         }
+
+        public int GetLearningDeliveryFAMsCountByFAMType(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs, string famType)
+            => learningDeliveryFAMs?.Where(d => d.LearnDelFAMType == famType).Count() ?? 0;
     }
 }

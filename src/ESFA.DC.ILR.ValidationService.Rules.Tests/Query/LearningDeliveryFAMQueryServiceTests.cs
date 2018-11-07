@@ -140,6 +140,56 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_CountCheckForFound()
+        {
+            var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    }
+                };
+
+            NewService().GetLearningDeliveryFAMsCountByFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.HHS).Should().Be(2);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_CountCheckForNotFound()
+        {
+            var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    }
+                };
+
+            NewService().GetLearningDeliveryFAMsCountByFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT).Should().Be(0);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_NullCheck()
+        {
+            NewService().GetLearningDeliveryFAMsCountByFAMType(null, LearningDeliveryFAMTypeConstants.HHS).Should().Be(0);
+        }
+
+        [Fact]
         public void HasAnyLearningDeliveryFAMTypes_False()
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
