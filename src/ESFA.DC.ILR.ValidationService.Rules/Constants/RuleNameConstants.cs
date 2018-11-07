@@ -86,6 +86,8 @@
         public const string EmpStat_08 = "EmpStat_08";
         public const string EmpStat_12 = "EmpStat_12";
 
+        public const string EngGrade_01 = "EngGrade_01";
+
         public const string Entity_1 = "Entity_1";
 
         public const string FamilyName_01 = "FamilyName_01";
