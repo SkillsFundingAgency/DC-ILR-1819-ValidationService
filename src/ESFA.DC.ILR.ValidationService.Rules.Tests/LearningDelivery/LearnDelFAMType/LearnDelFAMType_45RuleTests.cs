@@ -86,6 +86,94 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
+        public void Validate_Error()
+        {
+            var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    }
+                };
+
+            var testLearner = new TestLearner()
+            {
+                LearningDeliveries = new TestLearningDelivery[]
+                    {
+                        new TestLearningDelivery()
+                        {
+                            LearningDeliveryFAMs = testLearningDeliveryFAMs
+                        }
+                    }
+            };
+
+            var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMsQueryServiceMock.Setup(f => f.GetLearningDeliveryFAMsCountByFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.HHS)).Returns(3);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).ConditionMet(testLearningDeliveryFAMs).Should().BeTrue();
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
+        {
+            var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    }
+                };
+
+            var testLearner = new TestLearner()
+            {
+                LearningDeliveries = new TestLearningDelivery[]
+                    {
+                        new TestLearningDelivery()
+                        {
+                            LearningDeliveryFAMs = testLearningDeliveryFAMs
+                        }
+                    }
+            };
+
+            var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMsQueryServiceMock.Setup(f => f.GetLearningDeliveryFAMsCountByFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.HHS)).Returns(2);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).ConditionMet(testLearningDeliveryFAMs).Should().BeFalse();
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
         public void BuildErrorMessageParameters()
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
