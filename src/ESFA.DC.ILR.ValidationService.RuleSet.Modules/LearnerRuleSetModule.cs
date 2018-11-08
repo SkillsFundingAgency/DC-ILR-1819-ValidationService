@@ -239,6 +239,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LLDDCat_02Rule),
                 typeof(MathGrade_01Rule),
                 typeof(MathGrade_03Rule),
+                typeof(MathGrade_04Rule),
                 typeof(NETFEE_01Rule),
                 typeof(NETFEE_02Rule),
                 typeof(NINumber_01Rule),
