@@ -7,34 +7,54 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade
 {
-    /// <summary>
-    /// Learner.LearnFAMType = MCF and Learner.LearnFAMCode = 2, 3 or 4 and Learner.MathGrade <> "NONE"
-    /// </summary>
     public class MathGrade_04Rule : AbstractRule, IRule<ILearner>
     {
-        private const string MathGradeNone = "NONE";
         private readonly ILearnerFAMQueryService _learnerFamQueryService;
-        private readonly HashSet<long> _famCodes = new HashSet<long>() { 2, 3, 4 };
 
-        public MathGrade_04Rule(IValidationErrorHandler validationErrorHandler, ILearnerFAMQueryService learnerFamQueryService)
-            : base(validationErrorHandler)
+        public MathGrade_04Rule(
+            ILearnerFAMQueryService learnerFamQueryService,
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.MathGrade_04)
         {
             _learnerFamQueryService = learnerFamQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.MathGrade, objectToValidate.LearnerFAMs))
+            if (ConditionMet(
+                objectToValidate.MathGrade,
+                objectToValidate.LearnerFAMs))
             {
-                HandleValidationError(RuleNameConstants.MathGrade_04Rule, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.MathGrade));
             }
         }
 
-        public bool ConditionMet(string mathGrade, IReadOnlyCollection<ILearnerFAM> learnerFams)
+        public bool ConditionMet(string mathGrade, IEnumerable<ILearnerFAM> learnerFAMs)
         {
-            return !string.IsNullOrWhiteSpace(mathGrade) &&
-                   mathGrade != MathGradeNone &&
-                   _learnerFamQueryService.HasAnyLearnerFAMCodesForType(learnerFams, LearnerFamTypeConstants.MCF, _famCodes);
+            return MathGradeConditionMet(mathGrade)
+                   && LearnerFAMConditionMet(learnerFAMs);
+        }
+
+        public bool MathGradeConditionMet(string mathGrade)
+        {
+            return !string.IsNullOrWhiteSpace(mathGrade)
+                   && mathGrade != "NONE";
+        }
+
+        public bool LearnerFAMConditionMet(IEnumerable<ILearnerFAM> learnerFAMs)
+        {
+            var famType = "MCF";
+            var famCodes = new[] { 2, 3, 4 };
+
+            return _learnerFamQueryService.HasAnyLearnerFAMCodesForType(learnerFAMs, famType, famCodes);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string mathGrade)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.MathGrade, mathGrade),
+            };
         }
     }
 }
