@@ -183,6 +183,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03Rule.cs" />
+    <Compile Include="Learner\EngGrade\EngGrade_04Rule.cs" />
     <Compile Include="Learner\Ethnicity\Ethnicity_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01Rule.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02Rule.cs" />
