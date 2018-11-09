@@ -114,12 +114,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AzureStorageCompressedFileContentStringProviderServiceTests.cs" />
     <Compile Include="LearnerProviderServiceTests.cs" />
     <Compile Include="MessageStringProviderServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SchemaFileContentStringProviderServiceTests.cs" />
-    <Compile Include="ValidateXMLSchemaServiceTests.cs" />
     <Compile Include="ValidationErrorCachePassThroughOutputServiceTests.cs" />
     <Compile Include="ValidationOutputServiceTests.cs" />
   </ItemGroup>

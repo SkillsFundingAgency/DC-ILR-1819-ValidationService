@@ -30,23 +30,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             using (var childLifeTimeScope = _parentLifeTimeScope
                 .BeginLifetimeScope(c =>
                 {
-                    var fileName = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString();
-                    if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        c.RegisterType<AzureStorageCompressedFileContentStringProviderService>()
-                            .As<IMessageStreamProviderService>();
-                    }
-                    else
-                    {
-                        c.RegisterType<AzureStorageFileContentStringProviderService>()
-                            .As<IMessageStreamProviderService>();
-                    }
-
                     c.RegisterInstance(
                         new PreValidationContext
                         {
                             JobId = jobContextMessage.JobId.ToString(),
-                            Input = fileName,
+                            Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
                             InvalidLearnRefNumbersKey = jobContextMessage
                                 .KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers].ToString(),
                             ValidLearnRefNumbersKey =
@@ -76,9 +64,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     var validationContext = childLifeTimeScope.Resolve<IPreValidationContext>();
 
                     await preValidationOrchestrationService.ExecuteAsync(validationContext, cancellationToken);
-
-                    // Update the file name, as it could have been a zip which we have extracted now so needs updating in the message
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename] = validationContext.Input;
 
                     // populate the keys into jobcontextmessage
                     jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] =
