@@ -147,6 +147,7 @@
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
+        public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
@@ -206,6 +207,7 @@
 
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
+        public const string PriorAttain_07 = "PriorAttain_07";
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 

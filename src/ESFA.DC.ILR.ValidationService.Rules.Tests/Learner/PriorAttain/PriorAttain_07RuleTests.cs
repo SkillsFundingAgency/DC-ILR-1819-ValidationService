@@ -1,53 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 {
-    public class PriorAttain_07RuleTests
+    public class PriorAttain_07RuleTests : AbstractRuleTests<PriorAttain_07Rule>
     {
         [Fact]
-        public void RuleConditionMet_True()
+        public void RuleName()
         {
-            var priorAttainValues = new List<int> { 4, 5, 10, 11, 12, 13, 97, 98 };
-
-            var rule = NewRule();
-
-            foreach (var item in priorAttainValues)
-            {
-                rule.ConditionMet(item, 35, 24, new DateTime(2016, 8, 01)).Should().BeTrue();
-            }
+            NewRule().RuleName.Should().Be("PriorAttain_07");
         }
 
         [Fact]
-        public void RuleConditionMet_False()
+        public void LearnStartDateConditionMet_True()
         {
-            var priorAttainValues = new List<int> { 4, 5, 10, 11, 12, 13, 97, 98 };
+            var learnStartDate = new DateTime(2016, 08, 01);
 
-            var rule = NewRule();
-
-            foreach (var item in priorAttainValues)
-            {
-                rule.ConditionMet(item, 35, 10, new DateTime(2016, 8, 01)).Should().BeFalse();
-            }
+            NewRule().LearnStartDateConditionMet(learnStartDate).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData(999)]
-        public void PriorAttainConditionMet_False(long? priorAttain)
+        [InlineData("2016/07/31")]
+        [InlineData("2016/07/01")]
+        public void LearnStartDateConditionMet_False(DateTime learnStartDate)
         {
-            NewRule().PriorAttainConditionMet(priorAttain).Should().BeFalse();
+            NewRule().LearnStartDateConditionMet(learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void FundModelConditionMet_True()
+        {
+            var fundModel = 35;
+
+            NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
+        }
+
+        [Fact]
+        public void FundModelConditionMet_False()
+        {
+            var fundModel = 0;
+
+            NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
         }
 
         [Theory]
+        [InlineData(3)]
+        [InlineData(4)]
         [InlineData(5)]
         [InlineData(10)]
         [InlineData(11)]
@@ -55,111 +61,154 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
         [InlineData(13)]
         [InlineData(97)]
         [InlineData(98)]
-        public void PriorAttainConditionMet_True(long? priorAttain)
+        public void PriorAttainConditionMet_True(int? priorAttain)
         {
             NewRule().PriorAttainConditionMet(priorAttain).Should().BeTrue();
         }
 
         [Theory]
         [InlineData(null)]
-        [InlineData(999)]
-        public void FundModelConditionMet_False(long? fundModel)
+        [InlineData(1)]
+        public void PriorAttainConditionMet_False(int? priorAttain)
         {
-            NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(35)]
-        public void FundModelConditionMet_True(long? fundModel)
-        {
-            NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData(999)]
-        public void ProgTypeConditionMet_False(long? progType)
-        {
-            NewRule().ProgTypeConditionMet(progType).Should().BeFalse();
+            NewRule().PriorAttainConditionMet(priorAttain).Should().BeFalse();
         }
 
         [Fact]
         public void ProgTypeConditionMet_True()
         {
-            NewRule().ProgTypeConditionMet(24).Should().BeTrue();
+            var progType = 24;
+
+            NewRule().ProgTypeConditionMet(progType).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(0)]
+        public void ProgTypeConditionMet_False(int? progType)
+        {
+            NewRule().ProgTypeConditionMet(progType).Should().BeFalse();
         }
 
         [Fact]
-        public void LearnStartDateConditionMet_False()
+        public void ConditionMet_True()
         {
-            NewRule().LearnStartDateConditionMet(new DateTime(2015, 7, 31)).Should().BeFalse();
+            var learnStartDate = new DateTime(2017, 08, 01);
+            var fundModel = 35;
+            var priorAttain = 3;
+            var progType = 24;
+
+            NewRule().ConditionMet(learnStartDate, fundModel, priorAttain, progType).Should().BeTrue();
         }
 
         [Fact]
-        public void LearnStartDateConditionMet_False_Null()
+        public void ConditionMet_FalseLearnStartDate()
         {
-            NewRule().LearnStartDateConditionMet(null).Should().BeFalse();
+            var learnStartDate = new DateTime(2016, 07, 01);
+            var fundModel = 35;
+            var priorAttain = 3;
+            var progType = 24;
+
+            NewRule().ConditionMet(learnStartDate, fundModel, priorAttain, progType).Should().BeFalse();
         }
 
         [Fact]
-        public void LearnStartDateConditionMet_True()
+        public void ConditionMet_FalseFundModel()
         {
-            NewRule().LearnStartDateConditionMet(new DateTime(2016, 08, 01)).Should().BeTrue();
+            var learnStartDate = new DateTime(2017, 08, 01);
+            var fundModel = 0;
+            var priorAttain = 3;
+            var progType = 24;
+
+            NewRule().ConditionMet(learnStartDate, fundModel, priorAttain, progType).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_Error()
+        public void ConditionMet_FalsePriorAttain()
         {
-            var learner = SetupLearner(5, new DateTime(2016, 08, 02));
+            var learnStartDate = new DateTime(2017, 08, 01);
+            var fundModel = 35;
+            var priorAttain = 0;
+            var progType = 24;
 
+            NewRule().ConditionMet(learnStartDate, fundModel, priorAttain, progType).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_FalseProgType()
+        {
+            var learnStartDate = new DateTime(2017, 08, 01);
+            var fundModel = 35;
+            var priorAttain = 3;
+            var progType = 0;
+
+            NewRule().ConditionMet(learnStartDate, fundModel, priorAttain, progType).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ValidateError()
+        {
+            var learner = new TestLearner()
+            {
+                PriorAttainNullable = 3,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35,
+                        LearnStartDate = new DateTime(2016, 09, 01),
+                        ProgTypeNullable = 24
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void ValidateNoError()
+        {
+            var learner = new TestLearner()
+            {
+                PriorAttainNullable = 0,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 0,
+                        LearnStartDate = new DateTime(2016, 06, 01),
+                        ProgTypeNullable = 0
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PriorAttain_07", null, null, null);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, "01/01/2016")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, 1)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.PriorAttain, 1)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.ProgType, 1)).Verifiable();
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2016, 1, 1), 1, 1, 1);
 
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
-
-        [Fact]
-        public void Validate_NoError()
-        {
-            var learner = SetupLearner(999, new DateTime(2015, 07, 31));
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PriorAttain_07", null, null, null);
-
-            var rule = new PriorAttain_07Rule(validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            validationErrorHandlerMock.Verify();
         }
 
         private PriorAttain_07Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
             return new PriorAttain_07Rule(validationErrorHandler);
-        }
-
-        private ILearner SetupLearner(long priorAttain, DateTime learnStartDate)
-        {
-            return new TestLearner
-            {
-                PriorAttainNullable = priorAttain,
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        FundModelNullable = 35,
-                        ProgTypeNullable = 24,
-                        LearnStartDateNullable = learnStartDate,
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { }
-                    }
-                }
-            };
         }
     }
 }
