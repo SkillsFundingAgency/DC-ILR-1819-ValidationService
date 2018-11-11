@@ -98,6 +98,7 @@
     <Compile Include="CrossEntity\R91Rule.cs" />
     <Compile Include="Derived\DerivedData_11Rule.cs" />
     <Compile Include="Derived\DerivedData_22Rule.cs" />
+    <Compile Include="Derived\DerivedData_24Rule.cs" />
     <Compile Include="Derived\DerivedData_28Rule.cs" />
     <Compile Include="Derived\DerivedData_29Rule.cs" />
     <Compile Include="Derived\DerivedData_21Rule.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_11Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_14Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_17Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_10Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_09Rule.cs" />
@@ -131,7 +133,6 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_08Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_02Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01Rule.cs" />
-    <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_02Rule.cs" />
