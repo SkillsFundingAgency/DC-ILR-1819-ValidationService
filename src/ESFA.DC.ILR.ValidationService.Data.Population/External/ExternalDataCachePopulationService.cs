@@ -48,7 +48,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             externalDataCache.ULNs = new HashSet<long>(await _ulnDataRetrievalService.RetrieveAsync(cancellationToken));
             externalDataCache.Postcodes = new HashSet<string>(await _postcodesDataRetrievalService.RetrieveAsync(cancellationToken));
             externalDataCache.Organisations = await _organisationsDataRetrievalService.RetrieveAsync(cancellationToken);
+
             externalDataCache.FCSContracts = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
+            externalDataCache.FCSContractAllocations = await _fcsDataRetrievalService.RetrieveContractAllocationsAsync(cancellationToken);
+            externalDataCache.ESFEligibilityRuleEmploymentStatuses = await _fcsDataRetrievalService.RetrieveEligibilityRuleEmploymentStatusesAsync(cancellationToken);
         }
     }
 }

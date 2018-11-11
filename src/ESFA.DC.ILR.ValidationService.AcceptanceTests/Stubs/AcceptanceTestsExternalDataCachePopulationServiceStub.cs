@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using ESFA.DC.ILR.ValidationService.Data.External;
+﻿using ESFA.DC.ILR.ValidationService.Data.External;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ESFA.DC.ILR.ValidationService.AcceptanceTests.Stubs
 {
@@ -65,6 +66,8 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests.Stubs
 
             // TODO: NEEDS FIXING!!!
             _dataCache.StandardValidities = new List<LARSStandardValidity>();
+            _dataCache.ESFEligibilityRuleEmploymentStatuses = new List<IEsfEligibilityRuleEmploymentStatus>();
+            _dataCache.FCSContractAllocations = new List<IFcsContractAllocation>();
         }
 
         private void BuildFrameworkAimsAndCommonComponents(List<Framework> frameworks, dynamic v, int progType, int fworkCode, int pwayCode, LearningDelivery ld)

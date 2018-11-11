@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
@@ -18,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <summary>
         /// Gets the LARS standard validities.
         /// </summary>
-        IReadOnlyCollection<LARSStandardValidity> StandardValidities { get; }
+        IReadOnlyCollection<ILARSStandardValidity> StandardValidities { get; }
 
         IReadOnlyDictionary<long, Organisation> Organisations { get; }
 
@@ -31,6 +32,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
 
         IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; }
 
-        IReadOnlyCollection<FcsContract> FCSContracts { get; }
+        /// <summary>
+        /// Gets the FCS contracts.
+        /// </summary>
+        IReadOnlyCollection<IFcsContract> FCSContracts { get; }
+
+        /// <summary>
+        /// Gets the FCS contract allocations.
+        /// </summary>
+        IReadOnlyCollection<IFcsContractAllocation> FCSContractAllocations { get; }
+
+        /// <summary>
+        /// Gets the ESF eligibility rule employment statuses.
+        /// </summary>
+        IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> ESFEligibilityRuleEmploymentStatuses { get; }
     }
 }
