@@ -1,155 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Postcode
 {
-    public class Postcode_15RuleTests
+    public class Postcode_15RuleTests : AbstractRuleTests<Postcode_15Rule>
     {
-        [Theory]
-        [InlineData("b01 1WX")]
-        [InlineData("bc1 1WX")]
-        [InlineData("1x 1WX")]
-        [InlineData("1x 1WXTT")]
-        [InlineData("G11 1")]
-        [InlineData("HHV XXXX")]
-        public void ConditionMet_True_FirstTwoCharacters(string postcode)
+        [Fact]
+        public void RuleName()
         {
-            var rule = new Postcode_15Rule(null);
-
-            rule.ConditionMet(postcode).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData("A1 1WX")]
-        [InlineData("BV1 1WX")]
-        [InlineData("")]
-        [InlineData(null)]
-        public void ConditionMet_False_FirstTwoCharacters(string postcode)
-        {
-            var rule = new Postcode_15Rule(null);
-
-            rule.ConditionMet(postcode).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData("NZ 1WX")]
-        [InlineData("N1c 1WX")]
-        [InlineData("NFV 1WX")]
-        public void ConditionMet_True_MiddleTwoCharacters(string postcode)
-        {
-            var rule = new Postcode_15Rule(null);
-
-            rule.ConditionMet(postcode).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData("B20 1WX")]
-        [InlineData("C11 1WX")]
-        [InlineData("CV22 1WX")]
-        [InlineData("N1 1WX")]
-        public void ConditionMet_False_MiddleTwoCharacters(string postcode)
-        {
-            var rule = new Postcode_15Rule(null);
-
-            rule.ConditionMet(postcode).Should().BeFalse();
+            NewRule().RuleName.Should().Be("Postcode_15");
         }
 
         [Fact]
-        public void ConditionMet_True_Space()
+        public void ConditionMet_True()
         {
-            var rule = new Postcode_15Rule(null);
-            rule.ConditionMet("B111EW").Should().BeTrue();
+            var postcode = "abc";
+
+            var postcodeQueryServiceMock = new Mock<IPostcodeQueryService>();
+
+            postcodeQueryServiceMock.Setup(qs => qs.RegexValid(postcode)).Returns(false);
+
+            NewRule(postcodeQueryServiceMock.Object).ConditionMet(postcode).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False_Space()
+        public void ConditionMet_False()
         {
-            var rule = new Postcode_15Rule(null);
-            rule.ConditionMet("B11 1EW").Should().BeFalse();
+            var postcode = "AA1 1AA";
+
+            var postcodeQueryServiceMock = new Mock<IPostcodeQueryService>();
+
+            postcodeQueryServiceMock.Setup(qs => qs.RegexValid(postcode)).Returns(true);
+
+            NewRule(postcodeQueryServiceMock.Object).ConditionMet(postcode).Should().BeFalse();
         }
 
         [Fact]
-        public void ConditionMet_True_AfterSpaceNumbers()
+        public void Validate_Error()
         {
-            var rule = new Postcode_15Rule(null);
-            rule.ConditionMet("B11 EEW").Should().BeTrue();
-        }
+            var postcode = "abc";
 
-        [Fact]
-        public void ConditionMet_False_AfterSpaceNumbers()
-        {
-            var rule = new Postcode_15Rule(null);
-            rule.ConditionMet("B11 9XX").Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData("B11 0{0}X")]
-        [InlineData("B11 0X{0}")]
-        public void ConditionMet_True_AfterSpaceNotAllowedCharacters(string postCodeTemplate)
-        {
-            var notAllowed = new List<char>() { 'C', 'I', 'K', 'M', 'O', 'V' };
-            var rule = new Postcode_15Rule(null);
-
-            foreach (char letter in notAllowed)
+            var learner = new TestLearner()
             {
-                var niNumber = string.Format(postCodeTemplate, letter);
-                rule.ConditionMet(niNumber).Should().BeTrue();
-            }
-        }
+                Postcode = postcode
+            };
 
-        [Theory]
-        [InlineData("B11 0{0}X")]
-        [InlineData("B11 0X{0}")]
-        public void ConditionMet_False_AfterSpaceNotAllowedCharacters(string postCodeTemplate)
-        {
-            var notAllowed = new List<char>() { 'C', 'I', 'K', 'M', 'O', 'V' };
-            char[] allowedCharacters = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (char)i).Where(x => !notAllowed.Contains(x)).ToArray();
+            var postcodeQueryServiceMock = new Mock<IPostcodeQueryService>();
 
-            var rule = new Postcode_15Rule(null);
+            postcodeQueryServiceMock.Setup(qs => qs.RegexValid(postcode)).Returns(false);
 
-            foreach (char letter in allowedCharacters)
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                var niNumber = string.Format(postCodeTemplate, letter);
-                rule.ConditionMet(niNumber).Should().BeFalse();
+                NewRule(postcodeQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Fact]
         public void Validate_NoErrors()
         {
-            var learner = new Mock<ILearner>();
-            learner.SetupGet(x => x.Postcode).Returns("B11 1WX");
+            var postcode = "AA1 1AA";
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PostCode_15", null, null, null);
+            var learner = new TestLearner()
+            {
+                Postcode = postcode
+            };
 
-            var rule = new Postcode_15Rule(validationErrorHandlerMock.Object);
+            var postcodeQueryServiceMock = new Mock<IPostcodeQueryService>();
 
-            rule.Validate(learner.Object);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            postcodeQueryServiceMock.Setup(qs => qs.RegexValid(postcode)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(postcodeQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_Error()
+        public void BuildErrorMessageParameters()
         {
-            var learner = new Mock<ILearner>();
-            learner.SetupGet(x => x.Postcode).Returns("B1 XXX");
-
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PostCode_15", null, null, null);
 
-            var rule = new Postcode_15Rule(validationErrorHandlerMock.Object);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("Postcode", "abc")).Verifiable();
 
-            rule.Validate(learner.Object);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters("abc");
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private Postcode_15Rule NewRule(IPostcodeQueryService postcodeQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new Postcode_15Rule(postcodeQueryService, validationErrorHandler);
         }
     }
 }
