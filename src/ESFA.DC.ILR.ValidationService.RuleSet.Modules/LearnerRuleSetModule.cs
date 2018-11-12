@@ -69,7 +69,6 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 using System;
 using System.Collections.Generic;
-using Postcode_15Rule = ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode.Postcode_15Rule;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
