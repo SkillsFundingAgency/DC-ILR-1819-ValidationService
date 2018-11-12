@@ -211,6 +211,7 @@
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04RuleTests.cs" />
     <Compile Include="Learner\PMUKPRN\PMUKPRN_01RuleTests.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_01RuleTests.cs" />
+    <Compile Include="Learner\PostcodePrior\PostcodePrior_02RuleTests.cs" />
     <Compile Include="Learner\Postcode\Postcode_14RuleTests.cs" />
     <Compile Include="Learner\Postcode\Postcode_15RuleTests.cs" />
     <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01RuleTests.cs" />
