@@ -265,6 +265,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(Postcode_14Rule),
                 typeof(Postcode_15Rule),
                 typeof(PostcodePrior_01Rule),
+                typeof(PostcodePrior_02Rule),
                 typeof(PrevUKPRN_01Rule),
                 typeof(PrimaryLLDD_01Rule),
                 typeof(PrimaryLLDD_02Rule),
