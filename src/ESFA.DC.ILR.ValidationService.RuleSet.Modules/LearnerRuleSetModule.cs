@@ -263,6 +263,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PlanLearnHours_04Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(Postcode_14Rule),
+                typeof(Postcode_15Rule),
                 typeof(PostcodePrior_01Rule),
                 typeof(PrevUKPRN_01Rule),
                 typeof(PrimaryLLDD_01Rule),
