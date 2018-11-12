@@ -1,36 +1,47 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.Postcode
 {
-    /// <summary>
-    /// The first part of Learner.PostcodePrior <> valid format of 1 or 2 capital letters followed by (1 or 2 numbers or 1 number and a capital letter)
-    /// and the second part of the postcode <> valid format of (nXX) where n = 0-9 and XX are capital letters excluding C, I, K, M, O and V
-    /// </summary>
     public class Postcode_15Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly Regex _regex = new Regex("^[A-Z]{1,2}([0-9]{1,2}|[0-9][A-Z]) [0-9][ABD-HJLNP-UW-Z]{2}$", RegexOptions.Compiled);
+        private readonly IPostcodeQueryService _postcodeQueryService;
 
-        public Postcode_15Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+        public Postcode_15Rule(
+            IPostcodeQueryService postcodeQueryService,
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.Postcode_15)
         {
+            _postcodeQueryService = postcodeQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
             if (ConditionMet(objectToValidate.Postcode))
             {
-                HandleValidationError(RuleNameConstants.PostCode_15Rule, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.Postcode));
             }
         }
 
         public bool ConditionMet(string postcode)
         {
-            return !string.IsNullOrWhiteSpace(postcode) &&
-                   _regex.IsMatch(postcode.Trim()) == false;
+            return !_postcodeQueryService.RegexValid(postcode);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string postcode)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.Postcode, postcode)
+            };
         }
     }
 }
