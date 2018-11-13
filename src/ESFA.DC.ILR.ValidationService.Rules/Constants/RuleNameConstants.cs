@@ -195,8 +195,10 @@
         public const string PMUKPRN_01 = "PMUKPRN_01";
 
         public const string Postcode_14 = "Postcode_14";
+        public const string Postcode_15 = "Postcode_15";
 
         public const string PostcodePrior_01 = "PostcodePrior_01";
+        public const string PostcodePrior_02 = "PostcodePrior_02";
 
         public const string PrevUKPRN_01 = "PrevUKPRN_01";
 

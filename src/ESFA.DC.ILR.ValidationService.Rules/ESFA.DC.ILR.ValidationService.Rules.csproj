@@ -99,6 +99,7 @@
     <Compile Include="Derived\DerivedData_11Rule.cs" />
     <Compile Include="Derived\DerivedData_22Rule.cs" />
     <Compile Include="Derived\DerivedData_24Rule.cs" />
+    <Compile Include="Derived\DerivedData_27Rule.cs" />
     <Compile Include="Derived\DerivedData_28Rule.cs" />
     <Compile Include="Derived\DerivedData_29Rule.cs" />
     <Compile Include="Derived\DerivedData_21Rule.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Derived\DD04.cs" />
     <Compile Include="Derived\DD06.cs" />
     <Compile Include="Derived\DD07.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_27Rule.cs" />
     <Compile Include="Derived\Interface\IDD01.cs" />
     <Compile Include="Derived\Interface\IDD04.cs" />
     <Compile Include="Derived\Interface\IDD06.cs" />
@@ -206,7 +208,9 @@
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04Rule.cs" />
     <Compile Include="Learner\PMUKPRN\PMUKPRN_01Rule.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_01Rule.cs" />
+    <Compile Include="Learner\PostcodePrior\PostcodePrior_02Rule.cs" />
     <Compile Include="Learner\Postcode\Postcode_14Rule.cs" />
+    <Compile Include="Learner\Postcode\Postcode_15Rule.cs" />
     <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01Rule.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_01Rule.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_02Rule.cs" />
