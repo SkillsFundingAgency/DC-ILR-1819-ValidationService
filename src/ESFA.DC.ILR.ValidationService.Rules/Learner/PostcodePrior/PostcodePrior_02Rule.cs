@@ -29,7 +29,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PostcodePrior
 
         public bool ConditionMet(string postcodePrior)
         {
-            return !_postcodeQueryService.RegexValid(postcodePrior);
+            return !string.IsNullOrWhiteSpace(postcodePrior)
+                && !_postcodeQueryService.RegexValid(postcodePrior);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string postcodePrior)

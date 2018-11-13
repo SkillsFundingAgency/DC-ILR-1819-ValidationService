@@ -36,6 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.HEPostcode
         public bool ConditionMet(ILearningDeliveryHE learningDeliveryHEEntity)
         {
             return learningDeliveryHEEntity != null
+                   && !string.IsNullOrWhiteSpace(learningDeliveryHEEntity.HEPostCode)
                    && _postcodeQueryService.RegexValid(learningDeliveryHEEntity.HEPostCode) == false;
         }
 
