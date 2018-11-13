@@ -204,6 +204,7 @@
     <Compile Include="Learner\MathGrade\MathGrade_04Rule.cs" />
     <Compile Include="Learner\NiNumber\NINumber_01Rule.cs" />
     <Compile Include="Learner\NiNumber\NINumber_02Rule.cs" />
+    <Compile Include="Learner\PlanEEPHours\PlanEEPHours_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03Rule.cs" />
