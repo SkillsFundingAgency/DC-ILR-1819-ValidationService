@@ -147,6 +147,7 @@
     <Compile Include="HE\ELQ\ELQ_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02RuleTests.cs" />
+    <Compile Include="HE\HEPostcode\HEPostCode_01RuleTests.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_02RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02RuleTests.cs" />
