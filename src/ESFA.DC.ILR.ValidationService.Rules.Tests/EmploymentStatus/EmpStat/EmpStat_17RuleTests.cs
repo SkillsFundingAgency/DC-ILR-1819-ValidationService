@@ -225,6 +225,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         /// <summary>
+        /// Get matching employment with nulls returns null.
+        /// </summary>
+        [Fact]
+        public void GetMatchingEmploymentWithNullsReturnsNull()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.GetMatchingEmployment(null, null);
+
+            // assert
+            Assert.Null(result);
+        }
+
+        /// <summary>
         /// Get matching employment with null statuses returns null.
         /// </summary>
         [Fact]

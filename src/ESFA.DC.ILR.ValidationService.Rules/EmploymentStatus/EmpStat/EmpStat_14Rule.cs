@@ -130,7 +130,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [has a qualifying employment status] [the specified this employment]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasAQualifyingEmploymentStatus(ILearnerEmploymentStatus thisEmployment, IEsfEligibilityRuleEmploymentStatus eligibility) =>
-            thisEmployment.EmpStat == eligibility.Code;
+            thisEmployment?.EmpStat == eligibility.Code;
 
         /// <summary>
         /// Validates the specified object.
