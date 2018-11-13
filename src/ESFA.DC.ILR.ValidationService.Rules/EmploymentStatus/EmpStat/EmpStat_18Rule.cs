@@ -53,18 +53,52 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// </value>
         public DateTime OldCodeMonitoringThresholdDate => new DateTime(2018, 08, 01);
 
+        /// <summary>
+        /// Determines whether [in training] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [in training] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
         public bool InTraining(ILearningDelivery delivery) =>
             It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.Traineeship);
 
+        /// <summary>
+        /// Determines whether [in a programme] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [in a programme] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
         public bool InAProgramme(ILearningDelivery delivery) =>
             It.IsInRange(delivery.AimType, TypeOfAim.ProgrammeAim);
 
+        /// <summary>
+        /// Determines whether [has qualifying start] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [has qualifying start] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
         public bool HasQualifyingStart(ILearningDelivery delivery) =>
             delivery.LearnStartDate < OldCodeMonitoringThresholdDate;
 
+        /// <summary>
+        /// Determines whether [has a qualifying monitor status] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [has a qualifying monitor status] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
         public bool HasAQualifyingMonitorStatus(IEmploymentStatusMonitoring monitor) =>
             It.IsInRange($"{monitor.ESMType}{monitor.ESMCode}", Monitoring.EmploymentStatus.EmployedForLessThan16HoursPW);
 
+        /// <summary>
+        /// Checks the employment monitors.
+        /// </summary>
+        /// <param name="employment">The employment.</param>
+        /// <param name="matchCondition">The match condition.</param>
+        /// <returns></returns>
         public bool CheckEmploymentMonitors(ILearnerEmploymentStatus employment, Func<IEmploymentStatusMonitoring, bool> matchCondition) =>
             employment.EmploymentStatusMonitorings.SafeAny(matchCondition);
 
