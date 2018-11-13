@@ -292,6 +292,42 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         /// <summary>
+        /// Has a qualifying employment status meets expectation
+        /// </summary>
+        /// <param name="status">The status.</param>
+        /// <param name="eligibility">The eligibility.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.InPaidEmployment, true)]
+        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, false)]
+        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable, false)]
+        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotKnownProvided, false)]
+        [InlineData(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable, false)]
+        [InlineData(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, TypeOfEmploymentStatus.NotKnownProvided, false)]
+        [InlineData(TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable, TypeOfEmploymentStatus.NotKnownProvided, false)]
+        public void HasAQualifyingEmploymentStatusMeetsExpectation(int status, int eligibility, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+
+            var mockStatus = new Mock<ILearnerEmploymentStatus>();
+            mockStatus
+                .SetupGet(x => x.EmpStat)
+                .Returns(status);
+
+            var mockEligibility = new Mock<IEsfEligibilityRuleEmploymentStatus>();
+            mockEligibility
+                .SetupGet(x => x.Code)
+                .Returns(eligibility);
+
+            // act
+            var result = sut.HasAQualifyingEmploymentStatus(mockStatus.Object, mockEligibility.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
