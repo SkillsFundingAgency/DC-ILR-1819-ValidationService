@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
@@ -24,6 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         {
             using (var stream = await _streamProvider.Provide(cancellationToken))
             {
+                stream.Seek(0, SeekOrigin.Begin);
+
                 return _xmlSerializationService.Deserialize<Message>(stream);
             }
         }
