@@ -22,11 +22,167 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule().RuleName.Should().Be("R91");
         }
 
+        [Fact]
+        public void FundModelConditionMet_False()
+        {
+            NewRule().FundModelConditionMet(TypeOfFunding.ApprenticeshipsFrom1May2017).Should().BeFalse();
+        }
+
+        [Fact]
+        public void FundModelConditionMet_True()
+        {
+            NewRule().FundModelConditionMet(TypeOfFunding.EuropeanSocialFund).Should().BeTrue();
+        }
+
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-999999999")]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.References.SupportedInternship16To19, CompletionState.HasCompleted, "ESF-999999999")]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfAim.References.SupportedInternship16To19, CompletionState.IsOngoing, "ESF-999999999")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.SupportedInternship16To19, CompletionState.IsOngoing, "ESF-987654321")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.SupportedInternship16To19, CompletionState.IsOngoing, "ESF-123456789")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.SupportedInternship16To19, CompletionState.HasCompleted, "ESF-123456789")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-123456789")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-999999999")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.SupportedInternship16To19, CompletionState.HasCompleted, "ESF-999999999")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.IsOngoing, "ESF-999999999")]
+        public void ConRefConditionMet_False(int fundModel, string learnAimRef, int compStatus, string conRefNumber)
+        {
+            var testLearningDeliveries = new[]
+           {
+                new TestLearningDelivery()
+                {
+                    FundModel = fundModel,
+                    LearnAimRef = learnAimRef,
+                    CompStatus = compStatus,
+                    ConRefNumber = conRefNumber
+                },
+                new TestLearningDelivery()
+                {
+                    FundModel = TypeOfFunding.CommunityLearning,
+                    LearnAimRef = TypeOfAim.References.SupportedInternship16To19,
+                    CompStatus = CompletionState.HasWithdrawn,
+                    ConRefNumber = "ESF-123456789"
+                }
+            };
+
+            NewRule().ConRefConditionMet(testLearningDeliveries).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-999999999")]
+        public void ConRefConditionMet_FalseOnMatching(int fundModel, string learnAimRef, int compStatus, string conRefNumber)
+        {
+            var testLearningDeliveries = new[]
+           {
+                new TestLearningDelivery()
+                {
+                    FundModel = fundModel,
+                    LearnAimRef = learnAimRef,
+                    CompStatus = compStatus,
+                    ConRefNumber = conRefNumber
+                },
+                new TestLearningDelivery()
+                {
+                    FundModel = TypeOfFunding.EuropeanSocialFund,
+                    LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
+                    CompStatus = CompletionState.HasCompleted,
+                    ConRefNumber = "ESF-999999999"
+                }
+            };
+
+            NewRule().ConRefConditionMet(testLearningDeliveries).Should().BeFalse();
+        }
+
+        [Theory]
         [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-123456789")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.IsOngoing, "ESF-123456789")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.WorkExperience, CompletionState.IsOngoing, "ESF-123456789")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.IsOngoing, "ESF-999999999")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.WorkExperience, CompletionState.IsOngoing, "ESF-999999999")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.WorkExperience, CompletionState.HasCompleted, "ESF-999999999")]
+        public void ConRefConditionMet_True(int fundModel, string learnAimRef, int compStatus, string conRefNumber)
+        {
+            var testLearningDeliveries = new[]
+            {
+                new TestLearningDelivery()
+                {
+                    FundModel = fundModel,
+                    LearnAimRef = learnAimRef,
+                    CompStatus = compStatus,
+                    ConRefNumber = conRefNumber
+                },
+                new TestLearningDelivery()
+                {
+                    FundModel = TypeOfFunding.EuropeanSocialFund,
+                    LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
+                    CompStatus = CompletionState.HasCompleted,
+                    ConRefNumber = "ESF-999999999"
+                }
+            };
+
+            NewRule().ConRefConditionMet(testLearningDeliveries).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.SupportedInternship16To19, CompletionState.IsOngoing, "ESF-987654321")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.SupportedInternship16To19, CompletionState.IsOngoing, "ESF-123456789")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.SupportedInternship16To19, CompletionState.HasCompleted, "ESF-123456789")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-123456789")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-999999999")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.SupportedInternship16To19, CompletionState.HasCompleted, "ESF-999999999")]
+        [InlineData(TypeOfFunding.Other16To19, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.IsOngoing, "ESF-999999999")]
+        public void ConditionMet_False(int fundModel, string learnAimRef, int compStatus, string conRefNumber)
+        {
+            var testLearningDeliveries = new[]
+           {
+                new TestLearningDelivery()
+                {
+                    FundModel = fundModel,
+                    LearnAimRef = learnAimRef,
+                    CompStatus = compStatus,
+                    ConRefNumber = conRefNumber
+                },
+                new TestLearningDelivery()
+                {
+                    FundModel = TypeOfFunding.CommunityLearning,
+                    LearnAimRef = TypeOfAim.References.SupportedInternship16To19,
+                    CompStatus = CompletionState.HasWithdrawn,
+                    ConRefNumber = "ESF-123456789"
+                }
+            };
+
+            NewRule().ConditionMet(fundModel, testLearningDeliveries).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-999999999")]
+        public void ConditionMet_FalseOnMatching(int fundModel, string learnAimRef, int compStatus, string conRefNumber)
+        {
+            var testLearningDeliveries = new[]
+           {
+                new TestLearningDelivery()
+                {
+                    FundModel = fundModel,
+                    LearnAimRef = learnAimRef,
+                    CompStatus = compStatus,
+                    ConRefNumber = conRefNumber
+                },
+                new TestLearningDelivery()
+                {
+                    FundModel = TypeOfFunding.EuropeanSocialFund,
+                    LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
+                    CompStatus = CompletionState.HasCompleted,
+                    ConRefNumber = "ESF-999999999"
+                }
+            };
+
+            NewRule().ConditionMet(fundModel, testLearningDeliveries).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.HasCompleted, "ESF-123456789")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.IsOngoing, "ESF-123456789")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.WorkExperience, CompletionState.IsOngoing, "ESF-123456789")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.ESFLearnerStartandAssessment, CompletionState.IsOngoing, "ESF-999999999")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.WorkExperience, CompletionState.IsOngoing, "ESF-999999999")]
+        [InlineData(TypeOfFunding.EuropeanSocialFund, TypeOfAim.References.WorkExperience, CompletionState.HasCompleted, "ESF-999999999")]
         public void ConditionMet_True(int fundModel, string learnAimRef, int compStatus, string conRefNumber)
         {
             var testLearningDeliveries = new[]
@@ -47,31 +203,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            NewRule().ConditionMet(testLearningDeliveries).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMet_False()
-        {
-            var testLearningDeliveries = new[]
-           {
-                new TestLearningDelivery()
-                {
-                    FundModel = TypeOfFunding.EuropeanSocialFund,
-                    LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
-                    CompStatus = CompletionState.HasCompleted,
-                    ConRefNumber = "ESF-999999999"
-                },
-                new TestLearningDelivery()
-                {
-                    FundModel = TypeOfFunding.EuropeanSocialFund,
-                    LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
-                    CompStatus = CompletionState.HasCompleted,
-                    ConRefNumber = "ESF-999999999"
-                }
-            };
-
-            NewRule().ConditionMet(testLearningDeliveries).Should().BeFalse();
+            NewRule().ConditionMet(fundModel, testLearningDeliveries).Should().BeTrue();
         }
 
         [Fact]
@@ -94,6 +226,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
                         CompStatus = CompletionState.HasCompleted,
                         ConRefNumber = "ESF-999999999"
+                    },
+                    new TestLearningDelivery()
+                    {
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
+                        LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
+                        CompStatus = CompletionState.HasTemporarilyWithdrawn,
+                        ConRefNumber = "ESF-554466331"
                     }
                 }
             };
