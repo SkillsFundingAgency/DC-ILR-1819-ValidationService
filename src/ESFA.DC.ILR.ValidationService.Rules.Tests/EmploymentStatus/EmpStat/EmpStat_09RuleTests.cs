@@ -236,10 +236,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         /// <param name="startDate">The start date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData("2018-04-18", "2018-03-10", false)]
-        [InlineData("2018-04-18", "2018-04-17", false)]
+        [InlineData("2018-04-18", "2018-03-10", true)]
+        [InlineData("2018-04-18", "2018-04-17", true)]
         [InlineData("2018-04-18", "2018-04-18", true)]
-        [InlineData("2018-04-18", "2018-04-19", true)]
+        [InlineData("2018-04-18", "2018-04-19", false)]
         public void HasAQualifyingEmploymentStatusMeetsExpectation(string candidate, string startDate, bool expectation)
         {
             // arrange
@@ -303,10 +303,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         /// <param name="learnStart">The learn start.</param>
         /// <param name="dateOffset">The date offset.</param>
         [Theory]
-        [InlineData("2014-08-01", -2)]
-        [InlineData("2014-12-31", -2)]
-        [InlineData("2014-08-01", -1)]
-        [InlineData("2014-12-31", -1)]
+        [InlineData("2014-08-01", 2)]
+        [InlineData("2014-12-31", 2)]
+        [InlineData("2014-08-01", 1)]
+        [InlineData("2014-12-31", 1)]
         public void InvalidItemRaisesValidationMessage(string learnStart, int dateOffset)
         {
             // arrange
@@ -389,8 +389,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Theory]
         [InlineData("2014-08-01", 0)]
         [InlineData("2014-12-31", 0)]
-        [InlineData("2014-08-01", 1)]
-        [InlineData("2014-12-31", 1)]
+        [InlineData("2014-08-01", -1)]
+        [InlineData("2014-12-31", -1)]
         public void ValidItemDoesNotRaiseValidationMessage(string learnStart, int dateOffset)
         {
             // arrange
