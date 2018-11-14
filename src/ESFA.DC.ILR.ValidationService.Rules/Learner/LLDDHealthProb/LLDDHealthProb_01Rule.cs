@@ -1,35 +1,40 @@
-﻿using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
 {
-    /// <summary>
-    /// The learner's LLDD and health problem must be a valid lookup
-    /// </summary>
     public class LLDDHealthProb_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<long> _llDDHealthProbLookupValues = new HashSet<long>() { 1, 2, 9 };
+        private readonly int[] _validCodes = { 1, 2, 9 };
 
         public LLDDHealthProb_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.LLDDHealthProb_01)
         {
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.LLDDHealthProbNullable))
+            if (ConditionMet(objectToValidate.LLDDHealthProb))
             {
-                HandleValidationError(RuleNameConstants.LLDDHealthProb_01Rule, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.LLDDHealthProb));
             }
         }
 
-        public bool ConditionMet(long? lldHealthProblem)
+        public bool ConditionMet(int llddHealthProb)
         {
-            return lldHealthProblem.HasValue &&
-                   !_llDDHealthProbLookupValues.Contains(lldHealthProblem.Value);
+            return !_validCodes.Contains(llddHealthProb);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int llddHealthProb)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LLDDHealthProb, llddHealthProb)
+            };
         }
     }
 }
