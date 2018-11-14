@@ -23,6 +23,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.FamilyName;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.GivenNames;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.NiNumber;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanEEPHours;
@@ -244,6 +245,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnStartDate_12Rule),
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
+                typeof(LLDDHealthProb_01Rule),
                 typeof(MathGrade_01Rule),
                 typeof(MathGrade_03Rule),
                 typeof(MathGrade_04Rule),
