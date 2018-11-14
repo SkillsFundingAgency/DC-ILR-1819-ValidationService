@@ -114,6 +114,7 @@
     <Compile Include="CrossEntity\R07RuleTests.cs" />
     <Compile Include="CrossEntity\R91RuleTests.cs" />
     <Compile Include="Derived\DerivedData_22RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_27RuleTests.cs" />
     <Compile Include="Derived\DerivedData_28RuleTests.cs" />
     <Compile Include="Derived\DerivedData_29RuleTests.cs" />
     <Compile Include="Derived\DerivedData_21RuleTests.cs" />
@@ -124,6 +125,9 @@
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_13RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_18RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_15RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_14RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_11RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_17RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_10RuleTests.cs" />
@@ -144,6 +148,7 @@
     <Compile Include="HE\ELQ\ELQ_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02RuleTests.cs" />
+    <Compile Include="HE\HEPostcode\HEPostCode_01RuleTests.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_02RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02RuleTests.cs" />
@@ -210,7 +215,9 @@
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04RuleTests.cs" />
     <Compile Include="Learner\PMUKPRN\PMUKPRN_01RuleTests.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_01RuleTests.cs" />
+    <Compile Include="Learner\PostcodePrior\PostcodePrior_02RuleTests.cs" />
     <Compile Include="Learner\Postcode\Postcode_14RuleTests.cs" />
+    <Compile Include="Learner\Postcode\Postcode_15RuleTests.cs" />
     <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01RuleTests.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_01RuleTests.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_02RuleTests.cs" />
@@ -218,6 +225,7 @@
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_04RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_01RuleTests.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_07RuleTests.cs" />
     <Compile Include="Learner\UKPRN\UKPRN_06RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_02RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_03RuleTests.cs" />
@@ -310,6 +318,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_44RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_09RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_45RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_54RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_63RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_64RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_62RuleTests.cs" />

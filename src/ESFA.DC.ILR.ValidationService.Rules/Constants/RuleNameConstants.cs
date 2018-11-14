@@ -115,6 +115,7 @@
         public const string Header_2 = "Header_2";
         public const string Header_3 = "Header_3";
 
+        public const string HEPostCode_01 = "HEPostCode_01";
         public const string HEPostCode_02 = "HEPostCode_02";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
@@ -147,6 +148,7 @@
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
+        public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
@@ -194,8 +196,10 @@
         public const string PMUKPRN_01 = "PMUKPRN_01";
 
         public const string Postcode_14 = "Postcode_14";
+        public const string Postcode_15 = "Postcode_15";
 
         public const string PostcodePrior_01 = "PostcodePrior_01";
+        public const string PostcodePrior_02 = "PostcodePrior_02";
 
         public const string PrevUKPRN_01 = "PrevUKPRN_01";
 
@@ -206,6 +210,7 @@
 
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
+        public const string PriorAttain_07 = "PriorAttain_07";
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 

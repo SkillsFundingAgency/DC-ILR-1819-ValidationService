@@ -485,7 +485,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [InlineData(TypeOfFunding.AdultSkills, "2014-07-31", "2013-07-31")]
         [InlineData(TypeOfFunding.NotFundedByESFA, "2014-07-31", "2013-07-31")]
         [InlineData(TypeOfFunding.OtherAdult, "2014-07-31", "2013-07-31")]
-        public void InvalidItemRaisesValidationMess_age(int fundModel, string learnStart, string previousYearEnd)
+        public void InvalidItemRaisesValidationMessage(int fundModel, string learnStart, string previousYearEnd)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
