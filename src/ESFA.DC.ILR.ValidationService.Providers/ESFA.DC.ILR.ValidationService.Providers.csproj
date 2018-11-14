@@ -173,7 +173,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AzureStorageCompressedFileContentStringProviderService.cs" />
     <Compile Include="AzureStorageFileContentStringProviderService.cs" />
     <Compile Include="MessageProviderService.cs" />
     <Compile Include="LearnerProviderService.cs" />
@@ -183,9 +182,7 @@
     <Compile Include="Output\ValidationErrorCachePassThroughOutputService.cs" />
     <Compile Include="Output\ValidationOutputService.cs" />
     <Compile Include="PreValidationOrchestrationSfService.cs" />
-    <Compile Include="PreValidation\ValidateXMLSchemaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SchemaFileContentStringProviderService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
