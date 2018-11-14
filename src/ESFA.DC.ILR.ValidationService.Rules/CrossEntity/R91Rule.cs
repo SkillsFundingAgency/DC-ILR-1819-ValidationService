@@ -27,24 +27,36 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return;
             }
 
-            if (ConditionMet(objectToValidate.LearningDeliveries))
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(
-                    _fundModel,
-                    string.Empty,
-                    _compStatus));
+                if (ConditionMet(learningDelivery.FundModel,  objectToValidate.LearningDeliveries))
+                {
+                    HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(
+                        _fundModel,
+                        string.Empty,
+                        _compStatus));
+                    return;
+                }
             }
         }
 
-        public bool ConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        public bool ConditionMet(int fundModel, IReadOnlyCollection<ILearningDelivery> learningDeliveries)
         {
-            return !(learningDeliveries.Where(l => l.FundModel == _fundModel
+            return FundModelConditionMet(fundModel)
+                && ConRefConditionMet(learningDeliveries);
+        }
+
+        public bool ConRefConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        {
+            return learningDeliveries.Where(l => l.FundModel == _fundModel
                 && l.LearnAimRef == TypeOfAim.References.ESFLearnerStartandAssessment
                 && l.CompStatus == CompletionState.HasCompleted)
-                .ToList()?.GroupBy(l => l.ConRefNumber)
+                .ToList()?.GroupBy(l => new { l.FundModel, l.LearnAimRef, l.CompStatus, l.ConRefNumber })
                 .Select(g => Tuple.Create(g.Key, g.Count()))
-                .Any(l => l.Item2 > 1) ?? false);
+                .Any(l => l.Item2 <= 1) ?? false;
         }
+
+        public bool FundModelConditionMet(int fundModel) => _fundModel == fundModel;
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, string conRefNumber, int compStatus)
         {
