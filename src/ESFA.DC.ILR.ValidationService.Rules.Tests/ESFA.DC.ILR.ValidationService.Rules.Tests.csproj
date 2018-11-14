@@ -138,6 +138,7 @@
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_07RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_05RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_11RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_08RuleTests.cs" />
