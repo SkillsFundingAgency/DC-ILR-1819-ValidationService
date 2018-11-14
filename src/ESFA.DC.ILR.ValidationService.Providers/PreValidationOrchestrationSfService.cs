@@ -31,13 +31,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IInternalDataCache _internalDataCache;
         private readonly IExternalDataCache _externalDataCache;
         private readonly IFileDataCache _fileDataCache;
-        private readonly ICache<string> _cache;
-        private readonly IMessageStreamProviderService _streamProvider;
         private readonly IValidationErrorCache<U> _validationErrorCache;
         private readonly IValidationOutputService<U> _validationOutputService;
         private readonly IRuleSetOrchestrationService<IMessage, U> _ruleSetOrchestrationService;
         private readonly ILogger _logger;
-        private readonly IValidateXMLSchemaService _validateXmlSchemaService;
 
         public PreValidationOrchestrationSfService(
             IPopulationService preValidationPopulationService,
@@ -47,13 +44,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
             IFileDataCache fileDataCache,
-            ICache<string> cache,
-            IMessageStreamProviderService streamProvider,
             IValidationErrorCache<U> validationErrorCache,
             IValidationOutputService<U> validationOutputService,
             IRuleSetOrchestrationService<IMessage, U> ruleSetOrchestrationService,
-            ILogger logger,
-            IValidateXMLSchemaService validateXMLSchemaService)
+            ILogger logger)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _errorLookupPopulationService = errorLookupPopulationService;
@@ -62,13 +56,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _internalDataCache = internalDataCache;
             _externalDataCache = externalDataCache;
             _fileDataCache = fileDataCache;
-            _cache = cache;
-            _streamProvider = streamProvider;
             _validationErrorCache = validationErrorCache;
             _validationOutputService = validationOutputService;
             _ruleSetOrchestrationService = ruleSetOrchestrationService;
             _logger = logger;
-            _validateXmlSchemaService = validateXMLSchemaService;
         }
 
         public async Task ExecuteAsync(IPreValidationContext validationContext, CancellationToken cancellationToken)
@@ -82,36 +73,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 await _errorLookupPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
                 _logger.LogDebug($"Error lookup service completed in: {stopWatch.ElapsedMilliseconds}");
 
-                // Todo: Remove this when XML is known to be schema valid
-                Stream fileStream = await _streamProvider.Provide(cancellationToken);
-                if (fileStream != null)
-                {
-                    fileStream.Seek(0, SeekOrigin.Begin);
-                    UTF8Encoding utF8Encoding = new UTF8Encoding(false, true);
-                    using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true))
-                    {
-                        Cache<string> fileContentCache = (Cache<string>)_cache;
-                        fileContentCache.Item = reader.ReadToEnd();
-                    }
-                }
-
                 if (_validationErrorCache.ValidationErrors.Any())
                 {
                     return;
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-
-                // Call XSD validation
-                _validateXmlSchemaService.Validate();
-                _logger.LogDebug($"XML validation schema service completed in: {stopWatch.ElapsedMilliseconds}");
-
-                if (_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
-                {
-                    _logger.LogDebug(
-                        $"Possible xsd validation failure: {_validationErrorCache.ValidationErrors.Count}");
-                    return;
-                }
 
                 await _preValidationPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
                 _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");

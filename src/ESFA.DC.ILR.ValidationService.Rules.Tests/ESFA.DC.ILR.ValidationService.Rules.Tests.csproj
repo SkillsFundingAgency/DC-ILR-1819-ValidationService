@@ -209,6 +209,7 @@
     <Compile Include="Learner\MathGrade\MathGrade_04RuleTests.cs" />
     <Compile Include="Learner\NINumber\NINumber_01Tests.cs" />
     <Compile Include="Learner\NINumber\NINumber_02Tests.cs" />
+    <Compile Include="Learner\PlanEEPHours\PlanEEPHours_01RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03RuleTests.cs" />

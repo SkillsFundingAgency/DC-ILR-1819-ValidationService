@@ -46,21 +46,17 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         [Fact]
         public void BuildInvalidLearnRefNumbers()
         {
-            var validationErrors = new List<IValidationError>()
+            var validationErrors = new List<ValidationError>()
             {
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "a", severity: Severity.Error),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "a", severity: Severity.Error),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "b", severity: Severity.Error),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "b", severity: Severity.Warning),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "c", severity: Severity.Warning),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "c", severity: Severity.Warning),
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "a", Severity = "E" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "a", Severity = "E" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "b", Severity = "E" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "b", Severity = "W" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "c", Severity = "W" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "c", Severity = "W" },
             };
-
-            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
-
-            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
-
-            NewService(validationErrorCacheMock.Object).BuildInvalidLearnRefNumbers().Should().BeEquivalentTo("a", "b");
+            
+            NewService().BuildInvalidLearnRefNumbers(validationErrors).Should().BeEquivalentTo("a", "b");
         }
 
         [Fact]
@@ -68,12 +64,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         {
             var invalidLearnRefNumbers = new List<string>() { "a", "b" };
 
-            var validationErrors = new List<IValidationError>()
+            var validationErrors = new List<ValidationError>()
             {
-                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "XYZ"),
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "XYZ" },
             };
-            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
-            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
 
             var message = new TestMessage()
             {
@@ -91,7 +85,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
 
-            NewService(validationErrorCacheMock.Object, messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
+            NewService(messageCache: messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers, validationErrors).Should().BeEquivalentTo("c", "d", "e");
         }
 
         [Fact]
@@ -99,12 +93,10 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         {
             var invalidLearnRefNumbers = new List<string>();
 
-            var validationErrors = new List<IValidationError>()
+            var validationErrors = new List<ValidationError>()
             {
-                new RuleSet.ErrorHandler.Model.ValidationError("HEADER", string.Empty),
+                new ValidationError() { RuleName = "HEADER", LearnerReferenceNumber = string.Empty},
             };
-            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
-            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
 
             var message = new TestMessage()
             {
@@ -119,8 +111,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
 
-            NewService(validationErrorCacheMock.Object, messageCacheMock.Object)
-                .BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().HaveCount(2);
+            NewService(messageCache: messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers, validationErrors).Should().HaveCount(2);
         }
 
 
