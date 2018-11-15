@@ -25,8 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
 
         public FCSDataService(IExternalDataCache externalDataCache)
         {
-            _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses;
-            _contractAllocations = externalDataCache.FCSContractAllocations;
+            _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses.AsSafeReadOnlyList();
+            _contractAllocations = externalDataCache.FCSContractAllocations.AsSafeReadOnlyList();
         }
 
         /// <summary>
@@ -64,7 +64,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         public IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatus(string forContractReference)
         {
             var allocation = _contractAllocations.FirstOrDefault(x => x.ContractAllocationNumber == forContractReference);
-            return _employmentStatuses.FirstOrDefault(x => x.TenderSpecReference.ComparesWith(allocation.TenderSpecReference));
+            return It.Has(allocation)
+                ? _employmentStatuses.FirstOrDefault(x => x.TenderSpecReference.ComparesWith(allocation.TenderSpecReference))
+                : null;
         }
     }
 }
