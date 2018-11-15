@@ -13,7 +13,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
     public class R91Rule : AbstractRule, IRule<ILearner>
     {
         private readonly int _fundModel = TypeOfFunding.EuropeanSocialFund;
-        private readonly int _compStatus = CompletionState.HasCompleted;
 
         public R91Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R91)
@@ -32,9 +31,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 if (ConditionMet(learningDelivery.FundModel,  objectToValidate.LearningDeliveries))
                 {
                     HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(
-                        _fundModel,
-                        string.Empty,
-                        _compStatus));
+                        learningDelivery.FundModel,
+                        learningDelivery.ConRefNumber,
+                        learningDelivery.CompStatus));
                     return;
                 }
             }
