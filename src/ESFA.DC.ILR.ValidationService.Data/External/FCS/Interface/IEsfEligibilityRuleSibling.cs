@@ -10,11 +10,5 @@
         /// 'add' me...
         /// </summary>
         int EligibilityRuleID { get; }
-
-        /// <summary>
-        /// Gets the esf eligibility rule.
-        /// remove me..
-        /// </summary>
-        IEsfEligibilityRule EsfEligibilityRule { get; }
     }
 }

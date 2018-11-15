@@ -1,5 +1,4 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
-using System;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
 {
@@ -41,6 +40,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
         /// Gets the esf eligibility rule.
         /// i need to be removed once the parent ID is available...
         /// </summary>
-        public IEsfEligibilityRule EsfEligibilityRule => throw new NotSupportedException();
+        // public IEsfEligibilityRule EsfEligibilityRule => throw new NotSupportedException();
     }
 }
