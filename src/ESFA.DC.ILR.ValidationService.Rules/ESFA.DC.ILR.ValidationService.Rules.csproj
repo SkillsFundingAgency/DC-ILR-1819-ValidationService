@@ -155,6 +155,7 @@
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
+    <Compile Include="HE\PCFLDCS\PCFLDCS_03Rule.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
