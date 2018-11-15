@@ -135,6 +135,7 @@
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_18Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_07Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_05Rule.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_09Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_11Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_08Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_02Rule.cs" />
