@@ -238,8 +238,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ESMType_11Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearnerEmploymentStatus>()))
+                    Moq.It.Is<string>(y => y == "DateEmpStatApp"),
+                    testDate))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             // we want it to 'fail'; so we return false

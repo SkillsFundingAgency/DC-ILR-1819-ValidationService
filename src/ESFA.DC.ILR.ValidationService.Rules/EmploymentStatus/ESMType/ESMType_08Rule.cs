@@ -10,11 +10,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         IRule<ILearner>
     {
         /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = "ESMType";
-
-        /// <summary>
         /// Gets the name of the rule.
         /// </summary>
         public const string Name = "ESMType_08";
@@ -155,7 +150,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         public void RaiseValidationMessage(string learnRefNumber, ILearnerEmploymentStatus thisEmployment)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisEmployment));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisEmployment.DateEmpStatApp), thisEmployment.DateEmpStatApp));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisEmployment.EmpStat), thisEmployment.EmpStat));
 
             _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
         }

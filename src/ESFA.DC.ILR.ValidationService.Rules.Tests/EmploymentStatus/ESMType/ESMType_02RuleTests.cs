@@ -302,10 +302,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
             var monitorings = Collection.Empty<IEmploymentStatusMonitoring>();
             monitorings.Add(monitor.Object);
 
+            var testDate = DateTime.Parse("2013-08-01");
             var status = new Mock<ILearnerEmploymentStatus>();
             status
                 .SetupGet(x => x.DateEmpStatApp)
-                .Returns(DateTime.Parse("2013-08-01"));
+                .Returns(testDate);
             status
                 .SetupGet(x => x.EmpStat)
                 .Returns(TypeOfEmploymentStatus.InPaidEmployment);
@@ -333,8 +334,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ESMType_02Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearnerEmploymentStatus>()))
+                    Moq.It.Is<string>(y => y == "EmpStat"),
+                    TypeOfEmploymentStatus.InPaidEmployment))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == "DateEmpStatApp"),
+                    testDate))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new ESMType_02Rule(handler.Object);

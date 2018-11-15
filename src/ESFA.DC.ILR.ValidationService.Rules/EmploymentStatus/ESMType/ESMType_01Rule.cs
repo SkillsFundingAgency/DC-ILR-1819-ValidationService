@@ -3,17 +3,13 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
 {
     public class ESMType_01Rule :
         IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = "ESMType";
-
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
@@ -53,16 +49,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
             It.IsOutOfRange($"{monitor.ESMType}{monitor.ESMCode}", Monitoring.EmploymentStatus.AsASet);
 
         /// <summary>
-        /// Determines whether [has invalid employment status] [the specified employment status].
-        /// </summary>
-        /// <param name="employmentStatus">The employment status.</param>
-        /// <returns>
-        ///   <c>true</c> if [has invalid employment status] [the specified employment status]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool HasInvalidEmploymentStatus(ILearnerEmploymentStatus employmentStatus) =>
-            employmentStatus.EmploymentStatusMonitorings.SafeAny(IsInvalidDomainItem);
-
-        /// <summary>
         /// Validates the specified object.
         /// </summary>
         /// <param name="objectToValidate">The object to validate.</param>
@@ -74,7 +60,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearnerEmploymentStatuses
-                .SafeWhere(HasInvalidEmploymentStatus)
+                .SelectMany(x => x.EmploymentStatusMonitorings)
+                .SafeWhere(IsInvalidDomainItem)
                 .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
         }
 
@@ -82,11 +69,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         /// Raises the validation message.
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <param name="thisEmployment">The this employment.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearnerEmploymentStatus thisEmployment)
+        /// <param name="thisMonitor">this monitor.</param>
+        public void RaiseValidationMessage(string learnRefNumber, IEmploymentStatusMonitoring thisMonitor)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisEmployment));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisMonitor.ESMType), thisMonitor.ESMType));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisMonitor.ESMCode), thisMonitor.ESMCode));
 
             _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
         }

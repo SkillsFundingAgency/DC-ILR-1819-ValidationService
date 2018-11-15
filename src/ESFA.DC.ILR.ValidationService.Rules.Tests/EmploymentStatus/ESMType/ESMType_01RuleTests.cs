@@ -147,45 +147,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         }
 
         /// <summary>
-        /// Has invalid employment status with null monitorings returns false
-        /// </summary>
-        [Fact]
-        public void HasInvalidEmploymentStatusWithNullMonitoringsReturnsFalse()
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<ILearnerEmploymentStatus>();
-
-            // act
-            var result = sut.HasInvalidEmploymentStatus(mockItem.Object);
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
-        /// Has invalid employment status with empty monitorings returns false
-        /// </summary>
-        [Fact]
-        public void HasInvalidEmploymentStatusWithEmptyMonitoringsReturnsFalse()
-        {
-            // arrange
-            var sut = NewRule();
-
-            var monitorings = Collection.EmptyAndReadOnly<IEmploymentStatusMonitoring>();
-            var mockItem = new Mock<ILearnerEmploymentStatus>();
-            mockItem
-                .SetupGet(x => x.EmploymentStatusMonitorings)
-                .Returns(monitorings);
-
-            // act
-            var result = sut.HasInvalidEmploymentStatus(mockItem.Object);
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -210,12 +171,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
             const string LearnRefNumber = "123456789X";
 
             var monitor = new Mock<IEmploymentStatusMonitoring>();
+            var esmType = candidate.Substring(0, 3);
+            var esmCode = int.Parse(candidate.Substring(3));
             monitor
                 .SetupGet(y => y.ESMType)
-                .Returns(candidate.Substring(0, 3));
+                .Returns(esmType);
             monitor
                 .SetupGet(y => y.ESMCode)
-                .Returns(int.Parse(candidate.Substring(3)));
+                .Returns(esmCode);
 
             var monitorings = Collection.Empty<IEmploymentStatusMonitoring>();
             monitorings.Add(monitor.Object);
@@ -245,8 +208,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ESMType_01Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearnerEmploymentStatus>()))
+                    Moq.It.Is<string>(y => y == "ESMType"),
+                    esmType))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == "ESMCode"),
+                    esmCode))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new ESMType_01Rule(handler.Object);

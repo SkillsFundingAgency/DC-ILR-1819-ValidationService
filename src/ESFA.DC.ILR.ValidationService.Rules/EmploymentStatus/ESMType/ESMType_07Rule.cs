@@ -106,8 +106,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         public void RaiseValidationMessage(string learnRefNumber, ILearnerEmploymentStatus thisEmployment)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.EmpStat, thisEmployment.EmpStat));
             parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, Monitoring.EmploymentStatus.Types.SelfEmploymentIndicator));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisEmployment.EmpStat), thisEmployment.EmpStat));
 
             _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
         }
