@@ -95,7 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     ID = ca.Id,
                     ContractID = ca.ContractId,
                     DeliveryOrganisation = ca.DeliveryOrganisation,
-                    DeliveryUKPRN = ca.DeliveryUKPRN,
+                    DeliveryUKPRN = ca.DeliveryUKPRN.Value,
                     LearningRatePremiumFactor = ca.LearningRatePremiumFactor,
                     LotReference = ca.LotReference,
                     PeriodTypeCode = ca.PeriodTypeCode,
