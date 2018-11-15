@@ -313,6 +313,43 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         [Fact]
+        public void Validate_Error_Null_EmploymentStatus()
+        {
+            var aimType = 2;
+            var learnStartDate = new DateTime(2014, 7, 1);
+            var progType = 24;
+
+            IReadOnlyCollection<ILearnerEmploymentStatus> learnerEmploymentStatuses = null;
+
+            var dd07Mock = new Mock<IDD07>();
+            var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
+
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+
+            ILearner learner = new TestLearner()
+            {
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimType = aimType,
+                        LearnStartDate = learnStartDate,
+                        ProgTypeNullable = progType
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(
+                    dd07: dd07Mock.Object,
+                    learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object,
+                    validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
         public void Validate_NoError()
         {
             var aimType = 2;
