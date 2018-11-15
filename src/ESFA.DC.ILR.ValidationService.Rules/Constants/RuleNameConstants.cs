@@ -187,6 +187,7 @@
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
 
         public const string PCFLDCS_02 = "PCFLDCS_02";
+        public const string PCFLDCS_03 = "PCFLDCS_03";
 
         public const string PCSLDCS_01 = "PCSLDCS_01";
 

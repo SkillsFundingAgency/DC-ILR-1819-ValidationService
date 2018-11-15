@@ -55,6 +55,7 @@
         public const string OutStartDate = "OutStartDate";
         public const string OutType = "OutType";
         public const string PartnerUKPRN = "PartnerUKPRN";
+        public const string PCFLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
         public const string PMUKPRN = "PMUKPRN";
