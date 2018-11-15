@@ -73,6 +73,7 @@
     <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
+    <Compile Include="Constants\LegalOrgTypeConstants.cs" />
     <Compile Include="Constants\Monitoring.cs" />
     <Compile Include="Constants\OutTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
