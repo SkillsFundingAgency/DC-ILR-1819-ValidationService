@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -19,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld => ld.AppFinRecords != null))
             {
                 foreach (var appFinRecord in learningDelivery.AppFinRecords)
                 {
@@ -36,18 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
         public bool ConditionMet(IAppFinRecord appFinRecord)
         {
-            return AppFinRecordNullConditionMet(appFinRecord)
-                && AppFinRecordLookupConditionMet(appFinRecord);
-        }
-
-        public bool AppFinRecordNullConditionMet(IAppFinRecord appFinRecord)
-        {
-            return appFinRecord != null;
-        }
-
-        public bool AppFinRecordLookupConditionMet(IAppFinRecord appFinRecord)
-        {
-             return !_lookups.ContainsValueForKey(
+            return !_lookups.ContainsValueForKey(
                 LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
                 appFinRecord.AFinType,
                 appFinRecord.AFinCode);

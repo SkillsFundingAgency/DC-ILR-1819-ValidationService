@@ -20,68 +20,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         }
 
         [Fact]
-        public void AppFinRecordNullConditionMet_True()
-        {
-            var appFinRecord = new TestAppFinRecord()
-            {
-                AFinAmount = 1,
-                AFinCode = 1,
-                AFinDate = new DateTime(2018, 10, 01),
-                AFinType = "TNP"
-            };
-
-            NewRule().AppFinRecordNullConditionMet(appFinRecord).Should().BeTrue();
-        }
-
-        [Fact]
-        public void AppFinRecordNullConditionMet_False()
-        {
-            NewRule().AppFinRecordNullConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void AppFinRecordLookupConditionMet_True()
-        {
-            var appFinRecord = new TestAppFinRecord()
-            {
-                AFinAmount = 1,
-                AFinCode = 1,
-                AFinDate = new DateTime(2018, 10, 01),
-                AFinType = "TNP"
-            };
-
-            var lookupsMock = new Mock<IProvideLookupDetails>();
-
-            lookupsMock.SetupGet(l => l.ContainsValueForKey(
-                LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
-                appFinRecord.AFinType,
-                appFinRecord.AFinCode)).Returns(false);
-
-            NewRule(lookupsMock.Object).AppFinRecordLookupConditionMet(appFinRecord).Should().BeTrue();
-        }
-
-        [Fact]
-        public void AppFinRecordLookupConditionMet_False()
-        {
-            var appFinRecord = new TestAppFinRecord()
-            {
-                AFinAmount = 1,
-                AFinCode = 1,
-                AFinDate = new DateTime(2018, 10, 01),
-                AFinType = "TNP"
-            };
-
-            var lookupsMock = new Mock<IProvideLookupDetails>();
-
-            lookupsMock.SetupGet(l => l.ContainsValueForKey(
-                LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
-                appFinRecord.AFinType,
-                appFinRecord.AFinCode)).Returns(true);
-
-            NewRule(lookupsMock.Object).AppFinRecordLookupConditionMet(appFinRecord).Should().BeFalse();
-        }
-
-        [Fact]
         public void ConditionMet_True()
         {
             var appFinRecord = new TestAppFinRecord()
@@ -94,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.SetupGet(l => l.ContainsValueForKey(
+            lookupsMock.Setup(l => l.ContainsValueForKey(
                 LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
                 appFinRecord.AFinType,
                 appFinRecord.AFinCode)).Returns(false);
@@ -103,13 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         }
 
         [Fact]
-        public void ConditionMet_False_NullEntity()
-        {
-            NewRule().ConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_False_AFinCode()
+        public void ConditionMet_False()
         {
             var appFinRecord = new TestAppFinRecord()
             {
@@ -121,12 +53,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.SetupGet(l => l.ContainsValueForKey(
+            lookupsMock.Setup(l => l.ContainsValueForKey(
                 LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
                 appFinRecord.AFinType,
                 appFinRecord.AFinCode)).Returns(true);
 
-            NewRule().ConditionMet(appFinRecord).Should().BeFalse();
+            NewRule(lookupsMock.Object).ConditionMet(appFinRecord).Should().BeFalse();
         }
 
         [Fact]
@@ -154,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.SetupGet(l => l.ContainsValueForKey(
+            lookupsMock.Setup(l => l.ContainsValueForKey(
               LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
               It.IsAny<string>(),
               It.IsAny<int>())).Returns(false);
@@ -180,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.SetupGet(l => l.ContainsValueForKey(
+            lookupsMock.Setup(l => l.ContainsValueForKey(
               LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
               It.IsAny<string>(),
               It.IsAny<int>())).Returns(false);
@@ -216,7 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.SetupGet(l => l.ContainsValueForKey(
+            lookupsMock.Setup(l => l.ContainsValueForKey(
               LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
               It.IsAny<string>(),
               It.IsAny<int>())).Returns(true);
