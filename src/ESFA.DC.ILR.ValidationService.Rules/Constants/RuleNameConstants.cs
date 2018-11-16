@@ -252,6 +252,7 @@
         public const string ULN_10 = "ULN_10";
         public const string ULN_12 = "ULN_12";
 
+        public const string WithdrawReason_02 = "WithdrawReason_02";
         public const string WithdrawReason_04 = "WithdrawReason_04";
 
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
