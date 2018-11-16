@@ -123,6 +123,32 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
         }
 
         /// <summary>
+        /// Provider contains Dictionary Lookup value matches expectation.
+        /// </summary>
+        /// <param name="keyCandidate">The dictionary key candidate.</param>
+        /// <param name="valueCandidate">The dictionary value candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("TNP", 1, true)]
+        [InlineData("TNP", 2, true)]
+        [InlineData("TNP", 5, false)]
+        [InlineData("PMR", 1, true)]
+        [InlineData("PMR", 2, true)]
+        [InlineData("PMR", 5, false)]
+        [InlineData("TXX", 1, false)]
+        public void ProviderContainsCodedKeyDictionaryMatchesExpectation(string keyCandidate, int valueCandidate, bool expectation)
+        {
+            // arrange
+            var sut = NewService();
+
+            // act
+            var result = sut.ContainsValueForKey(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, keyCandidate, valueCandidate);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// New service.
         /// </summary>
         /// <returns>a <seealso cref="LookupDetailsProvider"/></returns>
@@ -147,11 +173,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
                 ["P69"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31")),
                 ["P70"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31"))
             };
+            var apprenticeshipFinancialRecords = new Dictionary<string, IEnumerable<int>>
+            {
+                ["TNP"] = new List<int> { 1, 2, 3, 4 },
+                ["PMR"] = new List<int> { 1, 2, 3 },
+            };
 
             cache.SimpleLookups.Add(LookupSimpleKey.FINTYPE, finTypes);
             cache.CodedLookups.Add(LookupCodedKey.AppFinRecord, codedTypes);
             cache.LimitedLifeLookups.Add(LookupTimeRestrictedKey.TTAccom, tTAccomItems);
             cache.LimitedLifeLookups.Add(LookupTimeRestrictedKey.QualEnt3, qualent3s);
+            cache.CodedDictionaryLookups.Add(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, apprenticeshipFinancialRecords);
 
             cacheFactory
                 .Setup(c => c.Create())

@@ -120,6 +120,22 @@ namespace ESFA.DC.ILR.ValidationService.Data
         }
 
         /// <summary>
+        /// Determines whether [the specified lookup key] [contains] the value.
+        /// </summary>
+        /// <param name="lookupKey">The lookup key.</param>
+        /// <param name="keyCandidate">The dictionary key candidate.</param>
+        /// <param name="valueCandidate">The dictionary value candidate.</param>
+        /// <returns>
+        /// <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool ContainsValueForKey(LookupCodedKeyDictionary lookupKey, string keyCandidate, int valueCandidate)
+        {
+            return InternalCache.CodedDictionaryLookups[lookupKey]
+                    .Where(k => k.Key == keyCandidate)
+                    .Select(v => v.Value.Contains(valueCandidate)).FirstOrDefault();
+        }
+
+        /// <summary>
         /// Determines whether [the specified lookup key] is current on the given date
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>

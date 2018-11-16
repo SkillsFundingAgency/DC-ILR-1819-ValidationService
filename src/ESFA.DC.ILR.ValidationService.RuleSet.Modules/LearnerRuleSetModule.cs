@@ -101,6 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_06Rule),
                 typeof(AddLine1_03Rule),
                 typeof(AFinDate_03Rule),
+                typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
                 typeof(AFinType_10Rule),
                 typeof(AFinType_11Rule),
