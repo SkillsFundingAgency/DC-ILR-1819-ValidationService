@@ -103,6 +103,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AFinDate_03Rule),
                 typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
+                typeof(AFinType_08Rule),
                 typeof(AFinType_10Rule),
                 typeof(AFinType_11Rule),
                 typeof(AFinType_12Rule),
