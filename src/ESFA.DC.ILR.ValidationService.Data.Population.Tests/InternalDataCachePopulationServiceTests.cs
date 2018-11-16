@@ -97,6 +97,26 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         }
 
         /// <summary>
+        /// Complx coded lookups are present and match expected count.
+        /// </summary>
+        /// <param name="thisKey">The this key.</param>
+        /// <param name="expectedCount">The expected count.</param>
+        [Theory]
+        [InlineData(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, 2)]
+        public async Task CodedDictionaryLookupsArePresentAndMatchExpectedCount(LookupCodedKeyDictionary thisKey, int expectedCount)
+        {
+            // arrange
+            var internalDataCache = new InternalDataCache();
+
+            // act
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
+
+            // assert
+            Assert.True(internalDataCache.CodedDictionaryLookups.ContainsKey(thisKey));
+            Assert.Equal(expectedCount, internalDataCache.CodedDictionaryLookups[thisKey].Count);
+        }
+
+        /// <summary>
         /// Time limited lookups are present and match expected count.
         /// </summary>
         /// <param name="thisKey">The this key.</param>
