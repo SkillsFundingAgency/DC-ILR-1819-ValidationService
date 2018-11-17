@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
+using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.DateEmpStatApp;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType;
@@ -119,6 +120,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(CompStatus_06Rule),
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
+                typeof(DateEmpStatApp_01Rule),
                 typeof(DateOfBirth_01Rule),
                 typeof(DateOfBirth_02Rule),
                 typeof(DateOfBirth_03Rule),

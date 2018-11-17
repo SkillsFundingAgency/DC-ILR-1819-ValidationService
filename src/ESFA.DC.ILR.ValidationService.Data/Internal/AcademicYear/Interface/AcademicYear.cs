@@ -18,6 +18,16 @@
         /// <summary>
         /// The august 31 date
         /// </summary>
-        August31
+        August31,
+
+        /// <summary>
+        /// The current year end
+        /// </summary>
+        CurrentYearEnd,
+
+        /// <summary>
+        /// The next year commencement
+        /// </summary>
+        NextYearCommencement,
     }
 }

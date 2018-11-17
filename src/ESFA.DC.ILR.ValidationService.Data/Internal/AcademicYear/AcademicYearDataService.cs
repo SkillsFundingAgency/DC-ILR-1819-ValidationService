@@ -26,6 +26,24 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear
             _internalDataCache = internalDataCache;
         }
 
+        /// <summary>
+        /// Gets the academic year date of today.
+        /// </summary>
+        public DateTime Today => DateTime.Today;
+
+        /// <summary>
+        /// Gets an academic year of learning date.
+        /// </summary>
+        /// <param name="candidate">The candidate, representing a point of reference for
+        /// any current academic year where a calcuation can be made
+        /// based on the required 'academic year date' operation</param>
+        /// <param name="yearDate">The academic year date (of interest)</param>
+        /// <returns>
+        /// an academic date for the year of learning
+        /// </returns>
+        public DateTime GetAcademicYearOfLearningDate(DateTime candidate, AcademicYearDates yearDate) =>
+            DateTime.Parse(Format.String(yearDate.GetDateFormat(), yearDate.GetDateYear(candidate)));
+
         public DateTime AugustThirtyFirst()
         {
             return _internalDataCache.AcademicYear.AugustThirtyFirst;
@@ -62,19 +80,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear
         {
             return _internalDataCache.AcademicYear.Start;
         }
-
-        /// <summary>
-        /// Gets an academic year of learning date.
-        /// </summary>
-        /// <param name="candidate">
-        /// The candidate, representing the learning delivery start date
-        /// or any other date where the commencement of the acadameic year
-        /// for the date in question is required</param>
-        /// <param name="yearDate">The academic year date (of interest)</param>
-        /// <returns>
-        /// an academic date for the year of learning
-        /// </returns>
-        public DateTime GetAcademicYearOfLearningDate(DateTime candidate, AcademicYearDates yearDate) =>
-            DateTime.Parse(Format.String(yearDate.GetDateFormat(), candidate.Month > 8 ? candidate.Year : candidate.Year - 1));
     }
 }

@@ -7,6 +7,25 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface
     /// </summary>
     public interface IAcademicYearDataService
     {
+        /// <summary>
+        /// Gets the academic year date of today.
+        /// </summary>
+        DateTime Today { get; }
+
+        /// <summary>
+        /// Gets an academic year of learning date.
+        /// </summary>
+        /// <param name="candidate">
+        /// The candidate, representing a point of reference for
+        /// any current academic year where a calcuation can be made
+        /// based on the required 'academic year date' operation
+        /// </param>
+        /// <param name="yearDate">The academic year date (of interest)</param>
+        /// <returns>
+        /// an academic date for the year of learning
+        /// </returns>
+        DateTime GetAcademicYearOfLearningDate(DateTime candidate, AcademicYearDates yearDate);
+
         DateTime AugustThirtyFirst();
 
         /// <summary>
@@ -24,18 +43,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface
         /// </summary>
         /// <returns>an academic year start date</returns>
         DateTime Start();
-
-        /// <summary>
-        /// Gets an academic year of learning date.
-        /// </summary>
-        /// <param name="candidate">
-        /// The candidate, representing the learning delivery start date
-        /// or any other date where the commencement of the acadameic year
-        /// for the date in question is required</param>
-        /// <param name="yearDate">The academic year date (of interest)</param>
-        /// <returns>
-        /// an academic date for the year of learning
-        /// </returns>
-        DateTime GetAcademicYearOfLearningDate(DateTime candidate, AcademicYearDates yearDate);
     }
 }
