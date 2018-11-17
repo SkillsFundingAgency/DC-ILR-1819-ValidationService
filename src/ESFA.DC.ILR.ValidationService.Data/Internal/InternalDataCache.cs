@@ -18,6 +18,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         private Dictionary<LookupCodedKey, IReadOnlyCollection<string>> _codedLookups;
 
         /// <summary>
+        /// The coded lookups
+        /// </summary>
+        private Dictionary<LookupCodedKeyDictionary, IDictionary<string, IEnumerable<int>>> _codedDictionaryLookups;
+
+        /// <summary>
         /// The time restricted lookups
         /// </summary>
         private Dictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> _limitedLifeLookups;
@@ -59,6 +64,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
             {
                 return _codedLookups
                   ?? (_codedLookups = new Dictionary<LookupCodedKey, IReadOnlyCollection<string>>());
+            }
+        }
+
+        /// <summary>
+        /// Gets the complex coded lookups.
+        /// </summary>
+        public IDictionary<LookupCodedKeyDictionary, IDictionary<string, IEnumerable<int>>> CodedDictionaryLookups
+        {
+            get
+            {
+                return _codedDictionaryLookups
+                  ?? (_codedDictionaryLookups = new Dictionary<LookupCodedKeyDictionary, IDictionary<string, IEnumerable<int>>>());
             }
         }
 

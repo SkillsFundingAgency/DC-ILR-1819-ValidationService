@@ -31,6 +31,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IDictionary<LookupCodedKey, IReadOnlyCollection<string>> CodedLookups { get; }
 
         /// <summary>
+        /// Gets the coded lookups
+        /// </summary>
+        IDictionary<LookupCodedKeyDictionary, IDictionary<string, IEnumerable<int>>> CodedDictionaryLookups { get; }
+
+        /// <summary>
         /// Gets the time restricted lookups.
         /// </summary>
         IDictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> LimitedLifeLookups { get; }

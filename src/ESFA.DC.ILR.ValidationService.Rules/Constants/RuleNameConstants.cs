@@ -18,7 +18,9 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinType_02 = "AFinType_02";
         public const string AFinType_04 = "AFinType_04";
+        public const string AFinType_08 = "AFinType_08";
         public const string AFinType_10 = "AFinType_10";
         public const string AFinType_11 = "AFinType_11";
         public const string AFinType_14 = "AFinType_14";
@@ -152,6 +154,8 @@
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
+        public const string LearningDeliveryHE_03 = "LearningDeliveryHE_03";
+
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
@@ -187,6 +191,7 @@
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
 
         public const string PCFLDCS_02 = "PCFLDCS_02";
+        public const string PCFLDCS_03 = "PCFLDCS_03";
 
         public const string PCSLDCS_01 = "PCSLDCS_01";
 
@@ -251,6 +256,7 @@
         public const string ULN_10 = "ULN_10";
         public const string ULN_12 = "ULN_12";
 
+        public const string WithdrawReason_02 = "WithdrawReason_02";
         public const string WithdrawReason_04 = "WithdrawReason_04";
 
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";

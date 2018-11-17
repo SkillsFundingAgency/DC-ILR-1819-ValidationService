@@ -102,18 +102,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 }
             };
 
+            var empStats = new List<int> { 10 };
+
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(10);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
 
             NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeFalse();
         }
 
         [Fact]
-        public void EmpStatConditionMet_False_NoMatch()
+        public void EmpStatConditionMet_True_NoDateMatch()
         {
-            int? nullResult = null;
-            var learnStartDate = new DateTime(2018, 9, 1);
+            IEnumerable<int> nullResult = null;
+            var learnStartDate = new DateTime(2018, 7, 1);
             var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
             {
                 new TestLearnerEmploymentStatus
@@ -125,9 +127,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(nullResult);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(nullResult);
 
-            NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeFalse();
+            NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeTrue();
         }
 
         [Fact]

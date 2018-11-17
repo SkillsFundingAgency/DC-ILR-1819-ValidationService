@@ -73,6 +73,7 @@
     <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
+    <Compile Include="Constants\LegalOrgTypeConstants.cs" />
     <Compile Include="Constants\Monitoring.cs" />
     <Compile Include="Constants\OutTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
@@ -152,10 +153,12 @@
     <Compile Include="HE\HEPostcode\HEPostCode_01Rule.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_02Rule.cs" />
     <Compile Include="HE\LearnerHE_02Rule.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
+    <Compile Include="HE\PCFLDCS\PCFLDCS_03Rule.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
@@ -253,6 +256,8 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_05Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_03Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_08Rule.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_02Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_04Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_11Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_14Rule.cs" />
@@ -349,6 +354,7 @@
     <Compile Include="LearningDelivery\StdCode\StdCode_02Rule.cs" />
     <Compile Include="LearningDelivery\StdCode\StdCode_01Rule.cs" />
     <Compile Include="LearningDelivery\SWSupAimId\SWSupAimId_01Rule.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_02Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
