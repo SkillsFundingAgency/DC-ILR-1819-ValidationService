@@ -241,6 +241,8 @@
 
         public const string Schema = "Schema";
 
+        public const string STULOAD_04 = "STULOAD_04";
+
         public const string TTACCOM_04 = "TTACCOM_04";
 
         public const string UKPRN_03 = "UKPRN_03";
