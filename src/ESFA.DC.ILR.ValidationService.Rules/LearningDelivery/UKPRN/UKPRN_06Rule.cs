@@ -8,7 +8,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN
+namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 {
     public class UKPRN_06Rule : AbstractRule, IRule<ILearner>
     {

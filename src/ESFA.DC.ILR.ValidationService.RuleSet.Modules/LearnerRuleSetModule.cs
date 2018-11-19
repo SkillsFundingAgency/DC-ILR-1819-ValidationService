@@ -36,7 +36,6 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.PostcodePrior;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrevUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ULN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours;
@@ -66,6 +65,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PwayCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEndDate;
@@ -321,6 +321,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
                 typeof(UKPRN_06Rule),
+                typeof(UKPRN_10Rule),
                 typeof(ULN_02Rule),
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),
