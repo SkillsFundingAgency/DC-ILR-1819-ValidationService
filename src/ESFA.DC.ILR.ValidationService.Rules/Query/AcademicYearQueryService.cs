@@ -28,5 +28,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         {
             return new DateTime(dateLearnStartDate.Year, 08, 31);
         }
+
+        public bool DateIsInPrevAcademicYear(DateTime dateTime, DateTime currentYear)
+        {
+            return dateTime < currentYear && dateTime >= currentYear.AddYears(-1);
+        }
     }
 }

@@ -5,19 +5,19 @@ using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.UKPRN;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.UKPRN
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 {
     public class UKPRN_06RuleTests : AbstractRuleTests<UKPRN_06Rule>
     {
         private readonly int _fundModel = 35;
-        private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>() { "AEBC1819" };
+        private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>() { FundingStreamPeriodCodeConstants.AEBC1819 };
 
         [Fact]
         public void RuleName()
