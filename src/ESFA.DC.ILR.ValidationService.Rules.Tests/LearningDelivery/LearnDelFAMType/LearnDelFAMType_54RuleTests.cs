@@ -47,11 +47,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             NewRule().ProgTypeConditionMet(TypeOfLearningProgramme.HigherApprenticeshipLevel5).Should().BeTrue();
         }
 
-        [Fact]
-        public void LearningDeliveryFAMsCondtionMet_False()
+        [Theory]
+        [InlineData(LearningDeliveryFAMTypeConstants.EEF, "2")]
+        [InlineData(LearningDeliveryFAMTypeConstants.FFI, "2")]
+        public void LearningDeliveryFAMsCondtionMet_False(string learnDelFAMType, string learnDelFAMCode)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
                 {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = learnDelFAMType,
+                        LearnDelFAMCode = learnDelFAMCode
+                    },
                     new TestLearningDeliveryFAM()
                     {
                         LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
@@ -67,17 +74,40 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsCondtionMet(testLearningDeliveryFAMs).Should().BeFalse();
         }
 
-        [Theory]
-        [InlineData(LearningDeliveryFAMTypeConstants.EEF, "2")]
-        [InlineData(LearningDeliveryFAMTypeConstants.FFI, "2")]
-        public void LearningDeliveryFAMsCondtionMet_True(string learnDelFAMType, string learnDelFAMCode)
+        [Fact]
+        public void LearningDeliveryFAMsCondtionMet_False_NullCheck()
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
                 {
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = learnDelFAMType,
-                        LearnDelFAMCode = learnDelFAMCode
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                        LearnDelFAMCode = "34"
+                    }
+                };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2")).Returns(false);
+
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsCondtionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearningDeliveryFAMsCondtionMet_True()
+        {
+            var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.EEF,
+                        LearnDelFAMCode = "2"
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.FFI,
+                        LearnDelFAMCode = "2"
                     },
                     new TestLearningDeliveryFAM()
                     {
@@ -120,9 +150,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.HigherApprenticeshipLevel4, LearningDeliveryFAMTypeConstants.EEF, "2")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.HigherApprenticeshipLevel4, LearningDeliveryFAMTypeConstants.FFI, "2")]
         [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.AdvancedLevelApprenticeship, LearningDeliveryFAMTypeConstants.FFI, "2")]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard, LearningDeliveryFAMTypeConstants.EEF, "2")]
+        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard, LearningDeliveryFAMTypeConstants.FFI, "2")]
         [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLearningProgramme.ApprenticeshipStandard, LearningDeliveryFAMTypeConstants.FFI, "2")]
         public void ConditonMet_True(int fundModel, int? progType, string learnDelFAMType, string learnDelFAMCode)
         {
@@ -132,6 +162,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                     {
                         LearnDelFAMType = learnDelFAMType,
                         LearnDelFAMCode = learnDelFAMCode
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.EEF,
+                        LearnDelFAMCode = "2"
                     }
                 };
 
@@ -151,6 +186,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                     new TestLearningDeliveryFAM()
                     {
                         LearnDelFAMType = LearningDeliveryFAMTypeConstants.EEF,
+                        LearnDelFAMCode = "2"
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.FFI,
                         LearnDelFAMCode = "2"
                     }
                 };
