@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public bool LearningDeliveryFAMsCondtionMet(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")
-                || _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2");
+                && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2");
         }
 
         public bool ProgTypeConditionMet(int? progType) => progType != TypeOfLearningProgramme.ApprenticeshipStandard;
