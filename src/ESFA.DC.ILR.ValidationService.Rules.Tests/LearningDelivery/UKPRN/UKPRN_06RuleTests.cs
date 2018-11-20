@@ -2,6 +2,7 @@
 using System.Linq;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -364,10 +365,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, _fundModel)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.LDM)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, "034")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(_fundModel, LearningDeliveryFAMTypeConstants.LDM, "034");
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(_fundModel);
 
             validationErrorHandlerMock.Verify();
         }
@@ -375,10 +374,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         private UKPRN_06Rule NewRule(
             IFCSDataService fCSDataService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
+            IAcademicYearDataService academicYearDataService = null,
+            IAcademicYearQueryService academicYearQueryService = null,
             IDD07 dd07 = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
-            return new UKPRN_06Rule(fcsDataService: fCSDataService, learningDeliveryFAMQueryService: learningDeliveryFAMQueryService, dd07: dd07, validationErrorHandler: validationErrorHandler);
+            return new UKPRN_06Rule(fCSDataService, learningDeliveryFAMQueryService, academicYearDataService, academicYearQueryService, dd07, validationErrorHandler);
         }
     }
 }

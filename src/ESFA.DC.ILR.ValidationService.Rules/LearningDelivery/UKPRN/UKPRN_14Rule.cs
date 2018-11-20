@@ -78,7 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 
         public virtual bool FCTFundingConditionMet()
         {
-            return _fcsDataService.FundingRelationshipFCTExists(_fundingStreamPeriodCodes);
+            return !_fcsDataService.FundingRelationshipFCTExists(_fundingStreamPeriodCodes);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int ukprn, int fundModel, string learningDelFAMType, string learningDelFAMCode)
