@@ -155,6 +155,7 @@
     <Compile Include="HE\HEPostcode\HEPostCode_01Rule.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_02Rule.cs" />
     <Compile Include="HE\LearnerHE_02Rule.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />

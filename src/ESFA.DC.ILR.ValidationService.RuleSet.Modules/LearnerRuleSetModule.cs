@@ -10,6 +10,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.HEPostcode;
+using ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
@@ -247,6 +248,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_64Rule),
                 typeof(LearnDelFAMType_66Rule),
                 typeof(LearnDelFAMType_71Rule),
+                typeof(LearningDeliveryHE_02Rule),
                 typeof(LearnerHE_02Rule),
                 typeof(LearnFAMType_16Rule),
                 typeof(LearnStartDate_06Rule),
