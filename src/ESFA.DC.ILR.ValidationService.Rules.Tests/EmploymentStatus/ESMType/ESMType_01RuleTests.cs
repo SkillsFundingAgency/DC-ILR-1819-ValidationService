@@ -299,6 +299,61 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         }
 
         /// <summary>
+        /// Valid item with empty employments does not raise validation message.
+        /// </summary>
+        [Fact]
+        public void ValidItemWithEmptyEmploymentsDoesNotRaiseValidationMessage()
+        {
+            // arrange
+            const string LearnRefNumber = "123456789X";
+
+            var statii = Collection.EmptyAndReadOnly<ILearnerEmploymentStatus>();
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(y => y.LearnerEmploymentStatuses)
+                .Returns(statii);
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var sut = new ESMType_01Rule(handler.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+        }
+
+        /// <summary>
+        /// Valid item with null employments does not raise validation message.
+        /// </summary>
+        [Fact]
+        public void ValidItemWithNullEmploymentsDoesNotRaiseValidationMessage()
+        {
+            // arrange
+            const string LearnRefNumber = "123456789X";
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var sut = new ESMType_01Rule(handler.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+        }
+
+        /// <summary>
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>

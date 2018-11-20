@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearnerEmploymentStatuses
+            objectToValidate.LearnerEmploymentStatuses?
                 .SelectMany(x => x.EmploymentStatusMonitorings.AsSafeReadOnlyList())
                 .SafeWhere(IsInvalidDomainItem)
                 .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
