@@ -199,15 +199,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="lookups">The lookups.</param>
         /// <param name="type">The type.</param>
         /// <returns>a list of simple lookups</returns>
-        private IDictionary<string, IEnumerable<int>> BuildComplexLookupEnumerable(XElement lookups, string type)
+        private IDictionary<string, List<int>> BuildComplexLookupEnumerable(XElement lookups, string type)
         {
-            return lookups
-               .Descendants(type)
-               .Elements()
-               .ToDictionary(
-                   n => n.Name.ToString(),
-                    v => v.Descendants("option")
-                          .Attributes("code").Select(d => int.Parse(d.Value)));
+              return lookups
+                    .Descendants(type)
+                    .Elements()
+                    .ToDictionary(
+                        n => n.Name.ToString(),
+                        v => v.Descendants("option").Select(d => int.Parse(d.Attribute("code").Value)).ToList());
         }
 
         /// <summary>
