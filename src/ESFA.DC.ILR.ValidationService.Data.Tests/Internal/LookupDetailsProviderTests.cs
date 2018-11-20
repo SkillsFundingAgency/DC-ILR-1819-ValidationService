@@ -173,7 +173,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
                 ["P69"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31")),
                 ["P70"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31"))
             };
-            var apprenticeshipFinancialRecords = new Dictionary<string, IEnumerable<int>>
+            var apprenticeshipFinancialRecords = new Dictionary<string, List<int>>
             {
                 ["TNP"] = new List<int> { 1, 2, 3, 4 },
                 ["PMR"] = new List<int> { 1, 2, 3 },
