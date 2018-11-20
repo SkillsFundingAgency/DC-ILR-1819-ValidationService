@@ -124,6 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(DateEmpStatApp_01Rule),
+                typeof(DateEmpStatApp_02Rule),
                 typeof(DateOfBirth_01Rule),
                 typeof(DateOfBirth_02Rule),
                 typeof(DateOfBirth_03Rule),
