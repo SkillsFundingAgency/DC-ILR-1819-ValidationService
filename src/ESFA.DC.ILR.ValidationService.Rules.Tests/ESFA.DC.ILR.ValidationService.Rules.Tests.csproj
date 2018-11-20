@@ -237,6 +237,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_02RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_01RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_14RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_10RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_06RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_02RuleTests.cs" />
