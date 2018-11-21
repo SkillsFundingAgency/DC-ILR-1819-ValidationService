@@ -179,6 +179,8 @@
 
         public const string NUMHUS_01 = "NUMHUS_01";
 
+        public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
+
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
         public const string OutCollDate_01 = "OutCollDate_01";
