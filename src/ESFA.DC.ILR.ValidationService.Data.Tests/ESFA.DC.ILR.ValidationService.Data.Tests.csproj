@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="External\EDRSDataOperationsProviderTests.cs" />
     <Compile Include="External\LARSDataServiceTests.cs" />
     <Compile Include="External\EPAOrganisationDetailsProviderTests.cs" />
     <Compile Include="External\FCSDataServiceTests.cs" />

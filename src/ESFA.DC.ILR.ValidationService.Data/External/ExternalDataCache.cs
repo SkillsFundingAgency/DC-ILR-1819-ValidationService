@@ -12,6 +12,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External
     {
         public IReadOnlyCollection<long> ULNs { get; set; }
 
+        /// <summary>
+        /// Gets or sets the employer reference numbers.
+        /// </summary>
+        public IReadOnlyCollection<int> ERNs { get; set; }
+
         public IReadOnlyDictionary<string, LearningDelivery> LearningDeliveries { get; set; }
 
         public IReadOnlyCollection<Framework> Frameworks { get; set; }
