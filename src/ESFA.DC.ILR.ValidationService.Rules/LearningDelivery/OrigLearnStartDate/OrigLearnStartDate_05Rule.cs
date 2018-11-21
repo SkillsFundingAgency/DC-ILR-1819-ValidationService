@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         learningDelivery.AimSeqNumber,
-                        BuildErrorMessageParameters(learningDelivery.OrigLearnStartDateNullable, learningDelivery.FundModel, learningDelivery.ProgTypeNullable, learningDelivery.AimType));
+                        BuildErrorMessageParameters(learningDelivery.OrigLearnStartDateNullable, learningDelivery.FundModel, learningDelivery.AimType));
                 }
             }
         }
@@ -86,13 +86,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             return progType == 25;
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? origLearnStartDate, int fundModel, int? progType, int aimType)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? origLearnStartDate, int fundModel, int aimType)
         {
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.OrigLearnStartDate, origLearnStartDate),
                 BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
-                BuildErrorMessageParameter(PropertyNameConstants.ProgType, progType),
                 BuildErrorMessageParameter(PropertyNameConstants.AimType, aimType)
             };
         }
