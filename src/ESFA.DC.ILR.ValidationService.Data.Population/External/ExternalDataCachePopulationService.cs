@@ -52,6 +52,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             externalDataCache.FCSContracts = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.FCSContractAllocations = await _fcsDataRetrievalService.RetrieveContractAllocationsAsync(cancellationToken);
             externalDataCache.ESFEligibilityRuleEmploymentStatuses = await _fcsDataRetrievalService.RetrieveEligibilityRuleEmploymentStatusesAsync(cancellationToken);
+
+            // TODO: FIX ME!!! this is sanjeev's 'test' emp id...
+            externalDataCache.ERNs = new List<int> { 154549452 };
         }
     }
 }
