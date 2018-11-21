@@ -48,8 +48,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         /// </summary>
         public string RuleName => Name;
 
-        public bool IsNotValid(ILearnerEmploymentStatus employment) =>
-            !_edrsData.IsValid(employment.EmpIdNullable);
+        public bool IsNotValid(ILearnerEmploymentStatus employment) => false;
+
+        // !_edrsData.IsValid(employment.EmpIdNullable);
 
         /// <summary>
         /// Validates the specified object.
