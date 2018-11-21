@@ -236,6 +236,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_09Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_14Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_10Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_06Rule.cs" />
