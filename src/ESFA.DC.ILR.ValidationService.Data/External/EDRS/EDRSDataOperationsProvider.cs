@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.EDRS
         /// <returns>
         /// <c>true</c> if the specified this employer is temporary; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsTemporary(int thisEmployer)
+        public bool IsTemporary(int? thisEmployer)
         {
             return It.IsInRange(thisEmployer, TemporaryID);
         }
@@ -51,10 +51,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.EDRS
         /// <returns>
         /// <c>true</c> if the specified this employer is valid; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValid(int thisEmployer)
+        public bool IsValid(int? thisEmployer)
         {
-            return IsTemporary(thisEmployer)
-                || _employers.Contains(thisEmployer);
+            return It.IsEmpty(thisEmployer)
+                || IsTemporary(thisEmployer)
+                || _employers.Contains(thisEmployer.Value);
         }
     }
 }

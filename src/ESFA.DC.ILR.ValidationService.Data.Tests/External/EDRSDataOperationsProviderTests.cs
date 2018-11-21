@@ -15,12 +15,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
+        [InlineData(null, false)]
         [InlineData(99999999, false)]
         [InlineData(999999998, false)]
         [InlineData(EDRSDataOperationsProvider.TemporaryID, true)]
         [InlineData(1000000000, false)]
         [InlineData(2123456788, false)]
-        public void IsTemporaryMeetsExpectation(int candidate, bool expectation)
+        public void IsTemporaryMeetsExpectation(int? candidate, bool expectation)
         {
             // arrange
             var cache = new Mock<IExternalDataCache>();
@@ -35,6 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Theory]
+        [InlineData(null, true)]
         [InlineData(99999999, false)]
         [InlineData(999999998, false)]
         [InlineData(EDRSDataOperationsProvider.TemporaryID, true)]
@@ -46,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [InlineData(2145678901, true)]
         [InlineData(2146789012, true)]
         [InlineData(2147456788, false)]
-        public void IsValidExpectation(int candidate, bool expectation)
+        public void IsValidExpectation(int? candidate, bool expectation)
         {
             // arrange
             var cache = LoadCandidates();

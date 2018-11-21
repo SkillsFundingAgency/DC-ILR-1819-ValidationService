@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.EDRS.Interface
         /// <returns>
         ///   <c>true</c> if the specified this employer is valid; otherwise, <c>false</c>.
         /// </returns>
-        bool IsValid(int thisEmployer);
+        bool IsValid(int? thisEmployer);
 
         /// <summary>
         /// Determines whether the specified this employer is temporary.
@@ -23,6 +23,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.EDRS.Interface
         /// <returns>
         ///   <c>true</c> if the specified this employer is temporary; otherwise, <c>false</c>.
         /// </returns>
-        bool IsTemporary(int thisEmployer);
+        bool IsTemporary(int? thisEmployer);
     }
 }
