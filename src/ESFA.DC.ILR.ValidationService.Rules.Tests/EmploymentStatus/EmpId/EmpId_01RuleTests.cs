@@ -112,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var edrsData = new Mock<IProvideEDRSDataOperations>();
+            var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
             edrsData
                 .Setup(x => x.IsValid(candidate))
                 .Returns(!expectation);
@@ -175,7 +175,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             // the crux of the test runs on the return value from this call
-            var edrsData = new Mock<IProvideEDRSDataOperations>();
+            var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
             edrsData
                 .Setup(x => x.IsValid(candidate))
                 .Returns(false);
@@ -187,6 +187,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             // assert
             handler.VerifyAll();
+            edrsData.VerifyAll();
         }
 
         /// <summary>
@@ -222,7 +223,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
             // the crux of the test runs on the return value from this call
-            var edrsData = new Mock<IProvideEDRSDataOperations>();
+            var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
             edrsData
                 .Setup(x => x.IsValid(candidate))
                 .Returns(true);
@@ -234,6 +235,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             // assert
             handler.VerifyAll();
+            edrsData.VerifyAll();
         }
 
         /// <summary>
@@ -256,7 +258,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Returns(statii);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var edrsData = new Mock<IProvideEDRSDataOperations>();
+            var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
 
             var sut = new EmpId_01Rule(handler.Object, edrsData.Object);
 
@@ -265,6 +267,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             // assert
             handler.VerifyAll();
+            edrsData.VerifyAll();
         }
 
         /// <summary>
@@ -282,7 +285,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Returns(LearnRefNumber);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var edrsData = new Mock<IProvideEDRSDataOperations>();
+            var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
 
             var sut = new EmpId_01Rule(handler.Object, edrsData.Object);
 
@@ -291,6 +294,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             // assert
             handler.VerifyAll();
+            edrsData.VerifyAll();
         }
 
         /// <summary>
@@ -300,7 +304,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         public EmpId_01Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var edrsData = new Mock<IProvideEDRSDataOperations>();
+            var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
 
             return new EmpId_01Rule(handler.Object, edrsData.Object);
         }
