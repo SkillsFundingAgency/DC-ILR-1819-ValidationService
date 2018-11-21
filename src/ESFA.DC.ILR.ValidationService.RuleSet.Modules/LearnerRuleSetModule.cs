@@ -270,6 +270,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(OrigLearnStartDate_02Rule),
                 typeof(OrigLearnStartDate_03Rule),
                 typeof(OrigLearnStartDate_04Rule),
+                typeof(OrigLearnStartDate_05Rule),
                 typeof(OtherFundAdj_01Rule),
                 typeof(OutGrade_03Rule),
                 typeof(PartnerUKPRN_01Rule),
