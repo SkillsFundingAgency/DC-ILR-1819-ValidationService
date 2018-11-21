@@ -60,6 +60,33 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
+        /// As (a) safe read only digit list.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        /// <returns>
+        /// a readonly safe collection
+        /// </returns>
+        public static IReadOnlyCollection<int> AsSafeReadOnlyDigitList(this long number)
+        {
+            return Math.Abs(number)
+                .ToString()
+                .Select(x => Convert.ToInt32(x.ToString()))
+                .SafeReadOnlyList();
+        }
+
+        /// <summary>
+        /// As (a) safe read only digit list.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        /// <returns>
+        /// a readonly safe collection
+        /// </returns>
+        public static IReadOnlyCollection<int> AsSafeReadOnlyDigitList(this int number)
+        {
+            return AsSafeReadOnlyDigitList((long)number);
+        }
+
+        /// <summary>
         /// Safe any.
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
