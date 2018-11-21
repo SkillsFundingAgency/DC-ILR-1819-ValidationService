@@ -55,16 +55,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
             var ukprn = _fileDataService.UKPRN();
             var academicYearStart = _academicYearDataService.Start();
 
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => _fundModels.Remove(d.FundModel)))
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => !_fundModels.Contains(d.FundModel)))
             {
-                if (ConditionMet(learningDelivery.ProgTypeNullable, learningDelivery.LearnStartDate, academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.LearningDeliveryFAMs))
+                if (ConditionMet(learningDelivery.ProgTypeNullable,  academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.LearningDeliveryFAMs))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(ukprn, learningDelivery.FundModel, learningDelivery.ProgTypeNullable));
                 }
             }
         }
 
-        public bool ConditionMet(int? progType, DateTime learnStartDate, DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool ConditionMet(int? progType, DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return DD07ConditionMet(progType)
                 && FCTFundingConditionMet()
