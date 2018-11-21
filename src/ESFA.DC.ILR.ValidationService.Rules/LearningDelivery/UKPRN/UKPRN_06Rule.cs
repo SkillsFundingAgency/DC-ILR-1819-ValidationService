@@ -29,11 +29,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 
         public UKPRN_06Rule(
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
+            IFCSDataService fcsDataService,
             IDD07 dd07,
             IAcademicYearDataService academicYearDataService,
             IAcademicYearQueryService academicYearQueryService,
-            IValidationErrorHandler validationErrorHandler,
-            IFCSDataService fcsDataService)
+            IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.UKPRN_06)
         {
             _fcsDataService = fcsDataService;
@@ -41,6 +41,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
             _academicYearQueryService = academicYearQueryService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
             _dd07 = dd07;
+        }
+
+        public UKPRN_06Rule()
+          : base(null, null)
+        {
         }
 
         public void Validate(ILearner objectToValidate)
@@ -69,12 +74,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
                 && FCTFundingConditionMet();
         }
 
-        public bool LearningDeliveryFAMsConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public virtual bool LearningDeliveryFAMsConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "034");
         }
 
-        public bool DD07ConditionMet(int? progType, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public virtual bool DD07ConditionMet(int? progType, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return !(_dd07.IsApprenticeship(progType)
                 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "357"));
@@ -85,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
             return learnActEndDate == null ? true : !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYearStart);
         }
 
-        public bool FCTFundingConditionMet()
+        public virtual bool FCTFundingConditionMet()
         {
             return !_fcsDataService.FundingRelationshipFCTExists(_fundingStreamPeriodCodes);
         }
