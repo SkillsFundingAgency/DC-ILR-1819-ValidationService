@@ -179,6 +179,8 @@
 
         public const string NUMHUS_01 = "NUMHUS_01";
 
+        public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
+
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
         public const string OutCollDate_01 = "OutCollDate_01";
@@ -247,6 +249,7 @@
         public const string TTACCOM_04 = "TTACCOM_04";
 
         public const string UKPRN_03 = "UKPRN_03";
+        public const string UKPRN_05 = "UKPRN_05";
         public const string UKPRN_06 = "UKPRN_06";
         public const string UKPRN_09 = "UKPRN_09";
         public const string UKPRN_10 = "UKPRN_10";

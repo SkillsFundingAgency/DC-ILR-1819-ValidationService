@@ -98,6 +98,7 @@
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="CrossEntity\R91Rule.cs" />
+    <Compile Include="Derived\DerivedData_05Rule.cs" />
     <Compile Include="Derived\DerivedData_11Rule.cs" />
     <Compile Include="Derived\DerivedData_22Rule.cs" />
     <Compile Include="Derived\DerivedData_24Rule.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Derived\DD04.cs" />
     <Compile Include="Derived\DD06.cs" />
     <Compile Include="Derived\DD07.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_05Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_27Rule.cs" />
     <Compile Include="Derived\Interface\IDD01.cs" />
     <Compile Include="Derived\Interface\IDD04.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_02Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_01Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpId\EmpId_02Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_15Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_11Rule.cs" />
@@ -237,6 +240,8 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_05Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_14Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_10Rule.cs" />

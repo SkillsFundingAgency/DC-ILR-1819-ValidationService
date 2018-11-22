@@ -3,6 +3,7 @@ using ESFA.DC.ILR.ValidationService.Data.External.EDRS;
 using ESFA.DC.ILR.ValidationService.Data.External.EDRS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
@@ -12,7 +13,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 {
-    public class EmpId_01RuleTests
+    public class EmpId_02RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -22,9 +23,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         {
             // arrange
             var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpId_01Rule(null, edrsData.Object));
+            Assert.Throws<ArgumentNullException>(() => new EmpId_02Rule(null, edrsData.Object, ddRule05.Object));
         }
 
         [Fact]
@@ -32,9 +34,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpId_01Rule(handler.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new EmpId_02Rule(handler.Object, null, ddRule05.Object));
+        }
+
+        /// <summary>
+        /// New rule with null derived data throws.
+        /// </summary>
+        [Fact]
+        public void NewRuleWithNullDerivedDataThrows()
+        {
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new EmpId_02Rule(handler.Object, edrsData.Object, null));
         }
 
         /// <summary>
@@ -50,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("EmpId_01", result);
+            Assert.Equal("EmpId_02", result);
         }
 
         /// <summary>
@@ -66,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(EmpId_01Rule.Name, result);
+            Assert.Equal(EmpId_02Rule.Name, result);
         }
 
         /// <summary>
@@ -102,30 +120,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         /// Is invalid domain item meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
+        /// <param name="checksum">The checksum.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(null, false)]
-        [InlineData(1, false)]
-        [InlineData(1, true)]
-        [InlineData(2, true)]
-        public void IsNotValidMeetsExpectation(int? candidate, bool expectation)
+        [InlineData(100000001, '1', true)]
+        [InlineData(100000001, '2', false)]
+        [InlineData(100000002, '2', true)]
+        [InlineData(100000002, '3', false)]
+        [InlineData(200000003, '3', true)]
+        [InlineData(200000003, '4', false)]
+        public void IsNotValidMeetsExpectation(int candidate, char checksum, bool expectation)
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
-            edrsData
-                .Setup(x => x.IsValid(candidate))
-                .Returns(!expectation);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
+            ddRule05
+                .Setup(x => x.GetEmployerIDChecksum(candidate))
+                .Returns(checksum);
 
-            var sut = new EmpId_01Rule(handler.Object, edrsData.Object);
-
-            var mockItem = new Mock<ILearnerEmploymentStatus>();
-            mockItem
-                .SetupGet(x => x.EmpIdNullable)
-                .Returns(candidate);
+            var sut = new EmpId_02Rule(handler.Object, edrsData.Object, ddRule05.Object);
 
             // act
-            var result = sut.IsNotValid(mockItem.Object);
+            var result = sut.HasValidChecksum(candidate);
 
             // assert
             Assert.Equal(expectation, result);
@@ -135,12 +152,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         /// Invalid item raises validation message.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
+        /// <param name="checksum">The checksum.</param>
         [Theory]
-        [InlineData(null)]
-        [InlineData(EDRSDataOperationsProvider.TemporaryID)]
-        [InlineData(1)]
-        [InlineData(2)]
-        public void InvalidItemRaisesValidationMessage(int? candidate)
+        [InlineData(100000001, '2')]
+        [InlineData(100000002, '3')]
+        [InlineData(200000003, '4')]
+        public void InvalidItemRaisesValidationMessage(int candidate, char checksum)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -164,7 +181,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
                 .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == EmpId_01Rule.Name),
+                    Moq.It.Is<string>(y => y == EmpId_02Rule.Name),
                     Moq.It.Is<string>(y => y == LearnRefNumber),
                     null,
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
@@ -177,10 +194,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             // the crux of the test runs on the return value from this call
             var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
             edrsData
-                .Setup(x => x.IsValid(candidate))
+                .Setup(x => x.IsTemporary(candidate))
                 .Returns(false);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
+            ddRule05
+                .Setup(x => x.GetEmployerIDChecksum(candidate))
+                .Returns(checksum);
 
-            var sut = new EmpId_01Rule(handler.Object, edrsData.Object);
+            var sut = new EmpId_02Rule(handler.Object, edrsData.Object, ddRule05.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -188,18 +209,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             // assert
             handler.VerifyAll();
             edrsData.VerifyAll();
+            ddRule05.VerifyAll();
         }
 
         /// <summary>
         /// Valid item does not raise validation message.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
+        /// <param name="checksum">The checksum.</param>
         [Theory]
-        [InlineData(null)]
-        [InlineData(EDRSDataOperationsProvider.TemporaryID)]
-        [InlineData(1)]
-        [InlineData(2)]
-        public void ValidItemDoesNotRaiseValidationMessage(int? candidate)
+        [InlineData(100000001, '1')]
+        [InlineData(100000002, '2')]
+        [InlineData(200000003, '3')]
+        public void ValidItemDoesNotRaiseValidationMessage(int candidate, char checksum)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -225,10 +247,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             // the crux of the test runs on the return value from this call
             var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
             edrsData
-                .Setup(x => x.IsValid(candidate))
-                .Returns(true);
+                .Setup(x => x.IsTemporary(candidate))
+                .Returns(false);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
+            ddRule05
+                .Setup(x => x.GetEmployerIDChecksum(candidate))
+                .Returns(checksum);
 
-            var sut = new EmpId_01Rule(handler.Object, edrsData.Object);
+            var sut = new EmpId_02Rule(handler.Object, edrsData.Object, ddRule05.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -236,6 +262,52 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             // assert
             handler.VerifyAll();
             edrsData.VerifyAll();
+            ddRule05.VerifyAll();
+        }
+
+        /// <summary>
+        /// Valid temporary item does not raise validation message.
+        /// </summary>
+        [Fact]
+        public void ValidTemporaryItemDoesNotRaiseValidationMessage()
+        {
+            // arrange
+            const string LearnRefNumber = "123456789X";
+
+            var status = new Mock<ILearnerEmploymentStatus>();
+            status
+                .SetupGet(x => x.EmpIdNullable)
+                .Returns(EDRSDataOperationsProvider.TemporaryID);
+
+            var statii = Collection.Empty<ILearnerEmploymentStatus>();
+            statii.Add(status.Object);
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(y => y.LearnerEmploymentStatuses)
+                .Returns(statii.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            // the crux of the test runs on the return value from this call
+            var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
+            edrsData
+                .Setup(x => x.IsTemporary(EDRSDataOperationsProvider.TemporaryID))
+                .Returns(true);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
+
+            var sut = new EmpId_02Rule(handler.Object, edrsData.Object, ddRule05.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            edrsData.VerifyAll();
+            ddRule05.VerifyAll();
         }
 
         /// <summary>
@@ -259,8 +331,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
 
-            var sut = new EmpId_01Rule(handler.Object, edrsData.Object);
+            var sut = new EmpId_02Rule(handler.Object, edrsData.Object, ddRule05.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -268,6 +341,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             // assert
             handler.VerifyAll();
             edrsData.VerifyAll();
+            ddRule05.VerifyAll();
         }
 
         /// <summary>
@@ -286,8 +360,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
 
-            var sut = new EmpId_01Rule(handler.Object, edrsData.Object);
+            var sut = new EmpId_02Rule(handler.Object, edrsData.Object, ddRule05.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -295,18 +370,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             // assert
             handler.VerifyAll();
             edrsData.VerifyAll();
+            ddRule05.VerifyAll();
         }
 
         /// <summary>
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public EmpId_01Rule NewRule()
+        public EmpId_02Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
+            var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
 
-            return new EmpId_01Rule(handler.Object, edrsData.Object);
+            return new EmpId_02Rule(handler.Object, edrsData.Object, ddRule05.Object);
         }
     }
 }

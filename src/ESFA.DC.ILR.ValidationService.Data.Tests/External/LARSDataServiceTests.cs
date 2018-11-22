@@ -1367,6 +1367,238 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 .BeFalse();
         }
 
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships_True()
+        {
+            var learnAimRef = "123456789";
+            DateTime? origLearnStartDate = new DateTime(2017, 11, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LARSValidities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "APPRENTICESHIPS",
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "APPRENTICESHIPS",
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(origLearnStartDate, learnAimRef)
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships_FalseNullOrigLearnStartDate()
+        {
+            var learnAimRef = "123456789";
+            DateTime? origLearnStartDate = null;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LARSValidities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "APPRENTICESHIPS",
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "APPRENTICESHIPS",
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(origLearnStartDate, learnAimRef)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships_FalseOrigLearnStartDateNotInRange()
+        {
+            var learnAimRef = "123456789";
+            DateTime? origLearnStartDate = new DateTime(2018, 11, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LARSValidities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "APPRENTICESHIPS",
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "APPRENTICESHIPS",
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(origLearnStartDate, learnAimRef)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships_FalseCategoryMisMatch()
+        {
+            var learnAimRef = "123456789";
+            DateTime? origLearnStartDate = new DateTime(2018, 09, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LARSValidities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "XXX",
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "XXX",
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(origLearnStartDate, learnAimRef)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships_FalseLearnAimRefMisMatch()
+        {
+            var learnAimRef = "123456789";
+            DateTime? origLearnStartDate = new DateTime(2018, 09, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LARSValidities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = "123",
+                                ValidityCategory = "APPRENTICESHIPS",
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = "123",
+                                ValidityCategory = "APPRENTICESHIPS",
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(origLearnStartDate, learnAimRef)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships_FalseNull()
+        {
+            var learnAimRef = "123456789";
+            DateTime? origLearnStartDate = new DateTime(2017, 11, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>();
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(origLearnStartDate, learnAimRef)
+                .Should()
+                .BeFalse();
+        }
+
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
         {
             return new LARSDataService(externalDataCache);
