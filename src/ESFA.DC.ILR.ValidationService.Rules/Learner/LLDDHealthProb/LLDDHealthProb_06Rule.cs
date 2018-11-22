@@ -57,7 +57,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
 
         public bool LLDDRecordConditionMet(IEnumerable<ILLDDAndHealthProblem> llddAndHealthProblems)
         {
-            return llddAndHealthProblems == null;
+            return llddAndHealthProblems == null
+                   || !llddAndHealthProblems.Any();
         }
 
         public bool Excluded(IEnumerable<ILearningDelivery> learningDeliveries, DateTime? dateOfBirth, DateTime dd06Date)
