@@ -5,6 +5,7 @@ using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
@@ -93,7 +94,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [InlineData("2014-07-31", "2012-01-30", "2012-02-28", "2012-07-31", "2014-07-31", "2012-04-30")]
         [InlineData("2015-07-31", "2015-07-31", "2012-02-28", "2012-07-31", "2012-04-30")]
         [InlineData("2016-07-31", "2012-02-28", "2016-07-31", "2012-04-30")]
-        public void GetLastDeliveryReturnsDeliveryWithLatestActualEndDate(string expectedDate, params string[] testDates)
+        public void GetLastDeliveryReturnsMeetsExpectation(string expectedDate, params string[] testDates)
         {
             // arrange
             var testDate = DateTime.Parse(expectedDate);
@@ -122,8 +123,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             Assert.Equal(testDate, result.LearnActEndDateNullable);
         }
 
+        [Fact]
+        public void GetLastDeliveryWithNullDeliveriesMeetsExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            var mockItem = new Mock<ILearner>();
+
+            // act
+            var result = sut.GetLastDelivery(mockItem.Object);
+
+            // assert
+            Assert.Null(result);
+        }
+
         /// <summary>
-        /// Get destination and progression verifies ok.
+        /// Get destination and progression meets expectation.
         /// </summary>
         /// <param name="learnRN">The learn rn.</param>
         /// <param name="candidateCount">The candidate count.</param>
@@ -132,7 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [InlineData("alwerkasvf as", 2)]
         [InlineData("zxc,vmnsdlih", 5)]
         [InlineData(",samvnasorgdhkn", 1)]
-        public void GetDAndPVerifiesOK(string learnRN, int candidateCount)
+        public void GetDAndPMeetsExpectation(string learnRN, int candidateCount)
         {
             // arrange
             var outcomes = Collection.Empty<IDPOutcome>();
@@ -155,7 +171,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var message = new Mock<IMessage>(MockBehavior.Strict);
 
-            // we can no longer check the learn ref number gets sent into here as the mock doesn't support it
             message
                 .SetupGet(x => x.LearnerDestinationAndProgressions)
                 .Returns(collection.AsSafeReadOnlyList());
@@ -168,6 +183,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             // assert
             message.VerifyAll();
             Assert.Equal(candidateCount, result.DPOutcomes.Count);
+        }
+
+        [Theory]
+        [InlineData("sldfkajwefo asjf")]
+        [InlineData("alwerkasvf as")]
+        [InlineData("zxc,vmnsdlih")]
+        [InlineData(",samvnasorgdhkn")]
+        public void GetDAndPWithNullDAndPsMeetsExpectation(string learnRN)
+        {
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var message = new Mock<IMessage>(MockBehavior.Strict);
+            message
+                .SetupGet(x => x.LearnerDestinationAndProgressions)
+                .Returns((IReadOnlyCollection<ILearnerDestinationAndProgression>)null);
+
+            var sut = NewRule();
+
+            // act
+            var result = sut.GetDAndP(learnRN, message.Object);
+
+            // assert
+            message.VerifyAll();
+            Assert.Null(result);
         }
 
         /// <summary>

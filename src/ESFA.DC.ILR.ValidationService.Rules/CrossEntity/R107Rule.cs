@@ -44,8 +44,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// <param name="learner">The learner.</param>
         /// <returns>returns the last learning delivery (or null)</returns>
         public ILearningDelivery GetLastDelivery(ILearner learner) =>
-            learner.LearningDeliveries
-                .SafeWhere(x => It.Has(x.LearnActEndDateNullable))
+            learner.LearningDeliveries?
+                .Where(x => It.Has(x.LearnActEndDateNullable))
                 .OrderByDescending(x => x.LearnActEndDateNullable.Value)
                 .FirstOrDefault();
 
@@ -58,7 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// the destination and progression record
         /// </returns>
         public ILearnerDestinationAndProgression GetDAndP(string learnRefNumber, IMessage message) =>
-              message.LearnerDestinationAndProgressions
+              message.LearnerDestinationAndProgressions?
                  .Where(x => x.LearnRefNumber == learnRefNumber)
                  .FirstOrDefault();
 
@@ -87,6 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             var delivery = GetLastDelivery(learner);
 
             return It.Has(dps)
+                && It.Has(delivery)
                 && dps.DPOutcomes.SafeAny(x => HasQualifyingOutcome(x, delivery.LearnActEndDateNullable.Value));
         }
 
