@@ -1,69 +1,88 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
 {
-    /// <summary>
-    /// If the learner's LLDD and health problem is 'Learner does not consider himself or herself to have a learning difficulty and/or disability or health problem',
-    /// then a LLDD and Health Problem record must not be returned
-    /// </summary>
     public class LLDDHealthProb_06Rule : AbstractRule, IRule<ILearner>
     {
-        private const int ValidLlddHealthProblemValue = 1;
+        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
         private readonly IDD06 _dd06;
-        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
         private readonly IDateTimeQueryService _dateTimeQueryService;
 
-        public LLDDHealthProb_06Rule(IValidationErrorHandler validationErrorHandler, IDD06 dd06, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IDateTimeQueryService dateTimeQueryService)
-            : base(validationErrorHandler)
+        public LLDDHealthProb_06Rule(
+            ILearningDeliveryFAMQueryService learningDeliveryFamQueryService,
+            IDD06 dd06,
+            IDateTimeQueryService dateTimeQueryService,
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.LLDDHealthProb_06)
         {
+            _learningDeliveryFamQueryService = learningDeliveryFamQueryService;
             _dd06 = dd06;
-            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
             _dateTimeQueryService = dateTimeQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.LLDDHealthProbNullable, objectToValidate.LLDDAndHealthProblems) &&
-                !Exclude(objectToValidate.LearningDeliveries, objectToValidate.DateOfBirthNullable))
+            var dd06Date = _dd06.Derive(objectToValidate.LearningDeliveries);
+
+            if (ConditionMet(
+                objectToValidate.LLDDHealthProb,
+                objectToValidate.LLDDAndHealthProblems,
+                objectToValidate.LearningDeliveries,
+                objectToValidate.DateOfBirthNullable,
+                dd06Date))
             {
-                HandleValidationError(RuleNameConstants.LLDDHealthProb_06Rule, objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber);
             }
         }
 
-        public bool ConditionMet(long? lldHealthProblem, IReadOnlyCollection<ILLDDAndHealthProblem> llddAndHealthProblems)
+        public bool ConditionMet(int llddHealthProb, IEnumerable<ILLDDAndHealthProblem> llddAndHealthProblems, IEnumerable<ILearningDelivery> learningDeliveries, DateTime? dateOfBirth, DateTime dd06Date)
         {
-            return lldHealthProblem.HasValue &&
-                   lldHealthProblem.Value == ValidLlddHealthProblemValue &&
-                   (llddAndHealthProblems == null || !llddAndHealthProblems.Any());
+            return LLDDHealthProbConditionMet(llddHealthProb)
+                   && LLDDRecordConditionMet(llddAndHealthProblems)
+                   && !Excluded(learningDeliveries, dateOfBirth, dd06Date);
         }
 
-        public bool Exclude(IReadOnlyCollection<ILearningDelivery> learningDeliveries, DateTime? dateOfBirth)
+        public bool LLDDHealthProbConditionMet(int llddHealthProb)
         {
-            return (learningDeliveries != null && learningDeliveries.Any(x => ExcludeConditionFamValueMet(x.FundModelNullable, x.LearningDeliveryFAMs))) ||
-                   ExcludeConditionDateOfBirthMet(dateOfBirth, _dd06.Derive(learningDeliveries));
+            return llddHealthProb == 1;
         }
 
-        public bool ExcludeConditionFamValueMet(long? fundModel, IReadOnlyCollection<ILearningDeliveryFAM> fams)
+        public bool LLDDRecordConditionMet(IEnumerable<ILLDDAndHealthProblem> llddAndHealthProblems)
         {
-            return fundModel.HasValue &&
-                   (
-                       fundModel.Value == 10 ||
-                       (fundModel.Value == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(fams, LearningDeliveryFAMTypeConstants.SOF, "108")));
+            return llddAndHealthProblems == null;
         }
 
-        public bool ExcludeConditionDateOfBirthMet(DateTime? dateOfBirth, DateTime? minimumLearningDeliveryStartDate)
+        public bool Excluded(IEnumerable<ILearningDelivery> learningDeliveries, DateTime? dateOfBirth, DateTime dd06Date)
         {
-            return dateOfBirth.HasValue &&
-                   minimumLearningDeliveryStartDate.HasValue &&
-                   _dateTimeQueryService.YearsBetween(dateOfBirth.Value, minimumLearningDeliveryStartDate.Value) >= 25;
+            return ExcludedFundModelConditionMet(learningDeliveries)
+                   || ExcludedDeliveryFAMConditionMet(learningDeliveries)
+                   || ExcludedDOBConditionMet(dateOfBirth, dd06Date);
+        }
+
+        public bool ExcludedFundModelConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
+        {
+            return learningDeliveries != null
+                   && learningDeliveries.Any(ld => ld.FundModel == 10);
+        }
+
+        public bool ExcludedDeliveryFAMConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
+        {
+            return learningDeliveries != null
+                   && learningDeliveries.Any(learningDelivery => learningDelivery.FundModel == 99 && _learningDeliveryFamQueryService.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108"));
+        }
+
+        public bool ExcludedDOBConditionMet(DateTime? dateOfBirth, DateTime dd06Date)
+        {
+            return dateOfBirth.HasValue
+                   && _dateTimeQueryService.YearsBetween(dateOfBirth.Value, dd06Date) >= 25;
         }
     }
 }
