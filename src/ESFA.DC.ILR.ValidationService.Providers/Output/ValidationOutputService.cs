@@ -174,7 +174,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             }
             catch (Exception e)
             {
-                _logger.LogWarning("Failed To get Existing Validation Errors, assume none available and carry on.");
+                _logger.LogError("Failed To get Existing Validation Errors, assume none available and carry on.", e);
             }
 
             return validationErrors;
