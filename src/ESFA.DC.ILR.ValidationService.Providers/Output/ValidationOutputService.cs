@@ -73,8 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             var validLearnerRefNumbers = BuildValidLearnRefNumbers(invalidLearnerRefNumbers, validationErrors).ToList();
             _logger.LogDebug($"ValidationOutputService invalid:{invalidLearnerRefNumbers.Count} valid:{validLearnerRefNumbers.Count}");
 
-            var validationErrorMessageLookups = _validationErrorCache
-                .ValidationErrors
+            var validationErrorMessageLookups = validationErrors
                 .Select(ve => ve.RuleName)
                 .Distinct()
                 .Select(rn => new ValidationErrorMessageLookup
