@@ -53,6 +53,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.EDRS
         /// </returns>
         public bool IsValid(int? thisEmployer)
         {
+            // TODO: Needs fixup when EDRS data really turns up.
+            return true;
             return It.IsEmpty(thisEmployer)
                 || IsTemporary(thisEmployer)
                 || _employers.Contains(thisEmployer.Value);
