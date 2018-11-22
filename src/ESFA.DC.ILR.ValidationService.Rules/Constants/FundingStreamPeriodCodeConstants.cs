@@ -17,5 +17,9 @@
         public const string C1618_NLAP2018 = "16-18NLAP2018";
 
         public const string ANLAP2018 = "ANLAP2018";
+
+        public const string ALLB1819 = "ALLB1819";
+
+        public const string ALLBC1819 = "ALLBC1819";
     }
 }
