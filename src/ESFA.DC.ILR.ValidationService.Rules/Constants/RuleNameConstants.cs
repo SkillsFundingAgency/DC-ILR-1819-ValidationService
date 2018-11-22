@@ -163,6 +163,7 @@
         public const string LLDDCat_02 = "LLDDCat_02";
 
         public const string LLDDHealthProb_01 = "LLDDHealthProb_01";
+        public const string LLDDHealthProb_06 = "LLDDHealthProb_06";
 
         public const string LearnStartDate_06 = "LearnStartDate_06";
         public const string LearnStartDate_07 = "LearnStartDate_07";
