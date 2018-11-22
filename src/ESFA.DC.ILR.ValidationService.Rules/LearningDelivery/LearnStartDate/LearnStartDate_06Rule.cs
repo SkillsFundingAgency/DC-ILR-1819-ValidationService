@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         learningDelivery.AimSeqNumber,
-                        errorMessageParameters: BuildErrorMessageParameters(learningDelivery.LearnStartDate, learningDelivery.PwayCodeNullable, learningDelivery.ProgTypeNullable, learningDelivery.FworkCodeNullable));
+                        errorMessageParameters: BuildErrorMessageParameters(learningDelivery.LearnStartDate));
                 }
             }
         }
@@ -81,14 +81,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
                 || _learningDeliveryFAMQueryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES");
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, int? pwayCode, int? progType, int? fWorkCode)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB"))),
-                BuildErrorMessageParameter(PropertyNameConstants.PwayCode, pwayCode),
-                BuildErrorMessageParameter(PropertyNameConstants.ProgType, progType),
-                BuildErrorMessageParameter(PropertyNameConstants.FworkCode, fWorkCode),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
             };
         }
     }
