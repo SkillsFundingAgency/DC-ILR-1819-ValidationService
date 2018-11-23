@@ -163,6 +163,7 @@
         public const string LLDDCat_02 = "LLDDCat_02";
 
         public const string LLDDHealthProb_01 = "LLDDHealthProb_01";
+        public const string LLDDHealthProb_06 = "LLDDHealthProb_06";
 
         public const string LearnStartDate_06 = "LearnStartDate_06";
         public const string LearnStartDate_07 = "LearnStartDate_07";
@@ -178,6 +179,8 @@
         public const string NINumber_02 = "NINumber_02";
 
         public const string NUMHUS_01 = "NUMHUS_01";
+
+        public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
@@ -247,7 +250,9 @@
         public const string TTACCOM_04 = "TTACCOM_04";
 
         public const string UKPRN_03 = "UKPRN_03";
+        public const string UKPRN_05 = "UKPRN_05";
         public const string UKPRN_06 = "UKPRN_06";
+        public const string UKPRN_08 = "UKPRN_08";
         public const string UKPRN_09 = "UKPRN_09";
         public const string UKPRN_10 = "UKPRN_10";
         public const string UKPRN_14 = "UKPRN_14";

@@ -230,5 +230,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                         && dd04Date > fa.EffectiveTo))
                 .Any();
         }
+
+        public bool OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(DateTime? origLearnStartDate, string learnAimRef)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null
+                   && learningDelivery.LARSValidities != null
+                   && learningDelivery.LARSValidities.Any(lv => lv.LearnAimRef == learnAimRef
+                                                                && lv.ValidityCategory == "APPRENTICESHIPS"
+                                                                && origLearnStartDate >= lv.StartDate
+                                                                && origLearnStartDate <= lv.EndDate);
+        }
     }
 }

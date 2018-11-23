@@ -218,6 +218,7 @@
     <Compile Include="Learner\LLDDCat\LLDDCat_01Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_02Rule.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_01Rule.cs" />
+    <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_06Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_01Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_03Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_04Rule.cs" />
@@ -241,7 +242,10 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_05Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09Rule.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_08Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_14Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_10Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_06Rule.cs" />
