@@ -59,6 +59,7 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.Outcome;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
@@ -274,6 +275,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(OrigLearnStartDate_04Rule),
                 typeof(OrigLearnStartDate_05Rule),
                 typeof(OtherFundAdj_01Rule),
+                typeof(Outcome_09Rule),
                 typeof(OutGrade_03Rule),
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
