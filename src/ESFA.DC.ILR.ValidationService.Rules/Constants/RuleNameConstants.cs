@@ -247,6 +247,8 @@
 
         public const string Schema = "Schema";
 
+        public const string SOC2000_02 = "SOC2000_02";
+
         public const string STULOAD_04 = "STULOAD_04";
 
         public const string TTACCOM_04 = "TTACCOM_04";

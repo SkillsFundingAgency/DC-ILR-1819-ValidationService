@@ -19,6 +19,7 @@
         public const string CompStatus = "CompStatus";
         public const string ConRefNumber = "ConRefNumber";
         public const string DelLocPostCode = "DelLocPostCode";
+        public const string DOMICILE = "DOMICILE";
         public const string EmpId = "EmpId";
         public const string Ethnicity = "Ethnicity";
         public const string EmpOutcome = "EmpOutcome";
@@ -70,6 +71,7 @@
         public const string PwayCode = "PwayCode";
         public const string QUALENT3 = "QUALENT3";
         public const string StdCode = "StdCode";
+        public const string UCASAPPID = "UCASAPPID";
         public const string WithdrawReason = "WithdrawReason";
     }
 }
