@@ -12,10 +12,15 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 {
-    public class UKPRN_14Rule : AbstractRule, IRule<ILearner>
+    public class UKPRN_12Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly string _learnDelFamType = LearningDeliveryFAMTypeConstants.ACT;
-        private readonly HashSet<string> _fundingStreamPeriodCodes = new HashSet<string> { FundingStreamPeriodCodeConstants.APPS1819 };
+        private readonly string _learnDelFamType = LearningDeliveryFAMTypeConstants.LDM;
+        private readonly HashSet<string> _fundingStreamPeriodCodes = new HashSet<string>
+        {
+            FundingStreamPeriodCodeConstants.AEBTO_TOL1819
+        };
+
+        private readonly DateTime _firstNov2017 = new DateTime(2017, 11, 01);
 
         private readonly IFileDataService _fileDataService;
         private readonly IAcademicYearDataService _academicYearDataService;
@@ -23,14 +28,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         private readonly IFCSDataService _fcsDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public UKPRN_14Rule(
+        public UKPRN_12Rule(
             IFileDataService fileDataService,
             IAcademicYearDataService academicYearDataService,
             IAcademicYearQueryService academicYearQueryService,
             IFCSDataService fcsDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.UKPRN_14)
+            : base(validationErrorHandler, RuleNameConstants.UKPRN_12)
         {
             _fileDataService = fileDataService;
             _academicYearDataService = academicYearDataService;
@@ -39,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
-        public UKPRN_14Rule()
+        public UKPRN_12Rule()
            : base(null, null)
         {
         }
@@ -51,16 +56,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => d.LearningDeliveryFAMs != null))
             {
-                if (ConditionMet(academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.LearningDeliveryFAMs))
+                if (ConditionMet(learningDelivery.LearnStartDate, academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, ukprn, _learnDelFamType, "2"));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, ukprn, _learnDelFamType, "357"));
                 }
             }
         }
 
-        public bool ConditionMet(DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool ConditionMet(DateTime learnStartDate, DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return LearnActEndDateConditionMet(learnActEndDate, academicYearStart)
+                && LearnStartDateConditionMet(learnStartDate)
                 && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)
                 && FCTFundingConditionMet();
         }
@@ -70,10 +76,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
             return learnActEndDate == null ? true : !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYearStart);
         }
 
+        public virtual bool LearnStartDateConditionMet(DateTime learnStartDate)
+        {
+            return learnStartDate >= _firstNov2017;
+        }
+
         public virtual bool LearningDeliveryFAMsConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, "2")
-                && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "358");
+            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, _learnDelFamType, "357");
         }
 
         public virtual bool FCTFundingConditionMet()
