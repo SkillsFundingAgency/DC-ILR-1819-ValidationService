@@ -252,6 +252,7 @@
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_13RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_12RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_11RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_14RuleTests.cs" />

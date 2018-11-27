@@ -313,7 +313,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            };
+            }
+
             fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(ukprn);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
@@ -379,7 +380,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            };
+            }
+
             fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(ukprn);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
@@ -445,7 +447,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            };
+            }
+
             fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(ukprn);
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);

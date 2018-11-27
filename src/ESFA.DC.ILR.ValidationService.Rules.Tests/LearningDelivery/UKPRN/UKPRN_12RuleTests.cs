@@ -241,7 +241,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            };
+            }
+
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
             fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(ukprn);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "357")).Returns(true);
@@ -296,7 +297,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(true);
-            };
+            }
+
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
             fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(ukprn);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, "1")).Returns(true);

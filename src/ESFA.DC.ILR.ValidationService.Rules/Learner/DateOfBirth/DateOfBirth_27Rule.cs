@@ -6,14 +6,12 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_27Rule : AbstractRule, IRule<ILearner>
     {
         private readonly IAcademicYearDataService _academicYearDataService;
-        private readonly IDateTimeQueryService _dateTimeQueryService;
 
         public DateOfBirth_27Rule(IAcademicYearDataService academicYearDataService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_27)
