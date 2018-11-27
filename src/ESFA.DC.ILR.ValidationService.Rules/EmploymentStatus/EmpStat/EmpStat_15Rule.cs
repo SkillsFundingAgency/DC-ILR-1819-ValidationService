@@ -4,6 +4,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 {
@@ -96,7 +97,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [has qualifying employment status] [the specified employment status]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasQualifyingEmploymentStatus(ILearnerEmploymentStatus eStatus) =>
-            It.IsOutOfRange(eStatus.EmpStat, TypeOfEmploymentStatus.NotKnownProvided);
+            It.IsOutOfRange(eStatus?.EmpStat, TypeOfEmploymentStatus.NotKnownProvided);
+
+        /// <summary>
+        /// Gets the qualifying employment status.
+        /// </summary>
+        /// <param name="learner">The learner.</param>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>returns the latest applicable employment status</returns>
+        public ILearnerEmploymentStatus GetQualifyingEmploymentStatus(ILearner learner, ILearningDelivery delivery) =>
+            learner.LearnerEmploymentStatuses
+                .SafeWhere(x => x.DateEmpStatApp <= delivery.LearnStartDate)
+                .OrderByDescending(x => x.DateEmpStatApp)
+                .FirstOrDefault();
 
         /// <summary>
         /// Determines whether [has qualifying employment status] [the specified learner].
@@ -107,9 +120,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [has qualifying employment status] [the specified learner]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasQualifyingEmploymentStatus(ILearner learner, ILearningDelivery delivery) =>
-            learner.LearnerEmploymentStatuses
-                .SafeWhere(x => x.DateEmpStatApp == delivery.LearnStartDate)
-                .SafeAll(HasQualifyingEmploymentStatus);
+            HasQualifyingEmploymentStatus(GetQualifyingEmploymentStatus(learner, delivery));
 
         /// <summary>
         /// Determines whether [is not valid] [the specified learner].

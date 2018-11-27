@@ -209,10 +209,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         /// <summary>
-        /// Has a qualifying employment status with null employment returns false
+        /// Has a qualifying employment status with null employment returns true
         /// </summary>
         [Fact]
-        public void HasAQualifyingEmploymentStatusWithNullEmploymentReturnsFalse()
+        public void HasAQualifyingEmploymentStatusWithNullEmploymentReturnsTrue()
         {
             // arrange
             var sut = NewRule();
@@ -221,7 +221,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var result = sut.HasAQualifyingEmploymentStatus(null);
 
             // assert
-            Assert.False(result);
+            Assert.True(result);
         }
 
         /// <summary>
@@ -302,7 +302,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Returns(AimSeqNumber);
             deliveries.Add(mockDelivery.Object);
 
+            var mockEmpStat = new Mock<ILearnerEmploymentStatus>();
+            mockEmpStat
+                .SetupGet(x => x.EmpStat)
+                .Returns(TypeOfEmploymentStatus.NotKnownProvided);
+
             var statii = Collection.Empty<ILearnerEmploymentStatus>();
+            statii.Add(mockEmpStat.Object);
 
             var mockLearner = new Mock<ILearner>();
             mockLearner

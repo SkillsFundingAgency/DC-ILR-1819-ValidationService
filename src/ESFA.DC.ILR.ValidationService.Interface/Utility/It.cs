@@ -219,8 +219,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         public static bool IsOutOfRange<T>(T? source, params T[] target)
             where T : struct, IComparable, IFormattable
         {
-            var values = target.AsSafeList();
-            return Has(source) && !values.Contains(source.Value);
+            return !IsInRange(source, target);
         }
 
         /// <summary>
