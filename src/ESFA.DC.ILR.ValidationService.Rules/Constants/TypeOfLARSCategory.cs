@@ -19,5 +19,10 @@
         /// legal entitlement level 2
         /// </summary>
         public const int LegalEntitlementLevel2 = 37;
+
+        /// <summary>
+        /// only for legal entitlement at level 3
+        /// </summary>
+        public const int OnlyForLegalEntitlementAtLevel3 = 38;
     }
 }
