@@ -264,6 +264,7 @@
         public const string UKPRN_12 = "UKPRN_12";
         public const string UKPRN_13 = "UKPRN_13";
         public const string UKPRN_14 = "UKPRN_14";
+        public const string UKPRN_15 = "UKPRN_15";
 
         public const string ULN_02 = "ULN_02";
         public const string ULN_03 = "ULN_03";
