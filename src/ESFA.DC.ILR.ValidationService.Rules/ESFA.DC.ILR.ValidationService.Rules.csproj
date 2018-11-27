@@ -171,6 +171,7 @@
     <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_03Rule.cs" />
+    <Compile Include="HE\SOC2000\SOC2000_02Rule.cs" />
     <Compile Include="HE\STULOAD\STULOAD_04Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
@@ -242,11 +243,15 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_01Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_08Rule.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_12Rule.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_11Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_14Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_10Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_06Rule.cs" />

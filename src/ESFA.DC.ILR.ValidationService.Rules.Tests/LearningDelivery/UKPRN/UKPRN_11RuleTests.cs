@@ -7,7 +7,6 @@ using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -17,15 +16,20 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 {
-    public class UKPRN_14RuleTests : AbstractRuleTests<UKPRN_14Rule>
+    public class UKPRN_11RuleTests : AbstractRuleTests<UKPRN_11Rule>
     {
         private readonly int _fundModel = FundModelConstants.Apprenticeships;
-        private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>() { FundingStreamPeriodCodeConstants.APPS1819 };
+        private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>()
+        {
+            FundingStreamPeriodCodeConstants.APPS1819,
+            FundingStreamPeriodCodeConstants.C1618_NLAP2018,
+            FundingStreamPeriodCodeConstants.ANLAP2018
+        };
 
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("UKPRN_14");
+            NewRule().RuleName.Should().Be("UKPRN_11");
         }
 
         [Theory]
@@ -61,6 +65,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         }
 
         [Fact]
+        public void LearnStartDateConditionMet_True()
+        {
+            NewRule().LearnStartDateConditionMet(new DateTime(2018, 8, 1)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnStartDateConditionMet_False()
+        {
+            NewRule().LearnStartDateConditionMet(new DateTime(2016, 8, 1)).Should().BeFalse();
+        }
+
+        [Fact]
         public void LearningDeliveryFAMsConditionMet_True()
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
@@ -68,27 +84,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 new TestLearningDeliveryFAM
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                    LearnDelFAMCode = "1"
-                },
-                 new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
-                    LearnDelFAMCode = "358"
+                    LearnDelFAMCode = "2"
                 }
             };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, "2")).Returns(true);
 
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsConditionMet(learningDeliveryFAMs).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(LearningDeliveryFAMTypeConstants.ACT, "2")]
-        [InlineData(LearningDeliveryFAMTypeConstants.ASL, "1")]
-        [InlineData(LearningDeliveryFAMTypeConstants.LDM, "1")]
-        [InlineData(LearningDeliveryFAMTypeConstants.ACT, "358")]
+        [InlineData(LearningDeliveryFAMTypeConstants.ACT, "1")]
+        [InlineData(LearningDeliveryFAMTypeConstants.ASL, "2")]
         public void LearningDeliveryFAMsConditionMet_False(string famType, string famCode)
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
@@ -102,7 +111,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, "2")).Returns(false);
 
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsConditionMet(learningDeliveryFAMs).Should().BeFalse();
         }
@@ -142,7 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 new TestLearningDeliveryFAM
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                    LearnDelFAMCode = "1"
+                    LearnDelFAMCode = "2"
                 },
                 new TestLearningDeliveryFAM
                 {
@@ -154,20 +163,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             var rule = NewRuleMock();
 
             rule.Setup(r => r.LearnActEndDateConditionMet(learnActEndDate, academicYear)).Returns(true);
+            rule.Setup(r => r.LearnStartDateConditionMet(startDate)).Returns(true);
             rule.Setup(r => r.LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)).Returns(true);
             rule.Setup(r => r.FCTFundingConditionMet()).Returns(true);
 
-            rule.Object.ConditionMet(academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeTrue();
+            rule.Object.ConditionMet(startDate, academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(false, true, true)]
-        [InlineData(true, false, true)]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, false)]
-        [InlineData(false, false, true)]
-        [InlineData(false, false, false)]
-        public void ConditionMet_False(bool condition1, bool condition2, bool condition3)
+        [InlineData(false, true, true, true)]
+        [InlineData(true, false, true, true)]
+        [InlineData(true, true, false, true)]
+        [InlineData(true, true, true, false)]
+        [InlineData(true, true, false, false)]
+        [InlineData(false, false, true, true)]
+        [InlineData(false, false, false, false)]
+        public void ConditionMet_False(bool condition1, bool condition2, bool condition3, bool condition4)
         {
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
@@ -177,7 +188,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 new TestLearningDeliveryFAM
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                    LearnDelFAMCode = "1"
+                    LearnDelFAMCode = "2"
                 },
                 new TestLearningDeliveryFAM
                 {
@@ -189,10 +200,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             var rule = NewRuleMock();
 
             rule.Setup(r => r.LearnActEndDateConditionMet(learnActEndDate, academicYear)).Returns(condition1);
-            rule.Setup(r => r.LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)).Returns(condition2);
-            rule.Setup(r => r.FCTFundingConditionMet()).Returns(condition3);
+            rule.Setup(r => r.LearnStartDateConditionMet(startDate)).Returns(condition2);
+            rule.Setup(r => r.LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)).Returns(condition3);
+            rule.Setup(r => r.FCTFundingConditionMet()).Returns(condition4);
 
-            rule.Object.ConditionMet(academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeFalse();
+            rule.Object.ConditionMet(startDate, academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeFalse();
         }
 
         [Fact]
@@ -217,12 +229,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                             new TestLearningDeliveryFAM
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "1"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
-                                LearnDelFAMCode = "358"
+                                LearnDelFAMCode = "2"
                             }
                         }
                     }
@@ -241,7 +248,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             };
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
             fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(ukprn);
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, "2")).Returns(true);
             fcsDataServiceMock.Setup(qs => qs.FundingRelationshipFCTExists(_fundingStreamPeriodCodes)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -278,7 +285,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                             new TestLearningDeliveryFAM
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "1"
+                                LearnDelFAMCode = "2"
                             }
                         }
                     }
@@ -297,8 +304,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             };
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
             fileDataServiceMock.Setup(ds => ds.UKPRN()).Returns(ukprn);
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(true);
-            fcsDataServiceMock.Setup(qs => qs.FundingRelationshipFCTExists(_fundingStreamPeriodCodes)).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT, "1")).Returns(true);
+            fcsDataServiceMock.Setup(qs => qs.FundingRelationshipFCTExists(_fundingStreamPeriodCodes)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -316,20 +323,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         public void BuildErrorMessageParameters()
         {
             var ukprn = 12345678;
-            var learnStartDate = new DateTime(2017, 09, 01);
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, "01/09/2017")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.UKPRN, 12345678)).Verifiable();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.UKPRN, ukprn)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, _fundModel)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.ACT)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, "2")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(learnStartDate, ukprn, LearningDeliveryFAMTypeConstants.ACT, "2");
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(12345678, _fundModel, LearningDeliveryFAMTypeConstants.ACT, "2");
 
             validationErrorHandlerMock.Verify();
         }
 
-        private UKPRN_14Rule NewRule(
+        private UKPRN_11Rule NewRule(
             IFileDataService fileDataService = null,
             IAcademicYearDataService academicYearDataService = null,
             IAcademicYearQueryService academicYearQueryService = null,
@@ -337,7 +344,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
-            return new UKPRN_14Rule(fileDataService, academicYearDataService, academicYearQueryService, fcsDataService, learningDeliveryFAMQueryService, validationErrorHandler);
+            return new UKPRN_11Rule(fileDataService, academicYearDataService, academicYearQueryService, fcsDataService, learningDeliveryFAMQueryService, validationErrorHandler);
         }
     }
 }
