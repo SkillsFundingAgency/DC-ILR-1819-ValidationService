@@ -85,7 +85,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                 cache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupAsIntWithValidityPeriods(lookups, "LLDDCat"));
                 cache.QUALENT3s = new Dictionary<string, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "QualEnt3"));
                 cache.TTAccoms = new Dictionary<int, ValidityPeriods>(BuildLookupAsIntWithValidityPeriods(lookups, "TTAccom"));
-                //cache.ApprenticeshipFinancialRecords = new Dictionary<string, int>(BuildComplexLooup(lookups, "ApprenticeshipFinancialRecord"));
 
                 Enum.GetValues(typeof(LookupSimpleKey))
                     .OfType<LookupSimpleKey>()

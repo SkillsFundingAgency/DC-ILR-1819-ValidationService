@@ -14,7 +14,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 {
     public class UKPRN_11Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly string _learnDelFamType = LearningDeliveryFAMTypeConstants.ACT;
         private readonly int _fundModel = FundModelConstants.Apprenticeships;
         private readonly HashSet<string> _fundingStreamPeriodCodes = new HashSet<string>
         {

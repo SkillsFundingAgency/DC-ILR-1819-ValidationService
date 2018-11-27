@@ -116,7 +116,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         [Fact]
         public void Validate_Error()
         {
-            int ukprn = 12345678;
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
             DateTime? learnActEndDate = new DateTime(2018, 8, 1);
@@ -143,7 +142,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            };
+            }
+
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
             fcsDataServiceMock.Setup(qs => qs.FundingRelationshipFCTExists(_fundingStreamPeriodCodes)).Returns(false);
             fcsDataServiceMock.Setup(qs => qs.ConRefNumberExists(conRefNumber)).Returns(false);
@@ -161,7 +161,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         [Fact]
         public void Validate_NoError()
         {
-            int ukprn = 12345678;
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
             DateTime? learnActEndDate = new DateTime(2018, 8, 1);
@@ -188,7 +187,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            };
+            }
+
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
             fcsDataServiceMock.Setup(qs => qs.FundingRelationshipFCTExists(_fundingStreamPeriodCodes)).Returns(true);
             fcsDataServiceMock.Setup(qs => qs.ConRefNumberExists(conRefNumber)).Returns(false);

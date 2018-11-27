@@ -269,7 +269,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         [Fact]
         public void Validate_Error()
         {
-            int ukprn = 12345678;
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
             DateTime? learnActEndDate = new DateTime(2018, 8, 1);
@@ -310,7 +309,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            };
+            }
+
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(false);
@@ -331,7 +331,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         [Fact]
         public void Validate_NoError()
         {
-            int ukprn = 12345678;
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
             DateTime? learnActEndDate = new DateTime(2018, 8, 1);
@@ -372,7 +371,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             if (learnActEndDate != null)
             {
                 academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            };
+            }
+
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
             academicYearDataServiceMock.Setup(ds => ds.Start()).Returns(startDate);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, It.IsAny<string>(), It.IsAny<string>())).Returns(true);
