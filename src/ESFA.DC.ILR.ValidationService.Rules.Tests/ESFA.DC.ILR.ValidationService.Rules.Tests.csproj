@@ -162,6 +162,7 @@
     <Compile Include="HE\HEPostcode\HEPostCode_02RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03RuleTests.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_03RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02RuleTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02RuleTests.cs" />
@@ -252,8 +253,10 @@
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_13RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_12RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_11RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_15RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_14RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_10RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_06RuleTests.cs" />

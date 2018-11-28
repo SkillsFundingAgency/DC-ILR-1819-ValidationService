@@ -21,9 +21,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
             OutTypeConstants.VoluntaryWork
         };
 
-        private string _outTypesForError;
-
         private readonly ILearnerDPQueryService _learnerDPQueryService;
+        private string _outTypesForError;
 
         public OutType_02Rule(ILearnerDPQueryService learnerDPQueryService, IValidationErrorHandler validationErrorHandler)
           : base(validationErrorHandler, RuleNameConstants.OutType_02)

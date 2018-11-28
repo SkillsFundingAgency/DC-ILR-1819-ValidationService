@@ -173,6 +173,8 @@
         public const string MathGrade_03 = "MathGrade_03";
         public const string MathGrade_04 = "MathGrade_04";
 
+        public const string MSTUFEE_03 = "MSTUFEE_03";
+
         public const string NETFEE_01 = "NETFEE_01";
         public const string NETFEE_02 = "NETFEE_02";
 
@@ -262,7 +264,9 @@
         public const string UKPRN_10 = "UKPRN_10";
         public const string UKPRN_11 = "UKPRN_11";
         public const string UKPRN_12 = "UKPRN_12";
+        public const string UKPRN_13 = "UKPRN_13";
         public const string UKPRN_14 = "UKPRN_14";
+        public const string UKPRN_15 = "UKPRN_15";
 
         public const string ULN_02 = "ULN_02";
         public const string ULN_03 = "ULN_03";

@@ -162,6 +162,7 @@
     <Compile Include="HE\LearnerHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_03Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
@@ -251,8 +252,10 @@
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_08Rule.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_13Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_12Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_11Rule.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_15Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_14Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_10Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_06Rule.cs" />

@@ -35,11 +35,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutCollD
             return _outCollDateForError != DateTime.MinValue ? true : false;
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? OutCollDate)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? outCollDate)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.OutCollDate, OutCollDate),
+                BuildErrorMessageParameter(PropertyNameConstants.OutCollDate, outCollDate),
             };
         }
     }

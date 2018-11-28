@@ -11,6 +11,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.HEPostcode;
 using ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE;
+using ESFA.DC.ILR.ValidationService.Rules.HE.MSTUFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
@@ -269,6 +270,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(MathGrade_01Rule),
                 typeof(MathGrade_03Rule),
                 typeof(MathGrade_04Rule),
+                typeof(MSTUFEE_03Rule),
                 typeof(NETFEE_01Rule),
                 typeof(NETFEE_02Rule),
                 typeof(NINumber_01Rule),
@@ -342,7 +344,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(UKPRN_10Rule),
                 typeof(UKPRN_11Rule),
                 typeof(UKPRN_12Rule),
+                typeof(UKPRN_13Rule),
                 typeof(UKPRN_14Rule),
+                typeof(UKPRN_15Rule),
                 typeof(ULN_02Rule),
                 typeof(ULN_03Rule),
                 typeof(ULN_04Rule),
