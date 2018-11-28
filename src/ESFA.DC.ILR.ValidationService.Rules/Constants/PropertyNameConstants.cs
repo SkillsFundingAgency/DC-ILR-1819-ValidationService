@@ -47,6 +47,7 @@
         public const string LLDDHealthProb = "LLDDHealthProb";
         public const string MathGrade = "MathGrade";
         public const string MODESTUD = "MODESTUD";
+        public const string MSTUFEE = "MSTUFEE";
         public const string NETFEE = "NETFEE";
         public const string NINumber = "NINumber";
         public const string OrigLearnStartDate = "OrigLearnStartDate";
