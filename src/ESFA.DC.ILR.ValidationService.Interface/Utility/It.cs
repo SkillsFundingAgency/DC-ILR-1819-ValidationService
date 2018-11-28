@@ -251,6 +251,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         public static bool IsBetween(TimeSpan candidate, TimeSpan min, TimeSpan max, bool includeBoundaries = true)
         {
+            (max < min)
+                .AsGuard<ArgumentOutOfRangeException>(nameof(max));
+
             return includeBoundaries
                 ? candidate >= min && candidate <= max
                 : candidate > min && candidate < max;
@@ -258,6 +261,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
 
         /// <summary>
         /// Determines whether the specified candidate is between.
+        /// out of range exception where max is less than min
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="min">The minimum.</param>
@@ -268,6 +272,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         public static bool IsBetween(DateTime candidate, DateTime min, DateTime max, bool includeBoundaries = true)
         {
+            (max < min)
+                .AsGuard<ArgumentOutOfRangeException>(nameof(max));
+
             return includeBoundaries
                 ? candidate >= min && candidate <= max
                 : candidate > min && candidate < max;
@@ -275,6 +282,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
 
         /// <summary>
         /// Determines whether [is out of range] [the specified candidate].
+        /// out of range exception where max is less than min
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="min">The minimum.</param>

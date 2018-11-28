@@ -148,7 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData("2014-04-01", "2012-05-09", "2014-09-07", true)]
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", false)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", false)]
-        [InlineData("2013-07-16", "2015-05-09", "2013-07-15", false)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", false)]
         public void InValidStartRangeMeetsExpectation(string candidate, string startDate, string endDate, bool expectation)
         {
             // arrange
@@ -187,7 +187,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData("2014-04-01", "2012-05-09", "2014-09-07", true)]
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", false)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", false)]
-        [InlineData("2013-07-16", "2015-05-09", "2013-07-15", false)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", false)]
         public void HasValidLearningAimMeetsExpectation(string candidate, string startDate, string endDate, bool expectation)
         {
             // arrange
@@ -247,19 +247,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [Theory]
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2013-07-16", "2015-05-09", "2013-07-15", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2013-07-16", "2015-05-09", "2013-07-15", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
-        [InlineData("2013-07-16", "2015-05-09", "2013-07-15", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
-        [InlineData("2013-07-16", "2015-05-09", "2013-07-15", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
-        [InlineData("2013-07-16", "2015-05-09", "2013-07-15", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
         public void InvalidItemRaisesValidationMessage(string candidate, string startDate, string endDate, int funding, string category)
         {
             // arrange

@@ -4,8 +4,8 @@ using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
@@ -24,12 +24,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             var orgData = new Mock<IOrganisationDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_78Rule(null, service.Object, derivedData07.Object, fileData.Object, orgData.Object));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_78Rule(null, service.Object, commonChecks.Object, fileData.Object, orgData.Object));
         }
 
         /// <summary>
@@ -40,19 +40,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             var orgData = new Mock<IOrganisationDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_78Rule(handler.Object, null, derivedData07.Object, fileData.Object, orgData.Object));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_78Rule(handler.Object, null, commonChecks.Object, fileData.Object, orgData.Object));
         }
 
         /// <summary>
-        /// New rule with null derived data 07 throws.
+        /// New rule with null common checks throws.
         /// </summary>
         [Fact]
-        public void NewRuleWithNullDerivedData07Throws()
+        public void NewRuleWithNullCommonchecksThrows()
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
@@ -73,11 +73,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var orgData = new Mock<IOrganisationDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, null, orgData.Object));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_78Rule(handler.Object, service.Object, commonChecks.Object, null, orgData.Object));
         }
 
         /// <summary>
@@ -89,11 +89,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, fileData.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_78Rule(handler.Object, service.Object, commonChecks.Object, fileData.Object, null));
         }
 
         /// <summary>
@@ -163,11 +163,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [Fact]
         public void FirstViableDateMeetsExpectation()
         {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.FirstViableDate;
+            // arrange / act
+            var result = LearnAimRef_78Rule.FirstViableDate;
 
             // assert
             Assert.Equal(DateTime.Parse("2016-08-01"), result);
@@ -179,162 +176,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [Fact]
         public void LastViableDateMeetsExpectation()
         {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.LastViableDate;
+            // arrange / act
+            var result = LearnAimRef_78Rule.LastViableDate;
 
             // assert
             Assert.Equal(DateTime.Parse("2017-07-31"), result);
-        }
-
-        /// <summary>
-        /// Is restart meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoan, false)]
-        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.ApprenticeshipContract, false)]
-        [InlineData(Monitoring.Delivery.Types.CommunityLearningProvision, false)]
-        [InlineData(Monitoring.Delivery.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.FamilyEnglishMathsAndLanguage, false)]
-        [InlineData(Monitoring.Delivery.Types.FullOrCoFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.HEMonitoring, false)]
-        [InlineData(Monitoring.Delivery.Types.HouseholdSituation, false)]
-        [InlineData(Monitoring.Delivery.Types.Learning, false)]
-        [InlineData(Monitoring.Delivery.Types.LearningSupportFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.NationalSkillsAcademy, false)]
-        [InlineData(Monitoring.Delivery.Types.PercentageOfOnlineDelivery, false)]
-        [InlineData(Monitoring.Delivery.Types.Restart, true)]
-        [InlineData(Monitoring.Delivery.Types.SourceOfFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.WorkProgrammeParticipation, false)]
-        public void IsRestartMeetsExpectation(string candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockDelivery = new Mock<ILearningDeliveryFAM>();
-            mockDelivery
-                .SetupGet(y => y.LearnDelFAMType)
-                .Returns(candidate);
-
-            // act
-            var result = sut.IsRestart(mockDelivery.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
-        /// Is learner in custody meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(Monitoring.Delivery.OLASSOffendersInCustody, true)]
-        [InlineData(Monitoring.Delivery.FullyFundedLearningAim, false)]
-        [InlineData(Monitoring.Delivery.CoFundedLearningAim, false)]
-        [InlineData(Monitoring.Delivery.InReceiptOfLowWages, false)]
-        [InlineData(Monitoring.Delivery.MandationToSkillsTraining, false)]
-        [InlineData(Monitoring.Delivery.ReleasedOnTemporaryLicence, false)]
-        [InlineData(Monitoring.Delivery.SteelIndustriesRedundancyTraining, false)]
-        [InlineData(Monitoring.Delivery.ESFA16To19Funding, false)]
-        [InlineData(Monitoring.Delivery.ESFAAdultFunding, false)]
-        [InlineData(Monitoring.Delivery.HigherEducationFundingCouncilEngland, false)]
-        [InlineData(Monitoring.Delivery.LocalAuthorityCommunityLearningFunds, false)]
-        [InlineData(Monitoring.Delivery.FinancedByAdvancedLearnerLoans, false)]
-        public void IsLearnerInCustodyMeetsExpectation(string candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<ILearningDeliveryFAM>();
-            mockItem
-                .SetupGet(y => y.LearnDelFAMType)
-                .Returns(candidate.Substring(0, 3));
-            mockItem
-                .SetupGet(y => y.LearnDelFAMCode)
-                .Returns(candidate.Substring(3));
-
-            // act
-            var result = sut.IsLearnerInCustody(mockItem.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
-        /// Is steel worker redundancy training meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(Monitoring.Delivery.OLASSOffendersInCustody, false)]
-        [InlineData(Monitoring.Delivery.FullyFundedLearningAim, false)]
-        [InlineData(Monitoring.Delivery.CoFundedLearningAim, false)]
-        [InlineData(Monitoring.Delivery.InReceiptOfLowWages, false)]
-        [InlineData(Monitoring.Delivery.MandationToSkillsTraining, false)]
-        [InlineData(Monitoring.Delivery.ReleasedOnTemporaryLicence, false)]
-        [InlineData(Monitoring.Delivery.SteelIndustriesRedundancyTraining, true)]
-        [InlineData(Monitoring.Delivery.ESFA16To19Funding, false)]
-        [InlineData(Monitoring.Delivery.ESFAAdultFunding, false)]
-        [InlineData(Monitoring.Delivery.HigherEducationFundingCouncilEngland, false)]
-        [InlineData(Monitoring.Delivery.LocalAuthorityCommunityLearningFunds, false)]
-        [InlineData(Monitoring.Delivery.FinancedByAdvancedLearnerLoans, false)]
-        public void IsSteelWorkerRedundancyTrainingMeetsExpectation(string candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<ILearningDeliveryFAM>();
-            mockItem
-                .SetupGet(y => y.LearnDelFAMType)
-                .Returns(candidate.Substring(0, 3));
-            mockItem
-                .SetupGet(y => y.LearnDelFAMCode)
-                .Returns(candidate.Substring(3));
-
-            // act
-            var result = sut.IsSteelWorkerRedundancyTraining(mockItem.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
-        /// In apprenticeship meets expectation
-        /// </summary>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void InApprenticeshipMeetsExpectation(bool expectation)
-        {
-            // arrange
-            var mockItem = new Mock<ILearningDelivery>();
-
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
-            derivedData07
-                .Setup(x => x.IsApprenticeship(null))
-                .Returns(expectation);
-            var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
-            var orgData = new Mock<IOrganisationDataService>(MockBehavior.Strict);
-
-            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, fileData.Object, orgData.Object);
-
-            // act
-            var result = sut.InApprenticeship(mockItem.Object);
-
-            // assert
-            handler.VerifyAll();
-            service.VerifyAll();
-            derivedData07.VerifyAll();
-            fileData.VerifyAll();
-            orgData.VerifyAll();
-
-            Assert.Equal(expectation, result);
         }
 
         /// <summary>
@@ -352,7 +198,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             fileData
                 .Setup(x => x.UKPRN())
@@ -363,7 +209,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.LegalOrgTypeMatchForUkprn(ukprn, "USDC"))
                 .Returns(expectation);
 
-            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, fileData.Object, orgData.Object);
+            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, commonChecks.Object, fileData.Object, orgData.Object);
 
             // act
             var result = sut.IsSpecialistDesignatedCollege();
@@ -371,69 +217,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // assert
             handler.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
+            commonChecks.VerifyAll();
             fileData.VerifyAll();
             orgData.VerifyAll();
 
-            Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
-        /// Is qualifying funding meets expectation
-        /// </summary>
-        /// <param name="funding">The funding.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, true)]
-        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, false)]
-        [InlineData(TypeOfFunding.CommunityLearning, false)]
-        [InlineData(TypeOfFunding.Other16To19, false)]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, false)]
-        [InlineData(TypeOfFunding.EuropeanSocialFund, false)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, false)]
-        [InlineData(TypeOfFunding.OtherAdult, false)]
-        public void IsQualifyingFundingMeetsExpectation(int funding, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockDelivery = new Mock<ILearningDelivery>();
-            mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(funding);
-
-            // act
-            var result = sut.IsQualifyingFunding(mockDelivery.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
-        /// Is viable start unemployed maximum start meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData("2016-02-28", false)]
-        [InlineData("2016-07-31", false)]
-        [InlineData("2016-08-01", true)]
-        [InlineData("2017-03-01", true)]
-        [InlineData("2017-07-31", true)]
-        [InlineData("2017-08-01", false)]
-        [InlineData("2017-12-01", false)]
-        public void IsViableStartMeetsExpectation(string candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockDelivery = new Mock<ILearningDelivery>();
-            mockDelivery
-                .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse(candidate));
-
-            // act
-            var result = sut.IsViableStart(mockDelivery.Object);
-
-            // assert
             Assert.Equal(expectation, result);
         }
 
@@ -494,11 +281,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetDeliveriesFor(candidate))
                 .Returns(Collection.EmptyAndReadOnly<ILARSLearningDelivery>());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             var orgData = new Mock<IOrganisationDataService>(MockBehavior.Strict);
 
-            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, fileData.Object, orgData.Object);
+            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, commonChecks.Object, fileData.Object, orgData.Object);
 
             // act
             var result = sut.HasQualifyingNotionalNVQ(mockDelivery.Object);
@@ -506,7 +293,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // assert
             handler.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
+            commonChecks.VerifyAll();
             fileData.VerifyAll();
             orgData.VerifyAll();
 
@@ -560,11 +347,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetDeliveriesFor(candidate))
                 .Returns(Collection.EmptyAndReadOnly<ILARSLearningDelivery>());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             var orgData = new Mock<IOrganisationDataService>(MockBehavior.Strict);
 
-            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, fileData.Object, orgData.Object);
+            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, commonChecks.Object, fileData.Object, orgData.Object);
 
             // act
             var result = sut.HasQualifyingCategory(mockDelivery.Object);
@@ -572,7 +359,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // assert
             handler.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
+            commonChecks.VerifyAll();
             fileData.VerifyAll();
             orgData.VerifyAll();
 
@@ -651,10 +438,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetDeliveriesFor(learnAimRef))
                 .Returns(larsItems.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
-            derivedData07
-                .Setup(x => x.IsApprenticeship(null))
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonChecks
+                .Setup(x => x.IsRestart(mockDelivery.Object))
                 .Returns(false);
+            commonChecks
+                .Setup(x => x.IsLearnerInCustody(mockDelivery.Object))
+                .Returns(false);
+            commonChecks
+                .Setup(x => x.IsSteelWorkerRedundancyTraining(mockDelivery.Object))
+                .Returns(false);
+            commonChecks
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(false);
+            commonChecks
+                .Setup(x => x.HasQualifyingFunding(mockDelivery.Object, TypeOfFunding.AdultSkills))
+                .Returns(true);
+            commonChecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, LearnAimRef_78Rule.FirstViableDate, LearnAimRef_78Rule.LastViableDate))
+                .Returns(true);
 
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             fileData
@@ -666,7 +468,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.LegalOrgTypeMatchForUkprn(1004, "USDC"))
                 .Returns(false);
 
-            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, fileData.Object, orgData.Object);
+            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, commonChecks.Object, fileData.Object, orgData.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -674,7 +476,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // assert
             handler.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
+            commonChecks.VerifyAll();
             fileData.VerifyAll();
             orgData.VerifyAll();
         }
@@ -740,10 +542,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetDeliveriesFor(learnAimRef))
                 .Returns(larsItems.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
-            derivedData07
-                .Setup(x => x.IsApprenticeship(null))
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonChecks
+                .Setup(x => x.IsRestart(mockDelivery.Object))
                 .Returns(false);
+            commonChecks
+                .Setup(x => x.IsLearnerInCustody(mockDelivery.Object))
+                .Returns(false);
+            commonChecks
+                .Setup(x => x.IsSteelWorkerRedundancyTraining(mockDelivery.Object))
+                .Returns(false);
+            commonChecks
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(false);
+            commonChecks
+                .Setup(x => x.HasQualifyingFunding(mockDelivery.Object, TypeOfFunding.AdultSkills))
+                .Returns(true);
+            commonChecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, LearnAimRef_78Rule.FirstViableDate, LearnAimRef_78Rule.LastViableDate))
+                .Returns(true);
 
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             fileData
@@ -755,7 +572,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.LegalOrgTypeMatchForUkprn(1004, "USDC"))
                 .Returns(false);
 
-            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, fileData.Object, orgData.Object);
+            var sut = new LearnAimRef_78Rule(handler.Object, service.Object, commonChecks.Object, fileData.Object, orgData.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -763,7 +580,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // assert
             handler.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
+            commonChecks.VerifyAll();
             fileData.VerifyAll();
             orgData.VerifyAll();
         }
@@ -776,11 +593,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             var orgData = new Mock<IOrganisationDataService>(MockBehavior.Strict);
 
-            return new LearnAimRef_78Rule(handler.Object, service.Object, derivedData07.Object, fileData.Object, orgData.Object);
+            return new LearnAimRef_78Rule(handler.Object, service.Object, commonChecks.Object, fileData.Object, orgData.Object);
         }
     }
 }

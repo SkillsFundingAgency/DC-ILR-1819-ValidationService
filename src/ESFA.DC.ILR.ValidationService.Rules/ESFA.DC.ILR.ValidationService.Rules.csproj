@@ -399,6 +399,7 @@
     <Compile Include="Query\AcademicYearQueryService.cs" />
     <Compile Include="Query\DateTimeQueryService.cs" />
     <Compile Include="Query\Interface\ILearningDeliveryWorkPlacementQueryService.cs" />
+    <Compile Include="Query\Interface\IProvideRuleCommonOperations.cs" />
     <Compile Include="Query\LearnerDPQueryService.cs" />
     <Compile Include="Query\Interface\ILearnerDPQueryService.cs" />
     <Compile Include="Query\LearnerEmploymentStatusQueryService.cs" />
@@ -422,6 +423,7 @@
     <Compile Include="Query\LearningDeliveryFAMQueryService.cs" />
     <Compile Include="Query\LearningDeliveryQueryService.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_01Rule.cs" />
+    <Compile Include="Query\RuleCommonOperationsProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">

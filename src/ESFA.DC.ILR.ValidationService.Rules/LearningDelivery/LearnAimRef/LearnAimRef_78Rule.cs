@@ -4,7 +4,7 @@ using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Linq;
@@ -30,9 +30,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         private readonly ILARSDataService _larsData;
 
         /// <summary>
-        /// the derived data (rule) 07
+        /// The common rule (operations provider)
         /// </summary>
-        private readonly IDD07 _derivedData07;
+        private readonly IProvideRuleCommonOperations _check;
 
         /// <summary>
         /// the file data (service).
@@ -49,13 +49,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="larsData">The lars data.</param>
-        /// <param name="derivedData07">The derived data (rule) 07.</param>
+        /// <param name="commonChecks">The common checks.</param>
         /// <param name="fileData">The file data (service).</param>
         /// <param name="organisationData">The organisation data (service).</param>
         public LearnAimRef_78Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
-            IDD07 derivedData07,
+            IProvideRuleCommonOperations commonChecks,
             IFileDataService fileData,
             IOrganisationDataService organisationData)
         {
@@ -63,8 +63,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(larsData)
                 .AsGuard<ArgumentNullException>(nameof(larsData));
-            It.IsNull(derivedData07)
-                .AsGuard<ArgumentNullException>(nameof(derivedData07));
+            It.IsNull(commonChecks)
+                .AsGuard<ArgumentNullException>(nameof(commonChecks));
             It.IsNull(fileData)
                 .AsGuard<ArgumentNullException>(nameof(fileData));
             It.IsNull(organisationData)
@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
             _messageHandler = validationErrorHandler;
             _larsData = larsData;
-            _derivedData07 = derivedData07;
+            _check = commonChecks;
             _fileData = fileData;
             _organisationData = organisationData;
         }
@@ -80,96 +80,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <summary>
         /// Gets the first viable date.
         /// </summary>
-        public DateTime FirstViableDate => new DateTime(2016, 08, 01);
+        public static DateTime FirstViableDate => new DateTime(2016, 08, 01);
 
         /// <summary>
         /// Gets the last viable date.
         /// </summary>
-        public DateTime LastViableDate => new DateTime(2017, 07, 31);
+        public static DateTime LastViableDate => new DateTime(2017, 07, 31);
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
         public string RuleName => Name;
-
-        /// <summary>
-        /// Checks the delivery fams.
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <param name="matchCondition">The match condition.</param>
-        /// <returns>true if any of the delivery fams match the condition</returns>
-        public bool CheckDeliveryFAMs(ILearningDelivery delivery, Func<ILearningDeliveryFAM, bool> matchCondition) =>
-            delivery.LearningDeliveryFAMs.SafeAny(matchCondition);
-
-        /// <summary>
-        /// Determines whether the specified monitor is restart.
-        /// </summary>
-        /// <param name="monitor">The monitor.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified monitor is restart; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsRestart(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.Restart);
-
-        /// <summary>
-        /// Determines whether the specified delivery is restart.
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified delivery is restart; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsRestart(ILearningDelivery delivery) =>
-            CheckDeliveryFAMs(delivery, IsRestart);
-
-        /// <summary>
-        /// Determines whether [is learner in custody] [the specified monitor].
-        /// </summary>
-        /// <param name="monitor">The monitor.</param>
-        /// <returns>
-        ///   <c>true</c> if [is learner in custody] [the specified monitor]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsLearnerInCustody(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.OLASSOffendersInCustody);
-
-        /// <summary>
-        /// Determines whether [is learner in custody] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is learner in custody] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsLearnerInCustody(ILearningDelivery delivery) =>
-            CheckDeliveryFAMs(delivery, IsLearnerInCustody);
-
-        /// <summary>
-        /// Determines whether [is steel worker] [the specified monitor].
-        /// </summary>
-        /// <param name="monitor">The monitor.</param>
-        /// <returns>
-        ///   <c>true</c> if [is steel worker] [the specified monitor]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsSteelWorkerRedundancyTraining(ILearningDeliveryFAM monitor) =>
-            It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.SteelIndustriesRedundancyTraining);
-
-        /// <summary>
-        /// Determines whether [is steel worker redundancy training] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is steel worker redundancy training] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsSteelWorkerRedundancyTraining(ILearningDelivery delivery) =>
-            CheckDeliveryFAMs(delivery, IsSteelWorkerRedundancyTraining);
-
-        /// <summary>
-        /// Determines whether [in apprenticeship] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [in apprenticeship] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool InApprenticeship(ILearningDelivery delivery) =>
-            _derivedData07.IsApprenticeship(delivery.ProgTypeNullable);
 
         /// <summary>
         /// Determines whether [is specialist designated college].
@@ -182,26 +103,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             var ukprn = _fileData.UKPRN();
             return _organisationData.LegalOrgTypeMatchForUkprn(ukprn, "USDC");
         }
-
-        /// <summary>
-        /// Determines whether [is qualifying funding] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is qualifying funding] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsQualifyingFunding(ILearningDelivery delivery) =>
-            It.IsInRange(delivery.FundModel, TypeOfFunding.AdultSkills);
-
-        /// <summary>
-        /// Determines whether [is viable start] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsViableStart(ILearningDelivery delivery) =>
-            It.IsBetween(delivery.LearnStartDate, FirstViableDate, LastViableDate);
 
         /// <summary>
         /// Determines whether [is qualifying notional NVQ] [the specified delivery].
@@ -261,8 +162,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if the specified delivery is valid; otherwise, <c>false</c>.
         /// </returns>
         public bool PassesRestrictions(ILearningDelivery delivery) =>
-            IsQualifyingFunding(delivery)
-            && IsViableStart(delivery)
+            _check.HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
+            && _check.HasQualifyingStart(delivery, FirstViableDate, LastViableDate)
             && HasQualifyingNotionalNVQ(delivery);
 
         /// <summary>
@@ -273,10 +174,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if the specified delivery is excluded; otherwise, <c>false</c>.
         /// </returns>
         public bool IsExcluded(ILearningDelivery delivery) =>
-            IsRestart(delivery)
-            || IsLearnerInCustody(delivery)
-            || IsSteelWorkerRedundancyTraining(delivery)
-            || InApprenticeship(delivery)
+            _check.IsRestart(delivery)
+            || _check.IsLearnerInCustody(delivery)
+            || _check.IsSteelWorkerRedundancyTraining(delivery)
+            || _check.InApprenticeship(delivery)
             || IsSpecialistDesignatedCollege();
 
         /// <summary>

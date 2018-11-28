@@ -20,6 +20,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
             builder.RegisterType<LearnerEmploymentStatusMonitoringQueryService>().As<ILearnerEmploymentStatusMonitoringQueryService>().InstancePerLifetimeScope();
             builder.RegisterType<PostcodeQueryService>().As<IPostcodeQueryService>().InstancePerLifetimeScope();
             builder.RegisterType<LearningDeliveryWorkPlacementQueryService>().As<ILearningDeliveryWorkPlacementQueryService>().InstancePerLifetimeScope();
+
+            builder.RegisterType<RuleCommonOperationsProvider>().As<IProvideRuleCommonOperations>().InstancePerLifetimeScope();
         }
     }
 }
