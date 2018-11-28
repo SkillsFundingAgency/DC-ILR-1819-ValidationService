@@ -162,6 +162,7 @@
     <Compile Include="HE\LearnerHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_03Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />

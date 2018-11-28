@@ -173,6 +173,8 @@
         public const string MathGrade_03 = "MathGrade_03";
         public const string MathGrade_04 = "MathGrade_04";
 
+        public const string MSTUFEE_03 = "MSTUFEE_03";
+
         public const string NETFEE_01 = "NETFEE_01";
         public const string NETFEE_02 = "NETFEE_02";
 
