@@ -143,6 +143,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             It.IsInRange(delivery.AimType, TypeOfAim.ProgrammeAim);
 
         /// <summary>
+        /// Determines whether the specified delivery is traineeship.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified delivery is traineeship; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsTraineeship(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.Traineeship);
+
+        /// <summary>
         /// Determines whether the specified learning delivery has qualifying funding
         /// </summary>
         /// <param name="delivery">The delivery.</param>

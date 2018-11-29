@@ -71,6 +71,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool InAProgramme(ILearningDelivery delivery);
 
         /// <summary>
+        /// Determines whether the specified delivery is traineeship.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified delivery is traineeship; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsTraineeship(ILearningDelivery delivery);
+
+        /// <summary>
         /// Determines whether the specified learning delivery has qualifying funding
         /// </summary>
         /// <param name="delivery">The delivery.</param>

@@ -215,6 +215,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         /// <summary>
+        /// Determines whether [is traineeship meets expectation] [the specified candidate].
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, false)]
+        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel5, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel6, false)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, false)]
+        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, false)]
+        [InlineData(TypeOfLearningProgramme.Traineeship, true)]
+        public void IsTraineeshipMeetsExpectation(int candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewService();
+            var mockItem = new Mock<ILearningDelivery>(MockBehavior.Strict);
+            mockItem
+                .SetupGet(y => y.ProgTypeNullable)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsTraineeship(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+            mockItem.VerifyAll();
+        }
+
+        /// <summary>
         /// Has qualifying funding meets expectation
         /// </summary>
         /// <param name="funding">The funding.</param>
