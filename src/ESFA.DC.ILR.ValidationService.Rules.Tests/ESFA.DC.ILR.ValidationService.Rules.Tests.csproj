@@ -246,6 +246,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_02RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_01RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_85RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_84RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03RuleTests.cs" />
