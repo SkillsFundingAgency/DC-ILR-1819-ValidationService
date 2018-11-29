@@ -195,6 +195,7 @@
         public const string OutGrade_03 = "OutGrade_03";
 
         public const string OutType_02 = "OutType_02";
+        public const string OutType_04 = "OutType_04";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
