@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.ILR.IO.Model.Validation;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -64,11 +65,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         {
             var invalidLearnRefNumbers = new List<string>() { "a", "b" };
 
-            var validationErrors = new List<ValidationError>()
-            {
-                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "XYZ" },
-            };
-
             var message = new TestMessage()
             {
                 Learners = new List<TestLearner>()
@@ -81,22 +77,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
                 }
             };
 
-            var messageCacheMock = new Mock<ICache<IMessage>>();
-
-            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
-
-            NewService(messageCache: messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers, validationErrors).Should().BeEquivalentTo("c", "d", "e");
+            NewService().BuildValidLearnRefNumbers(message, invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
         }
 
         [Fact]
         public void BuildValidLearnRefNumbers_No_InvalidLearners()
         {
             var invalidLearnRefNumbers = new List<string>();
-
-            var validationErrors = new List<ValidationError>()
-            {
-                new ValidationError() { RuleName = "HEADER", LearnerReferenceNumber = string.Empty},
-            };
 
             var message = new TestMessage()
             {
@@ -107,11 +94,19 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
                 }
             };
 
-            var messageCacheMock = new Mock<ICache<IMessage>>();
+            NewService().BuildValidLearnRefNumbers(message, invalidLearnRefNumbers).Should().HaveCount(2);
+        }
 
-            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+        [Fact]
+        public void BuildValidLearnRefNumbers_NullMessage()
+        {
+            NewService().BuildValidLearnRefNumbers(null, new List<string>()).Should().HaveCount(0);
+        }
 
-            NewService(messageCache: messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers, validationErrors).Should().HaveCount(2);
+        [Fact]
+        public void BuildValidLearnRefNumbers_NullLearners()
+        {
+            NewService().BuildValidLearnRefNumbers(new TestMessage(), new List<string>()).Should().HaveCount(0);
         }
 
 
