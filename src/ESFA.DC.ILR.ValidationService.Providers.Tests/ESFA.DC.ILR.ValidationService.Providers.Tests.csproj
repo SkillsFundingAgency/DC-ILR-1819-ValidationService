@@ -120,7 +120,6 @@
     <Compile Include="LearnerProviderServiceTests.cs" />
     <Compile Include="MessageStringProviderServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValidationErrorCachePassThroughOutputServiceTests.cs" />
     <Compile Include="ValidationOutputServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>

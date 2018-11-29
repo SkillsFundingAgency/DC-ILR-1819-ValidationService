@@ -16,7 +16,7 @@ using ESFA.DC.Serialization.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Providers.Output
 {
-    public class ValidationOutputService : IValidationOutputService<IValidationError>
+    public class ValidationOutputService : IValidationOutputService
     {
         private const string Error = "E";
         private const string Warning = "W";
@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             _logger = logger;
         }
 
-        public async Task<IEnumerable<IValidationError>> ProcessAsync(CancellationToken cancellationToken)
+        public async Task ProcessAsync(CancellationToken cancellationToken)
         {
             var existingValidationErrors = await GetExistingValidationErrors();
 
@@ -89,8 +89,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                 validationErrors,
                 validationErrorMessageLookups,
                 cancellationToken);
-
-            return _validationErrorCache.ValidationErrors;
         }
 
         public IEnumerable<string> BuildInvalidLearnRefNumbers(IEnumerable<ValidationError> validationErrors)

@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
         {
             builder.RegisterType<ContextMessageStringProviderService>().As<IMessageStreamProviderService>();
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>();
-            builder.RegisterType<ValidationErrorCachePassThroughOutputService>().As<IValidationOutputService<IValidationError>>().WithAttributeFiltering();
+            builder.RegisterType<ValidationOutputServiceStub>().As<IValidationOutputService>().WithAttributeFiltering();
             builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>().As<IRuleSetOrchestrationService<ILearner, IValidationError>>();
             builder.RegisterType<AutoFacRuleSetResolutionService<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
             builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();

@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IExternalDataCache _externalDataCache;
         private readonly IFileDataCache _fileDataCache;
         private readonly IValidationErrorCache<U> _validationErrorCache;
-        private readonly IValidationOutputService<U> _validationOutputService;
+        private readonly IValidationOutputService _validationOutputService;
         private readonly IRuleSetOrchestrationService<IMessage, U> _ruleSetOrchestrationService;
         private readonly ILogger _logger;
 
@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             IExternalDataCache externalDataCache,
             IFileDataCache fileDataCache,
             IValidationErrorCache<U> validationErrorCache,
-            IValidationOutputService<U> validationOutputService,
+            IValidationOutputService validationOutputService,
             IRuleSetOrchestrationService<IMessage, U> ruleSetOrchestrationService,
             ILogger logger)
         {
