@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
+using ESFA.DC.ILR.IO.Model.Validation;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -15,7 +16,7 @@ using ESFA.DC.Serialization.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Providers.Output
 {
-    public class ValidationOutputService : IValidationOutputService<IValidationError>
+    public class ValidationOutputService : IValidationOutputService
     {
         private const string Error = "E";
         private const string Warning = "W";
@@ -47,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             _logger = logger;
         }
 
-        public async Task<IEnumerable<IValidationError>> ProcessAsync(CancellationToken cancellationToken)
+        public async Task ProcessAsync(CancellationToken cancellationToken)
         {
             var existingValidationErrors = await GetExistingValidationErrors();
 
@@ -70,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             validationErrors.AddRange(existingValidationErrors);
 
             var invalidLearnerRefNumbers = BuildInvalidLearnRefNumbers(validationErrors).ToList();
-            var validLearnerRefNumbers = BuildValidLearnRefNumbers(invalidLearnerRefNumbers, validationErrors).ToList();
+            var validLearnerRefNumbers = BuildValidLearnRefNumbers(_messageCache.Item, invalidLearnerRefNumbers).ToList();
             _logger.LogDebug($"ValidationOutputService invalid:{invalidLearnerRefNumbers.Count} valid:{validLearnerRefNumbers.Count}");
 
             var validationErrorMessageLookups = validationErrors
@@ -88,8 +89,6 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                 validationErrors,
                 validationErrorMessageLookups,
                 cancellationToken);
-
-            return _validationErrorCache.ValidationErrors;
         }
 
         public IEnumerable<string> BuildInvalidLearnRefNumbers(IEnumerable<ValidationError> validationErrors)
@@ -101,24 +100,16 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                 .Distinct();
         }
 
-        public IEnumerable<string> BuildValidLearnRefNumbers(IEnumerable<string> invalidLearnRefNumbers, IEnumerable<ValidationError> validationErrors)
+        public IEnumerable<string> BuildValidLearnRefNumbers(IMessage message, IEnumerable<string> invalidLearnRefNumbers)
         {
-            var invalidLearnRefNumbersHashSet = new HashSet<string>(invalidLearnRefNumbers);
-            _logger.LogDebug($"BuildValidLearnRefNumbers {invalidLearnRefNumbersHashSet.Count}");
-            if (validationErrors.Any(x => !string.IsNullOrEmpty(x.LearnerReferenceNumber)))
-            {
-                return _messageCache
-                    .Item
-                    .Learners
-                    .Select(l => l.LearnRefNumber)
-                    .Where(lrn => !invalidLearnRefNumbersHashSet.Contains(lrn));
-            }
+            var invalidLearnRefNumbersHashSet = invalidLearnRefNumbers != null ? new HashSet<string>(invalidLearnRefNumbers) : new HashSet<string>();
 
-            _logger.LogDebug($"BuildValidLearnRefNumbers: no errors in validationErrorCache have learner ref numbers {_messageCache.Item.Learners.Count}");
-            return _messageCache
-                    .Item
-                    .Learners
-                    .Select(l => l.LearnRefNumber).Distinct();
+            return message?
+                       .Learners?
+                       .Select(l => l.LearnRefNumber)
+                       .Where(lrn => !invalidLearnRefNumbersHashSet.Contains(lrn))
+                       .Distinct()
+                   ?? new List<string>();
         }
 
         public async Task SaveAsync(

@@ -23,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
             builder.RegisterType<PreValidationOrchestrationSfService<IValidationError>>().As<IPreValidationOrchestrationService<IValidationError>>().InstancePerLifetimeScope();
 
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
-            builder.RegisterType<ValidationOutputService>().As<IValidationOutputService<IValidationError>>().WithAttributeFiltering().InstancePerLifetimeScope();
+            builder.RegisterType<ValidationOutputService>().As<IValidationOutputService>().WithAttributeFiltering().InstancePerLifetimeScope();
             builder.RegisterType<LearnerPerActorServiceStub>().As<ILearnerPerActorService>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache<IValidationError>>().InstancePerLifetimeScope();
             builder.RegisterType<PreValidationPopulationService>().As<IPopulationService>().InstancePerLifetimeScope();

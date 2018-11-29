@@ -17,14 +17,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private readonly IPopulationService _preValidationPopulationService;
         private readonly IRuleSetOrchestrationService<ILearner, U> _learnerRuleSetOrchestrationService;
         private readonly IRuleSetOrchestrationService<IMessage, U> _messageRuleSetOrchestrationService;
-        private readonly IValidationOutputService<U> _validationOutputService;
+        private readonly IValidationOutputService _validationOutputService;
         private readonly IFileDataCache _fileDataCache;
 
         public ConsolePreValidationOrchestrationService(
             IPopulationService preValidationPopulationService,
             IRuleSetOrchestrationService<ILearner, U> learnerRuleSetOrchestrationService,
             IRuleSetOrchestrationService<IMessage, U> messageRuleSetOrchestrationService,
-            IValidationOutputService<U> validationOutputService,
+            IValidationOutputService validationOutputService,
             IFileDataCache fileDataCache)
         {
             _preValidationPopulationService = preValidationPopulationService;

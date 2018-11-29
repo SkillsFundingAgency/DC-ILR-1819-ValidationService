@@ -58,6 +58,9 @@
     <Reference Include="ESFA.DC.DateTimeProvider.Interface, Version=0.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.DateTimeProvider.Interface.0.1.6-beta0001\lib\netstandard2.0\ESFA.DC.DateTimeProvider.Interface.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.ILR.IO.Model.Validation, Version=0.1.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.ILR.1819.IO.Model.Validation.0.1.5-beta0001\lib\netstandard2.0\ESFA.DC.ILR.IO.Model.Validation.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.ILR.Model, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.dll</HintPath>
     </Reference>
@@ -179,7 +182,7 @@
     <Compile Include="ConsolePreValidationOrchestrationService.cs" />
     <Compile Include="FileSystemFileContentStringProviderService.cs" />
     <Compile Include="MessageFileProviderService.cs" />
-    <Compile Include="Output\ValidationErrorCachePassThroughOutputService.cs" />
+    <Compile Include="Output\Model\ValidationErrorMessageLookup.cs" />
     <Compile Include="Output\ValidationOutputService.cs" />
     <Compile Include="PreValidationOrchestrationSfService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -207,10 +210,6 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj">
       <Project>{513c4f05-55f4-4aef-b3eb-427c024da043}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Interface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.IO.Model\ESFA.DC.ILR.ValidationService.IO.Model.csproj">
-      <Project>{3F170AA8-982A-453B-899D-DC9F54AAC8C1}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.IO.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.RuleSet\ESFA.DC.ILR.ValidationService.RuleSet.csproj">
       <Project>{EBE0154D-6F8B-4DBB-A18F-4929AB74D204}</Project>
