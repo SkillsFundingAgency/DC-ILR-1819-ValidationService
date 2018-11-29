@@ -164,7 +164,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                 return null;
             }
 
-            return await this._fcs.EsfEligibilityRuleSectorSubjectAreaLevel?
+            var esfEligibilityRuleSectorSubjectAreaLevel = await this._fcs.EsfEligibilityRuleSectorSubjectAreaLevel.ToListAsync(cancellationToken);
+
+            return esfEligibilityRuleSectorSubjectAreaLevel?
                 .Join(
                     contractAllocations,
                     ers => new { ers.TenderSpecReference, ers.LotReference },
@@ -176,8 +178,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                         SectorSubjectAreaCode = ers.SectorSubjectAreaCode,
                         MaxLevelCode = ers.MaxLevelCode,
                         MinLevelCode = ers.MinLevelCode
-                    })
-                .ToListAsync(cancellationToken);
+                    }).ToList();
         }
 
         public List<string> ConRefNumbersFromMessage(IMessage message)
