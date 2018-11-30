@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
 
         public void Validate(ILearnerDestinationAndProgression objectToValidate)
         {
-            if (ConditionMet(objectToValidate.DPOutcomes))
+            if (objectToValidate != null && ConditionMet(objectToValidate.DPOutcomes))
             {
                 var outTypesForError = string.Join(", ", _outTypes);
 
