@@ -51,5 +51,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// Gets the ESF eligibility rule employment statuses.
         /// </summary>
         IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> ESFEligibilityRuleEmploymentStatuses { get; }
+
+        /// <summary>
+        /// Gets the ESF eligibility rule subject area level codes.
+        /// </summary>
+        IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> EsfEligibilityRuleSectorSubjectAreaLevels { get; }
     }
 }

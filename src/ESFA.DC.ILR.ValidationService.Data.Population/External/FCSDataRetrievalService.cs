@@ -1,14 +1,15 @@
-﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ReferenceData.FCS.Model.Interface;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ReferenceData.FCS.Model.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 {
@@ -125,6 +126,69 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     TenderSpecReference = er.TenderSpecReference
                 })
                 .ToListAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieves the eligibility rule sector subject area level for message specific contracts asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// a task running the collection builder for eligibility rule sector subject area level
+        /// </returns>
+        public async Task<IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel>> RetrieveEligibilityRuleSectorSubjectAreaLevelAsync(CancellationToken cancellationToken)
+        {
+            if (this._messageCache?
+                .Item?
+                .LearningProviderEntity == null)
+            {
+                return null;
+            }
+
+            var ukprn = this.UKPRNFromMessage(this._messageCache.Item);
+            var messageConRefNumbers = this.ConRefNumbersFromMessage(this._messageCache.Item);
+            if (messageConRefNumbers == null || messageConRefNumbers.Count == 0)
+            {
+                return null;
+            }
+
+            var contractAllocations = this._fcs.ContractAllocations?
+                .Where(ca => ca.DeliveryUKPRN == ukprn)
+                .ToList()
+                .Join(
+                    messageConRefNumbers,
+                    ca => ca.ContractAllocationNumber,
+                    crn => crn,
+                    (ca, crn) => new { ca.TenderSpecReference, ca.LotReference }).Distinct().ToList();
+            if (contractAllocations == null || contractAllocations.Count() == 0)
+            {
+                return null;
+            }
+
+            var esfEligibilityRuleSectorSubjectAreaLevel = await this._fcs.EsfEligibilityRuleSectorSubjectAreaLevel.ToListAsync(cancellationToken);
+
+            return esfEligibilityRuleSectorSubjectAreaLevel?
+                .Join(
+                    contractAllocations,
+                    ers => new { ers.TenderSpecReference, ers.LotReference },
+                    ca => new { ca.TenderSpecReference, ca.LotReference },
+                    (ers, ca) => new EsfEligibilityRuleSectorSubjectAreaLevel
+                    {
+                        TenderSpecReference = ers.TenderSpecReference,
+                        LotReference = ers.LotReference,
+                        SectorSubjectAreaCode = ers.SectorSubjectAreaCode,
+                        MaxLevelCode = ers.MaxLevelCode,
+                        MinLevelCode = ers.MinLevelCode
+                    }).ToList();
+        }
+
+        public List<string> ConRefNumbersFromMessage(IMessage message)
+        {
+            return message?
+                .Learners?
+                .Where(l => l.LearningDeliveries != null)
+                .SelectMany(l => l.LearningDeliveries)
+                .Where(ld => !string.IsNullOrEmpty(ld.ConRefNumber))
+                .Select(ld => ld.ConRefNumber).Distinct().ToList();
         }
 
         public int UKPRNFromMessage(IMessage message) =>

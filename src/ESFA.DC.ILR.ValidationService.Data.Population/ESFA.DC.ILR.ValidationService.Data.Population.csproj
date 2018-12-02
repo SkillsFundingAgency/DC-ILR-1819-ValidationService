@@ -75,7 +75,7 @@
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
     <Reference Include="ESFA.DC.ReferenceData.FCS.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ESFA.DC.ReferenceData.FCS.Model.0.1.82\lib\net461\ESFA.DC.ReferenceData.FCS.Model.dll</HintPath>
+      <HintPath>..\packages\ESFA.DC.ReferenceData.FCS.Model.0.1.95\lib\net461\ESFA.DC.ReferenceData.FCS.Model.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
