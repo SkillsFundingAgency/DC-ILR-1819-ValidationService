@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.External.FCS;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using FluentAssertions;
@@ -240,6 +241,188 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCahceMock.Setup(f => f.FCSContractAllocations).Returns(fcsContracts);
 
             NewService(externalDataCahceMock.Object).FundingRelationshipFCTExists(fundingStreamPeriodCodes).Should().BeFalse();
+        }
+
+        [Fact]
+        public void GetSectorSubjectAreaLevelsForContract_DataCheck()
+        {
+            string conRefNumber = "ESF0002";
+            var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[]
+            {
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    Id = 1,
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "01",
+                    SectorSubjectAreaCode = 13.1M,
+                    MinLevelCode = "2",
+                    MaxLevelCode = "4"
+                }
+            };
+
+            var allocations = new List<FcsContractAllocation>
+            {
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = conRefNumber,
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "01"
+                },
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = "101",
+                    TenderSpecReference = "tt_9978",
+                    LotReference = "04"
+                }
+            };
+
+            var externalDataCahceMock = new Mock<IExternalDataCache>();
+
+            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
+
+            NewService(externalDataCache: externalDataCahceMock.Object)
+                .GetSectorSubjectAreaLevelsForContract(conRefNumber).Equals(sectorSubjectAreaLevels);
+        }
+
+        [Fact]
+        public void GetSectorSubjectAreaLevelsForContract_NullCheck()
+        {
+            string conRefNumber = "ESF0002";
+            IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> esfEligibilityRuleSectorSubjectAreaLevels = null;
+            var allocations = new List<FcsContractAllocation>
+            {
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = conRefNumber,
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "01"
+                },
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = "101",
+                    TenderSpecReference = "tt_9978",
+                    LotReference = "04"
+                }
+            };
+
+            var externalDataCahceMock = new Mock<IExternalDataCache>();
+
+            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
+
+            NewService(externalDataCache: externalDataCahceMock.Object)
+                .GetSectorSubjectAreaLevelsForContract(conRefNumber).Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public void GetSectorSubjectAreaLevelsForContract_ContractAllocation_NullCheck()
+        {
+            string conRefNumber = "ESF0002";
+            var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[]
+            {
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    Id = 1,
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "01",
+                    SectorSubjectAreaCode = 13.1M,
+                    MinLevelCode = "2",
+                    MaxLevelCode = "4"
+                }
+            };
+
+            List<FcsContractAllocation> allocations = null;
+
+            var externalDataCahceMock = new Mock<IExternalDataCache>();
+
+            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
+
+            NewService(externalDataCache: externalDataCahceMock.Object)
+                .GetSectorSubjectAreaLevelsForContract(conRefNumber).Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public void IsSectorSubjectAreaCodeExistsForContract_False()
+        {
+            string conRefNumber = "ESF0002";
+            var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[]
+            {
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    Id = 1,
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "01",
+                    SectorSubjectAreaCode = 13.1M,
+                    MinLevelCode = "2",
+                    MaxLevelCode = "4"
+                }
+            };
+
+            var allocations = new List<FcsContractAllocation>
+            {
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = conRefNumber,
+                    TenderSpecReference = "tt_9979",
+                    LotReference = "01"
+                },
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = "101",
+                    TenderSpecReference = "tt_9978",
+                    LotReference = "04"
+                }
+            };
+
+            var externalDataCahceMock = new Mock<IExternalDataCache>();
+
+            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
+
+            NewService(externalDataCache: externalDataCahceMock.Object).IsSectorSubjectAreaCodeExistsForContract(conRefNumber).Should().BeFalse();
+        }
+
+        [Fact]
+        public void IsSectorSubjectAreaCodeExistsForContract_True()
+        {
+            string conRefNumber = "ESF0002";
+            var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[]
+            {
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    Id = 1,
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "01",
+                    SectorSubjectAreaCode = 13.1M,
+                    MinLevelCode = null,
+                    MaxLevelCode = null
+                }
+            };
+
+            var allocations = new List<FcsContractAllocation>
+            {
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = conRefNumber,
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "01"
+                },
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = "101",
+                    TenderSpecReference = "tt_9978",
+                    LotReference = "04"
+                }
+            };
+
+            var externalDataCahceMock = new Mock<IExternalDataCache>();
+
+            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
+
+            NewService(externalDataCache: externalDataCahceMock.Object).IsSectorSubjectAreaCodeExistsForContract(conRefNumber).Should().BeTrue();
         }
 
         private FCSDataService NewService(IExternalDataCache externalDataCache)

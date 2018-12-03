@@ -53,6 +53,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         public string LearnDirectClassSystemCode2 { get; set; }
 
         /// <summary>
+        ///  Gets or sets the Sector Subject Area Tier 1
+        /// </summary>
+        public decimal? SectorSubjectAreaTier1 { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the Sector Subject Area Tier 2
+        /// </summary>
+        public decimal? SectorSubjectAreaTier2 { get; set; }
+
+        /// <summary>
         /// Gets or sets the learning delivery categories.
         /// </summary>
         public IEnumerable<LearningDeliveryCategory> LearningDeliveryCategories { get; set; }

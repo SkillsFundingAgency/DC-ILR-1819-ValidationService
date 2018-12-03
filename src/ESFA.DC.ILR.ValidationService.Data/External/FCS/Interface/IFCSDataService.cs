@@ -18,5 +18,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <param name="forContractReference">For contract reference.</param>
         /// <returns>the eligibility rule employment status (should there be one)</returns>
         IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatus(string forContractReference);
+
+        IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
+
+        bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber);
     }
 }

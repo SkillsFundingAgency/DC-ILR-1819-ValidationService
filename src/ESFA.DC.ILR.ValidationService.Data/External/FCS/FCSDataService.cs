@@ -23,10 +23,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// </summary>
         private readonly IReadOnlyCollection<IFcsContractAllocation> _contractAllocations;
 
+        /// <summary>
+        /// The Sector Subject Area Levels
+        /// </summary>
+        private readonly IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> _sectorSubjectAreaLevels;
+
         public FCSDataService(IExternalDataCache externalDataCache)
         {
             _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses.AsSafeReadOnlyList();
             _contractAllocations = externalDataCache.FCSContractAllocations.AsSafeReadOnlyList();
+            _sectorSubjectAreaLevels = externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels;
         }
 
         /// <summary>
@@ -67,6 +73,25 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
             return It.Has(allocation)
                 ? _employmentStatuses.FirstOrDefault(x => x.TenderSpecReference.ComparesWith(allocation.TenderSpecReference))
                 : null;
+        }
+
+        public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
+        {
+            return _sectorSubjectAreaLevels?
+                .Join(
+                    _contractAllocations?.Where(ca => ca.ContractAllocationNumber == conRefNumber).ToList(),
+                    ers => new { ers.TenderSpecReference, ers.LotReference },
+                    ca => new { ca.TenderSpecReference, ca.LotReference },
+                    (ers, ca) => ers).ToList();
+        }
+
+        public bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber)
+        {
+            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+                .Any(
+                s => s.SectorSubjectAreaCode.HasValue
+                && (string.IsNullOrEmpty(s.MinLevelCode)
+                && string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
         }
     }
 }
