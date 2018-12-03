@@ -18,6 +18,7 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
         public const string AFinType_04 = "AFinType_04";
         public const string AFinType_08 = "AFinType_08";
