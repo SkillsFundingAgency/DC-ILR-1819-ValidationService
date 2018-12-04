@@ -18,8 +18,10 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
         public const string AFinType_04 = "AFinType_04";
+        public const string AFinType_07 = "AFinType_07";
         public const string AFinType_08 = "AFinType_08";
         public const string AFinType_10 = "AFinType_10";
         public const string AFinType_11 = "AFinType_11";
@@ -130,6 +132,7 @@
         public const string LearnAimRef_56 = "LearnAimRef_56";
         public const string LearnAimRef_57 = "LearnAimRef_57";
         public const string LearnAimRef_59 = "LearnAimRef_59";
+        public const string LearnAimRef_71 = "LearnAimRef_71";
         public const string LearnAimRef_80 = "LearnAimRef_80";
 
         public const string LearnDelFAMDateFrom_01 = "LearnDelFAMDateFrom_01";

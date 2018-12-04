@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using ESFA.DC.Data.LARS.Model;
 using ESFA.DC.Data.LARS.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
@@ -7,6 +10,7 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.External;
 using ESFA.DC.ILR.ValidationService.Data.Population.Keys;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
@@ -204,6 +208,156 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
 
             result.Should().HaveCount(1);
             result.Should().Contain("A");
+        }
+
+        [Fact]
+        public async Task Retrieve()
+        {
+            var message = new TestMessage
+            {
+                LearningProviderEntity = new TestLearningProvider
+                {
+                    UKPRN = 1
+                },
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner
+                    {
+                        LearningDeliveries = new List<TestLearningDelivery>
+                        {
+                            new TestLearningDelivery
+                            {
+                                LearnAimRef = "ABC123",
+                                FworkCodeNullable = 1,
+                                ProgTypeNullable = 2,
+                                PwayCodeNullable = 3
+                            },
+                            new TestLearningDelivery
+                            {
+                                LearnAimRef = "abc456",
+                                FworkCodeNullable = 2,
+                                ProgTypeNullable = 2,
+                                PwayCodeNullable = 3
+                            },
+                            new TestLearningDelivery
+                            {
+                                LearnAimRef = "Abc789",
+                                FworkCodeNullable = 1,
+                                ProgTypeNullable = 3,
+                                PwayCodeNullable = 3
+                            }
+                        }
+                    }
+                }
+            };
+
+            var larsMock = new Mock<ILARS>();
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            IEnumerable<LARS_Framework> larsFrameworks = new List<LARS_Framework>
+            {
+                new LARS_Framework
+                {
+                     FworkCode = 1,
+                     ProgType = 2,
+                     PwayCode = 3,
+                     EffectiveFrom = new System.DateTime(2018, 8, 1),
+                     LARS_FrameworkAims = new List<LARS_FrameworkAims>
+                     {
+                         new LARS_FrameworkAims
+                         {
+                             LearnAimRef = "ABC123",
+                             FworkCode = 1,
+                             ProgType = 2,
+                             PwayCode = 3,
+                             EffectiveFrom = new System.DateTime(2018, 8, 1),
+                         }
+                     },
+                     LARS_FrameworkCmnComp = new List<LARS_FrameworkCmnComp>
+                     {
+                         new LARS_FrameworkCmnComp
+                         {
+                             FworkCode = 1,
+                             ProgType = 2,
+                             PwayCode = 3,
+                             EffectiveFrom = new System.DateTime(2018, 8, 1),
+                             CommonComponent = 1
+                         }
+                     }
+                },
+                new LARS_Framework
+                {
+                    FworkCode = 2,
+                    ProgType = 2,
+                    PwayCode = 3,
+                    EffectiveFrom = new System.DateTime(2018, 8, 1),
+                    LARS_FrameworkAims = new List<LARS_FrameworkAims>
+                     {
+                         new LARS_FrameworkAims
+                         {
+                             LearnAimRef = "ABC456",
+                             FworkCode = 2,
+                             ProgType = 2,
+                             PwayCode = 3,
+                             EffectiveFrom = new System.DateTime(2018, 8, 1),
+                         }
+                     },
+                     LARS_FrameworkCmnComp = new List<LARS_FrameworkCmnComp>
+                     {
+                         new LARS_FrameworkCmnComp
+                         {
+                             FworkCode = 2,
+                             ProgType = 2,
+                             PwayCode = 3,
+                             EffectiveFrom = new System.DateTime(2018, 8, 1),
+                             CommonComponent = 2
+                         }
+                     }
+                },
+                new LARS_Framework
+                {
+                    FworkCode = 1,
+                    ProgType = 3,
+                    PwayCode = 3,
+                    EffectiveFrom = new System.DateTime(2018, 8, 1),
+                    LARS_FrameworkAims = new List<LARS_FrameworkAims>
+                     {
+                         new LARS_FrameworkAims
+                         {
+                             LearnAimRef = "abc789",
+                             FworkCode = 1,
+                             ProgType = 3,
+                             PwayCode = 3,
+                             EffectiveFrom = new System.DateTime(2018, 8, 1),
+                         }
+                     },
+                     LARS_FrameworkCmnComp = new List<LARS_FrameworkCmnComp>
+                     {
+                         new LARS_FrameworkCmnComp
+                         {
+                             FworkCode = 1,
+                             ProgType = 3,
+                             PwayCode = 3,
+                             EffectiveFrom = new System.DateTime(2018, 8, 1),
+                             CommonComponent = 3
+                         }
+                     }
+                }
+            }.AsMockDbSet();
+
+            var larsFrameworksMock = larsFrameworks.AsMockDbSet();
+
+            larsMock.Setup(o => o.LARS_Framework).Returns(larsFrameworksMock);
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+
+            var larsFrameworksValues = await NewService(larsMock.Object, messageCacheMock.Object).RetrieveAsync(CancellationToken.None);
+
+            larsFrameworksValues.Should().HaveCount(3);
+            larsFrameworksValues.SelectMany(f => f.FrameworkAims).Should().HaveCount(3);
+            larsFrameworksValues.SelectMany(f => f.FrameworkAims.Select(fa => fa.LearnAimRef)).Should().Contain("ABC123");
+            larsFrameworksValues.SelectMany(f => f.FrameworkAims.Select(fa => fa.LearnAimRef)).Should().Contain("ABC456");
+            larsFrameworksValues.SelectMany(f => f.FrameworkAims.Select(fa => fa.LearnAimRef)).Should().Contain("abc789");
         }
 
         private LARSFrameworkDataRetrievalService NewService(ILARS lars = null, ICache<IMessage> messageCache = null)

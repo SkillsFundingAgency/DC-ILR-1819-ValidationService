@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ESFA.DC.Data.LARS.Model;
 using ESFA.DC.Data.LARS.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
@@ -25,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public async Task<List<Framework>> RetrieveAsync(CancellationToken cancellationToken)
         {
-            var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToList();
+            var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToCaseInsensitiveHashSet();
             var uniqueFrameworks = UniqueFrameworksFromMessage(_messageCache.Item).ToList();
 
             var condition = PredicateBuilder.Create<LARS_Framework>(x => false);

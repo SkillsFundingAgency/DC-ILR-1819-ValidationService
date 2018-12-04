@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System.Collections.Generic;
@@ -23,10 +24,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// </summary>
         private readonly IReadOnlyCollection<IFcsContractAllocation> _contractAllocations;
 
+        /// <summary>
+        /// The Sector Subject Area Levels
+        /// </summary>
+        private readonly IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> _sectorSubjectAreaLevels;
+
         public FCSDataService(IExternalDataCache externalDataCache)
         {
             _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses.AsSafeReadOnlyList();
             _contractAllocations = externalDataCache.FCSContractAllocations.AsSafeReadOnlyList();
+            _sectorSubjectAreaLevels = externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels;
         }
 
         /// <summary>
@@ -37,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         public bool ConRefNumberExists(string conRefNumber)
         {
             return _contractAllocations
-                .Where(ca => ca.ContractAllocationNumber == conRefNumber)
+                .Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber))
                 .Any();
         }
 
@@ -48,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>true if it does</returns>
         public bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes)
         {
-            var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList();
+            var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList().ToCaseInsensitiveHashSet();
 
             return _contractAllocations
                .Where(ca => fsCodes.Contains(ca.FundingStreamPeriodCode))
@@ -63,10 +70,29 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>the eligibility rule employment status (should there be one)</returns>
         public IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatus(string forContractReference)
         {
-            var allocation = _contractAllocations.FirstOrDefault(x => x.ContractAllocationNumber == forContractReference);
+            var allocation = _contractAllocations.FirstOrDefault(x => x.ContractAllocationNumber.CaseInsensitiveEquals(forContractReference));
             return It.Has(allocation)
                 ? _employmentStatuses.FirstOrDefault(x => x.TenderSpecReference.ComparesWith(allocation.TenderSpecReference))
                 : null;
+        }
+
+        public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
+        {
+            return _sectorSubjectAreaLevels?
+                .Join(
+                    _contractAllocations?.Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber)).ToList(),
+                    ers => new { ers.TenderSpecReference, ers.LotReference },
+                    ca => new { ca.TenderSpecReference, ca.LotReference },
+                    (ers, ca) => ers).ToList();
+        }
+
+        public bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber)
+        {
+            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+                .Any(
+                s => s.SectorSubjectAreaCode.HasValue
+                && (string.IsNullOrEmpty(s.MinLevelCode)
+                && string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
         }
     }
 }
