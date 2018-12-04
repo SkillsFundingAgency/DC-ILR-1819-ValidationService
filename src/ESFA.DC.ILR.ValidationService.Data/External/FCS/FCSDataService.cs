@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System.Collections.Generic;
@@ -43,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         public bool ConRefNumberExists(string conRefNumber)
         {
             return _contractAllocations
-                .Where(ca => ca.ContractAllocationNumber == conRefNumber)
+                .Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber))
                 .Any();
         }
 
@@ -54,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>true if it does</returns>
         public bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes)
         {
-            var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList();
+            var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList().ToCaseInsensitiveHashSet();
 
             return _contractAllocations
                .Where(ca => fsCodes.Contains(ca.FundingStreamPeriodCode))
@@ -69,7 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>the eligibility rule employment status (should there be one)</returns>
         public IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatus(string forContractReference)
         {
-            var allocation = _contractAllocations.FirstOrDefault(x => x.ContractAllocationNumber == forContractReference);
+            var allocation = _contractAllocations.FirstOrDefault(x => x.ContractAllocationNumber.CaseInsensitiveEquals(forContractReference));
             return It.Has(allocation)
                 ? _employmentStatuses.FirstOrDefault(x => x.TenderSpecReference.ComparesWith(allocation.TenderSpecReference))
                 : null;
@@ -79,7 +80,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         {
             return _sectorSubjectAreaLevels?
                 .Join(
-                    _contractAllocations?.Where(ca => ca.ContractAllocationNumber == conRefNumber).ToList(),
+                    _contractAllocations?.Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber)).ToList(),
                     ers => new { ers.TenderSpecReference, ers.LotReference },
                     ca => new { ca.TenderSpecReference, ca.LotReference },
                     (ers, ca) => ers).ToList();

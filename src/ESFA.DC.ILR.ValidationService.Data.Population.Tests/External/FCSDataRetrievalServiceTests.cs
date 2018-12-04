@@ -540,6 +540,184 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
         }
 
         [Fact]
+        public async Task RetrieveEligibilityRuleSectorSubjectAreaLevelAsync_CaseSensitiveCheck()
+        {
+            var message = new TestMessage
+            {
+                LearningProviderEntity = new TestLearningProvider
+                {
+                    UKPRN = 1
+                },
+                Learners = new TestLearner[]
+                {
+                    new TestLearner()
+                    {
+                        LearningDeliveries = new TestLearningDelivery[]
+                        {
+                            new TestLearningDelivery
+                            {
+                                LearnAimRef = "123456",
+                                ConRefNumber = "ESF-123"
+                            },
+                            new TestLearningDelivery
+                            {
+                                LearnAimRef = "123457",
+                                ConRefNumber = "esf-124"
+                            }
+                        }
+                    },
+                    new TestLearner()
+                    {
+                        LearningDeliveries = new TestLearningDelivery[]
+                        {
+                            new TestLearningDelivery
+                            {
+                                LearnAimRef = "123458",
+                                ConRefNumber = "ESF-125"
+                            },
+                            new TestLearningDelivery
+                            {
+                                LearnAimRef = "123459",
+                                ConRefNumber = null
+                            },
+                            new TestLearningDelivery
+                            {
+                                LearnAimRef = "123460"
+                            }
+                        }
+                    }
+                }
+            };
+
+            var allocations = new List<ContractAllocation>
+            {
+                new ContractAllocation
+                {
+                    ContractAllocationNumber = "ESF-123",
+                    FundingStreamCode = "Code1",
+                    FundingStreamPeriodCode = "PeriodCode1",
+                    Period = "R01",
+                    StartDate = new DateTime(2018, 8, 1),
+                    EndDate = new DateTime(2018, 8, 3),
+                    DeliveryUKPRN = 1,
+                    TenderSpecReference = "itt_29976",
+                    LotReference = "01"
+                },
+                new ContractAllocation
+                {
+                    ContractAllocationNumber = "ESF-124",
+                    FundingStreamCode = "Code1",
+                    FundingStreamPeriodCode = "PeriodCode1",
+                    Period = "R01",
+                    StartDate = new DateTime(2018, 8, 4),
+                    DeliveryUKPRN = 1,
+                    TenderSpecReference = "itt_29976",
+                    LotReference = "02"
+                },
+                new ContractAllocation
+                {
+                    ContractAllocationNumber = "esf-125",
+                    FundingStreamCode = "Code1",
+                    FundingStreamPeriodCode = "PeriodCode1",
+                    Period = "R01",
+                    StartDate = new DateTime(2018, 8, 1),
+                    EndDate = new DateTime(2018, 8, 3),
+                    DeliveryUKPRN = 1,
+                    TenderSpecReference = "itt_29977",
+                    LotReference = "03"
+                },
+                new ContractAllocation
+                {
+                    ContractAllocationNumber = "ESF-123",
+                    FundingStreamCode = "Code1",
+                    FundingStreamPeriodCode = "PeriodCode1",
+                    Period = "R01",
+                    StartDate = new DateTime(2018, 8, 4),
+                    DeliveryUKPRN = 1,
+                    TenderSpecReference = "itt_29978",
+                    LotReference = "01"
+                },
+                new ContractAllocation
+                {
+                    ContractAllocationNumber = "ESF-123",
+                    FundingStreamCode = "Code1",
+                    FundingStreamPeriodCode = "PeriodCode1",
+                    Period = "R01",
+                    StartDate = new DateTime(2018, 8, 1),
+                    EndDate = new DateTime(2018, 8, 3),
+                    DeliveryUKPRN = 2,
+                    TenderSpecReference = "itt_29978",
+                    LotReference = "02"
+                },
+                new ContractAllocation
+                {
+                    ContractAllocationNumber = "esf-125",
+                    FundingStreamCode = "Code1",
+                    FundingStreamPeriodCode = "PeriodCode1",
+                    Period = "R01",
+                    StartDate = new DateTime(2018, 8, 4),
+                    DeliveryUKPRN = 2
+                }
+            }.AsMockDbSet();
+
+            var esfSubjectAreaLevels = new List<EsfEligibilityRuleSectorSubjectAreaLevel>()
+            {
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    TenderSpecReference = "itt_29978",
+                    LotReference = "01",
+                    SectorSubjectAreaCode = 1.0M,
+                    MinLevelCode = "1",
+                    MaxLevelCode = "2"
+                },
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    TenderSpecReference = "itt_29978",
+                    LotReference = "02",
+                    SectorSubjectAreaCode = 5.2M,
+                    MinLevelCode = "1",
+                    MaxLevelCode = "2"
+                },
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    TenderSpecReference = "itt_29977",
+                    LotReference = "03",
+                    SectorSubjectAreaCode = 13.10M
+                },
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    TenderSpecReference = "itt_11115",
+                    LotReference = "17",
+                    SectorSubjectAreaCode = 1.0M,
+                    MinLevelCode = "1",
+                    MaxLevelCode = "2"
+                },
+                new EsfEligibilityRuleSectorSubjectAreaLevel()
+                {
+                    TenderSpecReference = "itt_11006",
+                    LotReference = "9",
+                    SectorSubjectAreaCode = 1.0M,
+                },
+            }.AsMockDbSet();
+
+            var fcsMock = new Mock<IFcsContext>();
+            fcsMock
+                .Setup(f => f.ContractAllocations)
+                .Returns(allocations);
+            fcsMock
+                .Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevel)
+                .Returns(esfSubjectAreaLevels);
+
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+            messageCacheMock
+                .SetupGet(mc => mc.Item)
+                .Returns(message);
+
+            var fcsa = await this.NewService(fcsMock.Object, messageCacheMock.Object).RetrieveEligibilityRuleSectorSubjectAreaLevelAsync(CancellationToken.None);
+            fcsa.Should().HaveCount(2);
+        }
+
+        [Fact]
         public void ConRefNumbersFromMessage()
         {
             var message = new TestMessage()

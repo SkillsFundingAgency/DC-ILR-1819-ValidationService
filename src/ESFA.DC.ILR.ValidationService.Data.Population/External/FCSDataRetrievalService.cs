@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -146,19 +147,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
             var ukprn = this.UKPRNFromMessage(this._messageCache.Item);
             var messageConRefNumbers = this.ConRefNumbersFromMessage(this._messageCache.Item);
-            if (messageConRefNumbers == null || messageConRefNumbers.Count == 0)
+            if (messageConRefNumbers == null || messageConRefNumbers.Count() == 0)
             {
                 return null;
             }
 
             var contractAllocations = this._fcs.ContractAllocations?
-                .Where(ca => ca.DeliveryUKPRN == ukprn)
-                .ToList()
-                .Join(
-                    messageConRefNumbers,
-                    ca => ca.ContractAllocationNumber,
-                    crn => crn,
-                    (ca, crn) => new { ca.TenderSpecReference, ca.LotReference }).Distinct().ToList();
+               .Where(ca =>
+                   ca.DeliveryUKPRN == ukprn
+                   && messageConRefNumbers.Contains(ca.ContractAllocationNumber))
+               .Select(ca => new { ca.TenderSpecReference, ca.LotReference }).Distinct();
+
             if (contractAllocations == null || contractAllocations.Count() == 0)
             {
                 return null;
@@ -181,14 +180,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     }).ToList();
         }
 
-        public List<string> ConRefNumbersFromMessage(IMessage message)
+        public IEnumerable<string> ConRefNumbersFromMessage(IMessage message)
         {
             return message?
                 .Learners?
                 .Where(l => l.LearningDeliveries != null)
                 .SelectMany(l => l.LearningDeliveries)
                 .Where(ld => !string.IsNullOrEmpty(ld.ConRefNumber))
-                .Select(ld => ld.ConRefNumber).Distinct().ToList();
+                .Select(ld => ld.ConRefNumber).Distinct().ToCaseInsensitiveHashSet();
         }
 
         public int UKPRNFromMessage(IMessage message) =>

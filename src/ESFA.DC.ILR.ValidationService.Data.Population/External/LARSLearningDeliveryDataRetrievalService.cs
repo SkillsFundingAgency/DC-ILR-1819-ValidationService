@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.Data.LARS.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
@@ -23,12 +24,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public async Task<IReadOnlyDictionary<string, LearningDelivery>> RetrieveAsync(CancellationToken cancellationToken)
         {
-            var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToList();
+            var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToCaseInsensitiveHashSet();
 
             return await _lars
                 .LARS_LearningDelivery
                 .Where(ld => learnAimRefs.Contains(ld.LearnAimRef))
-                .ToDictionaryAsync(
+                .ToCaseInsensitiveAsyncDictionary(
                     ld => ld.LearnAimRef,
                     ld => new LearningDelivery()
                     {

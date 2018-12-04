@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using ESFA.DC.Data.Postcodes.Model;
 using ESFA.DC.Data.Postcodes.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
@@ -157,6 +160,65 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             result.Should().HaveCount(2);
             result.Should().Contain("ABC");
             result.Should().Contain("DEF");
+        }
+
+        [Fact]
+        public async Task Retrieve()
+        {
+            var message = new TestMessage
+            {
+                LearningProviderEntity = new TestLearningProvider
+                {
+                    UKPRN = 1
+                },
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner
+                    {
+                        Postcode = "CV1 2WT",
+                        PostcodePrior = "cv2 3wt",
+                        LearningDeliveries = new List<TestLearningDelivery>
+                        {
+                            new TestLearningDelivery
+                            {
+                                DelLocPostCode = "cv2 4AA"
+                            }
+                        }
+                    }
+                }
+            };
+
+            var postcodesMock = new Mock<IPostcodes>();
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            IEnumerable<MasterPostcode> masterPostcodeList = new List<MasterPostcode>
+            {
+                new MasterPostcode
+                {
+                    Postcode = "CV1 2WT"
+                },
+                new MasterPostcode
+                {
+                    Postcode = "CV2 3WT"
+                },
+                new MasterPostcode
+                {
+                    Postcode = "CV2 4AA"
+                }
+            };
+
+            var masterPostcodesMock = masterPostcodeList.AsMockDbSet();
+
+            postcodesMock.Setup(o => o.MasterPostcodes).Returns(masterPostcodesMock);
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+
+            var postcodes = await NewService(postcodesMock.Object, messageCacheMock.Object).RetrieveAsync(CancellationToken.None);
+
+            postcodes.Should().HaveCount(3);
+            postcodes.Should().Contain("CV1 2WT");
+            postcodes.Should().Contain("CV2 3WT");
+            postcodes.Should().Contain("CV2 4AA");
         }
 
         private PostcodesDataRetrievalService NewService(IPostcodes postcodes = null, ICache<IMessage> messageCache = null)
