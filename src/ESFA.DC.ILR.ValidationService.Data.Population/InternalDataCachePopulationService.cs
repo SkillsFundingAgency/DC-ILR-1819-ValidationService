@@ -3,6 +3,7 @@ using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model;
 using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -198,14 +199,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="lookups">The lookups.</param>
         /// <param name="type">The type.</param>
         /// <returns>a list of simple lookups</returns>
-        private IDictionary<string, List<int>> BuildComplexLookupEnumerable(XElement lookups, string type)
+        private IDictionary<string, IReadOnlyCollection<string>> BuildComplexLookupEnumerable(XElement lookups, string type)
         {
-              return lookups
-                    .Descendants(type)
-                    .Elements()
-                    .ToDictionary(
-                        n => n.Name.ToString(),
-                        v => v.Descendants("option").Select(d => int.Parse(d.Attribute("code").Value)).ToList());
+            return lookups
+                .Descendants(type)
+                .Elements()
+                .ToDictionary(
+                    n => $"{n.Name}",
+                    v => v.Descendants("option")
+                        .Select(d => GetAttributeValue(d.Attribute("code")))
+                        .AsSafeReadOnlyList());
         }
 
         /// <summary>
@@ -220,9 +223,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                  .Descendants(type)
                  .Descendants("option")
                  .ToDictionary(c => c.Attribute("code").Value, v => new ValidityPeriods(
-                     validFrom: DateTime.Parse(v.Attribute("validFrom") == null ? DateTime.MinValue.ToString() : v.Attribute("validFrom").Value),
-                     validTo: DateTime.Parse(v.Attribute("validTo") == null ? DateTime.MaxValue.ToString() : v.Attribute("validTo").Value)));
+                     validFrom: DateTime.Parse(GetAttributeValue(v.Attribute("validFrom")) ?? $"{DateTime.MinValue}"),
+                     validTo: DateTime.Parse(GetAttributeValue(v.Attribute("validTo")) ?? $"{DateTime.MaxValue}")));
         }
+
+        private string GetAttributeValue(XAttribute thisAttribute) =>
+            thisAttribute?.Value;
 
         /// <summary>
         /// Builds the lookup with validity periods (using int keys)
@@ -236,8 +242,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                  .Descendants(type)
                  .Descendants("option")
                  .ToDictionary(c => int.Parse(c.Attribute("code").Value), v => new ValidityPeriods(
-                     validFrom: DateTime.Parse(v.Attribute("validFrom").Value),
-                     validTo: DateTime.Parse(v.Attribute("validTo").Value)));
+                     validFrom: DateTime.Parse(GetAttributeValue(v.Attribute("validFrom")) ?? $"{DateTime.MinValue}"),
+                     validTo: DateTime.Parse(GetAttributeValue(v.Attribute("validTo")) ?? $"{DateTime.MaxValue}")));
         }
     }
 }

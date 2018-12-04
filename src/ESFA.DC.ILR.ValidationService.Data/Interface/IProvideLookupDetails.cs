@@ -72,6 +72,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <returns>
         /// <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
         /// </returns>
+        bool ContainsValueForKey(LookupCodedKeyDictionary lookupKey, string keyCandidate, string valueCandidate);
+
+        /// <summary>
+        /// Determines whether [the specified lookup key] [contains] the value.
+        /// </summary>
+        /// <param name="lookupKey">The lookup key.</param>
+        /// <param name="keyCandidate">The key candidate.</param>
+        /// <param name="valueCandidate">The value candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [contains value for key] [the specified lookup key]; otherwise, <c>false</c>.
+        /// </returns>
         bool ContainsValueForKey(LookupCodedKeyDictionary lookupKey, string keyCandidate, int valueCandidate);
 
         /// <summary>

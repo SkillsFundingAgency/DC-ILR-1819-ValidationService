@@ -833,40 +833,40 @@ localised additions are:
                     description="Non-funded (No ESFA funding for this learning aim)" />
         </FundModel>
         <LearnDelFAMType>
-            <option code="ACT"
-                    description="Apprenticeship contract type" />
+            <option code="SOF"
+                    description="Source of funding" />
+            <option code="FFI"
+                    description="Full or co-funding indicator" />
+            <option code="EEF"
+                    description="Eligibility for enhanced Apprenticeship funding" />
+            <option code="RES"
+                    description="Restart indicator" />
+            <option code="LSF"
+                    description="Learning support funding" />
             <option code="ADL"
                     description="Advanced Learner Loans indicator" />
             <option code="ALB"
                     description="Advanced Learner Loans Bursary funding" />
             <option code="ASL"
                     description="Adult Safeguarded Learning" />
-            <option code="EEF"
-                    description="Eligibility for enhanced Apprenticeship funding" />
-            <option code="FFI"
-                    description="Full or co-funding indicator" />
             <option code="FLN"
                     description="Family English, Maths and Language" />
+            <option code="LDM"
+                    description="Learning delivery monitoring" />
+            <option code="NSA"
+                    description="National Skills Academy indicator" />
+            <option code="WPP"
+                    description="Work programme participation" />
+            <option code="POD"
+                    description="Percentage of online delivery" />
             <option code="HEM"
                     description="HE monitoring" />
             <option code="HHS"
                     description="Household situation" />
-            <option code="LDM"
-                    description="Learning delivery monitoring" />
-            <option code="LSF"
-                    description="Learning support funding" />
-            <option code="NSA"
-                    description="National Skills Academy indicator" />
-            <option code="POD"
-                    description="Percentage of online delivery" />
-            <option code="RES"
-                    description="Restart indicator" />
-            <option code="SOF"
-                    description="Source of funding" />
-            <option code="SPP"
-                    description="Special projects and pilots" />
-            <option code="WPP"
-                    description="Work programme participation" />
+            <option code="ACT"
+                    description="Apprenticeship contract type" />
+            <!--<option code="SPP"
+                    description="Special projects and pilots" />-->
         </LearnDelFAMType>
         <LearnFAMType>
             <option code="DLA"
@@ -3445,12 +3445,44 @@ localised additions are:
             </SEN>
         </LearnerFAM>
         <LearningDeliveryFAM>
-            <ACT>
+            <SOF>
                 <option code="1"
-                        description="Apprenticeship fund through a contract for services with the employer" />
+                        description="HEFCE" />
+                <option code="105"
+                        description="Education and Skills Funding Agency (ESFA) - Adult" />
+                <option code="107"
+                        description="Education and Skills Funding Agency (ESFA) - 16-19" />
+                <option code="108"
+                        description="Local authority (Community Learning funds)" />
+                <option code="998"
+                        description="Other" />
+            </SOF>
+            <FFI>
+                <option code="1"
+                        description="Fully funded learning aim " />
                 <option code="2"
-                        description="Apprenticeship fund through a contract for services with the Skills Funding Agency" />
-            </ACT>
+                        description="Co funded learning aim " />
+            </FFI>
+            <EEF>
+                <option code="2"
+                        description="Entitlement to 16–18 Apprenticeship funding, where the learner is 19 or over" />
+                <option code="3"
+                        description="Entitlement to 19-23 Apprenticeship funding, where the learner is 24 or over" />
+                <option code="4"
+                        description="Entitlement to extended funding for apprentices" />
+            </EEF>
+            <RES>
+                <option code="1"
+                        description="Learning aim restarted" />
+            </RES>
+            <LSF>
+                <option code="1"
+                        description="Learning support funding " />
+                <!-- not a valid selection
+                <option code="2-11" 
+                        description="Unassigned" />
+                        -->
+            </LSF>
             <ADL>
                 <option code="1"
                         description="Aim is financed by an Advanced Learner Loan" />
@@ -3473,36 +3505,10 @@ localised additions are:
                 <option code="4"
                         description="Wider family learning" />
             </ASL>
-            <EEF>
-                <option code="2"
-                        description="Entitlement to 16–18 Apprenticeship funding, where the learner is 19 or over" />
-                <option code="3"
-                        description="Entitlement to 19-23 Apprenticeship funding, where the learner is 24 or over" />
-                <option code="4"
-                        description="Entitlement to extended funding for apprentices" />
-            </EEF>
-            <FFI>
-                <option code="1"
-                        description="Fully funded learning aim " />
-                <option code="2"
-                        description="Co funded learning aim " />
-            </FFI>
             <FLN>
                 <option code="1"
                         description="Family English, Maths or Language learning aim formula funded through the Adult Education Budget" />
             </FLN>
-            <HHS>
-                <option code="1"
-                        description="No household member is in employment and the household includes one or more dependent children" />
-                <option code="2"
-                        description="No household member is in employment and the household does not include any dependent children " />
-                <option code="3"
-                        description="Learner lives in a single adult household with dependent children" />
-                <option code="98"
-                        description="Learner has withheld this information" />
-                <option code="99"
-                        description="None of HHS1, HHS2 or HHS3 applies" />
-            </HHS>
             <LDM>
                 <option code="034"
                         description="OLASS – Offenders in custody" />
@@ -3595,12 +3601,6 @@ localised additions are:
                 <option code="330"
                         description="Skills Training Innovation and Employment (STRIVE) pilot for the homeless" />
             </LDM>
-            <LSF>
-                <option code="1"
-                        description="Learning support funding " />
-                <option code="2-11"
-                        description="Unassigned" />
-            </LSF>
             <NSA>
                 <option code="1"
                         description="Fashion Retail " />
@@ -3643,6 +3643,10 @@ localised additions are:
                 <option code="20"
                         description="Health " />
             </NSA>
+            <WPP>
+                <option code="1"
+                        description="DWP work Programme" />
+            </WPP>
             <POD>
                 <option code="1"
                         description="0% " />
@@ -3659,23 +3663,33 @@ localised additions are:
                 <option code="7"
                         description="100% " />
             </POD>
-            <RES>
+            <HEM>
                 <option code="1"
-                        description="Learning aim restarted" />
-            </RES>
-            <SOF>
+                        description="Student is funded by HEFCE using the old funding regime (only for learning aims starting on or after 1 September 2012)" />
+                <option code="3"
+                        description="Student has received an award under the National Scholarship programme for this learning aim" />
+                <option code="5"
+                        description="Student's qualifications and grades prior to enrolment are included in the student number control exemption list according to HEFCE" />
+            </HEM>
+            <HHS>
                 <option code="1"
-                        description="HEFCE" />
-                <option code="105"
-                        description="Education and Skills Funding Agency (ESFA) - Adult" />
-                <option code="107"
-                        description="Education and Skills Funding Agency (ESFA) - 16-19" />
-                <option code="108"
-                        description="Local authority (Community Learning funds)" />
-                <option code="998"
-                        description="Other" />
-            </SOF>
-            <SPP>
+                        description="No household member is in employment and the household includes one or more dependent children" />
+                <option code="2"
+                        description="No household member is in employment and the household does not include any dependent children " />
+                <option code="3"
+                        description="Learner lives in a single adult household with dependent children" />
+                <option code="98"
+                        description="Learner has withheld this information" />
+                <option code="99"
+                        description="None of HHS1, HHS2 or HHS3 applies" />
+            </HHS>
+            <ACT>
+                <option code="1"
+                        description="Apprenticeship fund through a contract for services with the employer" />
+                <option code="2"
+                        description="Apprenticeship fund through a contract for services with the Skills Funding Agency" />
+            </ACT>
+            <!--<SPP>
                 <option code="SP013"
                         description="Apprenticeship Expansion Programme" />
                 <option code="SP043"
@@ -3700,7 +3714,7 @@ localised additions are:
                         description="ESF Skills Support for Unemployed/Redundancy (76+ glh)" />
                 <option code="SP254"
                         description="ESF Skills Support for Unemployed/Redundancy - additional aim (no funding)" />
-            </SPP>
+            </SPP>-->
         </LearningDeliveryFAM>
         <TrailblazerApprenticeshipFinancialRecord>
             <TNP>

@@ -33,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <summary>
         /// Gets the coded lookups
         /// </summary>
-        IDictionary<LookupCodedKeyDictionary, IDictionary<string, List<int>>> CodedDictionaryLookups { get; }
+        IDictionary<LookupCodedKeyDictionary, IDictionary<string, IReadOnlyCollection<string>>> CodedDictionaryLookups { get; }
 
         /// <summary>
         /// Gets the time restricted lookups.

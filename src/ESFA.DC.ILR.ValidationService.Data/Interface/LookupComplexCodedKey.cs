@@ -6,6 +6,14 @@
     /// </summary>
     public enum LookupCodedKeyDictionary
     {
+        /// <summary>
+        /// The apprenticeship financial record
+        /// </summary>
         ApprenticeshipFinancialRecord,
+
+        /// <summary>
+        /// The learning delivery funding and monitoring
+        /// </summary>
+        LearningDeliveryFAM,
     }
 }

@@ -158,6 +158,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var cache = new InternalDataCache();
             var finTypes = new List<int>() { 1, 2, 4, 5, 6, 9, 24, 25, 29, 45 };
             var codedTypes = new List<string>() { "TNP", "PMR", "AEC", "UI", "OT", "ME", "YOU" };
+
             var tTAccomItems = new Dictionary<string, ValidityPeriods>()
             {
                 ["1"] = new ValidityPeriods(validFrom: DateTime.Parse("2013-06-14"), validTo: DateTime.Parse("2020-06-14")),
@@ -167,16 +168,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
                 ["6"] = new ValidityPeriods(validFrom: DateTime.Parse("2018-07-02"), validTo: DateTime.Parse("2020-06-14")),
                 ["9"] = new ValidityPeriods(validFrom: DateTime.Parse("2000-02-01"), validTo: DateTime.Parse("2008-08-26")),
             };
+
             var qualent3s = new Dictionary<string, ValidityPeriods>()
             {
                 ["C20"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.MaxValue),
                 ["P69"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31")),
                 ["P70"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31"))
             };
-            var apprenticeshipFinancialRecords = new Dictionary<string, List<int>>
+
+            var apprenticeshipFinancialRecords = new Dictionary<string, IReadOnlyCollection<string>>
             {
-                ["TNP"] = new List<int> { 1, 2, 3, 4 },
-                ["PMR"] = new List<int> { 1, 2, 3 },
+                ["TNP"] = new List<string> { "1", "2", "3", "4" },
+                ["PMR"] = new List<string> { "1", "2", "3" },
             };
 
             cache.SimpleLookups.Add(LookupSimpleKey.FINTYPE, finTypes);

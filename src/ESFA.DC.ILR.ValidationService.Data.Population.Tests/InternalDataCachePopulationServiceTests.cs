@@ -31,6 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         /// </summary>
         /// <param name="thisKey">this key.</param>
         /// <param name="expectedCount">The expected count.</param>
+        /// <returns>a task</returns>
         [Theory]
         [InlineData(LookupSimpleKey.Accom, 1)]
         [InlineData(LookupSimpleKey.AimType, 4)]
@@ -72,12 +73,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         /// </summary>
         /// <param name="thisKey">The this key.</param>
         /// <param name="expectedCount">The expected count.</param>
+        /// <returns>a task</returns>
         [Theory]
         [InlineData(LookupCodedKey.AppFinRecord, 2)]
         [InlineData(LookupCodedKey.ContPrefType, 2)]
         [InlineData(LookupCodedKey.Domicile, 264)]
         [InlineData(LookupCodedKey.ESMType, 7)]
-        [InlineData(LookupCodedKey.LearnDelFAMType, 17)]
+        [InlineData(LookupCodedKey.LearnDelFAMType, 16)]
         [InlineData(LookupCodedKey.LearnFAMType, 11)]
         [InlineData(LookupCodedKey.OutGrade, 502)]
         [InlineData(LookupCodedKey.OutType, 7)]
@@ -101,6 +103,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         /// </summary>
         /// <param name="thisKey">The this key.</param>
         /// <param name="expectedCount">The expected count.</param>
+        /// <returns>a task</returns>
         [Theory]
         [InlineData(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, 2)]
         public async Task CodedDictionaryLookupsArePresentAndMatchExpectedCount(LookupCodedKeyDictionary thisKey, int expectedCount)
@@ -121,6 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         /// </summary>
         /// <param name="thisKey">The this key.</param>
         /// <param name="expectedCount">The expected count.</param>
+        /// <returns>a task</returns>
         [Theory]
         [InlineData(LookupTimeRestrictedKey.EmpOutcome, 2)]
         [InlineData(LookupTimeRestrictedKey.FundComp, 4)]
