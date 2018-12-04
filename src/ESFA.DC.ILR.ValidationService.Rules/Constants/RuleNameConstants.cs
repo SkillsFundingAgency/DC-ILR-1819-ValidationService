@@ -21,6 +21,7 @@
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
         public const string AFinType_04 = "AFinType_04";
+        public const string AFinType_07 = "AFinType_07";
         public const string AFinType_08 = "AFinType_08";
         public const string AFinType_10 = "AFinType_10";
         public const string AFinType_11 = "AFinType_11";
