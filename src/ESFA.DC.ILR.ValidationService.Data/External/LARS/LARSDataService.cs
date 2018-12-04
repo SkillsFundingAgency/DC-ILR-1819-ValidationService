@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
@@ -71,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 .Where(f => f.FrameworkAims != null)
                 .SelectMany(f => f.FrameworkAims
                     .Where(fa =>
-                        fa.LearnAimRef == learnAimRef
+                        fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
                         && fa.ProgType == progType
                         && fa.FworkCode == fworkCode
                         && fa.PwayCode == pwayCode))
@@ -222,7 +223,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 .Where(f => f.FrameworkAims != null)
                 .SelectMany(f => f.FrameworkAims
                     .Where(fa =>
-                        fa.LearnAimRef == learnAimRef
+                        fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
                         && fa.ProgType == progType
                         && fa.FworkCode == fworkCode
                         && fa.PwayCode == pwayCode
@@ -237,7 +238,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
             return learningDelivery != null
                    && learningDelivery.LARSValidities != null
-                   && learningDelivery.LARSValidities.Any(lv => lv.LearnAimRef == learnAimRef
+                   && learningDelivery.LARSValidities.Any(lv => lv.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
                                                                 && lv.ValidityCategory == "APPRENTICESHIPS"
                                                                 && origLearnStartDate >= lv.StartDate
                                                                 && origLearnStartDate <= lv.EndDate);
