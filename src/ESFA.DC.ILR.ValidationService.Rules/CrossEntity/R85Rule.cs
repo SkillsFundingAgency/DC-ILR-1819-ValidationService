@@ -1,52 +1,117 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
+using System;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
-    public class R85Rule : AbstractRule, IRule<IMessage>
+    /// <summary>
+    /// the cross record rule 85 implementation
+    /// </summary>
+    /// <seealso cref="Interface.IRule{IMessage}" />
+    public class R85Rule :
+        IRule<IMessage>
     {
+        /// <summary>
+        /// Gets the name of the rule.
+        /// </summary>
+        public const string Name = "R85";
+
+        /// <summary>
+        /// The message handler
+        /// </summary>
+        private readonly IValidationErrorHandler _messageHandler;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="R85Rule"/> class.
+        /// </summary>
+        /// <param name="validationErrorHandler">The validation error handler.</param>
         public R85Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.R85)
         {
+            It.IsNull(validationErrorHandler)
+                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+
+            _messageHandler = validationErrorHandler;
         }
 
+        /// <summary>
+        /// Gets the name of the rule.
+        /// </summary>
+        public string RuleName => Name;
+
+        /// <summary>
+        /// Determines whether [is not matching learner number] [the specified d and p].
+        /// </summary>
+        /// <param name="dAndP">The d and p.</param>
+        /// <param name="learner">The learner.</param>
+        /// <returns>
+        ///   <c>true</c> if [is not matching learner number] [the specified d and p]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsNotMatchingLearnerNumber(ILearnerDestinationAndProgression dAndP, ILearner learner) =>
+             dAndP.ULN != learner.ULN;
+
+        /// <summary>
+        /// Determines whether [has matching reference number] [the specified d and p].
+        /// </summary>
+        /// <param name="dAndP">The d and p.</param>
+        /// <param name="learner">The learner.</param>
+        /// <returns>
+        ///   <c>true</c> if [has matching reference number] [the specified d and p]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasMatchingReferenceNumber(ILearnerDestinationAndProgression dAndP, ILearner learner) =>
+             dAndP.LearnRefNumber == learner.LearnRefNumber;
+
+        /// <summary>
+        /// Determines whether [is not valid] [the specified (learner) destination and progression].
+        /// </summary>
+        /// <param name="dAndP">The d and p.</param>
+        /// <param name="learner">The learner.</param>
+        /// <returns>
+        ///   <c>true</c> if [is not valid] [the specified d and p]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsNotValid(ILearnerDestinationAndProgression dAndP, ILearner learner) =>
+             HasMatchingReferenceNumber(dAndP, learner) && IsNotMatchingLearnerNumber(dAndP, learner);
+
+        /// <summary>
+        /// Validates the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public void Validate(IMessage message)
         {
-            if (message.Learners != null && message.LearnerDestinationAndProgressions != null)
-            {
-                foreach (ILearner learner in message.Learners)
-                {
-                    var misMatched = message.LearnerDestinationAndProgressions.Where(ldap => ldap.LearnRefNumber == learner.LearnRefNumber && ldap.ULN != learner.ULN);
-                    if (misMatched.Count() == 0)
-                    {
-                        misMatched = message.LearnerDestinationAndProgressions
-                            .Where(ldap => ldap.ULN == learner.ULN && ldap.LearnRefNumber != learner.LearnRefNumber);
-                    }
+            It.IsNull(message)
+                .AsGuard<ArgumentNullException>(nameof(message));
 
-                    if (misMatched.Count() > 0)
-                    {
-                        HandleValidationError(learner.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learner.ULN, misMatched.First().ULN, misMatched.First().LearnRefNumber));
-                    }
-                }
+            var learners = message.Learners.AsSafeReadOnlyList();
+            var dAndPs = message.LearnerDestinationAndProgressions.AsSafeReadOnlyList();
+
+            if (It.IsEmpty(learners) || It.IsEmpty(dAndPs))
+            {
+                return;
             }
+
+            learners.ForEach(learner =>
+            {
+                dAndPs
+                    .Where(ldap => IsNotValid(ldap, learner))
+                    .ForEach(x => RaiseValidationMessage(learner, x));
+            });
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long uln, long dpUln, string dpLearnRefNumber)
+        /// <summary>
+        /// Raises the validation message.
+        /// </summary>
+        /// <param name="learner">The learner.</param>
+        /// <param name="dAndP">The destination and progression.</param>
+        public void RaiseValidationMessage(ILearner learner, ILearnerDestinationAndProgression dAndP)
         {
-            return new[]
-            {
-                BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
-                BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionULN, dpUln),
-                BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, dpLearnRefNumber)
-            };
+            var parameters = Collection.Empty<IErrorMessageParameter>();
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(learner.ULN), learner.ULN));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionULN, dAndP.ULN));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, dAndP.LearnRefNumber));
+
+            _messageHandler.Handle(RuleName, learner.LearnRefNumber, null, parameters);
         }
     }
 }

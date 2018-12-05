@@ -1,125 +1,262 @@
-﻿using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using FluentAssertions;
+using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 {
-    public class R85RuleTests : AbstractRuleTests<R85Rule>
+    public class R85RuleTests
     {
+        /// <summary>
+        /// New rule with null message handler throws.
+        /// </summary>
         [Fact]
-        public void RuleName()
+        public void NewRuleWithNullMessageHandlerThrows()
         {
-            NewRule().RuleName.Should().Be("R85");
+            Assert.Throws<ArgumentNullException>(() => new R85Rule(null));
+        }
+
+        /// <summary>
+        /// Rule name 1, matches a literal.
+        /// </summary>
+        [Fact]
+        public void RuleName1()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal("R85", result);
+        }
+
+        /// <summary>
+        /// Rule name 2, matches the constant.
+        /// </summary>
+        [Fact]
+        public void RuleName2()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal(R85Rule.Name, result);
+        }
+
+        /// <summary>
+        /// Rule name 3 test, account for potential false positives.
+        /// </summary>
+        [Fact]
+        public void RuleName3()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.NotEqual("SomeOtherRuleName_07", result);
+        }
+
+        /// <summary>
+        /// Validate with null learner throws.
+        /// </summary>
+        [Fact]
+        public void ValidateWithNullMessageThrows()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
+        }
+
+        /// <summary>
+        /// Blahes the meets expectation.
+        /// </summary>
+        /// <param name="dAndPULN">The destination and progression uln.</param>
+        /// <param name="learnerULN">The learner uln.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(99998, 99999, true)]
+        [InlineData(99999, 99999, false)]
+        [InlineData(99958, 92959, true)]
+        [InlineData(92958, 92958, false)]
+        public void IsNotMatchingLearnerNumberMeetsExpectation(long dAndPULN, long learnerULN, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+
+            var dAndP = new Mock<ILearnerDestinationAndProgression>();
+            dAndP.SetupGet(x => x.ULN).Returns(dAndPULN);
+
+            var learner = new Mock<ILearner>();
+            learner.SetupGet(x => x.ULN).Returns(learnerULN);
+
+            // act
+            var result = sut.IsNotMatchingLearnerNumber(dAndP.Object, learner.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
         }
 
         [Theory]
-        [InlineData("Learner1", 9999999999)]
-        [InlineData("Learner5", 9999999999)]
-        public void Validate_Error(string learnRefNumber, long uln)
+        [InlineData("99998", "99999", false)]
+        [InlineData("99999", "99999", true)]
+        [InlineData("99958", "92959", false)]
+        [InlineData("92958", "92958", true)]
+        public void HasMatchingReferenceNumberMeetsExpectation(string dAndPRefNum, string learnerRefNum, bool expectation)
         {
-            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
-            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
-            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
-            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+            // arrange
+            var sut = NewRule();
 
-            var learnerDPs = new TestLearnerDestinationAndProgression[]
-            {
-                learnerDP1,
-                learnerDP2,
-                learnerDP3,
-                learnerDP4
-            };
+            var dAndP = new Mock<ILearnerDestinationAndProgression>();
+            dAndP.SetupGet(x => x.LearnRefNumber).Returns(dAndPRefNum);
 
-            var message = new TestMessage()
-            {
-                Learners = new TestLearner[]
-                {
-                    new TestLearner()
-                    {
-                        LearnRefNumber = learnRefNumber,
-                        ULN = uln
-                    }
-                },
-                LearnerDestinationAndProgressions = learnerDPs
-            };
+            var learner = new Mock<ILearner>();
+            learner.SetupGet(x => x.LearnRefNumber).Returns(learnerRefNum);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(validationErrorHandlerMock.Object).Validate(message);
-            }
+            // act
+            var result = sut.HasMatchingReferenceNumber(dAndP.Object, learner.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
         }
 
+        /// <summary>
+        /// Invalid item raises validation message.
+        /// </summary>
         [Fact]
-        public void Validate_NoError()
+        public void InvalidItemRaisesValidationMessage()
         {
-            var learner = new TestLearner()
-            {
-                LearnRefNumber = "Learner1",
-                ULN = 9999999996
-            };
-            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
-            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+            // arrange
+            const string LearnRefNumber = "123456789X";
+            const long learnerULN = 999998;
+            const long dAndP__ULN = 999999;
 
-            var learnerDPs = new TestLearnerDestinationAndProgression[]
-            {
-                learnerDP3,
-                learnerDP4
-            };
-            var message = new TestMessage()
-            {
-                Learners = new TestLearner[] { learner },
-                LearnerDestinationAndProgressions = learnerDPs
-            };
+            var learner = new Mock<ILearner>();
+            learner
+                .SetupGet(y => y.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            learner
+                .SetupGet(y => y.ULN)
+                .Returns(learnerULN);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(validationErrorHandlerMock.Object).Validate(message);
-            }
+            var learners = Collection.Empty<ILearner>();
+            learners.Add(learner.Object);
+
+            var dAndP = new Mock<ILearnerDestinationAndProgression>();
+            dAndP
+                .SetupGet(y => y.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            dAndP
+                .SetupGet(y => y.ULN)
+                .Returns(dAndP__ULN);
+
+            var records = Collection.Empty<ILearnerDestinationAndProgression>();
+            records.Add(dAndP.Object);
+
+            var message = new Mock<IMessage>();
+            message
+                .SetupGet(y => y.Learners)
+                .Returns(learners.AsSafeReadOnlyList());
+            message
+                .SetupGet(x => x.LearnerDestinationAndProgressions)
+                .Returns(records.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle(R85Rule.Name, LearnRefNumber, null, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("ULN", learnerULN))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("LearnerDestinationandProgression.ULN", dAndP__ULN))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("LearnerDestinationandProgression.LearnRefNumber", LearnRefNumber))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            var sut = new R85Rule(handler.Object);
+
+            // act
+            sut.Validate(message.Object);
+
+            // assert
+            handler.VerifyAll();
         }
 
+        /// <summary>
+        /// Valid item does not raise a validation message.
+        /// </summary>
         [Fact]
-        public void Validate_NullDP()
+        public void ValidItemDoesNotRaiseAValidationMessage()
         {
-            var learner = new TestLearner()
-            {
-                LearnRefNumber = "Learner1",
-                ULN = 9999999999
-            };
+            // arrange
+            const string LearnRefNumber = "123456789X";
+            const int learnerULN = 999999;
+            const int dAndP__ULN = 999999;
 
-            var message = new TestMessage()
-            {
-                Learners = new TestLearner[] { learner },
-                LearnerDestinationAndProgressions = null
-            };
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(validationErrorHandlerMock.Object).Validate(message);
-            }
+            var dAndP = new Mock<ILearnerDestinationAndProgression>();
+            dAndP
+                .SetupGet(y => y.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            dAndP
+                .SetupGet(y => y.ULN)
+                .Returns(dAndP__ULN);
+
+            var learner = new Mock<ILearner>();
+            learner
+                .SetupGet(y => y.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            learner
+                .SetupGet(y => y.ULN)
+                .Returns(learnerULN);
+
+            var records = Collection.Empty<ILearnerDestinationAndProgression>();
+            records.Add(dAndP.Object);
+
+            var learners = Collection.Empty<ILearner>();
+            learners.Add(learner.Object);
+
+            var message = new Mock<IMessage>();
+            message
+                .SetupGet(y => y.Learners)
+                .Returns(learners.AsSafeReadOnlyList());
+            message
+                .SetupGet(x => x.LearnerDestinationAndProgressions)
+                .Returns(records.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var sut = new R85Rule(handler.Object);
+
+            // act
+            sut.Validate(message.Object);
+
+            // assert
+            handler.VerifyAll();
         }
 
-        [Fact]
-        public void BuildErrorMessageParameters()
+        /// <summary>
+        /// New rule.
+        /// </summary>
+        /// <returns>a new rule (with a strict mock message handler)</returns>
+        private R85Rule NewRule()
         {
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ULN", 9999999999)).Verifiable();
-
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(9999999999, 999999998, "learner1");
-
-            validationErrorHandlerMock.Verify();
-        }
-
-        private R85Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
-        {
-            return new R85Rule(validationErrorHandler);
+            return new R85Rule(handler.Object);
         }
     }
 }
