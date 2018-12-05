@@ -57,16 +57,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         /// <summary>
-        /// Validate with null learner throws.
+        /// Validate with null learner.
         /// </summary>
         [Fact]
-        public void ValidateWithNullMessageThrows()
+        public void ValidateWithNullMessage()
         {
-            // arrange
-            var sut = NewRule();
+            NewRule().Validate(null);
+        }
 
-            // act / assert
-            Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
+        /// <summary>
+        /// Validate with null learner.
+        /// </summary>
+        [Fact]
+        public void ValidateWithEmptyMessage()
+        {
+            var testMessage = new TestMessage()
+            {
+                Learners = new TestLearner[]
+                {
+                    new TestLearner()
+                    {
+                    },
+                    new TestLearner()
+                    {
+                    }
+                }
+            };
+            NewRule().Validate(testMessage);
         }
 
         [Fact]
@@ -97,6 +114,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             {
                 Learners = new TestLearner[]
                 {
+                    new TestLearner()
+                    {
+                    },
                     new TestLearner()
                     {
                         LearnRefNumber = "123456"

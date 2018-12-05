@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -255,26 +257,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
                 }
             };
 
-            var testMessage = new TestMessage()
+            var testLearner = new TestLearner
             {
-                LearningProviderEntity = new TestLearningProvider()
+                LearningDeliveries = new TestLearningDelivery[]
                 {
-                    UKPRN = 98756789
-                },
-                Learners = new TestLearner[]
-                {
-                    new TestLearner()
+                    new TestLearningDelivery()
                     {
-                        LearningDeliveries = new TestLearningDelivery[]
-                        {
-                            new TestLearningDelivery()
-                            {
-                                FundModel = TypeOfFunding.AdultSkills,
-                                ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
-                                LearnAimRef = "50023408",
-                                LearningDeliveryFAMs = testLearningDeliveryFAMs
-                            }
-                        }
+                        FundModel = TypeOfFunding.AdultSkills,
+                        ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
+                        LearnAimRef = "50023408",
+                        LearningDeliveryFAMs = testLearningDeliveryFAMs
                     }
                 }
             };
@@ -283,8 +275,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
             var derivedDataServiceMock = new Mock<IDerivedData_27Rule>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var dd07Mock = new Mock<IDD07>();
 
+            fileDataServiceMock.Setup(f => f.UKPRN()).Returns(98756789);
             learningDeliveryFAMsQueryServiceMock.Setup(s => s.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "352")).Returns(false);
             organisationDataServiceMock.Setup(o => o.LegalOrgTypeMatchForUkprn(123654321, LegalOrgTypeConstants.ULEA)).Returns(true);
             derivedDataServiceMock.Setup(d => d.IsUKPRNCollegeOrGrantFundedProvider(98756789)).Returns(true);
@@ -299,7 +293,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
                     dD07: dd07Mock.Object,
                     derivedData_27Rule: derivedDataServiceMock.Object,
                     lARSDataService: larsDataServiceMock.Object,
-                    organisationDataService: organisationDataServiceMock.Object).Validate(testMessage);
+                    fileDataService: fileDataServiceMock.Object,
+                    organisationDataService: organisationDataServiceMock.Object).Validate(testLearner);
             }
         }
 
@@ -320,27 +315,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
                     }
                 };
 
-            var testMessage = new TestMessage()
+            var testLearner = new TestLearner()
             {
-                LearningProviderEntity = new TestLearningProvider()
+                LearningDeliveries = new TestLearningDelivery[]
                 {
-                    UKPRN = 123654321
-                },
-                Learners = new TestLearner[]
-                {
-                    new TestLearner()
+                    new TestLearningDelivery()
                     {
-                        LearningDeliveries = new TestLearningDelivery[]
-                        {
-                            new TestLearningDelivery()
-                            {
-                                FundModel = TypeOfFunding.CommunityLearning,
-                                ProgTypeNullable = TypeOfLearningProgramme.ApprenticeshipStandard,
-                                LearnAimRef = "50023408",
-                                LearningDeliveryFAMs = testLearningDeliveryFAMs,
-                                LearningDeliveryHEEntity = testLearningDeliveryHeEntity
-                            }
-                        }
+                        FundModel = TypeOfFunding.CommunityLearning,
+                        ProgTypeNullable = TypeOfLearningProgramme.ApprenticeshipStandard,
+                        LearnAimRef = "50023408",
+                        LearningDeliveryFAMs = testLearningDeliveryFAMs,
+                        LearningDeliveryHEEntity = testLearningDeliveryHeEntity
                     }
                 }
             };
@@ -349,8 +334,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
             var derivedDataServiceMock = new Mock<IDerivedData_27Rule>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
+            var fileDataServiceMock = new Mock<IFileDataService>();
             var dd07Mock = new Mock<IDD07>();
 
+            fileDataServiceMock.Setup(f => f.UKPRN()).Returns(123654321);
             learningDeliveryFAMsQueryServiceMock.Setup(s => s.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "352")).Returns(true);
             larsDataServiceMock.Setup(l => l.NotionalNVQLevelV2MatchForLearnAimRefAndLevels("50023411", _notionalNVQLevels)).Returns(false);
             organisationDataServiceMock.Setup(o => o.LegalOrgTypeMatchForUkprn(123654321, LegalOrgTypeConstants.ULEA)).Returns(true);
@@ -365,7 +352,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
                     dD07: dd07Mock.Object,
                     derivedData_27Rule: derivedDataServiceMock.Object,
                     lARSDataService: larsDataServiceMock.Object,
-                    organisationDataService: organisationDataServiceMock.Object).Validate(testMessage);
+                    fileDataService: fileDataServiceMock.Object,
+                    organisationDataService: organisationDataServiceMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_Learner_NullCheck()
+        {
+            TestLearner testLearner = null;
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_LearningDelivery_NullCheck()
+        {
+            TestLearner testLearner = new TestLearner()
+            {
+                LearningDeliveries = null
+            };
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
             }
         }
 
@@ -387,6 +398,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
             IOrganisationDataService organisationDataService = null,
             IDerivedData_27Rule derivedData_27Rule = null,
             ILARSDataService lARSDataService = null,
+            IFileDataService fileDataService = null,
             IDD07 dD07 = null)
         {
             return new LearningDeliveryHE_03Rule(
@@ -395,6 +407,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
                 organisationDataService: organisationDataService,
                 derivedData_27Rule: derivedData_27Rule,
                 lARSDataService: lARSDataService,
+                fileDataService: fileDataService,
                 dd07: dD07);
         }
     }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -14,7 +12,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
 {
-    public class LearningDeliveryHE_03Rule : AbstractRule, IRule<IMessage>
+    public class LearningDeliveryHE_03Rule : AbstractRule, IRule<ILearner>
     {
         private readonly int[] _fundModels =
             {
@@ -34,6 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
             };
 
         private readonly IDD07 _dd07;
+        private readonly IFileDataService _fileDataService;
         private readonly ILARSDataService _lARSDataService;
         private readonly IDerivedData_27Rule _derivedData_27Rule;
         private readonly IOrganisationDataService _organisationDataService;
@@ -45,6 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
             IOrganisationDataService organisationDataService,
             IDerivedData_27Rule derivedData_27Rule,
             ILARSDataService lARSDataService,
+            IFileDataService fileDataService,
             IDD07 dd07)
             : base(validationErrorHandler, RuleNameConstants.LearningDeliveryHE_03)
         {
@@ -52,31 +52,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
             _organisationDataService = organisationDataService;
             _derivedData_27Rule = derivedData_27Rule;
             _lARSDataService = lARSDataService;
+            _fileDataService = fileDataService;
             _dd07 = dd07;
         }
 
-        public void Validate(IMessage objectToValidate)
+        public void Validate(ILearner objectToValidate)
         {
             if (objectToValidate == null
-                    || _organisationDataService.LegalOrgTypeMatchForUkprn(objectToValidate.LearningProviderEntity.UKPRN, LegalOrgTypeConstants.UHEO)
-                    || !DerivedData27ConditionMet(objectToValidate.LearningProviderEntity.UKPRN))
+                    || objectToValidate.LearningDeliveries == null
+                    || _organisationDataService.LegalOrgTypeMatchForUkprn(_fileDataService.UKPRN(), LegalOrgTypeConstants.UHEO)
+                    || !DerivedData27ConditionMet(_fileDataService.UKPRN()))
             {
                 return;
             }
 
-            foreach (var learner in objectToValidate.Learners)
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                foreach (var learningDelivery in learner.LearningDeliveries)
+                if (ConditionMet(
+                    learningDelivery.FundModel,
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.LearningDeliveryHEEntity,
+                    learningDelivery.LearningDeliveryFAMs))
                 {
-                    if (ConditionMet(
-                        learningDelivery.FundModel,
-                        learningDelivery.LearnAimRef,
-                        learningDelivery.ProgTypeNullable,
-                        learningDelivery.LearningDeliveryHEEntity,
-                        learningDelivery.LearningDeliveryFAMs))
-                    {
-                        HandleValidationError(learner.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel));
-                    }
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel));
                 }
             }
         }

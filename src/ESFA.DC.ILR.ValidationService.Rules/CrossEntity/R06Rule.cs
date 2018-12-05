@@ -36,13 +36,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// <param name="objectToValidate">The object to validate.</param>
         public void Validate(IMessage objectToValidate)
         {
-            It.IsNull(objectToValidate)
-                .AsGuard<ArgumentNullException>(nameof(objectToValidate));
+            if (objectToValidate?.Learners == null)
+            {
+                return;
+            }
 
             HashSet<string> allLearnRefs = new HashSet<string>();
             foreach (ILearner learner in objectToValidate.Learners)
             {
-                if (allLearnRefs.Contains(learner.LearnRefNumber))
+                if (string.IsNullOrEmpty(learner.LearnRefNumber))
+                {
+                    continue;
+                }
+                else if (allLearnRefs.Contains(learner.LearnRefNumber))
                 {
                     RaiseValidationMessage(learner.LearnRefNumber);
                 }

@@ -19,6 +19,11 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
 
         public IEnumerable<IMessage> Process()
         {
+            if (this._messageCache?.Item?.Learners == null)
+            {
+                return null;
+            }
+
             var learners = _messageCache.Item.Learners.ToList();
 
             var learnersPerActors = CalculateLearnersPerActor(learners.Count);
