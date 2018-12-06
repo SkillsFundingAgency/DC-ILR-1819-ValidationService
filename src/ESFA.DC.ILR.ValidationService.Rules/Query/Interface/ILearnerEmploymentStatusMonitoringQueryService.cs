@@ -8,5 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, string esmType, int esmCode);
 
         bool HasAnyEmploymentStatusMonitoringTypeMoreThanOnce(IEnumerable<IEmploymentStatusMonitoring> employmentStatusMonitorings, IEnumerable<string> esmTypes);
+
+        IEnumerable<string> GetDuplicatedEmploymentStatusMonitoringTypesForTypes(IEnumerable<IEmploymentStatusMonitoring> employmentStatusMonitorings, IEnumerable<string> esmTypes);
     }
 }

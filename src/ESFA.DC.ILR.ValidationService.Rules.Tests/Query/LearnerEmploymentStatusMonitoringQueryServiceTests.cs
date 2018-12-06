@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
@@ -112,6 +113,75 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
 
             NewService().HasAnyEmploymentStatusMonitoringTypeMoreThanOnce(null, esmTypes).Should().BeFalse();
+        }
+
+        [Fact]
+        public void GetDuplicatedEmploymentStatusMonitoringTypesForTypes_OneMatch()
+        {
+            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+
+            var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+            {
+                new TestEmploymentStatusMonitoring() { ESMType = "SEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "EII" },
+                new TestEmploymentStatusMonitoring() { ESMType = "LOU" },
+                new TestEmploymentStatusMonitoring() { ESMType = "LOE" },
+                new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
+                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
+            };
+
+            NewService().GetDuplicatedEmploymentStatusMonitoringTypesForTypes(employmentStatusMonitorings, esmTypes).Count().Should().Be(1);
+        }
+
+        [Fact]
+        public void GetDuplicatedEmploymentStatusMonitoringTypesForTypes_MultipleMatches()
+        {
+            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+
+            var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+            {
+                new TestEmploymentStatusMonitoring() { ESMType = "SEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "EII" },
+                new TestEmploymentStatusMonitoring() { ESMType = "LOU" },
+                new TestEmploymentStatusMonitoring() { ESMType = "LOE" },
+                new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
+                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
+            };
+
+            NewService().GetDuplicatedEmploymentStatusMonitoringTypesForTypes(employmentStatusMonitorings, esmTypes).Count().Should().Be(3);
+        }
+
+        [Fact]
+        public void GetDuplicatedEmploymentStatusMonitoringTypesForTypes_NoMatch()
+        {
+            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+
+            var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+            {
+                new TestEmploymentStatusMonitoring() { ESMType = "SEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "EII" },
+                new TestEmploymentStatusMonitoring() { ESMType = "LOU" },
+                new TestEmploymentStatusMonitoring() { ESMType = "LOE" },
+                new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
+            };
+
+            NewService().GetDuplicatedEmploymentStatusMonitoringTypesForTypes(employmentStatusMonitorings, esmTypes).Count().Should().Be(0);
+        }
+
+        [Fact]
+        public void GetDuplicatedEmploymentStatusMonitoringTypesForTypes_Null()
+        {
+            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+
+            NewService().GetDuplicatedEmploymentStatusMonitoringTypesForTypes(null, esmTypes).Should().BeNull();
         }
 
         private ILearnerEmploymentStatus[] SetupLearnerEmploymentStatuses()
