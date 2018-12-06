@@ -124,6 +124,7 @@
     <Compile Include="Derived\DD06Tests.cs" />
     <Compile Include="Derived\DD07Tests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_01RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_02RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_04RuleTests.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_02RuleTests.cs" />
