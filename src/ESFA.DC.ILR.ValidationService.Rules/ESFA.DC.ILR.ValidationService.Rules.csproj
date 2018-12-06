@@ -122,6 +122,7 @@
     <Compile Include="Derived\Interface\IDerivedData_29Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
+    <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_04Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_02Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_01Rule.cs" />
