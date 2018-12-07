@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
@@ -80,6 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             ILogger logger = _parentLifeTimeScope.Resolve<ILogger>();
 
             InternalDataCache internalDataCache;
+            ExternalDataCache externalDataCacheGet;
             ExternalDataCache externalDataCache;
             FileDataCache fileDataCache;
             Message message;
@@ -91,9 +93,26 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                 logger.LogDebug($"{nameof(ValidationActor)} {_actorId} {GC.GetGeneration(actorModel)} starting");
 
                 internalDataCache = _jsonSerializationService.Deserialize<InternalDataCache>(actorModel.InternalDataCache);
-                externalDataCache = _jsonSerializationService.Deserialize<ExternalDataCache>(actorModel.ExternalDataCache);
+                externalDataCacheGet = _jsonSerializationService.Deserialize<ExternalDataCache>(actorModel.ExternalDataCache);
                 fileDataCache = _jsonSerializationService.Deserialize<FileDataCache>(actorModel.FileDataCache);
                 message = _jsonSerializationService.Deserialize<Message>(actorModel.Message);
+
+                externalDataCache = new ExternalDataCache
+                {
+                    LearningDeliveries = ((IDictionary<string, LearningDelivery>)externalDataCacheGet.LearningDeliveries).ToCaseInsensitiveDictionary(),
+                    EPAOrganisations = externalDataCacheGet.EPAOrganisations,
+                    ERNs = externalDataCacheGet.ERNs,
+                    ESFEligibilityRuleEmploymentStatuses = externalDataCacheGet.ESFEligibilityRuleEmploymentStatuses,
+                    EsfEligibilityRuleSectorSubjectAreaLevels = externalDataCacheGet.EsfEligibilityRuleSectorSubjectAreaLevels,
+                    FCSContractAllocations = externalDataCacheGet.FCSContractAllocations,
+                    FCSContracts = externalDataCacheGet.FCSContracts,
+                    Frameworks = externalDataCacheGet.Frameworks,
+                    Organisations = externalDataCacheGet.Organisations,
+                    Postcodes = externalDataCacheGet.Postcodes.ToCaseInsensitiveHashSet(),
+                    StandardValidities = externalDataCacheGet.StandardValidities,
+                    ULNs = externalDataCacheGet.ULNs,
+                    ValidationErrors = externalDataCacheGet.ValidationErrors
+                };
 
                 validationContext = new ValidationContext
                 {
