@@ -95,6 +95,8 @@
 
         public const string Entity_1 = "Entity_1";
 
+        public const string ESMType_15 = "ESMType_15";
+
         public const string FamilyName_01 = "FamilyName_01";
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
