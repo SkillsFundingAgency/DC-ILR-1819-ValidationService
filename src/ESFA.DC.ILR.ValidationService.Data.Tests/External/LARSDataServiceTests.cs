@@ -1692,6 +1692,158 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 .BeFalse();
         }
 
+        [Fact]
+        public void FrameWorkComponentTypeExistsInFrameworkAims_False()
+        {
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var learnAimRef = "ZESF12345";
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    FrameworkAims = new List<FrameworkAim>()
+                    {
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 5
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 2
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 6
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF99887",
+                            FrameworkComponentType = 3
+                        }
+                    }
+                },
+                new Framework()
+                {
+                    FrameworkAims = new List<FrameworkAim>()
+                    {
+                        new FrameworkAim(),
+                    }
+                },
+                new Framework()
+                {
+                    FrameworkAims = null
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void FrameWorkComponentTypeExistsInFrameworkAims_FalseNull()
+        {
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var learnAimRef = "ZESF12345";
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    FrameworkAims = null
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void FrameWorkComponentTypeExistsInFrameworkAims_False_FrameworkNull()
+        {
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var learnAimRef = "ZESF12345";
+
+            List<Framework> frameworks = null;
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void FrameWorkComponentTypeExistsInFrameworkAims_True()
+        {
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var learnAimRef = "ZESF12345";
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    FrameworkAims = new List<FrameworkAim>()
+                    {
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 1
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 2
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 3
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF99887",
+                            FrameworkComponentType = 3
+                        }
+                    }
+                },
+                new Framework()
+                {
+                    FrameworkAims = new List<FrameworkAim>()
+                    {
+                        new FrameworkAim(),
+                    }
+                },
+                new Framework()
+                {
+                    FrameworkAims = null
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
+                .Should()
+                .BeTrue();
+        }
+
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
         {
             return new LARSDataService(externalDataCache);

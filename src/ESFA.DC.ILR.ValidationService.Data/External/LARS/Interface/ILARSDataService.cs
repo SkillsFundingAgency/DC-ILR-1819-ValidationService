@@ -33,6 +33,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
 
+        bool FrameWorkComponentTypeExistsInFrameworkAims(string learnAimRef, HashSet<int?> frameworkTypeComponents);
+
         bool FrameworkCodeExistsForCommonComponent(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
 
         bool LearnAimRefExists(string learnAimRef);
