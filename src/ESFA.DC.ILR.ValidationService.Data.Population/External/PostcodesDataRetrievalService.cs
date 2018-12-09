@@ -1,26 +1,44 @@
-﻿using System;
+﻿using ESFA.DC.Data.Postcodes.Model.Interfaces;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.External.Postcodes;
+using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ESFA.DC.Data.Postcodes.Model.Interfaces;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Extensions;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 {
-    public class PostcodesDataRetrievalService : AbstractDataRetrievalService, IPostcodesDataRetrievalService
+    /// <summary>
+    /// the postcode data service implementation
+    /// </summary>
+    /// <seealso cref="AbstractDataRetrievalService" />
+    /// <seealso cref="IPostcodesDataRetrievalService" />
+    public class PostcodesDataRetrievalService :
+        AbstractDataRetrievalService,
+        IPostcodesDataRetrievalService
     {
         private readonly IPostcodes _postcodes;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PostcodesDataRetrievalService"/> class.
+        /// </summary>
         public PostcodesDataRetrievalService()
             : base(null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PostcodesDataRetrievalService"/> class.
+        /// </summary>
+        /// <param name="postcodes">The postcodes.</param>
+        /// <param name="messageCache">The message cache.</param>
         public PostcodesDataRetrievalService(IPostcodes postcodes, ICache<IMessage> messageCache)
             : base(messageCache)
         {
@@ -45,6 +63,35 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             return result;
         }
 
+        /// <summary>
+        /// Retrieves the ons postcodes asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>a set of ons postcode records</returns>
+        public async Task<IReadOnlyCollection<IONSPostcode>> RetrieveONSPostcodesAsync(CancellationToken cancellationToken)
+        {
+            var message = _messageCache.Item;
+            It.IsNull(message)
+                .AsGuard<ArgumentNullException>(nameof(message));
+
+            var deliveries = message.Learners
+                    .SelectMany(x => x.LearningDeliveries.AsSafeReadOnlyList())
+                    .AsSafeReadOnlyList();
+            var uniquePostcodes = GetUniqueDeliveryLocationPostcodesFrom(deliveries).ToCaseInsensitiveHashSet();
+
+            return await _postcodes.ONS_Postcodes
+                .Where(p => uniquePostcodes.Contains(p.Postcode))
+                .Select(p => new ONSPostcode
+                {
+                    Postcode = p.Postcode,
+                    EffectiveFrom = p.EffectiveFrom,
+                    EffectiveTo = p.EffectiveTo,
+                    LocalAuthority = p.LocalAuthority,
+                    Termination = p.Termination
+                })
+                .ToListAsync(cancellationToken);
+        }
+
         public IEnumerable<string> UniquePostcodesFromMessage(IMessage message)
         {
             return UniqueLearnerPostcodesFromMessage(message)
@@ -61,6 +108,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                         .Select(l => l.Postcode)
                         .Distinct()
                     ?? new List<string>();
+        }
+
+        /// <summary>
+        /// Gets the unique delivery location postcodes from.
+        /// </summary>
+        /// <param name="deliveries">The deliveries.</param>
+        /// <returns>a set of delivery location postcodes</returns>
+        public virtual IReadOnlyCollection<string> GetUniqueDeliveryLocationPostcodesFrom(IReadOnlyCollection<ILearningDelivery> deliveries)
+        {
+            return deliveries
+                .SafeWhere(x => It.Has(x.DelLocPostCode))
+                .Select(x => x.DelLocPostCode)
+                .Distinct()
+                .AsSafeReadOnlyList();
         }
 
         public virtual IEnumerable<string> UniqueLearnerPostcodePriorsFromMessage(IMessage message)

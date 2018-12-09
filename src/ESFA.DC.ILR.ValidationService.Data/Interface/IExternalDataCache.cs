@@ -3,11 +3,15 @@ using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Interface
 {
+    /// <summary>
+    /// the external data cache definition
+    /// </summary>
     public interface IExternalDataCache
     {
         IReadOnlyCollection<long> ULNs { get; }
@@ -35,6 +39,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
 
         IReadOnlyCollection<string> Postcodes { get; }
 
+        /// <summary>
+        /// Gets the ons postcodes.
+        /// </summary>
+        IReadOnlyCollection<IONSPostcode> ONSPostcodes { get; }
+
         IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; }
 
         /// <summary>
@@ -51,6 +60,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// Gets the ESF eligibility rule employment statuses.
         /// </summary>
         IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> ESFEligibilityRuleEmploymentStatuses { get; }
+
+        /// <summary>
+        /// Gets the esf eligibility rule local authorities.
+        /// </summary>
+        IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> ESFEligibilityRuleLocalAuthorities { get; }
 
         /// <summary>
         /// Gets the ESF eligibility rule subject area level codes.

@@ -21,11 +21,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
         Task<IReadOnlyCollection<IFcsContractAllocation>> RetrieveContractAllocationsAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Retrieves the eligibility rule employment statuses asynchronous.
+        /// Retrieves the eligibility rule employment statuses asynchronously.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>a task running the collection builder</returns>
         Task<IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus>> RetrieveEligibilityRuleEmploymentStatusesAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Retrieves the eligibility rule local authorities asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>a task running the collection builder</returns>
+        Task<IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority>> RetrieveEligibilityRuleLocalAuthoritiesAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Retrieves the eligibility rule sector subject area level.

@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ReferenceData.FCS.Model.Interface;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 {
@@ -110,7 +109,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         }
 
         /// <summary>
-        /// Retrieves the eligibility rule employment statuses asynchronous.
+        /// Retrieves the eligibility rule employment statuses asynchronously.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
@@ -121,8 +120,30 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             return await _fcs.EsfEligibilityRuleEmploymentStatuses
                 .Select(er => new EsfEligibilityRuleEmploymentStatus
                 {
-                                        Code = er.Code,
-                    EligibilityRuleID = 0, // not yet offered by the class EsfEligibilityRule = er.EsfEligibilityRule,
+                    // ID = 0,
+                    // EligibilityRuleID = 0, not yet offered by the class EsfEligibilityRule = er.EsfEligibilityRule,
+                    Code = er.Code,
+                    LotReference = er.LotReference,
+                    TenderSpecReference = er.TenderSpecReference
+                })
+                .ToListAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieves the eligibility rule local authorities asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// a task running the collection builder
+        /// </returns>
+        public async Task<IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority>> RetrieveEligibilityRuleLocalAuthoritiesAsync(CancellationToken cancellationToken)
+        {
+            return await _fcs.EsEligibilityRulefLocalAuthorities
+                .Select(er => new EsfEligibilityRuleLocalAuthority
+                {
+                    // ID = 0,
+                    // EligibilityRuleID = 0, not yet offered by the class EsfEligibilityRule = er.EsfEligibilityRule,
+                    Code = er.Code,
                     LotReference = er.LotReference,
                     TenderSpecReference = er.TenderSpecReference
                 })

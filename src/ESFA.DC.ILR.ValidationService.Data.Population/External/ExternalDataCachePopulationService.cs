@@ -47,11 +47,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             externalDataCache.LearningDeliveries = await _larsLearningDeliveryDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.Frameworks = await _larsFrameworkDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.ULNs = new HashSet<long>(await _ulnDataRetrievalService.RetrieveAsync(cancellationToken));
+
             externalDataCache.Postcodes = (await _postcodesDataRetrievalService.RetrieveAsync(cancellationToken)).ToCaseInsensitiveHashSet();
+            externalDataCache.ONSPostcodes = await _postcodesDataRetrievalService.RetrieveONSPostcodesAsync(cancellationToken);
+
             externalDataCache.Organisations = await _organisationsDataRetrievalService.RetrieveAsync(cancellationToken);
 
             externalDataCache.FCSContracts = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.FCSContractAllocations = await _fcsDataRetrievalService.RetrieveContractAllocationsAsync(cancellationToken);
+            externalDataCache.ESFEligibilityRuleLocalAuthorities = await _fcsDataRetrievalService.RetrieveEligibilityRuleLocalAuthoritiesAsync(cancellationToken);
             externalDataCache.ESFEligibilityRuleEmploymentStatuses = await _fcsDataRetrievalService.RetrieveEligibilityRuleEmploymentStatusesAsync(cancellationToken);
             externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels = await _fcsDataRetrievalService.RetrieveEligibilityRuleSectorSubjectAreaLevelAsync(cancellationToken);
 

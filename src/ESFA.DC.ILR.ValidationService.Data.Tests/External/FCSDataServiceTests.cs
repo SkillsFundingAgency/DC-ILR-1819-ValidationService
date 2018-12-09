@@ -425,7 +425,157 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             NewService(externalDataCache: externalDataCahceMock.Object).IsSectorSubjectAreaCodeExistsForContract(conRefNumber).Should().BeTrue();
         }
 
-        private FCSDataService NewService(IExternalDataCache externalDataCache)
+        /// <summary>
+        /// Get contract allocation for, meets expectation.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">The expectation.</param>
+        [Theory]
+        [InlineData("ESF0002", "tt_9972")]
+        [InlineData("ESF0003", "tt_9972")]
+        [InlineData("ESF0004", "tt_9972")]
+        [InlineData("ESF0005", "tt_9978")]
+        public void GetContractAllocationForMeetsExpectation(string candidate, string expectation)
+        {
+            // arrange
+            var cache = GetDefaultStrictEmptyCache();
+            Mock.Get(cache)
+                .Setup(e => e.FCSContractAllocations)
+                .Returns(GetDefaultContractAllocationTestList());
+
+            var sut = new FCSDataService(cache);
+
+            // act
+            var result = sut.GetContractAllocationFor(candidate);
+
+            // assert
+            Assert.Equal(expectation, result.TenderSpecReference);
+            Mock.Get(cache).VerifyAll();
+        }
+
+        /// <summary>
+        /// Get contract allocation for, with null reference returns null.
+        /// </summary>
+        [Fact]
+        public void GetContractAllocationForWithNullReferenceReturnsNull()
+        {
+            // arrange
+            var cache = GetDefaultStrictEmptyCache();
+
+            Mock.Get(cache)
+                .Setup(e => e.FCSContractAllocations)
+                .Returns(GetDefaultContractAllocationTestList());
+
+            var sut = new FCSDataService(cache);
+
+            // act
+            var result = sut.GetContractAllocationFor(null);
+
+            // assert
+            Assert.Null(result);
+            Mock.Get(cache).VerifyAll();
+        }
+
+        /// <summary>
+        /// That matches, meets expectation.
+        /// </summary>
+        /// <param name="reference">The reference.</param>
+        /// <param name="allocation">The allocation.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("ESF0002", "tt_9972", false)]
+        [InlineData("tt_9972", "ESF0002", false)]
+        [InlineData("TT_9972", "tt_9972", true)]
+        [InlineData("tt_9972", "TT_9972", true)]
+        [InlineData("tt_9972", "tt_9972", true)]
+        [InlineData("TT_9973", "tt_9972", false)]
+        [InlineData("tt_9972", "TT_9973", false)]
+        [InlineData("tt_9973", "tt_9972", false)]
+        [InlineData("tt_9972", "tt_9973", false)]
+        public void ThatMatchesMeetsExpectation(string reference, string allocation, bool expectation)
+        {
+            // arrange
+            var cache = GetDefaultStrictEmptyCache();
+            var sut = new FCSDataService(cache);
+
+            var referenceMock = new Mock<IEsfEligibilityRuleReferences>();
+            referenceMock
+                .SetupGet(x => x.TenderSpecReference)
+                .Returns(reference);
+            var allocatonMock = new Mock<IFcsContractAllocation>();
+            allocatonMock
+                .SetupGet(x => x.TenderSpecReference)
+                .Returns(allocation);
+
+            // act
+            var result = sut.ThatMatches(referenceMock.Object, allocatonMock.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+            Mock.Get(cache).VerifyAll();
+        }
+
+        /// <summary>
+        /// Gets the default contract allocation test list.
+        /// </summary>
+        /// <returns>the default set of contract allocations for testing</returns>
+        internal IReadOnlyCollection<IFcsContractAllocation> GetDefaultContractAllocationTestList()
+        {
+            // this provides a set of test contract allocations
+            return new List<FcsContractAllocation>
+            {
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = "ESF0002",
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "01"
+                },
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = "ESF0003",
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "02"
+                },
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = "ESF0004",
+                    TenderSpecReference = "tt_9972",
+                    LotReference = "03"
+                },
+                new FcsContractAllocation
+                {
+                    ContractAllocationNumber = "ESF0005",
+                    TenderSpecReference = "tt_9978",
+                    LotReference = "01"
+                }
+            };
+        }
+
+        /// <summary>
+        /// Gets the default strict empty cache.
+        /// </summary>
+        /// <returns>an i external data cache</returns>
+        internal IExternalDataCache GetDefaultStrictEmptyCache()
+        {
+            // this sets up an empty by default, verifiable mocked cache with strict behaviour
+            var cache = new Mock<IExternalDataCache>(MockBehavior.Strict);
+            cache
+                .Setup(e => e.FCSContractAllocations)
+                .Returns((IReadOnlyCollection<IFcsContractAllocation>)null);
+            cache
+                .Setup(e => e.ESFEligibilityRuleEmploymentStatuses)
+                .Returns((IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus>)null);
+            cache
+                .Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels)
+                .Returns((IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel>)null);
+            cache
+                .Setup(e => e.ESFEligibilityRuleLocalAuthorities)
+                .Returns((IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority>)null);
+
+            return cache.Object;
+        }
+
+        internal FCSDataService NewService(IExternalDataCache externalDataCache)
         {
             return new FCSDataService(externalDataCache);
         }
