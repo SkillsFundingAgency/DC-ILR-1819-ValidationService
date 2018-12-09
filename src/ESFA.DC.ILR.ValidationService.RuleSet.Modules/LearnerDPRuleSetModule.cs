@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutCollDate;
+using ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutStartDate;
 using ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
 using System;
@@ -17,6 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
             Rules = new List<Type>()
             {
                 typeof(OutCollDate_01Rule),
+                typeof(OutStartDate_01Rule),
                 typeof(OutType_02Rule),
                 typeof(OutType_04Rule)
             };

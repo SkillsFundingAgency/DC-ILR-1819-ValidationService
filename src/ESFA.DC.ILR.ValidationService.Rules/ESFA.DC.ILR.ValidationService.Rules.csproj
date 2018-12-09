@@ -122,6 +122,7 @@
     <Compile Include="Derived\Interface\IDerivedData_29Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
+    <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_04Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_02Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_01Rule.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_08Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_02Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01Rule.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_15Rule.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_02Rule.cs" />
@@ -259,6 +261,7 @@
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09Rule.cs" />

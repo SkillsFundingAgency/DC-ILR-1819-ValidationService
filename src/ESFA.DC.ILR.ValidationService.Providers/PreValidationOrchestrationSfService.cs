@@ -144,7 +144,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private async Task ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
         {
             // Get L/A and split the learners into separate lists
-            IEnumerable<IMessage> messageShards = _learnerPerActorService.Process();
+            IEnumerable<IMessage> messageShards = _learnerPerActorService.Process() ?? new List<IMessage>();
 
             List<IValidationActor> actors = new List<IValidationActor>();
             List<Task<string>> actorTasks = new List<Task<string>>();

@@ -95,6 +95,8 @@
 
         public const string Entity_1 = "Entity_1";
 
+        public const string ESMType_15 = "ESMType_15";
+
         public const string FamilyName_01 = "FamilyName_01";
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
@@ -193,9 +195,12 @@
 
         public const string OutCollDate_01 = "OutCollDate_01";
 
+        public const string Outcome_04 = "Outcome_04";
         public const string Outcome_09 = "Outcome_09";
 
         public const string OutGrade_03 = "OutGrade_03";
+
+        public const string OutStartDate_01 = "OutStartDate_01";
 
         public const string OutType_02 = "OutType_02";
         public const string OutType_04 = "OutType_04";
