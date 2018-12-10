@@ -65,6 +65,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && (learningDelivery.EffectiveTo != null ? date <= learningDelivery.EffectiveTo : date <= DateTime.MaxValue);
         }
 
+        public bool EnglishPrescribedIdsExistsforLearnAimRef(string learnAimRef, HashSet<int?> engPrscIDs)
+        {
+            return GetDeliveriesFor(learnAimRef)?.Where(e => engPrscIDs.Contains(e.EnglPrscID)).Any() ?? false;
+        }
+
         public bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
             return _externalDataCache

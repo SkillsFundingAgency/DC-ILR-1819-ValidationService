@@ -24,6 +24,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         DateTime? EffectiveTo { get; }
 
         /// <summary>
+        /// Gets the english prescribed Ids.
+        /// </summary>
+        int? EnglPrscID { get; }
+
+        /// <summary>
         /// Gets the notional NVQ level.
         /// </summary>
         string NotionalNVQLevel { get; }
