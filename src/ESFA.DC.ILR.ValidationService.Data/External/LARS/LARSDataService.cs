@@ -79,6 +79,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 .Any();
         }
 
+        public bool FrameWorkComponentTypeExistsInFrameworkAims(string learnAimRef, HashSet<int?> frameworkTypeComponents)
+        {
+            return _externalDataCache
+                .Frameworks?
+                .Where(f => f.FrameworkAims != null)
+                .SelectMany(f => f.FrameworkAims
+                    .Where(fa =>
+                        fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
+                        && (fa.FrameworkComponentType.HasValue
+                            && frameworkTypeComponents.Contains(fa.FrameworkComponentType))))
+                .Any() ?? false;
+        }
+
         public bool FrameworkCodeExistsForCommonComponent(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
