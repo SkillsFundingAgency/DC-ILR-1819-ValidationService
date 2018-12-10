@@ -249,6 +249,7 @@
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_04RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_01RuleTests.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_04RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_01RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_07RuleTests.cs" />
