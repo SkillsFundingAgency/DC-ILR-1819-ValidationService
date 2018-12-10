@@ -65,9 +65,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData("02/07/2015", "01/12/2015", 1)]
-        [InlineData("01/12/2015", "02/07/2015", 2)]
-        [InlineData("01/12/2015", null, 3)]
+        [InlineData("2015-07-02", "2015-12-01", 1)]
+        [InlineData("2015-12-01", "2015-07-02", 2)]
+        [InlineData("2015-12-01", null, 3)]
         public void LearnStartDateConditionMet_False(string learnStartDateString, string learnActEndDateString, int recordNo)
         {
             DateTime learnStartDate = DateTime.Parse(learnStartDateString);
@@ -77,8 +77,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData("02/07/2015", null, 1)]
-        [InlineData("02/07/2015", "01/12/2015", 2)]
+        [InlineData("2015-07-02", null, 1)]
+        [InlineData("2015-07-02", "2015-12-01", 2)]
         public void LearnStartDateConditionMet_True(string learnStartDateString, string learnActEndDateString, int recordNo)
         {
             DateTime learnStartDate = DateTime.Parse(learnStartDateString);
@@ -126,9 +126,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, "ZESF98765", "02/07/2015", "01/12/2015", 1)]
-        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, "ZESF98765", "02/07/2015", null, 2)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, "ZESF98765", "02/07/2015", "01/01/2015", 2)]
+        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, "ZESF98765", "2015-07-02", "2015-12-01", 1)]
+        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, "ZESF98765", "2015-07-02", null, 2)]
+        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, "ZESF98765", "2015-07-02", "2015-01-01", 2)]
         public void ConditionMet_False(int? progType, string learnAimRef, string learnStartDateString, string learnActEndDateString, int recordNo)
         {
             DateTime learnStartDate = DateTime.Parse(learnStartDateString);
@@ -143,8 +143,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData("02/07/2015", null, 1)]
-        [InlineData("02/07/2015", "01/12/2015", 2)]
+        [InlineData("2015-07-02", null, 1)]
+        [InlineData("2015-07-02", "2015-12-01", 2)]
         public void ConditionMet_True(string learnStartDateString, string learnActEndDateString, int recordNo)
         {
             HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
