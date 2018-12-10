@@ -58,8 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null
-                    || objectToValidate.LearningDeliveries == null
+            if (objectToValidate?.LearningDeliveries == null
                     || _organisationDataService.LegalOrgTypeMatchForUkprn(_fileDataService.UKPRN(), LegalOrgTypeConstants.UHEO)
                     || !DerivedData27ConditionMet(_fileDataService.UKPRN()))
             {
