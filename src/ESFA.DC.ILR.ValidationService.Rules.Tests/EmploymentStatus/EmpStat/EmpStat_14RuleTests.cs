@@ -235,7 +235,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEmploymentStatus(null))
+                .Setup(x => x.GetEligibilityRuleEmploymentStatusFor(null))
                 .Returns((IEsfEligibilityRuleEmploymentStatus)null);
 
             var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
@@ -459,7 +459,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEmploymentStatus(conRefNumber))
+                .Setup(x => x.GetEligibilityRuleEmploymentStatusFor(conRefNumber))
                 .Returns(eligibubble.Object);
 
             var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
@@ -557,7 +557,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEmploymentStatus(conRefNumber))
+                .Setup(x => x.GetEligibilityRuleEmploymentStatusFor(conRefNumber))
                 .Returns(eligibubble.Object);
 
             var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);

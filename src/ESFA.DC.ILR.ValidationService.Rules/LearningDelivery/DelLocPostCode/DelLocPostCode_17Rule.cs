@@ -118,7 +118,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// <param name="delivery">The delivery.</param>
         /// <returns>the authority (if found)</returns>
         public IEsfEligibilityRuleLocalAuthority GetLocalAuthority(ILearningDelivery delivery) =>
-            _fcsData.GetEligibilityRuleLocalAuthority(delivery.ConRefNumber);
+            _fcsData.GetEligibilityRuleLocalAuthorityFor(delivery.ConRefNumber);
 
         /// <summary>
         /// Gets the ons postcode.

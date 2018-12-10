@@ -35,6 +35,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
         Task<IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority>> RetrieveEligibilityRuleLocalAuthoritiesAsync(CancellationToken cancellationToken);
 
         /// <summary>
+        /// Retrieves the eligibility rule enterprise partnerships asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// a task running the collection builder
+        /// </returns>
+        Task<IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership>> RetrieveEligibilityRuleEnterprisePartnershipsAsync(CancellationToken cancellationToken);
+
+        /// <summary>
         /// Retrieves the eligibility rule sector subject area level.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>

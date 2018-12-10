@@ -22,22 +22,31 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes);
 
         /// <summary>
-        /// Gets the eligibility rule employment status.
+        /// Gets the eligibility rule employment status for.
         /// </summary>
-        /// <param name="forContractReference">For contract reference.</param>
+        /// <param name="contractReference">The contract reference.</param>
         /// <returns>
         /// the eligibility rule employment status (if found)
         /// </returns>
-        IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatus(string forContractReference);
+        IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatusFor(string contractReference);
 
         /// <summary>
-        /// Gets the eligibility rule local authority.
+        /// Gets the eligibility rule local authority for.
         /// </summary>
         /// <param name="contractReference">The contract reference.</param>
         /// <returns>
         /// an eligibility rule local authority (if found)
         /// </returns>
-        IEsfEligibilityRuleLocalAuthority GetEligibilityRuleLocalAuthority(string contractReference);
+        IEsfEligibilityRuleLocalAuthority GetEligibilityRuleLocalAuthorityFor(string contractReference);
+
+        /// <summary>
+        /// Gets the eligibility rule enterprise partnership for.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>
+        /// an eligibility rule enterprise partnership (if found)
+        /// </returns>
+        IEsfEligibilityRuleLocalEnterprisePartnership GetEligibilityRuleEnterprisePartnershipFor(string contractReference);
 
         IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
 

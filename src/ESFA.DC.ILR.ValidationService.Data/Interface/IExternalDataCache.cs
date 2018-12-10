@@ -67,6 +67,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> ESFEligibilityRuleLocalAuthorities { get; }
 
         /// <summary>
+        /// Gets the ESF eligibility rule enterprise partnerships
+        /// </summary>
+        IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> ESFEligibilityRuleEnterprisePartnerships { get; }
+
+        /// <summary>
         /// Gets the ESF eligibility rule subject area level codes.
         /// </summary>
         IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> EsfEligibilityRuleSectorSubjectAreaLevels { get; }

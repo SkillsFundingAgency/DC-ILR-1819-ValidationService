@@ -151,6 +151,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         }
 
         /// <summary>
+        /// Retrieves the eligibility rule enterprise partnerships asynchronously.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>
+        /// a task running the collection builder
+        /// </returns>
+        public async Task<IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership>> RetrieveEligibilityRuleEnterprisePartnershipsAsync(CancellationToken cancellationToken)
+        {
+            return await _fcs.EsfEligibilityRuleLocalEnterprisePartnerships
+                .Select(er => new EsfEligibilityRuleLocalEnterprisePartnership
+                {
+                    // ID = 0,
+                    // EligibilityRuleID = 0, not yet offered by the class EsfEligibilityRule = er.EsfEligibilityRule,
+                    Code = er.Code,
+                    LotReference = er.LotReference,
+                    TenderSpecReference = er.TenderSpecReference
+                })
+                .ToListAsync(cancellationToken);
+        }
+
+        /// <summary>
         /// Retrieves the eligibility rule sector subject area level for message specific contracts asynchronously.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>

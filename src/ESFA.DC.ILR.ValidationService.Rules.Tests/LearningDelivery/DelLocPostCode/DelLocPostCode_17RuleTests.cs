@@ -288,7 +288,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleLocalAuthority(candidate))
+                .Setup(x => x.GetEligibilityRuleLocalAuthorityFor(candidate))
                 .Returns(new Mock<IEsfEligibilityRuleLocalAuthority>().Object);
 
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
@@ -536,7 +536,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleLocalAuthority(conRefNum))
+                .Setup(x => x.GetEligibilityRuleLocalAuthorityFor(conRefNum))
                 .Returns(authority.Object);
 
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
@@ -646,7 +646,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleLocalAuthority(conRefNum))
+                .Setup(x => x.GetEligibilityRuleLocalAuthorityFor(conRefNum))
                 .Returns(authority.Object);
 
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);

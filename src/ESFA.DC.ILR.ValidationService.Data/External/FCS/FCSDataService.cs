@@ -25,6 +25,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         private readonly IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> _localAuthorities;
 
         /// <summary>
+        /// The enterprise partnerships
+        /// </summary>
+        private readonly IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> _enterprisePartnerships;
+
+        /// <summary>
         /// The contract allocations
         /// </summary>
         private readonly IReadOnlyCollection<IFcsContractAllocation> _contractAllocations;
@@ -42,6 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         {
             _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses.AsSafeReadOnlyList();
             _localAuthorities = externalDataCache.ESFEligibilityRuleLocalAuthorities.AsSafeReadOnlyList();
+            _enterprisePartnerships = Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalEnterprisePartnership>();
             _contractAllocations = externalDataCache.FCSContractAllocations.AsSafeReadOnlyList();
             _sectorSubjectAreaLevels = externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels;
         }
@@ -73,6 +79,42 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         }
 
         /// <summary>
+        /// Gets the eligibility rule employment status.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>
+        /// the eligibility rule employment status (if found)
+        /// </returns>
+        public IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatusFor(string contractReference)
+        {
+            return GetEligibilityRuleItemFor(contractReference, _employmentStatuses);
+        }
+
+        /// <summary>
+        /// Gets the eligibility rule local authority.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>
+        /// an eligibility rule local authority (if found)
+        /// </returns>
+        public IEsfEligibilityRuleLocalAuthority GetEligibilityRuleLocalAuthorityFor(string contractReference)
+        {
+            return GetEligibilityRuleItemFor(contractReference, _localAuthorities);
+        }
+
+        /// <summary>
+        /// Gets the eligibility rule enterprise partnership.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>
+        /// an eligibility rule enterprise partnership (if found)
+        /// </returns>
+        public IEsfEligibilityRuleLocalEnterprisePartnership GetEligibilityRuleEnterprisePartnershipFor(string contractReference)
+        {
+            return GetEligibilityRuleItemFor(contractReference, _enterprisePartnerships);
+        }
+
+        /// <summary>
         /// Gets the contract allocation for.
         /// </summary>
         /// <param name="contractReference">The contract reference.</param>
@@ -82,6 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
 
         /// <summary>
         /// That matches reference to allocation
+        /// 2018-12-05 CME: this routine may require refinement as i'm not convinced i'm filtering with all of the correct criteria
         /// </summary>
         /// <param name="reference">The reference.</param>
         /// <param name="allocation">The allocation.</param>
@@ -92,34 +135,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
             reference.TenderSpecReference.ComparesWith(allocation.TenderSpecReference);
 
         /// <summary>
-        /// Gets the eligibility rule employment status.
-        /// 2018-11-08 CME: this routine may require refinement as i'm not convinced i'm filtering with all of the correct criteria
+        /// Gets the eligibility rule item for.
         /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="contractReference">The contract reference.</param>
+        /// <param name="usingSources">The using sources.</param>
         /// <returns>
-        /// the eligibility rule employment status (if found)
+        /// an eligibility rule item of <typeparamref name="TResult" /> (if found)
         /// </returns>
-        public IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatus(string contractReference)
+        public TResult GetEligibilityRuleItemFor<TResult>(string contractReference, IReadOnlyCollection<TResult> usingSources)
+            where TResult : class, IEsfEligibilityRuleReferences
         {
-            var allocation = GetContractAllocationFor(contractReference);
-            return It.Has(allocation)
-                ? _employmentStatuses.FirstOrDefault(x => ThatMatches(x, allocation))
-                : null;
-        }
-
-        /// <summary>
-        /// Gets the eligibility rule local authority.
-        /// 2018-12-05 CME: this routine may require refinement as i'm not convinced i'm filtering with all of the correct criteria
-        /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
-        /// <returns>
-        /// an eligibility rule local authority (if found)
-        /// </returns>
-        public IEsfEligibilityRuleLocalAuthority GetEligibilityRuleLocalAuthority(string contractReference)
-        {
-            var allocation = GetContractAllocationFor(contractReference);
-            return It.Has(allocation)
-                ? _localAuthorities.FirstOrDefault(x => ThatMatches(x, allocation))
+            var thisAllocation = GetContractAllocationFor(contractReference);
+            return It.Has(thisAllocation)
+                ? usingSources.FirstOrDefault(x => ThatMatches(x, thisAllocation))
                 : null;
         }
 
