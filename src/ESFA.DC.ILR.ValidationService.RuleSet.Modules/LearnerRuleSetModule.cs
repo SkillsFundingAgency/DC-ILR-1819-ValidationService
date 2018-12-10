@@ -268,6 +268,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_71Rule),
                 typeof(LearningDeliveryHE_02Rule),
                 typeof(LearningDeliveryHE_03Rule),
+                typeof(LearningDeliveryHE_07Rule),
                 typeof(LearnerHE_02Rule),
                 typeof(LearnFAMType_16Rule),
                 typeof(LearnStartDate_03Rule),

@@ -37,6 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                         LearnAimRef = ld.LearnAimRef,
                         EffectiveFrom = ld.EffectiveFrom,
                         EffectiveTo = ld.EffectiveTo,
+                        EnglPrscID = ld.EnglPrscID,
                         NotionalNVQLevel = ld.NotionalNVQLevel,
                         NotionalNVQLevelv2 = ld.NotionalNVQLevelv2,
                         LearnDirectClassSystemCode1 = ld.LearnDirectClassSystemCode1,

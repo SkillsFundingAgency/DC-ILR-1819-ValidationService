@@ -31,6 +31,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date);
 
+        bool EnglishPrescribedIdsExistsforLearnAimRef(string learnAimRef, HashSet<int?> engPrscIDs);
+
         bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
 
         bool FrameWorkComponentTypeExistsInFrameworkAims(string learnAimRef, HashSet<int?> frameworkTypeComponents);
