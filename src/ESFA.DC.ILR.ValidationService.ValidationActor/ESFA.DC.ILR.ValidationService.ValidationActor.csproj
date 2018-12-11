@@ -180,6 +180,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Extensions\ESFA.DC.ILR.ValidationService.Data.Extensions.csproj">
+      <Project>{7a822136-deec-4899-8907-6afa86e421c4}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Data.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
       <Project>{FAACF863-EB2E-473F-8EF9-F7FA9613F556}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Data</Name>
