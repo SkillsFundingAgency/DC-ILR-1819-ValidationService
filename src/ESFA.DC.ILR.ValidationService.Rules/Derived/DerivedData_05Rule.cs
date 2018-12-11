@@ -13,6 +13,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     public class DerivedData_05Rule :
         IDerivedData_05Rule
     {
+        /// <summary>
+        /// The valid checksums
+        /// </summary>
         private static readonly Dictionary<int, char> _validChecksums = new Dictionary<int, char>
         {
             [0] = '0',  // <= ???
@@ -29,6 +32,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             [11] = '0', // <= ??? (mod by 11)
         };
 
+        /// <summary>
+        /// Gets the employer identifier checksum.
+        /// </summary>
+        /// <param name="thisEmployer">this employer.</param>
+        /// <returns>
+        /// the checksum character
+        /// </returns>
         public char GetEmployerIDChecksum(int thisEmployer)
         {
             /*
