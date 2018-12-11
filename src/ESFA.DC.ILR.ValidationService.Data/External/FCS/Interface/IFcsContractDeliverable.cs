@@ -12,28 +12,28 @@
         int ContractAllocationID { get; }
 
         /// <summary>
-        /// Gets or sets the description.
+        /// Gets the description.
         /// </summary>
-        string Description { get; set; }
+        string Description { get; }
 
         /// <summary>
-        /// Gets or sets the deliverable code.
+        /// Gets the deliverable code.
         /// </summary>
-        int? DeliverableCode { get; set; }
+        int? DeliverableCode { get; }
 
         /// <summary>
-        /// Gets or sets the unit cost.
+        /// Gets the unit cost.
         /// </summary>
-        decimal? UnitCost { get; set; }
+        decimal? UnitCost { get; }
 
         /// <summary>
-        /// Gets or sets the planned volume.
+        /// Gets the planned volume.
         /// </summary>
-        int? PlannedVolume { get; set; }
+        int? PlannedVolume { get; }
 
         /// <summary>
-        /// Gets or sets the planned value.
+        /// Gets the planned value.
         /// </summary>
-        decimal? PlannedValue { get; set; }
+        decimal? PlannedValue { get; }
     }
 }

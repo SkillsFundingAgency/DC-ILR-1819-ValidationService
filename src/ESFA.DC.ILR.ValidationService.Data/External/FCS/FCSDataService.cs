@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         {
             _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses.AsSafeReadOnlyList();
             _localAuthorities = externalDataCache.ESFEligibilityRuleLocalAuthorities.AsSafeReadOnlyList();
-            _enterprisePartnerships = Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalEnterprisePartnership>();
+            _enterprisePartnerships = externalDataCache.ESFEligibilityRuleEnterprisePartnerships.AsSafeReadOnlyList();
             _contractAllocations = externalDataCache.FCSContractAllocations.AsSafeReadOnlyList();
             _sectorSubjectAreaLevels = externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels;
         }
