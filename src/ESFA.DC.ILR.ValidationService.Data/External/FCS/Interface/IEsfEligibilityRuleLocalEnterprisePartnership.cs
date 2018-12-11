@@ -6,11 +6,8 @@
     public interface IEsfEligibilityRuleLocalEnterprisePartnership :
         IIdentifiableItem,
         IEsfEligibilityRuleSibling,
-        IEsfEligibilityRuleReferences
+        IEsfEligibilityRuleReferences,
+        IEsfEligibilityRuleCode<string>
     {
-        /// <summary>
-        /// Gets the code.
-        /// </summary>
-        string Code { get; }
     }
 }

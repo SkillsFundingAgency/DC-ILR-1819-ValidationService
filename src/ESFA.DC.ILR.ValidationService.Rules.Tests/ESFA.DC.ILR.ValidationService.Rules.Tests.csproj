@@ -252,6 +252,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_07RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_01RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18RuleTests.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_87RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71RuleTests.cs" />

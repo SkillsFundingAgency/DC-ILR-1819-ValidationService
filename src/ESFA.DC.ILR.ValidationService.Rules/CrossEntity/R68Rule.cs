@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         /// </returns>
         public bool HasWrongCodeCardinality(ILearningDelivery delivery, IReadOnlyCollection<ILearningDelivery> allDeliveries) =>
             It.Has(delivery.StdCodeNullable)
-                && allDeliveries.Count(x => It.Has(x.StdCodeNullable) && x.StdCodeNullable == delivery.StdCodeNullable) != 1;
+                && allDeliveries.SafeCount(x => It.Has(x.StdCodeNullable) && x.StdCodeNullable == delivery.StdCodeNullable) != 1;
 
         /// <summary>
         /// Gets the candidate codes.

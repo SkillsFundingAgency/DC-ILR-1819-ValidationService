@@ -21,6 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
 
         /// <summary>
         /// Compares (the item) with any candidate.
+        /// this is a case and culture insensitive comparison
         /// </summary>
         /// <param name="item">The item.</param>
         /// <param name="anyCandidate">Any candidate.</param>

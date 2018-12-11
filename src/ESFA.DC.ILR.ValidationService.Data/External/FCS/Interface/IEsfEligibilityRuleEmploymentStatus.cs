@@ -6,11 +6,8 @@
     public interface IEsfEligibilityRuleEmploymentStatus :
         IIdentifiableItem,
         IEsfEligibilityRuleSibling,
-        IEsfEligibilityRuleReferences
+        IEsfEligibilityRuleReferences,
+        IEsfEligibilityRuleCode<int>
     {
-        /// <summary>
-        /// Gets the code.
-        /// </summary>
-        int Code { get; }
     }
 }

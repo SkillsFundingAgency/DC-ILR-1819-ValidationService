@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Utility
@@ -18,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <returns>an empty collection of <typeparamref name="T"/></returns>
         public static ICollection<T> Empty<T>()
         {
-            return new List<T>();
+            return Enumerable.Empty<T>().SafeList();
         }
 
         /// <summary>
@@ -30,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         public static IReadOnlyCollection<T> EmptyAndReadOnly<T>()
         {
-            return new List<T>().SafeReadOnlyList();
+            return Enumerable.Empty<T>().SafeReadOnlyList();
         }
 
         /// <summary>
@@ -176,7 +175,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
             It.IsNull(action)
                 .AsGuard<ArgumentNullException>();
 
-            var items = collection.AsSafeList();
+            var items = collection.SafeReadOnlyList();
             foreach (var item in items)
             {
                 action(item);
@@ -184,7 +183,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
-        /// Safe list, the private implemntation of null coalescing
+        /// Safe list, the private implementation, null coalescing
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
         /// <param name="list">The list.</param>
@@ -193,7 +192,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         private static List<T> SafeList<T>(this IEnumerable<T> list)
         {
-            return (list ?? new List<T>()).ToList();
+            return new List<T>(list ?? Enumerable.Empty<T>());
         }
 
         /// <summary>
@@ -204,9 +203,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <returns>
         /// a safe readonly list
         /// </returns>
-        private static ReadOnlyCollection<T> SafeReadOnlyList<T>(this IEnumerable<T> list)
+        private static IReadOnlyCollection<T> SafeReadOnlyList<T>(this IEnumerable<T> list)
         {
-            return new ReadOnlyCollection<T>(list.SafeList());
+            return list.SafeList();
         }
     }
 }
