@@ -566,11 +566,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 .Setup(e => e.ESFEligibilityRuleEmploymentStatuses)
                 .Returns((IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus>)null);
             cache
-                .Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels)
-                .Returns((IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel>)null);
-            cache
                 .Setup(e => e.ESFEligibilityRuleLocalAuthorities)
                 .Returns((IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority>)null);
+            cache
+                .Setup(e => e.ESFEligibilityRuleEnterprisePartnerships)
+                .Returns((IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership>)null);
+            cache
+                .Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels)
+                .Returns((IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel>)null);
 
             return cache.Object;
         }
