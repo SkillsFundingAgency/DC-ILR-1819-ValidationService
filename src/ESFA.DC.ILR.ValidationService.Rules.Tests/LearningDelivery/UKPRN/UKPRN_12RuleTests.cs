@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
     {
         private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>()
         {
-            FundingStreamPeriodCodeConstants.AEBTO_TOL1819
+            FundingStreamPeriodCodeConstants.AEB_TOL1819
         };
 
         [Fact]
