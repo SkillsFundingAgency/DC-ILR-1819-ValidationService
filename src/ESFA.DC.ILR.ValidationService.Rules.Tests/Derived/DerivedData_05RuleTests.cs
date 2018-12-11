@@ -28,6 +28,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         [InlineData(100000185, '5')]
         [InlineData(100000193, '3')]
         [InlineData(100000207, '7')]
+        [InlineData(10000020, 'X')]
+        [InlineData(1000002, 'X')]
+        [InlineData(100000, 'X')]
         public void GetEmployerIDChecksumMeetsExpectation(int candidate, char expectation)
         {
             // arrange

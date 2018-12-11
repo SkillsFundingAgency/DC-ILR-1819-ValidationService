@@ -7,6 +7,11 @@
     public interface IDerivedData_05Rule
     {
         /// <summary>
+        /// Gets the invalid length checksum.
+        /// </summary>
+        char InvalidLengthChecksum { get; }
+
+        /// <summary>
         /// Gets the employer identifier checksum.
         /// </summary>
         /// <param name="thisEmployer">this employer.</param>

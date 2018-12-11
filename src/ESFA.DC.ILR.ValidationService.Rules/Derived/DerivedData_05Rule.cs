@@ -1,6 +1,5 @@
 ﻿using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +12,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     public class DerivedData_05Rule :
         IDerivedData_05Rule
     {
+        /// <summary>
+        /// The invalid length checksum
+        /// </summary>
+        private const int _invalidLengthChecksum = 10;
+
+        /// <summary>
+        /// The required identifier length
+        /// </summary>
+        private const int _requiredIDLength = 9;
+
         /// <summary>
         /// The valid checksums
         /// </summary>
@@ -31,6 +40,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             [10] = 'X',
             [11] = '0', // <= ??? (mod by 11)
         };
+
+        /// <summary>
+        /// Gets the invalid length checksum.
+        /// </summary>
+        public char InvalidLengthChecksum =>
+            _validChecksums[_invalidLengthChecksum];
 
         /// <summary>
         /// Gets the employer identifier checksum.
@@ -54,9 +69,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             var list = thisEmployer.AsSafeReadOnlyDigitList();
 
             // the employer id has to have a length of 9 digits
-            var failedLength = !It.HasCountOf(list, 9);
-            failedLength
-                .AsGuard<ArgumentOutOfRangeException>(nameof(thisEmployer));
+            if (!It.HasCountOf(list, _requiredIDLength))
+            {
+                return InvalidLengthChecksum;
+            }
 
             var result = 11 - (Sum(list) % 11);
 

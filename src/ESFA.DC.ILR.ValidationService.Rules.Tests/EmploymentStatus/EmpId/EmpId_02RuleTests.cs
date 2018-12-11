@@ -129,12 +129,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         [InlineData(100000002, '3', false)]
         [InlineData(200000003, '3', true)]
         [InlineData(200000003, '4', false)]
+        [InlineData(200000003, 'X', false)]
+        [InlineData(20000000, 'X', false)]
         public void IsNotValidMeetsExpectation(int candidate, char checksum, bool expectation)
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var edrsData = new Mock<IProvideEDRSDataOperations>(MockBehavior.Strict);
             var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
+            ddRule05
+                .SetupGet(x => x.InvalidLengthChecksum)
+                .Returns('X');
             ddRule05
                 .Setup(x => x.GetEmployerIDChecksum(candidate))
                 .Returns(checksum);
@@ -198,6 +203,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Returns(false);
             var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
             ddRule05
+                .SetupGet(x => x.InvalidLengthChecksum)
+                .Returns('X');
+            ddRule05
                 .Setup(x => x.GetEmployerIDChecksum(candidate))
                 .Returns(checksum);
 
@@ -250,6 +258,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Setup(x => x.IsTemporary(candidate))
                 .Returns(false);
             var ddRule05 = new Mock<IDerivedData_05Rule>(MockBehavior.Strict);
+            ddRule05
+                .SetupGet(x => x.InvalidLengthChecksum)
+                .Returns('X');
             ddRule05
                 .Setup(x => x.GetEmployerIDChecksum(candidate))
                 .Returns(checksum);
