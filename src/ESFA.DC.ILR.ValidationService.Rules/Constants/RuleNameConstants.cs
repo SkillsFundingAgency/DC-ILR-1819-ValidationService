@@ -7,6 +7,7 @@
         public const string AchDate_04 = "AchDate_04";
         public const string AchDate_05 = "AchDate_05";
         public const string AchDate_07 = "AchDate_07";
+        public const string AchDate_08 = "AchDate_08";
         public const string AchDate_09 = "AchDate_09";
         public const string AchDate_10 = "AchDate_10";
 
@@ -238,6 +239,7 @@
 
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
+        public const string PriorAttain_04 = "PriorAttain_04";
         public const string PriorAttain_07 = "PriorAttain_07";
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";

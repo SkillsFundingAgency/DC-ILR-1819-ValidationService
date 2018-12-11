@@ -1,20 +1,25 @@
-﻿using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
 {
-    /// <summary>
-    /// If the prior attainment is level 4 or above, then the learner must not be on an Adult skills funded intermediate or advanced apprenticeship
-    /// </summary>
     public class PriorAttain_04Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<long> _validPriorAttainValues = new HashSet<long> { 4, 5, 10, 11, 12, 13 };
+        private readonly int[] _validPriorAttains =
+        {
+            TypeOfPriorAttainment.Level4Expired20130731,
+            TypeOfPriorAttainment.Level5AndAboveExpired20130731,
+            TypeOfPriorAttainment.Level4,
+            TypeOfPriorAttainment.Level5,
+            TypeOfPriorAttainment.Level6,
+            TypeOfPriorAttainment.Level7AndAbove
+        };
 
         public PriorAttain_04Rule(IValidationErrorHandler validationErrorHandler)
-           : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PriorAttain_04)
         {
         }
 
@@ -22,33 +27,40 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
         {
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(objectToValidate.PriorAttainNullable, learningDelivery.FundModelNullable, learningDelivery.ProgTypeNullable))
+                if (ConditionMet(
+                    objectToValidate.PriorAttainNullable,
+                    learningDelivery.FundModel,
+                    learningDelivery.ProgTypeNullable))
                 {
-                    HandleValidationError(RuleNameConstants.PriorAttain_04Rule, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber);
                 }
             }
         }
 
-        public bool ConditionMet(long? priorAttain, long? fundModel, long? progType)
+        public bool ConditionMet(int? priorAttain, int fundModel, int? progType)
         {
-            return PriorAttainConditionMet(priorAttain) &&
-                    FundModelConditionMet(fundModel) &&
-                    ProgTypeConditionMet(progType);
+            return PriorAttainConditionMet(priorAttain)
+                   && FundModelConditionMet(fundModel)
+                   && ProgTypeConditionMet(progType);
         }
 
-        public bool PriorAttainConditionMet(long? priorAttain)
+        public bool PriorAttainConditionMet(int? priorAttain)
         {
-            return priorAttain.HasValue && _validPriorAttainValues.Contains(priorAttain.Value);
+            return priorAttain.HasValue
+                && _validPriorAttains.Contains(priorAttain.Value);
         }
 
-        public bool FundModelConditionMet(long? fundModel)
+        public bool FundModelConditionMet(int fundModel)
         {
-            return fundModel.HasValue && fundModel.Value == 35;
+            return fundModel == 35;
         }
 
-        public bool ProgTypeConditionMet(long? progType)
+        public bool ProgTypeConditionMet(int? progType)
         {
-            return progType.HasValue && (progType.Value == 2 || progType.Value == 3);
+            int[] progTypes = { 2, 3 };
+
+            return progType.HasValue
+                   && progTypes.Contains(progType.Value);
         }
     }
 }

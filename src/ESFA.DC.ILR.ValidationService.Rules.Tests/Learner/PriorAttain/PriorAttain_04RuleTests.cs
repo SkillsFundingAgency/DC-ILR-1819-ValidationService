@@ -1,70 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
-using Moq;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 {
-    public class PriorAttain_04RuleTests
+    public class PriorAttain_04RuleTests : AbstractRuleTests<PriorAttain_04Rule>
     {
-        [Theory]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void ConditionMet_True(long? progType)
+        [Fact]
+        public void RuleName()
         {
-            var priorAttainValues = new List<int> { 4, 5, 10, 11, 12, 13 };
-
-            var rule = NewRule();
-
-            foreach (var item in priorAttainValues)
-            {
-                rule.ConditionMet(item, 35, progType).Should().BeTrue();
-            }
+            NewRule().RuleName.Should().Be("PriorAttain_04");
         }
 
         [Theory]
-        [InlineData(null, null, null)]
-        [InlineData(null, 35, null)]
-        [InlineData(null, 35, 2)]
-        [InlineData(4, null, null)]
-        [InlineData(4, null, 3)]
-        [InlineData(4, 9999, 3)]
-        public void ConditionMet_False(long? priorAttain, long? fundModel, long? progType)
-        {
-            NewRule().ConditionMet(priorAttain, fundModel, progType).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData(999)]
-        public void PriorAttainConditionMet_False(long? priorAttain)
-        {
-            NewRule().PriorAttainConditionMet(priorAttain).Should().BeFalse();
-        }
-
-        [Theory]
+        [InlineData(4)]
         [InlineData(5)]
         [InlineData(10)]
         [InlineData(11)]
         [InlineData(12)]
         [InlineData(13)]
-        public void PriorAttainConditionMet_True(long? priorAttain)
+        public void PriorAttainConditionMet_True(int priorAttain)
         {
             NewRule().PriorAttainConditionMet(priorAttain).Should().BeTrue();
         }
 
         [Theory]
         [InlineData(null)]
-        [InlineData(999)]
-        public void FundModelConditionMet_False(long? fundModel)
+        [InlineData(0)]
+        public void PriorAttainConditionMet_False(int? priorAttain)
         {
-            NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
+            NewRule().PriorAttainConditionMet(priorAttain).Should().BeFalse();
         }
 
         [Fact]
@@ -73,72 +42,113 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             NewRule().FundModelConditionMet(35).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData(999)]
-        public void ProgTypeConditionMet_False(long? progType)
+        [Fact]
+        public void FundModelConditionMet_False()
         {
-            NewRule().ProgTypeConditionMet(progType).Should().BeFalse();
+            NewRule().FundModelConditionMet(1).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(3)]
         [InlineData(2)]
-        public void ProgTypeConditionMet_True(long? progType)
+        [InlineData(3)]
+        public void ProgTypeConditionMet_True(int progType)
         {
             NewRule().ProgTypeConditionMet(progType).Should().BeTrue();
         }
 
-        [Fact]
-        public void Validate_Error()
+        [Theory]
+        [InlineData(null)]
+        [InlineData(1)]
+        public void ProgTypeConditionMet_False(int? progType)
         {
-            var learner = SetupLearner(5);
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PriorAttain_04", null, null, null);
-
-            var rule = new PriorAttain_04Rule(validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            NewRule().ProgTypeConditionMet(progType).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_NoError()
+        public void ConditionMet_True()
         {
-            var learner = SetupLearner(999);
+            var priorAttain = 4;
+            var fundModel = 35;
+            var progType = 2;
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PriorAttain_04", null, null, null);
+            NewRule().ConditionMet(priorAttain, fundModel, progType).Should().BeTrue();
+        }
 
-            var rule = new PriorAttain_04Rule(validationErrorHandlerMock.Object);
+        [Fact]
+        public void ConditionMet_FalsePriorAttain()
+        {
+            int? priorAttain = null;
+            var fundModel = 35;
+            var progType = 2;
 
-            rule.Validate(learner);
+            NewRule().ConditionMet(null, fundModel, progType).Should().BeFalse();
+        }
 
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+        [Fact]
+        public void ConditionMet_FalseFundModel()
+        {
+            var priorAttain = 4;
+            var fundModel = 1;
+            var progType = 2;
+
+            NewRule().ConditionMet(priorAttain, fundModel, progType).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_FalseProgType()
+        {
+            var priorAttain = 4;
+            var fundModel = 35;
+            int? progType = null;
+
+            NewRule().ConditionMet(priorAttain, fundModel, progType).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ValidateError()
+        {
+            var learner = new TestLearner()
+            {
+                PriorAttainNullable = 4,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35,
+                        ProgTypeNullable = 2
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void ValidateNoError()
+        {
+            var learner = new TestLearner()
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35,
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         private PriorAttain_04Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
             return new PriorAttain_04Rule(validationErrorHandler);
-        }
-
-        private ILearner SetupLearner(long priorAttain)
-        {
-            return new TestLearner()
-            {
-                PriorAttainNullable = priorAttain,
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        FundModelNullable = 35,
-                        ProgTypeNullable = 2,
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { },
-                    }
-                }
-            };
         }
     }
 }
