@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using FluentAssertions;
@@ -1842,6 +1844,54 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
                 .Should()
                 .BeTrue();
+        }
+
+        [Fact]
+        public void EnglishPrescribedIdsExistsforLearnAimRef_False()
+        {
+            string learnAimRef = "ESF123456";
+            HashSet<int?> englishPrescribedIDs = new HashSet<int?>() { 1, 2 };
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        EnglPrscID = 3
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .EnglishPrescribedIdsExistsforLearnAimRef(learnAimRef, englishPrescribedIDs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void EnglishPrescribedIdsExistsforLearnAimRef_True()
+        {
+            string learnAimRef = "ESF123456";
+            HashSet<int?> englishPrescribedIDs = new HashSet<int?>() { 1, 2 };
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        EnglPrscID = 1
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .EnglishPrescribedIdsExistsforLearnAimRef(learnAimRef, englishPrescribedIDs).Should().BeTrue();
         }
 
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
