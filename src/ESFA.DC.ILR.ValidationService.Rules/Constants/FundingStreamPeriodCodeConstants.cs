@@ -8,6 +8,8 @@
 
         public const string AEBTO_LS1819 = "AEBTO-LS1819";
 
+        public const string AEB_TOL1819 = "AEB-TOL1819";
+
         public const string AEBTO_TOL1819 = "AEBTO-TOL1819";
 
         public const string ESF1420 = "ESF1420";

@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         private readonly string _learnDelFamType = LearningDeliveryFAMTypeConstants.LDM;
         private readonly HashSet<string> _fundingStreamPeriodCodes = new HashSet<string>
         {
-            FundingStreamPeriodCodeConstants.AEBTO_TOL1819
+            FundingStreamPeriodCodeConstants.AEB_TOL1819
         };
 
         private readonly DateTime _firstNov2017 = new DateTime(2017, 11, 01);
