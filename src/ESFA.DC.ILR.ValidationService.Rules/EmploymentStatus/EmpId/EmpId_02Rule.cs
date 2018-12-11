@@ -69,8 +69,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         /// </returns>
         public bool HasValidChecksum(int employerID)
         {
-            var checkSum = _derivedData05.GetEmployerIDChecksum(employerID).ToString();
-            var candidate = employerID.AsSafeReadOnlyDigitList().Skip(8).First().ToString();
+            var checkSum = $"{_derivedData05.GetEmployerIDChecksum(employerID)}";
+            var candidate = $"{employerID.AsSafeReadOnlyDigitList().ElementAt(8)}";
             return candidate.ComparesWith(checkSum);
         }
 

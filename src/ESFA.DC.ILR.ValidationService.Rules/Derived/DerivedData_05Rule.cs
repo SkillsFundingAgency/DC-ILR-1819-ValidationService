@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,6 +42,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
              */
 
             var list = thisEmployer.AsSafeReadOnlyDigitList();
+
+            // the employer id has to have a length of 9 digits
+            var failedLength = !It.HasCountOf(list, 9);
+            failedLength
+                .AsGuard<ArgumentOutOfRangeException>(nameof(thisEmployer));
+
             var result = 11 - (Sum(list) % 11);
 
             return _validChecksums[result];
@@ -64,6 +71,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             return result;
         }
 
+        /// <summary>
+        /// Calculates the value of the checksum element.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="multiple">The multiple.</param>
+        /// <returns>the sum of the operation</returns>
         public int Calc(int item, int multiple)
         {
             return item * multiple;
