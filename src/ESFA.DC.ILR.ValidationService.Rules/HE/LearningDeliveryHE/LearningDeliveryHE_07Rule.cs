@@ -71,7 +71,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
             }
         }
 
-        public bool ConditionMet(int? progTypeNullable, string learnAimRef, ILearningDeliveryHE learningDeliveryHEEntity, IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool ConditionMet(
+            int? progTypeNullable,
+            string learnAimRef,
+            ILearningDeliveryHE learningDeliveryHEEntity,
+            IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return ProgTypeConditionMet(progTypeNullable)
                 && LearningDeliveryHEConditionMet(learningDeliveryHEEntity)
