@@ -3,6 +3,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
@@ -20,18 +21,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange
-            var ddRule07 = new Mock<IDD07>();
+            var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new ESMType_09Rule(null, ddRule07.Object));
+            Assert.Throws<ArgumentNullException>(() => new ESMType_09Rule(null, common.Object));
         }
 
         [Fact]
-        public void NewRuleWithNullDerivedRuleThrows()
+        public void NewRuleWithNullCommonOperationsThrows()
         {
             // arrange
-            var handler = new Mock<IValidationErrorHandler>();
-            var ddRule07 = new Mock<IDD07>();
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new ESMType_09Rule(handler.Object, null));
@@ -104,96 +106,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         [Fact]
         public void FirstViableDateMeetsExpectation()
         {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.FirstViableDate;
-
-            // assert
-            Assert.Equal(DateTime.Parse("2013-08-01"), result);
-        }
-
-        /// <summary>
-        /// Is apprenticeship meets expectation
-        /// </summary>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void IsApprenticeshipMeetsExpectation(bool expectation)
-        {
-            // arrange
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
-            mockDDRule07
-                .Setup(x => x.IsApprenticeship(null))
-                .Returns(expectation);
-
-            var sut = new ESMType_09Rule(handler.Object, mockDDRule07.Object);
-
-            var mockItem = new Mock<ILearningDelivery>();
-
-            // act
-            var result = sut.IsApprenticeship(mockItem.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-            handler.VerifyAll();
-            mockDDRule07.VerifyAll();
-        }
-
-        /// <summary>
-        /// In a programme meets expectation.
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(TypeOfAim.AimNotPartOfAProgramme, false)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, false)]
-        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, false)]
-        [InlineData(TypeOfAim.ProgrammeAim, true)]
-        public void InAProgrammeMeetsExpectation(int candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<ILearningDelivery>();
-            mockItem
-                .SetupGet(y => y.AimType)
-                .Returns(candidate);
-
-            // act
-            var result = sut.InAProgramme(mockItem.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
-        /// Is qualifying period meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="latestBoundary">The latest boundary.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData("2010-11-12", "2018-01-02", false)]
-        [InlineData("2013-07-31", "2015-11-19", false)]
-        [InlineData("2013-08-01", "2014-10-12", true)]
-        [InlineData("2014-03-17", "2017-06-07", true)]
-        public void IsQualifyingPeriodMeetsExpectation(string candidate, string latestBoundary, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<ILearnerEmploymentStatus>();
-            mockItem
-                .SetupGet(y => y.DateEmpStatApp)
-                .Returns(DateTime.Parse(candidate));
-
-            // act
-            var result = sut.IsQualifyingPeriod(mockItem.Object, DateTime.Parse(latestBoundary));
-
-            // assert
-            Assert.Equal(expectation, result);
+            // arrange / act / assert
+            Assert.Equal(DateTime.Parse("2013-08-01"), ESMType_09Rule.FirstViableDate);
         }
 
         /// <summary>
@@ -367,16 +281,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
             var statii = Collection.Empty<ILearnerEmploymentStatus>();
             statii.Add(status.Object);
 
+            var learnStart = DateTime.Parse("2016-09-24");
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse("2016-09-24"));
-            mockDelivery
-                .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfLearningProgramme.ApprenticeshipStandard);
-            mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ProgrammeAim);
+                .Returns(learnStart);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -414,19 +323,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
                     Moq.It.Is<string>(y => y == "DateEmpStatApp"),
                     testDate))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
-            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
-            ddRule07
-                .Setup(x => x.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard))
+
+            var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            common
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(true);
+            common
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
+            common
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, ESMType_09Rule.FirstViableDate, null))
+                .Returns(true);
+            common
+                .Setup(x => x.HasQualifyingStart(status.Object, ESMType_09Rule.FirstViableDate, learnStart))
                 .Returns(true);
 
-            var sut = new ESMType_09Rule(handler.Object, ddRule07.Object);
+            var sut = new ESMType_09Rule(handler.Object, common.Object);
 
             // act
             sut.Validate(mockLearner.Object);
 
             // assert
             handler.VerifyAll();
-            ddRule07.VerifyAll();
+            common.VerifyAll();
         }
 
         /// <summary>
@@ -470,16 +389,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
             var statii = Collection.Empty<ILearnerEmploymentStatus>();
             statii.Add(status.Object);
 
+            var learnStart = DateTime.Parse("2016-09-24");
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse("2016-09-24"));
-            mockDelivery
-                .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfLearningProgramme.ApprenticeshipStandard);
-            mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ProgrammeAim);
+                .Returns(learnStart);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -496,19 +410,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
                 .Returns(statii.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
-            ddRule07
-                .Setup(x => x.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard))
+
+            var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            common
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(true);
+            common
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
+            common
+                .Setup(x => x.HasQualifyingStart(status.Object, ESMType_09Rule.FirstViableDate, learnStart))
+                .Returns(true);
+            common
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, ESMType_09Rule.FirstViableDate, null))
                 .Returns(true);
 
-            var sut = new ESMType_09Rule(handler.Object, ddRule07.Object);
+            var sut = new ESMType_09Rule(handler.Object, common.Object);
 
             // act
             sut.Validate(mockLearner.Object);
 
             // assert
             handler.VerifyAll();
-            ddRule07.VerifyAll();
+            common.VerifyAll();
         }
 
         /// <summary>
@@ -518,9 +442,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         public ESMType_09Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            return new ESMType_09Rule(handler.Object, ddRule07.Object);
+            return new ESMType_09Rule(handler.Object, common.Object);
         }
     }
 }

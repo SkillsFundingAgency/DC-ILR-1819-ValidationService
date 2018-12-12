@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
@@ -28,37 +29,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
-        /// The derived data 07 (rule)
+        /// The checker (common rule operations provider)
         /// </summary>
-        private readonly IDD07 _derivedData07;
+        private readonly IProvideRuleCommonOperations _check;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ESMType_09Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
+        /// <param name="commonOperations">The common operations.</param>
         /// <param name="derivedData07">The derived data 07.</param>
         public ESMType_09Rule(
             IValidationErrorHandler validationErrorHandler,
-            IDD07 derivedData07)
+            IProvideRuleCommonOperations commonOperations)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-            It.IsNull(derivedData07)
-                .AsGuard<ArgumentNullException>(nameof(derivedData07));
+            It.IsNull(commonOperations)
+                .AsGuard<ArgumentNullException>(nameof(commonOperations));
 
             _messageHandler = validationErrorHandler;
-            _derivedData07 = derivedData07;
+            _check = commonOperations;
         }
+
+        /// <summary>
+        /// Gets the first viable date.
+        /// </summary>
+        public static DateTime FirstViableDate => new DateTime(2013, 08, 01);
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
         public string RuleName => Name;
-
-        /// <summary>
-        /// Gets the first viable date.
-        /// </summary>
-        public DateTime FirstViableDate => new DateTime(2013, 08, 01);
 
         /// <summary>
         /// Gets the lastest qualifying date.
@@ -80,38 +82,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         ///   <c>true</c> if the specified delivery is a candidate; otherwise, <c>false</c>.
         /// </returns>
         public bool IsACandidate(ILearningDelivery delivery) =>
-            IsApprenticeship(delivery) && InAProgramme(delivery);
-
-        /// <summary>
-        /// Determines whether the specified delivery is apprenticeship.
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if the specified delivery is apprenticeship; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsApprenticeship(ILearningDelivery delivery) =>
-            _derivedData07.IsApprenticeship(delivery.ProgTypeNullable);
-
-        /// <summary>
-        /// Determines whether [in a programme] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [in a programme] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool InAProgramme(ILearningDelivery delivery) =>
-            It.IsInRange(delivery.AimType, TypeOfAim.ProgrammeAim);
-
-        /// <summary>
-        /// Determines whether [is qualifying period] [the specified employment status].
-        /// </summary>
-        /// <param name="employmentStatus">The employment status.</param>
-        /// <param name="lastViableDate">The last viable date.</param>
-        /// <returns>
-        ///   <c>true</c> if [is qualifying period] [the specified employment status]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsQualifyingPeriod(ILearnerEmploymentStatus employmentStatus, DateTime lastViableDate) =>
-            It.IsBetween(employmentStatus.DateEmpStatApp, FirstViableDate, lastViableDate);
+            _check.InApprenticeship(delivery)
+                && _check.InAProgramme(delivery)
+                && _check.HasQualifyingStart(delivery, FirstViableDate);
 
         /// <summary>
         /// Determines whether [is qualifying employment] [the specified employment status].
@@ -153,7 +126,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         /// </returns>
         public bool IsNotValid(ILearnerEmploymentStatus employmentStatus, DateTime? lastViabledate) =>
             It.Has(lastViabledate)
-                && IsQualifyingPeriod(employmentStatus, lastViabledate.Value)
+                && _check.HasQualifyingStart(employmentStatus, FirstViableDate, lastViabledate)
                 && IsQualifyingEmployment(employmentStatus)
                 && !HasQualifyingIndicator(employmentStatus);
 
