@@ -1895,7 +1895,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Fact]
-        public void STDCodeExistsForLearnStartDate_FalseNoMatch()
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNoMatch()
         {
             int? stdCode = 1;
             var learnStartDate = new DateTime(2018, 10, 01);
@@ -1928,11 +1928,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
 
-            NewService(externalDataCacheMock.Object).STDCodeExistsForLearnStartDate(stdCode, learnStartDate).Should().BeFalse();
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeFalse();
         }
 
         [Fact]
-        public void STDCodeExistsForLearnStartDate_FalseNoStandards()
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNoStandards()
         {
             int? stdCode = 1;
             var learnStartDate = new DateTime(2018, 10, 01);
@@ -1943,11 +1943,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
 
-            NewService(externalDataCacheMock.Object).STDCodeExistsForLearnStartDate(stdCode, learnStartDate).Should().BeFalse();
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeFalse();
         }
 
         [Fact]
-        public void STDCodeExistsForLearnStartDate_FalseNullSTDCode()
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNullSTDCode()
         {
             int? stdCode = null;
             var learnStartDate = new DateTime(2018, 10, 01);
@@ -1980,11 +1980,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
 
-            NewService(externalDataCacheMock.Object).STDCodeExistsForLearnStartDate(stdCode, learnStartDate).Should().BeFalse();
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeFalse();
         }
 
         [Fact]
-        public void STDCodeExistsForLearnStartDate_True()
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_True()
         {
             int? stdCode = 1;
             var learnStartDate = new DateTime(2018, 10, 01);
@@ -2017,7 +2017,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
 
-            NewService(externalDataCacheMock.Object).STDCodeExistsForLearnStartDate(stdCode, learnStartDate).Should().BeTrue();
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeTrue();
         }
 
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
