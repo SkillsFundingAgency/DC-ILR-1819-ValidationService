@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -33,6 +34,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             {
                 { "rulename", new ValidationError() { RuleName = "rulename", Severity = Severity.Error } }
             });
+
+            NewService(referenceDataCacheMock.Object).SeverityForRuleName("rulename").Should().Be(Severity.Error);
+        }
+
+        [Fact]
+        public void SeverityForRuleName_Error_CaseSensitivityCheck()
+        {
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
+
+            referenceDataCacheMock.SetupGet(rdc => rdc.ValidationErrors).Returns(new Dictionary<string, ValidationError>
+            {
+                { "RULENAME", new ValidationError() { RuleName = "rulename", Severity = Severity.Error } }
+            }.ToCaseInsensitiveDictionary());
 
             NewService(referenceDataCacheMock.Object).SeverityForRuleName("rulename").Should().Be(Severity.Error);
         }
