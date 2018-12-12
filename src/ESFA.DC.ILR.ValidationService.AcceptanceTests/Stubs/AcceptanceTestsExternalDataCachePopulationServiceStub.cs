@@ -63,6 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests.Stubs
 
             _dataCache.Frameworks = frameworks;
             _dataCache.LearningDeliveries = learningDeliveries;
+            _dataCache.Standards = new List<LARSStandard>();
 
             // TODO: NEEDS FIXING!!!
             _dataCache.StandardValidities = new List<LARSStandardValidity>();

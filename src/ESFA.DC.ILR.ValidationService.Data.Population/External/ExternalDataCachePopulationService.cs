@@ -11,6 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
     public class ExternalDataCachePopulationService : IExternalDataCachePopulationService
     {
         private readonly IExternalDataCache _externalDataCache;
+        private readonly ILARSStandardDataRetrievalService _larsStandardDataRetrievalService;
         private readonly ILARSStandardValidityDataRetrievalService _larsStandardValidityDataRetrievalService;
         private readonly ILARSLearningDeliveryDataRetrievalService _larsLearningDeliveryDataRetrievalService;
         private readonly ILARSFrameworkDataRetrievalService _larsFrameworkDataRetrievalService;
@@ -21,6 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public ExternalDataCachePopulationService(
             IExternalDataCache externalDataCache,
+            ILARSStandardDataRetrievalService larsStandardDataRetrievalService,
             ILARSStandardValidityDataRetrievalService larsStandardValidityDataRetrievalService,
             ILARSLearningDeliveryDataRetrievalService larsLearningDeliveryDataRetrievalService,
             ILARSFrameworkDataRetrievalService larsFrameworkDataRetrievalService,
@@ -30,6 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             IFCSDataRetrievalService fcsDataRetrievalService)
         {
             _externalDataCache = externalDataCache;
+            _larsStandardDataRetrievalService = larsStandardDataRetrievalService;
             _larsStandardValidityDataRetrievalService = larsStandardValidityDataRetrievalService;
             _larsLearningDeliveryDataRetrievalService = larsLearningDeliveryDataRetrievalService;
             _larsFrameworkDataRetrievalService = larsFrameworkDataRetrievalService;
@@ -43,6 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         {
             var externalDataCache = (ExternalDataCache)_externalDataCache;
 
+            externalDataCache.Standards = await _larsStandardDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.StandardValidities = await _larsStandardValidityDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.LearningDeliveries = await _larsLearningDeliveryDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.Frameworks = await _larsFrameworkDataRetrievalService.RetrieveAsync(cancellationToken);

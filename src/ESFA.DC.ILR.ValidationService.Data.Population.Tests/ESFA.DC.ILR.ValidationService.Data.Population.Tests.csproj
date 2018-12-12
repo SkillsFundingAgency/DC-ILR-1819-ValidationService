@@ -127,6 +127,7 @@
     <Compile Include="External\ExternalDataCachePopulationServiceTests.cs" />
     <Compile Include="External\LARSFrameworkDataRetrievalServiceTests.cs" />
     <Compile Include="External\LARSLearningDeliveryDataRetrievalServiceTests.cs" />
+    <Compile Include="External\LARSStandardDataRetrievalServiceTests.cs" />
     <Compile Include="External\OrganisationsDataRetrievalServiceTests.cs" />
     <Compile Include="External\PostcodesDataRetrievalServiceTests.cs" />
     <Compile Include="External\FCSDataRetrievalServiceTests.cs" />
