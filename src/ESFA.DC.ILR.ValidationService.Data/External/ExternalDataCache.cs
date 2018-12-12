@@ -10,7 +10,8 @@ using System.Collections.Generic;
 namespace ESFA.DC.ILR.ValidationService.Data.External
 {
     /// <summary>
-    /// the external data cache implementation
+    /// The external data cache implementation,
+    /// model to be reflected within the validation actor.
     /// </summary>
     /// <seealso cref="IExternalDataCache" />
     public class ExternalDataCache :
@@ -28,6 +29,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External
         public IReadOnlyCollection<Framework> Frameworks { get; set; }
 
         public IReadOnlyDictionary<long, Organisation.Model.Organisation> Organisations { get; set; }
+
+        /// <summary>
+        /// Gets or sets the LARS standards.
+        /// </summary>
+        public IReadOnlyCollection<ILARSStandard> Standards { get; set; }
 
         /// <summary>
         /// Gets or sets the LARS standard validities.

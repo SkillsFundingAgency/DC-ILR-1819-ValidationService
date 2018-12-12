@@ -1894,6 +1894,132 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 .EnglishPrescribedIdsExistsforLearnAimRef(learnAimRef, englishPrescribedIDs).Should().BeTrue();
         }
 
+        [Fact]
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNoMatch()
+        {
+            int? stdCode = 1;
+            var learnStartDate = new DateTime(2018, 10, 01);
+
+            var standards = new List<LARSStandard>()
+            {
+                new LARSStandard()
+                {
+                    StandardCode = 2,
+                    StandardSectorCode = "3",
+                    NotionalEndLevel = "4",
+                    EffectiveTo = new DateTime(2018, 01, 01),
+                    EffectiveFrom = new DateTime(2017, 01, 01)
+                },
+                new LARSStandard()
+                {
+                    StandardCode = 3,
+                    StandardSectorCode = "3",
+                    NotionalEndLevel = "4",
+                    EffectiveTo = new DateTime(2018, 01, 01),
+                    EffectiveFrom = new DateTime(2017, 01, 01)
+                },
+                new LARSStandard()
+                {
+                    StandardCode = 4
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNoStandards()
+        {
+            int? stdCode = 1;
+            var learnStartDate = new DateTime(2018, 10, 01);
+
+            var standards = new List<LARSStandard>();
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNullSTDCode()
+        {
+            int? stdCode = null;
+            var learnStartDate = new DateTime(2018, 10, 01);
+
+            var standards = new List<LARSStandard>()
+            {
+                new LARSStandard()
+                {
+                    StandardCode = 2,
+                    StandardSectorCode = "3",
+                    NotionalEndLevel = "4",
+                    EffectiveTo = new DateTime(2018, 01, 01),
+                    EffectiveFrom = new DateTime(2017, 01, 01)
+                },
+                new LARSStandard()
+                {
+                    StandardCode = 3,
+                    StandardSectorCode = "3",
+                    NotionalEndLevel = "4",
+                    EffectiveTo = new DateTime(2018, 01, 01),
+                    EffectiveFrom = new DateTime(2017, 01, 01)
+                },
+                new LARSStandard()
+                {
+                    StandardCode = 4
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_True()
+        {
+            int? stdCode = 1;
+            var learnStartDate = new DateTime(2018, 10, 01);
+
+            var standards = new List<LARSStandard>()
+            {
+                new LARSStandard()
+                {
+                    StandardCode = 1,
+                    StandardSectorCode = "3",
+                    NotionalEndLevel = "4",
+                    EffectiveTo = new DateTime(2018, 01, 01),
+                    EffectiveFrom = new DateTime(2017, 01, 01)
+                },
+                new LARSStandard()
+                {
+                    StandardCode = 3,
+                    StandardSectorCode = "3",
+                    NotionalEndLevel = "4",
+                    EffectiveTo = new DateTime(2018, 01, 01),
+                    EffectiveFrom = new DateTime(2017, 01, 01)
+                },
+                new LARSStandard()
+                {
+                    StandardCode = 4
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeTrue();
+        }
+
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
         {
             return new LARSDataService(externalDataCache);
