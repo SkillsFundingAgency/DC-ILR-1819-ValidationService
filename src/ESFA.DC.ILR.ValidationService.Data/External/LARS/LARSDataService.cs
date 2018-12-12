@@ -261,5 +261,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                                                                 && origLearnStartDate >= lv.StartDate
                                                                 && origLearnStartDate <= lv.EndDate);
         }
+
+        public bool STDCodeExistsForLearnStartDate(int? stdCode, DateTime learnStartDate)
+        {
+            return stdCode.HasValue
+                   && _externalDataCache.Standards.Any(s => s.EffectiveTo != null
+                                                            && learnStartDate > s.EffectiveTo
+                                                            && s.StandardCode == stdCode);
+        }
     }
 }
