@@ -64,6 +64,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.Data.ILR.ValidationErrors.Model, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.Data.ILR.1819.ValidationErrors.Model.0.1.2-beta0001\lib\net461\ESFA.DC.Data.ILR.ValidationErrors.Model.dll</HintPath>
+    </Reference>
     <Reference Include="ESFA.DC.Data.LARS.Model, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.Data.LARS.Model.0.1.4-beta0001\lib\net461\ESFA.DC.Data.LARS.Model.dll</HintPath>
     </Reference>
@@ -132,6 +135,7 @@
     <Compile Include="External\PostcodesDataRetrievalServiceTests.cs" />
     <Compile Include="External\FCSDataRetrievalServiceTests.cs" />
     <Compile Include="External\ULNDataRetrievalServiceTests.cs" />
+    <Compile Include="External\ValidationErrorsDataRetrievalServiceTests.cs" />
     <Compile Include="FileDataCachePopulationServiceTests.cs" />
     <Compile Include="IEnumerableExtensions.cs" />
     <Compile Include="InternalDataCachePopulationServiceTests.cs" />
