@@ -109,6 +109,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     Frameworks = externalDataCacheGet.Frameworks,
                     Organisations = externalDataCacheGet.Organisations,
                     Postcodes = externalDataCacheGet.Postcodes.ToCaseInsensitiveHashSet(),
+                    Standards = externalDataCacheGet.Standards,
                     StandardValidities = externalDataCacheGet.StandardValidities,
                     ULNs = externalDataCacheGet.ULNs,
                     ValidationErrors = externalDataCacheGet.ValidationErrors
