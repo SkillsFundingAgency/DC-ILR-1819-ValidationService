@@ -90,6 +90,7 @@
     <Compile Include="Constants\TypeOfQualEnt3.cs" />
     <Compile Include="CrossEntity\R06Rule.cs" />
     <Compile Include="CrossEntity\R20Rule.cs" />
+    <Compile Include="CrossEntity\R47Rule.cs" />
     <Compile Include="CrossEntity\R68Rule.cs" />
     <Compile Include="CrossEntity\R107Rule.cs" />
     <Compile Include="CrossEntity\R108Rule.cs" />
