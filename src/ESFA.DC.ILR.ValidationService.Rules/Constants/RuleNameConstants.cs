@@ -199,6 +199,7 @@
         public const string OutCollDate_01 = "OutCollDate_01";
 
         public const string Outcome_04 = "Outcome_04";
+        public const string Outcome_05 = "Outcome_05";
         public const string Outcome_09 = "Outcome_09";
 
         public const string OutGrade_03 = "OutGrade_03";
