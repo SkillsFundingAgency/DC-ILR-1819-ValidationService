@@ -18,6 +18,8 @@
         public const string AimType = "AimType";
         public const string CompStatus = "CompStatus";
         public const string ConRefNumber = "ConRefNumber";
+        public const string ContPrefCode = "ContPrefCode";
+        public const string ContPrefType = "ContPrefType";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string DOMICILE = "DOMICILE";
         public const string EmpId = "EmpId";
