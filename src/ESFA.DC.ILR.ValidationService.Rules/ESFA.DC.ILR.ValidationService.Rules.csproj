@@ -269,6 +269,7 @@
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09Rule.cs" />
