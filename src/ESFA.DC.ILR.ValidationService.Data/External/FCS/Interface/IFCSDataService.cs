@@ -48,8 +48,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// </returns>
         IEsfEligibilityRuleLocalEnterprisePartnership GetEligibilityRuleEnterprisePartnershipFor(string contractReference);
 
+        /// <summary>
+        /// Gets the eligibility sector subject area levels for.
+        /// </summary>
+        /// <param name="conRefNumber">The contract reference number.</param>
+        /// <returns>
+        /// esf eligibility rule sector subject area levels
+        /// </returns>
         IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
 
         bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber);
+
+        bool IsSectorSubjectAreaCodeNullForContract(string conRefNumber);
+
+        bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber);
     }
 }

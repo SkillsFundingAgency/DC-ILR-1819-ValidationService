@@ -56,6 +56,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 .FirstOrDefault();
         }
 
+        public string GetNotionalNVQLevelv2ForLearnAimRef(string learnAimRef)
+        {
+            return _externalDataCache.LearningDeliveries?
+                .Values?.Where(l => l.LearnAimRef.CaseInsensitiveEquals(learnAimRef))
+                .Select(l => l.NotionalNVQLevelv2).FirstOrDefault();
+        }
+
         public bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
