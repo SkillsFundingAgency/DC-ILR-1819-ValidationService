@@ -29,6 +29,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// <returns>a LARS Standard Validity</returns>
         ILARSStandardValidity GetStandardValidityFor(int thisStandardCode);
 
+        string GetNotionalNVQLevelv2ForLearnAimRef(string learnAimRef);
+
         bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date);
 
         bool EnglishPrescribedIdsExistsforLearnAimRef(string learnAimRef, HashSet<int?> engPrscIDs);
