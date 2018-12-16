@@ -38,7 +38,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             {
                 if (ConditionMet(learningDelivery.FundModel, learningDelivery.ConRefNumber, learningDelivery.LearnAimRef))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel, learningDelivery.ConRefNumber));
+                    HandleValidationError(
+                        objectToValidate.LearnRefNumber,
+                        learningDelivery.AimSeqNumber,
+                        BuildErrorMessageParameters(learningDelivery.FundModel, learningDelivery.ConRefNumber));
                 }
             }
         }
