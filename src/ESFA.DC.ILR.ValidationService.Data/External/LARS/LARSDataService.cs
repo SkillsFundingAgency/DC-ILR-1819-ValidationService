@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         public IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef)
         {
             return _externalDataCache.LearningDeliveries.Values
-                .Where(x => x.LearnAimRef == forThisAimRef)
+                .Where(x => x.LearnAimRef.CaseInsensitiveEquals(forThisAimRef))
                 .AsSafeReadOnlyList();
         }
 
@@ -58,8 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
         public string GetNotionalNVQLevelv2ForLearnAimRef(string learnAimRef)
         {
-            return _externalDataCache.LearningDeliveries?
-                .Values?.Where(l => l.LearnAimRef.CaseInsensitiveEquals(learnAimRef))
+            return GetDeliveriesFor(learnAimRef)?
                 .Select(l => l.NotionalNVQLevelv2).FirstOrDefault();
         }
 

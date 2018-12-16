@@ -2020,6 +2020,55 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeTrue();
         }
 
+        [Fact]
+        public void GetNotionalNVQLevelv2ForLearnAimRef()
+        {
+            string learnAimRef = "ESF123456";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    "esf123456",
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        NotionalNVQLevelv2 = "1"
+                    }
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef).Should().Be("1");
+        }
+
+        [Fact]
+        public void GetNotionalNVQLevelv2ForLearnAimRef_NullCheck()
+        {
+            string learnAimRef = "ESF09876";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    "esf223344",
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = "esf223344",
+                        NotionalNVQLevelv2 = "223"
+                    }
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object).GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef).Should().BeNullOrEmpty();
+        }
+
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)
         {
             return new LARSDataService(externalDataCache);
