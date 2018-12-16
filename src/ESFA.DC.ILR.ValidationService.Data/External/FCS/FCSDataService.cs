@@ -184,8 +184,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         public bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber)
         {
             return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
-                .Any(s => notionalNVQLevel2 < Convert.ToInt32(s.MinLevelCode)
-                    || notionalNVQLevel2 > Convert.ToInt32(s.MaxLevelCode)) ?? false;
+                .Any(s => (!string.IsNullOrEmpty(s.MinLevelCode)
+                    && notionalNVQLevel2 < Convert.ToInt32(s.MinLevelCode))
+                    || (!string.IsNullOrEmpty(s.MaxLevelCode)
+                    && notionalNVQLevel2 > Convert.ToInt32(s.MaxLevelCode))) ?? false;
         }
     }
 }
