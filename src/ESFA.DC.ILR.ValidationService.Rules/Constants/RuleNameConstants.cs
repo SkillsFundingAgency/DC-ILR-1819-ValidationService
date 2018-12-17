@@ -203,6 +203,7 @@
         public const string Outcome_09 = "Outcome_09";
 
         public const string OutGrade_03 = "OutGrade_03";
+        public const string OutGrade_06 = "OutGrade_06";
 
         public const string OutStartDate_01 = "OutStartDate_01";
 
