@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -169,6 +170,24 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
                 s => s.SectorSubjectAreaCode.HasValue
                 && (string.IsNullOrEmpty(s.MinLevelCode)
                 && string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
+        }
+
+        public bool IsSectorSubjectAreaCodeNullForContract(string conRefNumber)
+        {
+            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+                .Any(
+                s => s.SectorSubjectAreaCode == null
+                && (!string.IsNullOrEmpty(s.MinLevelCode)
+                    || !string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
+        }
+
+        public bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber)
+        {
+            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+                .Any(s => (!string.IsNullOrEmpty(s.MinLevelCode)
+                    && notionalNVQLevel2 < Convert.ToInt32(s.MinLevelCode))
+                    || (!string.IsNullOrEmpty(s.MaxLevelCode)
+                    && notionalNVQLevel2 > Convert.ToInt32(s.MaxLevelCode))) ?? false;
         }
     }
 }
