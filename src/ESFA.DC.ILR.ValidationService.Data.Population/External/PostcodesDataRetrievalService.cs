@@ -75,6 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                 .AsGuard<ArgumentNullException>(nameof(message));
 
             var deliveries = message.Learners
+                    .AsSafeReadOnlyList()
                     .SelectMany(x => x.LearningDeliveries.AsSafeReadOnlyList())
                     .AsSafeReadOnlyList();
             var uniquePostcodes = GetUniqueDeliveryLocationPostcodesFrom(deliveries).ToCaseInsensitiveHashSet();
