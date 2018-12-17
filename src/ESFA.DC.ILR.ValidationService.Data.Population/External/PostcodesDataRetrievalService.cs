@@ -70,27 +70,31 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         /// <returns>a set of ons postcode records</returns>
         public async Task<IReadOnlyCollection<IONSPostcode>> RetrieveONSPostcodesAsync(CancellationToken cancellationToken)
         {
-            var message = _messageCache.Item;
-            It.IsNull(message)
-                .AsGuard<ArgumentNullException>(nameof(message));
-
-            var deliveries = message.Learners
-                    .AsSafeReadOnlyList()
-                    .SelectMany(x => x.LearningDeliveries.AsSafeReadOnlyList())
-                    .AsSafeReadOnlyList();
-            var uniquePostcodes = GetUniqueDeliveryLocationPostcodesFrom(deliveries).ToCaseInsensitiveHashSet();
-
-            return await _postcodes.ONS_Postcodes
-                .Where(p => uniquePostcodes.Contains(p.Postcode))
-                .Select(p => new ONSPostcode
+            return await Task.Run(
+                () =>
                 {
-                    Postcode = p.Postcode,
-                    EffectiveFrom = p.EffectiveFrom,
-                    EffectiveTo = p.EffectiveTo,
-                    LocalAuthority = p.LocalAuthority,
-                    Termination = p.Termination
-                })
-                .ToListAsync(cancellationToken);
+                    var message = _messageCache.Item;
+                    It.IsNull(message)
+                        .AsGuard<ArgumentNullException>(nameof(message));
+
+                    var deliveries = message.Learners
+                            .AsSafeReadOnlyList()
+                            .SelectMany(x => x.LearningDeliveries.AsSafeReadOnlyList())
+                            .AsSafeReadOnlyList();
+                    var uniquePostcodes = GetUniqueDeliveryLocationPostcodesFrom(deliveries).ToCaseInsensitiveHashSet();
+
+                    return _postcodes.ONS_Postcodes
+                        .Where(p => uniquePostcodes.Contains(p.Postcode))
+                        .Select(p => new ONSPostcode
+                        {
+                            Postcode = p.Postcode,
+                            EffectiveFrom = p.EffectiveFrom,
+                            EffectiveTo = p.EffectiveTo,
+                            LocalAuthority = p.LocalAuthority,
+                            Termination = p.Termination
+                        })
+                        .AsSafeReadOnlyList();
+                }, cancellationToken);
         }
 
         public IEnumerable<string> UniquePostcodesFromMessage(IMessage message)
