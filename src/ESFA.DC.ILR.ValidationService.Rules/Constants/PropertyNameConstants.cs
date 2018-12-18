@@ -28,6 +28,7 @@
         public const string EmpOutcome = "EmpOutcome";
         public const string EmpStat = "EmpStat";
         public const string EngGrade = "EngGrade";
+        public const string EPAOrgID = "EPAOrgID";
         public const string ESMType = "ESMType";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";

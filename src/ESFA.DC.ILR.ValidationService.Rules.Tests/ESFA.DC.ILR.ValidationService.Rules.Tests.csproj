@@ -266,6 +266,7 @@
     <Compile Include="LearningDelivery\AFinType\AFinType_07RuleTests.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18RuleTests.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17RuleTests.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_72RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_87RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71RuleTests.cs" />

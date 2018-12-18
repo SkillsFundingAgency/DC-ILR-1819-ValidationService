@@ -96,6 +96,8 @@
 
         public const string Entity_1 = "Entity_1";
 
+        public const string EPAOrgID_03 = "EPAOrgID_03";
+
         public const string ESMType_15 = "ESMType_15";
 
         public const string FamilyName_01 = "FamilyName_01";
