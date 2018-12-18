@@ -181,6 +181,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
                     || !string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
         }
 
+        public bool IsSubjectAreaAndMinMaxLevelsExistsForContract(string conRefNumber)
+        {
+            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+                .Any(
+                s => s.SectorSubjectAreaCode.HasValue
+                && (!string.IsNullOrEmpty(s.MinLevelCode)
+                    || !string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
+        }
+
         public bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber)
         {
             return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
@@ -188,6 +197,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
                     && notionalNVQLevel2 < Convert.ToInt32(s.MinLevelCode))
                     || (!string.IsNullOrEmpty(s.MaxLevelCode)
                     && notionalNVQLevel2 > Convert.ToInt32(s.MaxLevelCode))) ?? false;
+        }
+
+        public bool IsSectorSubjectAreaTiersMatchingSubjectAreaCode(string conRefNumber, decimal? sectorSubjectAreaTier1, decimal? sectorSubjectAreaTier2)
+        {
+            if (sectorSubjectAreaTier1 == null
+                && sectorSubjectAreaTier2 == null)
+            {
+                return false;
+            }
+
+            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+                .Any(s => (s.SectorSubjectAreaCode.HasValue && sectorSubjectAreaTier1.HasValue && s.SectorSubjectAreaCode == sectorSubjectAreaTier1)
+                    && (s.SectorSubjectAreaCode.HasValue && sectorSubjectAreaTier2.HasValue && s.SectorSubjectAreaCode == sectorSubjectAreaTier2)) ?? false;
         }
     }
 }

@@ -15,6 +15,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
         IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef);
 
+        ILARSLearningDelivery GetLearningDeliveryForLearnAimRef(string learnAimRef);
+
         /// <summary>
         /// Gets the validities for.
         /// </summary>
