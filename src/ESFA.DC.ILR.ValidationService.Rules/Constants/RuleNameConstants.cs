@@ -96,6 +96,8 @@
 
         public const string Entity_1 = "Entity_1";
 
+        public const string EPAOrgID_03 = "EPAOrgID_03";
+
         public const string ESMType_15 = "ESMType_15";
 
         public const string FamilyName_01 = "FamilyName_01";
@@ -203,7 +205,10 @@
         public const string Outcome_05 = "Outcome_05";
         public const string Outcome_09 = "Outcome_09";
 
+        public const string OutEndDate_01 = "OutEndDate_01";
+
         public const string OutGrade_03 = "OutGrade_03";
+        public const string OutGrade_04 = "OutGrade_04";
         public const string OutGrade_06 = "OutGrade_06";
 
         public const string OutStartDate_01 = "OutStartDate_01";
@@ -211,6 +216,9 @@
 
         public const string OutType_02 = "OutType_02";
         public const string OutType_04 = "OutType_04";
+
+        public const string OutULN_01 = "OutULN_01";
+        public const string OutULN_02 = "OutULN_02";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";

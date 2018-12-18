@@ -28,6 +28,7 @@
         public const string EmpOutcome = "EmpOutcome";
         public const string EmpStat = "EmpStat";
         public const string EngGrade = "EngGrade";
+        public const string EPAOrgID = "EPAOrgID";
         public const string ESMType = "ESMType";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
@@ -58,9 +59,11 @@
         public const string OtherFundAdj = "OtherFundAdj";
         public const string OutCollDate = "OutCollDate";
         public const string Outcome = "Outcome";
+        public const string OutEndDate = "OutEndDate";
         public const string OutGrade = "OutGrade";
         public const string OutStartDate = "OutStartDate";
         public const string OutType = "OutType";
+        public const string OutULN = "OutULN";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PCFLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";

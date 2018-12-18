@@ -107,6 +107,7 @@
     <Compile Include="CrossEntity\R91Rule.cs" />
     <Compile Include="Derived\DerivedData_05Rule.cs" />
     <Compile Include="Derived\DerivedData_11Rule.cs" />
+    <Compile Include="Derived\DerivedData_15Rule.cs" />
     <Compile Include="Derived\DerivedData_22Rule.cs" />
     <Compile Include="Derived\DerivedData_24Rule.cs" />
     <Compile Include="Derived\DerivedData_27Rule.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Derived\DD06.cs" />
     <Compile Include="Derived\DD07.cs" />
     <Compile Include="Derived\Interface\IDerivedData_05Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_15Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_27Rule.cs" />
     <Compile Include="Derived\Interface\IDD01.cs" />
     <Compile Include="Derived\Interface\IDD04.cs" />
@@ -129,9 +131,12 @@
     <Compile Include="Derived\Interface\IDerivedData_29Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_21Rule.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01Rule.cs" />
+    <Compile Include="DestinationAndProgression\OutEndDate\OutEndDate_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_02Rule.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_04Rule.cs" />
+    <Compile Include="DestinationAndProgression\OutULN\OutULN_01Rule.cs" />
+    <Compile Include="DestinationAndProgression\OutULN\OutULN_02Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_02Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_02Rule.cs" />
@@ -262,6 +267,7 @@
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRuleBase{TEligibilityItem}.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18Rule.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_01Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_07Rule.cs" />
@@ -279,6 +285,7 @@
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_04Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_06Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09Rule.cs" />

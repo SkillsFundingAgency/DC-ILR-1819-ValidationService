@@ -3600,7 +3600,35 @@ localised additions are:
                         description="ESOL Plus (Mandation)" />
                 <option code="330"
                         description="Skills Training Innovation and Employment (STRIVE) pilot for the homeless" />
-            </LDM>
+<option code="331" description="Princes Trust Team programme" />
+<option code="333" description="Apprenticeship Grant for Employers for 16 to 24 year olds (AGE 16 to 24) - Provider Payment Trigger from  1 Jan 2015 to 31 Mar 2016" />
+<option code="334" description="Apprenticeship Grant for Employers for 16 to 24 year olds (AGE 16 to 24) - Strategic Partner from 1 Jan 2015 to 31 Dec 2015" />
+<option code="335" description="ESF AGE Enhancement 1-49" />
+<option code="338" description="ESF AGE Enhancements 50-249" />
+<option code="340" description="Community learning mental health pilot" />
+<option code="342" description="BBC Make it Digital Traineeship Programme" />
+<option code="344" description="Greater Manchester Skills for Employment Pilot Programme (Growth Deal)" />
+<option code="345" description="Sheffield City Region Skills Bank (Growth Deal)" />
+<option code="346" description="Armed forces leavers" />
+<option code="347" description="Steel Industries Redundancy Training" />
+<option code="348" description="Apprenticeship seasonal worker pilot" />
+<option code="349" description="Apprenticeship Grant for Employers (AGE) - Provider Payment Trigger from 1 April 2016 to 31 July 2017" />
+<option code="350" description="Non-apprenticeship workplace learning originally funded under the employer responsive funding model" />
+<option code="351" description="Former Employer Ownership Pilot Provision" />
+<option code="352" description="HESA-generated ILR file" />
+<option code="353" description="Non-apprenticeship Sporting Excellence Award" />
+<option code="354" description="Non-apprenticeship Theatre and live events" />
+<option code="355" description="Non-apprenticeship Sea Fishing" />
+<option code="356" description="Apprenticeship being delivered to own employees" />
+<option code="357" description="Procured Adult Education Budget (AEB)" />
+<option code="358" description="Extended Allocated Non-Levy Apprenticeships" />
+<option code="359" description="Career Learning Pilot" />
+<option code="360" description="Flexible Learning Fund" />
+<option code="361" description="Waiver to record payment records for apprenticeships" />
+<option code="362" description="Apprentice care leavers" />
+<option code="363" description="Learners in receipt of low wages" />
+
+          </LDM>
             <NSA>
                 <option code="1"
                         description="Fashion Retail " />
