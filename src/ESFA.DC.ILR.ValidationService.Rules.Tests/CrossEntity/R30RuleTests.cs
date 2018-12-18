@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void ValidationSingleDleiveryFails()
+        public void ValidationSingleDeliveryFails()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
             var testLearner = new TestLearner
