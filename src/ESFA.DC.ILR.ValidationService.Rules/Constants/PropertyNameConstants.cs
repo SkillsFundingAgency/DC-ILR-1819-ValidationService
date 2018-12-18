@@ -59,6 +59,7 @@
         public const string OtherFundAdj = "OtherFundAdj";
         public const string OutCollDate = "OutCollDate";
         public const string Outcome = "Outcome";
+        public const string OutEndDate = "OutEndDate";
         public const string OutGrade = "OutGrade";
         public const string OutStartDate = "OutStartDate";
         public const string OutType = "OutType";

@@ -205,6 +205,8 @@
         public const string Outcome_05 = "Outcome_05";
         public const string Outcome_09 = "Outcome_09";
 
+        public const string OutEndDate_01 = "OutEndDate_01";
+
         public const string OutGrade_03 = "OutGrade_03";
         public const string OutGrade_04 = "OutGrade_04";
         public const string OutGrade_06 = "OutGrade_06";
