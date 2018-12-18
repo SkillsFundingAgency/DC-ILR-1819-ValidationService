@@ -47,6 +47,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
+        public void ValidationSingleDleiveryFails()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
+            var testLearner = new TestLearner
+            {
+                LearningDeliveries = new List<ILearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        AimType = 3,
+                        ProgTypeNullable = 1,
+                        FworkCodeNullable = 1,
+                        PwayCodeNullable = 1
+                    }
+                }
+            };
+
+            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            validationErrorHandlerMock.Verify(h => h.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+        }
+
+        [Fact]
         public void ValidationFails()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
