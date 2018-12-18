@@ -213,6 +213,7 @@
         public const string OutType_04 = "OutType_04";
 
         public const string OutULN_01 = "OutULN_01";
+        public const string OutULN_02 = "OutULN_02";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
