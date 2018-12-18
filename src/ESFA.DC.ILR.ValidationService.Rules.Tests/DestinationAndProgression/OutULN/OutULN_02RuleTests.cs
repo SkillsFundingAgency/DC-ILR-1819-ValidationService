@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [Fact]
         public void Validate_NoErrors()
         {
-            var learner = new TestLearner
+            var learner = new TestLearnerDestinationAndProgression
             {
                 ULN = 1
             };
@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [Fact]
         public void Validate_TempULNPasses()
         {
-            var learner = new TestLearner
+            var learner = new TestLearnerDestinationAndProgression
             {
                 ULN = ValidationConstants.TemporaryULN
             };
@@ -58,7 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [Fact]
         public void Validate_Error()
         {
-            var learner = new TestLearner()
+            var learner = new TestLearnerDestinationAndProgression
             {
                 ULN = 1,
             };

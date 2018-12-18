@@ -7,7 +7,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutULN
 {
-    public class OutULN_02Rule : AbstractRule, IRule<ILearner>
+    public class OutULN_02Rule : AbstractRule, IRule<ILearnerDestinationAndProgression>
     {
         private readonly IULNDataService _ulnDataService;
 
@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutULN
             _ulnDataService = ulnDataService;
         }
 
-        public void Validate(ILearner objectToValidate)
+        public void Validate(ILearnerDestinationAndProgression objectToValidate)
         {
             var uln = objectToValidate.ULN;
 
