@@ -200,6 +200,7 @@
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
         public const string OutCollDate_01 = "OutCollDate_01";
+        public const string OutCollDate_02 = "OutCollDate_02";
 
         public const string Outcome_04 = "Outcome_04";
         public const string Outcome_05 = "Outcome_05";
