@@ -5,7 +5,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
+namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutULN
 {
     public class OutULN_02Rule : AbstractRule, IRule<ILearner>
     {
