@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutCollDate;
+using ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutStartDate;
 using ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType;
 using ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutULN;
@@ -16,9 +17,10 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
         {
             RuleSetType = typeof(IRule<ILearnerDestinationAndProgression>);
 
-            Rules = new List<Type>()
+            Rules = new List<Type>
             {
                 typeof(OutCollDate_01Rule),
+                typeof(OutEndDate_01Rule),
                 typeof(OutStartDate_01Rule),
                 typeof(OutStartDate_02Rule),
                 typeof(OutType_02Rule),
