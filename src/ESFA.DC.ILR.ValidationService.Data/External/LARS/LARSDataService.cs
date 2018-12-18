@@ -275,5 +275,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                                                             && learnStartDate > s.EffectiveTo
                                                             && s.StandardCode == stdCode);
         }
+
+        public bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types)
+        {
+            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
+
+            return learningDelivery != null && types.Contains(learningDelivery.LearnAimRefType);
+        }
     }
 }
