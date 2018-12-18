@@ -98,24 +98,35 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// </summary>
         /// <param name="employment">The employment.</param>
         /// <param name="matchCondition">The match condition.</param>
-        /// <returns></returns>
+        /// <returns>true if the match condition is met</returns>
         public bool CheckEmploymentMonitors(ILearnerEmploymentStatus employment, Func<IEmploymentStatusMonitoring, bool> matchCondition) =>
             employment.EmploymentStatusMonitorings.SafeAny(matchCondition);
 
         /// <summary>
-        /// Determines whether [has a qualifying employment status] [using the specified employments].
+        /// Determines whether [is not valid] [the specified employment].
+        /// </summary>
+        /// <param name="employment">The employment.</param>
+        /// <returns>
+        ///   <c>true</c> if [is not valid] [the specified employment]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsNotValid(ILearnerEmploymentStatus employment) =>
+            !CheckEmploymentMonitors(employment, HasAQualifyingMonitorStatus);
+
+        /// <summary>
+        /// Determines whether [does not have a qualifying employment status] [using the specified employments].
         /// </summary>
         /// <param name="usingEmployments">using employments.</param>
         /// <param name="matchingDelivery">matching delivery.</param>
         /// <returns>
         ///   <c>true</c> if [has a qualifying employment status] [using the specified employments]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasAQualifyingEmploymentStatus(
+        public bool DoesNotHaveAQualifyingEmploymentStatus(
             IReadOnlyCollection<ILearnerEmploymentStatus> usingEmployments,
             ILearningDelivery matchingDelivery) =>
-                usingEmployments
+                It.IsEmpty(usingEmployments)
+                || usingEmployments
                     .SafeWhere(x => x.DateEmpStatApp == matchingDelivery.LearnStartDate)
-                    .SafeAny(x => CheckEmploymentMonitors(x, HasAQualifyingMonitorStatus));
+                    .Any(IsNotValid);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
@@ -129,7 +140,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
             InTraining(delivery)
                 && InAProgramme(delivery)
                 && HasQualifyingStart(delivery)
-                && !HasAQualifyingEmploymentStatus(usingEmployments, delivery);
+                && DoesNotHaveAQualifyingEmploymentStatus(usingEmployments, delivery);
 
         /// <summary>
         /// Validates the specified object.

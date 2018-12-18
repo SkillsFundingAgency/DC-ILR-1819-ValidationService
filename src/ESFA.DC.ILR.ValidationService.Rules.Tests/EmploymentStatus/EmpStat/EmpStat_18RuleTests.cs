@@ -232,26 +232,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         /// <summary>
-        /// Has a qualifying employment status with null employment returns false
+        /// Does not have a qualifying employment status with null employment returns true
         /// </summary>
         [Fact]
-        public void HasAQualifyingEmploymentStatusWithNullEmploymentReturnsFalse()
+        public void DoesNotHaveAQualifyingEmploymentStatusWithNullEmploymentReturnsTrue()
         {
             // arrange
             var sut = NewRule();
 
             // act
-            var result = sut.HasAQualifyingEmploymentStatus(null, null);
+            var result = sut.DoesNotHaveAQualifyingEmploymentStatus(null, null);
 
             // assert
-            Assert.False(result);
+            Assert.True(result);
         }
 
         /// <summary>
-        /// Has a qualifying employment status with null statuses returns false
+        /// Does not have a qualifying employment status with null statuses returns true
         /// </summary>
         [Fact]
-        public void HasAQualifyingEmploymentStatusWithNullStatusesReturnsFalse()
+        public void DoesNotHaveAQualifyingEmploymentStatusWithNullStatusesReturnsTrue()
         {
             // arrange
             var sut = NewRule();
@@ -259,17 +259,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var mockItem = new Mock<ILearningDelivery>();
 
             // act
-            var result = sut.HasAQualifyingEmploymentStatus(null, mockItem.Object);
+            var result = sut.DoesNotHaveAQualifyingEmploymentStatus(null, mockItem.Object);
 
             // assert
-            Assert.False(result);
+            Assert.True(result);
         }
 
         /// <summary>
-        /// Has a qualifying employment status with empty statuses returns false
+        /// Does not have a qualifying employment status with empty statuses returns true
         /// </summary>
         [Fact]
-        public void HasAQualifyingEmploymentStatusWithEmptyStatusesReturnsFalse()
+        public void DoesNotHaveAQualifyingEmploymentStatusWithEmptyStatusesReturnsTrue()
         {
             // arrange
             var sut = NewRule();
@@ -277,10 +277,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var mockItem = new Mock<ILearningDelivery>();
 
             // act
-            var result = sut.HasAQualifyingEmploymentStatus(Collection.EmptyAndReadOnly<ILearnerEmploymentStatus>(), mockItem.Object);
+            var result = sut.DoesNotHaveAQualifyingEmploymentStatus(Collection.EmptyAndReadOnly<ILearnerEmploymentStatus>(), mockItem.Object);
 
             // assert
-            Assert.False(result);
+            Assert.True(result);
         }
 
         /// <summary>
