@@ -61,6 +61,7 @@
         public const string OutGrade = "OutGrade";
         public const string OutStartDate = "OutStartDate";
         public const string OutType = "OutType";
+        public const string OutULN = "OutULN";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PCFLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";
