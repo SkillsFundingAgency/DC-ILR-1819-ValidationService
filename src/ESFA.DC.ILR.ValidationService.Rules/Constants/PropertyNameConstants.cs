@@ -32,6 +32,7 @@
         public const string ESMType = "ESMType";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
+        public const string FUNDLEV = "FUNDLEV";
         public const string FworkCode = "FworkCode";
         public const string GivenNames = "GivenNames";
         public const string HEPostcode = "HEPostCode";
