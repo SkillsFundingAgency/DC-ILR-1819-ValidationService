@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 .SelectMany(w => w.LearningDeliveryWorkPlacements)?.ToList()
                 .GroupBy(w => w.WorkPlaceStartDate)
                 .Where(w => w.Count() > 1)?
-                .Select(g => Tuple.Create(g.Key, g.Count()));
+                .Select(g => g.Key);
 
             if ((workPlaceStartDates?.Count() ?? 0) == 0)
             {
@@ -40,11 +40,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var workPlaceStartDate in workPlaceStartDates)
             {
-                HandleValidationError(objectToValidate.LearnRefNumber, null, BuildErrorMessageParameters(DateTime.Parse(workPlaceStartDate.Item1.ToString())));
+                HandleValidationError(
+                    learnRefNumber: objectToValidate.LearnRefNumber,
+                    errorMessageParameters: BuildErrorMessageParameters(workPlaceStartDate));
             }
         }
 
-        private IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime workPlaceStartDate)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime workPlaceStartDate)
         {
             return new[]
             {
