@@ -105,6 +105,7 @@
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="CrossEntity\R91Rule.cs" />
+    <Compile Include="CrossEntity\R96Rule.cs" />
     <Compile Include="Derived\DerivedData_05Rule.cs" />
     <Compile Include="Derived\DerivedData_11Rule.cs" />
     <Compile Include="Derived\DerivedData_15Rule.cs" />
