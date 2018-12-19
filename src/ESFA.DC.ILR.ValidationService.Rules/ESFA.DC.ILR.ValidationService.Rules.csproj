@@ -173,6 +173,7 @@
     <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
+    <Compile Include="HE\FUNDLEV\FUNDLEV_03Rule.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_01Rule.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_02Rule.cs" />
     <Compile Include="HE\LearnerHE_02Rule.cs" />
