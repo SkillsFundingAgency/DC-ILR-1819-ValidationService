@@ -72,5 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         bool OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(DateTime? origLearnStartDate, string learnAimRef);
 
         bool LearnStartDateGreaterThanStandardsEffectiveTo(int? stdCode, DateTime learnStartDate);
+
+        bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types);
     }
 }

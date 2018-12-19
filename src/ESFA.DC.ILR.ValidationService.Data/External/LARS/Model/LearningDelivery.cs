@@ -28,6 +28,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         public DateTime? EffectiveTo { get; set; }
 
         /// <summary>
+        /// Gets or sets the learn aim reference type.
+        /// </summary>
+        public string LearnAimRefType { get; set; }
+
+        /// <summary>
         /// Gets the english prescribed Ids.
         /// </summary>
         public int? EnglPrscID { get; set; }
