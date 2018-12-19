@@ -1,84 +1,94 @@
-﻿using System;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartDate
 {
-    public class LearnStartDate_05RuleTests
+    public class LearnStartDate_05RuleTests : AbstractRuleTests<LearnStartDate_05Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("LearnStartDate_05");
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
-            NewRule().ConditionMet(new DateTime(2018, 1, 1), new DateTime(2017, 8, 1)).Should().BeTrue();
+            NewRule().ConditionMet(new DateTime(2018, 02, 01), new DateTime(2018, 01, 01)).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False_DateOfBirth_Null()
+        public void ConditionMet_False_NullDOB()
         {
-            NewRule().ConditionMet(null, new DateTime(2017, 8, 1)).Should().BeFalse();
+            NewRule().ConditionMet(null, new DateTime(2018, 01, 01)).Should().BeFalse();
         }
 
         [Fact]
-        public void ConditionMet_False_LearnStartDate_Null()
+        public void ConditionMet_False()
         {
-            NewRule().ConditionMet(new DateTime(1988, 12, 25), null).Should().BeFalse();
+            NewRule().ConditionMet(new DateTime(2017, 01, 01), new DateTime(2018, 01, 01)).Should().BeFalse();
         }
 
         [Fact]
-        public void ConditionMet_False_DateOfBirth()
-        {
-            NewRule().ConditionMet(new DateTime(1988, 12, 25), new DateTime(2017, 8, 1)).Should().BeFalse();
-        }
-
-        [Fact]
-        public void Validate_NoErrors()
+        public void Validate_Error()
         {
             var learner = new TestLearner()
             {
-                DateOfBirthNullable = new DateTime(1988, 12, 25),
-                LearningDeliveries = new TestLearningDelivery[]
+                DateOfBirthNullable = new DateTime(2018, 02, 01),
+                LearningDeliveries = new List<TestLearningDelivery>()
                 {
                     new TestLearningDelivery()
                     {
-                        LearnStartDateNullable = new DateTime(2015, 1, 1),
+                        LearnStartDate = new DateTime(2018, 01, 01)
                     }
                 }
             };
 
-            NewRule().Validate(learner);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_Errors()
+        public void Validate_NoError()
         {
             var learner = new TestLearner()
             {
-                DateOfBirthNullable = new DateTime(2018, 1, 1),
-                LearningDeliveries = new TestLearningDelivery[]
+                LearningDeliveries = new List<TestLearningDelivery>()
                 {
                     new TestLearningDelivery()
                     {
-                        LearnStartDateNullable = new DateTime(2005, 1, 1),
+                        LearnStartDate = new DateTime(2018, 01, 01)
                     }
                 }
             };
 
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LearnStartDate_05", null, null, null);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("DateOfBirth", "01/01/2000")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, "01/10/2018")).Verifiable();
 
-            validationErrorHandlerMock.Setup(handle);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2000, 01, 01), new DateTime(2018, 10, 01));
 
-            var rule = new LearnStartDate_05Rule(validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            validationErrorHandlerMock.Verify();
         }
 
         private LearnStartDate_05Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
