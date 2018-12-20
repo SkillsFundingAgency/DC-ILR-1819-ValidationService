@@ -91,7 +91,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData("Z0007836")]
         [InlineData("Z0007837")]
         [InlineData("Z0007838")]
+        [InlineData("z0007838")]
         [InlineData("ZWRKX001")]
+        [InlineData("zWRKX001")]
         public void WorkExperienceConditionMet_True(string learnAimRef)
         {
             NewRule().WorkExperienceConditionMet(learnAimRef).Should().BeTrue();
