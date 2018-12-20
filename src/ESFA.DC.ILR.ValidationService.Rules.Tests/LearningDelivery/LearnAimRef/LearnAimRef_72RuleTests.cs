@@ -36,10 +36,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             NewRule().FundModelConditionMet(TypeOfFunding.EuropeanSocialFund).Should().BeTrue();
         }
 
-        [Fact]
-        public void LearnAimRefConditionMet_False()
+        [Theory]
+        [InlineData(ValidationConstants.ZESF0001)]
+        [InlineData("zesf0001")]
+        public void LearnAimRefConditionMet_False(string learnAimRef)
         {
-            NewRule().LearnAimRefConditionMet(ValidationConstants.ZESF0001).Should().BeFalse();
+            NewRule().LearnAimRefConditionMet(learnAimRef).Should().BeFalse();
         }
 
         [Fact]
