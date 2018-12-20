@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -50,10 +48,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             return FundModelConditionMet(fundModel)
                 && EsfSectorSubjectAreaLevelConditionMet(conRefNumber)
                 && LARSConditionMet(conRefNumber, learnAimRef)
-                && LearAimRefConditionMet(learnAimRef);
+                && LearnAimRefConditionMet(learnAimRef);
         }
 
-        public bool LearAimRefConditionMet(string learnAimRef) => !(learnAimRef == ValidationConstants.ZESF0001);
+        public bool LearnAimRefConditionMet(string learnAimRef) => !learnAimRef.CaseInsensitiveEquals(ValidationConstants.ZESF0001);
 
         public bool LARSConditionMet(string conRefNumber, string learnAimRef)
         {

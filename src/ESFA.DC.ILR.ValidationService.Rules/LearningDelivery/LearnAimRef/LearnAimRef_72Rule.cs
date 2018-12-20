@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -67,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             return _fCSDataService.IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(notionalNVQLevel2, conRefNumber);
         }
 
-        public bool LearnAimRefConditionMet(string learnAimRef) => !(learnAimRef == ValidationConstants.ZESF0001);
+        public bool LearnAimRefConditionMet(string learnAimRef) => !learnAimRef.CaseInsensitiveEquals(ValidationConstants.ZESF0001);
 
         public bool FCSConditionMet(string conRefNumber) => _fCSDataService.IsSectorSubjectAreaCodeNullForContract(conRefNumber);
 
