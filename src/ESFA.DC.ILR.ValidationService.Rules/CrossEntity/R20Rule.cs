@@ -54,13 +54,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                         learnActEndDatePrevious,
                         firstRecord))
                 {
-                    HandleValidationError(
-                        objectToValidate.LearnRefNumber,
-                        learningDelivery.AimSeqNumber,
-                        BuildErrorMessageParameters(
-                            learningDelivery.AimType,
-                            learningDelivery.LearnStartDate,
-                            learningDelivery.LearnActEndDateNullable));
+                    if (!firstRecord)
+                    {
+                        HandleValidationError(
+                            objectToValidate.LearnRefNumber,
+                            learningDelivery.AimSeqNumber,
+                            BuildErrorMessageParameters(
+                                learningDelivery.AimType,
+                                learningDelivery.LearnStartDate,
+                                learningDelivery.LearnActEndDateNullable));
+                    }
 
                     learnActEndDatePrevious = learningDelivery.LearnActEndDateNullable;
                     firstRecord = false;
@@ -80,7 +83,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 && DD07ConditionMet(progTypeNullable)
                 && ApprenticeshipStandardsConditionMet(progTypeNullable)
                 && LARSConditionMet(learnAimRef)
-                && LearnStartDateConditionMet(learnStartDate, learnActEndDatePrevious, firstRecord);
+                && (firstRecord || LearnStartDateConditionMet(learnStartDate, learnActEndDatePrevious, firstRecord));
         }
 
         public bool LearnStartDateConditionMet(

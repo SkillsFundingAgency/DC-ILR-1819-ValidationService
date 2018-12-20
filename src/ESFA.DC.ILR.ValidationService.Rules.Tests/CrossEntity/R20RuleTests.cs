@@ -184,26 +184,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         LearnAimRef = learnAimRef,
-                        AimType = TypeOfAim.ComponentAimInAProgramme,
+                        AimType = TypeOfAim.AimNotPartOfAProgramme,
                         ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
-                        LearnStartDate = new DateTime(2015, 07, 02),
-                        LearnActEndDateNullable = null
+                        LearnStartDate = new DateTime(2017, 02, 01),
+                        LearnActEndDateNullable = new DateTime(2017, 02, 28)
                     },
                     new TestLearningDelivery()
                     {
                         LearnAimRef = learnAimRef,
                         AimType = TypeOfAim.ComponentAimInAProgramme,
                         ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
-                        LearnStartDate = new DateTime(2015, 07, 02),
-                        LearnActEndDateNullable = new DateTime(2015, 12, 01)
+                        LearnStartDate = new DateTime(2017, 02, 24),
+                        LearnActEndDateNullable = new DateTime(2017, 03, 01)
+                    },
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AimType = TypeOfAim.AimNotPartOfAProgramme,
+                        ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
+                        LearnStartDate = new DateTime(2017, 02, 25),
+                        LearnActEndDateNullable = new DateTime(2017, 10, 25)
                     },
                     new TestLearningDelivery()
                     {
                         LearnAimRef = learnAimRef,
                         AimType = TypeOfAim.ComponentAimInAProgramme,
                         ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
-                        LearnStartDate = new DateTime(2015, 12, 02),
-                        LearnActEndDateNullable = new DateTime(2016, 05, 01)
+                        LearnStartDate = new DateTime(2017, 02, 26),
+                        LearnActEndDateNullable = new DateTime(2017, 11, 25)
                     }
                 }
             };
