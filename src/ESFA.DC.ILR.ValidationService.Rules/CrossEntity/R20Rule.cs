@@ -31,23 +31,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate?.LearningDeliveries == null
-                || (GetLearningDeliveriesForCompetencyAim(objectToValidate.LearningDeliveries)?.Count() ?? 0) <= 1)
+            if (objectToValidate?.LearningDeliveries == null)
             {
                 return;
             }
 
             DateTime? learnActEndDatePrevious = null;
-            int recordNo = 1;
-            foreach (var learningDelivery in GetLearningDeliveriesForCompetencyAim(
-                objectToValidate.LearningDeliveries))
+            bool firstRecord = true;
+            foreach (var learningDelivery in objectToValidate
+                .LearningDeliveries.OrderBy(d => d.LearnStartDate))
             {
+                if (firstRecord)
+                {
+                    learnActEndDatePrevious = learningDelivery.LearnActEndDateNullable;
+                }
+
                 if (ConditionMet(
+                        learningDelivery.AimType,
                         learningDelivery.ProgTypeNullable,
                         learningDelivery.LearnAimRef,
                         learningDelivery.LearnStartDate,
                         learnActEndDatePrevious,
-                        recordNo))
+                        firstRecord))
                 {
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
@@ -56,37 +61,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                             learningDelivery.AimType,
                             learningDelivery.LearnStartDate,
                             learningDelivery.LearnActEndDateNullable));
-                }
 
-                learnActEndDatePrevious = learningDelivery.LearnActEndDateNullable;
-                recordNo++;
+                    learnActEndDatePrevious = learningDelivery.LearnActEndDateNullable;
+                    firstRecord = false;
+                }
             }
         }
 
         public bool ConditionMet(
+            int aimType,
             int? progTypeNullable,
             string learnAimRef,
             DateTime learnStartDate,
             DateTime? learnActEndDatePrevious,
-            int recordNo)
+            bool firstRecord)
         {
-            return ApprenticeshipStandardsConditionMet(progTypeNullable)
+            return ComponentAimTypeConditionMet(aimType)
+                && DD07ConditionMet(progTypeNullable)
+                && ApprenticeshipStandardsConditionMet(progTypeNullable)
                 && LARSConditionMet(learnAimRef)
-                && LearnStartDateConditionMet(learnStartDate, learnActEndDatePrevious, recordNo);
+                && LearnStartDateConditionMet(learnStartDate, learnActEndDatePrevious, firstRecord);
         }
-
-        public IReadOnlyCollection<ILearningDelivery> GetLearningDeliveriesForCompetencyAim(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
-            => learningDeliveries?
-            .Where(d => d.AimType == TypeOfAim.ComponentAimInAProgramme
-                && _dd07.IsApprenticeship(d.ProgTypeNullable))
-            .OrderBy(d => d.LearnStartDate)
-            .ToList();
 
         public bool LearnStartDateConditionMet(
             DateTime learnStartDate,
             DateTime? learnActEndDatePrevious,
-            int recordNo)
-            => recordNo == 1 ? learnActEndDatePrevious == null : learnStartDate < learnActEndDatePrevious;
+            bool firstRecord)
+            => firstRecord ? learnActEndDatePrevious == null
+                : (!learnActEndDatePrevious.HasValue || learnStartDate < learnActEndDatePrevious);
+
+        public bool DD07ConditionMet(int? progType) => _dd07.IsApprenticeship(progType);
+
+        public bool ComponentAimTypeConditionMet(int aimType) => aimType == TypeOfAim.ComponentAimInAProgramme;
 
         public bool LARSConditionMet(string learnAimRef) => _lARSDataService.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, _frameWorkComponentTypes);
 
