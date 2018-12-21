@@ -22,6 +22,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         /// </summary>
         private Dictionary<LookupCodedKeyDictionary, IDictionary<string, IReadOnlyCollection<string>>> _codedDictionaryLookups;
 
+        private Dictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>> _codedComplexLookups;
+
         /// <summary>
         /// The time restricted lookups
         /// </summary>
@@ -88,6 +90,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
             {
                 return _limitedLifeLookups
                   ?? (_limitedLifeLookups = new Dictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>>());
+            }
+        }
+
+        public IDictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>> CodedComplexLookups
+        {
+            get
+            {
+                return _codedComplexLookups
+                       ?? (_codedComplexLookups = new Dictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>>());
             }
         }
     }

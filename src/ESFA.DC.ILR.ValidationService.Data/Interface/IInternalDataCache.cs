@@ -39,5 +39,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// Gets the time restricted lookups.
         /// </summary>
         IDictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> LimitedLifeLookups { get; }
+
+        IDictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>> CodedComplexLookups
+        {
+            get;
+        }
     }
 }

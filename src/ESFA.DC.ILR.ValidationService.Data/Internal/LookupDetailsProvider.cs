@@ -149,6 +149,14 @@ namespace ESFA.DC.ILR.ValidationService.Data
                     .Select(v => v.Value.Contains(valueCandidate)).FirstOrDefault();
         }
 
+        public bool ContainsValueForKey(LookupComplexKey lookupKey, string keyCandidate, string valueCandidate)
+        {
+            return InternalCache.CodedComplexLookups[lookupKey]
+                .Where(k => k.Key == keyCandidate)
+                .SelectMany(x => x.Value)
+                .Any(x => x.Key == valueCandidate);
+        }
+
         /// <summary>
         /// Determines whether [the specified lookup key] is current on the given date
         /// </summary>
@@ -178,6 +186,15 @@ namespace ESFA.DC.ILR.ValidationService.Data
                 && InternalCache.LimitedLifeLookups[lookupKey]
                     .Where(x => x.Key == candidate)
                     .Any(y => IsBetween(y.Value.ValidFrom, y.Value.ValidTo, referenceDate));
+        }
+
+        public bool IsCurrent(LookupComplexKey lookupKey, string key, string value, DateTime date)
+        {
+            return ContainsValueForKey(lookupKey, key, value) &&
+                   InternalCache.CodedComplexLookups[lookupKey]
+                       .Where(x => x.Key == key)
+                       .SelectMany(x => x.Value).Where(x => x.Key == value)
+                       .Any(y => IsBetween(y.Value.ValidFrom, y.Value.ValidTo, date));
         }
     }
 }

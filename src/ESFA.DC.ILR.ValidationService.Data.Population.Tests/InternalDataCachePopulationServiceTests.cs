@@ -79,7 +79,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupCodedKey.ContPrefType, 2)]
         [InlineData(LookupCodedKey.Domicile, 264)]
         [InlineData(LookupCodedKey.ESMType, 7)]
-        [InlineData(LookupCodedKey.LearnDelFAMType, 16)]
         [InlineData(LookupCodedKey.LearnFAMType, 11)]
         [InlineData(LookupCodedKey.OutGrade, 502)]
         [InlineData(LookupCodedKey.OutType, 7)]
