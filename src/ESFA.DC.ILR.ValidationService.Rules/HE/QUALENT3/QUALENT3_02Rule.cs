@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -10,14 +10,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3
 {
     public class QUALENT3_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly DateTime _augustFirst2010 = new DateTime(2010, 08, 01);
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        private readonly IQUALENT3DataService _iQUALENT3DataService;
-
-        public QUALENT3_02Rule(IQUALENT3DataService iQUALENT3DataService, IValidationErrorHandler validationErrorHandler)
+        public QUALENT3_02Rule(IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
           : base(validationErrorHandler, RuleNameConstants.QUALENT3_02)
         {
-            _iQUALENT3DataService = iQUALENT3DataService;
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -44,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3
 
         public bool QUALENT3ValidConditionMet(string qualent3)
         {
-            return !_iQUALENT3DataService.Exists(qualent3);
+            return !_provideLookupDetails.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string qualent3)
