@@ -23,6 +23,9 @@
     <Parameter Name="RedisCacheConnectionString" DefaultValue="" />
     <Parameter Name="ProcessingServicePlacementConstraints" DefaultValue="" />
     <Parameter Name="OrganisationsConnectionString" DefaultValue="metadata=res://*/Organisations.csdl|res://*/Organisations.ssdl|res://*/Organisations.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.Organisations.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
+    <Parameter Name="ValidationDPActorService_PartitionCount" DefaultValue="10" />
+    <Parameter Name="ValidationDPActorService_MinReplicaSetSize" DefaultValue="1" />
+    <Parameter Name="ValidationDPActorService_TargetReplicaSetSize" DefaultValue="1" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -111,6 +114,11 @@
       <StatefulService ServiceTypeName="ValidationActorServiceType" TargetReplicaSetSize="[ValidationActorService_TargetReplicaSetSize]" MinReplicaSetSize="[ValidationActorService_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[ValidationActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
         <PlacementConstraints>[ProcessingServicePlacementConstraints]</PlacementConstraints>
+      </StatefulService>
+    </Service>
+    <Service Name="ValidationDPActorService" GeneratedIdRef="f2d21743-7ad1-4597-851f-e5ddb7b7ba47|None">
+      <StatefulService ServiceTypeName="ValidationDPActorServiceType" TargetReplicaSetSize="[ValidationDPActorService_TargetReplicaSetSize]" MinReplicaSetSize="[ValidationDPActorService_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[ValidationDPActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
     </Service>
   </DefaultServices>
