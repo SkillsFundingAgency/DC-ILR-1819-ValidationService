@@ -118,6 +118,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LearnerDPProviderServiceTests.cs" />
     <Compile Include="LearnerProviderServiceTests.cs" />
     <Compile Include="MessageStringProviderServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
