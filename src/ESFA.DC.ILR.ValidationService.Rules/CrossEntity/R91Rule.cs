@@ -44,7 +44,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                     if (LearnAimRefConditionMet(learningDelivery.LearnAimRef)
                         && CompStatusConditionMet(learningDelivery.CompStatus))
                     {
-                        if (ContractReferenceConditionMet(learningDelivery.ConRefNumber))
+                        if (ContractReferenceConditionMet(
+                            learningDelivery.ConRefNumber,
+                            _contractReferencesCompleted))
                         {
                             isSameContractReferencePresent = true;
                             break;
@@ -76,7 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public bool CompStatusConditionMet(int compStatus) => compStatus == CompletionState.HasCompleted;
 
-        public bool ContractReferenceConditionMet(string conRefNumber) => _contractReferencesCompleted.Contains(conRefNumber);
+        public bool ContractReferenceConditionMet(string conRefNumber, HashSet<string> contractReferences) => contractReferences.Contains(conRefNumber);
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, string conRefNumber, int compStatus)
         {
