@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.QUALENT3.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -15,16 +14,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3
 {
     public class QUALENT3_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IQUALENT3DataService _qUALENT3DataService;
+        private readonly IProvideLookupDetails _provideLookupDetails;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public QUALENT3_03Rule(
             IValidationErrorHandler validationErrorHandler,
-            IQUALENT3DataService qUALENT3DataService,
+            IProvideLookupDetails provideLookupDetails,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService)
             : base(validationErrorHandler, RuleNameConstants.QUALENT3_03)
         {
-            _qUALENT3DataService = qUALENT3DataService;
+            _provideLookupDetails = provideLookupDetails;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
@@ -58,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3
         public bool LearningDeliveryHEConditionMet(DateTime learnStartDate, string qUALENT3)
         {
             return !string.IsNullOrEmpty(qUALENT3)
-                && !_qUALENT3DataService.IsLearnStartDateBeforeValidTo(qUALENT3, learnStartDate);
+                && !_provideLookupDetails.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qUALENT3, learnStartDate);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, string qUALENT3)

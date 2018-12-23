@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.EmpOutcome.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -9,12 +9,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome
 {
     public class EmpOutcome_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IEmpOutcomeDataService _empOutcomeDataService;
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public EmpOutcome_02Rule(IEmpOutcomeDataService empOutcomeDataService, IValidationErrorHandler validationErrorHandler)
+        public EmpOutcome_02Rule(IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.EmpOutcome_02)
         {
-            _empOutcomeDataService = empOutcomeDataService;
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome
 
         public bool ConditionMet(int? empOutcome)
         {
-            return empOutcome.HasValue && !_empOutcomeDataService.Exists(empOutcome.Value);
+            return empOutcome.HasValue && !_provideLookupDetails.Contains(LookupTimeRestrictedKey.EmpOutcome, empOutcome.Value);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? empOutcome)

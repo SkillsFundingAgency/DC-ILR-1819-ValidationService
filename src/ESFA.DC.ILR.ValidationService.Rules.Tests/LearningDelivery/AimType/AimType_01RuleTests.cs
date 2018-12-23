@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Internal.AimType.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -23,9 +23,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
         {
             var aimType = 1;
 
-            var aimTypeInternalDataServiceMock = new Mock<IAimTypeDataService>();
+            var aimTypeInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(false);
+            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.AimType, aimType)).Returns(false);
 
             NewRule(aimTypeInternalDataServiceMock.Object).ConditionMet(aimType).Should().BeTrue();
         }
@@ -35,9 +35,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
         {
             var aimType = 1;
 
-            var aimTypeInternalDataServiceMock = new Mock<IAimTypeDataService>();
+            var aimTypeInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(true);
+            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.AimType, aimType)).Returns(true);
 
             NewRule(aimTypeInternalDataServiceMock.Object).ConditionMet(aimType).Should().BeFalse();
         }
@@ -58,9 +58,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
                 }
             };
 
-            var aimTypeInternalDataServiceMock = new Mock<IAimTypeDataService>();
+            var aimTypeInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(false);
+            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.AimType, aimType)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -84,9 +84,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
                 }
             };
 
-            var aimTypeInternalDataServiceMock = new Mock<IAimTypeDataService>();
+            var aimTypeInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            aimTypeInternalDataServiceMock.Setup(ds => ds.Exists(aimType)).Returns(true);
+            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.AimType, aimType)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -106,9 +106,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
             validationErrorHandlerMock.Verify();
         }
 
-        private AimType_01Rule NewRule(IAimTypeDataService aimTypeInternalDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private AimType_01Rule NewRule(IProvideLookupDetails provideLookupDetails = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new AimType_01Rule(aimTypeInternalDataService, validationErrorHandler);
+            return new AimType_01Rule(provideLookupDetails, validationErrorHandler);
         }
     }
 }

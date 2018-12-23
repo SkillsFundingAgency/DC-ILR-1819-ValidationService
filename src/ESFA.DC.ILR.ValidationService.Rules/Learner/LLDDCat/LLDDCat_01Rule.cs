@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -9,12 +9,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat
 {
     public class LLDDCat_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly ILLDDCatDataService _llddCatDataService;
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public LLDDCat_01Rule(ILLDDCatDataService llddCatDataService, IValidationErrorHandler validationErrorHandler)
+        public LLDDCat_01Rule(IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LLDDCat_01)
         {
-            _llddCatDataService = llddCatDataService;
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat
 
         public bool ConditionMet(int llddCat)
         {
-            return !_llddCatDataService.Exists(llddCat);
+            return !_provideLookupDetails.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int llddCat)

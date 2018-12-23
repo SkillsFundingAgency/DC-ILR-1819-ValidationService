@@ -107,15 +107,9 @@
     <Compile Include="External\ValidationErrorsDataServiceTests.cs" />
     <Compile Include="File\FileDataServiceTests.cs" />
     <Compile Include="Internal\AcademicYearDataServiceTests.cs" />
-    <Compile Include="Internal\AimTypeDataServiceTests.cs" />
-    <Compile Include="Internal\CompStatusDataServiceTests.cs" />
     <Compile Include="External\OrganisationDataServiceTests.cs" />
     <Compile Include="External\ULNDataServiceTests.cs" />
-    <Compile Include="Internal\FundModelDataServiceTests.cs" />
-    <Compile Include="Internal\EmpOutcomeDataServiceTests.cs" />
-    <Compile Include="Internal\LLDDCatDataServiceTests.cs" />
     <Compile Include="Internal\LookupDetailsProviderTests.cs" />
-    <Compile Include="Internal\QUALENT3DataServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
