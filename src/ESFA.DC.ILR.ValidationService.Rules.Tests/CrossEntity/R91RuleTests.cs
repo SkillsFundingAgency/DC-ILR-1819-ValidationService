@@ -90,6 +90,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     },
                     new TestLearningDelivery()
                     {
+                        FundModel = TypeOfFunding.EuropeanSocialFund,
+                        LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
+                        CompStatus = CompletionState.HasCompleted,
+                        ConRefNumber = "ESF-123445679"
+                    },
+                    new TestLearningDelivery()
+                    {
                         FundModel = fundModel,
                         LearnAimRef = learnAimRef,
                         CompStatus = compStatus,
