@@ -178,6 +178,7 @@
   <ItemGroup>
     <Compile Include="AzureStorageFileContentStringProviderService.cs" />
     <Compile Include="LearnerDPProviderService.cs" />
+    <Compile Include="LearnerDPPerActorProviderService.cs" />
     <Compile Include="LearnerPerActorProviderService.cs" />
     <Compile Include="MessageProviderService.cs" />
     <Compile Include="LearnerProviderService.cs" />
@@ -236,6 +237,10 @@
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ValidationActor.Model\ESFA.DC.ILR.ValidationService.ValidationActor.Model.csproj">
       <Project>{95CF36FF-C198-4B1D-8DD9-6BE0660F81F9}</Project>
       <Name>ESFA.DC.ILR.ValidationService.ValidationActor.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ValidationDPActor.Interfaces\ESFA.DC.ILR.ValidationService.ValidationDPActor.Interfaces.csproj">
+      <Project>{6FBDF88F-427D-498A-9A11-42743D8C3136}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.ValidationDPActor.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

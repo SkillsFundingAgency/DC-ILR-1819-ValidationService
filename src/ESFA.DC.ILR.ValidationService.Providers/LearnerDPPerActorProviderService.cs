@@ -10,50 +10,46 @@ using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Providers
 {
-    public class LearnerPerActorProviderService : ILearnerPerActorProviderService
+    public class LearnerDPPerActorProviderService : ILearnerDPPerActorProviderService
     {
         private readonly ICache<IMessage> _messageCache;
 
-        public LearnerPerActorProviderService(ICache<IMessage> messageCache)
+        public LearnerDPPerActorProviderService(ICache<IMessage> messageCache)
         {
             _messageCache = messageCache;
         }
 
         public async Task<IEnumerable<IMessage>> ProvideAsync()
         {
-            if (this._messageCache?.Item?.Learners == null)
+            if (this._messageCache?.Item?.LearnerDestinationAndProgressions == null)
             {
                 return null;
             }
 
-            var learners = _messageCache.Item.Learners.ToList();
+            var learnerDPs = _messageCache.Item.LearnerDestinationAndProgressions.ToList();
 
-            var learnersPerActors = CalculateLearnersPerActor(learners.Count);
+            var learnerDPsPerActors = CalculateLearnerDPsPerActor(learnerDPs.Count);
 
-            var learnerShards = learners.SplitList(learnersPerActors);
+            var learnerDPShards = learnerDPs.SplitList(learnerDPsPerActors);
 
             // create IMessage shards with learners
             var messageShards = new List<IMessage>();
             var msg = _messageCache.Item as Message;
-            foreach (var learnerShard in learnerShards)
+            foreach (var learnerDPShard in learnerDPShards)
             {
-                var learnRefNumbers = learnerShard.Select(l => l.LearnRefNumber).ToCaseInsensitiveHashSet();
-
                 // shallow duplication is sufficient except for the learners
                 Message message = new Message();
                 message.Header = msg.Header;
-                message.LearnerDestinationandProgression = msg.LearnerDestinationandProgression
-                    .Where(ldp => learnRefNumbers.Contains(ldp.LearnRefNumber)).ToArray();
+                message.LearnerDestinationandProgression = learnerDPShard.Cast<MessageLearnerDestinationandProgression>().ToArray();
                 message.LearningProvider = msg.LearningProvider;
                 message.SourceFiles = msg.SourceFiles;
-                message.Learner = learnerShard.Cast<MessageLearner>().ToArray();
                 messageShards.Add(message);
             }
 
             return messageShards;
         }
 
-        public virtual int CalculateLearnersPerActor(int totalMessagesCount)
+        public virtual int CalculateLearnerDPsPerActor(int totalMessagesCount)
         {
             if (totalMessagesCount < 2000)
             {
