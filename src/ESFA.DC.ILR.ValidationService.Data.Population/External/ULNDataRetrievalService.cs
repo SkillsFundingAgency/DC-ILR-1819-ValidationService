@@ -40,11 +40,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public IEnumerable<long> UniqueULNsFromMessage(IMessage message)
         {
-            return message?
-                       .Learners?
-                       .Select(l => l.ULN)
-                       .Distinct()
-                   ?? new List<long>();
+            return
+                message?
+                    .Learners?
+                    .Select(l => l.ULN)
+                    .Distinct()
+                .Union(
+                        message?
+                        .LearnerDestinationAndProgressions
+                        .Select(l => l.ULN)
+                        .Distinct())
+                .Distinct()
+                ?? new List<long>();
         }
 
         private IEnumerable<IEnumerable<long>> SplitList(IEnumerable<long> ulns, int nSize = 30)
