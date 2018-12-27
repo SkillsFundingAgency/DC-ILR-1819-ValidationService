@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Interface
 {
-    public interface ILearnerPerActorService
+    public interface ILearnerDPPerActorProviderService
     {
-        IEnumerable<IMessage> Process();
+        Task<IEnumerable<IMessage>> ProvideAsync();
     }
 }
