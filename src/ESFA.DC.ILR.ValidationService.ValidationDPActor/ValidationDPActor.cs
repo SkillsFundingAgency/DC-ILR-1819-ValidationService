@@ -131,7 +131,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationDPActor
                 ILogger jobLogger = childLifeTimeScope.Resolve<ILogger>();
                 try
                 {
-                    jobLogger.LogDebug($"{nameof(ValidationDPActor)} {_actorId} {GC.GetGeneration(actorModel)} {executionContext.TaskKey} started learners: {validationContext.Input.Learners.Count}");
+                    jobLogger.LogDebug($"{nameof(ValidationDPActor)} {_actorId} {GC.GetGeneration(actorModel)} {executionContext.TaskKey} started Destination and Progressions: {validationContext.Input.LearnerDestinationAndProgressions.Count}");
                     IRuleSetOrchestrationService<ILearnerDestinationAndProgression, IValidationError> preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearnerDestinationAndProgression, IValidationError>>();
 
