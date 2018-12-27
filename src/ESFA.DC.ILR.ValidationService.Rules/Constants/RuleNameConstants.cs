@@ -157,10 +157,12 @@
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
+        public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
+        public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
