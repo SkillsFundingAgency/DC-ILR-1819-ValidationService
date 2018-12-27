@@ -167,6 +167,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_12RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_02RuleTests.cs" />
