@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 return;
             }
 
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => d.LearningDeliveryFAMs != null))
             {
                 var learnDelFamTypes = learningDelivery.LearningDeliveryFAMs.Select(x => x.LearnDelFAMType).Distinct();
 
