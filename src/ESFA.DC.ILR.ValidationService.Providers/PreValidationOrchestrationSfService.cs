@@ -153,6 +153,24 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             }
         }
 
+        private async Task DestroyValidationDPActorAsync(IValidationDPActor validationDPActor, CancellationToken cancellationToken)
+        {
+            try
+            {
+                ActorId actorId = validationDPActor.GetActorId();
+
+                IActorService myActorServiceProxy = ActorServiceProxy.Create(
+                    new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"),
+                    actorId);
+
+                await myActorServiceProxy.DeleteActorAsync(actorId, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Problem deleting actor", ex);
+            }
+        }
+
         private async Task ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
         {
             // Get L/A and split the learners into separate lists
@@ -251,6 +269,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             foreach (IValidationActor validationActor in learnerValidationActors)
             {
                 actorDestroys.Add(DestroyValidationActorAsync(validationActor, cancellationToken));
+            }
+
+            foreach (IValidationDPActor validationDPActor in learnerDPValidationActors)
+            {
+                actorDestroys.Add(DestroyValidationDPActorAsync(validationDPActor, cancellationToken));
             }
 
             await Task.WhenAll(actorDestroys.ToArray()).ConfigureAwait(false);

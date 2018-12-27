@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
         {
             var outTypesList = _learnerDPQueryService.OutTypesForStartDateAndTypes(objectToValidate.DPOutcomes, _outTypes);
 
-            if (outTypesList.Any())
+            if (outTypesList != null && outTypesList.Any())
             {
                 foreach (var outTypeList in outTypesList)
                 {

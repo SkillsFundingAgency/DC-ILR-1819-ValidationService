@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Microsoft.ServiceFabric.Actors.Remoting.FabricTransport;
+using Microsoft.ServiceFabric.Services.Remoting;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -35,3 +37,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: FabricTransportActorRemotingProvider(RemotingListener = RemotingListener.V2Listener, MaxMessageSize = 1073741824, RemotingClient = RemotingClient.V2Client)]

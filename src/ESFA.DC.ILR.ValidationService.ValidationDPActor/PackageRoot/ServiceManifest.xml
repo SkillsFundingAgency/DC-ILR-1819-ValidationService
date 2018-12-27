@@ -10,7 +10,7 @@
             <ReplicatorConfigSection Name="ValidationDPActorServiceReplicatorConfig" />
             <ReplicatorSecurityConfigSection Name="ValidationDPActorServiceReplicatorSecurityConfig" />
             <StoreConfigSection Name="ValidationDPActorServiceLocalStoreConfig" />
-            <ServiceEndpoint Name="ValidationDPActorServiceEndpoint" />
+            <ServiceEndpointV2 Name="ValidationDPActorServiceEndpointV2" />
           </GeneratedNames>
         </Extension>
       </Extensions>
@@ -26,8 +26,8 @@
   <ConfigPackage Name="Config" Version="1.0.0" />
   <Resources>
     <Endpoints>
-      <Endpoint Name="ValidationDPActorServiceEndpoint" />
       <Endpoint Name="ValidationDPActorServiceReplicatorEndpoint" />
+      <Endpoint Name="ValidationDPActorServiceEndpointV2" />
     </Endpoints>
   </Resources>
   <!-- The content will be generated during build -->
