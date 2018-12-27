@@ -41,14 +41,30 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                     {
                         ULN = 2
                     }
+                },
+                LearnerDestinationAndProgressions = new List<TestLearnerDestinationAndProgression>
+                {
+                    new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 1
+                    },
+                     new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 2
+                    },
+                      new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 3
+                    }
                 }
             };
 
             var result = NewService().UniqueULNsFromMessage(message).ToList();
 
-            result.Should().HaveCount(2);
+            result.Should().HaveCount(3);
             result.Should().Contain(1);
             result.Should().Contain(2);
+            result.Should().Contain(3);
         }
 
         private ULNDataRetrievalService NewService(IULN uln = null, ICache<IMessage> messageCache = null)
