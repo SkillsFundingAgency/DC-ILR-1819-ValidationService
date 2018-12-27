@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     {
         private readonly IPopulationService _preValidationPopulationService;
         private readonly IErrorLookupPopulationService _errorLookupPopulationService;
-        private readonly ILearnerPerActorService _learnerPerActorService;
+        private readonly ILearnerPerActorProviderService _learnerPerActorProviderService;
         private readonly IJsonSerializationService _jsonSerializationService;
         private readonly IInternalDataCache _internalDataCache;
         private readonly IExternalDataCache _externalDataCache;
@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         public PreValidationOrchestrationSfService(
             IPopulationService preValidationPopulationService,
             IErrorLookupPopulationService errorLookupPopulationService,
-            ILearnerPerActorService learnerPerActorService,
+            ILearnerPerActorProviderService learnerPerActorProviderService,
             IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
@@ -51,7 +51,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         {
             _preValidationPopulationService = preValidationPopulationService;
             _errorLookupPopulationService = errorLookupPopulationService;
-            _learnerPerActorService = learnerPerActorService;
+            _learnerPerActorProviderService = learnerPerActorProviderService;
             _jsonSerializationService = jsonSerializationService;
             _internalDataCache = internalDataCache;
             _externalDataCache = externalDataCache;
@@ -144,7 +144,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
         private async Task ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
         {
             // Get L/A and split the learners into separate lists
-            IEnumerable<IMessage> messageShards = _learnerPerActorService.Process() ?? new List<IMessage>();
+            IEnumerable<IMessage> messageShards = await _learnerPerActorProviderService.ProvideAsync();
 
             List<IValidationActor> actors = new List<IValidationActor>();
             List<Task<string>> actorTasks = new List<Task<string>>();
