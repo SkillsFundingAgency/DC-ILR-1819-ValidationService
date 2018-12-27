@@ -13,5 +13,10 @@
         public const string LSF = "LSF";
         public const string RES = "RES";
         public const string SOF = "SOF";
+        public const string SPP = "SPP";
+        public const string NSA = "NSA";
+        public const string WPP = "WPP";
+        public const string POD = "POD";
+        public const string FLN = "FLN";
     }
 }
