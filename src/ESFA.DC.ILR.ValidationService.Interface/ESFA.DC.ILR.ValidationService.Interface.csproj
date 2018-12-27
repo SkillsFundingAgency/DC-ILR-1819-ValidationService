@@ -79,7 +79,7 @@
     <Compile Include="Enum\PersistenceStorageKey.cs" />
     <Compile Include="Enum\Severity.cs" />
     <Compile Include="IErrorMessageParameter.cs" />
-    <Compile Include="ILearnerPerActorService.cs" />
+    <Compile Include="ILearnerPerActorProviderService.cs" />
     <Compile Include="IPreValidationContext.cs" />
     <Compile Include="IPreValidationOrchestrationService.cs" />
     <Compile Include="IRule.cs" />
