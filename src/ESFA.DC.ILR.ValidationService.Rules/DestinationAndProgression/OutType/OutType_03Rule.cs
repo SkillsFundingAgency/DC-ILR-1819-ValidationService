@@ -10,23 +10,18 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
 {
-    public class OutType_02Rule : AbstractRule, IRule<ILearnerDestinationAndProgression>
+    public class OutType_03Rule : AbstractRule, IRule<ILearnerDestinationAndProgression>
     {
         private readonly HashSet<string> _outTypes = new HashSet<string>
         {
-            OutTypeConstants.PaidEmployment,
-            OutTypeConstants.GapYear,
-            OutTypeConstants.NotInPaidEmployment,
-            OutTypeConstants.Other,
-            OutTypeConstants.SocialDestination,
-            OutTypeConstants.VoluntaryWork
+            OutTypeConstants.Education
         }.ToCaseInsensitiveHashSet();
 
         private readonly ILearnerDPQueryService _learnerDPQueryService;
         private string _outTypesForError;
 
-        public OutType_02Rule(ILearnerDPQueryService learnerDPQueryService, IValidationErrorHandler validationErrorHandler)
-          : base(validationErrorHandler, RuleNameConstants.OutType_02)
+        public OutType_03Rule(ILearnerDPQueryService learnerDPQueryService, IValidationErrorHandler validationErrorHandler)
+          : base(validationErrorHandler, RuleNameConstants.OutType_03)
         {
             _learnerDPQueryService = learnerDPQueryService;
         }
@@ -51,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
         {
             var repeatedOutTypes = outTypes
                 .GroupBy(x => x)
-                 .Where(g => g.Count() > 1)
+                 .Where(g => g.Count() > 2)
                      .Select(y => y.Key)
                      .Where(d => _outTypes.Contains(d))
                  .ToList();

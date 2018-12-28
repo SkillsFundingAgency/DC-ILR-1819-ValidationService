@@ -136,6 +136,7 @@
     <Compile Include="DestinationAndProgression\OutEndDate\OutEndDate_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_02Rule.cs" />
+    <Compile Include="DestinationAndProgression\OutType\OutType_03Rule.cs" />
     <Compile Include="DestinationAndProgression\OutType\OutType_04Rule.cs" />
     <Compile Include="DestinationAndProgression\OutULN\OutULN_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutULN\OutULN_02Rule.cs" />
