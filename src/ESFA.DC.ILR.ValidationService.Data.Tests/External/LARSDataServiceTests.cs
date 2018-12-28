@@ -1162,6 +1162,22 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Fact]
+        public void BasicSkillsMatchForLearnAimRefAndStartDate_False_NullCheck()
+        {
+            IEnumerable<int> basicSkillsTypes = new List<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
+
+            Dictionary<string, LearningDelivery> learningDeliveriesDictionary = null;
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", new DateTime(2013, 07, 01)).Should().BeFalse();
+        }
+
+
+
+        [Fact]
         public void LearnStartDateGreaterFrameworkThanEffectiveTo_True()
         {
             var effectiveTo = new DateTime(2018, 09, 01);
