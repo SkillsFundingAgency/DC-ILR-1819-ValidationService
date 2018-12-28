@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
         public IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef)
         {
-            return _externalDataCache.LearningDeliveries.Values
+            return _externalDataCache.LearningDeliveries?.Values
                 .Where(x => x.LearnAimRef.CaseInsensitiveEquals(forThisAimRef))
                 .AsSafeReadOnlyList();
         }
@@ -231,12 +231,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
         public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate)
         {
-            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
-
-            return learningDelivery != null
-                && learningDelivery.AnnualValues != null
-                && learningDelivery.AnnualValues.Where(
-                    a => basicSkillsType.Contains(a.BasicSkillsType ?? -9999)
+            return GetDeliveriesFor(learnAimRef)?
+                .SelectMany(ld => ld.AnnualValues)?
+                .Where(
+                    a => (a.BasicSkillsType.HasValue
+                        && basicSkillsType.ToCaseInsensitiveHashSet().Contains((int)a.BasicSkillsType))
                     && (learnStartDate >= a.EffectiveFrom
                     && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null))).Count() > 0;
         }
@@ -289,11 +288,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                                                             && s.StandardCode == stdCode);
         }
 
-        public bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types)
+        public bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> learnAimRefTypes)
         {
-            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
-
-            return learningDelivery != null && types.Contains(learningDelivery.LearnAimRefType);
+            return GetDeliveriesFor(learnAimRef)?
+                .Where(ld => learnAimRefTypes.ToCaseInsensitiveHashSet().Contains(ld.LearnAimRefType))?
+                .Count() > 0;
         }
     }
 }
