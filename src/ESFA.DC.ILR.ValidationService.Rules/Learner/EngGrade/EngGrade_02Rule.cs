@@ -46,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade
 
         public bool ConditionMet(string learnAimRef)
         {
-            return !_lARSDataService.LearnAimRefTypeExistsForLearnAimRef(learnAimRef, _learnAimRefTypes);
+            return !_lARSDataService.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, _learnAimRefTypes);
         }
 
         public bool EngGradeConditionMet(string engGrade)

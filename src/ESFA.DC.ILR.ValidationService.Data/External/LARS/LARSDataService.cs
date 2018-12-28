@@ -227,13 +227,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null))).Count() > 0;
         }
 
-        public bool LearnAimRefTypeExistsForLearnAimRef(string learnAimRef, HashSet<string> learnAimRefTypes)
-        {
-            return GetDeliveriesFor(learnAimRef)?
-                .Where(ld => learnAimRefTypes.ToCaseInsensitiveHashSet().Contains(ld.LearnAimRefType))?
-                .Count() > 0;
-        }
-
         public bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode)
         {
             return _externalDataCache.Frameworks
@@ -282,11 +275,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                                                             && s.StandardCode == stdCode);
         }
 
-        public bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types)
+        public bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> learnAimRefTypes)
         {
-            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
-
-            return learningDelivery != null && types.Contains(learningDelivery.LearnAimRefType);
+            return GetDeliveriesFor(learnAimRef)?
+                .Where(ld => learnAimRefTypes.ToCaseInsensitiveHashSet().Contains(ld.LearnAimRefType))?
+                .Count() > 0;
         }
     }
 }

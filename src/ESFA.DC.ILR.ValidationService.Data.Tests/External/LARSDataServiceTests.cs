@@ -1175,8 +1175,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", new DateTime(2013, 07, 01)).Should().BeFalse();
         }
 
-
-
         [Fact]
         public void LearnStartDateGreaterFrameworkThanEffectiveTo_True()
         {
