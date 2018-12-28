@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
@@ -1057,7 +1055,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                     learnAimRef, new LearningDelivery()
                     {
                         LearnAimRef = learnAimRef,
-                        LearnDirectClassSystemCode2 = learnDirectClassSystemCode2
+                        LearnDirectClassSystemCode2 = new LearnDirectClassSystemCode(learnDirectClassSystemCode2)
                     }
                 }
             };
@@ -1078,7 +1076,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                     "123", new LearningDelivery()
                     {
                         LearnAimRef = "123",
-                        LearnDirectClassSystemCode2 = "CDE"
+                        LearnDirectClassSystemCode2 = new LearnDirectClassSystemCode("CDE")
                     }
                 }
             };

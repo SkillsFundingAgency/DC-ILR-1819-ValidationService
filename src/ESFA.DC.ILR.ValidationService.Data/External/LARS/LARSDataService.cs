@@ -188,13 +188,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     && av.EffectiveTo >= learnStartDate).Any();
         }
 
+        /// <summary>
+        /// Determines whether [has known learn direct class system code 3 for] [the specified this learn aim reference].
+        /// </summary>
+        /// <param name="thisLearnAimRef">The this learn aim reference.</param>
+        /// <returns>
+        ///   <c>true</c> if [has known learn direct class system code 3 for] [the specified this learn aim reference]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasKnownLearnDirectClassSystemCode3For(string thisLearnAimRef)
+        {
+            var delivery = GetDeliveriesFor(thisLearnAimRef).FirstOrDefault();
+
+            return It.Has(delivery)
+                && delivery.LearnDirectClassSystemCode3.IsKnown();
+        }
+
         public bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
 
             return learningDelivery != null
-                && (!string.IsNullOrEmpty(learningDelivery.LearnDirectClassSystemCode1)
-                    && learningDelivery.LearnDirectClassSystemCode1 != "NUL");
+                && learningDelivery.LearnDirectClassSystemCode1.IsKnown();
         }
 
         public bool LearnDirectClassSystemCode2MatchForLearnAimRef(string learnAimRef)
@@ -202,8 +216,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
 
             return learningDelivery != null
-                && (!string.IsNullOrEmpty(learningDelivery.LearnDirectClassSystemCode2)
-                    && learningDelivery.LearnDirectClassSystemCode2.ToUpper() != "NUL");
+                && learningDelivery.LearnDirectClassSystemCode2.IsKnown();
         }
 
         public bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills)
