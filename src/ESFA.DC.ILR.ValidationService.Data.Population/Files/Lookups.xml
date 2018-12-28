@@ -5,6 +5,7 @@ you will not be able to do a simple file replace should the originating source c
 
 localised additions are:
     ESMTypedCode - employment status monitoring 'typed code' combinations added: 2018-10-04 
+    OutTypedCode - Outcome 'typed code' coninations added 2018-12-28
 -->
 <lookups>
     <simple>
@@ -2253,6 +2254,100 @@ localised additions are:
             <option code="VOL"
                     description="Voluntary work" />
         </OutType>
+      <OutTypedCode>
+        <option code="EDU1"
+                description="Traineeship"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EDU2"
+                description="Apprenticeship"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EDU3"
+                description="Supported Internship"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EDU4"
+                description="Other FE (Full-time)"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EDU5"
+                description="Other FE (Part-time)"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EDU6"
+                description="HE"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EMP1"
+                description="In paid employment for 16 hours or more per week"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EMP2"
+                description="In paid employment for less than 16 hours per week"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EMP3"
+                description="Self employed"
+                validFrom="2000-01-01"
+                validTo="2015-07-31" />
+        <option code="EMP4"
+                description="Self-employed for 16 hours or more per week"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="EMP5"
+                description="Self-employed for less than 16 hours per week"
+                validFrom="2000-01-01"
+                validTo="2099-12-31" />
+        <option code="GAP1"
+              description="Gap year before starting HE"
+              validFrom="2000-01-01"
+              validTo="2099-12-31" />
+        <option code="NPE1"
+              description="Not in paid employment, looking for work and available to start work"
+              validFrom="2000-01-01"
+              validTo="2099-12-31" />
+        <option code="NPE2"
+              description="Not in paid employment, not looking for work and/or not available to start work (including retired)"
+              validFrom="2000-01-01"
+              validTo="2099-12-31" />
+        <option code="OTH1"
+             description="Other outcome - not listed"
+             validFrom="2000-01-01"
+             validTo="2099-12-31" />
+        <option code="OTH2"
+            description="Not reported"
+            validFrom="2000-01-01"
+            validTo="2015-07-31" />
+        <option code="OTH3"
+            description="Unable to contact learner"
+            validFrom="2000-01-01"
+            validTo="2099-12-31" />
+        <option code="OTH4"
+             description="Not known"
+             validFrom="2000-01-01"
+             validTo="2099-12-31" />
+        <option code="SDE1"
+             description="Supported independent living"
+             validFrom="2000-01-01"
+             validTo="2099-12-31" />
+        <option code="SDE2"
+             description="Independent living"
+             validFrom="2000-01-01"
+             validTo="2099-12-31" />
+        <option code="SDE3"
+             description="Learner returning home"
+             validFrom="2000-01-01"
+             validTo="2099-12-31" />
+        <option code="SDE4"
+             description="Long term residential placement"
+             validFrom="2000-01-01"
+             validTo="2099-12-31" />
+        <option code="VOL1"
+            description="Voluntary work"
+            validFrom="2000-01-01"
+            validTo="2099-12-31" />
+      </OutTypedCode>
         <PriorAttain>
             <option code="1"
                     description="Level 1" />
