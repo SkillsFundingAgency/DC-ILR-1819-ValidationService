@@ -28,6 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(OutType_02Rule),
                 typeof(OutType_03Rule),
                 typeof(OutType_04Rule),
+                typeof(OutType_05Rule),
                 typeof(OutULN_01Rule),
                 typeof(OutULN_02Rule)
             };
