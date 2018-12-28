@@ -8,7 +8,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
 {
-    public class OutType_01Rule : AbstractRule, IRule<ILearnerDestinationAndProgression>
+    public class OutType_05Rule : AbstractRule, IRule<ILearnerDestinationAndProgression>
     {
         private readonly HashSet<string> _outTypes = new HashSet<string>
         {
@@ -23,8 +23,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
 
         private readonly IProvideLookupDetails _lookups;
 
-        public OutType_01Rule(IProvideLookupDetails lookups, IValidationErrorHandler validationErrorHandler)
-          : base(validationErrorHandler, RuleNameConstants.OutType_01)
+        public OutType_05Rule(IProvideLookupDetails lookups, IValidationErrorHandler validationErrorHandler)
+          : base(validationErrorHandler, RuleNameConstants.OutType_05)
         {
             _lookups = lookups;
         }
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
                 {
                     if (ConditionMet(dpOutcome))
                     {
-                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(dpOutcome.OutCode));
+                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(dpOutcome.OutStartDate));
                     }
                 }
             }
@@ -56,16 +56,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
 
         public bool OutCodeConditionMet(IDPOutcome dpOutcome)
         {
-            return !_lookups.Contains(
+            return !_lookups.IsCurrent(
                 LookupTimeRestrictedKey.OutTypedCode,
-                $"{dpOutcome.OutType}{dpOutcome.OutType}");
+                $"{dpOutcome.OutType}{dpOutcome.OutType}",
+                dpOutcome.OutStartDate);
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int outCode)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(System.DateTime outStartDate)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.OutCode, outCode),
+                BuildErrorMessageParameter(PropertyNameConstants.OutStartDate, outStartDate),
             };
         }
     }

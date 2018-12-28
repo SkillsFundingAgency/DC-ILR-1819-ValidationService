@@ -224,6 +224,7 @@
         public const string OutType_02 = "OutType_02";
         public const string OutType_03 = "OutType_03";
         public const string OutType_04 = "OutType_04";
+        public const string OutType_05 = "OutType_05";
 
         public const string OutULN_01 = "OutULN_01";
         public const string OutULN_02 = "OutULN_02";
