@@ -45,6 +45,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         bool LearnAimRefExistsForLearningDeliveryCategoryRef(string learnAimRef, int categoryRef);
 
+        bool LearnAimRefTypeExistsForLearnAimRef(string learnAimRef, HashSet<string> learnAimRefTypes);
+
         bool NotionalNVQLevelMatchForLearnAimRef(string learnAimRef, string level);
 
         bool NotionalNVQLevelV2MatchForLearnAimRefAndLevel(string learnAimRef, string level);

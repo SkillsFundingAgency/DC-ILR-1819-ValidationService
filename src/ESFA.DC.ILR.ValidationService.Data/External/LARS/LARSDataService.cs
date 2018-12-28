@@ -228,6 +228,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null))).Count() > 0;
         }
 
+        public bool LearnAimRefTypeExistsForLearnAimRef(string learnAimRef, HashSet<string> learnAimRefTypes)
+        {
+            return GetDeliveriesFor(learnAimRef)?
+                .Where(ld => learnAimRefTypes.ToCaseInsensitiveHashSet().Contains(ld.LearnAimRefType))?
+                .Count() > 0;
+        }
+
         public bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode)
         {
             return _externalDataCache.Frameworks
