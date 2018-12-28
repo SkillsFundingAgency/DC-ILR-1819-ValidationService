@@ -169,6 +169,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_12RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_02RuleTests.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="HE\PCFLDCS\PCFLDCS_02RuleTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_03RuleTests.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01RuleTests.cs" />
+    <Compile Include="HE\PCTLDCS\PCTLDCS_01RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01RuleTests.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01RuleTests.cs" />
@@ -489,7 +491,9 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Learner\ContPrefType\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

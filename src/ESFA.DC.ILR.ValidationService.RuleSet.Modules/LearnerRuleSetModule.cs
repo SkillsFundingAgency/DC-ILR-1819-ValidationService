@@ -17,6 +17,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCSLDCS;
+using ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
 using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
@@ -201,6 +202,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ESMType_09Rule),
                 typeof(ESMType_10Rule),
                 typeof(ESMType_11Rule),
+                typeof(ESMType_12Rule),
                 typeof(ESMType_15Rule),
                 typeof(EPAOrgID_02Rule),
                 typeof(EPAOrgID_03Rule),
@@ -316,6 +318,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PCFLDCS_02Rule),
                 typeof(PCFLDCS_03Rule),
                 typeof(PCSLDCS_01Rule),
+                typeof(PCTLDCS_01Rule),
                 typeof(PlanEEPHours_01Rule),
                 typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),

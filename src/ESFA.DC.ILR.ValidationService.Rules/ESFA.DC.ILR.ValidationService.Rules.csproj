@@ -168,6 +168,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_08Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_02Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01Rule.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_12Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15Rule.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_03Rule.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01Rule.cs" />
+    <Compile Include="HE\PCTLDCS\PCTLDCS_01Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_03Rule.cs" />
@@ -502,6 +504,8 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Learner\ContPrefType\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

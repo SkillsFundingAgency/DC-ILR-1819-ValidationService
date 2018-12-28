@@ -33,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         public string LearnAimRefType { get; set; }
 
         /// <summary>
-        /// Gets the english prescribed Ids.
+        /// Gets or sets the english prescribed Ids.
         /// </summary>
         public int? EnglPrscID { get; set; }
 
@@ -55,12 +55,17 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// <summary>
         /// Gets or sets the learn direct class system code 1.
         /// </summary>
-        public string LearnDirectClassSystemCode1 { get; set; }
+        public ILearnDirectClassSystemCode LearnDirectClassSystemCode1 { get; set; }
 
         /// <summary>
         ///  Gets or sets the learn direct class system code 2
         /// </summary>
-        public string LearnDirectClassSystemCode2 { get; set; }
+        public ILearnDirectClassSystemCode LearnDirectClassSystemCode2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the learn direct class system code 3.
+        /// </summary>
+        public ILearnDirectClassSystemCode LearnDirectClassSystemCode3 { get; set; }
 
         /// <summary>
         ///  Gets or sets the Sector Subject Area Tier 1
