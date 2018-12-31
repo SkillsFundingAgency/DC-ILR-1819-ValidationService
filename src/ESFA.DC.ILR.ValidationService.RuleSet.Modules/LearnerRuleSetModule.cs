@@ -10,6 +10,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV;
+using ESFA.DC.ILR.ValidationService.Rules.HE.GROSSFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.HEPostcode;
 using ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.MSTUFEE;
@@ -227,6 +228,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(GivenNames_01Rule),
                 typeof(GivenNames_02Rule),
                 typeof(GivenNames_04Rule),
+                typeof(GROSSFEE_01Rule),
                 typeof(HEPostCode_01Rule),
                 typeof(HEPostCode_02Rule),
                 typeof(LearnActEndDate_01Rule),
