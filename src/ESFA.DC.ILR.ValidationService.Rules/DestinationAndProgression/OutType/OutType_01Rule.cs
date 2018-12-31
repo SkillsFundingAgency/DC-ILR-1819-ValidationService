@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
                 {
                     if (ConditionMet(dpOutcome))
                     {
-                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(dpOutcome.OutCode));
+                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(dpOutcome.OutType, dpOutcome.OutCode));
                     }
                 }
             }
@@ -45,13 +45,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
 
         public bool ConditionMet(IDPOutcome dpOutcome)
         {
-            return OutTypeConditionMet(dpOutcome)
+            return OutTypeNullConditionMet(dpOutcome)
                 && OutCodeConditionMet(dpOutcome);
         }
 
-        public bool OutTypeConditionMet(IDPOutcome dpOutcome)
+        public bool OutTypeNullConditionMet(IDPOutcome dpOutcome)
         {
-            return dpOutcome.OutType != null && _outTypes.Contains(dpOutcome.OutType);
+            return dpOutcome.OutType != null;
         }
 
         public bool OutCodeConditionMet(IDPOutcome dpOutcome)
@@ -64,10 +64,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
             return t;
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int outCode)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string outType, int outCode)
         {
             return new[]
             {
+                BuildErrorMessageParameter(PropertyNameConstants.OutType, outType),
                 BuildErrorMessageParameter(PropertyNameConstants.OutCode, outCode),
             };
         }
