@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
@@ -27,61 +28,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
+        /// The checks (rule common operations provider)
+        /// </summary>
+        private readonly IProvideRuleCommonOperations _check;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="EmpStat_18Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        /// <param name="derivedData22">The derived data 22 rule.</param>
-        /// <param name="yearData">The year data.</param>
-        public EmpStat_18Rule(IValidationErrorHandler validationErrorHandler)
+        /// <param name="commonOperations">The common operations.</param>
+        public EmpStat_18Rule(
+            IValidationErrorHandler validationErrorHandler,
+            IProvideRuleCommonOperations commonOperations)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            It.IsNull(commonOperations)
+                .AsGuard<ArgumentNullException>(nameof(commonOperations));
 
             _messageHandler = validationErrorHandler;
+            _check = commonOperations;
         }
+
+        /// <summary>
+        /// Gets the old code monitoring threshold date.
+        /// </summary>
+        public static DateTime OldCodeMonitoringThresholdDate => new DateTime(2018, 07, 31);
 
         /// <summary>
         /// Gets the name of the rule.
         /// </summary>
         public string RuleName => Name;
-
-        /// <summary>
-        /// Gets the old code monitoring threshold date.
-        /// </summary>
-        /// <value>
-        /// The old code monitoring threshold date.
-        /// </value>
-        public DateTime OldCodeMonitoringThresholdDate => new DateTime(2018, 08, 01);
-
-        /// <summary>
-        /// Determines whether [in training] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [in training] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool InTraining(ILearningDelivery delivery) =>
-            It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.Traineeship);
-
-        /// <summary>
-        /// Determines whether [in a programme] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [in a programme] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool InAProgramme(ILearningDelivery delivery) =>
-            It.IsInRange(delivery.AimType, TypeOfAim.ProgrammeAim);
-
-        /// <summary>
-        /// Determines whether [has qualifying start] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [has qualifying start] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool HasQualifyingStart(ILearningDelivery delivery) =>
-            delivery.LearnStartDate < OldCodeMonitoringThresholdDate;
 
         /// <summary>
         /// Determines whether [has a qualifying monitor status] [the specified monitor].
@@ -125,7 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
             ILearningDelivery matchingDelivery) =>
                 It.IsEmpty(usingEmployments)
                 || usingEmployments
-                    .SafeWhere(x => x.DateEmpStatApp == matchingDelivery.LearnStartDate)
+                    .SafeWhere(x => x.DateEmpStatApp <= matchingDelivery.LearnStartDate)
                     .Any(IsNotValid);
 
         /// <summary>
@@ -137,9 +114,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(ILearningDelivery delivery, IReadOnlyCollection<ILearnerEmploymentStatus> usingEmployments) =>
-            InTraining(delivery)
-                && InAProgramme(delivery)
-                && HasQualifyingStart(delivery)
+            _check.IsTraineeship(delivery)
+                && _check.InAProgramme(delivery)
+                && _check.HasQualifyingStart(delivery, DateTime.MinValue, OldCodeMonitoringThresholdDate)
                 && DoesNotHaveAQualifyingEmploymentStatus(usingEmployments, delivery);
 
         /// <summary>

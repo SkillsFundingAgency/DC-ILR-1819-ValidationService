@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
@@ -18,8 +19,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
-            // arrange / act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpStat_18Rule(null));
+            // arrange
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_18Rule(null, commonchecks.Object));
+        }
+
+        /// <summary>
+        /// New rule with null common checks throws.
+        /// </summary>
+        [Fact]
+        public void NewRuleWithNullCommonChecksThrows()
+        {
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_18Rule(handler.Object, null));
         }
 
         /// <summary>
@@ -89,70 +106,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void OldCodeMonitoringThresholdDateMeetsExpectation()
         {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.OldCodeMonitoringThresholdDate;
-
-            // assert
-            Assert.Equal(DateTime.Parse("2018-08-01"), result);
-        }
-
-        /// <summary>
-        /// In training meets expectation.
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(TypeOfLearningProgramme.AdvancedLevelApprenticeship, false)]
-        [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard, false)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel4, false)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel5, false)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel6, false)]
-        [InlineData(TypeOfLearningProgramme.HigherApprenticeshipLevel7Plus, false)]
-        [InlineData(TypeOfLearningProgramme.IntermediateLevelApprenticeship, false)]
-        [InlineData(TypeOfLearningProgramme.Traineeship, true)]
-        public void InTrainingMeetsExpectation(int candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<ILearningDelivery>();
-            mockItem
-                .SetupGet(y => y.ProgTypeNullable)
-                .Returns(candidate);
-
-            // act
-            var result = sut.InTraining(mockItem.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
-        /// In a programme meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(TypeOfAim.ProgrammeAim, true)]
-        [InlineData(TypeOfAim.AimNotPartOfAProgramme, false)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, false)]
-        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, false)]
-        public void InAProgrammeMeetsExpectation(int candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<ILearningDelivery>();
-            mockItem
-                .SetupGet(y => y.AimType)
-                .Returns(candidate);
-
-            // act
-            var result = sut.InAProgramme(mockItem.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
+            // arrange / act / assert
+            Assert.Equal(DateTime.Parse("2018-07-31"), EmpStat_18Rule.OldCodeMonitoringThresholdDate);
         }
 
         /// <summary>
@@ -203,32 +158,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             // assert
             Assert.Equal(expectation, result);
             mockItem.VerifyAll();
-        }
-
-        /// <summary>
-        /// Has a qualifying start meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData("2018-09-14", false)]
-        [InlineData("2018-08-01", false)]
-        [InlineData("2018-07-31", true)]
-        [InlineData("2017-08-01", true)]
-        public void HasAQualifyingStartMeetsExpectation(string candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockDelivery = new Mock<ILearningDelivery>();
-            mockDelivery
-                .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse(candidate));
-
-            // act
-            var result = sut.HasQualifyingStart(mockDelivery.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
         }
 
         /// <summary>
@@ -387,7 +316,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                     testDate))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var sut = new EmpStat_18Rule(handler.Object);
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonchecks
+                .Setup(x => x.IsTraineeship(mockDelivery.Object))
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, EmpStat_18Rule.OldCodeMonitoringThresholdDate))
+                .Returns(true);
+
+            var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -461,7 +401,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Returns(statii.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var sut = new EmpStat_18Rule(handler.Object);
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonchecks
+                .Setup(x => x.IsTraineeship(mockDelivery.Object))
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, EmpStat_18Rule.OldCodeMonitoringThresholdDate))
+                .Returns(true);
+
+            var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -477,8 +428,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         public EmpStat_18Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            return new EmpStat_18Rule(handler.Object);
+            return new EmpStat_18Rule(handler.Object, commonchecks.Object);
         }
     }
 }
