@@ -289,6 +289,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_48Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_18Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_53Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05Rule.cs" />
