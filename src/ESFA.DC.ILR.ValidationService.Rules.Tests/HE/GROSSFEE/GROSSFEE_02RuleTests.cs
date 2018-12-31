@@ -14,15 +14,16 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.GROSSFEE
 {
-    public class GROSSFEE_01RuleTests : AbstractRuleTests<GROSSFEE_01Rule>
+    public class GROSSFEE_02RuleTests : AbstractRuleTests<GROSSFEE_02Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("GROSSFEE_01");
+            NewRule().RuleName.Should().Be("GROSSFEE_02");
         }
 
         [Theory]
+        [InlineData(null, null)]
         [InlineData(null, 2)]
         [InlineData(2, 3)]
         public void ConditionMet_False(int? netFee, int? grossFee)
@@ -33,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.GROSSFEE
         [Fact]
         public void ConditionMet_True()
         {
-            NewRule().ConditionMet(2, null).Should().BeTrue();
+            NewRule().ConditionMet(3, 2).Should().BeTrue();
         }
 
         [Fact]
@@ -49,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.GROSSFEE
                         LearningDeliveryHEEntity = new TestLearningDeliveryHE()
                         {
                             NETFEENullable = 3,
-                            GROSSFEENullable = null
+                            GROSSFEENullable = 2
                         }
                     }
                 }
@@ -91,16 +92,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.GROSSFEE
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.GrossFee, 2)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.GrossFee, 3)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.NETFEE, 2)).Verifiable();
 
-            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(2);
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(2, 3);
 
             validationErrorHandlerMock.Verify();
         }
 
-        public GROSSFEE_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        public GROSSFEE_02Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new GROSSFEE_01Rule(validationErrorHandler);
+            return new GROSSFEE_02Rule(validationErrorHandler);
         }
     }
 }
