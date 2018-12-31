@@ -5,7 +5,8 @@ you will not be able to do a simple file replace should the originating source c
 
 localised additions are:
     ESMTypedCode - employment status monitoring 'typed code' combinations added: 2018-10-04 
-    OutTypedCode - Outcome 'typed code' coninations added 2018-12-28
+    OutTypedCode - Outcome 'typed code' combinations added 2018-12-28
+    Contact Preference 'typed code' combinations added 2018-12-31
 -->
 <lookups>
     <simple>
@@ -45,6 +46,60 @@ localised additions are:
             <option code="RUI"
                     description="Restricted use indicator" />
         </ContPrefType>
+        <ContactPreference>
+            <option code="RUI1"
+                    description="Learner does not wish to be contacted about courses or learning opportunities"
+                    validFrom="2000-01-01"
+                    validTo="2018-05-25" />
+            <option code="RUI2"
+                    description="Learner does not wish to be contacted for survey and research"
+                    validFrom="2000-01-01"
+                    validTo="2018-05-25" />
+            <option code="RUI3"
+                    description="Learner is not to be contacted, for example where a learner has died, or suffered severe illness during the programme"
+                    validFrom="2000-01-01"
+                    validTo="2013-07-31" />
+            <option code="RUI4"
+                    description="Learner is not to be contacted, for example where a learner has suffered severe illness during the programme or other circumstance"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="RUI5"
+                    description="Learner is not to be contacted - learner has died"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="RUI6"
+                    description="Learner agrees to be contacted about courses or learning opportunities"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="RUI7"
+                    description="Learner agrees to be contacted for survey and research"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="PMC1"
+                    description="Learner does not wish to be contacted by post"
+                    validFrom="2000-01-01"
+                    validTo="2018-05-25" />
+            <option code="PMC2"
+                    description="Learner does not wish to be contacted by telephone"
+                    validFrom="2000-01-01"
+                    validTo="2018-05-25" />
+            <option code="PMC3"
+                    description="Learner does not wish to be contacted by e-mail"
+                    validFrom="2000-01-01"
+                    validTo="2018-05-25" />
+            <option code="PMC4"
+                    description="Learner agrees to be contacted by post"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="PMC5"
+                    description="Learner agrees to be contacted by telephone"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="PMC6"
+                    description="Learner agrees to be contacted by e-mail"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+        </ContactPreference>
         <ContType>
             <option code="1"
                     description="Prior to enrolment (the permanent or home postcode of the learner prior to enrolling at the provider)" />
@@ -2254,100 +2309,100 @@ localised additions are:
             <option code="VOL"
                     description="Voluntary work" />
         </OutType>
-      <OutTypedCode>
-        <option code="EDU1"
-                description="Traineeship"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EDU2"
-                description="Apprenticeship"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EDU3"
-                description="Supported Internship"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EDU4"
-                description="Other FE (Full-time)"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EDU5"
-                description="Other FE (Part-time)"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EDU6"
-                description="HE"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EMP1"
-                description="In paid employment for 16 hours or more per week"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EMP2"
-                description="In paid employment for less than 16 hours per week"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EMP3"
-                description="Self employed"
-                validFrom="2000-01-01"
-                validTo="2015-07-31" />
-        <option code="EMP4"
-                description="Self-employed for 16 hours or more per week"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="EMP5"
-                description="Self-employed for less than 16 hours per week"
-                validFrom="2000-01-01"
-                validTo="2099-12-31" />
-        <option code="GAP1"
-              description="Gap year before starting HE"
-              validFrom="2000-01-01"
-              validTo="2099-12-31" />
-        <option code="NPE1"
-              description="Not in paid employment, looking for work and available to start work"
-              validFrom="2000-01-01"
-              validTo="2099-12-31" />
-        <option code="NPE2"
-              description="Not in paid employment, not looking for work and/or not available to start work (including retired)"
-              validFrom="2000-01-01"
-              validTo="2099-12-31" />
-        <option code="OTH1"
-             description="Other outcome - not listed"
-             validFrom="2000-01-01"
-             validTo="2099-12-31" />
-        <option code="OTH2"
-            description="Not reported"
-            validFrom="2000-01-01"
-            validTo="2015-07-31" />
-        <option code="OTH3"
-            description="Unable to contact learner"
-            validFrom="2000-01-01"
-            validTo="2099-12-31" />
-        <option code="OTH4"
-             description="Not known"
-             validFrom="2000-01-01"
-             validTo="2099-12-31" />
-        <option code="SDE1"
-             description="Supported independent living"
-             validFrom="2000-01-01"
-             validTo="2099-12-31" />
-        <option code="SDE2"
-             description="Independent living"
-             validFrom="2000-01-01"
-             validTo="2099-12-31" />
-        <option code="SDE3"
-             description="Learner returning home"
-             validFrom="2000-01-01"
-             validTo="2099-12-31" />
-        <option code="SDE4"
-             description="Long term residential placement"
-             validFrom="2000-01-01"
-             validTo="2099-12-31" />
-        <option code="VOL1"
-            description="Voluntary work"
-            validFrom="2000-01-01"
-            validTo="2099-12-31" />
-      </OutTypedCode>
+        <OutTypedCode>
+            <option code="EDU1"
+                    description="Traineeship"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EDU2"
+                    description="Apprenticeship"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EDU3"
+                    description="Supported Internship"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EDU4"
+                    description="Other FE (Full-time)"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EDU5"
+                    description="Other FE (Part-time)"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EDU6"
+                    description="HE"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EMP1"
+                    description="In paid employment for 16 hours or more per week"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EMP2"
+                    description="In paid employment for less than 16 hours per week"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EMP3"
+                    description="Self employed"
+                    validFrom="2000-01-01"
+                    validTo="2015-07-31" />
+            <option code="EMP4"
+                    description="Self-employed for 16 hours or more per week"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="EMP5"
+                    description="Self-employed for less than 16 hours per week"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="GAP1"
+                    description="Gap year before starting HE"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="NPE1"
+                    description="Not in paid employment, looking for work and available to start work"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="NPE2"
+                    description="Not in paid employment, not looking for work and/or not available to start work (including retired)"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="OTH1"
+                    description="Other outcome - not listed"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="OTH2"
+                    description="Not reported"
+                    validFrom="2000-01-01"
+                    validTo="2015-07-31" />
+            <option code="OTH3"
+                    description="Unable to contact learner"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="OTH4"
+                    description="Not known"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="SDE1"
+                    description="Supported independent living"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="SDE2"
+                    description="Independent living"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="SDE3"
+                    description="Learner returning home"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="SDE4"
+                    description="Long term residential placement"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+            <option code="VOL1"
+                    description="Voluntary work"
+                    validFrom="2000-01-01"
+                    validTo="2099-12-31" />
+        </OutTypedCode>
         <PriorAttain>
             <option code="1"
                     description="Level 1" />
@@ -3374,6 +3429,8 @@ localised additions are:
         </WorkPlaceMode>
     </simple>
     <typed>
+        <!-- 
+        defunct and out of date
         <ContactPreference>
             <PMC>
                 <option code="1"
@@ -3394,6 +3451,7 @@ localised additions are:
                         description="Learner is not to be contacted - learner has died " />
             </RUI>
         </ContactPreference>
+        -->
         <EmploymentStatusMonitoring>
             <BSI>
                 <option code="1"
@@ -3695,35 +3753,61 @@ localised additions are:
                         description="ESOL Plus (Mandation)" />
                 <option code="330"
                         description="Skills Training Innovation and Employment (STRIVE) pilot for the homeless" />
-<option code="331" description="Princes Trust Team programme" />
-<option code="333" description="Apprenticeship Grant for Employers for 16 to 24 year olds (AGE 16 to 24) - Provider Payment Trigger from  1 Jan 2015 to 31 Mar 2016" />
-<option code="334" description="Apprenticeship Grant for Employers for 16 to 24 year olds (AGE 16 to 24) - Strategic Partner from 1 Jan 2015 to 31 Dec 2015" />
-<option code="335" description="ESF AGE Enhancement 1-49" />
-<option code="338" description="ESF AGE Enhancements 50-249" />
-<option code="340" description="Community learning mental health pilot" />
-<option code="342" description="BBC Make it Digital Traineeship Programme" />
-<option code="344" description="Greater Manchester Skills for Employment Pilot Programme (Growth Deal)" />
-<option code="345" description="Sheffield City Region Skills Bank (Growth Deal)" />
-<option code="346" description="Armed forces leavers" />
-<option code="347" description="Steel Industries Redundancy Training" />
-<option code="348" description="Apprenticeship seasonal worker pilot" />
-<option code="349" description="Apprenticeship Grant for Employers (AGE) - Provider Payment Trigger from 1 April 2016 to 31 July 2017" />
-<option code="350" description="Non-apprenticeship workplace learning originally funded under the employer responsive funding model" />
-<option code="351" description="Former Employer Ownership Pilot Provision" />
-<option code="352" description="HESA-generated ILR file" />
-<option code="353" description="Non-apprenticeship Sporting Excellence Award" />
-<option code="354" description="Non-apprenticeship Theatre and live events" />
-<option code="355" description="Non-apprenticeship Sea Fishing" />
-<option code="356" description="Apprenticeship being delivered to own employees" />
-<option code="357" description="Procured Adult Education Budget (AEB)" />
-<option code="358" description="Extended Allocated Non-Levy Apprenticeships" />
-<option code="359" description="Career Learning Pilot" />
-<option code="360" description="Flexible Learning Fund" />
-<option code="361" description="Waiver to record payment records for apprenticeships" />
-<option code="362" description="Apprentice care leavers" />
-<option code="363" description="Learners in receipt of low wages" />
-
-          </LDM>
+                <option code="331"
+                        description="Princes Trust Team programme" />
+                <option code="333"
+                        description="Apprenticeship Grant for Employers for 16 to 24 year olds (AGE 16 to 24) - Provider Payment Trigger from  1 Jan 2015 to 31 Mar 2016" />
+                <option code="334"
+                        description="Apprenticeship Grant for Employers for 16 to 24 year olds (AGE 16 to 24) - Strategic Partner from 1 Jan 2015 to 31 Dec 2015" />
+                <option code="335"
+                        description="ESF AGE Enhancement 1-49" />
+                <option code="338"
+                        description="ESF AGE Enhancements 50-249" />
+                <option code="340"
+                        description="Community learning mental health pilot" />
+                <option code="342"
+                        description="BBC Make it Digital Traineeship Programme" />
+                <option code="344"
+                        description="Greater Manchester Skills for Employment Pilot Programme (Growth Deal)" />
+                <option code="345"
+                        description="Sheffield City Region Skills Bank (Growth Deal)" />
+                <option code="346"
+                        description="Armed forces leavers" />
+                <option code="347"
+                        description="Steel Industries Redundancy Training" />
+                <option code="348"
+                        description="Apprenticeship seasonal worker pilot" />
+                <option code="349"
+                        description="Apprenticeship Grant for Employers (AGE) - Provider Payment Trigger from 1 April 2016 to 31 July 2017" />
+                <option code="350"
+                        description="Non-apprenticeship workplace learning originally funded under the employer responsive funding model" />
+                <option code="351"
+                        description="Former Employer Ownership Pilot Provision" />
+                <option code="352"
+                        description="HESA-generated ILR file" />
+                <option code="353"
+                        description="Non-apprenticeship Sporting Excellence Award" />
+                <option code="354"
+                        description="Non-apprenticeship Theatre and live events" />
+                <option code="355"
+                        description="Non-apprenticeship Sea Fishing" />
+                <option code="356"
+                        description="Apprenticeship being delivered to own employees" />
+                <option code="357"
+                        description="Procured Adult Education Budget (AEB)" />
+                <option code="358"
+                        description="Extended Allocated Non-Levy Apprenticeships" />
+                <option code="359"
+                        description="Career Learning Pilot" />
+                <option code="360"
+                        description="Flexible Learning Fund" />
+                <option code="361"
+                        description="Waiver to record payment records for apprenticeships" />
+                <option code="362"
+                        description="Apprentice care leavers" />
+                <option code="363"
+                        description="Learners in receipt of low wages" />
+            </LDM>
             <NSA>
                 <option code="1"
                         description="Fashion Retail " />

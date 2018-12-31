@@ -69,7 +69,6 @@
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ApprenticeshipFinanicalRecord.cs" />
     <Compile Include="Constants\CompletionState.cs" />
-    <Compile Include="Constants\ContPrefTypeConstants.cs" />
     <Compile Include="Constants\FundingStreamPeriodCodeConstants.cs" />
     <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
@@ -80,6 +79,7 @@
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\ReasonForWithdrawal.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
+    <Compile Include="Constants\ContactPreference.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
@@ -205,6 +205,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
@@ -509,8 +510,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Learner\ContPrefType\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
