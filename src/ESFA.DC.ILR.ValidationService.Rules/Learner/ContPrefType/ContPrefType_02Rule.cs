@@ -1,64 +1,133 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Utility;
+using System;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType
 {
-    /// <summary>
-    /// LearnerContactPreference.ContPrefType = RUI and LearnerContactPreference.ContPrefCode = 3, 4 or 5 and (LearnerContactPreference.ContPrefType = PMC or
-    /// LearnerContactPreference.ContPrefType = RUI  and LearnerContactPreference.ContPrefCode = 1 or 2 or LearnerContactPreference.ContPrefType = PMC and LearnerContactPreference.ContPrefCode = 3)
-    /// </summary>
-    public class ContPrefType_02Rule : AbstractRule, IRule<ILearner>
+    public class ContPrefType_02Rule :
+        IRule<ILearner>
     {
+        /// <summary>
+        /// The (rule) name
+        /// </summary>
+        public const string Name = "ContPrefType_02";
+
+        /// <summary>
+        /// the message handler
+        /// </summary>
+        private readonly IValidationErrorHandler _messageHandler;
+
         public ContPrefType_02Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
         {
+            It.IsNull(validationErrorHandler)
+                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+
+            _messageHandler = validationErrorHandler;
         }
 
+        /// <summary>
+        /// Gets the name of the rule.
+        /// </summary>
+        public string RuleName => Name;
+
+        /// <summary>
+        /// Determines whether [has disqualifying contact indicator] [the specified preference].
+        /// </summary>
+        /// <param name="preference">The preference.</param>
+        /// <returns>
+        ///   <c>true</c> if [has disqualifying contact indicator] [the specified preference]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasDisqualifyingContactIndicator(IContactPreference preference) =>
+            It.IsInRange(
+                $"{preference.ContPrefType}{preference.ContPrefCode}",
+                ContactPreference.NoContactByPostPreGDPR,
+                ContactPreference.NoContactByPhonePreGDPR,
+                ContactPreference.NoContactByEmailPreGDPR,
+                ContactPreference.AgreesContactByPostPostGDPR,
+                ContactPreference.AgreesContactByPhonePostGDPR,
+                ContactPreference.AgreesContactByEmailPostGDPR,
+                ContactPreference.NoContactCoursesOrOpportunitiesPreGDPR,
+                ContactPreference.NoContactSurveysAndResearchPreGDPR,
+                ContactPreference.AgreesContactCoursesOrOpportunitiesPostGDPR,
+                ContactPreference.AgreesContactSurveysAndResearchPostGDPR);
+
+        /// <summary>
+        /// Determines whether [has disqualifying contact indicator] [the specified this learner].
+        /// </summary>
+        /// <param name="thisLearner">The this learner.</param>
+        /// <returns>
+        ///   <c>true</c> if [has disqualifying contact indicator] [the specified this learner]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasDisqualifyingContactIndicator(ILearner thisLearner) =>
+            thisLearner.ContactPreferences.SafeAny(HasDisqualifyingContactIndicator);
+
+        /// <summary>
+        /// Determines whether [has restricted contact indicator] [the specified preference].
+        /// </summary>
+        /// <param name="preference">The preference.</param>
+        /// <returns>
+        ///   <c>true</c> if [has restricted contact indicator] [the specified preference]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasRestrictedContactIndicator(IContactPreference preference) =>
+            It.IsInRange(
+                $"{preference.ContPrefType}{preference.ContPrefCode}",
+                ContactPreference.NoContactIllnessOrDied_ValidTo20130731,
+                ContactPreference.NoContactDueToIllness,
+                ContactPreference.NoContactDueToDeath);
+
+        /// <summary>
+        /// Determines whether [has restricted contact indicator] [the specified this learner].
+        /// </summary>
+        /// <param name="thisLearner">The this learner.</param>
+        /// <returns>
+        ///   <c>true</c> if [has restricted contact indicator] [the specified this learner]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasRestrictedContactIndicator(ILearner thisLearner) =>
+            thisLearner.ContactPreferences.SafeAny(HasRestrictedContactIndicator);
+
+        /// <summary>
+        /// Determines whether [has conflicting contact indicators] [the specified this learner].
+        /// </summary>
+        /// <param name="thisLearner">The this learner.</param>
+        /// <returns>
+        ///   <c>true</c> if [has conflicting contact indicators] [the specified this learner]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasConflictingContactIndicators(ILearner thisLearner) =>
+            HasRestrictedContactIndicator(thisLearner) && HasDisqualifyingContactIndicator(thisLearner);
+
+        /// <summary>
+        /// Validates the specified object to validate.
+        /// </summary>
+        /// <param name="objectToValidate">The object to validate.</param>
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate.ContactPreferences != null)
+            It.IsNull(objectToValidate)
+                .AsGuard<ArgumentNullException>(nameof(objectToValidate));
+
+            var learnRefNumber = objectToValidate.LearnRefNumber;
+
+            if (HasConflictingContactIndicators(objectToValidate))
             {
-                foreach (var contactPreference in objectToValidate.ContactPreferences)
-                {
-                    if (ConditionMet(contactPreference.ContPrefType, contactPreference.ContPrefCodeNullable, objectToValidate.ContactPreferences))
-                    {
-                        HandleValidationError(RuleNameConstants.ContPrefType_02Rule, objectToValidate.LearnRefNumber);
-                    }
-                }
+                objectToValidate.ContactPreferences
+                    .SafeWhere(HasDisqualifyingContactIndicator)
+                    .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
             }
         }
 
-        public bool ConditionMet(string contactPreferenceType, long? contPrefCode, IReadOnlyCollection<IContactPreference> contactPreferences)
+        /// <summary>
+        /// Raises the validation message.
+        /// </summary>
+        /// <param name="learnRefNumber">The learn reference number.</param>
+        /// <param name="thisPreference">this preference.</param>
+        public void RaiseValidationMessage(string learnRefNumber, IContactPreference thisPreference)
         {
-            return ConditionMetNotToBeContacted(contactPreferenceType, contPrefCode) &&
-                   (ConditionMetContactPMC(contactPreferences) || ConditionMetContactRUI(contactPreferences));
-        }
+            var parameters = Collection.Empty<IErrorMessageParameter>();
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisPreference.ContPrefType), thisPreference.ContPrefType));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisPreference.ContPrefCode), thisPreference.ContPrefCode));
 
-        public bool ConditionMetNotToBeContacted(string contactPreferenceType, long? contPrefCode)
-        {
-            return !string.IsNullOrWhiteSpace(contactPreferenceType)
-                   && contPrefCode.HasValue &&
-                   (contactPreferenceType == ContPrefTypeConstants.RUI &&
-                    (contPrefCode == 3 || contPrefCode == 4 || contPrefCode == 5));
-        }
-
-        public bool ConditionMetContactRUI(IReadOnlyCollection<IContactPreference> contactPreferences)
-        {
-            return contactPreferences.Any(
-                x => (x.ContPrefType == ContPrefTypeConstants.RUI && x.ContPrefCodeNullable.HasValue &&
-                       (x.ContPrefCodeNullable.Value == 1 || x.ContPrefCodeNullable.Value == 2)));
-        }
-
-        public bool ConditionMetContactPMC(IReadOnlyCollection<IContactPreference> contactPreferences)
-        {
-            return contactPreferences.Any(x =>
-                (x.ContPrefType == ContPrefTypeConstants.PMC && x.ContPrefCodeNullable.HasValue &&
-                 (x.ContPrefCodeNullable.Value == 1 || x.ContPrefCodeNullable.Value == 2 ||
-                  x.ContPrefCodeNullable.Value == 3)));
+            _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
         }
     }
 }
