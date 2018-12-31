@@ -58,7 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
         {
             return !_lookups.IsCurrent(
                 LookupTimeRestrictedKey.OutTypedCode,
-                $"{dpOutcome.OutType}{dpOutcome.OutType}",
+                $"{dpOutcome.OutType}{dpOutcome.OutCode}",
                 dpOutcome.OutStartDate);
         }
 
