@@ -127,6 +127,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupTimeRestrictedKey.FundComp, 4)]
         [InlineData(LookupTimeRestrictedKey.LLDDCat, 24)]
         [InlineData(LookupTimeRestrictedKey.MSTuFee, 50)]
+        [InlineData(LookupTimeRestrictedKey.OutTypedCode, 23)]
         [InlineData(LookupTimeRestrictedKey.QualEnt3, 61)]
         [InlineData(LookupTimeRestrictedKey.TTAccom, 9)]
         public async Task TimeLimitedLookupsArePresentAndMatchExpectedCount(LookupTimeRestrictedKey thisKey, int expectedCount)

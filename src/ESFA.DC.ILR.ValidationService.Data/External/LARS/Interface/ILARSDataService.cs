@@ -29,6 +29,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// <returns>a LARS Standard Validity</returns>
         ILARSStandardValidity GetStandardValidityFor(int thisStandardCode);
 
+        /// <summary>
+        /// Determines whether [has known learn direct class system code 3 for] [the specified this learn aim reference].
+        /// </summary>
+        /// <param name="thisLearnAimRef">The this learn aim reference.</param>
+        /// <returns>
+        ///   <c>true</c> if [has known learn direct class system code 3 for] [the specified this learn aim reference]; otherwise, <c>false</c>.
+        /// </returns>
+        bool HasKnownLearnDirectClassSystemCode3For(string thisLearnAimRef);
+
         string GetNotionalNVQLevelv2ForLearnAimRef(string learnAimRef);
 
         bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date);

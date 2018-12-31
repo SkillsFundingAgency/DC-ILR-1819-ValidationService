@@ -80,7 +80,7 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool Contains(LookupCodedKey lookupKey, string candidate)
         {
-            return InternalCache.CodedLookups[lookupKey].Contains(candidate);
+            return InternalCache.CodedLookups[lookupKey].Contains(candidate, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>

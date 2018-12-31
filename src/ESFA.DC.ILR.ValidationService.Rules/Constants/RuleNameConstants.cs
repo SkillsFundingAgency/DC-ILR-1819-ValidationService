@@ -92,6 +92,7 @@
         public const string EmpStat_12 = "EmpStat_12";
 
         public const string EngGrade_01 = "EngGrade_01";
+        public const string EngGrade_02 = "EngGrade_02";
         public const string EngGrade_04 = "EngGrade_04";
 
         public const string Entity_1 = "Entity_1";
@@ -221,8 +222,11 @@
         public const string OutStartDate_01 = "OutStartDate_01";
         public const string OutStartDate_02 = "OutStartDate_02";
 
+        public const string OutType_01 = "OutType_01";
         public const string OutType_02 = "OutType_02";
+        public const string OutType_03 = "OutType_03";
         public const string OutType_04 = "OutType_04";
+        public const string OutType_05 = "OutType_05";
 
         public const string OutULN_01 = "OutULN_01";
         public const string OutULN_02 = "OutULN_02";

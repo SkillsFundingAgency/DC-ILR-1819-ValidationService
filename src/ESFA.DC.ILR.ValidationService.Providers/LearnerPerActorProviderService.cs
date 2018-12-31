@@ -42,8 +42,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 // shallow duplication is sufficient except for the learners
                 Message message = new Message();
                 message.Header = msg.Header;
-                message.LearnerDestinationandProgression = msg.LearnerDestinationandProgression
-                    .Where(ldp => learnRefNumbers.Contains(ldp.LearnRefNumber)).ToArray();
+                message.LearnerDestinationandProgression = msg.LearnerDestinationandProgression?
+                    .Where(ldp => learnRefNumbers.Contains(ldp.LearnRefNumber)).ToArray() ?? Array.Empty<MessageLearnerDestinationandProgression>();
                 message.LearningProvider = msg.LearningProvider;
                 message.SourceFiles = msg.SourceFiles;
                 message.Learner = learnerShard.Cast<MessageLearner>().ToArray();
