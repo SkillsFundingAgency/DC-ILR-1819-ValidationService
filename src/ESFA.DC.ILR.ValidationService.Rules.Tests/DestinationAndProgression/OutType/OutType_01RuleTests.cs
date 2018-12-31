@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.DestinationAndProgression.Ou
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutType}")).Returns(false);
+            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutCode}")).Returns(false);
 
             NewRule(lookupsMock.Object).OutCodeConditionMet(dpOutcome).Should().BeTrue();
         }
@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.DestinationAndProgression.Ou
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutType}")).Returns(true);
+            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutCode}")).Returns(true);
 
             NewRule(lookupsMock.Object).OutCodeConditionMet(dpOutcome).Should().BeFalse();
         }
@@ -88,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.DestinationAndProgression.Ou
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutType}")).Returns(false);
+            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutCode}")).Returns(false);
 
             NewRule(lookupsMock.Object).ConditionMet(dpOutcome).Should().BeTrue();
         }
@@ -104,7 +104,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.DestinationAndProgression.Ou
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutType}")).Returns(false);
+            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutCode}")).Returns(false);
 
             NewRule(lookupsMock.Object).ConditionMet(dpOutcome).Should().BeFalse();
         }
@@ -128,7 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.DestinationAndProgression.Ou
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutType}")).Returns(false);
+            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutCode}")).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -155,7 +155,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.DestinationAndProgression.Ou
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutType}")).Returns(true);
+            lookupsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.OutTypedCode, $"{dpOutcome.OutType}{dpOutcome.OutCode}")).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

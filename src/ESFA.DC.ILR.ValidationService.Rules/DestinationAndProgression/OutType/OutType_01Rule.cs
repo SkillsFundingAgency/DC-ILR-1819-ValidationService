@@ -56,9 +56,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
 
         public bool OutCodeConditionMet(IDPOutcome dpOutcome)
         {
-            return !_lookups.Contains(
+            var code = $"{dpOutcome.OutType}{dpOutcome.OutCode}";
+            var t = !_lookups.Contains(
                 LookupTimeRestrictedKey.OutTypedCode,
-                $"{dpOutcome.OutType}{dpOutcome.OutType}");
+               code);
+
+            return t;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int outCode)
