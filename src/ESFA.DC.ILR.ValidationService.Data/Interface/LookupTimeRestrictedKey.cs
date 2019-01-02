@@ -44,11 +44,6 @@
         /// <summary>
         /// term time accomodation
         /// </summary>
-        TTAccom,
-
-        /// <summary>
-        /// contact preferences
-        /// </summary>
-        ContactPreference
+        TTAccom
     }
 }
