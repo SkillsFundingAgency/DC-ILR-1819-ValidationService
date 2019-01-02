@@ -90,6 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         /// <summary>
         /// Gets the qualifyingd aim.
+        /// the incoming set is guaranteed not to be null
         /// </summary>
         /// <param name="usingSources">using sources.</param>
         /// <param name="onThisDate">on this date.</param>
@@ -111,18 +112,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         /// <summary>
         /// Gets the closest employment.
+        /// the incoming set is guaranteed not to be null
         /// </summary>
         /// <param name="usingSources">The using sources.</param>
         /// <param name="toThisDate">To this date.</param>
         /// <returns>the closest employment record to this date (if there is one)</returns>
         public ILearnerEmploymentStatus GetClosestEmployment(IReadOnlyCollection<ILearnerEmploymentStatus> usingSources, DateTime? toThisDate) =>
             usingSources
-                .SafeWhere(x => x.DateEmpStatApp <= toThisDate)
+                .Where(x => x.DateEmpStatApp <= toThisDate)
                 .OrderByDescending(x => x.DateEmpStatApp)
                 .FirstOrDefault();
 
         /// <summary>
         /// Determines whether [has a qualifying employment status] [the specified employment].
+        /// at the point of calling, neither the employment or the eligibility can be null
         /// </summary>
         /// <param name="thisEmployment">this employment.</param>
         /// <param name="eligibility">The eligibility (status).</param>
@@ -130,7 +133,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [has a qualifying employment status] [the specified this employment]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasAQualifyingEmploymentStatus(ILearnerEmploymentStatus thisEmployment, IEsfEligibilityRuleEmploymentStatus eligibility) =>
-            thisEmployment?.EmpStat == eligibility.Code;
+            thisEmployment.EmpStat == eligibility.Code;
 
         /// <summary>
         /// Validates the specified object.
@@ -150,14 +153,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
             var qualifyingAim = GetQualifyingdAim(fromDeliveries, qualifyingDate);
             var eligibleStatus = GetEligibleEmploymentStatus(qualifyingAim);
 
-            if (It.Has(eligibleStatus))
+            if (It.IsNull(eligibleStatus))
             {
-                var employment = GetClosestEmployment(fromEmployments, qualifyingDate);
+                return;
+            }
 
-                if (!HasAQualifyingEmploymentStatus(employment, eligibleStatus))
-                {
-                    RaiseValidationMessage(learnRefNumber, qualifyingAim, employment);
-                }
+            var employment = GetClosestEmployment(fromEmployments, qualifyingDate);
+
+            if (It.IsNull(employment))
+            {
+                return;
+            }
+
+            if (!HasAQualifyingEmploymentStatus(employment, eligibleStatus))
+            {
+                RaiseValidationMessage(learnRefNumber, qualifyingAim, employment);
             }
         }
 

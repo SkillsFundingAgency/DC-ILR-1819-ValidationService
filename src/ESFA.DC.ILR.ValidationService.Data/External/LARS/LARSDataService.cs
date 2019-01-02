@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
         public IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef)
         {
-            return _externalDataCache.LearningDeliveries.Values
+            return _externalDataCache.LearningDeliveries?.Values
                 .Where(x => x.LearnAimRef.CaseInsensitiveEquals(forThisAimRef))
                 .AsSafeReadOnlyList();
         }
@@ -188,13 +188,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     && av.EffectiveTo >= learnStartDate).Any();
         }
 
+        /// <summary>
+        /// Determines whether [has known learn direct class system code 3 for] [the specified this learn aim reference].
+        /// </summary>
+        /// <param name="thisLearnAimRef">The this learn aim reference.</param>
+        /// <returns>
+        ///   <c>true</c> if [has known learn direct class system code 3 for] [the specified this learn aim reference]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasKnownLearnDirectClassSystemCode3For(string thisLearnAimRef)
+        {
+            var delivery = GetDeliveriesFor(thisLearnAimRef).FirstOrDefault();
+
+            return It.Has(delivery)
+                && delivery.LearnDirectClassSystemCode3.IsKnown();
+        }
+
         public bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
 
             return learningDelivery != null
-                && (!string.IsNullOrEmpty(learningDelivery.LearnDirectClassSystemCode1)
-                    && learningDelivery.LearnDirectClassSystemCode1 != "NUL");
+                && learningDelivery.LearnDirectClassSystemCode1.IsKnown();
         }
 
         public bool LearnDirectClassSystemCode2MatchForLearnAimRef(string learnAimRef)
@@ -202,8 +216,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
 
             return learningDelivery != null
-                && (!string.IsNullOrEmpty(learningDelivery.LearnDirectClassSystemCode2)
-                    && learningDelivery.LearnDirectClassSystemCode2.ToUpper() != "NUL");
+                && learningDelivery.LearnDirectClassSystemCode2.IsKnown();
         }
 
         public bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills)
@@ -218,12 +231,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
         public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate)
         {
-            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
-
-            return learningDelivery != null
-                && learningDelivery.AnnualValues != null
-                && learningDelivery.AnnualValues.Where(
-                    a => basicSkillsType.Contains(a.BasicSkillsType ?? -9999)
+            return GetDeliveriesFor(learnAimRef)?
+                .SelectMany(ld => ld.AnnualValues)?
+                .Where(
+                    a => (a.BasicSkillsType.HasValue
+                        && basicSkillsType.ToCaseInsensitiveHashSet().Contains((int)a.BasicSkillsType))
                     && (learnStartDate >= a.EffectiveFrom
                     && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null))).Count() > 0;
         }
@@ -276,11 +288,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                                                             && s.StandardCode == stdCode);
         }
 
-        public bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types)
+        public bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> learnAimRefTypes)
         {
-            _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
-
-            return learningDelivery != null && types.Contains(learningDelivery.LearnAimRefType);
+            return GetDeliveriesFor(learnAimRef)?
+                .Where(ld => learnAimRefTypes.ToCaseInsensitiveHashSet().Contains(ld.LearnAimRefType))?
+                .Count() > 0;
         }
     }
 }

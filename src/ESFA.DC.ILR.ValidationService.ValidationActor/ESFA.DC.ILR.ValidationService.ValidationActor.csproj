@@ -208,6 +208,10 @@
       <Project>{F267B89E-04E1-4295-AC75-7E9D833CF189}</Project>
       <Name>ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ValidationActor.Model\ESFA.DC.ILR.ValidationService.ValidationActor.Model.csproj">
+      <Project>{95CF36FF-C198-4B1D-8DD9-6BE0660F81F9}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.ValidationActor.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Lindhart.Analyser.MissingAwaitWarning.1.0.1\analyzers\dotnet\cs\Lindhart.Analyser.MissingAwaitWarning.dll" />

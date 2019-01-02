@@ -12,18 +12,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
     public class InternalDataCachePopulationServiceTests
     {
         [Fact]
-        public async Task Populate()
+        public async Task Populate_AcademicYear()
         {
             var internalDataCache = new InternalDataCache();
 
             await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
 
             var yearStart = new DateTime(2018, 8, 1);
-            var fundModels = new List<int> { 10, 25, 35, 36, 70, 81, 82, 99 };
 
             internalDataCache.AcademicYear.Start.Should().BeSameDateAs(yearStart);
-            internalDataCache.FundModels.Should().BeEquivalentTo(fundModels);
-            internalDataCache.QUALENT3s.Count.Should().Be(61);
         }
 
         /// <summary>
@@ -129,6 +126,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupTimeRestrictedKey.FundComp, 4)]
         [InlineData(LookupTimeRestrictedKey.LLDDCat, 24)]
         [InlineData(LookupTimeRestrictedKey.MSTuFee, 50)]
+        [InlineData(LookupTimeRestrictedKey.OutTypedCode, 23)]
         [InlineData(LookupTimeRestrictedKey.QualEnt3, 61)]
         [InlineData(LookupTimeRestrictedKey.TTAccom, 9)]
         public async Task TimeLimitedLookupsArePresentAndMatchExpectedCount(LookupTimeRestrictedKey thisKey, int expectedCount)

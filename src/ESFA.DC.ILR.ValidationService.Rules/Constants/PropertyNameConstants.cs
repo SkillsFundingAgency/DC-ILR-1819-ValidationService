@@ -35,6 +35,7 @@
         public const string FUNDLEV = "FUNDLEV";
         public const string FworkCode = "FworkCode";
         public const string GivenNames = "GivenNames";
+        public const string GrossFee = "GrossFee";
         public const string HEPostcode = "HEPostCode";
         public const string LearnActEndDate = "LearnActEndDate";
         public const string LearnAimRef = "LearnAimRef";
@@ -58,6 +59,7 @@
         public const string NINumber = "NINumber";
         public const string OrigLearnStartDate = "OrigLearnStartDate";
         public const string OtherFundAdj = "OtherFundAdj";
+        public const string OutCode = "OutCode";
         public const string OutCollDate = "OutCollDate";
         public const string Outcome = "Outcome";
         public const string OutEndDate = "OutEndDate";

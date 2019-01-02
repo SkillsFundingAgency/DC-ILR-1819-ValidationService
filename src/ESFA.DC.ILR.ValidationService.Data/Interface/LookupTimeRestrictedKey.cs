@@ -32,6 +32,11 @@
         MSTuFee,
 
         /// <summary>
+        /// Outcome Type
+        /// </summary>
+        OutTypedCode,
+
+        /// <summary>
         /// highest qualification on entry
         /// </summary>
         QualEnt3,
@@ -40,5 +45,10 @@
         /// term time accomodation
         /// </summary>
         TTAccom,
+
+        /// <summary>
+        /// contact preferences
+        /// </summary>
+        ContactPreference
     }
 }

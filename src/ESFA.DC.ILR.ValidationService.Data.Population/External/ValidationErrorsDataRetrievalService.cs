@@ -29,14 +29,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             return (await _validationErrors
                 .Rules?
                 .ToListAsync(cancellationToken))
-                .ToDictionary(
+                .ToCaseInsensitiveDictionary(
                     ve => ve.Rulename,
                     ve => new ValidationError
                     {
                         Message = ve.Message,
                         RuleName = ve.Rulename,
                         Severity = GetSeverity(ve.Severity)
-                    }).ToCaseInsensitiveDictionary();
+                    });
         }
 
         private Severity GetSeverity(string sev)

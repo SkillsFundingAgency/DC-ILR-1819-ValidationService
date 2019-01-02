@@ -78,15 +78,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
 
                 cache.AcademicYear = BuildAcademicYear();
 
-                // these are defunct; whilst i won't remove them, don't add to them either.
-                cache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));
-                cache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
-                cache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
-                cache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
-                cache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupAsIntWithValidityPeriods(lookups, "LLDDCat"));
-                cache.QUALENT3s = new Dictionary<string, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "QualEnt3"));
-                cache.TTAccoms = new Dictionary<int, ValidityPeriods>(BuildLookupAsIntWithValidityPeriods(lookups, "TTAccom"));
-
                 Enum.GetValues(typeof(LookupSimpleKey))
                     .OfType<LookupSimpleKey>()
                     .ToList()

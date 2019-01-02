@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -19,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
             OutTypeConstants.Other,
             OutTypeConstants.SocialDestination,
             OutTypeConstants.VoluntaryWork
-        };
+        }.ToCaseInsensitiveHashSet();
 
         private readonly ILearnerDPQueryService _learnerDPQueryService;
         private string _outTypesForError;
@@ -34,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.DestinationAndProgression.OutType
         {
             var outTypesList = _learnerDPQueryService.OutTypesForStartDateAndTypes(objectToValidate.DPOutcomes, _outTypes);
 
-            if (outTypesList.Any())
+            if (outTypesList != null && outTypesList.Any())
             {
                 foreach (var outTypeList in outTypesList)
                 {

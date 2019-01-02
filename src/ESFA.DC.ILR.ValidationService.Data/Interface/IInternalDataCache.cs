@@ -8,18 +8,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
     {
         IAcademicYear AcademicYear { get; }
 
-        IReadOnlyCollection<int> AimTypes { get; }
-
-        IReadOnlyCollection<int> CompStatuses { get; }
-
-        IReadOnlyCollection<int> EmpOutcomes { get; }
-
-        IReadOnlyCollection<int> FundModels { get; }
-
-        IDictionary<int, ValidityPeriods> LLDDCats { get; }
-
-        IDictionary<string, ValidityPeriods> QUALENT3s { get; }
-
         /// <summary>
         /// Gets the simple lookups.
         /// </summary>
