@@ -190,6 +190,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             }
         }
 
+        [Fact]
+        public void Validate_NoError_NoFAMs()
+        {
+            var learner = new TestLearner()
+            {
+                LearnRefNumber = "00100309",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
         public R106Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
             return new R106Rule(validationErrorHandler: validationErrorHandler);
