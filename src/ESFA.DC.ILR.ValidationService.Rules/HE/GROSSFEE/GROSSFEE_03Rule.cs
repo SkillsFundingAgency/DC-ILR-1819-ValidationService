@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.GROSSFEE
 
         public bool ConditionMet(int? gROSSFEENullable)
         {
-            return !gROSSFEENullable.HasValue
+            return gROSSFEENullable.HasValue
                 && gROSSFEENullable > 30000;
         }
 
