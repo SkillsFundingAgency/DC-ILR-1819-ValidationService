@@ -184,6 +184,7 @@
     <Compile Include="HE\FUNDLEV\FUNDLEV_03RuleTests.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_01RuleTests.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_02RuleTests.cs" />
+    <Compile Include="HE\GROSSFEE\GROSSFEE_03RuleTests.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_01RuleTests.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_02RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02RuleTests.cs" />
