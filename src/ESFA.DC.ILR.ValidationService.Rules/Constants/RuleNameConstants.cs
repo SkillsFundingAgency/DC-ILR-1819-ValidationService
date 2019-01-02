@@ -133,6 +133,7 @@
 
         public const string GROSSFEE_01 = "GROSSFEE_01";
         public const string GROSSFEE_02 = "GROSSFEE_02";
+        public const string GROSSFEE_03 = "GROSSFEE_03";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";

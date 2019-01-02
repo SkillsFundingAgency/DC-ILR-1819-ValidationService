@@ -233,6 +233,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(GivenNames_04Rule),
                 typeof(GROSSFEE_01Rule),
                 typeof(GROSSFEE_02Rule),
+                typeof(GROSSFEE_03Rule),
                 typeof(HEPostCode_01Rule),
                 typeof(HEPostCode_02Rule),
                 typeof(LearnActEndDate_01Rule),
