@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         /// <summary>
         /// Determines whether [has valid start range] [the specified validity].
-        /// caters for the custom and practice of setting the end date to before 
+        /// caters for the custom and practice of setting the end date to before
         /// the start date as a means of withdrawing funding
         /// </summary>
         /// <param name="validity">The validity.</param>
