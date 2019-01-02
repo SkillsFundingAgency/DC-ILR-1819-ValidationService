@@ -26,6 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
 
             var dpCoutcomes = objectToValidate.LearnerDestinationAndProgressions
+                .Where(x => x.DPOutcomes != null)
                 .GroupBy(ldp => new
                 {
                     ldp.LearnRefNumber,

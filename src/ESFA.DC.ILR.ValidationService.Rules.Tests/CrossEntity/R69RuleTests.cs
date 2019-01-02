@@ -72,6 +72,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
+        public void ValidationPasses_NoDpOutcomes()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+            var testMessage = new TestMessage()
+            {
+                LearnerDestinationAndProgressions = new List<ILearnerDestinationAndProgression>
+                {
+                    new TestLearnerDestinationAndProgression
+                    {
+                        LearnRefNumber = "12345",
+                    },
+                    new TestLearnerDestinationAndProgression
+                    {
+                        LearnRefNumber = "123456",
+                        DPOutcomes = new IDPOutcome[] { }
+                    }
+                }
+            };
+
+            NewRule(validationErrorHandlerMock.Object).Validate(testMessage);
+        }
+
+        [Fact]
         public void ValidationFails()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
