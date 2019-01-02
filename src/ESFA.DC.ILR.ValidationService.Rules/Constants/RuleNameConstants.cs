@@ -133,6 +133,7 @@
 
         public const string GROSSFEE_01 = "GROSSFEE_01";
         public const string GROSSFEE_02 = "GROSSFEE_02";
+        public const string GROSSFEE_03 = "GROSSFEE_03";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
@@ -293,6 +294,7 @@
         public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
+        public const string R75 = "R75";
         public const string R85 = "R85";
         public const string R91 = "R91";
         public const string R96 = "R96";

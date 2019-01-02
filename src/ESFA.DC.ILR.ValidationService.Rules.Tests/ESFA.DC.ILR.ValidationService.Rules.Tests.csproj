@@ -111,6 +111,7 @@
     <Compile Include="CrossEntity\R45RuleTests.cs" />
     <Compile Include="CrossEntity\R43RuleTests.cs" />
     <Compile Include="CrossEntity\R69RuleTests.cs" />
+    <Compile Include="CrossEntity\R75RuleTests.cs" />
     <Compile Include="CrossEntity\R71RuleTests.cs" />
     <Compile Include="CrossEntity\R47RuleTests.cs" />
     <Compile Include="CrossEntity\R20RuleTests.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="HE\FUNDLEV\FUNDLEV_03RuleTests.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_01RuleTests.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_02RuleTests.cs" />
+    <Compile Include="HE\GROSSFEE\GROSSFEE_03RuleTests.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_01RuleTests.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_02RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02RuleTests.cs" />
