@@ -11,7 +11,6 @@
         Domicile,
         ESMType,
         TBFinType,
-        LearnDelFAMType,
         LearnFAMType,
         OutGrade,
         OutType,

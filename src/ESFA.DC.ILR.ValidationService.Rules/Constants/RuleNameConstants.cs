@@ -161,6 +161,7 @@
 
         public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
+        public const string LearnDelFAMType_06 = "LearnDelFAMType_06";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
@@ -290,6 +291,7 @@
         public const string R45 = "R45";
         public const string R47 = "R47";
         public const string R66 = "R66";
+        public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
         public const string R85 = "R85";

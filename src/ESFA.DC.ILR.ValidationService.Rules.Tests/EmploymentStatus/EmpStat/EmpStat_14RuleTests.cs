@@ -328,32 +328,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         /// <summary>
-        /// Has a qualifying employmentwith null status returns false
-        /// </summary>
-        /// <param name="eligibility">The eligibility.</param>
-        [Theory]
-        [InlineData(TypeOfEmploymentStatus.InPaidEmployment)]
-        [InlineData(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable)]
-        [InlineData(TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable)]
-        [InlineData(TypeOfEmploymentStatus.NotKnownProvided)]
-        public void HasAQualifyingEmploymentwithNullStatusReturnsFalse(int eligibility)
-        {
-            // arrange
-            var sut = NewRule();
-
-            var mockEligibility = new Mock<IEsfEligibilityRuleEmploymentStatus>();
-            mockEligibility
-                .SetupGet(x => x.Code)
-                .Returns(eligibility);
-
-            // act
-            var result = sut.HasAQualifyingEmploymentStatus(null, mockEligibility.Object);
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
         /// <param name="candidate">The candidate.</param>

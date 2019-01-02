@@ -94,6 +94,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                     .OfType<LookupTimeRestrictedKey>()
                     .ToList()
                     .ForEach(x => AddLookups(x, lookups, cache));
+                Enum.GetValues(typeof(LookupComplexKey))
+                    .OfType<LookupComplexKey>()
+                    .ToList()
+                    .ForEach(x => AddLookups(x, lookups, cache));
             }
         }
 
@@ -134,6 +138,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             var lookups = BuildComplexLookupEnumerable(usingSource, $"{forThisKey}");
 
             addToCache.CodedDictionaryLookups.Add(forThisKey, lookups);
+        }
+
+        public void AddLookups(LookupComplexKey forThisKey, XElement usingSource, InternalDataCache addToCache)
+        {
+            var lookups = BuildComplexLookupWithValidityPeriods(usingSource, $"{forThisKey}");
+
+            addToCache.CodedComplexLookups.Add(forThisKey, lookups);
         }
 
         /// <summary>
@@ -200,6 +211,24 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                     v => v.Descendants("option")
                         .Select(d => GetAttributeValue(d.Attribute("code")))
                         .AsSafeReadOnlyList());
+        }
+
+        private IDictionary<string, IDictionary<string, ValidityPeriods>> BuildComplexLookupWithValidityPeriods(
+            XElement lookups, string type)
+        {
+            return lookups
+                .Descendants(type)
+                .Elements()
+                .ToDictionary(
+                    k => k.Attribute("code")?.Value,
+                    v => lookups.Descendants(v.Attribute("code")?.Value)
+                            .Elements()
+                            .ToDictionary(
+                                c => c.Attribute("code")?.Value,
+                                vp => new ValidityPeriods(
+                                    DateTime.Parse(GetAttributeValue(vp.Attribute("validFrom")) ?? $"{DateTime.MinValue}"),
+                                    DateTime.Parse(GetAttributeValue(vp.Attribute("validTo")) ?? $"{DateTime.MaxValue}")))
+                        as IDictionary<string, ValidityPeriods>);
         }
 
         /// <summary>
