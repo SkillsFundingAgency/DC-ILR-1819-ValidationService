@@ -136,7 +136,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         /// <summary>
-        /// Determines whether [is current meets expectation] [the specified candidate].
+        /// Has valid start range with validity last new start date meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="startDate">The start date.</param>
@@ -149,7 +149,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", false)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", false)]
         [InlineData("2013-07-16", "2015-05-09", "2015-07-15", false)]
-        public void InValidStartRangeMeetsExpectation(string candidate, string startDate, string endDate, bool expectation)
+        [InlineData("2013-07-17", "2013-07-16", "2013-07-15", false)]
+
+        // the next 4 test cases account for the 'custom and practice' of
+        // withdrawing funding for a learning aim by shifting the end date
+        // of the validty to one day before the start date
+        [InlineData("2013-07-16", "2013-07-16", "2013-07-15", false)]
+        [InlineData("2013-07-15", "2013-07-16", "2013-07-15", false)]
+        [InlineData("2013-07-14", "2013-07-16", "2013-07-15", false)]
+        public void HasValidStartRangeWithValidityLastNewStartDateMeetsExpectation(string candidate, string startDate, string endDate, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -160,6 +168,53 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(DateTime.Parse(startDate));
             mockValidity
                 .SetupGet(x => x.LastNewStartDate)
+                .Returns(DateTime.Parse(endDate));
+
+            var mockItem = new Mock<ILearningDelivery>();
+            mockItem
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse(candidate));
+
+            // act
+            var result = sut.HasValidStartRange(mockValidity.Object, mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
+        /// Has valid start range with validity end date meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", true)]
+        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", true)]
+        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", true)]
+        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", false)]
+        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", false)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", false)]
+
+        // the next 4 test cases account for the 'custom and practice' of
+        // withdrawing funding for a learning aim by shifting the end date
+        // of the validty to one day before the start date
+        [InlineData("2013-07-17", "2013-07-16", "2013-07-15", false)]
+        [InlineData("2013-07-16", "2013-07-16", "2013-07-15", false)]
+        [InlineData("2013-07-15", "2013-07-16", "2013-07-15", false)]
+        [InlineData("2013-07-14", "2013-07-16", "2013-07-15", false)]
+        public void HasValidStartRangeWithValidityEndDateMeetsExpectation(string candidate, string startDate, string endDate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+
+            var mockValidity = new Mock<ILARSValidity>();
+            mockValidity
+                .SetupGet(x => x.StartDate)
+                .Returns(DateTime.Parse(startDate));
+            mockValidity
+                .SetupGet(x => x.EndDate)
                 .Returns(DateTime.Parse(endDate));
 
             var mockItem = new Mock<ILearningDelivery>();

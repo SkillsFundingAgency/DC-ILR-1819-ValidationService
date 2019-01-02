@@ -76,7 +76,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupCodedKey.ContPrefType, 2)]
         [InlineData(LookupCodedKey.Domicile, 264)]
         [InlineData(LookupCodedKey.ESMType, 7)]
-        [InlineData(LookupCodedKey.LearnDelFAMType, 16)]
         [InlineData(LookupCodedKey.LearnFAMType, 11)]
         [InlineData(LookupCodedKey.OutGrade, 502)]
         [InlineData(LookupCodedKey.OutType, 7)]
@@ -141,6 +140,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
             // assert
             Assert.True(internalDataCache.LimitedLifeLookups.ContainsKey(thisKey));
             Assert.Equal(expectedCount, internalDataCache.LimitedLifeLookups[thisKey].Count);
+        }
+
+        [Theory]
+        [InlineData(LookupComplexKey.LearnDelFAMType, 16)]
+        public async Task ComplexLookupsArePresentAndMatchExpectedCount(LookupComplexKey thisKey, int expectedCount)
+        {
+            // arrange
+            var internalDataCache = new InternalDataCache();
+
+            // act
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
+
+            Assert.True(internalDataCache.CodedComplexLookups.ContainsKey(thisKey));
+            Assert.Equal(expectedCount, internalDataCache.CodedComplexLookups[thisKey].Count);
         }
 
         private InternalDataCachePopulationService NewService(IInternalDataCache internalDataCache = null)

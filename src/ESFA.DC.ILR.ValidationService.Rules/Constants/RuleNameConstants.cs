@@ -13,6 +13,7 @@
 
         public const string AddHours_01 = "AddHours_01";
         public const string AddHours_02 = "AddHours_02";
+        public const string AddHours_03 = "AddHours_03";
         public const string AddHours_04 = "AddHours_04";
         public const string AddHours_05 = "AddHours_05";
         public const string AddHours_06 = "AddHours_06";
@@ -130,6 +131,10 @@
         public const string HEPostCode_01 = "HEPostCode_01";
         public const string HEPostCode_02 = "HEPostCode_02";
 
+        public const string GROSSFEE_01 = "GROSSFEE_01";
+        public const string GROSSFEE_02 = "GROSSFEE_02";
+        public const string GROSSFEE_03 = "GROSSFEE_03";
+
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
 
@@ -156,6 +161,7 @@
 
         public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
+        public const string LearnDelFAMType_06 = "LearnDelFAMType_06";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
@@ -285,11 +291,14 @@
         public const string R45 = "R45";
         public const string R47 = "R47";
         public const string R66 = "R66";
+        public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
+        public const string R75 = "R75";
         public const string R85 = "R85";
         public const string R91 = "R91";
         public const string R96 = "R96";
+        public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R112 = "R112";
 

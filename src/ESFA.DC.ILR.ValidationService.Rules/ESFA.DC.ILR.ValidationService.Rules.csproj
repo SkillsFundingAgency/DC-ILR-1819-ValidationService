@@ -69,7 +69,6 @@
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ApprenticeshipFinanicalRecord.cs" />
     <Compile Include="Constants\CompletionState.cs" />
-    <Compile Include="Constants\ContPrefTypeConstants.cs" />
     <Compile Include="Constants\FundingStreamPeriodCodeConstants.cs" />
     <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
@@ -80,6 +79,7 @@
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\ReasonForWithdrawal.cs" />
     <Compile Include="Constants\RuleNameConstants.cs" />
+    <Compile Include="Constants\ContactPreference.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
@@ -89,11 +89,13 @@
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
     <Compile Include="Constants\TypeOfQualEnt3.cs" />
     <Compile Include="CrossEntity\R06Rule.cs" />
+    <Compile Include="CrossEntity\R106Rule.cs" />
     <Compile Include="CrossEntity\R20Rule.cs" />
     <Compile Include="CrossEntity\R31Rule.cs" />
     <Compile Include="CrossEntity\R30Rule.cs" />
     <Compile Include="CrossEntity\R45Rule.cs" />
     <Compile Include="CrossEntity\R43Rule.cs" />
+    <Compile Include="CrossEntity\R69Rule.cs" />
     <Compile Include="CrossEntity\R71Rule.cs" />
     <Compile Include="CrossEntity\R47Rule.cs" />
     <Compile Include="CrossEntity\R68Rule.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="CrossEntity\R66Rule.cs" />
     <Compile Include="CrossEntity\R70Rule.cs" />
     <Compile Include="CrossEntity\R112Rule.cs" />
+    <Compile Include="CrossEntity\R75Rule.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="CrossEntity\R91Rule.cs" />
@@ -180,6 +183,9 @@
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
     <Compile Include="HE\FUNDLEV\FUNDLEV_03Rule.cs" />
+    <Compile Include="HE\GROSSFEE\GROSSFEE_01Rule.cs" />
+    <Compile Include="HE\GROSSFEE\GROSSFEE_02Rule.cs" />
+    <Compile Include="HE\GROSSFEE\GROSSFEE_03Rule.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_01Rule.cs" />
     <Compile Include="HE\HEPostcode\HEPostCode_02Rule.cs" />
     <Compile Include="HE\LearnerHE_02Rule.cs" />
@@ -204,6 +210,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
@@ -273,6 +280,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_04Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_08Rule.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_03Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRuleBase{TEligibilityItem}.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18Rule.cs" />
@@ -287,6 +295,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_84Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_06Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_48Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_18Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_53Rule.cs" />
@@ -509,8 +518,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Learner\ContPrefType\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

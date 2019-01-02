@@ -35,6 +35,7 @@
         public const string FUNDLEV = "FUNDLEV";
         public const string FworkCode = "FworkCode";
         public const string GivenNames = "GivenNames";
+        public const string GrossFee = "GrossFee";
         public const string HEPostcode = "HEPostCode";
         public const string LearnActEndDate = "LearnActEndDate";
         public const string LearnAimRef = "LearnAimRef";

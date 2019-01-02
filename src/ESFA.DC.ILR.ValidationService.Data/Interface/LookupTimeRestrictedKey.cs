@@ -44,6 +44,6 @@
         /// <summary>
         /// term time accomodation
         /// </summary>
-        TTAccom,
+        TTAccom
     }
 }
