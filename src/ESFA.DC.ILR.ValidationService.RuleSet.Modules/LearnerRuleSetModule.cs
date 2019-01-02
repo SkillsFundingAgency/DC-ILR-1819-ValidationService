@@ -311,6 +311,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(NINumber_01Rule),
                 typeof(NINumber_02Rule),
                 typeof(NUMHUS_01Rule),
+                typeof(OrigLearnStartDate_01Rule),
                 typeof(OrigLearnStartDate_02Rule),
                 typeof(OrigLearnStartDate_03Rule),
                 typeof(OrigLearnStartDate_04Rule),
