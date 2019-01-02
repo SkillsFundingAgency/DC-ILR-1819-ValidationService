@@ -144,6 +144,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
             Assert.Equal(expectedCount, internalDataCache.LimitedLifeLookups[thisKey].Count);
         }
 
+        [Theory]
+        [InlineData(LookupComplexKey.LearnDelFAMType, 16)]
+        public async Task ComplexLookupsArePresentAndMatchExpectedCount(LookupComplexKey thisKey, int expectedCount)
+        {
+            // arrange
+            var internalDataCache = new InternalDataCache();
+
+            // act
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
+
+            Assert.True(internalDataCache.CodedComplexLookups.ContainsKey(thisKey));
+            Assert.Equal(expectedCount, internalDataCache.CodedComplexLookups[thisKey].Count);
+        }
+
         private InternalDataCachePopulationService NewService(IInternalDataCache internalDataCache = null)
         {
             return new InternalDataCachePopulationService(internalDataCache);
