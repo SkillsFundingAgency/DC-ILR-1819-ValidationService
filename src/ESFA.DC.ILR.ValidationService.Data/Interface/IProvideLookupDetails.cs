@@ -106,5 +106,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         ///   <c>true</c> if the specified lookup key is current; otherwise, <c>false</c>.
         /// </returns>
         bool IsCurrent(LookupTimeRestrictedKey lookupKey, string candidate, DateTime referenceDate);
+
+        bool IsCurrent(LookupComplexKey lookupKey, string key, string value, DateTime date);
     }
 }
