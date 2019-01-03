@@ -57,8 +57,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.OrigLearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB"))),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, originalLearnStartDate?.ToString("d", new CultureInfo("en-GB")))
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.OrigLearnStartDate, originalLearnStartDate?.ToString("d", new CultureInfo("en-GB")))
             };
         }
     }
