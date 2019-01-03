@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
 
-        private readonly List<int> FundModels = new List<int> { 35, 36, 81, 99 };
+        private readonly HashSet<int> FundModels = new HashSet<int> { 35, 36, 81, 99 };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrigLearnStartDate_02Rule" /> class.
