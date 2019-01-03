@@ -51,6 +51,45 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
+        public void ValidationPasses_NoLDs()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+            var lookupProviderMock = new Mock<IProvideLookupDetails>();
+            lookupProviderMock.Setup(m =>
+                    m.IsCurrent(LookupComplexKey.LearnDelFAMType, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
+                .Returns(true);
+
+            var testLearner = new TestLearner
+            {
+            };
+
+            NewRule(validationErrorHandlerMock.Object, lookupProviderMock.Object).Validate(testLearner);
+        }
+
+        [Fact]
+        public void ValidationPasses_NoFAMs()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+            var lookupProviderMock = new Mock<IProvideLookupDetails>();
+            lookupProviderMock.Setup(m =>
+                    m.IsCurrent(LookupComplexKey.LearnDelFAMType, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
+                .Returns(true);
+
+            var testLearner = new TestLearner
+            {
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        LearnStartDate = new DateTime(2018, 09, 01)
+                    }
+                }
+            };
+
+            NewRule(validationErrorHandlerMock.Object, lookupProviderMock.Object).Validate(testLearner);
+        }
+
+        [Fact]
         public void ValidationFails()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();

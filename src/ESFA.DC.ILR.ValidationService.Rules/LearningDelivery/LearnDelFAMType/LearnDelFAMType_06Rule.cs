@@ -25,13 +25,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <param name="objectToValidate">The object to validate.</param>
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null)
+            if (objectToValidate == null || objectToValidate.LearningDeliveries == null)
             {
                 return;
             }
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
+                if (learningDelivery.LearningDeliveryFAMs == null)
+                {
+                    continue;
+                }
                 foreach (var learningDeliveryFam in learningDelivery.LearningDeliveryFAMs)
                 {
                     if (learningDeliveryFam.LearnDelFAMType == LearningDeliveryFAMTypeConstants.RES)

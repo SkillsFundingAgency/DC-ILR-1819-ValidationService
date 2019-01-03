@@ -23,8 +23,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public void Validate(ILearner objectToValidate)
         {
-            var learningDeliveryFAMs = objectToValidate.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
-
+            var learningDeliveryFAMs = objectToValidate.LearningDeliveries
+                .Where(l => l.LearningDeliveryFAMs != null)
+                .SelectMany(ld => ld.LearningDeliveryFAMs);
             if (ConditionMet(learningDeliveryFAMs))
             {
                 HandleValidationError(objectToValidate.LearnRefNumber);
