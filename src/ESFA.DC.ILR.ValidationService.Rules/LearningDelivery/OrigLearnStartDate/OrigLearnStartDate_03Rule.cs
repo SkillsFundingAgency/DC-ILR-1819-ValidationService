@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 {
     public class OrigLearnStartDate_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly List<int> FundModels = new List<int> { 25, 82, 10 };
+        private readonly HashSet<int> FundModels = new HashSet<int> { 25, 82, 10 };
 
         public OrigLearnStartDate_03Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_03)
