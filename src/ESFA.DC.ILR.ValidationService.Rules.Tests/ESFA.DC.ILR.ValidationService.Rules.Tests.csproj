@@ -295,6 +295,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_84RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_27RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_07RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_06RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_53RuleTests.cs" />
