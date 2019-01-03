@@ -162,9 +162,11 @@
         public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
         public const string LearnDelFAMType_06 = "LearnDelFAMType_06";
+        public const string LearnDelFAMType_07 = "LearnDelFAMType_07";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
+        public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
@@ -178,6 +180,7 @@
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
         public const string LearningDeliveryHE_03 = "LearningDeliveryHE_03";
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
+        public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
@@ -209,6 +212,7 @@
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
+        public const string OrigLearnStartDate_01 = "OrigLearnStartDate_01";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
