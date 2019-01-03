@@ -10,12 +10,21 @@ using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate
 {
-    public class OrigLearnStartDate_05Rule : AbstractRule, IRule<ILearner>
+    public class OrigLearnStartDate_06Rule : AbstractRule, IRule<ILearner>
     {
+        private const int FundModel35 = 35;
+
+        private readonly HashSet<string> LarsValidityCategories = new HashSet<string>()
+        {
+            TypeOfLARSValidity.AdultSkills,
+            TypeOfLARSValidity.Unemployed,
+            TypeOfLARSValidity.OLASSAdult
+        };
+
         private readonly IDD07 _dd07;
         private readonly ILARSDataService _larsDataService;
 
-        public OrigLearnStartDate_05Rule(
+        public OrigLearnStartDate_06Rule(
             IDD07 dd07,
             ILARSDataService larsDataService,
             IValidationErrorHandler validationErrorHandler)
@@ -33,7 +42,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
                     learningDelivery.OrigLearnStartDateNullable,
                     learningDelivery.FundModel,
                     learningDelivery.ProgTypeNullable,
-                    learningDelivery.AimType,
                     learningDelivery.LearnAimRef))
                 {
                     HandleValidationError(
@@ -44,12 +52,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             }
         }
 
-        public bool ConditionMet(DateTime? origLearnStartDate, int fundModel, int? progType, int aimType, string learnAimRef)
+        public bool ConditionMet(DateTime? origLearnStartDate, int fundModel, int? progType, string learnAimRef)
         {
             return OrigLearnStartDateConditionMet(origLearnStartDate)
                    && FundModelConditionMet(fundModel)
-                   && DD07ConditionMet(progType)
-                   && AimTypeConditionMet(aimType)
                    && LARSConditionMet(origLearnStartDate, learnAimRef)
                    && !Excluded(progType);
         }
@@ -61,38 +67,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         public bool FundModelConditionMet(int fundModel)
         {
-            var fundModels = new[] { 35, 36 };
-
-            return fundModels.Contains(fundModel);
-        }
-
-        public bool DD07ConditionMet(int? progType)
-        {
-            return _dd07.IsApprenticeship(progType);
-        }
-
-        public bool AimTypeConditionMet(int aimType)
-        {
-            return aimType == 3;
+            return fundModel == FundModel35;
         }
 
         public bool LARSConditionMet(DateTime? origLearnStartDate, string learnAimRef)
         {
-            return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Apprenticeships);
+            return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForValidityCategories(origLearnStartDate, learnAimRef, LarsValidityCategories);
         }
 
         public bool Excluded(int? progType)
         {
-            return progType == 25;
+            return _dd07.IsApprenticeship(progType);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? origLearnStartDate, int fundModel, int aimType)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.OrigLearnStartDate, origLearnStartDate),
-                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
-                BuildErrorMessageParameter(PropertyNameConstants.AimType, aimType)
+                BuildErrorMessageParameter(PropertyNameConstants.OrigLearnStartDate, origLearnStartDate)
             };
         }
     }
