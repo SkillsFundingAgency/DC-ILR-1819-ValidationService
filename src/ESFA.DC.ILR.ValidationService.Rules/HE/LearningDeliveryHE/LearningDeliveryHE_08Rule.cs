@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
             IDerivedData_27Rule derivedData_27Rule,
             IOrganisationDataService organisationDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService)
-            : base(validationErrorHandler, RuleNameConstants.LearningDeliveryHE_07)
+            : base(validationErrorHandler, RuleNameConstants.LearningDeliveryHE_08)
         {
             _fileDataService = fileDataService;
             _lARSDataService = lARSDataService;

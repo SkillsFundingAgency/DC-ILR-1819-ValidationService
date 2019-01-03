@@ -178,6 +178,7 @@
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
         public const string LearningDeliveryHE_03 = "LearningDeliveryHE_03";
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
+        public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
