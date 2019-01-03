@@ -13,6 +13,7 @@
 
         public const string AddHours_01 = "AddHours_01";
         public const string AddHours_02 = "AddHours_02";
+        public const string AddHours_03 = "AddHours_03";
         public const string AddHours_04 = "AddHours_04";
         public const string AddHours_05 = "AddHours_05";
         public const string AddHours_06 = "AddHours_06";
@@ -92,15 +93,20 @@
         public const string EmpStat_12 = "EmpStat_12";
 
         public const string EngGrade_01 = "EngGrade_01";
+        public const string EngGrade_02 = "EngGrade_02";
         public const string EngGrade_04 = "EngGrade_04";
 
         public const string Entity_1 = "Entity_1";
+
+        public const string EPAOrgID_03 = "EPAOrgID_03";
 
         public const string ESMType_15 = "ESMType_15";
 
         public const string FamilyName_01 = "FamilyName_01";
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
+
+        public const string FUNDLEV_03 = "FUNDLEV_03";
 
         public const string FundModel_01 = "FundModel_01";
         public const string FundModel_03 = "FundModel_03";
@@ -124,6 +130,10 @@
 
         public const string HEPostCode_01 = "HEPostCode_01";
         public const string HEPostCode_02 = "HEPostCode_02";
+
+        public const string GROSSFEE_01 = "GROSSFEE_01";
+        public const string GROSSFEE_02 = "GROSSFEE_02";
+        public const string GROSSFEE_03 = "GROSSFEE_03";
 
         public const string LearnActEndDate_01 = "LearnActEndDate_01";
         public const string LearnActEndDate_04 = "LearnActEndDate_04";
@@ -152,12 +162,17 @@
 
         public const string LearnDelFAMType_02 = "LearnDelFAMType_02";
         public const string LearnDelFAMType_03 = "LearnDelFAMType_03";
+        public const string LearnDelFAMType_06 = "LearnDelFAMType_06";
+        public const string LearnDelFAMType_07 = "LearnDelFAMType_07";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
+        public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
+        public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
+        public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
@@ -165,6 +180,7 @@
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
         public const string LearningDeliveryHE_03 = "LearningDeliveryHE_03";
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
+        public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
@@ -175,6 +191,7 @@
         public const string LLDDHealthProb_06 = "LLDDHealthProb_06";
 
         public const string LearnStartDate_03 = "LearnStartDate_03";
+        public const string LearnStartDate_05 = "LearnStartDate_05";
         public const string LearnStartDate_06 = "LearnStartDate_06";
         public const string LearnStartDate_07 = "LearnStartDate_07";
         public const string LearnStartDate_13 = "LearnStartDate_13";
@@ -195,23 +212,34 @@
         public const string NUMHUS_01 = "NUMHUS_01";
 
         public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
+        public const string OrigLearnStartDate_01 = "OrigLearnStartDate_01";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
         public const string OutCollDate_01 = "OutCollDate_01";
+        public const string OutCollDate_02 = "OutCollDate_02";
 
         public const string Outcome_04 = "Outcome_04";
         public const string Outcome_05 = "Outcome_05";
         public const string Outcome_09 = "Outcome_09";
 
+        public const string OutEndDate_01 = "OutEndDate_01";
+
         public const string OutGrade_03 = "OutGrade_03";
+        public const string OutGrade_04 = "OutGrade_04";
         public const string OutGrade_06 = "OutGrade_06";
 
         public const string OutStartDate_01 = "OutStartDate_01";
         public const string OutStartDate_02 = "OutStartDate_02";
 
+        public const string OutType_01 = "OutType_01";
         public const string OutType_02 = "OutType_02";
+        public const string OutType_03 = "OutType_03";
         public const string OutType_04 = "OutType_04";
+        public const string OutType_05 = "OutType_05";
+
+        public const string OutULN_01 = "OutULN_01";
+        public const string OutULN_02 = "OutULN_02";
 
         public const string PartnerUKPRN_01 = "PartnerUKPRN_01";
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
@@ -267,10 +295,14 @@
         public const string R45 = "R45";
         public const string R47 = "R47";
         public const string R66 = "R66";
+        public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
+        public const string R75 = "R75";
         public const string R85 = "R85";
         public const string R91 = "R91";
+        public const string R96 = "R96";
+        public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R112 = "R112";
 

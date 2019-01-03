@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -26,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public bool ConditionMet(string learnAimRef, int fundModel)
         {
-            return learnAimRef == ValidationConstants.ZESF0001 && fundModel != FundModelConstants.ESF;
+            return learnAimRef.CaseInsensitiveEquals(ValidationConstants.ZESF0001) && fundModel != FundModelConstants.ESF;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnAimRef, int fundModel)

@@ -1,6 +1,9 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors
 {
@@ -14,18 +17,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors
             _externalDataCache = externalDataCache;
         }
 
-        public string MessageforRuleName(string ruleName)
-        {
-            _externalDataCache.ValidationErrors.TryGetValue(ruleName, out var error);
+        public string MessageforRuleName(string ruleName) => GetRule(ruleName)?.Message;
 
-            return error?.Message;
-        }
+        public Severity? SeverityForRuleName(string ruleName) => GetRule(ruleName)?.Severity ?? _nullSeverity;
 
-        public Severity? SeverityForRuleName(string ruleName)
-        {
-            _externalDataCache.ValidationErrors.TryGetValue(ruleName, out var error);
-
-            return error?.Severity ?? _nullSeverity;
-        }
+        private ValidationError GetRule(string ruleName) => _externalDataCache.ValidationErrors?
+                .Where(r => r.Key.CaseInsensitiveEquals(ruleName))?
+                .Select(r => r.Value)?
+                .FirstOrDefault();
     }
 }

@@ -28,11 +28,14 @@
         public const string EmpOutcome = "EmpOutcome";
         public const string EmpStat = "EmpStat";
         public const string EngGrade = "EngGrade";
+        public const string EPAOrgID = "EPAOrgID";
         public const string ESMType = "ESMType";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
+        public const string FUNDLEV = "FUNDLEV";
         public const string FworkCode = "FworkCode";
         public const string GivenNames = "GivenNames";
+        public const string GrossFee = "GrossFee";
         public const string HEPostcode = "HEPostCode";
         public const string LearnActEndDate = "LearnActEndDate";
         public const string LearnAimRef = "LearnAimRef";
@@ -56,11 +59,14 @@
         public const string NINumber = "NINumber";
         public const string OrigLearnStartDate = "OrigLearnStartDate";
         public const string OtherFundAdj = "OtherFundAdj";
+        public const string OutCode = "OutCode";
         public const string OutCollDate = "OutCollDate";
         public const string Outcome = "Outcome";
+        public const string OutEndDate = "OutEndDate";
         public const string OutGrade = "OutGrade";
         public const string OutStartDate = "OutStartDate";
         public const string OutType = "OutType";
+        public const string OutULN = "OutULN";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PCFLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";
@@ -78,5 +84,6 @@
         public const string StdCode = "StdCode";
         public const string UCASAPPID = "UCASAPPID";
         public const string WithdrawReason = "WithdrawReason";
+        public const string WorkPlaceStartDate = "WorkPlaceStartDate";
     }
 }

@@ -78,15 +78,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
 
                 cache.AcademicYear = BuildAcademicYear();
 
-                // these are defunct; whilst i won't remove them, don't add to them either.
-                cache.AimTypes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "AimType"));
-                cache.CompStatuses = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "CompStatus"));
-                cache.EmpOutcomes = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "EmpOutcome"));
-                cache.FundModels = new HashSet<int>(BuildSimpleLookupEnumerable<int>(lookups, "FundModel"));
-                cache.LLDDCats = new Dictionary<int, ValidityPeriods>(BuildLookupAsIntWithValidityPeriods(lookups, "LLDDCat"));
-                cache.QUALENT3s = new Dictionary<string, ValidityPeriods>(BuildLookupWithValidityPeriods(lookups, "QualEnt3"));
-                cache.TTAccoms = new Dictionary<int, ValidityPeriods>(BuildLookupAsIntWithValidityPeriods(lookups, "TTAccom"));
-
                 Enum.GetValues(typeof(LookupSimpleKey))
                     .OfType<LookupSimpleKey>()
                     .ToList()
@@ -101,6 +92,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                     .ForEach(x => AddLookups(x, lookups, cache));
                 Enum.GetValues(typeof(LookupTimeRestrictedKey))
                     .OfType<LookupTimeRestrictedKey>()
+                    .ToList()
+                    .ForEach(x => AddLookups(x, lookups, cache));
+                Enum.GetValues(typeof(LookupComplexKey))
+                    .OfType<LookupComplexKey>()
                     .ToList()
                     .ForEach(x => AddLookups(x, lookups, cache));
             }
@@ -143,6 +138,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             var lookups = BuildComplexLookupEnumerable(usingSource, $"{forThisKey}");
 
             addToCache.CodedDictionaryLookups.Add(forThisKey, lookups);
+        }
+
+        public void AddLookups(LookupComplexKey forThisKey, XElement usingSource, InternalDataCache addToCache)
+        {
+            var lookups = BuildComplexLookupWithValidityPeriods(usingSource, $"{forThisKey}");
+
+            addToCache.CodedComplexLookups.Add(forThisKey, lookups);
         }
 
         /// <summary>
@@ -209,6 +211,24 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                     v => v.Descendants("option")
                         .Select(d => GetAttributeValue(d.Attribute("code")))
                         .AsSafeReadOnlyList());
+        }
+
+        private IDictionary<string, IDictionary<string, ValidityPeriods>> BuildComplexLookupWithValidityPeriods(
+            XElement lookups, string type)
+        {
+            return lookups
+                .Descendants(type)
+                .Elements()
+                .ToDictionary(
+                    k => k.Attribute("code")?.Value,
+                    v => lookups.Descendants(v.Attribute("code")?.Value)
+                            .Elements()
+                            .ToDictionary(
+                                c => c.Attribute("code")?.Value,
+                                vp => new ValidityPeriods(
+                                    DateTime.Parse(GetAttributeValue(vp.Attribute("validFrom")) ?? $"{DateTime.MinValue}"),
+                                    DateTime.Parse(GetAttributeValue(vp.Attribute("validTo")) ?? $"{DateTime.MaxValue}")))
+                        as IDictionary<string, ValidityPeriods>);
         }
 
         /// <summary>

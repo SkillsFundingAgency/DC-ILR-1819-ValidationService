@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.LARS;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
@@ -1057,7 +1055,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                     learnAimRef, new LearningDelivery()
                     {
                         LearnAimRef = learnAimRef,
-                        LearnDirectClassSystemCode2 = learnDirectClassSystemCode2
+                        LearnDirectClassSystemCode2 = new LearnDirectClassSystemCode(learnDirectClassSystemCode2)
                     }
                 }
             };
@@ -1078,7 +1076,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                     "123", new LearningDelivery()
                     {
                         LearnAimRef = "123",
-                        LearnDirectClassSystemCode2 = "CDE"
+                        LearnDirectClassSystemCode2 = new LearnDirectClassSystemCode("CDE")
                     }
                 }
             };
@@ -1159,6 +1157,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
             NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", learnStartDate).Should().BeTrue();
+        }
+
+        [Fact]
+        public void BasicSkillsMatchForLearnAimRefAndStartDate_False_NullCheck()
+        {
+            IEnumerable<int> basicSkillsTypes = new List<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
+
+            Dictionary<string, LearningDelivery> learningDeliveriesDictionary = null;
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", new DateTime(2013, 07, 01)).Should().BeFalse();
         }
 
         [Fact]
@@ -2067,6 +2079,86 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
             NewService(externalDataCache: externalDataCacheMock.Object).GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef).Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryForLearnAimRefAndTypes_True()
+        {
+            var learnAimRefTypes = new[] { "1111", "2222", "3333" };
+            var learnAimRef = "123456789";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LearnAimRefType = "2222"
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryForLearnAimRefAndTypes_False_NullType()
+        {
+            var learnAimRefTypes = new[] { "1111", "2222", "3333" };
+            var learnAimRef = "123456789";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryForLearnAimRefAndTypes_False_NoMatch()
+        {
+            var learnAimRefTypes = new[] { "1111", "2222", "3333" };
+            var learnAimRef = "123456789";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LearnAimRefType = "4444"
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)
+                .Should()
+                .BeFalse();
         }
 
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)

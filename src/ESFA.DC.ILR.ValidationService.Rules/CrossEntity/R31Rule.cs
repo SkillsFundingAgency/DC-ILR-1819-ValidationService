@@ -24,15 +24,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return;
             }
 
-            var duplicates = objectToValidate.LearningDeliveries
-                .GroupBy(ld => new { ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable })
-                .Where(grp => grp.Count() > 1);
+            var groups = objectToValidate.LearningDeliveries
+                .GroupBy(ld => new { ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable });
 
-            foreach (var duplicate in duplicates)
+            foreach (var group in groups)
             {
-                if (duplicate.Any(d => d.AimType == ProgramAimType && d.LearnActEndDateNullable == null) && duplicate.All(d => d.AimType != ComponentAimType))
+                if (group.Any(d => d.AimType == ProgramAimType && d.LearnActEndDateNullable == null) && group.All(d => d.AimType != ComponentAimType))
                 {
-                    var delivery = duplicate.First(d => d.AimType == ProgramAimType && d.LearnActEndDateNullable == null);
+                    var delivery = group.First(d => d.AimType == ProgramAimType && d.LearnActEndDateNullable == null);
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         null,

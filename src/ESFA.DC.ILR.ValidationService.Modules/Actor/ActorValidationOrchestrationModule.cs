@@ -18,9 +18,12 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Actor
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<RuleSetOrchestrationService<ILearner, IValidationError>>().As<IRuleSetOrchestrationService<ILearner, IValidationError>>();
+            builder.RegisterType<RuleSetOrchestrationService<ILearnerDestinationAndProgression, IValidationError>>().As<IRuleSetOrchestrationService<ILearnerDestinationAndProgression, IValidationError>>();
             builder.RegisterType<AutoFacRuleSetResolutionService<ILearner>>().As<IRuleSetResolutionService<ILearner>>();
+            builder.RegisterType<AutoFacRuleSetResolutionService<ILearnerDestinationAndProgression>>().As<IRuleSetResolutionService<ILearnerDestinationAndProgression>>();
             builder.RegisterType<AutoFacRuleSetResolutionService<IMessage>>().As<IRuleSetResolutionService<IMessage>>();
             builder.RegisterType<RuleSetExecutionService<ILearner>>().As<IRuleSetExecutionService<ILearner>>();
+            builder.RegisterType<RuleSetExecutionService<ILearnerDestinationAndProgression>>().As<IRuleSetExecutionService<ILearnerDestinationAndProgression>>();
             builder.RegisterType<RuleSetExecutionService<IMessage>>().As<IRuleSetExecutionService<IMessage>>();
             builder.RegisterType<ValidationErrorHandler>().As<IValidationErrorHandler>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache<IValidationError>>().InstancePerLifetimeScope();
@@ -28,6 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Actor
             builder.RegisterType<JsonSerializationService>().As<IJsonSerializationService>().InstancePerLifetimeScope();
             builder.RegisterType<XmlSerializationService>().As<IXmlSerializationService>().InstancePerLifetimeScope();
             builder.RegisterType<LearnerProviderService>().As<IValidationItemProviderService<IEnumerable<ILearner>>>().InstancePerLifetimeScope();
+            builder.RegisterType<LearnerDPProviderService>().As<IValidationItemProviderService<IEnumerable<ILearnerDestinationAndProgression>>>().InstancePerLifetimeScope();
         }
     }
 }

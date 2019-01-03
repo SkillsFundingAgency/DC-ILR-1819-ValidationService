@@ -79,7 +79,8 @@
     <Compile Include="Enum\PersistenceStorageKey.cs" />
     <Compile Include="Enum\Severity.cs" />
     <Compile Include="IErrorMessageParameter.cs" />
-    <Compile Include="ILearnerPerActorService.cs" />
+    <Compile Include="ILearnerDPPerActorProviderService.cs" />
+    <Compile Include="ILearnerPerActorProviderService.cs" />
     <Compile Include="IPreValidationContext.cs" />
     <Compile Include="IPreValidationOrchestrationService.cs" />
     <Compile Include="IRule.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Utility\Format.cs" />
     <Compile Include="Utility\Guard.cs" />
     <Compile Include="Utility\It.cs" />
+    <Compile Include="Utility\SafeActions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ESFA.DC.ILR.ValidationService.Interface.ruleset">

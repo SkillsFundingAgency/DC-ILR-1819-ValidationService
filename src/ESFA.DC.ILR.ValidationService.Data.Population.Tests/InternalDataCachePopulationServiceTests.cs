@@ -12,18 +12,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
     public class InternalDataCachePopulationServiceTests
     {
         [Fact]
-        public async Task Populate()
+        public async Task Populate_AcademicYear()
         {
             var internalDataCache = new InternalDataCache();
 
             await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
 
             var yearStart = new DateTime(2018, 8, 1);
-            var fundModels = new List<int> { 10, 25, 35, 36, 70, 81, 82, 99 };
 
             internalDataCache.AcademicYear.Start.Should().BeSameDateAs(yearStart);
-            internalDataCache.FundModels.Should().BeEquivalentTo(fundModels);
-            internalDataCache.QUALENT3s.Count.Should().Be(61);
         }
 
         /// <summary>
@@ -79,7 +76,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupCodedKey.ContPrefType, 2)]
         [InlineData(LookupCodedKey.Domicile, 264)]
         [InlineData(LookupCodedKey.ESMType, 7)]
-        [InlineData(LookupCodedKey.LearnDelFAMType, 16)]
         [InlineData(LookupCodedKey.LearnFAMType, 11)]
         [InlineData(LookupCodedKey.OutGrade, 502)]
         [InlineData(LookupCodedKey.OutType, 7)]
@@ -130,6 +126,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupTimeRestrictedKey.FundComp, 4)]
         [InlineData(LookupTimeRestrictedKey.LLDDCat, 24)]
         [InlineData(LookupTimeRestrictedKey.MSTuFee, 50)]
+        [InlineData(LookupTimeRestrictedKey.OutTypedCode, 23)]
         [InlineData(LookupTimeRestrictedKey.QualEnt3, 61)]
         [InlineData(LookupTimeRestrictedKey.TTAccom, 9)]
         public async Task TimeLimitedLookupsArePresentAndMatchExpectedCount(LookupTimeRestrictedKey thisKey, int expectedCount)
@@ -143,6 +140,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
             // assert
             Assert.True(internalDataCache.LimitedLifeLookups.ContainsKey(thisKey));
             Assert.Equal(expectedCount, internalDataCache.LimitedLifeLookups[thisKey].Count);
+        }
+
+        [Theory]
+        [InlineData(LookupComplexKey.LearnDelFAMType, 16)]
+        public async Task ComplexLookupsArePresentAndMatchExpectedCount(LookupComplexKey thisKey, int expectedCount)
+        {
+            // arrange
+            var internalDataCache = new InternalDataCache();
+
+            // act
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
+
+            Assert.True(internalDataCache.CodedComplexLookups.ContainsKey(thisKey));
+            Assert.Equal(expectedCount, internalDataCache.CodedComplexLookups[thisKey].Count);
         }
 
         private InternalDataCachePopulationService NewService(IInternalDataCache internalDataCache = null)

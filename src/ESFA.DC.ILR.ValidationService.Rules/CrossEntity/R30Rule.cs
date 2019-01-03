@@ -25,18 +25,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return;
             }
 
-            var duplicates = objectToValidate.LearningDeliveries
+            var groups = objectToValidate.LearningDeliveries
                 .GroupBy(ld => new { ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable })
-                .Where(grp => grp.Count() > 1 && grp.Key.ProgTypeNullable != ExcludedProgType);
+                .Where(grp => grp.Key.ProgTypeNullable != ExcludedProgType);
 
-            foreach (var duplicate in duplicates)
+            foreach (var group in groups)
             {
-                if (duplicate.Any(d => d.AimType == ComponentAimType) && duplicate.All(d => d.AimType != ProgramAimType))
+                if (group.Any(d => d.AimType == ComponentAimType) && group.All(d => d.AimType != ProgramAimType))
                 {
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         null,
-                        BuildErrorMessageParameters(duplicate.Key.ProgTypeNullable, duplicate.Key.FworkCodeNullable, duplicate.Key.PwayCodeNullable));
+                        BuildErrorMessageParameters(group.Key.ProgTypeNullable, group.Key.FworkCodeNullable, group.Key.PwayCodeNullable));
                 }
             }
         }

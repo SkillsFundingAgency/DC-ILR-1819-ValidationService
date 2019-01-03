@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Stateless\ESFA.DC.ILR.ValidationService.Stateless.csproj" />
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ValidationActor\ESFA.DC.ILR.ValidationService.ValidationActor.csproj" />
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.ValidationDPActor\ESFA.DC.ILR.ValidationService.ValidationDPActor.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationParameters\Local.1Node.xml" />

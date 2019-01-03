@@ -24,6 +24,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         DateTime? EffectiveTo { get; }
 
         /// <summary>
+        /// Gets the learn aim reference type.
+        /// </summary>
+        string LearnAimRefType { get; }
+
+        /// <summary>
         /// Gets the english prescribed Ids.
         /// </summary>
         int? EnglPrscID { get; }
@@ -44,22 +49,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         int? FrameworkCommonComponent { get; }
 
         /// <summary>
-        /// Gets the learn direct class system code1.
+        /// Gets the learn direct class system code 1.
         /// </summary>
-        string LearnDirectClassSystemCode1 { get; }
+        ILearnDirectClassSystemCode LearnDirectClassSystemCode1 { get; }
 
         /// <summary>
-        /// Gets teh learn direct class system code2
+        /// Gets the learn direct class system code 2
         /// </summary>
-        string LearnDirectClassSystemCode2 { get; }
+        ILearnDirectClassSystemCode LearnDirectClassSystemCode2 { get; }
 
         /// <summary>
-        ///  Gets or sets the Sector Subject Area Tier 1
+        /// Gets the learn direct class system code 3.
+        /// </summary>
+        ILearnDirectClassSystemCode LearnDirectClassSystemCode3 { get; }
+
+        /// <summary>
+        ///  Gets the Sector Subject Area Tier 1
         /// </summary>
         decimal? SectorSubjectAreaTier1 { get; }
 
         /// <summary>
-        ///  Gets or sets the Sector Subject Area Tier 2
+        ///  Gets the Sector Subject Area Tier 2
         /// </summary>
         decimal? SectorSubjectAreaTier2 { get; }
 

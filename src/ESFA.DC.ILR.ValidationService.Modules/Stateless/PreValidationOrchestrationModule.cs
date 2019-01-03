@@ -24,7 +24,8 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
 
             builder.RegisterType<MessageFileProviderService>().As<IValidationItemProviderService<IMessage>>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationOutputService>().As<IValidationOutputService>().WithAttributeFiltering().InstancePerLifetimeScope();
-            builder.RegisterType<LearnerPerActorServiceStub>().As<ILearnerPerActorService>().InstancePerLifetimeScope();
+            builder.RegisterType<LearnerPerActorProviderService>().As<ILearnerPerActorProviderService>().InstancePerLifetimeScope();
+            builder.RegisterType<LearnerDPPerActorProviderService>().As<ILearnerDPPerActorProviderService>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrorCache>().As<IValidationErrorCache<IValidationError>>().InstancePerLifetimeScope();
             builder.RegisterType<PreValidationPopulationService>().As<IPopulationService>().InstancePerLifetimeScope();
             builder.RegisterType<JsonSerializationService>().As<IJsonSerializationService>().InstancePerLifetimeScope();
@@ -34,6 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
             builder.RegisterType<RuleSetExecutionService<IMessage>>().As<IRuleSetExecutionService<IMessage>>();
             builder.RegisterType<MessageProviderService>().As<IValidationItemProviderService<IEnumerable<IMessage>>>().InstancePerLifetimeScope();
             builder.RegisterType<LearnerProviderService>().As<IValidationItemProviderService<IEnumerable<ILearner>>>().InstancePerLifetimeScope();
+            builder.RegisterType<LearnerDPProviderService>().As<IValidationItemProviderService<IEnumerable<ILearnerDestinationAndProgression>>>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrorHandler>().As<IValidationErrorHandler>().InstancePerLifetimeScope();
 
             builder.RegisterType<AzureStorageFileContentStringProviderService>().As<IMessageStreamProviderService>();
