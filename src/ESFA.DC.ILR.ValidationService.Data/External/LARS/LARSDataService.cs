@@ -30,6 +30,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         }
 
         /// <summary>
+        /// Gets the lars learning delivery for.
+        /// </summary>
+        /// <param name="learnAimRef">this learn aim reference.</param>
+        /// <returns>a lars learning delivery record for this learning aim reference</returns>
+        public ILARSLearningDelivery GetLearningDeliveryForLearnAimRef(string learnAimRef)
+        {
+            return _externalDataCache.LearningDeliveries?.Values?
+                 .Where(e => e.LearnAimRef.CaseInsensitiveEquals(learnAimRef))?
+                 .FirstOrDefault();
+        }
+
+        /// <summary>
         /// Gets the validities for.
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
