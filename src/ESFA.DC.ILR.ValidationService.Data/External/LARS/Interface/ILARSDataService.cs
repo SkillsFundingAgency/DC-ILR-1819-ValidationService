@@ -13,7 +13,24 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// </summary>
         /// <param name="forThisAimRef">this aim reference.</param>
         /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
+        [Obsolete("this method is deprecated; use 'GetDeliveryFor' instead", false)]
         IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef);
+
+        /// <summary>
+        /// Gets the delivery for.
+        /// </summary>
+        /// <param name="thisAimRef">this aim reference.</param>
+        /// <returns>
+        /// a lars learning delivery for this learning aim reference
+        /// </returns>
+        ILARSLearningDelivery GetDeliveryFor(string thisAimRef);
+
+        /// <summary>
+        /// Gets the categories for.
+        /// </summary>
+        /// <param name="thisAimRef">this aim reference.</param>
+        /// <returns>a collection of lars learning categories for this learning aim reference</returns>
+        IReadOnlyCollection<ILARSLearningCategory> GetCategoriesFor(string thisAimRef);
 
         /// <summary>
         /// Gets the validities for.
