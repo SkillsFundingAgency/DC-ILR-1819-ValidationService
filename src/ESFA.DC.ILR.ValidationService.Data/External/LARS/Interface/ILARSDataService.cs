@@ -80,10 +80,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
 
-        bool OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(DateTime? origLearnStartDate, string learnAimRef);
+        bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime? origLearnStartDate, string learnAimRef, string validityCategory);
 
         bool LearnStartDateGreaterThanStandardsEffectiveTo(int? stdCode, DateTime learnStartDate);
 
         bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types);
+
+        bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(
+            DateTime? origLearnStartDate,
+            string learnAimRef,
+            IEnumerable<string> categoriesHashSet);
     }
 }
