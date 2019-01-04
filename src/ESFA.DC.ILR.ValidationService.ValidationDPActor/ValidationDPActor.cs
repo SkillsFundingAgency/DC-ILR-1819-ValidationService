@@ -7,7 +7,9 @@ using Autofac;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
@@ -97,7 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationDPActor
                 externalDataCache = new ExternalDataCache
                 {
                     ULNs = externalDataCacheGet.ULNs,
-                    ValidationErrors = externalDataCacheGet.ValidationErrors
+                    ValidationErrors = ((IDictionary<string, ValidationError>)externalDataCacheGet.ValidationErrors).ToCaseInsensitiveDictionary()
                 };
 
                 validationContext = new ValidationContext
