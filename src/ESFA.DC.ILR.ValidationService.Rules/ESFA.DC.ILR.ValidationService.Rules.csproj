@@ -89,6 +89,7 @@
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
     <Compile Include="Constants\TypeOfQualEnt3.cs" />
     <Compile Include="CrossEntity\R06Rule.cs" />
+    <Compile Include="CrossEntity\R104Rule.cs" />
     <Compile Include="CrossEntity\R102Rule.cs" />
     <Compile Include="CrossEntity\R106Rule.cs" />
     <Compile Include="CrossEntity\R20Rule.cs" />
