@@ -3,6 +3,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate
 {
@@ -23,6 +24,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         /// The message handler
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
+
+        private readonly HashSet<int> FundModels = new HashSet<int> { 35, 36, 81, 99 };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrigLearnStartDate_02Rule" /> class.
@@ -61,6 +64,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         public bool HasQualifyingDates(ILearningDelivery delivery) =>
             It.IsBetween(delivery.OrigLearnStartDateNullable.Value, DateTime.MinValue, delivery.LearnStartDate);
 
+        public bool HasValidFundModel(ILearningDelivery delivery) =>
+            FundModels.Contains(delivery.FundModel);
+
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
         /// </summary>
@@ -69,7 +75,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(ILearningDelivery delivery) =>
-            HasOriginalLearningStartDate(delivery) && !HasQualifyingDates(delivery);
+            HasOriginalLearningStartDate(delivery) &&
+            HasValidFundModel(delivery) &&
+            !HasQualifyingDates(delivery);
 
         /// <summary>
         /// Validates the specified object.

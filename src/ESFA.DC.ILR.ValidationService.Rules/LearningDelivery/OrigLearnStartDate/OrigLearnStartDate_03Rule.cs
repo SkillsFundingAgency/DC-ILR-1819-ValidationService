@@ -1,108 +1,63 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Utility;
-using System;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate
 {
-    public class OrigLearnStartDate_03Rule :
-        IRule<ILearner>
+    public class OrigLearnStartDate_03Rule : AbstractRule, IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = "OrigLearnStartDate";
+        private readonly HashSet<int> FundModels = new HashSet<int> { 25, 82, 10 };
 
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "OrigLearnStartDate_03";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OrigLearnStartDate_03Rule" /> class.
-        /// </summary>
-        /// <param name="validationErrorHandler">The validation error handler.</param>
         public OrigLearnStartDate_03Rule(IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_03)
         {
-            It.IsNull(validationErrorHandler)
-                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-
-            _messageHandler = validationErrorHandler;
         }
 
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
-
-        /// <summary>
-        /// Determines whether [is qualifying funding] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is qualifying funding] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsQualifyingFundModel(ILearningDelivery delivery) =>
-            It.IsInRange(
-                delivery.FundModel,
-                TypeOfFunding.CommunityLearning,
-                TypeOfFunding.Age16To19ExcludingApprenticeships,
-                TypeOfFunding.Other16To19);
-
-        /// <summary>
-        /// Determines whether [has original learning start date] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [has original learning start date] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool HasOriginalLearningStartDate(ILearningDelivery delivery) =>
-            It.Has(delivery.OrigLearnStartDateNullable);
-
-        /// <summary>
-        /// Determines whether [is not valid] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsNotValid(ILearningDelivery delivery) =>
-            IsQualifyingFundModel(delivery) && HasOriginalLearningStartDate(delivery);
-
-        /// <summary>
-        /// Validates the specified object.
-        /// </summary>
-        /// <param name="objectToValidate">The object to validate.</param>
         public void Validate(ILearner objectToValidate)
         {
-            It.IsNull(objectToValidate)
-                .AsGuard<ArgumentNullException>(nameof(objectToValidate));
-
-            var learnRefNumber = objectToValidate.LearnRefNumber;
-
-            objectToValidate.LearningDeliveries
-                .SafeWhere(IsNotValid)
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+            {
+                if (ConditionMet(
+                    learningDelivery.OrigLearnStartDateNullable,
+                    learningDelivery.FundModel))
+                {
+                    HandleValidationError(
+                        objectToValidate.LearnRefNumber,
+                        learningDelivery.AimSeqNumber,
+                        BuildErrorMessageParameters(learningDelivery.LearnStartDate, learningDelivery.FundModel));
+                }
+            }
         }
 
-        /// <summary>
-        /// Raises the validation message.
-        /// </summary>
-        /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <param name="thisDelivery">this delivery.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
+        public bool ConditionMet(DateTime? originalLearnStartDate, int fundModel)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.FundModel, thisDelivery.FundModel));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery.OrigLearnStartDateNullable));
+            return FundModelConditionMet(fundModel) &&
+                   OriginalLearnStartDateConditionMet(originalLearnStartDate);
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        public bool OriginalLearnStartDateConditionMet(DateTime? originalLearnStartDate)
+        {
+            return originalLearnStartDate.HasValue;
+        }
+
+        public bool FundModelConditionMet(int fundModel)
+        {
+            return FundModels.Contains(fundModel);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? originalLearnStartDate, int fundModel)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.OrigLearnStartDate, originalLearnStartDate?.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)
+            };
         }
     }
 }
