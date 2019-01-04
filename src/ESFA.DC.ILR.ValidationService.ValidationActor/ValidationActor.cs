@@ -9,7 +9,6 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -85,6 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             ExternalDataCache externalDataCache;
             FileDataCache fileDataCache;
             Message message;
+            IEnumerable<string> tasks;
             ValidationContext validationContext;
             IEnumerable<IValidationError> errors;
 
@@ -96,6 +96,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                 externalDataCacheGet = _jsonSerializationService.Deserialize<ExternalDataCache>(actorModel.ExternalDataCache);
                 fileDataCache = _jsonSerializationService.Deserialize<FileDataCache>(actorModel.FileDataCache);
                 message = _jsonSerializationService.Deserialize<Message>(actorModel.Message);
+                tasks = _jsonSerializationService.Deserialize<IEnumerable<string>>(actorModel.TaskList);
 
                 externalDataCache = new ExternalDataCache
                 {
@@ -150,7 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     IRuleSetOrchestrationService<ILearner, IValidationError> preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                    errors = await preValidationOrchestrationService.Execute(cancellationToken);
+                    errors = await preValidationOrchestrationService.ExecuteAsync(tasks, cancellationToken);
                     jobLogger.LogDebug($"{nameof(ValidationActor)} {_actorId} {GC.GetGeneration(actorModel)} {executionContext.TaskKey} validation done");
                 }
                 catch (Exception ex)
