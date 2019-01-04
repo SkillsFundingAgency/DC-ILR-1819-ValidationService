@@ -10,27 +10,19 @@ using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate
 {
-    public class OrigLearnStartDate_06Rule : AbstractRule, IRule<ILearner>
+    public class OrigLearnStartDate_07Rule : AbstractRule, IRule<ILearner>
     {
-        private const int FundModel35 = 35;
+        private const int FundModel81 = 81;
+        private const int FundModel36 = 36;
+        private const int ProgType25 = 25;
 
-        private readonly HashSet<string> LarsValidityCategories = new HashSet<string>()
-        {
-            TypeOfLARSValidity.AdultSkills,
-            TypeOfLARSValidity.Unemployed,
-            TypeOfLARSValidity.OLASSAdult
-        };
-
-        private readonly IDD07 _dd07;
         private readonly ILARSDataService _larsDataService;
 
-        public OrigLearnStartDate_06Rule(
-            IDD07 dd07,
+        public OrigLearnStartDate_07Rule(
             ILARSDataService larsDataService,
             IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_06)
+            : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_07)
         {
-            _dd07 = dd07;
             _larsDataService = larsDataService;
         }
 
@@ -55,8 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         public bool ConditionMet(DateTime? origLearnStartDate, int fundModel, int? progType, string learnAimRef)
         {
             return OrigLearnStartDateConditionMet(origLearnStartDate)
-                   && FundModelConditionMet(fundModel)
-                   && !Excluded(progType)
+                   && FundModelConditionMet(fundModel, progType)
                    && LARSConditionMet(origLearnStartDate, learnAimRef);
         }
 
@@ -65,19 +56,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             return origLearnStartDate.HasValue;
         }
 
-        public bool FundModelConditionMet(int fundModel)
+        public bool FundModelConditionMet(int fundModel, int? progType)
         {
-            return fundModel == FundModel35;
+            return fundModel == FundModel81 || (fundModel == FundModel36 && progType.HasValue && progType == ProgType25);
         }
 
         public bool LARSConditionMet(DateTime? origLearnStartDate, string learnAimRef)
         {
-            return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(origLearnStartDate, learnAimRef, LarsValidityCategories);
-        }
-
-        public bool Excluded(int? progType)
-        {
-            return _dd07.IsApprenticeship(progType);
+            return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Any);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? origLearnStartDate)
