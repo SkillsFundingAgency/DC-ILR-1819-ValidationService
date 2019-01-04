@@ -96,6 +96,7 @@
     <Compile Include="CrossEntity\R30Rule.cs" />
     <Compile Include="CrossEntity\R45Rule.cs" />
     <Compile Include="CrossEntity\R43Rule.cs" />
+    <Compile Include="CrossEntity\R52Rule.cs" />
     <Compile Include="CrossEntity\R69Rule.cs" />
     <Compile Include="CrossEntity\R71Rule.cs" />
     <Compile Include="CrossEntity\R47Rule.cs" />
