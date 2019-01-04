@@ -135,7 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.AcceptanceTests
 
                 var ruleSetOrchestrationService = scope.Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                return await ruleSetOrchestrationService.Execute(CancellationToken.None);
+                return await ruleSetOrchestrationService.ExecuteAsync(new List<string>(), CancellationToken.None);
             }
         }
 

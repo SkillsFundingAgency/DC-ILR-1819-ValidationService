@@ -216,6 +216,7 @@
         public const string OrigLearnStartDate_02 = "OrigLearnStartDate_02";
         public const string OrigLearnStartDate_03 = "OrigLearnStartDate_03";
         public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
+        public const string OrigLearnStartDate_06 = "OrigLearnStartDate_06";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
@@ -306,6 +307,7 @@
         public const string R85 = "R85";
         public const string R91 = "R91";
         public const string R96 = "R96";
+        public const string R102 = "R102";
         public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R112 = "R112";

@@ -89,6 +89,7 @@
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
     <Compile Include="Constants\TypeOfQualEnt3.cs" />
     <Compile Include="CrossEntity\R06Rule.cs" />
+    <Compile Include="CrossEntity\R102Rule.cs" />
     <Compile Include="CrossEntity\R106Rule.cs" />
     <Compile Include="CrossEntity\R20Rule.cs" />
     <Compile Include="CrossEntity\R31Rule.cs" />
@@ -310,6 +311,7 @@
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_01Rule.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_06Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
@@ -524,6 +526,5 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

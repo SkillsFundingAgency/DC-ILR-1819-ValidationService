@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return false;
             }
 
-            var AFinValues = learningDeliveries
+            var aFinValues = learningDeliveries
                 .GroupBy(ld => new
                 {
                     ld.StdCodeNullable,
@@ -60,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                     x.Key.AFinReimbersement
                 });
 
-            return AFinValues.Any(x => x.AFinPayments - x.AFinReimbersement < 0);
+            return aFinValues.Any(x => x.AFinPayments - x.AFinReimbersement < 0);
         }
     }
 }

@@ -7,7 +7,9 @@ using Autofac;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
@@ -82,6 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationDPActor
             ExternalDataCache externalDataCache;
             FileDataCache fileDataCache;
             Message message;
+            IEnumerable<string> tasks;
             ValidationContext validationContext;
             IEnumerable<IValidationError> errors;
 
@@ -93,11 +96,12 @@ namespace ESFA.DC.ILR.ValidationService.ValidationDPActor
                 externalDataCacheGet = _jsonSerializationService.Deserialize<ExternalDataCache>(actorModel.ExternalDataCache);
                 fileDataCache = _jsonSerializationService.Deserialize<FileDataCache>(actorModel.FileDataCache);
                 message = _jsonSerializationService.Deserialize<Message>(actorModel.Message);
+                tasks = _jsonSerializationService.Deserialize<IEnumerable<string>>(actorModel.TaskList);
 
                 externalDataCache = new ExternalDataCache
                 {
                     ULNs = externalDataCacheGet.ULNs,
-                    ValidationErrors = externalDataCacheGet.ValidationErrors
+                    ValidationErrors = ((IDictionary<string, ValidationError>)externalDataCacheGet.ValidationErrors).ToCaseInsensitiveDictionary()
                 };
 
                 validationContext = new ValidationContext
@@ -135,7 +139,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationDPActor
                     IRuleSetOrchestrationService<ILearnerDestinationAndProgression, IValidationError> preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearnerDestinationAndProgression, IValidationError>>();
 
-                    errors = await preValidationOrchestrationService.Execute(cancellationToken);
+                    errors = await preValidationOrchestrationService.ExecuteAsync(tasks, cancellationToken);
                     jobLogger.LogDebug($"{nameof(ValidationDPActor)} {_actorId} {GC.GetGeneration(actorModel)} {executionContext.TaskKey} Destination and Progression validation done");
                 }
                 catch (Exception ex)

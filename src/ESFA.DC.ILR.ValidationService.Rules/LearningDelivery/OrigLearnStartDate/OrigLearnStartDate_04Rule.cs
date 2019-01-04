@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
 
-        private readonly HashSet<int> FundModels = new HashSet<int> { 35, 36, 81, 99 };
+        private readonly HashSet<int> fundModels = new HashSet<int> { 35, 36, 81, 99 };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrigLearnStartDate_04Rule" /> class.
@@ -87,7 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             !HasRestartIndicator(delivery);
 
         public bool HasValidFundModel(ILearningDelivery delivery) =>
-            FundModels.Contains(delivery.FundModel);
+            fundModels.Contains(delivery.FundModel);
 
         /// <summary>
         /// Validates the specified object.

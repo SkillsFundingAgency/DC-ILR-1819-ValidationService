@@ -194,8 +194,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void Validate_Error()
         {
-            string learnRefNumber = "00100309";
-
             var learner = new TestLearner()
             {
                 LearnRefNumber = "00100309",
@@ -252,8 +250,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void Validate_NoError()
         {
-            string learnRefNumber = "00100309";
-
             var learner = new TestLearner()
             {
                 LearnRefNumber = "00100309",
