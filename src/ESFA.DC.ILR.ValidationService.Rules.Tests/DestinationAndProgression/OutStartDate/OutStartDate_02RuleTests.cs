@@ -54,15 +54,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.DestinationAndProgression.Ou
                 }
             };
 
-            var AcademicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
 
-            AcademicYearDataServiceMock.Setup(a => a.End()).Returns(DateTime.Now);
+            academicYearDataServiceMock.Setup(a => a.End()).Returns(DateTime.Now);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    academicYearDataService: AcademicYearDataServiceMock.Object)
+                    academicYearDataService: academicYearDataServiceMock.Object)
                     .Validate(testLearningDestinationAndProgression);
             }
         }
@@ -81,15 +81,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.DestinationAndProgression.Ou
                 }
             };
 
-            var AcademicYearDataServiceMock = new Mock<IAcademicYearDataService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
 
-            AcademicYearDataServiceMock.Setup(a => a.End()).Returns(DateTime.Now);
+            academicYearDataServiceMock.Setup(a => a.End()).Returns(DateTime.Now);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    academicYearDataService: AcademicYearDataServiceMock.Object)
+                    academicYearDataService: academicYearDataServiceMock.Object)
                     .Validate(testLearningDestinationAndProgression);
             }
         }

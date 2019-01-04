@@ -462,7 +462,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
         public void ValidateError()
         {
             var llddHealthProb = 1;
-            IEnumerable<TestLLDDAndHealthProblem> llddAndHealthProblems = null;
             var dateOfBirth = new DateTime(1994, 10, 01);
             var dd06Date = new DateTime(2018, 10, 01);
             var famType = "XXX";
@@ -511,7 +510,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
         public void ValidateNoError()
         {
             var llddHealthProb = 1;
-            IEnumerable<TestLLDDAndHealthProblem> llddAndHealthProblems = null;
             var dateOfBirth = new DateTime(1992, 10, 01);
             var dd06Date = new DateTime(2018, 10, 01);
             var famType = "XXX";
