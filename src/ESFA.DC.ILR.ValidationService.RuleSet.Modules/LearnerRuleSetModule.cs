@@ -376,6 +376,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R43Rule),
                 typeof(R45Rule),
                 typeof(R47Rule),
+                typeof(R52Rule),
                 typeof(R66Rule),
                 typeof(R68Rule),
                 typeof(R70Rule),

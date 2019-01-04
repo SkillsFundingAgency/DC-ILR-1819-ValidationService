@@ -297,6 +297,7 @@
         public const string R43 = "R43";
         public const string R45 = "R45";
         public const string R47 = "R47";
+        public const string R52 = "R52";
         public const string R66 = "R66";
         public const string R69 = "R69";
         public const string R70 = "R70";
