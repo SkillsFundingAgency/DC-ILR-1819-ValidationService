@@ -321,14 +321,22 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 .Any();
         }
 
-        public bool OrigLearnStartDateBetweenStartAndEndDateForValidityApprenticeships(DateTime? origLearnStartDate, string learnAimRef)
+        public bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime? origLearnStartDate, string learnAimRef, string validityCategory)
+        {
+            return OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(
+                origLearnStartDate,
+                learnAimRef,
+                new List<string>() { validityCategory });
+        }
+
+        public bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(DateTime? origLearnStartDate, string learnAimRef, IEnumerable<string> categoriesHashSet)
         {
             var learningDelivery = GetDeliveryFor(learnAimRef);
+            var caseInsensitveCategoriesHashSet = categoriesHashSet.ToCaseInsensitiveHashSet();
 
-            return learningDelivery != null
-                   && learningDelivery.LARSValidities != null
+            return learningDelivery?.LARSValidities != null
                    && learningDelivery.LARSValidities.Any(lv => lv.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                                                                && lv.ValidityCategory == "APPRENTICESHIPS"
+                                                                && caseInsensitveCategoriesHashSet.Contains(lv.ValidityCategory)
                                                                 && origLearnStartDate >= lv.StartDate
                                                                 && origLearnStartDate <= lv.EndDate);
         }
