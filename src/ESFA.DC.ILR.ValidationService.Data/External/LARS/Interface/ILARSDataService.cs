@@ -16,6 +16,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         [Obsolete("this method is deprecated; use 'GetDeliveryFor' instead", false)]
         IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef);
 
+        ILARSLearningDelivery GetLearningDeliveryForLearnAimRef(string learnAimRef);
+
         /// <summary>
         /// Gets the delivery for.
         /// </summary>

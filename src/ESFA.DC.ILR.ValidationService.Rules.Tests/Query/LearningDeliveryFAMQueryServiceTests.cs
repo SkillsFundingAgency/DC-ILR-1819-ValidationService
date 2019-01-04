@@ -125,21 +125,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
-        public void HasAnyLearningDeliveryFAMTypes_True()
-        {
-            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
-            {
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "A" },
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
-            };
-
-            var famTypes = new List<string>() { "A", "D" };
-
-            NewService().HasAnyLearningDeliveryFAMTypes(learningDeliveryFAMs, famTypes).Should().BeTrue();
-        }
-
-        [Fact]
         public void GetLearningDeliveryFAMsCountByFAMType_CountCheckForFound()
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
@@ -190,6 +175,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
+        public void HasAnyLearningDeliveryFAMTypes_True()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            var famTypes = new List<string>() { "A", "D" };
+
+            NewService().HasAnyLearningDeliveryFAMTypes(learningDeliveryFAMs, famTypes).Should().BeTrue();
+        }
+
+        [Fact]
         public void HasAnyLearningDeliveryFAMTypes_False()
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
@@ -214,6 +214,51 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         public void HasAnyLearningDeliveryFAMTypes_False_NullFAMTypes()
         {
             NewService().HasAnyLearningDeliveryFAMTypes(new List<ILearningDeliveryFAM>(), null);
+        }
+
+        [Fact]
+        public void HasLearningDeliveryFAMTypeForDate_True()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A", LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1) },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            NewService().HasLearningDeliveryFAMTypeForDate(learningDeliveryFAMs, "A", new DateTime(2018, 8, 1)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void HasLearningDeliveryFAMTypeForDate_False()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A", LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1) },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            NewService().HasLearningDeliveryFAMTypeForDate(learningDeliveryFAMs, "A", new DateTime(2018, 9, 1)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasLearningDeliveryFAMTypeForDate_False_NullLearningDeliveryFAMs()
+        {
+            NewService().HasLearningDeliveryFAMTypeForDate(null, "A", new DateTime(2018, 9, 1)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasLearningDeliveryFAMTypeForDate_False_NullFAMTypes()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A", LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1) },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            NewService().HasLearningDeliveryFAMTypeForDate(learningDeliveryFAMs, null, new DateTime(2018, 9, 1)).Should().BeFalse();
         }
 
         [Fact]

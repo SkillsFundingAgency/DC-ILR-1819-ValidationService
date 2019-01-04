@@ -35,8 +35,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(s => s.GetLearningDeliveryFAMsCountByFAMType
-                (It.IsAny<List<ILearningDeliveryFAM>>(), learDelFamType)).Returns(2);
+            learningDeliveryFAMsQueryServiceMock
+                .Setup(s => s.GetLearningDeliveryFAMsCountByFAMType(It.IsAny<List<ILearningDeliveryFAM>>(), learDelFamType))
+                .Returns(2);
 
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).ConditionMet(testLearningDeliveryFam, null).Should().BeFalse();
         }
@@ -54,8 +55,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(s => s.GetLearningDeliveryFAMsCountByFAMType
-                (It.IsAny<List<ILearningDeliveryFAM>>(), learDelFamType)).Returns(2);
+            learningDeliveryFAMsQueryServiceMock
+                .Setup(s => s.GetLearningDeliveryFAMsCountByFAMType(It.IsAny<List<ILearningDeliveryFAM>>(), learDelFamType))
+                .Returns(2);
 
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).ConditionMet(testLearningDeliveryFam, null).Should().BeTrue();
         }

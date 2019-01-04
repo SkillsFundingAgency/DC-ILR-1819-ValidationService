@@ -1,11 +1,13 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate;
 using ESFA.DC.ILR.ValidationService.Utility;
+using FluentAssertions;
 using Moq;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnStartDate
@@ -132,6 +134,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
                 .SetupGet(y => y.OrigLearnStartDateNullable)
                 .Returns(referenceDate);
 
+            mockDelivery
+                .SetupGet(y => y.FundModel)
+                .Returns(35);
+
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
 
@@ -189,6 +195,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
                 .SetupGet(y => y.OrigLearnStartDateNullable)
                 .Returns(referenceDate);
 
+            mockDelivery
+                .SetupGet(y => y.FundModel)
+                .Returns(35);
+
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
 
@@ -209,6 +219,36 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
 
             // assert
             handler.VerifyAll();
+        }
+
+        [Theory]
+        [InlineData(35)]
+        [InlineData(36)]
+        [InlineData(81)]
+        [InlineData(99)]
+        public void FundModelConditionMet_True(int fundModel)
+        {
+            var learningDelivery = new TestLearningDelivery
+            {
+                FundModel = fundModel
+            };
+
+            NewRule().HasValidFundModel(learningDelivery).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(25)]
+        [InlineData(88)]
+        [InlineData(10)]
+        [InlineData(100)]
+        public void FundModelConditionMet_False(int fundModel)
+        {
+            var learningDelivery = new TestLearningDelivery
+            {
+                FundModel = fundModel
+            };
+
+            NewRule().HasValidFundModel(learningDelivery).Should().BeFalse();
         }
 
         /// <summary>

@@ -14,8 +14,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private readonly DateTime _augFirst2016 = new DateTime(2016, 8, 1);
         private readonly string _famTypeLSF = LearningDeliveryFAMTypeConstants.LSF;
 
-        private readonly IFileDataService _fileDataService;
-
         public R106Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R106)
         {

@@ -61,6 +61,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
 
         bool IsSectorSubjectAreaCodeNullForContract(string conRefNumber);
 
+        bool IsSubjectAreaAndMinMaxLevelsExistsForContract(string conRefNumber);
+
         bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber);
+
+        bool IsSectorSubjectAreaTiersMatchingSubjectAreaCode(string conRefNumber, decimal? sectorSubjectAreaTier1, decimal? sectorSubjectAreaTier2);
     }
 }

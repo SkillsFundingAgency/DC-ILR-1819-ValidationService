@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.RuleSet.Tests.Rules;
 using FluentAssertions;
 using Moq;
@@ -14,55 +15,67 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
         [Fact]
         public async Task Execute_NoValidationItems()
         {
-            var validationContextMock = new Mock<IValidationContext>();
+            var output = new List<string> { "1", "2", "3" };
+
+            IValidationErrorCache<string> validationErrorCache = new ValidationErrorCacheGenericTest<string>();
 
             var ruleSetResolutionServiceMock = new Mock<IRuleSetResolutionService<string>>();
-            ruleSetResolutionServiceMock.Setup(rs => rs.Resolve()).Returns(new List<IRule<string>>() { new RuleOne(), new RuleTwo() });
+            ruleSetResolutionServiceMock.Setup(rs => rs.Resolve()).Returns(new List<IRule<string>>() { new RuleOne(validationErrorCache), new RuleTwo(validationErrorCache) });
 
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
-            validationItemProviderServiceMock.Setup(ps => ps.ProvideAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<string>());
+            validationItemProviderServiceMock.Setup(ps => ps.ProvideAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<string> { "NA" });
 
-            var output = new List<int>() { 1, 2, 3 };
+            var ruleSetExecutionService = new RuleSetExecutionService<string>();
 
-            var validationErrorCacheMock = new Mock<IValidationErrorCache<int>>();
-            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(output);
+            var service = NewService(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, validationErrorCache: validationErrorCache, ruleSetExecutionService: ruleSetExecutionService);
 
-            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, validationErrorCache: validationErrorCacheMock.Object);
+            (await service.ExecuteAsync(new List<string>(), CancellationToken.None)).Should().BeEquivalentTo(output);
+        }
 
-            (await service.Execute(CancellationToken.None)).Should().BeSameAs(output);
+        [Fact]
+        public async Task Execute_FilteredValidationItems()
+        {
+            IValidationErrorCache<string> validationErrorCache = new ValidationErrorCacheGenericTest<string>();
+
+            var ruleSetResolutionServiceMock = new Mock<IRuleSetResolutionService<string>>();
+            ruleSetResolutionServiceMock.Setup(rs => rs.Resolve()).Returns(new List<IRule<string>>() { new RuleOne(validationErrorCache), new RuleTwo(validationErrorCache) });
+
+            var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
+            validationItemProviderServiceMock.Setup(ps => ps.ProvideAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<string> { "NA" });
+
+            var ruleSetExecutionService = new RuleSetExecutionService<string>();
+
+            var service = NewService(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, validationErrorCache: validationErrorCache, ruleSetExecutionService: ruleSetExecutionService);
+
+            var filtered = new List<string> { "RuleOne", "RuleTwo" };
+
+            (await service.ExecuteAsync(filtered, CancellationToken.None)).Should().BeEmpty();
         }
 
         [Fact]
         public async Task Execute()
         {
-            var validationContextMock = new Mock<IValidationContext>();
+            var output = new List<string> { "1", "2", "3", "1", "2", "3" };
 
-            var ruleSet = new List<IRule<string>>() { new RuleOne(), new RuleTwo() };
+            IValidationErrorCache<string> validationErrorCache = new ValidationErrorCacheGenericTest<string>();
+
+            var ruleSet = new List<IRule<string>> { new RuleOne(validationErrorCache), new RuleTwo(validationErrorCache) };
 
             var ruleSetResolutionServiceMock = new Mock<IRuleSetResolutionService<string>>();
             ruleSetResolutionServiceMock.Setup(rs => rs.Resolve()).Returns(ruleSet);
 
             const string one = "one";
             const string two = "two";
-            var validationItems = new List<string>() { one, two };
+            var validationItems = new List<string> { one, two };
 
             var validationItemProviderServiceMock = new Mock<IValidationItemProviderService<IEnumerable<string>>>();
             validationItemProviderServiceMock.Setup(ps => ps.ProvideAsync(It.IsAny<CancellationToken>())).ReturnsAsync(validationItems);
 
-            var ruleSetExecutionServiceMock = new Mock<IRuleSetExecutionService<string>>();
-            ruleSetExecutionServiceMock.Setup(es => es.Execute(ruleSet, one)).Verifiable();
-            ruleSetExecutionServiceMock.Setup(es => es.Execute(ruleSet, two)).Verifiable();
+            var ruleSetExecutionService = new RuleSetExecutionService<string>();
 
-            var output = new List<int>() { 1, 2, 3 };
+            var service = NewService(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, ruleSetExecutionService, validationErrorCache);
 
-            var validationErrorCacheMock = new Mock<IValidationErrorCache<int>>();
-            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(output);
-
-            var service = NewService<string, int>(ruleSetResolutionServiceMock.Object, validationItemProviderServiceMock.Object, ruleSetExecutionServiceMock.Object, validationErrorCacheMock.Object);
-
-            (await service.Execute(CancellationToken.None)).Should().BeSameAs(output);
-
-            ruleSetExecutionServiceMock.Verify();
+            (await service.ExecuteAsync(new List<string>(), CancellationToken.None)).Should().BeEquivalentTo(output);
         }
 
         public RuleSetOrchestrationService<T, U> NewService<T, U>(

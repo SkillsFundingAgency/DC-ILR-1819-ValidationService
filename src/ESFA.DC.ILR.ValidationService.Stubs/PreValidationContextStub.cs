@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stubs
 {
@@ -25,5 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Stubs
         public string ValidationErrorsKey { get; set; }
 
         public string ValidationErrorMessageLookupKey { get; set; }
+
+        public IEnumerable<string> Tasks { get; set; }
     }
 }

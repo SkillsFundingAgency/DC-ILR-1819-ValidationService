@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         }
 
         public DelLocPostCode_03Rule()
-            : base(null, null)
+            : base(null, RuleNameConstants.DelLocPostCode_03)
         {
         }
 

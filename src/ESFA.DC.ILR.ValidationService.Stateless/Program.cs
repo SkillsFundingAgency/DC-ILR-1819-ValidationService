@@ -74,6 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterModule<PreValidationServiceModule>();
 
             Console.WriteLine($"BuildContainer:2");
+
             // get ServiceBus, Azurestorage config values and register container
             var configHelper = new ConfigurationHelper();
             var serviceBusOptions =
@@ -87,6 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
             containerBuilder.RegisterInstance(azureStorageOptions).As<IAzureStorageKeyValuePersistenceServiceConfig>().SingleInstance();
 
             Console.WriteLine($"BuildContainer:4");
+
             // register logger
             var loggerOptions =
                 configHelper.GetSectionValues<LoggerOptions>("LoggerSection");
@@ -113,12 +115,12 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 .InstancePerLifetimeScope();
 
             Console.WriteLine($"BuildContainer:6");
+
             // service bus queue configuration
-            //var topicConfiguration = new ServiceBusTopicConfiguration(
+            // var topicConfiguration = new ServiceBusTopicConfiguration(
             //    serviceBusOptions.ServiceBusConnectionString,
             //    serviceBusOptions.TopicName,
             //    serviceBusOptions.SubscriptionName);
-
             var topicSubscribeConfig = new TopicConfiguration(
                 serviceBusOptions.ServiceBusConnectionString,
                 serviceBusOptions.TopicName,
@@ -133,6 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 Environment.ProcessorCount);
 
             Console.WriteLine($"BuildContainer:9");
+
             // register queue services
             containerBuilder.Register(c =>
             {
@@ -161,6 +164,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 .As<IQueuePublishService<AuditingDto>>();
 
             Console.WriteLine($"BuildContainer:12");
+
             // Job Status Update Service
             var jobStatusPublishConfig = new JobStatusQueueConfig(
                 serviceBusOptions.ServiceBusConnectionString,
@@ -174,6 +178,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless
                 .As<IQueuePublishService<JobStatusDto>>();
 
             Console.WriteLine($"BuildContainer:14");
+
             // register job context manager
             containerBuilder.RegisterType<DefaultJobContextMessageMapper<JobContextMessage>>().As<IMapper<JobContextMessage, JobContextMessage>>();
 
