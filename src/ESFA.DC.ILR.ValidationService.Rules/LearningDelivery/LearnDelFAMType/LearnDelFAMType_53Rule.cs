@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -18,16 +19,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         };
 
         private readonly IFCSDataService _fcsDataService;
-        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
+        private readonly IFileDataService _fileDataService;
 
         public LearnDelFAMType_53Rule(
             IFCSDataService fcsDataService,
-            ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
-            IValidationErrorHandler validationErrorHandler)
+            IValidationErrorHandler validationErrorHandler,
+            IFileDataService fileDataService)
             : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_53)
         {
             _fcsDataService = fcsDataService;
-            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
+            _fileDataService = fileDataService;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -37,24 +38,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 return;
             }
 
+            var ukprn = _fileDataService.UKPRN();
             foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => d.LearningDeliveryFAMs != null))
             {
-                if (ConditionMet(learningDelivery.LearningDeliveryFAMs))
+                foreach (var learnDelFam in learningDelivery.LearningDeliveryFAMs)
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(LearningDeliveryFAMTypeConstants.ALB));
+                    if (ConditionMet(learnDelFam))
+                    {
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learnDelFam, ukprn));
+                    }
                 }
             }
         }
 
-        public bool ConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool ConditionMet(ILearningDeliveryFAM learningDeliveryFAM)
         {
-            return LearningDeliveryFAMsConditionMet(learningDeliveryFAMs) && FCTFundingConditionMet();
+            return LearningDeliveryFAMsConditionMet(learningDeliveryFAM) && FCTFundingConditionMet();
         }
 
-        public virtual bool LearningDeliveryFAMsConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public virtual bool LearningDeliveryFAMsConditionMet(ILearningDeliveryFAM learningDeliveryFAM)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ALB, "1")
-                || _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ALB, "3");
+           if ((learningDeliveryFAM?.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ALB && learningDeliveryFAM.LearnDelFAMCode.Equals("1"))
+                ||
+                (learningDeliveryFAM?.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ALB && learningDeliveryFAM.LearnDelFAMCode.Equals("3")))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public virtual bool FCTFundingConditionMet()
@@ -62,11 +73,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return _fcsDataService.FundingRelationshipFCTExists(_fundingStreamPeriodCodes);
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learningDelFAMType)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(ILearningDeliveryFAM learnDelFam, int ukprn)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learningDelFAMType)
+                BuildErrorMessageParameter(PropertyNameConstants.UKPRN, ukprn),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learnDelFam.LearnDelFAMType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, learnDelFam.LearnDelFAMCode)
             };
         }
     }

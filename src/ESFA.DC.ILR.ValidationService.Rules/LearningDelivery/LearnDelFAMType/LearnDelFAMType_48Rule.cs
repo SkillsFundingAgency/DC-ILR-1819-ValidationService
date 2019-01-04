@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 {
                     if (ConditionMet(learnDelFam, learningDelivery.LearningDeliveryFAMs))
                     {
-                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(LearningDeliveryFAMTypeConstants.HHS));
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learnDelFam));
                     }
                 }
             }
@@ -58,11 +58,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return false;
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnDelFamType)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(ILearningDeliveryFAM learnDelFam)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learnDelFamType)
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learnDelFam.LearnDelFAMType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, learnDelFam.LearnDelFAMCode)
             };
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAMType
+﻿using System.Globalization;
+
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAMType
 {
     using System;
     using System.Collections.Generic;
@@ -13,9 +15,6 @@
     using Moq;
     using Xunit;
 
-    /// <summary>
-    /// from version 1.1 validation spread sheet
-    /// </summary>
     public class LearnDelFAMType_61RuleTests
     {
         [Fact]
@@ -659,18 +658,12 @@
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
 
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            handler
-                .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == LearnDelFAMType_61Rule.Name),
-                    Moq.It.Is<string>(y => y == LearnRefNumber),
-                    0,
-                    Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
-            handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == LearnDelFAMType_61Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
-                .Returns(new Mock<IErrorMessageParameter>().Object);
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, Monitoring.Delivery.Types.FullOrCoFunding)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, "1")).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, DateTime.Parse("2017-08-01").ToString("d", new CultureInfo("en-GB")))).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, DateTime.Parse("1996-07-01").ToString("d", new CultureInfo("en-GB")))).Verifiable();
 
             var mock = new Mock<ILARSLearningDelivery>();
             mock
@@ -690,13 +683,13 @@
             var mockDDRule28 = new Mock<IDerivedData_28Rule>(MockBehavior.Strict);
             var mockDDRule29 = new Mock<IDerivedData_29Rule>(MockBehavior.Strict);
 
-            var sut = new LearnDelFAMType_61Rule(handler.Object, service.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object);
+            var sut = new LearnDelFAMType_61Rule(validationErrorHandlerMock.Object, service.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object);
 
             // act
             sut.ValidateDeliveries(mockLearner.Object);
 
             // assert
-            handler.VerifyAll();
+            validationErrorHandlerMock.VerifyAll();
             service.VerifyAll();
             mockDDRule07.VerifyAll();
             mockDDRule21.VerifyAll();
