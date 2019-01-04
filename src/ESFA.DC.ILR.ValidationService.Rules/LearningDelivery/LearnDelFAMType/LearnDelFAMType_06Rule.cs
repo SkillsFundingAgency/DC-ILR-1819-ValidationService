@@ -36,6 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 {
                     continue;
                 }
+
                 foreach (var learningDeliveryFam in learningDelivery.LearningDeliveryFAMs)
                 {
                     if (learningDeliveryFam.LearnDelFAMType == LearningDeliveryFAMTypeConstants.RES)

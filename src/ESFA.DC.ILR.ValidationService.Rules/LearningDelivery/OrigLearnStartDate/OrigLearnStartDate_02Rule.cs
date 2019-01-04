@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
 
-        private readonly HashSet<int> FundModels = new HashSet<int> { 35, 36, 81, 99 };
+        private readonly HashSet<int> fundModels = new HashSet<int> { 35, 36, 81, 99 };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrigLearnStartDate_02Rule" /> class.
@@ -65,7 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             It.IsBetween(delivery.OrigLearnStartDateNullable.Value, DateTime.MinValue, delivery.LearnStartDate);
 
         public bool HasValidFundModel(ILearningDelivery delivery) =>
-            FundModels.Contains(delivery.FundModel);
+            fundModels.Contains(delivery.FundModel);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].

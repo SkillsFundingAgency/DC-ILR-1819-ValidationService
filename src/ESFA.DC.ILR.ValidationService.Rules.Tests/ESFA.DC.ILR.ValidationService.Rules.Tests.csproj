@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="CrossEntity\R06RuleTests.cs" />
+    <Compile Include="CrossEntity\R102RuleTests.cs" />
     <Compile Include="CrossEntity\R106RuleTests.cs" />
     <Compile Include="CrossEntity\R31RuleTests.cs" />
     <Compile Include="CrossEntity\R30RuleTests.cs" />

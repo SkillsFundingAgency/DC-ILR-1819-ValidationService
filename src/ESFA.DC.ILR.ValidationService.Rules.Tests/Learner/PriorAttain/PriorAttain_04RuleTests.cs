@@ -77,7 +77,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
         [Fact]
         public void ConditionMet_FalsePriorAttain()
         {
-            int? priorAttain = null;
             var fundModel = 35;
             var progType = 2;
 
