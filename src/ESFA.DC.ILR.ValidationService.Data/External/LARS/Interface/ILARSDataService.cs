@@ -84,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types);
 
-        bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategories(
+        bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(
             DateTime? origLearnStartDate,
             string learnAimRef,
             IEnumerable<string> categoriesHashSet);

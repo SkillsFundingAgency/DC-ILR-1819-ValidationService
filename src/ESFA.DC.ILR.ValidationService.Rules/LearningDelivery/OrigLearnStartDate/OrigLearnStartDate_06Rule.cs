@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             IDD07 dd07,
             ILARSDataService larsDataService,
             IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_05)
+            : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_06)
         {
             _dd07 = dd07;
             _larsDataService = larsDataService;
@@ -56,8 +56,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         {
             return OrigLearnStartDateConditionMet(origLearnStartDate)
                    && FundModelConditionMet(fundModel)
-                   && LARSConditionMet(origLearnStartDate, learnAimRef)
-                   && !Excluded(progType);
+                   && !Excluded(progType)
+                   && LARSConditionMet(origLearnStartDate, learnAimRef);
         }
 
         public bool OrigLearnStartDateConditionMet(DateTime? origLearnStartDate)
@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         public bool LARSConditionMet(DateTime? origLearnStartDate, string learnAimRef)
         {
-            return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForValidityCategories(origLearnStartDate, learnAimRef, LarsValidityCategories);
+            return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(origLearnStartDate, learnAimRef, LarsValidityCategories);
         }
 
         public bool Excluded(int? progType)

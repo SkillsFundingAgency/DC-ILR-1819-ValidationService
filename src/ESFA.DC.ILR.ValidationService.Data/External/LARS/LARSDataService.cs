@@ -270,13 +270,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
         public bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime? origLearnStartDate, string learnAimRef, string validityCategory)
         {
-            return OrigLearnStartDateBetweenStartAndEndDateForValidityCategories(
+            return OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(
                 origLearnStartDate,
                 learnAimRef,
                 new List<string>() { validityCategory });
         }
 
-        public bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategories(DateTime? origLearnStartDate, string learnAimRef, IEnumerable<string> categoriesHashSet)
+        public bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(DateTime? origLearnStartDate, string learnAimRef, IEnumerable<string> categoriesHashSet)
         {
             _externalDataCache.LearningDeliveries.TryGetValue(learnAimRef, out var learningDelivery);
             var caseInsensitveCategoriesHashSet = categoriesHashSet.ToCaseInsensitiveHashSet();
