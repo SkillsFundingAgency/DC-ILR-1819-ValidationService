@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Autofac;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler;
 using ESFA.DC.ILR.ValidationService.RuleSet.Tests.Rules;
 using FluentAssertions;
 using Xunit;
@@ -29,6 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
         {
             var builder = new ContainerBuilder();
 
+            builder.RegisterType<ValidationErrorCacheGenericTest<string>>().As<IValidationErrorCache<string>>();
             builder.RegisterType<RuleOne>().As<IRule<string>>();
 
             var container = builder.Build();
@@ -46,6 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
         {
             var builder = new ContainerBuilder();
 
+            builder.RegisterType<ValidationErrorCacheGenericTest<string>>().As<IValidationErrorCache<string>>();
             builder.RegisterType<RuleOne>().As<IRule<string>>();
             builder.RegisterType<RuleTwo>().As<IRule<string>>();
 
@@ -68,6 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests
         {
             var builder = new ContainerBuilder();
 
+            builder.RegisterType<ValidationErrorCacheGenericTest<string>>().As<IValidationErrorCache<string>>().InstancePerLifetimeScope();
             builder.RegisterType<RuleOne>().As<IRule<string>>().InstancePerLifetimeScope();
 
             var container = builder.Build();

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Fabric;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Providers;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.JobContext.Interface;
 using ESFA.DC.JobContextManager.Interface;
@@ -42,7 +42,8 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                             ValidationErrorsKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors]
                                 .ToString(),
                             ValidationErrorMessageLookupKey = jobContextMessage
-                                .KeyValuePairs[JobContextMessageKey.ValidationErrorLookups].ToString()
+                                .KeyValuePairs[JobContextMessageKey.ValidationErrorLookups].ToString(),
+                            Tasks = jobContextMessage.Topics[jobContextMessage.TopicPointer].Tasks.SelectMany(x => x.Tasks)
                         }).As<IPreValidationContext>();
                 }))
             {

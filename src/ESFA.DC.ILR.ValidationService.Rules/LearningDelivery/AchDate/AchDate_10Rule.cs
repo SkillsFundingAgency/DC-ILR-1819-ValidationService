@@ -9,15 +9,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate
 {
     public class AchDate_10Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly DateTime _learnStartDate = new DateTime(2015, 7, 31);
-
         public AchDate_10Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.AchDate_10)
         {
         }
 
         public AchDate_10Rule()
-            : base(null, null)
+            : base(null, RuleNameConstants.AchDate_10)
         {
         }
 

@@ -17,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AchDate
         }
 
         public AchDate_09Rule()
-            : base(null, null)
+            : base(null, RuleNameConstants.AchDate_09)
         {
         }
 

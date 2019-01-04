@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber
         }
 
         public ConRefNumber_01Rule()
-            : base(null, null)
+            : base(null, RuleNameConstants.ConRefNumber_01)
         {
         }
 

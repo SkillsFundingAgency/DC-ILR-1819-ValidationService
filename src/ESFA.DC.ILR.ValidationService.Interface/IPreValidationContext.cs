@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Interface
+﻿using System.Collections.Generic;
+
+namespace ESFA.DC.ILR.ValidationService.Interface
 {
     public interface IPreValidationContext
     {
@@ -23,5 +25,7 @@
         int ValidationTotalErrorCount { get; set; }
 
         int ValidationTotalWarningCount { get; set; }
+
+        IEnumerable<string> Tasks { get; set; }
     }
 }

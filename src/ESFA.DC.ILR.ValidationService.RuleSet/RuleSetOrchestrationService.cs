@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,9 +27,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet
             _validationErrorCache = validationErrorCache;
         }
 
-        public async Task<IEnumerable<U>> Execute(CancellationToken cancellationToken)
+        public async Task<IEnumerable<U>> ExecuteAsync(IEnumerable<string> ignoredRules, CancellationToken cancellationToken)
         {
-            var ruleSet = _ruleSetResolutionService.Resolve().ToList();
+            List<IRule<T>> ruleSet = _ruleSetResolutionService.Resolve().Where(x => !ignoredRules.Any(y => string.Equals(x.RuleName, y, StringComparison.OrdinalIgnoreCase))).ToList();
 
             IEnumerable<T> items = await _validationItemProviderService.ProvideAsync(cancellationToken);
             foreach (T validationItem in items)
