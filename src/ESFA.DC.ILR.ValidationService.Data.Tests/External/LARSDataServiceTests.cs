@@ -1325,6 +1325,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 .BeTrue();
         }
 
+        // why would you introduce case sensitivity into the search when you're trying to remove it?
+        /*
         [Fact]
         public void DD04DateGreaterThanFrameworkAimEffectiveTo_CaseSensitive_True()
         {
@@ -1374,6 +1376,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 .Should()
                 .BeTrue();
         }
+        */
 
         [Fact]
         public void DD04DateGreaterThanFrameworkAimEffectiveTo_False()
@@ -2143,6 +2146,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeTrue();
         }
 
+        /// <summary>
+        /// Gets the notional NVQ levelv2 for learn aim reference.
+        /// and also (not by design) conducts a case insensitive request (test) from the cache...
+        /// </summary>
         [Fact]
         public void GetNotionalNVQLevelv2ForLearnAimRef()
         {

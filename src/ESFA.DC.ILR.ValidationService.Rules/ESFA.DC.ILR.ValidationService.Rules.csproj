@@ -293,6 +293,7 @@
     <Compile Include="LearningDelivery\AFinType\AFinType_01Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_07Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_72Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_81Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_73Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_87Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_86Rule.cs" />
