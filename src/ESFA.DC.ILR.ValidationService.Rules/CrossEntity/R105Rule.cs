@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 .Where(l => l.LearningDeliveryFAMs != null)?
                 .SelectMany(l => l.LearningDeliveryFAMs)?
                 .GroupBy(f => f.LearnDelFAMCode)?
-                .Any(g => g.Key.Count() > 1) ?? false;
+                .Any(g => g.Count() > 1) ?? false;
         }
 
         public bool LearnDelFAMTypeConditionMet(ILearner learner)
