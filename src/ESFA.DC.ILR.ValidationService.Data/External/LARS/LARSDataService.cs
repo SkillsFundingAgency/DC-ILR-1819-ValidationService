@@ -12,12 +12,24 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
     {
         private readonly IExternalDataCache _externalDataCache;
 
+        /// <summary>
+        /// The case de-sensitised lars deliveries
+        /// </summary>
+        private readonly IReadOnlyDictionary<string, Model.LearningDelivery> _larsDeliveries;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LARSDataService"/> class.
+        /// </summary>
+        /// <param name="externalDataCache">The external data cache.</param>
         public LARSDataService(IExternalDataCache externalDataCache)
         {
             It.IsNull(externalDataCache)
                 .AsGuard<ArgumentNullException>(nameof(externalDataCache));
 
             _externalDataCache = externalDataCache;
+
+            // de-sensitise the lars deliveries
+            _larsDeliveries = externalDataCache.LearningDeliveries.AsCIReadOnlyDictionary();
         }
 
         /// <summary>
@@ -45,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         /// </returns>
         public ILARSLearningDelivery GetDeliveryFor(string thisAimRef)
         {
-            _externalDataCache.LearningDeliveries.TryGetValue(thisAimRef, out var learningDelivery);
+            _larsDeliveries.TryGetValue(thisAimRef, out var learningDelivery);
 
             return learningDelivery;
         }
@@ -64,18 +76,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             return It.Has(delivery)
                 ? delivery.LearningDeliveryCategories.AsSafeReadOnlyList()
                 : Collection.EmptyAndReadOnly<ILARSLearningCategory>();
-        }
-
-        /// <summary>
-        /// Gets the lars learning delivery for.
-        /// </summary>
-        /// <param name="learnAimRef">this learn aim reference.</param>
-        /// <returns>a lars learning delivery record for this learning aim reference</returns>
-        public ILARSLearningDelivery GetLearningDeliveryForLearnAimRef(string learnAimRef)
-        {
-            return _externalDataCache.LearningDeliveries?.Values?
-                 .Where(e => e.LearnAimRef.CaseInsensitiveEquals(learnAimRef))?
-                 .FirstOrDefault();
         }
 
         /// <summary>
@@ -284,13 +284,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate)
         {
             var delivery = GetDeliveryFor(learnAimRef);
+            var safeSkillsSet = basicSkillsType.AsSafeDistinctKeySet();
 
             return It.Has(delivery)
                 && delivery.AnnualValues
                     .SafeAny(a => a.BasicSkillsType.HasValue
-                        && basicSkillsType.Contains((int)a.BasicSkillsType)
+                        && safeSkillsSet.Contains((int)a.BasicSkillsType)
                         && learnStartDate >= a.EffectiveFrom
-                        && learnStartDate <= a.EffectiveTo);
+                        && (a.EffectiveTo == null || learnStartDate <= a.EffectiveTo));
         }
 
         public bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode)

@@ -89,7 +89,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
-            larsDataServiceMock.Setup(l => l.GetLearningDeliveryForLearnAimRef(learnAimRef)).Returns(lARSLearningDelivery);
+            larsDataServiceMock.Setup(l => l.GetDeliveryFor(learnAimRef)).Returns(lARSLearningDelivery);
             fcsDataServiceMock.Setup(f => f.IsSectorSubjectAreaTiersMatchingSubjectAreaCode(
                 conRefNumber,
                 lARSLearningDelivery.SectorSubjectAreaTier1,
@@ -119,7 +119,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
-            larsDataServiceMock.Setup(l => l.GetLearningDeliveryForLearnAimRef(learnAimRef)).Returns(lARSLearningDelivery);
+            larsDataServiceMock.Setup(l => l.GetDeliveryFor(learnAimRef)).Returns(lARSLearningDelivery);
             fcsDataServiceMock.Setup(f => f.IsSectorSubjectAreaTiersMatchingSubjectAreaCode(
                 conRefNumber,
                 lARSLearningDelivery.SectorSubjectAreaTier1,
@@ -144,7 +144,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
-            larsDataServiceMock.Setup(l => l.GetLearningDeliveryForLearnAimRef(learnAimRef)).Returns(lARSLearningDelivery);
+            larsDataServiceMock.Setup(l => l.GetDeliveryFor(learnAimRef)).Returns(lARSLearningDelivery);
             fcsDataServiceMock.Setup(f => f.IsSectorSubjectAreaTiersMatchingSubjectAreaCode(
                 conRefNumber,
                 1.2M,
@@ -175,7 +175,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
-            larsDataServiceMock.Setup(l => l.GetLearningDeliveryForLearnAimRef(learnAimRef)).Returns(lARSLearningDelivery);
+            larsDataServiceMock.Setup(l => l.GetDeliveryFor(learnAimRef)).Returns(lARSLearningDelivery);
             fcsDataServiceMock.Setup(f => f.IsSectorSubjectAreaTiersMatchingSubjectAreaCode(
                 conRefNumber,
                 lARSLearningDelivery.SectorSubjectAreaTier1,
@@ -206,7 +206,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
-            larsDataServiceMock.Setup(l => l.GetLearningDeliveryForLearnAimRef(learnAimRef)).Returns(lARSLearningDelivery);
+            larsDataServiceMock.Setup(l => l.GetDeliveryFor(learnAimRef)).Returns(lARSLearningDelivery);
             fcsDataServiceMock.Setup(f => f.IsSubjectAreaAndMinMaxLevelsExistsForContract(conRefNumber)).Returns(false);
             fcsDataServiceMock.Setup(f => f.IsSectorSubjectAreaTiersMatchingSubjectAreaCode(
                 conRefNumber,
@@ -239,7 +239,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
-            larsDataServiceMock.Setup(l => l.GetLearningDeliveryForLearnAimRef(learnAimRef)).Returns(lARSLearningDelivery);
+            larsDataServiceMock.Setup(l => l.GetDeliveryFor(learnAimRef)).Returns(lARSLearningDelivery);
             fcsDataServiceMock.Setup(f => f.IsSubjectAreaAndMinMaxLevelsExistsForContract(conRefNumber)).Returns(true);
             fcsDataServiceMock.Setup(f => f.IsSectorSubjectAreaTiersMatchingSubjectAreaCode(
                 conRefNumber,
@@ -285,7 +285,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
-            larsDataServiceMock.Setup(l => l.GetLearningDeliveryForLearnAimRef(learnAimRef)).Returns(lARSLearningDelivery);
+            larsDataServiceMock.Setup(l => l.GetDeliveryFor(learnAimRef)).Returns(lARSLearningDelivery);
             fcsDataServiceMock.Setup(f => f.IsSubjectAreaAndMinMaxLevelsExistsForContract(conRefNumber)).Returns(true);
             fcsDataServiceMock.Setup(f => f.IsSectorSubjectAreaTiersMatchingSubjectAreaCode(
                 conRefNumber,
@@ -335,7 +335,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
-            larsDataServiceMock.Setup(l => l.GetLearningDeliveryForLearnAimRef(learnAimRef)).Returns(lARSLearningDelivery);
+            larsDataServiceMock.Setup(l => l.GetDeliveryFor(learnAimRef)).Returns(lARSLearningDelivery);
             fcsDataServiceMock.Setup(f => f.IsSubjectAreaAndMinMaxLevelsExistsForContract(conRefNumber)).Returns(false);
             fcsDataServiceMock.Setup(f => f.IsSectorSubjectAreaTiersMatchingSubjectAreaCode(
                 conRefNumber,

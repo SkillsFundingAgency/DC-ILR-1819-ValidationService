@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public bool LARSConditionMet(string conRefNumber, string learnAimRef)
         {
-            var larsLearningDelivery = _lARSDataService.GetLearningDeliveryForLearnAimRef(learnAimRef);
+            var larsLearningDelivery = _lARSDataService.GetDeliveryFor(learnAimRef);
             if (larsLearningDelivery == null)
             {
                 return false;
