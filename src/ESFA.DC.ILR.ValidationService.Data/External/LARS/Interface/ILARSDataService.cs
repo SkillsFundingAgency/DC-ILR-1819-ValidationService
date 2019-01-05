@@ -13,19 +13,34 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// </summary>
         /// <param name="forThisAimRef">this aim reference.</param>
         /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
+        [Obsolete("this method is deprecated; use 'GetDeliveryFor' instead", false)]
         IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef);
 
-        ILARSLearningDelivery GetLearningDeliveryForLearnAimRef(string learnAimRef);
+        /// <summary>
+        /// Gets the (lars) delivery for (this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">this aim reference.</param>
+        /// <returns>
+        /// a lars learning delivery for this learning aim reference
+        /// </returns>
+        ILARSLearningDelivery GetDeliveryFor(string thisAimRef);
 
         /// <summary>
-        /// Gets the validities for.
+        /// Gets the (lars) categories for  (this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">this aim reference.</param>
+        /// <returns>a collection of lars learning categories for this learning aim reference</returns>
+        IReadOnlyCollection<ILARSLearningCategory> GetCategoriesFor(string thisAimRef);
+
+        /// <summary>
+        /// Gets the (lars) validities for  (this aim reference).
         /// </summary>
         /// <param name="forThisAimRef">this aim reference.</param>
         /// <returns>a collection of lars 'validities' for this learning aim reference</returns>
         IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef);
 
         /// <summary>
-        /// Gets the standard validity for.
+        /// Gets the standard validity for  (this standard code).
         /// </summary>
         /// <param name="thisStandardCode">this standard code.</param>
         /// <returns>a LARS Standard Validity</returns>

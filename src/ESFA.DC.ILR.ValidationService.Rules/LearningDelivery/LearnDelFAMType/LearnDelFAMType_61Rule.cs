@@ -1,15 +1,19 @@
-﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
-using ESFA.DC.ILR.ValidationService.Utility;
-using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
-    public class LearnDelFAMType_61Rule : IRule<ILearner>
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using ESFA.DC.ILR.Model.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+    using ESFA.DC.ILR.ValidationService.Interface;
+    using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+    using ESFA.DC.ILR.ValidationService.Rules.Constants;
+    using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+    using ESFA.DC.ILR.ValidationService.Utility;
+
+    public class LearnDelFAMType_61Rule : AbstractRule, IRule<ILearner>
     {
         public const string MessagePropertyName = "LearnDelFAMType";
         public const string Name = "LearnDelFAMType_61";
@@ -27,6 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             IDerivedData_21Rule derivedData21,
             IDerivedData_28Rule derivedData28,
             IDerivedData_29Rule derivedData29)
+            : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_61)
         {
             _messageHandler = validationErrorHandler;
             _larsData = larsData;
@@ -35,8 +40,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             _derivedData28 = derivedData28;
             _derivedData29 = derivedData29;
         }
-
-        public string RuleName => Name;
 
         public DateTime LastInviableDate => new DateTime(2017, 07, 31);
 
@@ -54,8 +57,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.ReleasedOnTemporaryLicence);
         }
 
-        public bool IsRestart(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.Restart);
+        public bool IsRestart(ILearningDeliveryFAM monitor)
+        {
+            return It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.Restart);
+        }
 
         public bool IsSteelWorkerRedundancyTrainingOrIsInReceiptOfLowWages(ILearningDeliveryFAM monitor)
         {
@@ -193,9 +198,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             ValidateDeliveries(objectToValidate);
         }
 
-        public void ValidateDeliveries(ILearner candidate)
+        public void ValidateDeliveries(ILearner learner)
         {
-            var learnRefNumber = candidate.LearnRefNumber;
+            var learnRefNumber = learner.LearnRefNumber;
 
             /*
               LearningDelivery.LearnStartDate > 2017 - 07 - 31                                                  <= for a delivery after the given date
@@ -207,28 +212,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
              */
 
-            candidate.LearningDeliveries
+            foreach (var learningDelivery in learner.LearningDeliveries
                 .SafeWhere(x => IsViableStart(x)
                                 && IsAdultFunding(x)
-                                && IsTargetAgeGroup(candidate, x)
-                                && CheckDeliveryFAMs(x, IsFullyFundedLearningAim))
-                .ForEach(x =>
+                                && IsTargetAgeGroup(learner, x)
+                                && !IsEntitledLevel2Nvq(x)
+                                && x.LearningDeliveryFAMs != null))
+            {
+                foreach (var learningDeliveryFam in learningDelivery.LearningDeliveryFAMs)
                 {
-                    var failedValidation = !IsEntitledLevel2Nvq(x);
-
-                    if (failedValidation)
+                    if (IsFullyFundedLearningAim(learningDeliveryFam))
                     {
-                        RaiseValidationMessage(learnRefNumber, x);
+                       HandleValidationError(learnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery, learningDeliveryFam, learner));
                     }
-                });
+                }
+            }
         }
 
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(ILearningDelivery learningDelivery, ILearningDeliveryFAM learningDeliveryFam, ILearner learner)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
-
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, learningDelivery.FundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learningDeliveryFam.LearnDelFAMType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, learningDeliveryFam.LearnDelFAMCode),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learningDelivery.LearnStartDate),
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, learner.DateOfBirthNullable)
+            };
         }
     }
 }

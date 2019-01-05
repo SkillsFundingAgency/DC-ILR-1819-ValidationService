@@ -175,8 +175,11 @@
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
+        public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
+        public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
         public const string LearnDelFAMType_67 = "LearnDelFAMType_67";
+        public const string LearnDelFAMType_68 = "LearnDelFAMType_68";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
@@ -311,6 +314,7 @@
         public const string R91 = "R91";
         public const string R96 = "R96";
         public const string R102 = "R102";
+        public const string R104 = "R104";
         public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R112 = "R112";
