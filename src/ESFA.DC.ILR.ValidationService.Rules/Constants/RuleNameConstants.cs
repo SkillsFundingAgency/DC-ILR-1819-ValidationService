@@ -318,6 +318,7 @@
         public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R112 = "R112";
+        public const string R113 = "R113";
 
         public const string Schema = "Schema";
 
