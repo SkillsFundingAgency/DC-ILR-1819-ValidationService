@@ -66,20 +66,19 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <returns>
         /// a safe key set collection
         /// </returns>
-        public static HashSet<T> AsSafeDistinctKeySet<T>(this IEnumerable<T> list)
-            where T : struct, IEquatable<T>
+        public static ICollection<T> AsSafeDistinctKeySet<T>(this IEnumerable<T> list)
         {
             return new HashSet<T>(list.SafeReadOnlyList());
         }
 
         /// <summary>
-        /// As a safe distinct key set.
+        /// As a safe distinct case insensitive key set.
         /// </summary>
         /// <param name="list">The list.</param>
         /// <returns>
         /// a safe case insensitive key set collection
         /// </returns>
-        public static HashSet<string> AsSafeDistinctKeySet(this IEnumerable<string> list)
+        public static ICollection<string> AsSafeDistinctKeySet(this IEnumerable<string> list)
         {
             return new HashSet<string>(list.SafeReadOnlyList(), StringComparer.OrdinalIgnoreCase);
         }

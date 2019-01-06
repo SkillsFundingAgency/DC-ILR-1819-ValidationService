@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.LARS;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
@@ -376,17 +377,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void LearnAimRefExists_True()
         {
+            // a tenant of the dictionary is that the key will always point to a lars delivery...
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
-                { "One", null },
-                { "Two", null },
+                ["One"] = new Mock<LearningDelivery>().Object,
+                ["Two"] = new Mock<LearningDelivery>().Object,
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
-            NewService(externalDataCacheMock.Object).LearnAimRefExists("One").Should().BeTrue();
+            // let's make it lower case and see if it finds it...
+            NewService(externalDataCacheMock.Object).LearnAimRefExists("one").Should().BeTrue();
         }
 
         [Fact]
@@ -1760,7 +1763,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 .BeFalse();
         }
 
-        [Fact]
+        [Fact(Skip = "invalid, validity learn aim ref is a foreign key")]
         public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_FalseLearnAimRefMisMatch()
         {
             var learnAimRef = "123456789";
