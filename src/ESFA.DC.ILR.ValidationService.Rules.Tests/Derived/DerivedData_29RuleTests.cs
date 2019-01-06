@@ -112,21 +112,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             var categories = Collection.Empty<ILARSLearningCategory>();
             categories.Add(mockItem.Object);
 
-            var mockLD = new Mock<ILARSLearningDelivery>(MockBehavior.Strict);
-            mockLD
-                .SetupGet(y => y.LearnAimRef)
-                .Returns(aimRef);
-            mockLD
-                .SetupGet(y => y.LearningDeliveryCategories)
-                .Returns(categories.AsSafeReadOnlyList());
-
-            var deliveries = Collection.Empty<ILARSLearningDelivery>();
-            deliveries.Add(mockLD.Object);
-
             var mockLARS = new Mock<ILARSDataService>(MockBehavior.Strict);
             mockLARS
-                .Setup(x => x.GetDeliveriesFor(aimRef))
-                .Returns(deliveries.AsSafeReadOnlyList());
+                .Setup(x => x.GetCategoriesFor(aimRef))
+                .Returns(categories.AsSafeReadOnlyList());
 
             var sut = new DerivedData_29Rule(mockLARS.Object);
 

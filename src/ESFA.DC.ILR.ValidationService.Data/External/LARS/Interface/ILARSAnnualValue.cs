@@ -5,22 +5,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
     /// <summary>
     /// the lars annual value
     /// </summary>
-    public interface ILARSAnnualValue
+    public interface ILARSAnnualValue :
+        ISupportFundingWithdrawal
     {
         /// <summary>
         /// Gets the learn aim reference.
         /// </summary>
         string LearnAimRef { get; }
-
-        /// <summary>
-        /// Gets the effective from date.
-        /// </summary>
-        DateTime EffectiveFrom { get; }
-
-        /// <summary>
-        /// Gets the effective to date.
-        /// </summary>
-        DateTime? EffectiveTo { get; }
 
         /// <summary>
         /// Gets the basic skills.

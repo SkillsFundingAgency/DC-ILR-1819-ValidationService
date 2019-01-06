@@ -40,6 +40,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef);
 
         /// <summary>
+        /// Gets the (lars) annual values for(this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">The this aim reference.</param>
+        /// <returns>a collection of lars 'annula values' for this learning aim reference</returns>
+        IReadOnlyCollection<ILARSAnnualValue> GetAnnualValuesFor(string thisAimRef);
+
+        /// <summary>
         /// Gets the standard validity for  (this standard code).
         /// </summary>
         /// <param name="thisStandardCode">this standard code.</param>
