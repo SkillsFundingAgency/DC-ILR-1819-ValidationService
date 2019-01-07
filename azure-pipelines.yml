@@ -1,0 +1,243 @@
+queue:
+  name: DCT
+  demands: 
+  - IsBuildServer
+  - msbuild
+  - visualstudio
+  - vstest
+  - Cmd
+
+#Your build pipeline references the ‘BuildPlatform’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildPlatform’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references an undefined variable named ‘$(Build.DefinitionName’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references the ‘BuildPlatform’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+#Your build pipeline references the ‘BuildConfiguration’ variable, which you’ve selected to be settable at queue time. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it settable at queue time. See https://go.microsoft.com/fwlink/?linkid=865971
+variables:
+  ServiceFabricApplicationParametersFolder: 'src\$(ServiceFabricProjectFolderName)\ApplicationParameters'
+#Task group has not been exported, task groups are not supported yet
+
+- task: gittools.gitversion.gitversion-task.GitVersion@3
+  displayName: GitVersion
+  inputs:
+    updateAssemblyInfo: true
+
+  enabled: false
+
+- powershell: |
+   $var = (gci env:*).GetEnumerator() | Where-Object {$_.Name -Like "*BUILD*" -or $_.Name -Like "*GITVERSION*" -or $_.Name -Like "*CI_Version*" } | Sort-Object Name
+   Foreach ($v in $var) 
+   {
+     Write-Host "Name: " + $v.Name + " | Value : " + $v.Value
+   }
+  displayName: 'Display GitVersion Variables copy'
+  enabled: false
+
+- powershell: |
+   Copy-Item "Cloud.xml" "Local.1Node.xml" -Force
+   Copy-Item "Cloud.xml" "Local.5Node.xml" -Force
+   
+  workingDirectory: '$(ServiceFabricApplicationParametersFolder)'
+
+  displayName: 'Generate Fake Config Files'
+
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet <=4.8.0'
+  inputs:
+    versionSpec: '<=4.8.0'
+
+    checkLatest: true
+
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    vstsFeed: '1d5deb2d-cf8b-4bb1-b147-d13bc246e3f4'
+
+
+- task: VSBuild@1
+  displayName: 'Build solution **\*.sln'
+  inputs:
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)\applicationpackage" /p:version=$(Build.BuildNumber) /p:FileVersion=$(Build.BuildNumber)'
+
+    platform: '$(BuildPlatform)'
+
+    configuration: '$(BuildConfiguration)'
+
+    clean: true
+
+    maximumCpuCount: true
+
+    msbuildArchitecture: x64
+
+    createLogFile: true
+
+
+- task: CopyFiles@2
+  displayName: 'Copy Database Files to: Artifact Databases Directory'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)'
+
+    Contents: '**\*.dacpac'
+
+    TargetFolder: '$(build.artifactstagingdirectory)\Databases'
+
+    CleanTargetFolder: true
+
+    flattenFolders: true
+
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: Acceptance Tests to Artifact Folder'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)/src/'
+
+    Contents: '**\*AcceptanceTests\bin\$(BuildConfiguration)\*.*'
+
+    TargetFolder: '$(build.artifactstagingdirectory)\AcceptanceTests'
+
+    CleanTargetFolder: true
+
+    flattenFolders: true
+
+
+- task: VSBuild@1
+  displayName: 'Build sfproj'
+  inputs:
+    solution: '$(build.sourcesdirectory)\src\$(ServiceFabricProjectFolderName)\*.sfproj'
+
+    msbuildArgs: '/t:Package /p:PackageLocation=$(build.artifactstagingdirectory)\applicationpackage /p:version=$(Build.BuildNumber) /p:FileVersion=$(Build.BuildNumber)'
+
+    platform: '$(BuildPlatform)'
+
+    configuration: '$(BuildConfiguration)'
+
+    maximumCpuCount: true
+
+    msbuildArchitecture: x64
+
+
+- task: CopyFiles@2
+  displayName: 'Copy ApplicationParameters Files to: Artifact Nuget Directory'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)\src'
+
+    Contents: |
+     **\*.$(NugetFilter).*.nupkg
+     !**\packages\**
+     !**\bin\x64\**
+
+    TargetFolder: '$(build.artifactstagingdirectory)\NugetPackages'
+
+    CleanTargetFolder: true
+
+    OverWrite: true
+
+    flattenFolders: true
+
+
+- task: VSTest@2
+  displayName: 'VsTest - testAssemblies'
+  inputs:
+    testAssemblyVer2: |
+     **\*test*.dll
+     !**\*TestAdapter.dll
+     !**\*AcceptanceTests.dll
+     !**\obj\**
+
+    runInParallel: true
+
+    codeCoverageEnabled: true
+
+    testRunTitle: '$($(Build.DefinitionName)'
+
+    platform: '$(BuildPlatform)'
+
+    configuration: '$(BuildConfiguration)'
+
+
+- task: NuGetCommand@2
+  displayName: 'NuGet pack'
+  inputs:
+    command: pack
+
+    packagesToPack: '$(NugetProjFilter)'
+
+    packDestination: '$(Build.ArtifactStagingDirectory)\NugetPackages'
+
+    versioningScheme: byBuildNumber
+
+    buildProperties: '-MSBuildVersion'
+
+
+- task: CopyFiles@2
+  displayName: 'Copy Symbols Files to: Artifact Symbols Directory'
+  inputs:
+    SourceFolder: '$(build.artifactstagingdirectory)\applicationpackage'
+
+    Contents: '**\*.pdb'
+
+    TargetFolder: '$(build.artifactstagingdirectory)\Symbols_$(BuildConfiguration)'
+
+    CleanTargetFolder: true
+
+
+- task: DeleteFiles@1
+  displayName: 'Delete Symbols files from $(build.artifactstagingdirectory)\applicationpackage'
+  inputs:
+    SourceFolder: '$(build.artifactstagingdirectory)\applicationpackage'
+
+    Contents: '**\*.pdb'
+
+
+- task: ServiceFabricUpdateManifests@2
+  displayName: 'Update Service Fabric Manifests (Manifest versions)'
+  inputs:
+    applicationPackagePath: '$(build.artifactstagingdirectory)\applicationpackage'
+
+    versionBehavior: Replace
+
+
+- task: CopyFiles@2
+  displayName: 'Copy PublishProfiles Files to: Artifact PublishProfiles Directory'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)\src\$(ServiceFabricProjectFolderName)'
+
+    Contents: '$(build.sourcesdirectory)\src\$(ServiceFabricProjectFolderName)'
+
+    TargetFolder: '$(build.artifactstagingdirectory)\PublishProfiles '
+
+
+- task: CopyFiles@2
+  displayName: 'Copy ApplicationParameters Files to: Artifact ApplicationParameters Directory'
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)\src\$(ServiceFabricProjectFolderName)'
+
+    Contents: |
+     **\ApplicationParameters\*.xml
+     
+
+    TargetFolder: '$(build.artifactstagingdirectory)\ApplicationParameters'
+
+    CleanTargetFolder: true
+
+    flattenFolders: true
+
+
+- task: PublishSymbols@2
+  displayName: 'Publish symbols path'
+  inputs:
+    SymbolServerType: TeamServices
+
+    SymbolsMaximumWaitTime: 3
+
+  enabled: false
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+

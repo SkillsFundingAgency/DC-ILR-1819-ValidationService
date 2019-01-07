@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 .GroupBy(ldp => new
                 {
                     ldp.LearnRefNumber,
-                    DpOutComeCount = ldp.DPOutcomes.GroupBy(x => new { x.OutCode, x.OutType, x.OutStartDate }).Select(y => y.Count())
+                    DpOutComeCount = ldp.DPOutcomes.GroupBy(x => new { x.OutCode, OutType = x.OutType.ToUpperInvariant(), x.OutStartDate }).Select(y => y.Count())
                 })
                 .Where(x => x.Key.DpOutComeCount.Any(c => c > 1))
                 .Select(x => x.Key.LearnRefNumber);

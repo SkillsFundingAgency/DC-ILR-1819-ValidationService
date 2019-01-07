@@ -149,23 +149,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData("2014-04-01", "2015-05-09", "2016-07-15", false)]
         [InlineData("2011-09-01", "2016-07-14", "2016-07-15", false)]
         [InlineData("2013-07-16", "2015-05-09", "2015-07-15", false)]
-        [InlineData("2013-07-17", "2013-07-16", "2013-07-15", false)]
-
-        // the next 4 test cases account for the 'custom and practice' of
-        // withdrawing funding for a learning aim by shifting the end date
-        // of the validty to one day before the start date
-        [InlineData("2013-07-16", "2013-07-16", "2013-07-15", false)]
-        [InlineData("2013-07-15", "2013-07-16", "2013-07-15", false)]
-        [InlineData("2013-07-14", "2013-07-16", "2013-07-15", false)]
         public void HasValidStartRangeWithValidityLastNewStartDateMeetsExpectation(string candidate, string startDate, string endDate, bool expectation)
         {
             // arrange
             var sut = NewRule();
 
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSValidity>(MockBehavior.Strict);
             mockValidity
                 .SetupGet(x => x.StartDate)
                 .Returns(DateTime.Parse(startDate));
+            mockValidity
+                .SetupGet(x => x.EndDate)
+                .Returns((DateTime?)null);
             mockValidity
                 .SetupGet(x => x.LastNewStartDate)
                 .Returns(DateTime.Parse(endDate));
@@ -209,13 +204,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // arrange
             var sut = NewRule();
 
-            var mockValidity = new Mock<ILARSValidity>();
+            // for testing, effective from and effect to,
+            // this establishes whether the item is current or not
+            var mockValidity = new Mock<ILARSValidity>(MockBehavior.Strict);
             mockValidity
                 .SetupGet(x => x.StartDate)
                 .Returns(DateTime.Parse(startDate));
             mockValidity
                 .SetupGet(x => x.EndDate)
                 .Returns(DateTime.Parse(endDate));
+            mockValidity
+                .SetupGet(x => x.LastNewStartDate)
+                .Returns((DateTime?)null);
 
             var mockItem = new Mock<ILearningDelivery>();
             mockItem
@@ -258,13 +258,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSValidity>(MockBehavior.Strict);
             mockValidity
                 .SetupGet(x => x.StartDate)
                 .Returns(DateTime.Parse(startDate));
             mockValidity
                 .SetupGet(x => x.EndDate)
                 .Returns(DateTime.Parse(endDate));
+            mockValidity
+                .SetupGet(x => x.LastNewStartDate)
+                .Returns((DateTime?)null);
 
             var larsValidities = Collection.Empty<ILARSValidity>();
             larsValidities.Add(mockValidity.Object);
@@ -359,8 +362,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                     learnAimRef))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            // we just need to get a 'valid' category to get through the restrictions
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSValidity>(MockBehavior.Strict);
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
@@ -370,6 +372,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             mockValidity
                 .SetupGet(x => x.EndDate)
                 .Returns(DateTime.Parse(endDate));
+            mockValidity
+                .SetupGet(x => x.LastNewStartDate)
+                .Returns((DateTime?)null);
 
             var larsValidities = Collection.Empty<ILARSValidity>();
             larsValidities.Add(mockValidity.Object);
@@ -451,8 +456,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            // we just need to get a 'valid' category to get through the restrictions
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSValidity>(MockBehavior.Strict);
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
@@ -462,6 +466,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             mockValidity
                 .SetupGet(x => x.EndDate)
                 .Returns(DateTime.Parse(endDate));
+            mockValidity
+                .SetupGet(x => x.LastNewStartDate)
+                .Returns((DateTime?)null);
 
             var larsValidities = Collection.Empty<ILARSValidity>();
             larsValidities.Add(mockValidity.Object);

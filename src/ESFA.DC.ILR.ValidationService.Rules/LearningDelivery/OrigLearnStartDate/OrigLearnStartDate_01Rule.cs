@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 {
     public class OrigLearnStartDate_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly List<int> FundModels = new List<int> { 35, 36, 81, 99 };
+        private readonly HashSet<int> _fundModels = new HashSet<int> { 35, 36, 81, 99 };
 
         public OrigLearnStartDate_01Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_01)
@@ -50,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         public bool FundModelConditionMet(int fundModel)
         {
-            return FundModels.Contains(fundModel);
+            return _fundModels.Contains(fundModel);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, DateTime? originalLearnStartDate)

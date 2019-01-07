@@ -174,7 +174,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         public static bool IsInRange<T>(T source, params T[] target)
             where T : IComparable
         {
-            var values = target.AsSafeList();
+            var values = target.AsSafeReadOnlyList();
             return values.Contains(source);
         }
 
@@ -200,10 +200,37 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <param name="source">The source.</param>
         /// <param name="target">The target.</param>
         /// <returns>true or false</returns>
+        public static bool IsInRange(string source, params string[] target)
+        {
+            var values = target.AsSafeDistinctKeySet();
+            return values.Contains(source);
+        }
+
+        /// <summary>
+        /// Determines whether [is out of range] [the specified source].
+        /// </summary>
+        /// <typeparam name="T">of value type</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>
+        ///   <c>true</c> if [is out of range] [the specified source]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsOutOfRange(string source, params string[] target)
+        {
+            return !IsInRange(source, target);
+        }
+
+        /// <summary>
+        /// Determines whether [is in range] [the specified source].
+        /// </summary>
+        /// <typeparam name="T">of value type</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>true or false</returns>
         public static bool IsInRange<T>(T? source, params T[] target)
             where T : struct, IComparable, IFormattable
         {
-            var values = target.AsSafeList();
+            var values = target.AsSafeDistinctKeySet();
             return Has(source) && values.Contains(source.Value);
         }
 

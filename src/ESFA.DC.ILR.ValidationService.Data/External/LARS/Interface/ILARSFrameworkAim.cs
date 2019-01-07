@@ -5,7 +5,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
     /// <summary>
     /// the lars framework aim
     /// </summary>
-    public interface ILARSFrameworkAim
+    public interface ILARSFrameworkAim :
+        ISupportFundingWithdrawal
     {
         /// <summary>
         /// Gets the framework code.
@@ -31,15 +32,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// Gets the type of the framework component.
         /// </summary>
         int? FrameworkComponentType { get; }
-
-        /// <summary>
-        /// Gets the effective from date.
-        /// </summary>
-        DateTime EffectiveFrom { get; }
-
-        /// <summary>
-        /// Gets the effective to date.
-        /// </summary>
-        DateTime? EffectiveTo { get; }
     }
 }

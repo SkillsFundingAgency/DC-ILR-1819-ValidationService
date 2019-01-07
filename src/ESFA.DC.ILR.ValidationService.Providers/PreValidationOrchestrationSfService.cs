@@ -92,14 +92,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 _fileDataCache.FileName = validationContext.Input;
 
                 // File Validation
-                await _ruleSetOrchestrationService.Execute(cancellationToken).ConfigureAwait(false);
+                await _ruleSetOrchestrationService.ExecuteAsync(validationContext.Tasks, cancellationToken).ConfigureAwait(false);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
                 if (_validationErrorCache.ValidationErrors.Any(IsFail))
                 {
                     _logger.LogDebug(
-                        $"File schema catestrophic error, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
+                        $"File schema catastrophic error, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
                     return;
                 }
 
@@ -196,7 +196,9 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             _logger.LogDebug($"fileDataCacheAsString {fileDataCacheAsString.Length}");
             string externalDataCacheAsString =
                 _jsonSerializationService.Serialize(_externalDataCache);
-            _logger.LogDebug($"ExternalDataCache: {externalDataCacheAsString.Length} ");
+            _logger.LogDebug($"ExternalDataCache: {externalDataCacheAsString.Length}");
+            string taskListAsString = _jsonSerializationService.Serialize(validationContext.Tasks);
+            _logger.LogDebug($"taskListAsString {taskListAsString.Length}");
 
             foreach (IMessage messageShard in learnerMessageShards)
             {
@@ -216,6 +218,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     InternalDataCache = internalDataCacheAsString,
                     ExternalDataCache = externalDataCacheAsString,
                     FileDataCache = fileDataCacheAsString,
+                    TaskList = taskListAsString
                 };
 
                 actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
@@ -241,6 +244,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                         InternalDataCache = internalDataCacheAsString,
                         ExternalDataCache = externalDataCacheAsString,
                         FileDataCache = fileDataCacheAsString,
+                        TaskList = taskListAsString
                     };
 
                     actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));

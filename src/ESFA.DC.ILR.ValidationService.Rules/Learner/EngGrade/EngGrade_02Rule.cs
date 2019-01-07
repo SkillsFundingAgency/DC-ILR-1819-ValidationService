@@ -13,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade
 {
     public class EngGrade_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<string> _learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999", "NONE" };
+        private readonly HashSet<string> _learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
         private readonly ILARSDataService _lARSDataService;
 
         public EngGrade_02Rule(
@@ -27,7 +27,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade
         public void Validate(ILearner objectToValidate)
         {
             if (objectToValidate?.LearningDeliveries == null
-                && !EngGradeConditionMet(objectToValidate?.EngGrade))
+                || !EngGradeSupplied(objectToValidate?.EngGrade))
+            {
+                return;
+            }
+
+            var none = "none";
+            bool engGradeNone = none.Equals(objectToValidate?.EngGrade, StringComparison.InvariantCultureIgnoreCase);
+            if (engGradeNone)
             {
                 return;
             }
@@ -49,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade
             return !_lARSDataService.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, _learnAimRefTypes);
         }
 
-        public bool EngGradeConditionMet(string engGrade)
+        public bool EngGradeSupplied(string engGrade)
         {
             return !string.IsNullOrEmpty(engGrade);
         }

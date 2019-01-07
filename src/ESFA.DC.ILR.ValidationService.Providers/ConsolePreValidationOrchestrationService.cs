@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -44,8 +45,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             // get ILR data from file
             await _preValidationPopulationService.PopulateAsync(cancellationToken);
 
-            await _messageRuleSetOrchestrationService.Execute(cancellationToken);
-            await _learnerRuleSetOrchestrationService.Execute(cancellationToken);
+            await _messageRuleSetOrchestrationService.ExecuteAsync(new List<string>(), cancellationToken);
+            await _learnerRuleSetOrchestrationService.ExecuteAsync(new List<string>(), cancellationToken);
 
             await _validationOutputService.ProcessAsync(CancellationToken.None);
         }

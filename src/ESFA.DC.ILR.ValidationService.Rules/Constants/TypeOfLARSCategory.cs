@@ -24,5 +24,10 @@
         /// only for legal entitlement at level 3
         /// </summary>
         public const int OnlyForLegalEntitlementAtLevel3 = 38;
+
+        /// <summary>
+        /// license to practice
+        /// </summary>
+        public const int LicenseToPractice = 20;
     }
 }

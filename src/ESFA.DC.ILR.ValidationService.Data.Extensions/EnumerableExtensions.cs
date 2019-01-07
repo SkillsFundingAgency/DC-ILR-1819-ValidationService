@@ -14,6 +14,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.Extensions
             return new HashSet<T>(source, StringComparer.OrdinalIgnoreCase as IEqualityComparer<T>);
         }
 
+        /// <summary>
+        /// As case insensitive read only dictionary.
+        /// ordinal ignore case, because it's faster than it's invariant culture cousin
+        /// </summary>
+        /// <typeparam name="TValue">The type of value.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <returns>a case insensitive readonly dictionary</returns>
+        public static IReadOnlyDictionary<string, TValue> AsCIReadOnlyDictionary<TValue>(this IReadOnlyDictionary<string, TValue> source)
+        {
+            if (source == null)
+            {
+                return new Dictionary<string, TValue>(StringComparer.OrdinalIgnoreCase);
+            }
+
+            return new Dictionary<string, TValue>(source.ToDictionary(kvp => kvp.Key, kvp => kvp.Value), StringComparer.OrdinalIgnoreCase);
+        }
+
         public static Dictionary<string, TValue> ToCaseInsensitiveDictionary<TValue>(this IDictionary<string, TValue> dictionary)
         {
             return new Dictionary<string, TValue>(dictionary, StringComparer.OrdinalIgnoreCase);

@@ -89,12 +89,17 @@
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
     <Compile Include="Constants\TypeOfQualEnt3.cs" />
     <Compile Include="CrossEntity\R06Rule.cs" />
+    <Compile Include="CrossEntity\R104Rule.cs" />
+    <Compile Include="CrossEntity\R102Rule.cs" />
     <Compile Include="CrossEntity\R106Rule.cs" />
+    <Compile Include="CrossEntity\R113Rule.cs" />
     <Compile Include="CrossEntity\R20Rule.cs" />
     <Compile Include="CrossEntity\R31Rule.cs" />
     <Compile Include="CrossEntity\R30Rule.cs" />
     <Compile Include="CrossEntity\R45Rule.cs" />
     <Compile Include="CrossEntity\R43Rule.cs" />
+    <Compile Include="CrossEntity\R52Rule.cs" />
+    <Compile Include="CrossEntity\R63Rule.cs" />
     <Compile Include="CrossEntity\R69Rule.cs" />
     <Compile Include="CrossEntity\R71Rule.cs" />
     <Compile Include="CrossEntity\R47Rule.cs" />
@@ -290,6 +295,8 @@
     <Compile Include="LearningDelivery\AFinType\AFinType_01Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_07Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_72Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_81Rule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_73Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_87Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_86Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_85Rule.cs" />
@@ -298,17 +305,24 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_06Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_65Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_69Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_68Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_67Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_27Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_07Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_48Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_18Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_53Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_60Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_61Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_01Rule.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_09Rule.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_07Rule.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_06Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
@@ -523,6 +537,5 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

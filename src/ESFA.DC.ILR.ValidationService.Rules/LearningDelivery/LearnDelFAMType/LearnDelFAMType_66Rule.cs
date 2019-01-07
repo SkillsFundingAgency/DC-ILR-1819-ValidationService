@@ -5,7 +5,6 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
@@ -164,13 +163,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsBasicSkillsLearner(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef)
-                .Where(x => It.IsBetween(delivery.LearnStartDate, x.EffectiveFrom, x.EffectiveTo ?? DateTime.MaxValue))
-                .AsSafeReadOnlyList();
+            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
-            return deliveries
-                .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
-                .Any(IsBasicSkillsLearner);
+            return larsDelivery.IsCurrent(delivery.LearnStartDate)
+                && larsDelivery.AnnualValues.SafeAny(IsBasicSkillsLearner);
         }
 
         /// <summary>
@@ -291,10 +287,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsEarlyStageNVQ(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
+            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
-            return deliveries
-                .Any(x => It.IsInRange(x.NotionalNVQLevelv2, LARSNotionalNVQLevelV2.EntryLevel, LARSNotionalNVQLevelV2.Level1, LARSNotionalNVQLevelV2.Level2));
+            return It.IsInRange(
+                larsDelivery?.NotionalNVQLevelv2,
+                LARSNotionalNVQLevelV2.EntryLevel,
+                LARSNotionalNVQLevelV2.Level1,
+                LARSNotionalNVQLevelV2.Level2);
         }
 
         /// <summary>
@@ -335,6 +334,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             ValidateDeliveries(objectToValidate);
         }
 
+        public bool IsNotValid(ILearner learner, ILearningDelivery delivery) =>
+            IsAdultFunding(delivery)
+                && IsViableStart(delivery)
+                && IsTargetAgeGroup(learner, delivery)
+                && CheckDeliveryFAMs(delivery, IsFullyFunded)
+                && IsEarlyStageNVQ(delivery);
+
         /// <summary>
         /// Validates the deliveries.
         /// a breakout routine to simplify testing
@@ -345,16 +351,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             var learnRefNumber = candidate.LearnRefNumber;
 
             candidate.LearningDeliveries
-                .SafeWhere(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsFullyFunded))
-                .ForEach(x =>
-                {
-                    var failedValidation = IsEarlyStageNVQ(x);
-
-                    if (failedValidation)
-                    {
-                        RaiseValidationMessage(learnRefNumber, x);
-                    }
-                });
+                .SafeWhere(x => IsNotValid(candidate, x))
+                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
         }
 
         /// <summary>

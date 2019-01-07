@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
@@ -23,11 +24,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "1", false, true)]
-        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "3", false, true)]
-        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "1", true, false)]
-        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "3", true, false)]
-        public void ConditionMet_False(string learDelFamType, string famCode, bool hasLearningDeliveryFamCodesForType, bool hasFundingStreamPeriodCode)
+        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "1", false)]
+        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "3", false)]
+        public void ConditionMet_False(string learDelFamType, string famCode, bool hasFundingStreamPeriodCode)
         {
             var testLearningDeliveryFam = new TestLearningDeliveryFAM()
             {
@@ -35,24 +34,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 LearnDelFAMCode = famCode
             };
 
-            var learningDeliveryFams = new List<ILearningDeliveryFAM>() { testLearningDeliveryFam };
-
-            var learningDeliveryFaMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-
-            learningDeliveryFaMsQueryServiceMock.Setup(s => s.HasLearningDeliveryFAMCodeForType(It.IsAny<List<ILearningDeliveryFAM>>(), learDelFamType, famCode)).Returns(hasLearningDeliveryFamCodesForType);
-
             fcsDataServiceMock.Setup(x => x.FundingRelationshipFCTExists(It.IsAny<List<string>>())).Returns(hasFundingStreamPeriodCode);
 
-            NewRule(fcsDataServiceMock.Object, learningDeliveryFaMsQueryServiceMock.Object)
-                .ConditionMet(learningDeliveryFams)
-                .Should().BeFalse();
+            NewRule(fcsDataServiceMock.Object).ConditionMet(testLearningDeliveryFam).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "1", true, true)]
-        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "3", true, true)]
-        public void ConditionMet_True(string learDelFamType, string famCode, bool hasLearningDeliveryFamCodesForType, bool hasFundingStreamPeriodCode)
+        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "1", true)]
+        [InlineData(LearningDeliveryFAMTypeConstants.ALB, "3", true)]
+        public void ConditionMet_True(string learDelFamType, string famCode, bool hasFundingStreamPeriodCode)
         {
             var testLearningDeliveryFam = new TestLearningDeliveryFAM()
             {
@@ -60,46 +51,43 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 LearnDelFAMCode = famCode
             };
 
-            var learningDeliveryFams = new List<ILearningDeliveryFAM>() { testLearningDeliveryFam };
-
-            var learningDeliveryFaMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-
-            learningDeliveryFaMsQueryServiceMock.Setup(s => s.HasLearningDeliveryFAMCodeForType(It.IsAny<List<ILearningDeliveryFAM>>(), learDelFamType, famCode)).Returns(hasLearningDeliveryFamCodesForType);
-
             fcsDataServiceMock.Setup(x => x.FundingRelationshipFCTExists(It.IsAny<List<string>>())).Returns(hasFundingStreamPeriodCode);
 
-            NewRule(fcsDataServiceMock.Object, learningDeliveryFaMsQueryServiceMock.Object)
-                .ConditionMet(learningDeliveryFams)
-                .Should().BeTrue();
+            NewRule(fcsDataServiceMock.Object).ConditionMet(testLearningDeliveryFam).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False_NullCheck()
         {
-            var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-            learningDeliveryFAMsQueryServiceMock.Setup(d => d.GetLearningDeliveryFAMsCountByFAMType(null, LearningDeliveryFAMTypeConstants.HHS)).Returns(0);
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).ConditionMet(null).Should().BeFalse();
+            NewRule().ConditionMet(null).Should().BeFalse();
         }
 
         [Fact]
         public void BuildErrorMessageParameters()
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var testLearningDeliveryFam = new TestLearningDeliveryFAM()
+            {
+                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ALB,
+                LearnDelFAMCode = "1"
+            };
 
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.HHS)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.ALB)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, "1")).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.UKPRN, 123456)).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(LearningDeliveryFAMTypeConstants.HHS);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(testLearningDeliveryFam, 123456);
 
             validationErrorHandlerMock.Verify();
         }
 
         private LearnDelFAMType_53Rule NewRule(
             IFCSDataService fcsDataService = null,
-            ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
-            IValidationErrorHandler validationErrorHandler = null)
+            IValidationErrorHandler validationErrorHandler = null,
+            IFileDataService fileDataService = null)
         {
-            return new LearnDelFAMType_53Rule(fcsDataService, learningDeliveryFAMQueryService, validationErrorHandler);
+            return new LearnDelFAMType_53Rule(fcsDataService, validationErrorHandler, fileDataService);
         }
     }
 }

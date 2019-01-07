@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" />
   <Import Project="..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -90,7 +90,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
@@ -105,11 +104,16 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="CrossEntity\R06RuleTests.cs" />
+    <Compile Include="CrossEntity\R104RuleTests.cs" />
+    <Compile Include="CrossEntity\R102RuleTests.cs" />
     <Compile Include="CrossEntity\R106RuleTests.cs" />
+    <Compile Include="CrossEntity\R113RuleTests.cs" />
     <Compile Include="CrossEntity\R31RuleTests.cs" />
     <Compile Include="CrossEntity\R30RuleTests.cs" />
     <Compile Include="CrossEntity\R45RuleTests.cs" />
     <Compile Include="CrossEntity\R43RuleTests.cs" />
+    <Compile Include="CrossEntity\R52RuleTests.cs" />
+    <Compile Include="CrossEntity\R63RuleTests.cs" />
     <Compile Include="CrossEntity\R69RuleTests.cs" />
     <Compile Include="CrossEntity\R75RuleTests.cs" />
     <Compile Include="CrossEntity\R71RuleTests.cs" />
@@ -288,6 +292,8 @@
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17RuleTests.cs" />
     <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_72RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_73RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_81RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_87RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_86RuleTests.cs" />
@@ -296,18 +302,25 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_65RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_69RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_68RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_67RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_27RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_07RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_06RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_53RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_48RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_18RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_60RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_61RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13RuleTests.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_09RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_06RuleTests.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05RuleTests.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04RuleTests.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05RuleTests.cs" />
@@ -510,15 +523,14 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props'))" />
     <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
     <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
   <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
 </Project>
