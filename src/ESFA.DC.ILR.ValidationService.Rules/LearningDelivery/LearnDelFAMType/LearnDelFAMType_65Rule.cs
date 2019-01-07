@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -17,6 +18,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         private const int MinAge = 19;
         private const int MaxAge = 23;
+
+        private const string InvalidFamCode = "1";
 
         private readonly ILARSDataService _larsDataService;
         private readonly IDD07 _dd07;
@@ -77,7 +80,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 }
 
                 var nvqLevel = _larsDataService.GetNotionalNVQLevelv2ForLearnAimRef(learningDelivery.LearnAimRef);
-                if (!_nvqLevels.Contains(nvqLevel))
+                if (!_nvqLevels.Any(x => x.CaseInsensitiveEquals(nvqLevel)))
                 {
                     continue;
                 }
@@ -89,7 +92,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
                 foreach (var deliveryFam in learningDelivery.LearningDeliveryFAMs)
                 {
-                    if (deliveryFam.LearnDelFAMType == LearningDeliveryFAMTypeConstants.FFI && deliveryFam.LearnDelFAMCode == "1")
+                    if (deliveryFam.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.FFI)
+                        && deliveryFam.LearnDelFAMCode.CaseInsensitiveEquals(InvalidFamCode))
                     {
                         RaiseValidationMessage(learner, learningDelivery, deliveryFam);
                     }
@@ -114,13 +118,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 return true;
             }
 
-            if (learningDelivery.LearningDeliveryFAMs.Any(ldf => ldf.LearnDelFAMType == LearningDeliveryFAMTypeConstants.LDM
-                && _ldmTypeExcludedCodes.Contains(ldf.LearnDelFAMCode)))
+            if (learningDelivery.LearningDeliveryFAMs.Any(ldf => ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.LDM)
+                && _ldmTypeExcludedCodes.Any(x => x.CaseInsensitiveEquals(ldf.LearnDelFAMCode))))
             {
                 return true;
             }
 
-            if (learningDelivery.LearningDeliveryFAMs.Any(ldf => ldf.LearnDelFAMType == LearningDeliveryFAMTypeConstants.RES))
+            if (learningDelivery.LearningDeliveryFAMs.Any(ldf => ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.RES)))
             {
                 return true;
             }
