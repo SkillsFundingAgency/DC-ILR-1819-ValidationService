@@ -116,7 +116,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             new TestDPOutcome()
                             {
                                 OutCode = 1,
-                                OutType = "A",
+                                OutType = "a",
                                 OutStartDate = new DateTime(2018, 10, 10)
                             },
                         }

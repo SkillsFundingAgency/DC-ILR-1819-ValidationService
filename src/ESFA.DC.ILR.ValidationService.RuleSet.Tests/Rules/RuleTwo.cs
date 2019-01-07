@@ -4,13 +4,19 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.Rules
 {
     public class RuleTwo : IRule<string>
     {
-        public string RuleName
+        private readonly IValidationErrorCache<string> _validationErrorCache;
+
+        public RuleTwo(IValidationErrorCache<string> validationErrorCache)
         {
-            get { return string.Empty; }
+            _validationErrorCache = validationErrorCache;
         }
+
+        public string RuleName => "RuleTwo";
 
         public void Validate(string objectToValidate)
         {
+            _validationErrorCache.Add("2");
+            _validationErrorCache.Add("3");
         }
     }
 }

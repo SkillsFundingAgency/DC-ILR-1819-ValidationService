@@ -147,6 +147,7 @@
         public const string LearnAimRef_59 = "LearnAimRef_59";
         public const string LearnAimRef_71 = "LearnAimRef_71";
         public const string LearnAimRef_72 = "LearnAimRef_72";
+        public const string LearnAimRef_73 = "LearnAimRef_73";
         public const string LearnAimRef_80 = "LearnAimRef_80";
 
         public const string LearnDelFAMDateFrom_01 = "LearnDelFAMDateFrom_01";
@@ -174,7 +175,12 @@
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
+        public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
+        public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
+        public const string LearnDelFAMType_67 = "LearnDelFAMType_67";
+        public const string LearnDelFAMType_68 = "LearnDelFAMType_68";
+        public const string LearnDelFAMType_69 = "LearnDelFAMType_69";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
@@ -211,8 +217,14 @@
 
         public const string NUMHUS_01 = "NUMHUS_01";
 
-        public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
         public const string OrigLearnStartDate_01 = "OrigLearnStartDate_01";
+        public const string OrigLearnStartDate_02 = "OrigLearnStartDate_02";
+        public const string OrigLearnStartDate_03 = "OrigLearnStartDate_03";
+        public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
+        public const string OrigLearnStartDate_06 = "OrigLearnStartDate_06";
+        public const string OrigLearnStartDate_07 = "OrigLearnStartDate_07";
+        public const string OrigLearnStartDate_08 = "OrigLearnStartDate_08";
+        public const string OrigLearnStartDate_09 = "OrigLearnStartDate_09";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
@@ -294,6 +306,8 @@
         public const string R43 = "R43";
         public const string R45 = "R45";
         public const string R47 = "R47";
+        public const string R52 = "R52";
+        public const string R63 = "R63";
         public const string R66 = "R66";
         public const string R69 = "R69";
         public const string R70 = "R70";
@@ -302,9 +316,12 @@
         public const string R85 = "R85";
         public const string R91 = "R91";
         public const string R96 = "R96";
+        public const string R102 = "R102";
+        public const string R104 = "R104";
         public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R112 = "R112";
+        public const string R113 = "R113";
 
         public const string Schema = "Schema";
 

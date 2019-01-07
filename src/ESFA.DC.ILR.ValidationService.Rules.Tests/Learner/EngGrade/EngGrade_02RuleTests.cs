@@ -37,25 +37,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
             validaionErrorHandlerMock.Verify();
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void EngGradeConditionMet_False(string engGrade)
-        {
-            NewRule().EngGradeConditionMet(engGrade).Should().BeFalse();
-        }
-
-        [Fact]
-        public void EngGradeConditionMet_True()
-        {
-            NewRule().EngGradeConditionMet("33310").Should().BeTrue();
-        }
-
         [Fact]
         public void ConditionMet_False()
         {
             string learnAimRef = "ABC123456";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999", "NONE" };
+            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
@@ -68,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
         public void ConditionMet_True()
         {
             string learnAimRef = "ABC98765";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999", "NONE" };
+            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
@@ -81,12 +67,80 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
         public void Validate_Error()
         {
             string learnAimRef = "ABC98765";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999", "NONE" };
+            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
 
             var testLearner = new TestLearner()
             {
                 LearnRefNumber = "AB12345",
                 EngGrade = "33310",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef
+                    }
+                }
+            };
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+
+            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    lARSDataService: larsDataServiceMock.Object)
+                    .Validate(testLearner);
+            }
+        }
+
+        [Theory]
+        [InlineData("123")]
+        [InlineData("A**")]
+        public void Validate_EngGrade_AimTypeGCSE_NoError(string grade)
+        {
+            string learnAimRef = "ABC98765";
+            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
+
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "AB12345",
+                EngGrade = grade,
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef
+                    }
+                }
+            };
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+
+            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    lARSDataService: larsDataServiceMock.Object)
+                    .Validate(testLearner);
+            }
+        }
+
+        [Theory]
+        [InlineData("123")]
+        [InlineData("A**")]
+        public void Validate_EngGrade_AimTypeNotGCSE_Error(string grade)
+        {
+            string learnAimRef = "ABC98765";
+            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
+
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "AB12345",
+                EngGrade = grade,
                 LearningDeliveries = new TestLearningDelivery[]
                 {
                     new TestLearningDelivery()
@@ -130,6 +184,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
             larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    lARSDataService: larsDataServiceMock.Object)
+                    .Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoGradeSupplied_NoError()
+        {
+            string learnAimRef = "ABC98765";
+            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
+
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "AB12345",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef
+                    }
+                }
+            };
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+
+            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

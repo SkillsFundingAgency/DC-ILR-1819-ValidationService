@@ -11,5 +11,7 @@
         public string ExternalDataCache { get; set; }
 
         public string FileDataCache { get; set; }
+
+        public string TaskList { get; set; }
     }
 }

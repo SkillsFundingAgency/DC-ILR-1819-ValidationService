@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless.Models
 {
@@ -25,5 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Models
         public int ValidationTotalErrorCount { get; set; }
 
         public int ValidationTotalWarningCount { get; set; }
+
+        public IEnumerable<string> Tasks { get; set; }
     }
 }
