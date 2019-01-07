@@ -85,5 +85,6 @@
         public const string UCASAPPID = "UCASAPPID";
         public const string WithdrawReason = "WithdrawReason";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";
+        public const string WorkPlaceMode = "WorkPlaceMode";
     }
 }

@@ -86,6 +86,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             NewService().HasAnyEmpIdNullAndStartDateNotNull(learningDeliveryWorkPlacements).Should().BeFalse();
         }
 
+        [Theory]
+        [InlineData(1, true)]
+        [InlineData(2, true)]
+        [InlineData(3, false)]
+        [InlineData(0, false)]
+        public void IsValidWorkPlaceModeMeetsExpectation(int workPlaceMode, bool expectation)
+        {
+            var isValidWorkPlaceMode = NewService().IsValidWorkPlaceMode(workPlaceMode);
+            isValidWorkPlaceMode.Should().Be(expectation);
+        }
+
         [Fact]
         public void HasAnyEmpIdNullAndStartDateNotNull_FalseNull()
         {
