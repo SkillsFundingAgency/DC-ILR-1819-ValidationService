@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -33,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
             foreach (var learningDelivery in learner.LearningDeliveries)
             {
-                if ((_fundingModels.Contains(learningDelivery.FundModel) && learningDelivery.LearnStartDate > _startDate)
+                if ((_fundingModels.Contains(learningDelivery.FundModel) && learningDelivery.LearnStartDate >= _startDate)
                     || learningDelivery.LearningDeliveryFAMs == null)
                 {
                     continue;
@@ -41,7 +42,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
                 foreach (var deliveryFam in learningDelivery.LearningDeliveryFAMs)
                 {
-                    if (deliveryFam.LearnDelFAMType == LearningDeliveryFAMTypeConstants.LDM && deliveryFam.LearnDelFAMCode == _famCode)
+                    if (deliveryFam.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.LDM)
+                        && deliveryFam.LearnDelFAMCode.CaseInsensitiveEquals(_famCode))
                     {
                         RaiseValidationMessage(learner.LearnRefNumber, learningDelivery, deliveryFam);
                     }
