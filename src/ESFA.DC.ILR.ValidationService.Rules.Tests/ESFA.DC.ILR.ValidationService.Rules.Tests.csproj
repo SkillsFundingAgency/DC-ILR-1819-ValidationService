@@ -484,6 +484,7 @@
     <Compile Include="Query\RuleCommonOperationsProviderTests.cs" />
     <Compile Include="Query\PostcodeQueryServiceTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
+    <Compile Include="CrossEntity\R114RuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
