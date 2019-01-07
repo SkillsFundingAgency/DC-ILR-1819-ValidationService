@@ -356,6 +356,7 @@
         public const string WithdrawReason_02 = "WithdrawReason_02";
         public const string WithdrawReason_04 = "WithdrawReason_04";
 
+        public const string WorkPlaceEmpId_04 = "WorkPlaceEmpId_04";
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
         public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
