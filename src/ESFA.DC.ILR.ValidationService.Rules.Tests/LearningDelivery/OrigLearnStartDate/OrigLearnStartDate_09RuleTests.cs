@@ -31,8 +31,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
         }
 
         [Theory]
-        [InlineData("30-04-2017")]
-        [InlineData("01-05-2016")]
+        [InlineData("2017-04-30")]
+        [InlineData("2016-05-01")]
         public void OrigLearnStartDateConditionMet_True(string origStartDate)
         {
             var origLearnStartDate = DateTime.Parse(origStartDate);
@@ -40,8 +40,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
         }
 
         [Theory]
-        [InlineData("30-04-2018")]
-        [InlineData("01-05-2017")]
+        [InlineData("2018-04-30")]
+        [InlineData("2017-05-01")]
         public void OrigLearnStartDateConditionMet_False(string origStartDate)
         {
             var origLearnStartDate = DateTime.Parse(origStartDate);
