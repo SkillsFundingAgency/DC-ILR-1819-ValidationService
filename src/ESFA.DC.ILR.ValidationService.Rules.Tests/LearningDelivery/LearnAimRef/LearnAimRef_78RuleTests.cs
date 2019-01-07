@@ -278,8 +278,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetDeliveriesFor(candidate))
-                .Returns(Collection.EmptyAndReadOnly<ILARSLearningDelivery>());
+                .Setup(x => x.GetDeliveryFor(candidate))
+                .Returns((ILARSLearningDelivery)null);
 
             var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
@@ -344,8 +344,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetDeliveriesFor(candidate))
-                .Returns(Collection.EmptyAndReadOnly<ILARSLearningDelivery>());
+                .Setup(x => x.GetCategoriesFor(candidate))
+                .Returns(Collection.EmptyAndReadOnly<ILARSLearningCategory>());
 
             var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
@@ -426,17 +426,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             mockLars
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(LARSNotionalNVQLevelV2.Level3);
-            mockLars
-                .SetupGet(x => x.LearningDeliveryCategories)
-                .Returns(larsCategories.AsSafeReadOnlyList());
-
-            var larsItems = Collection.Empty<ILARSLearningDelivery>();
-            larsItems.Add(mockLars.Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetDeliveriesFor(learnAimRef))
-                .Returns(larsItems.AsSafeReadOnlyList());
+                .Setup(x => x.GetDeliveryFor(learnAimRef))
+                .Returns(mockLars.Object);
+            service
+                .Setup(x => x.GetCategoriesFor(learnAimRef))
+                .Returns(larsCategories.AsSafeReadOnlyList());
 
             var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             commonChecks
@@ -530,17 +527,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             mockLars
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(LARSNotionalNVQLevelV2.Level3);
-            mockLars
-                .SetupGet(x => x.LearningDeliveryCategories)
-                .Returns(larsCategories.AsSafeReadOnlyList());
-
-            var larsItems = Collection.Empty<ILARSLearningDelivery>();
-            larsItems.Add(mockLars.Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetDeliveriesFor(learnAimRef))
-                .Returns(larsItems.AsSafeReadOnlyList());
+                .Setup(x => x.GetDeliveryFor(learnAimRef))
+                .Returns(mockLars.Object);
+            service
+                .Setup(x => x.GetCategoriesFor(learnAimRef))
+                .Returns(larsCategories.AsSafeReadOnlyList());
 
             var commonChecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             commonChecks

@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is qualifying notional NVQ] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsQualifyingNotionalNVQ(ILARSLearningDelivery delivery) =>
-            It.IsOutOfRange(delivery.NotionalNVQLevelv2, LARSNotionalNVQLevelV2.Level4);
+            It.IsOutOfRange(delivery?.NotionalNVQLevelv2, LARSNotionalNVQLevelV2.Level4);
 
         /// <summary>
         /// Determines whether [has qualifying notional NVQ] [the specified delivery].
@@ -83,9 +83,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// </returns>
         public bool HasQualifyingNotionalNVQ(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
+            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
-            return deliveries.SafeAll(IsQualifyingNotionalNVQ);
+            return IsQualifyingNotionalNVQ(larsDelivery);
         }
 
         /// <summary>

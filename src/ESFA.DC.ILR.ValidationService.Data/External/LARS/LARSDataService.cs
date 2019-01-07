@@ -73,9 +73,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return It.Has(delivery)
-                ? delivery.LearningDeliveryCategories.AsSafeReadOnlyList()
-                : Collection.EmptyAndReadOnly<ILARSLearningCategory>();
+            return delivery?.LearningDeliveryCategories.AsSafeReadOnlyList()
+                ?? Collection.EmptyAndReadOnly<ILARSLearningCategory>();
         }
 
         /// <summary>
@@ -89,9 +88,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return It.Has(delivery)
-                ? delivery.LARSValidities.AsSafeReadOnlyList()
-                : Collection.EmptyAndReadOnly<ILARSValidity>();
+            return delivery?.LARSValidities.AsSafeReadOnlyList()
+                ?? Collection.EmptyAndReadOnly<ILARSValidity>();
+        }
+
+        /// <summary>
+        /// Gets the (lars) annual values for(this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">The this aim reference.</param>
+        /// <returns>
+        /// a collection of lars 'annula values' for this learning aim reference
+        /// </returns>
+        public IReadOnlyCollection<ILARSAnnualValue> GetAnnualValuesFor(string thisAimRef)
+        {
+            var delivery = GetDeliveryFor(thisAimRef);
+
+            return delivery?.AnnualValues.AsSafeReadOnlyList()
+                ?? Collection.EmptyAndReadOnly<ILARSAnnualValue>();
         }
 
         /// <summary>
@@ -106,83 +119,83 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Learn aim reference exists (but probably pointless as this should be done in the rule...)
+        /// </summary>
+        /// <param name="learnAimRef">The learn aim reference.</param>
+        /// <returns>true if it does</returns>
+        public bool LearnAimRefExists(string learnAimRef)
+        {
+            return GetDeliveryFor(learnAimRef) != null;
+        }
+
+        // TODO: this should happen in the rule
         public string GetNotionalNVQLevelv2ForLearnAimRef(string learnAimRef)
         {
             return GetDeliveryFor(learnAimRef)?.NotionalNVQLevelv2;
         }
 
+        // TODO: this should happen in the rule
         public bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date)
         {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
+            var delivery = GetDeliveryFor(learnAimRef);
 
-            return learningDelivery != null
-                && learningDelivery.EffectiveFrom <= date
-                && (learningDelivery.EffectiveTo != null ? date <= learningDelivery.EffectiveTo : date <= DateTime.MaxValue);
+            return It.Has(delivery) && delivery.IsCurrent(date);
         }
 
+        // TODO: this should happen in the rule
         public bool EnglishPrescribedIdsExistsforLearnAimRef(string learnAimRef, HashSet<int?> engPrscIDs)
         {
             return engPrscIDs.Contains(GetDeliveryFor(learnAimRef)?.EnglPrscID);
         }
 
+        // TODO: access to frameworks needs to be thought out, as this isn't right => GetFrameworkAimsFor(string thisAimRef)
         public bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
-            return _externalDataCache
-                .Frameworks
-                .Where(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims
-                    .Where(fa =>
-                        fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                        && fa.ProgType == progType
-                        && fa.FworkCode == fworkCode
-                        && fa.PwayCode == pwayCode))
-                .Any();
+            return _externalDataCache.Frameworks
+                .SafeWhere(f => f.FrameworkAims != null)
+                .SelectMany(f => f.FrameworkAims)
+                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
+                    && fa.ProgType == progType
+                    && fa.FworkCode == fworkCode
+                    && fa.PwayCode == pwayCode);
         }
 
+        // TODO: access to frameworks needs to be thought out, as this isn't right => GetFrameworkAimsFor(string thisAimRef)
         public bool FrameWorkComponentTypeExistsInFrameworkAims(string learnAimRef, HashSet<int?> frameworkTypeComponents)
         {
-            return _externalDataCache
-                .Frameworks?
-                .Where(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims
-                    .Where(fa =>
-                        fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                        && (fa.FrameworkComponentType.HasValue
-                            && frameworkTypeComponents.Contains(fa.FrameworkComponentType))))
-                .Any() ?? false;
+            return _externalDataCache.Frameworks
+                .SafeWhere(f => f.FrameworkAims != null)
+                .SelectMany(f => f.FrameworkAims)
+                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
+                    && fa.FrameworkComponentType.HasValue
+                    && frameworkTypeComponents.Contains(fa.FrameworkComponentType));
         }
 
+        // TODO: needs to be thought out, this isn't right either...
         public bool FrameworkCodeExistsForCommonComponent(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
             var learningDelivery = GetDeliveryFor(learnAimRef);
 
             return learningDelivery != null
-                   && _externalDataCache
-                        .Frameworks
-                        .Where(f => f.FrameworkCommonComponents != null)
-                        .SelectMany(f => f.FrameworkCommonComponents
-                            .Where(fa =>
-                                fa.ProgType == progType
-                                && fa.FworkCode == fworkCode
-                                && fa.PwayCode == pwayCode
-                                && fa.CommonComponent == learningDelivery.FrameworkCommonComponent))
-                        .Any();
+                   && _externalDataCache.Frameworks
+                        .SafeWhere(f => f.FrameworkCommonComponents != null)
+                        .SelectMany(f => f.FrameworkCommonComponents)
+                        .Any(fa => fa.ProgType == progType
+                            && fa.FworkCode == fworkCode
+                            && fa.PwayCode == pwayCode
+                            && fa.CommonComponent == learningDelivery.FrameworkCommonComponent);
         }
 
-        public bool LearnAimRefExists(string learnAimRef)
-        {
-            return _externalDataCache.LearningDeliveries.ContainsKey(learnAimRef);
-        }
-
+        // TODO: not descriptive of it's actual operation, and should be done in the rule
         public bool LearnAimRefExistsForLearningDeliveryCategoryRef(string learnAimRef, int categoryRef)
         {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
+            var categories = GetCategoriesFor(learnAimRef);
 
-            return learningDelivery != null
-                && learningDelivery.LearningDeliveryCategories != null
-                && learningDelivery.LearningDeliveryCategories.Where(cr => cr.CategoryRef == categoryRef).Any();
+            return categories.Any(cr => cr.CategoryRef == categoryRef);
         }
 
+        // TODO: this should happen in the rule
         public bool NotionalNVQLevelMatchForLearnAimRef(string learnAimRef, string level)
         {
             var learningDelivery = GetDeliveryFor(learnAimRef);
@@ -191,6 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && learningDelivery.NotionalNVQLevel == level;
         }
 
+        // TODO: this should happen in the rule
         public bool NotionalNVQLevelV2MatchForLearnAimRefAndLevel(string learnAimRef, string level)
         {
             var learningDelivery = GetDeliveryFor(learnAimRef);
@@ -199,54 +213,40 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && learningDelivery.NotionalNVQLevelv2 == level;
         }
 
+        // TODO: this should happen in the rule
         public bool NotionalNVQLevelV2MatchForLearnAimRefAndLevels(string learnAimRef, IEnumerable<string> levels)
         {
             var learningDelivery = GetDeliveryFor(learnAimRef);
 
             return learningDelivery != null
-                && levels.Contains(learningDelivery.NotionalNVQLevelv2);
+                && levels.AsSafeDistinctKeySet().Contains(learningDelivery.NotionalNVQLevelv2);
         }
 
+        // TODO: this should happen in the rule
         public bool FullLevel2EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
         {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
+            var values = GetAnnualValuesFor(learnAimRef);
 
-            return learningDelivery != null
-                && learningDelivery.AnnualValues != null
-                && learningDelivery.AnnualValues
-                    .Any(av => av.FullLevel2EntitlementCategory == level);
+            return values.Any(av => av.FullLevel2EntitlementCategory == level);
         }
 
+        // TODO: this should happen in the rule
         public bool FullLevel3EntitlementCategoryMatchForLearnAimRef(string learnAimRef, int level)
         {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
+            var values = GetAnnualValuesFor(learnAimRef);
 
-            return learningDelivery != null
-                && learningDelivery.AnnualValues != null
-                && learningDelivery.AnnualValues
-                    .Any(av => av.FullLevel3EntitlementCategory == level);
+            return values.Any(av => av.FullLevel3EntitlementCategory == level);
         }
 
+        // TODO: this should happen in the rule
         public bool FullLevel3PercentForLearnAimRefAndDateAndPercentValue(string learnAimRef, DateTime learnStartDate, decimal percentValue)
         {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
+            var values = GetAnnualValuesFor(learnAimRef);
 
-            return learningDelivery != null
-                && learningDelivery.AnnualValues != null
-                && learningDelivery.AnnualValues
-                    .Any(av =>
-                        av.FullLevel3Percent == percentValue
-                            && av.EffectiveFrom <= learnStartDate
-                            && av.EffectiveTo >= learnStartDate);
+            return values.Any(av => av.FullLevel3Percent == percentValue && av.IsCurrent(learnStartDate));
         }
 
-        /// <summary>
-        /// Determines whether [has known learn direct class system code 3 for] [the specified this learn aim reference].
-        /// </summary>
-        /// <param name="thisLearnAimRef">The this learn aim reference.</param>
-        /// <returns>
-        ///   <c>true</c> if [has known learn direct class system code 3 for] [the specified this learn aim reference]; otherwise, <c>false</c>.
-        /// </returns>
+        // TODO: this should happen in the rule
         public bool HasKnownLearnDirectClassSystemCode3For(string thisLearnAimRef)
         {
             var delivery = GetDeliveryFor(thisLearnAimRef);
@@ -255,73 +255,73 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && delivery.LearnDirectClassSystemCode3.IsKnown();
         }
 
-        public bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef)
+        // TODO: this should happen in the rule
+        public bool LearnDirectClassSystemCode1MatchForLearnAimRef(string thisLearnAimRef)
         {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
-
-            return learningDelivery != null
-                && learningDelivery.LearnDirectClassSystemCode1.IsKnown();
-        }
-
-        public bool LearnDirectClassSystemCode2MatchForLearnAimRef(string learnAimRef)
-        {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
-
-            return learningDelivery != null
-                && learningDelivery.LearnDirectClassSystemCode2.IsKnown();
-        }
-
-        public bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills)
-        {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
-
-            return learningDelivery != null
-                && learningDelivery.AnnualValues != null
-                && learningDelivery.AnnualValues
-                    .Any(av => av.BasicSkills == basicSkills);
-        }
-
-        public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate)
-        {
-            var delivery = GetDeliveryFor(learnAimRef);
-            var safeSkillsSet = basicSkillsType.AsSafeDistinctKeySet();
+            var delivery = GetDeliveryFor(thisLearnAimRef);
 
             return It.Has(delivery)
-                && delivery.AnnualValues
-                    .SafeAny(a => a.BasicSkillsType.HasValue
-                        && safeSkillsSet.Contains((int)a.BasicSkillsType)
-                        && learnStartDate >= a.EffectiveFrom
-                        && (a.EffectiveTo == null || learnStartDate <= a.EffectiveTo));
+                && delivery.LearnDirectClassSystemCode1.IsKnown();
         }
 
+        // TODO: this should happen in the rule
+        public bool LearnDirectClassSystemCode2MatchForLearnAimRef(string thisLearnAimRef)
+        {
+            var delivery = GetDeliveryFor(thisLearnAimRef);
+
+            return It.Has(delivery)
+                && delivery.LearnDirectClassSystemCode2.IsKnown();
+        }
+
+        // TODO: this should happen in the rule
+        public bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills)
+        {
+            var values = GetAnnualValuesFor(learnAimRef);
+
+            return values.Any(av => av.BasicSkills == basicSkills);
+        }
+
+        // TODO: this should happen in the rule
+        public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate)
+        {
+            var values = GetAnnualValuesFor(learnAimRef);
+            var safeSkillsSet = basicSkillsType.AsSafeDistinctKeySet();
+
+            return values.SafeAny(a => a.BasicSkillsType.HasValue
+                        && safeSkillsSet.Contains((int)a.BasicSkillsType)
+                        && a.IsCurrent(learnStartDate));
+        }
+
+        // TODO: this should happen in the rule
         public bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode)
         {
             return _externalDataCache.Frameworks
-                .Where(f =>
+                .SafeAny(f =>
                     f.ProgType == progType
                     && f.FworkCode == fWorkCode
                     && f.PwayCode == pwayCode
-                    && f.EffectiveTo != null
-                    && learnStartDate > f.EffectiveTo)
-                .Any();
+
+                    // && f.EffectiveTo != null <= not needed with uplifting operators
+                    && learnStartDate > f.EffectiveTo);
         }
 
+        // TODO: this should happen in the rule
         public bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
             return _externalDataCache
                 .Frameworks
-                .Where(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims
-                    .Where(fa =>
-                        fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                        && fa.ProgType == progType
-                        && fa.FworkCode == fworkCode
-                        && fa.PwayCode == pwayCode
-                        && fa.EffectiveTo != null
-                        && dd04Date > fa.EffectiveTo))
-                .Any();
+                .SafeWhere(f => f.FrameworkAims != null)
+                .SelectMany(f => f.FrameworkAims)
+                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
+                    && fa.ProgType == progType
+                    && fa.FworkCode == fworkCode
+                    && fa.PwayCode == pwayCode
+
+                    // && f.EffectiveTo != null <= not needed with uplifting operators
+                    && dd04Date > fa.EffectiveTo);
         }
 
+        // TODO: this should happen in the rule
         public bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime? origLearnStartDate, string learnAimRef, string validityCategory)
         {
             return OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(
@@ -330,26 +330,32 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 new List<string>() { validityCategory });
         }
 
+        // TODO: this should happen in the rule
         public bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(DateTime? origLearnStartDate, string learnAimRef, IEnumerable<string> categoriesHashSet)
         {
-            var learningDelivery = GetDeliveryFor(learnAimRef);
+            var validities = GetValiditiesFor(learnAimRef);
             var caseInsensitveCategoriesHashSet = categoriesHashSet.ToCaseInsensitiveHashSet();
 
-            return learningDelivery?.LARSValidities != null
-                   && learningDelivery.LARSValidities.Any(lv => lv.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                                                                && caseInsensitveCategoriesHashSet.Contains(lv.ValidityCategory)
-                                                                && origLearnStartDate >= lv.StartDate
-                                                                && origLearnStartDate <= lv.EndDate);
+            return validities.Any(lv =>
+                caseInsensitveCategoriesHashSet.Contains(lv.ValidityCategory)
+                && origLearnStartDate >= lv.StartDate
+                && origLearnStartDate <= lv.EndDate);
         }
 
+        // TODO: this should happen in the rule, but may require an accessor => GetStandard(s)For(int thisStandardCode)
+        // and what is the point of sending in a 'key' that might null?!?
         public bool LearnStartDateGreaterThanStandardsEffectiveTo(int? stdCode, DateTime learnStartDate)
         {
             return stdCode.HasValue
-                   && _externalDataCache.Standards.Any(s => s.EffectiveTo != null
-                                                            && learnStartDate > s.EffectiveTo
-                                                            && s.StandardCode == stdCode);
+                   && _externalDataCache.Standards
+                    .Any(s =>
+
+                        // s.EffectiveTo != null <= not required with uplifting operators
+                        learnStartDate > s.EffectiveTo
+                        && s.StandardCode == stdCode);
         }
 
+        // TODO: this should happen in the rule
         public bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> learnAimRefTypes)
         {
             var learningDelivery = GetDeliveryFor(learnAimRef);
