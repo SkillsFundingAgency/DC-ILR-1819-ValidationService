@@ -166,6 +166,7 @@
         public const string LearnDelFAMType_07 = "LearnDelFAMType_07";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
+        public const string LearnDelFAMType_15 = "LearnDelFAMType_15";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
@@ -178,6 +179,7 @@
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
         public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
+        public const string LearnDelFAMType_65 = "LearnDelFAMType_65";
         public const string LearnDelFAMType_67 = "LearnDelFAMType_67";
         public const string LearnDelFAMType_68 = "LearnDelFAMType_68";
         public const string LearnDelFAMType_69 = "LearnDelFAMType_69";
