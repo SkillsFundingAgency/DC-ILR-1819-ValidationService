@@ -241,15 +241,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     .Where(av => av.BasicSkills == basicSkills).Any();
         }
 
-        public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate)
+        public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsTypes, string learnAimRef, DateTime learnStartDate)
         {
-            return GetDeliveriesFor(learnAimRef)?
-                .SelectMany(ld => ld.AnnualValues)?
-                .Where(
-                    a => (a.BasicSkillsType.HasValue
-                        && basicSkillsType.ToCaseInsensitiveHashSet().Contains((int)a.BasicSkillsType))
-                    && (learnStartDate >= a.EffectiveFrom
-                    && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null))).Count() > 0;
+            return GetLearningDeliveryForLearnAimRef(learnAimRef)?
+                .AnnualValues?
+                .Any(
+                    a => a.BasicSkillsType.HasValue
+                         && learnStartDate >= a.EffectiveFrom
+                         && (learnStartDate <= a.EffectiveTo || a.EffectiveTo == null)
+                         && basicSkillsTypes.Contains(a.BasicSkillsType.Value)) ?? false;
         }
 
         public bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode)

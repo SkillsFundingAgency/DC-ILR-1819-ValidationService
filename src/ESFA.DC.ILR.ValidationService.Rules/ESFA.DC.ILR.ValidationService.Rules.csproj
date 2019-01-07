@@ -124,6 +124,7 @@
     <Compile Include="Derived\DD04.cs" />
     <Compile Include="Derived\DD06.cs" />
     <Compile Include="Derived\DD07.cs" />
+    <Compile Include="Derived\DerivedData_31Rule.cs" />
     <Compile Include="Derived\DerivedData_32Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_05Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_15Rule.cs" />
