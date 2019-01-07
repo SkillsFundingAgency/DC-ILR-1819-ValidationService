@@ -24,6 +24,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceMode
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate.LearningDeliveries == null)
+            {
+                return;
+            }
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => d.LearningDeliveryWorkPlacements != null))
             {
                 foreach (var learningDeliveryWorkPlacement in learningDelivery.LearningDeliveryWorkPlacements)
