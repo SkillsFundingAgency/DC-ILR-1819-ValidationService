@@ -27,6 +27,62 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
+        public void ProgrammeAimConditionMet_False_NoFams()
+        {
+            var learningDelivery = new TestLearningDelivery();
+
+            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, _famType, _famCode)).Returns(false);
+
+            NewRule(learningeliveryFAMQueryServiceMock.Object).ProgrammeAimConditionMet(learningDelivery).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ProgrammeAimConditionMet_False()
+        {
+            var learningDelivery = new TestLearningDelivery
+            {
+                LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                {
+                    new TestLearningDeliveryFAM
+                    {
+                        LearnDelFAMType = "LDM",
+                        LearnDelFAMCode = "356"
+                    }
+                }.ToArray()
+            };
+
+            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, _famType, _famCode)).Returns(false);
+
+            NewRule(learningeliveryFAMQueryServiceMock.Object).ProgrammeAimConditionMet(learningDelivery).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ProgrammeAimConditionMet_True()
+        {
+            var learningDelivery = new TestLearningDelivery
+            {
+                LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                {
+                    new TestLearningDeliveryFAM
+                    {
+                        LearnDelFAMType = "LDM",
+                        LearnDelFAMCode = "357"
+                    }
+                }.ToArray()
+            };
+
+            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDelivery.LearningDeliveryFAMs, _famType, _famCode)).Returns(true);
+
+            NewRule(learningeliveryFAMQueryServiceMock.Object).ProgrammeAimConditionMet(learningDelivery).Should().BeTrue();
+        }
+
+        [Fact]
         public void ComponentAimConditionMet_True_NoAims()
         {
             var learningDeliveries = new List<TestLearningDelivery>();
@@ -171,13 +227,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var learningDeliveryFams = learningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
+            var rule = NewRuleMock();
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            rule.Setup(r => r.ProgrammeAimConditionMet(learningDelivery)).Returns(true);
+            rule.Setup(r => r.ComponentAimConditionMet(learningDelivery.FundModel, learningDelivery.ProgTypeNullable, learningDeliveries)).Returns(true);
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, _famType, _famCode)).Returns(false);
-
-            NewRule(learningeliveryFAMQueryServiceMock.Object).ConditionMet(learningDelivery, learningDeliveries).Should().BeTrue();
+            rule.Object.ConditionMet(learningDelivery, learningDeliveries).Should().BeTrue();
         }
 
         [Fact]
@@ -208,13 +263,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var learningDeliveryFams = learningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
+            var rule = NewRuleMock();
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            rule.Setup(r => r.ProgrammeAimConditionMet(learningDelivery)).Returns(true);
+            rule.Setup(r => r.ComponentAimConditionMet(learningDelivery.FundModel, learningDelivery.ProgTypeNullable, learningDeliveries)).Returns(false);
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, _famType, _famCode)).Returns(true);
-
-            NewRule(learningeliveryFAMQueryServiceMock.Object).ConditionMet(learningDelivery, learningDeliveries).Should().BeFalse();
+            rule.Object.ConditionMet(learningDelivery, learningDeliveries).Should().BeFalse();
         }
 
         [Fact]
@@ -238,13 +292,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var learningDeliveryFams = learningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
+            var rule = NewRuleMock();
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            rule.Setup(r => r.ProgrammeAimConditionMet(null)).Returns(false);
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, _famType, _famCode)).Returns(true);
-
-            NewRule(learningeliveryFAMQueryServiceMock.Object).ConditionMet(null, learningDeliveries).Should().BeFalse();
+            rule.Object.ConditionMet(null, learningDeliveries).Should().BeFalse();
         }
 
         [Fact]
@@ -260,7 +312,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AimSeqNumber = 1,
                         AimType = 1,
                         FundModel = 35,
-                        ProgTypeNullable = 24
+                        ProgTypeNullable = 24,
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "LDM",
+                                LearnDelFAMCode = "357"
+                            }
+                        }.ToArray()
                     },
                     new TestLearningDelivery
                     {
@@ -280,11 +340,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }.ToArray()
             };
 
-            var learningDeliveryFams = learner.LearningDeliveries.Where(ld => ld.LearningDeliveryFAMs != null).SelectMany(ld => ld.LearningDeliveryFAMs);
+            var progAimFAMs = learner.LearningDeliveries.Where(ld => ld.AimSeqNumber == 1 && ld.LearningDeliveryFAMs != null).SelectMany(ld => ld.LearningDeliveryFAMs);
+            var compAimFAMs = learner.LearningDeliveries.Where(ld => ld.AimSeqNumber == 2 && ld.LearningDeliveryFAMs != null).SelectMany(ld => ld.LearningDeliveryFAMs);
 
             var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, _famType, _famCode)).Returns(false);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(progAimFAMs, _famType, _famCode)).Returns(true);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(compAimFAMs, _famType, _famCode)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -305,7 +367,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AimSeqNumber = 1,
                         AimType = 1,
                         FundModel = 35,
-                        ProgTypeNullable = 24
+                        ProgTypeNullable = 24,
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "LDM",
+                                LearnDelFAMCode = "357"
+                            }
+                        }.ToArray()
                     },
                     new TestLearningDelivery
                     {
@@ -317,11 +387,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }.ToArray()
             };
 
-            var learningDeliveryFams = learner.LearningDeliveries.Where(ld => ld.LearningDeliveryFAMs != null).SelectMany(ld => ld.LearningDeliveryFAMs);
+            var progAimFAMs = learner.LearningDeliveries.Where(ld => ld.AimSeqNumber == 1 && ld.LearningDeliveryFAMs != null).SelectMany(ld => ld.LearningDeliveryFAMs);
 
             var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, _famType, _famCode)).Returns(false);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(progAimFAMs, _famType, _famCode)).Returns(true);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(null, _famType, _famCode)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -342,7 +413,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AimSeqNumber = 1,
                         AimType = 1,
                         FundModel = 35,
-                        ProgTypeNullable = 24
+                        ProgTypeNullable = 24,
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "LDM",
+                                LearnDelFAMCode = "357"
+                            }
+                        }.ToArray()
                     },
                     new TestLearningDelivery
                     {
@@ -362,11 +441,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }.ToArray()
             };
 
-            var learningDeliveryFams = learner.LearningDeliveries.Where(ld => ld.LearningDeliveryFAMs != null).SelectMany(ld => ld.LearningDeliveryFAMs);
+            var progAimFAMs = learner.LearningDeliveries.Where(ld => ld.AimSeqNumber == 1 && ld.LearningDeliveryFAMs != null).SelectMany(ld => ld.LearningDeliveryFAMs);
+            var compAimFAMs = learner.LearningDeliveries.Where(ld => ld.AimSeqNumber == 2 && ld.LearningDeliveryFAMs != null).SelectMany(ld => ld.LearningDeliveryFAMs);
 
             var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFams, _famType, _famCode)).Returns(true);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(progAimFAMs, _famType, _famCode)).Returns(true);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(compAimFAMs, _famType, _famCode)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
