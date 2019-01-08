@@ -24,11 +24,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
         public const string Name = "WorkPlaceEmpId_03";
 
         /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
-        /// <summary>
         /// The file data service
         /// </summary>
         private readonly IFileDataService _fileDataService;
@@ -48,7 +43,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
             It.IsNull(fileDataService)
                 .AsGuard<ArgumentNullException>(nameof(fileDataService));
 
-            _messageHandler = validationErrorHandler;
             _fileDataService = fileDataService;
         }
 
