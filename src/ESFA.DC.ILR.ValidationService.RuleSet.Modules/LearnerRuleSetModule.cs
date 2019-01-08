@@ -437,6 +437,7 @@
                 typeof(WithdrawReason_04Rule),
                 typeof(WorkPlaceEndDate_02Rule),
                 typeof(WorkPlaceStartDate_01Rule),
+                typeof(WorkPlaceStartDate_02Rule),
                 typeof(WorkPlaceStartDate_03Rule),
                 typeof(WorkPlaceMode_01Rule),
                 typeof(WorkPlaceEmpId_04Rule),
