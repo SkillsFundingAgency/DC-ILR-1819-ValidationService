@@ -40,13 +40,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 .Where(x => AimTypeConditionMet(x.AimType) &&
                             FundModelsConditionMet(x.FundModel) &&
                             !ExcludeConditionMet(x.FundModel) &&
-                            LarsComponentTypeConditionMet(x.LearnAimRef)).ToList();
+                            LarsComponentTypeConditionMet(x.LearnAimRef));
 
-            var completedLearningDeliveries = filteredLearningDeliveries.Where(x =>
-                x.CompStatus == ValidCompStatus &&
-                x.OutcomeNullable.HasValue &&
-                x.OutcomeNullable == ValidOutcome)
-                .ToList();
+            var completedLearningDeliveries = filteredLearningDeliveries.
+                Where(x => CompletedLearningDeliveryConditionMet(x.CompStatus, x.OutcomeNullable));
 
             if (completedLearningDeliveries.Any())
             {
@@ -60,18 +57,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
         }
 
-        public bool ConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries, ILearningDelivery completedLearningDelivery)
+        public bool CompletedLearningDeliveryConditionMet(int compStatus, int? outCome)
+        {
+            return compStatus == ValidCompStatus && outCome.HasValue && outCome == ValidOutcome;
+        }
+
+        public bool ConditionMet(IEnumerable<ILearningDelivery> learningDeliveries, ILearningDelivery completedLearningDelivery)
         {
             return learningDeliveries.Any(
                 x => x.ProgTypeNullable == completedLearningDelivery.ProgTypeNullable &&
                      x.FworkCodeNullable == completedLearningDelivery.FworkCodeNullable &&
                      x.PwayCodeNullable == completedLearningDelivery.PwayCodeNullable &&
                      x.LearnStartDate > completedLearningDelivery.LearnStartDate);
-        }
-
-        public bool ExcludeConditionMet(int? progType)
-        {
-            return progType.HasValue && progType == ExcludedProgType;
         }
 
         public bool FundModelsConditionMet(int fundModel)
@@ -87,6 +84,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         public bool LarsComponentTypeConditionMet(string learnAimRef)
         {
             return _larsDataService.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, ValidComponentTypes);
+        }
+
+        public bool ExcludeConditionMet(int? progType)
+        {
+            return progType.HasValue && progType == ExcludedProgType;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(
+           ILearningDelivery learningDelivery)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.AimType, learningDelivery.AimType),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, learningDelivery.FundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.ProgType, learningDelivery.ProgTypeNullable),
+                BuildErrorMessageParameter(PropertyNameConstants.FworkCode, learningDelivery.FworkCodeNullable),
+                BuildErrorMessageParameter(PropertyNameConstants.PwayCode, learningDelivery.PwayCodeNullable),
+                BuildErrorMessageParameter(PropertyNameConstants.StdCode, learningDelivery.StdCodeNullable),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learningDelivery.LearnStartDate),
+                BuildErrorMessageParameter(PropertyNameConstants.Outcome, learningDelivery.OutcomeNullable),
+                BuildErrorMessageParameter(PropertyNameConstants.CompStatus, learningDelivery.CompStatus)
+            };
         }
     }
 }
