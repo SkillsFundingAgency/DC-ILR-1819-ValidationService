@@ -304,6 +304,7 @@
                 typeof(LearningDeliveryHE_08Rule),
                 typeof(LearnerHE_02Rule),
                 typeof(LearnFAMType_16Rule),
+                typeof(LearnStartDate_02Rule),
                 typeof(LearnStartDate_03Rule),
                 typeof(LearnStartDate_05Rule),
                 typeof(LearnStartDate_06Rule),
