@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
     /// <summary>
     /// the lars learning delivery
     /// </summary>
-    public interface ILARSLearningDelivery
+    public interface ILARSLearningDelivery :
+        ISupportFundingWithdrawal
     {
         /// <summary>
         /// Gets the learn aim reference.
         /// </summary>
         string LearnAimRef { get; }
-
-        /// <summary>
-        /// Gets the effective from date.
-        /// </summary>
-        DateTime EffectiveFrom { get; }
-
-        /// <summary>
-        /// Gets the effective to date.
-        /// </summary>
-        DateTime? EffectiveTo { get; }
 
         /// <summary>
         /// Gets the learn aim reference type.

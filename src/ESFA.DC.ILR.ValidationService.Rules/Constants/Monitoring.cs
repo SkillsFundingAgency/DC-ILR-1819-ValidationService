@@ -419,9 +419,9 @@
                 public const string LengthOfEmployment = "LOE";
 
                 /// <summary>
-                /// benfit status indicator
+                /// benefit status indicator
                 /// </summary>
-                public const string BenfitStatusIndicator = "BSI";
+                public const string BenefitStatusIndicator = "BSI";
 
                 /// <summary>
                 /// previous education indicator

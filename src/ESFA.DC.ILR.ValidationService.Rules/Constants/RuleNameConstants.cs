@@ -166,6 +166,7 @@
         public const string LearnDelFAMType_07 = "LearnDelFAMType_07";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
+        public const string LearnDelFAMType_15 = "LearnDelFAMType_15";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
@@ -175,8 +176,13 @@
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
+        public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
+        public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
+        public const string LearnDelFAMType_65 = "LearnDelFAMType_65";
         public const string LearnDelFAMType_67 = "LearnDelFAMType_67";
+        public const string LearnDelFAMType_68 = "LearnDelFAMType_68";
+        public const string LearnDelFAMType_69 = "LearnDelFAMType_69";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
@@ -218,12 +224,16 @@
         public const string OrigLearnStartDate_03 = "OrigLearnStartDate_03";
         public const string OrigLearnStartDate_05 = "OrigLearnStartDate_05";
         public const string OrigLearnStartDate_06 = "OrigLearnStartDate_06";
+        public const string OrigLearnStartDate_07 = "OrigLearnStartDate_07";
+        public const string OrigLearnStartDate_08 = "OrigLearnStartDate_08";
+        public const string OrigLearnStartDate_09 = "OrigLearnStartDate_09";
 
         public const string OtherFundAdj_01 = "OtherFundAdj_01";
 
         public const string OutCollDate_01 = "OutCollDate_01";
         public const string OutCollDate_02 = "OutCollDate_02";
 
+        public const string Outcome_01 = "Outcome_01";
         public const string Outcome_04 = "Outcome_04";
         public const string Outcome_05 = "Outcome_05";
         public const string Outcome_09 = "Outcome_09";
@@ -300,6 +310,7 @@
         public const string R45 = "R45";
         public const string R47 = "R47";
         public const string R52 = "R52";
+        public const string R63 = "R63";
         public const string R66 = "R66";
         public const string R69 = "R69";
         public const string R70 = "R70";
@@ -309,9 +320,11 @@
         public const string R91 = "R91";
         public const string R96 = "R96";
         public const string R102 = "R102";
+        public const string R104 = "R104";
         public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R112 = "R112";
+        public const string R113 = "R113";
         public const string R114 = "R114";
 
         public const string Schema = "Schema";

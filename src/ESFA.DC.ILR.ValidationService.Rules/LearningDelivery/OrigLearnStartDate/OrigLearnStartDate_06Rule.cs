@@ -36,6 +36,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate?.LearningDeliveries == null)
+            {
+                return;
+            }
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 if (ConditionMet(
@@ -47,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         learningDelivery.AimSeqNumber,
-                        BuildErrorMessageParameters(learningDelivery.OrigLearnStartDateNullable, learningDelivery.FundModel, learningDelivery.AimType));
+                        BuildErrorMessageParameters(learningDelivery.OrigLearnStartDateNullable));
                 }
             }
         }
@@ -80,7 +85,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             return _dd07.IsApprenticeship(progType);
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? origLearnStartDate, int fundModel, int aimType)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? origLearnStartDate)
         {
             return new[]
             {
