@@ -166,6 +166,7 @@
         public const string LearnDelFAMType_07 = "LearnDelFAMType_07";
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
+        public const string LearnDelFAMType_15 = "LearnDelFAMType_15";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
@@ -178,6 +179,7 @@
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
         public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
+        public const string LearnDelFAMType_65 = "LearnDelFAMType_65";
         public const string LearnDelFAMType_67 = "LearnDelFAMType_67";
         public const string LearnDelFAMType_68 = "LearnDelFAMType_68";
         public const string LearnDelFAMType_69 = "LearnDelFAMType_69";
@@ -231,6 +233,7 @@
         public const string OutCollDate_01 = "OutCollDate_01";
         public const string OutCollDate_02 = "OutCollDate_02";
 
+        public const string Outcome_01 = "Outcome_01";
         public const string Outcome_04 = "Outcome_04";
         public const string Outcome_05 = "Outcome_05";
         public const string Outcome_09 = "Outcome_09";
@@ -359,6 +362,8 @@
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
         public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
+
+        public const string WorkPlaceMode_01 = "WorkPlaceMode_01";
 
         public const string WorkPlaceStartDate_03 = "WorkPlaceStartDate_03";
     }
