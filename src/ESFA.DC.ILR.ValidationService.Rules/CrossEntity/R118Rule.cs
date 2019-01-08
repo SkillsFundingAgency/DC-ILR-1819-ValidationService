@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -12,8 +10,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R118Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly string _famCode = "357";
-        private readonly string _famType = LearningDeliveryFAMTypeConstants.LDM;
+        private const string _famCode = "357";
+        private const string _famType = LearningDeliveryFAMTypeConstants.LDM;
+        private const int _aimType1 = 1;
+        private const int _aimType3 = 3;
+        private const int _progType24 = 24;
+
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public R118Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
@@ -22,38 +24,54 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
+        public R118Rule()
+          : base(null, null)
+        {
+        }
+
         public void Validate(ILearner objectToValidate)
         {
-            var learningDeliveryAimType1 = objectToValidate.LearningDeliveries?.Where(ld => ld.AimType == 1 && ld.ProgTypeNullable == 24).FirstOrDefault();
+            var programmeAim = objectToValidate.LearningDeliveries?
+                .Where(ld =>
+                    ld.AimType == _aimType1
+                && ld.ProgTypeNullable == _progType24)
+                .FirstOrDefault();
 
-            if (ConditionMet(learningDeliveryAimType1, objectToValidate.LearningDeliveries))
+            if (ConditionMet(programmeAim, objectToValidate.LearningDeliveries))
             {
                 HandleValidationError(
                     objectToValidate.LearnRefNumber,
-                    learningDeliveryAimType1.AimSeqNumber,
+                    programmeAim.AimSeqNumber,
                     BuildErrorMessageParameters(
-                        learningDeliveryAimType1.AimType, learningDeliveryAimType1.FundModel, learningDeliveryAimType1.ProgTypeNullable, _famType, _famCode));
+                        programmeAim.AimType, programmeAim.FundModel, programmeAim.ProgTypeNullable, _famType, _famCode));
             }
         }
 
-        public bool ConditionMet(ILearningDelivery learningDelivery, IEnumerable<ILearningDelivery> learningDeliveries)
+        public bool ConditionMet(ILearningDelivery programmeAim, IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            if (learningDelivery != null)
+            if (programmeAim != null)
             {
-                return ComponentAimConditionMet(learningDelivery.FundModel, learningDelivery.ProgTypeNullable, learningDeliveries);
+                return ProgrammeAimConditionMet(programmeAim)
+                    && ComponentAimConditionMet(programmeAim.FundModel, programmeAim.ProgTypeNullable, learningDeliveries);
             }
 
             return false;
         }
 
-        public bool ComponentAimConditionMet(int fundModel, int? progType, IEnumerable<ILearningDelivery> learningDeliveries)
+        public virtual bool ProgrammeAimConditionMet(ILearningDelivery programmeAim)
+        {
+            return programmeAim == null
+                ? false
+                : _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(programmeAim.LearningDeliveryFAMs, _famType, _famCode);
+        }
+
+        public virtual bool ComponentAimConditionMet(int fundModel, int? progType, IEnumerable<ILearningDelivery> learningDeliveries)
         {
             var componentAims = learningDeliveries?
                 .Where(
-                   ld => ld.AimType == 3
+                   ld => ld.AimType == _aimType3
                 && ld.ProgTypeNullable == progType
-                && ld.FundModel == fundModel)
-                .Select(ld => ld);
+                && ld.FundModel == fundModel);
 
             if (componentAims.Any())
             {
