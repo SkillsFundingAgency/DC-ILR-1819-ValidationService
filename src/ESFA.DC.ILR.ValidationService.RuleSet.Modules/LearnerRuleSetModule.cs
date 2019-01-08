@@ -401,6 +401,7 @@
                 typeof(R106Rule),
                 typeof(R112Rule),
                 typeof(R113Rule),
+                typeof(R114Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SWSupAimId_01Rule),
                 typeof(StdCode_01Rule),
