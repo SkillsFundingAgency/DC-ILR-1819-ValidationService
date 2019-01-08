@@ -14,7 +14,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
     /// these rules are singleton's; they can't hold state...
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
-    public class WorkPlaceEmpId_04Rule : AbstractRule,
+    public class WorkPlaceEmpId_04Rule :
+        AbstractRule,
         IRule<ILearner>
     {
         /// <summary>

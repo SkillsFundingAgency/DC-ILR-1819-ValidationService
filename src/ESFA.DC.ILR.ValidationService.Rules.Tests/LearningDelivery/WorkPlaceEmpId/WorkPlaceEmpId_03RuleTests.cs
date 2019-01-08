@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
         /// <summary>
         /// New rule with null message handler throws.
         /// </summary>
-        [Fact]
+        [Fact(Skip = "this can't be tested for any more")]
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange
@@ -241,7 +241,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
             handler
                 .Setup(x => x.Handle(WorkPlaceEmpId_03Rule.Name, LearnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter(WorkPlaceEmpId_03Rule.MessagePropertyName, WorkPlaceEmpId_03Rule.TemporaryEmpID))
+                .Setup(x => x.BuildErrorMessageParameter(PropertyNameConstants.WorkPlaceEmpId, WorkPlaceEmpId_03Rule.TemporaryEmpID))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var service = new Mock<IFileDataService>(MockBehavior.Strict);
