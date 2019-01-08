@@ -25,7 +25,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
 
-        private readonly HashSet<int> fundModels = new HashSet<int> { 35, 36, 81, 99 };
+        /// <summary>
+        /// The fund models
+        /// </summary>
+        private readonly HashSet<int> fundModels = new HashSet<int>
+        {
+            TypeOfFunding.AdultSkills,
+            TypeOfFunding.ApprenticeshipsFrom1May2017,
+            TypeOfFunding.OtherAdult,
+            TypeOfFunding.NotFundedByESFA
+        };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OrigLearnStartDate_02Rule" /> class.
@@ -56,13 +65,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         /// <summary>
         /// Determines whether [has qualifying dates] [the specified delivery].
+        /// must be less than the learn start date
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying dates] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasQualifyingDates(ILearningDelivery delivery) =>
-            It.IsBetween(delivery.OrigLearnStartDateNullable.Value, DateTime.MinValue, delivery.LearnStartDate);
+            It.IsBetween(delivery.OrigLearnStartDateNullable.Value, DateTime.MinValue, delivery.LearnStartDate, false);
 
         public bool HasValidFundModel(ILearningDelivery delivery) =>
             fundModels.Contains(delivery.FundModel);
