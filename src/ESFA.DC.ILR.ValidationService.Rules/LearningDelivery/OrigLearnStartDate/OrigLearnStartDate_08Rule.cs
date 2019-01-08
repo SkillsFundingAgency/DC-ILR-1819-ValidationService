@@ -3,22 +3,28 @@ using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate
 {
-    public class OrigLearnStartDate_09Rule : AbstractRule, IRule<ILearner>
+    public class OrigLearnStartDate_08Rule : AbstractRule, IRule<ILearner>
     {
-        private const int FundModel36 = 36;
-        private readonly DateTime StartDateConditionDateTime = new DateTime(2017, 5, 1);
+        private const int FundModel99 = 99;
 
-        public OrigLearnStartDate_09Rule(
+        private readonly ILARSDataService _larsDataService;
+        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
+
+        public OrigLearnStartDate_08Rule(
+            ILARSDataService larsDataService,
+            ILearningDeliveryFAMQueryService learningDeliveryFamQueryService,
             IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_09)
+            : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_08)
         {
+            _larsDataService = larsDataService;
+            _learningDeliveryFamQueryService = learningDeliveryFamQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -32,7 +38,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             {
                 if (ConditionMet(
                     learningDelivery.OrigLearnStartDateNullable,
-                    learningDelivery.FundModel))
+                    learningDelivery.FundModel,
+                    learningDelivery.LearningDeliveryFAMs,
+                    learningDelivery.LearnAimRef))
                 {
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
@@ -42,20 +50,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             }
         }
 
-        public bool ConditionMet(DateTime? origLearnStartDate, int fundModel)
+        public bool ConditionMet(DateTime? origLearnStartDate, int fundModel, IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFams, string learnAimRef)
         {
             return OrigLearnStartDateConditionMet(origLearnStartDate)
-                   && FundModelConditionMet(fundModel);
+                   && FundModelConditionMet(fundModel)
+                   && _learningDeliveryFamQueryService.HasLearningDeliveryFAMType(learningDeliveryFams, LearningDeliveryFAMTypeConstants.ADL)
+                   && LARSConditionMet(origLearnStartDate, learnAimRef);
         }
 
         public bool OrigLearnStartDateConditionMet(DateTime? origLearnStartDate)
         {
-            return origLearnStartDate.HasValue && origLearnStartDate < StartDateConditionDateTime;
+            return origLearnStartDate.HasValue;
         }
 
         public bool FundModelConditionMet(int fundModel)
         {
-            return fundModel == FundModel36;
+            return fundModel == FundModel99;
+        }
+
+        public bool LARSConditionMet(DateTime? origLearnStartDate, string learnAimRef)
+        {
+            return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.AdvancedLearnerLoan);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? origLearnStartDate)

@@ -37,7 +37,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         ///   <c>true</c> if the specified source is withdrawn; otherwise, <c>false</c>.
         /// </returns>
         public static bool IsWithdrawn(this ISupportFundingWithdrawal source) =>
-            source.EndDate < source.StartDate;
+            It.Has(source)
+            && source.EndDate < source.StartDate;
 
         /// <summary>
         /// Determines whether the specified candidate is current.
@@ -50,7 +51,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         ///   <c>true</c> if the specified candidate is current; otherwise, <c>false</c>.
         /// </returns>
         public static bool IsCurrent(this ISupportFundingWithdrawal source, DateTime candidate, DateTime? optionalEnding = null) =>
-            !source.IsWithdrawn()
+            It.Has(source)
+            && !source.IsWithdrawn()
             && It.IsBetween(candidate, source.StartDate, optionalEnding ?? source.EndDate ?? DateTime.MaxValue);
     }
 }

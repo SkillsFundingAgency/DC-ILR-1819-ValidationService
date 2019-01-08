@@ -75,6 +75,7 @@
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\LegalOrgTypeConstants.cs" />
     <Compile Include="Constants\Monitoring.cs" />
+    <Compile Include="Constants\OutcomeConstants.cs" />
     <Compile Include="Constants\OutTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
     <Compile Include="Constants\ReasonForWithdrawal.cs" />
@@ -321,10 +322,12 @@
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_01Rule.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_08Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_09Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_07Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_06Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_01Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
@@ -451,7 +454,6 @@
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01Rule.cs" />
     <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01Rule.cs" />
-    <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_02Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_14Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_13Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08Rule.cs" />
