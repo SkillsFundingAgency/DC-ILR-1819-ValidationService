@@ -452,7 +452,6 @@
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01RuleTests.cs" />
     <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01RuleTests.cs" />
-    <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_02RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_14RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08RuleTests.cs" />

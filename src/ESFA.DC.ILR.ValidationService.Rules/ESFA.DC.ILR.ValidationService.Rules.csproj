@@ -454,7 +454,6 @@
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02Rule.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01Rule.cs" />
     <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01Rule.cs" />
-    <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_02Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_14Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_13Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08Rule.cs" />
