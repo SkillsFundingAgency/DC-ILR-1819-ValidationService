@@ -21,10 +21,5 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         {
             return (learningDelivery.LearnPlanEndDate - learningDelivery.LearnStartDate).Days + 1;
         }
-
-        //public bool HasLearningDeliveryForAimAndProgType(int aimType, int? progType)
-        //{
-
-        //}
     }
 }
