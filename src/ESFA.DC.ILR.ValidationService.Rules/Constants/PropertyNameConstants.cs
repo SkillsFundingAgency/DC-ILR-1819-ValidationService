@@ -84,6 +84,7 @@
         public const string StdCode = "StdCode";
         public const string UCASAPPID = "UCASAPPID";
         public const string WithdrawReason = "WithdrawReason";
+        public const string WorkPlaceEmpId = "WorkPlaceEmpId";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";
         public const string WorkPlaceMode = "WorkPlaceMode";
     }

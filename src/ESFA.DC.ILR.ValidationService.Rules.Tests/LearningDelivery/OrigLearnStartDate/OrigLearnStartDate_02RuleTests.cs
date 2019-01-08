@@ -96,7 +96,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
         [InlineData("2018-04-19", "2018-04-18", true)]
         [InlineData("2018-04-18", "2018-04-18", false)]
         [InlineData("2018-04-17", "2018-04-18", false)]
-        [InlineData("2018-04-16", "2018-04-18", false)]
         public void HasQualifyingDatesMeetsExpectation(string startDate, string originalDate, bool expectation)
         {
             // arrange
@@ -193,7 +192,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
                 .SetupGet(y => y.LearnStartDate)
                 .Returns(referenceDate);
 
-            // get it into range
+            // move into range
             mockDelivery
                 .SetupGet(y => y.OrigLearnStartDateNullable)
                 .Returns(referenceDate.AddDays(-1));

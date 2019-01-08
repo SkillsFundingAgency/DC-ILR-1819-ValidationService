@@ -139,6 +139,8 @@
     <Compile Include="Derived\DD04Tests.cs" />
     <Compile Include="Derived\DD06Tests.cs" />
     <Compile Include="Derived\DD07Tests.cs" />
+    <Compile Include="Derived\DerivedData_31RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_32RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_02RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutEndDate\OutEndDate_01RuleTests.cs" />
@@ -496,6 +498,7 @@
     <Compile Include="Query\RuleCommonOperationsProviderTests.cs" />
     <Compile Include="Query\PostcodeQueryServiceTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
+    <Compile Include="CrossEntity\R114RuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

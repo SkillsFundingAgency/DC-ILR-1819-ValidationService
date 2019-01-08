@@ -74,6 +74,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         public bool HasQualifyingDates(ILearningDelivery delivery) =>
             It.IsBetween(delivery.OrigLearnStartDateNullable.Value, DateTime.MinValue, delivery.LearnStartDate, false);
 
+        /// <summary>
+        /// Determines whether [has valid fund model] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [has valid fund model] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
         public bool HasValidFundModel(ILearningDelivery delivery) =>
             fundModels.Contains(delivery.FundModel);
 
