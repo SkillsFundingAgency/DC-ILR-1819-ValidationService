@@ -92,10 +92,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
         /// <param name="originalDate">The original date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
+        [InlineData("2018-04-20", "2018-04-18", true)]
         [InlineData("2018-04-19", "2018-04-18", true)]
-        [InlineData("2018-04-18", "2018-04-18", true)]
+        [InlineData("2018-04-18", "2018-04-18", false)]
         [InlineData("2018-04-17", "2018-04-18", false)]
-        [InlineData("2018-04-16", "2018-04-18", false)]
         public void HasQualifyingDatesMeetsExpectation(string startDate, string originalDate, bool expectation)
         {
             // arrange
@@ -191,9 +191,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
             mockDelivery
                 .SetupGet(y => y.LearnStartDate)
                 .Returns(referenceDate);
+
+            // move into range
             mockDelivery
                 .SetupGet(y => y.OrigLearnStartDateNullable)
-                .Returns(referenceDate);
+                .Returns(referenceDate.AddDays(-1));
 
             mockDelivery
                 .SetupGet(y => y.FundModel)
