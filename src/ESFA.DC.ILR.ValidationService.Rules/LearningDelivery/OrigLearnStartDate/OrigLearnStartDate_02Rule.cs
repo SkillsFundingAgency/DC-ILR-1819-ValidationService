@@ -65,6 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         /// <summary>
         /// Determines whether [has qualifying dates] [the specified delivery].
+        /// must be less than the learn start date
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>
