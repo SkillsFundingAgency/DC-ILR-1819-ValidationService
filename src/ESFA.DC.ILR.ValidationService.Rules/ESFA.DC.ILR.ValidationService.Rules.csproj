@@ -70,7 +70,6 @@
     <Compile Include="Constants\ApprenticeshipFinanicalRecord.cs" />
     <Compile Include="Constants\CompletionState.cs" />
     <Compile Include="Constants\FundingStreamPeriodCodeConstants.cs" />
-    <Compile Include="Constants\FundModelConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\LegalOrgTypeConstants.cs" />

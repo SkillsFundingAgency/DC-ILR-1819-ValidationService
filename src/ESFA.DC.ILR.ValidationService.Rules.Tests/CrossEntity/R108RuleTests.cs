@@ -38,8 +38,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(FundModelConstants.NonFunded)]
-        [InlineData(FundModelConstants.Apprenticeships)]
+        [InlineData(TypeOfFunding.NotFundedByESFA)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017)]
         public void FundModelConditionMet_False(int fundModel)
         {
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
@@ -50,10 +50,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(FundModelConstants.CommunityLearning)]
-        [InlineData(FundModelConstants.AdultSkills)]
-        [InlineData(FundModelConstants.ESF)]
-        [InlineData(FundModelConstants.OtherAdult)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships)]
+        [InlineData(TypeOfFunding.AdultSkills)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund)]
+        [InlineData(TypeOfFunding.OtherAdult)]
         public void FundModelConditionMet_True(int fundModel)
         {
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
@@ -202,14 +202,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         ProgTypeNullable = 12,
-                        FundModel = FundModelConstants.AdultSkills,
+                        FundModel = TypeOfFunding.AdultSkills,
                         LearnActEndDateNullable = new DateTime(2017, 05, 01),
                         CompStatus = 7
                     },
                     new TestLearningDelivery()
                     {
                         ProgTypeNullable = null,
-                        FundModel = FundModelConstants.ESF,
+                        FundModel = TypeOfFunding.EuropeanSocialFund,
                         LearnActEndDateNullable = new DateTime(2018, 06, 01),
                         CompStatus = 8
                     }
@@ -258,14 +258,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         ProgTypeNullable = 24,
-                        FundModel = FundModelConstants.NonFunded,
+                        FundModel = TypeOfFunding.NotFundedByESFA,
                         LearnActEndDateNullable = null,
                         CompStatus = 5
                     },
                     new TestLearningDelivery()
                     {
                         ProgTypeNullable = 25,
-                        FundModel = FundModelConstants.Apprenticeships,
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                         LearnActEndDateNullable = new DateTime(2018, 06, 01),
                         CompStatus = 6
                     }
@@ -306,13 +306,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnRefNumber, "00100309")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, FundModelConstants.AdultSkills)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.CompStatus, 5)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, "01/06/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, "00100309")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.OutStartDate, "01/06/2018")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters("00100309", FundModelConstants.AdultSkills, 5, new DateTime(2018, 06, 01), "00100309", new DateTime(2018, 06, 01));
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters("00100309", TypeOfFunding.AdultSkills, 5, new DateTime(2018, 06, 01), "00100309", new DateTime(2018, 06, 01));
 
             validationErrorHandlerMock.Verify();
         }
