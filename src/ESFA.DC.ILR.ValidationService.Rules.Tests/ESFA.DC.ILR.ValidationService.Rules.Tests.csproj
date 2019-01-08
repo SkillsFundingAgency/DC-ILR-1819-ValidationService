@@ -467,6 +467,7 @@
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04RuleTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_05RuleTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceMode\WorkPlaceMode_01RuleTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_03RuleTests.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07RuleTests.cs" />
