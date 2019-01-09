@@ -372,6 +372,7 @@
 
         public const string WorkPlaceMode_01 = "WorkPlaceMode_01";
 
+        public const string WorkPlaceStartDate_02 = "WorkPlaceStartDate_02";
         public const string WorkPlaceStartDate_03 = "WorkPlaceStartDate_03";
     }
 }
