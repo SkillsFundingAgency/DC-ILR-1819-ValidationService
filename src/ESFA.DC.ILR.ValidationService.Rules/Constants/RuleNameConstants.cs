@@ -325,6 +325,7 @@
         public const string R63 = "R63";
         public const string R64 = "R64";
         public const string R66 = "R66";
+        public const string R67 = "R67";
         public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
