@@ -230,6 +230,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_06Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
