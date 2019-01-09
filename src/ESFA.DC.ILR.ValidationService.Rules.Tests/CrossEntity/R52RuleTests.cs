@@ -21,42 +21,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule().RuleName.Should().Be("R52");
         }
 
-        [Theory]
-        [InlineData(LearningDeliveryFAMTypeConstants.ACT)]
-        [InlineData(LearningDeliveryFAMTypeConstants.ALB)]
-        [InlineData(LearningDeliveryFAMTypeConstants.LSF)]
-        public void ConditionMet_False(string learnDelFAMType)
-        {
-            var testLearner = new TestLearner()
-            {
-                LearnRefNumber = "123456789",
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        AimSeqNumber = 654,
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = learnDelFAMType,
-                                LearnDelFAMCode = "32"
-                            },
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA,
-                                LearnDelFAMCode = "21"
-                            }
-                        }
-                    }
-                }
-            };
-
-            NewRule().ConditionMet(testLearner).Should().BeFalse();
-        }
-
         [Fact]
-        public void ConditionMet_True()
+        public void Validate_MultipleLDs_Error()
         {
             var testLearner = new TestLearner()
             {
@@ -70,55 +36,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         {
                             new TestLearningDeliveryFAM()
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ALB,
-                                LearnDelFAMCode = "32"
-                            },
-                            new TestLearningDeliveryFAM()
-                            {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA,
                                 LearnDelFAMCode = "21"
-                            }
-                        }
-                    },
-                    new TestLearningDelivery()
-                    {
-                        AimSeqNumber = 655,
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA,
-                                LearnDelFAMCode = "21"
-                            }
-                        }
-                    },
-                    new TestLearningDelivery()
-                    {
-                        AimSeqNumber = 656
-                    }
-                }
-            };
-
-            NewRule().ConditionMet(testLearner).Should().BeTrue();
-        }
-
-        [Fact]
-        public void Validate_Error()
-        {
-            var testLearner = new TestLearner()
-            {
-                LearnRefNumber = "123456789",
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        AimSeqNumber = 654,
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ALB,
-                                LearnDelFAMCode = "32"
                             },
                             new TestLearningDeliveryFAM()
                             {
@@ -153,6 +72,146 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
+        public void Validate_MultipleLDsDifferentCase_Error()
+        {
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "123456789",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 654,
+                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA.ToLower(),
+                                LearnDelFAMCode = "21"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA.ToUpper(),
+                                LearnDelFAMCode = "21"
+                            }
+                        }
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 655,
+                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA,
+                                LearnDelFAMCode = "21"
+                            }
+                        }
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 656
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_MultipleFAMsExclusions_NoError()
+        {
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "123456789",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 654,
+                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
+                                LearnDelFAMCode = "21"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA,
+                                LearnDelFAMCode = "21"
+                            }
+                        }
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 655,
+                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT.ToUpper(),
+                                LearnDelFAMCode = "21"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA,
+                                LearnDelFAMCode = "1"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT.ToLower(),
+                                LearnDelFAMCode = "21"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LSF,
+                                LearnDelFAMCode = "21"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA.ToLower(),
+                                LearnDelFAMCode = "2"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LSF,
+                                LearnDelFAMCode = "21"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ALB,
+                                LearnDelFAMCode = "21"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.NSA.ToUpper(),
+                                LearnDelFAMCode = "3"
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ALB,
+                                LearnDelFAMCode = "21"
+                            }
+                        }
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 656
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
         public void Validate_NoError()
         {
             var testLearner = new TestLearner()
@@ -169,6 +228,47 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
                                 LearnDelFAMCode = "32"
+                            }
+                        }
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_MultipleLDs_NoError()
+        {
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "123456789",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 1,
+                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
+                                LearnDelFAMCode = "357"
+                            }
+                        }
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 2,
+                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
+                                LearnDelFAMCode = "357"
                             }
                         }
                     }
