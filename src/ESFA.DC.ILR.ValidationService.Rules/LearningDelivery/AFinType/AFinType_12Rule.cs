@@ -100,7 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? thisDelivery.AppFinRecords.SafeAny(afr => It.IsInRange(afr.AFinType, ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice))
+                ? thisDelivery.AppFinRecords.SafeAny(afr => It.IsInRange(afr.AFinType, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice))
                 : true;
         }
 

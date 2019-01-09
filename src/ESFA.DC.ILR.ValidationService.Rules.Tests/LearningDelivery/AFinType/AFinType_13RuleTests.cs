@@ -290,7 +290,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinType)
-                .Returns(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice);
+                .Returns(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice);
             mockFinRec
                 .SetupGet(x => x.AFinDate)
                 .Returns(DateTime.Parse(finDate));
@@ -360,7 +360,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinType)
-                .Returns(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice);
+                .Returns(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice);
             mockFinRec
                 .SetupGet(x => x.AFinDate)
                 .Returns(DateTime.Parse(finDate));

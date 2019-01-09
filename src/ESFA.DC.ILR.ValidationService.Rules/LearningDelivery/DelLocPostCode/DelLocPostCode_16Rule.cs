@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
 
         public virtual bool FundModelConditionMet(int fundModel)
         {
-            return fundModel == FundModelConstants.ESF;
+            return fundModel == TypeOfFunding.EuropeanSocialFund;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string delLocPostCode)

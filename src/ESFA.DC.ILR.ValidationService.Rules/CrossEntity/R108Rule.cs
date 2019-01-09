@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R108Rule : AbstractRule, IRule<IMessage>
     {
-        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { FundModelConstants.CommunityLearning, FundModelConstants.AdultSkills, FundModelConstants.ESF, FundModelConstants.OtherAdult };
+        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfFunding.AdultSkills, TypeOfFunding.EuropeanSocialFund, TypeOfFunding.OtherAdult };
 
         private readonly IFileDataService _fileDataService;
 

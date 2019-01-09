@@ -25,9 +25,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills)]
-        [InlineData(FundModelConstants.Apprenticeships)]
-        [InlineData(FundModelConstants.OtherAdult)]
+        [InlineData(TypeOfFunding.AdultSkills)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017)]
+        [InlineData(TypeOfFunding.OtherAdult)]
         public void FundModelConditionMet_False(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [Fact]
         public void FundModelConditionMet_True()
         {
-            NewRule().FundModelConditionMet(FundModelConstants.SixteenToNineteen).Should().BeTrue();
+            NewRule().FundModelConditionMet(TypeOfFunding.Other16To19).Should().BeTrue();
         }
 
         [Fact]
@@ -96,10 +96,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills, false, true)]
-        [InlineData(FundModelConstants.Apprenticeships, true, false)]
-        [InlineData(FundModelConstants.OtherAdult, false, false)]
-        [InlineData(FundModelConstants.NonFunded, false, false)]
+        [InlineData(TypeOfFunding.AdultSkills, false, true)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, true, false)]
+        [InlineData(TypeOfFunding.OtherAdult, false, false)]
+        [InlineData(TypeOfFunding.NotFundedByESFA, false, false)]
         public void ConditionMet_False(int fundModel, bool dd07Result, bool famsResult)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
@@ -120,9 +120,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills, true, true)]
-        [InlineData(FundModelConstants.NonFunded, true, true)]
-        [InlineData(FundModelConstants.NonFunded, false, true)]
+        [InlineData(TypeOfFunding.AdultSkills, true, true)]
+        [InlineData(TypeOfFunding.NotFundedByESFA, true, true)]
+        [InlineData(TypeOfFunding.NotFundedByESFA, false, true)]
         public void ConditionMet_True(int fundModel, bool dd07Result, bool famsResult)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
@@ -159,7 +159,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = FundModelConstants.NonFunded,
+                        FundModel = TypeOfFunding.NotFundedByESFA,
                         ProgTypeNullable = null,
                         LearningDeliveryFAMs = testLearningDeliveryFAMs
                     }
@@ -195,7 +195,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = FundModelConstants.Apprenticeships,
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                         ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
                         LearningDeliveryFAMs = testLearningDeliveryFAMs
                     }
@@ -215,9 +215,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(FundModelConstants.Apprenticeships)]
-        [InlineData(FundModelConstants.AdultSkills)]
-        [InlineData(FundModelConstants.OtherAdult)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017)]
+        [InlineData(TypeOfFunding.AdultSkills)]
+        [InlineData(TypeOfFunding.OtherAdult)]
         public void BuildErrorMessageParameters(int fundModel)
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
