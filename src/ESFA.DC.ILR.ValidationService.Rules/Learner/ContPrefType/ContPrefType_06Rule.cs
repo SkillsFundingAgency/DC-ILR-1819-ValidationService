@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -31,19 +32,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType
 
         public bool ConditionMet(IEnumerable<IContactPreference> contactPreferences)
         {
-            var filteredContactPreferences = FilterContactPreferencesByPrefType(contactPreferences, ContactPreference.Types.RestrictedUserInteraction);
-
-            if (filteredContactPreferences != null && filteredContactPreferences.Count > 2)
+            if (contactPreferences.Count(cp => cp.ContPrefType.CaseInsensitiveEquals(ContactPreference.Types.RestrictedUserInteraction)) > 2)
             {
-                    return true;
+                return true;
             }
 
             return false;
-        }
-
-        public IList<IContactPreference> FilterContactPreferencesByPrefType(IEnumerable<IContactPreference> contactPreferences, string contPrefType)
-        {
-            return contactPreferences?.Where(cp => cp.ContPrefType == contPrefType).ToList();
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string contPrefType)

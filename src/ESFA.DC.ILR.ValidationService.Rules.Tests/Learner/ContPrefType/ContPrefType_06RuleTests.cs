@@ -19,50 +19,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         }
 
         [Fact]
-        public void FilterContactPreferencesByPrefType_OneMatch()
-        {
-            var RUI = ContactPreference.Types.RestrictedUserInteraction;
-            var PMC = ContactPreference.Types.PreferredMethodOfContact;
-
-            var contactPreferences = new TestContactPreference[]
-            {
-                new TestContactPreference { ContPrefCode = 1, ContPrefType = RUI },
-                new TestContactPreference { ContPrefCode = 1, ContPrefType = PMC }
-            };
-
-            var result = NewRule().FilterContactPreferencesByPrefType(contactPreferences, RUI);
-
-            result.Count.Should().Be(1);
-            result.Should().Contain(x => x.ContPrefType == RUI);
-        }
-
-        [Fact]
-        public void FilterContactPreferencesByPrefType_NoMatch()
-        {
-            var RUI = ContactPreference.Types.RestrictedUserInteraction;
-            var PMC = ContactPreference.Types.PreferredMethodOfContact;
-
-            var contactPreferences = new TestContactPreference[]
-            {
-                new TestContactPreference { ContPrefCode = 1, ContPrefType = PMC }
-            };
-
-            var result = NewRule().FilterContactPreferencesByPrefType(contactPreferences, RUI);
-
-            result.Count.Should().Be(0);
-        }
-
-        [Fact]
-        public void FilterContactPreferencesByPrefType_NullContactPreferences()
-        {
-            var RUI = ContactPreference.Types.RestrictedUserInteraction;
-
-            var result = NewRule().FilterContactPreferencesByPrefType(null, RUI);
-
-            result.Should().BeNull();
-        }
-
-        [Fact]
         public void ConditionMet_True()
         {
             var RUI = ContactPreference.Types.RestrictedUserInteraction;
@@ -93,12 +49,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
             };
 
             NewRule().ConditionMet(contactPreferences).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_FalseNull()
-        {
-            NewRule().ConditionMet(null).Should().BeFalse();
         }
 
         [Fact]
