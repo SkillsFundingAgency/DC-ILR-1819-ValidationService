@@ -314,6 +314,7 @@
         public const string R47 = "R47";
         public const string R52 = "R52";
         public const string R63 = "R63";
+        public const string R64 = "R64";
         public const string R66 = "R66";
         public const string R69 = "R69";
         public const string R70 = "R70";
