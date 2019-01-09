@@ -10,13 +10,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
     public class LearnerEmploymentStatusQueryServiceTests
     {
         [Fact]
-        public void EmpStatsForDateEmpStatApp_Null()
+        public void EmpStatForDateEmpStatApp_Zero()
         {
-            NewService().EmpStatsForDateEmpStatApp(null, new DateTime(2018, 8, 1)).Should().BeNull();
+            NewService().EmpStatForDateEmpStatApp(null, new DateTime(2018, 8, 1)).Should().Be(0);
         }
 
         [Fact]
-        public void EmpStatsForDateEmpStatApp_Null_DateMisMatch()
+        public void EmpStatForDateEmpStatApp_Zero_DateTooLate()
         {
             var learnStartDate = new DateTime(2018, 7, 1);
             var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
@@ -28,11 +28,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 }
             };
 
-            NewService().EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate).Should().BeNullOrEmpty();
+            NewService().EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate).Should().Be(0);
         }
 
         [Fact]
-        public void EmpStatsForDateEmpStatApp()
+        public void EmpStatForDateEmpStatApp()
         {
             var learnStartDate = new DateTime(2018, 8, 1);
             var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
@@ -44,7 +44,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 }
             };
 
-            NewService().EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate).Should().BeEquivalentTo(new List<int> { 10 });
+            NewService().EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate).Should().Be(10);
+        }
+
+        [Fact]
+        public void EmpStatForDateEmpStatApp_MiddleOne()
+        {
+            var learnStartDate = new DateTime(2018, 8, 13);
+            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+            {
+                new TestLearnerEmploymentStatus
+                {
+                    EmpStat = 10,
+                    DateEmpStatApp = new DateTime(2018, 8, 1)
+                },
+                new TestLearnerEmploymentStatus
+                {
+                    EmpStat = 11,
+                    DateEmpStatApp = new DateTime(2018, 8, 13)
+                },
+                new TestLearnerEmploymentStatus
+                {
+                    EmpStat = 10,
+                    DateEmpStatApp = new DateTime(2018, 8, 19)
+                }
+            };
+
+            NewService().EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate).Should().Be(11);
         }
 
         [Fact]
