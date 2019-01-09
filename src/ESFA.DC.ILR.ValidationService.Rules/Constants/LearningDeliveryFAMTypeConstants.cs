@@ -18,5 +18,6 @@
         public const string WPP = "WPP";
         public const string POD = "POD";
         public const string FLN = "FLN";
+        public const string HEM = "HEM";
     }
 }
