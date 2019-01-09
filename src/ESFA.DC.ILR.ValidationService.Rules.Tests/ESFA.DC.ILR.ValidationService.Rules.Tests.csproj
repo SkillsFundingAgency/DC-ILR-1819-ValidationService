@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="CrossEntity\R06RuleTests.cs" />
+    <Compile Include="CrossEntity\R117RuleTests.cs" />
     <Compile Include="CrossEntity\R118RuleTests.cs" />
     <Compile Include="CrossEntity\R104RuleTests.cs" />
     <Compile Include="CrossEntity\R102RuleTests.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="CrossEntity\R91RuleTests.cs" />
     <Compile Include="CrossEntity\R96RuleTests.cs" />
     <Compile Include="Derived\DerivedData_05RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_14RuleTests.cs" />
     <Compile Include="Derived\DerivedData_22RuleTests.cs" />
     <Compile Include="Derived\DerivedData_27RuleTests.cs" />
     <Compile Include="Derived\DerivedData_28RuleTests.cs" />
@@ -304,6 +306,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_84RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_16RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_15RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_65RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_69RuleTests.cs" />
@@ -317,6 +320,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_18RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_60RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_61RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnPlanEndDate\LearnPlanEndDate_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78RuleTests.cs" />

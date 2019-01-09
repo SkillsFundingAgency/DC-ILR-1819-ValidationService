@@ -167,6 +167,7 @@
         public const string LearnDelFAMType_08 = "LearnDelFAMType_08";
         public const string LearnDelFAMType_14 = "LearnDelFAMType_14";
         public const string LearnDelFAMType_15 = "LearnDelFAMType_15";
+        public const string LearnDelFAMType_16 = "LearnDelFAMType_16";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
@@ -203,6 +204,8 @@
         public const string LearnStartDate_06 = "LearnStartDate_06";
         public const string LearnStartDate_07 = "LearnStartDate_07";
         public const string LearnStartDate_13 = "LearnStartDate_13";
+
+        public const string LearnPlanEndDate_02 = "LearnPlanEndDate_02";
 
         public const string MathGrade_01 = "MathGrade_01";
         public const string MathGrade_03 = "MathGrade_03";
@@ -326,6 +329,7 @@
         public const string R112 = "R112";
         public const string R113 = "R113";
         public const string R114 = "R114";
+        public const string R117 = "R117";
         public const string R118 = "R118";
 
         public const string Schema = "Schema";
