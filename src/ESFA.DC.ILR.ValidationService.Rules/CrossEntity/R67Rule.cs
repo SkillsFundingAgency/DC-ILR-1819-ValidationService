@@ -24,32 +24,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.LearningDeliveryWorkPlacements))
+                if (learningDelivery.LearningDeliveryWorkPlacements != null)
                 {
-                    var duplicateWorkPlacement = learningDelivery.LearningDeliveryWorkPlacements.FirstOrDefault();
-                    HandleValidationError(
-                        objectToValidate.LearnRefNumber,
-                        learningDelivery.AimSeqNumber,
-                        BuildErrorMessageParameters(duplicateWorkPlacement?.WorkPlaceStartDate, duplicateWorkPlacement?.WorkPlaceEmpIdNullable));
+                    var duplicates = learningDelivery.LearningDeliveryWorkPlacements.GroupBy(
+                            x => new
+                            {
+                                x.WorkPlaceEmpIdNullable,
+                                x.WorkPlaceStartDate
+                            })
+                        .Where(dup => dup.Count() > 1);
+
+                    foreach (var workPlacement in duplicates)
+                    {
+                        HandleValidationError(
+                            objectToValidate.LearnRefNumber,
+                            learningDelivery.AimSeqNumber,
+                            BuildErrorMessageParameters(
+                                workPlacement.Key.WorkPlaceStartDate,
+                                workPlacement.Key.WorkPlaceEmpIdNullable));
+                    }
                 }
             }
-        }
-
-        public bool ConditionMet(IReadOnlyCollection<ILearningDeliveryWorkPlacement> learningDeliveryWorkPlacements)
-        {
-            if (learningDeliveryWorkPlacements == null)
-            {
-                return false;
-            }
-
-            var isDuplicatedAny = learningDeliveryWorkPlacements.GroupBy(
-                                 x => new
-                                 {
-                                     x.WorkPlaceEmpIdNullable,
-                                     x.WorkPlaceStartDate,
-                                 }).Any(x => x.Count() > 1);
-
-            return isDuplicatedAny;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? workPlaceStartDate, int? empId)

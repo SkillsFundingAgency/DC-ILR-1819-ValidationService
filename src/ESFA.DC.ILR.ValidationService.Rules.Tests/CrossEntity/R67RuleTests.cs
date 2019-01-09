@@ -21,48 +21,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void Validate_Null_True()
+        public void Validate_Null_LearningDelivery_True()
         {
-            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
-
-            NewRule(validationErrorHandlerMock.Object).Validate(new TestLearner());
-            validationErrorHandlerMock.Verify(h => h.Handle(RuleNameConstants.R67, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()), Times.Never);
-        }
-
-        [Fact]
-        public void ConditionMet_Null_False()
-        {
-            NewRule().ConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_True()
-        {
-            var learningDeliveryWorkPlacements = new TestLearningDeliveryWorkPlacement[]
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                new TestLearningDeliveryWorkPlacement()
-                {
-                    WorkPlaceEmpIdNullable = 123,
-                    WorkPlaceStartDate = new DateTime(2018, 10, 11)
-                },
+                NewRule(validationErrorHandlerMock.Object).Validate(new TestLearner());
+            }
+        }
 
-                new TestLearningDeliveryWorkPlacement()
-                {
-                    WorkPlaceEmpIdNullable = 123,
-                    WorkPlaceStartDate = new DateTime(2018, 10, 11)
-                },
-                new TestLearningDeliveryWorkPlacement()
-                {
-                    WorkPlaceEmpIdNullable = 124,
-                    WorkPlaceStartDate = new DateTime(2018, 10, 11)
-                },
-                new TestLearningDeliveryWorkPlacement()
-                {
-                    WorkPlaceEmpIdNullable = null,
-                    WorkPlaceStartDate = new DateTime(2018, 10, 11)
-                }
-            };
-            NewRule().ConditionMet(learningDeliveryWorkPlacements).Should().BeTrue();
+        [Fact]
+        public void Validate_Null_WorkPlacements_True()
+        {
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(
+                    new TestLearner()
+                    {
+                        LearningDeliveries = new List<ILearningDelivery>()
+                    });
+            }
         }
 
         [Theory]
@@ -70,22 +47,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [InlineData(999, "2018-10-10")]
         [InlineData(123, "2018-11-11")]
         [InlineData(999, "2018-11-11")]
-        public void ConditionMet_False(int? employerId, string startDate)
+        public void ValidatePass_DuplicateNotFound(int? employerId, string startDate)
         {
-            var learningDeliveryWorkPlacements = new TestLearningDeliveryWorkPlacement[]
+            var learner = new TestLearner()
             {
-                new TestLearningDeliveryWorkPlacement()
+                LearningDeliveries = new List<ILearningDelivery>()
                 {
-                    WorkPlaceEmpIdNullable = 123,
-                    WorkPlaceStartDate = new DateTime(2018, 10, 10)
-                },
-                new TestLearningDeliveryWorkPlacement()
-                {
-                    WorkPlaceEmpIdNullable = employerId,
-                    WorkPlaceStartDate = DateTime.Parse(startDate)
+                    new TestLearningDelivery()
+                    {
+                        LearningDeliveryWorkPlacements = new TestLearningDeliveryWorkPlacement[]
+                        {
+                            new TestLearningDeliveryWorkPlacement()
+                            {
+                                WorkPlaceEmpIdNullable = 123,
+                                WorkPlaceStartDate = new DateTime(2018, 10, 11)
+                            },
+
+                            new TestLearningDeliveryWorkPlacement()
+                            {
+                                WorkPlaceEmpIdNullable = employerId,
+                                WorkPlaceStartDate = DateTime.Parse(startDate)
+                            }
+                        }
+                    }
                 }
             };
-            NewRule().ConditionMet(learningDeliveryWorkPlacements).Should().BeFalse();
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+                validationErrorHandlerMock.Verify(h => h.Handle(RuleNameConstants.R67, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()), Times.Never);
+            }
         }
 
         [Fact]
