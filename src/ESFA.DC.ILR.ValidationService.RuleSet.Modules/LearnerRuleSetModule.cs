@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnPlanEndDate;
+
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
@@ -310,6 +312,7 @@
                 typeof(LearnStartDate_07Rule),
                 typeof(LearnStartDate_12Rule),
                 typeof(LearnStartDate_13Rule),
+                typeof(LearnPlanEndDate_02Rule),
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
                 typeof(LLDDHealthProb_01Rule),
