@@ -378,7 +378,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
             validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.AimType, TypeOfAim.ComponentAimInAProgramme)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FundModel, FundModelConstants.Apprenticeships)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.ApprenticeshipsFrom1May2017)).Verifiable();
             validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.ProgType, TypeOfLearningProgramme.AdvancedLevelApprenticeship)).Verifiable();
             validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FworkCode, 2)).Verifiable();
             validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.PwayCode, 3)).Verifiable();
@@ -395,7 +395,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 FworkCodeNullable = 2,
                 PwayCodeNullable = 3,
                 StdCodeNullable = null,
-                FundModel = FundModelConstants.Apprenticeships,
+                FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                 OutcomeNullable = 1,
                 CompStatus = 2,
                 LearnStartDate = new DateTime(2017, 10, 10)
@@ -405,29 +405,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             validationErrorHandlerMock.Verify();
         }
-
-        //private ILearningDelivery BuildLearningDelivery(
-        //    string learnAimRef = null,
-        //    int? aimType = null,
-        //    int fundModel = 35,
-        //    int? frameworkCode = null,
-        //    int? standardCode = null,
-        //    int? pwayCode = null,
-        //    int? progType = null,
-        //    DateTime? learnStartDateTime = null)
-        //{
-        //    return new TestLearningDelivery()
-        //    {
-        //        LearnAimRef = learnAimRef,
-        //        AimType = aimType ?? TypeOfAim.ComponentAimInAProgramme,
-        //        FundModel = fundModel,
-        //        ProgTypeNullable = progType,
-        //        FworkCodeNullable = frameworkCode,
-        //        PwayCodeNullable = pwayCode,
-        //        StdCodeNullable = standardCode,
-        //        LearnStartDate = learnStartDateTime ?? DateTime.MinValue
-        //    };
-        //}
 
         private R64Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILARSDataService larsDataService = null)
         {

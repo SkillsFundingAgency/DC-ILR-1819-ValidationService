@@ -1,6 +1,4 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnPlanEndDate;
-
-namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
@@ -68,6 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+    using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnPlanEndDate;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
