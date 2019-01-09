@@ -28,6 +28,26 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         public DateTime? EffectiveTo { get; set; }
 
         /// <summary>
+        /// Gets the effective from (date).
+        /// </summary>
+        public DateTime StartDate => EffectiveFrom;
+
+        /// <summary>
+        /// Gets the effective to (date).
+        /// </summary>
+        public DateTime? EndDate => EffectiveTo;
+
+        /// <summary>
+        /// Gets or sets the learn aim reference type.
+        /// </summary>
+        public string LearnAimRefType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the english prescribed Ids.
+        /// </summary>
+        public int? EnglPrscID { get; set; }
+
+        /// <summary>
         /// Gets or sets the notional NVQ level.
         /// </summary>
         public string NotionalNVQLevel { get; set; }
@@ -45,7 +65,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// <summary>
         /// Gets or sets the learn direct class system code 1.
         /// </summary>
-        public string LearnDirectClassSystemCode1 { get; set; }
+        public ILearnDirectClassSystemCode LearnDirectClassSystemCode1 { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the learn direct class system code 2
+        /// </summary>
+        public ILearnDirectClassSystemCode LearnDirectClassSystemCode2 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the learn direct class system code 3.
+        /// </summary>
+        public ILearnDirectClassSystemCode LearnDirectClassSystemCode3 { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the Sector Subject Area Tier 1
+        /// </summary>
+        public decimal? SectorSubjectAreaTier1 { get; set; }
+
+        /// <summary>
+        ///  Gets or sets the Sector Subject Area Tier 2
+        /// </summary>
+        public decimal? SectorSubjectAreaTier2 { get; set; }
 
         /// <summary>
         /// Gets or sets the learning delivery categories.

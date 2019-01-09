@@ -20,7 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Extensions\ESFA.DC.ILR.ValidationService.Data.Extensions.csproj" />
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Interface\ESFA.DC.ILR.ValidationService.Interface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="External\EDRS\Model\" />
   </ItemGroup>
 
 </Project>

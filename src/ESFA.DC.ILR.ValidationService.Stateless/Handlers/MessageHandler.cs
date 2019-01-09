@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Fabric;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Providers;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
-using ESFA.DC.JobContext;
 using ESFA.DC.JobContext.Interface;
+using ESFA.DC.JobContextManager.Interface;
+using ESFA.DC.JobContextManager.Model;
 using ESFA.DC.Logging.Interfaces;
 using ExecutionContext = ESFA.DC.Logging.ExecutionContext;
 
 namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 {
-    public class MessageHandler : IMessageHandler
+    public class MessageHandler : IMessageHandler<JobContextMessage>
     {
         private readonly ILifetimeScope _parentLifeTimeScope;
         private readonly StatelessServiceContext _context;
@@ -24,28 +25,16 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
             _context = context;
         }
 
-        public async Task<bool> Handle(JobContextMessage jobContextMessage, CancellationToken cancellationToken)
+        public async Task<bool> HandleAsync(JobContextMessage jobContextMessage, CancellationToken cancellationToken)
         {
             using (var childLifeTimeScope = _parentLifeTimeScope
                 .BeginLifetimeScope(c =>
                 {
-                    var fileName = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString();
-                    if (fileName.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        c.RegisterType<AzureStorageCompressedFileContentStringProviderService>()
-                            .As<IMessageStreamProviderService>();
-                    }
-                    else
-                    {
-                        c.RegisterType<AzureStorageFileContentStringProviderService>()
-                            .As<IMessageStreamProviderService>();
-                    }
-
                     c.RegisterInstance(
                         new PreValidationContext
                         {
                             JobId = jobContextMessage.JobId.ToString(),
-                            Input = fileName,
+                            Input = jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename].ToString(),
                             InvalidLearnRefNumbersKey = jobContextMessage
                                 .KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbers].ToString(),
                             ValidLearnRefNumbersKey =
@@ -53,7 +42,8 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                             ValidationErrorsKey = jobContextMessage.KeyValuePairs[JobContextMessageKey.ValidationErrors]
                                 .ToString(),
                             ValidationErrorMessageLookupKey = jobContextMessage
-                                .KeyValuePairs[JobContextMessageKey.ValidationErrorLookups].ToString()
+                                .KeyValuePairs[JobContextMessageKey.ValidationErrorLookups].ToString(),
+                            Tasks = jobContextMessage.Topics[jobContextMessage.TopicPointer].Tasks.SelectMany(x => x.Tasks)
                         }).As<IPreValidationContext>();
                 }))
             {
@@ -76,9 +66,6 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
 
                     await preValidationOrchestrationService.ExecuteAsync(validationContext, cancellationToken);
 
-                    // Update the file name, as it could have been a zip which we have extracted now so needs updating in the message
-                    jobContextMessage.KeyValuePairs[JobContextMessageKey.Filename] = validationContext.Input;
-
                     // populate the keys into jobcontextmessage
                     jobContextMessage.KeyValuePairs[JobContextMessageKey.InvalidLearnRefNumbersCount] =
                         validationContext.InvalidLearnRefNumbersCount;
@@ -92,6 +79,11 @@ namespace ESFA.DC.ILR.ValidationService.Stateless.Handlers
                     logger.LogDebug("Validation complete");
                     ServiceEventSource.Current.ServiceMessage(_context, "Validation complete");
                     return true;
+                }
+                catch (OutOfMemoryException oom)
+                {
+                    Environment.FailFast("Validation Service Out Of Memory", oom);
+                    throw;
                 }
                 catch (Exception ex)
                 {

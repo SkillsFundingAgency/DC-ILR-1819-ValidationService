@@ -125,6 +125,56 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_CountCheckForFound()
+        {
+            var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    }
+                };
+
+            NewService().GetLearningDeliveryFAMsCountByFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.HHS).Should().Be(2);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_CountCheckForNotFound()
+        {
+            var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                    },
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.HHS
+                    }
+                };
+
+            NewService().GetLearningDeliveryFAMsCountByFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT).Should().Be(0);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_NullCheck()
+        {
+            NewService().GetLearningDeliveryFAMsCountByFAMType(null, LearningDeliveryFAMTypeConstants.HHS).Should().Be(0);
+        }
+
+        [Fact]
         public void HasAnyLearningDeliveryFAMTypes_True()
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
@@ -164,6 +214,51 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         public void HasAnyLearningDeliveryFAMTypes_False_NullFAMTypes()
         {
             NewService().HasAnyLearningDeliveryFAMTypes(new List<ILearningDeliveryFAM>(), null);
+        }
+
+        [Fact]
+        public void HasLearningDeliveryFAMTypeForDate_True()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A", LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1) },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            NewService().HasLearningDeliveryFAMTypeForDate(learningDeliveryFAMs, "A", new DateTime(2018, 8, 1)).Should().BeTrue();
+        }
+
+        [Fact]
+        public void HasLearningDeliveryFAMTypeForDate_False()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A", LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1) },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            NewService().HasLearningDeliveryFAMTypeForDate(learningDeliveryFAMs, "A", new DateTime(2018, 9, 1)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasLearningDeliveryFAMTypeForDate_False_NullLearningDeliveryFAMs()
+        {
+            NewService().HasLearningDeliveryFAMTypeForDate(null, "A", new DateTime(2018, 9, 1)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasLearningDeliveryFAMTypeForDate_False_NullFAMTypes()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "A", LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1) },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
+            };
+
+            NewService().HasLearningDeliveryFAMTypeForDate(learningDeliveryFAMs, null, new DateTime(2018, 9, 1)).Should().BeFalse();
         }
 
         [Fact]

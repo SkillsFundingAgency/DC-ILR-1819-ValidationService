@@ -23,16 +23,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             NewRule().ConditionMet("not ZPROG001", 1).Should().BeTrue();
         }
 
-        [Fact]
-        public void ConditionMet_True_AimType()
+        [Theory]
+        [InlineData("ZPROG001")]
+        [InlineData("zprog001")]
+        public void ConditionMet_True_AimType(string learnAimRef)
         {
-            NewRule().ConditionMet("ZPROG001", 2).Should().BeTrue();
+            NewRule().ConditionMet(learnAimRef, 2).Should().BeTrue();
         }
 
-        [Fact]
-        public void ConditionMet_False()
+        [Theory]
+        [InlineData("ZPROG001")]
+        [InlineData("zprog001")]
+        public void ConditionMet_False(string learnAimRef)
         {
-            NewRule().ConditionMet("ZPROG001", 1).Should().BeFalse();
+            NewRule().ConditionMet(learnAimRef, 1).Should().BeFalse();
         }
 
         [Fact]

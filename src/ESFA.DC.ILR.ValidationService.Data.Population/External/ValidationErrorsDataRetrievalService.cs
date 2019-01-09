@@ -1,13 +1,14 @@
-﻿using System;
+﻿using ESFA.DC.Data.ILR.ValidationErrors.Model.Interfaces;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ILR.ValidationService.Interface.Enum;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ESFA.DC.Data.ILR.ValidationErrors.Model.Interfaces;
-using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
-using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ILR.ValidationService.Interface.Enum;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 {
@@ -26,9 +27,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         public async Task<IReadOnlyDictionary<string, ValidationError>> RetrieveAsync(CancellationToken cancellationToken)
         {
             return (await _validationErrors
-                .Rules
+                .Rules?
                 .ToListAsync(cancellationToken))
-                .ToDictionary(
+                .ToCaseInsensitiveDictionary(
                     ve => ve.Rulename,
                     ve => new ValidationError
                     {

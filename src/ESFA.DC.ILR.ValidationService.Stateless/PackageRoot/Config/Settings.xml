@@ -31,6 +31,7 @@
     <Parameter Name="ULNConnectionstring" Value="" />
     <Parameter Name="ValidationErrorsConnectionString" Value="" />
     <Parameter Name="OrganisationsConnectionString" Value="" />
+    <Parameter Name="FCSConnectionString" Value="" />
   </Section>
 
   <Section  Name="AzureRedisSection">

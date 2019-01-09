@@ -13,18 +13,64 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// </summary>
         /// <param name="forThisAimRef">this aim reference.</param>
         /// <returns>a collection of lars learning deliveries for this learning aim reference</returns>
+        [Obsolete("this method is deprecated; use 'GetDeliveryFor' instead", false)]
         IReadOnlyCollection<ILARSLearningDelivery> GetDeliveriesFor(string forThisAimRef);
 
         /// <summary>
-        /// Gets the validities for.
+        /// Gets the (lars) delivery for (this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">this aim reference.</param>
+        /// <returns>
+        /// a lars learning delivery for this learning aim reference
+        /// </returns>
+        ILARSLearningDelivery GetDeliveryFor(string thisAimRef);
+
+        /// <summary>
+        /// Gets the (lars) categories for  (this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">this aim reference.</param>
+        /// <returns>a collection of lars learning categories for this learning aim reference</returns>
+        IReadOnlyCollection<ILARSLearningCategory> GetCategoriesFor(string thisAimRef);
+
+        /// <summary>
+        /// Gets the (lars) validities for  (this aim reference).
         /// </summary>
         /// <param name="forThisAimRef">this aim reference.</param>
         /// <returns>a collection of lars 'validities' for this learning aim reference</returns>
         IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef);
 
+        /// <summary>
+        /// Gets the (lars) annual values for(this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">The this aim reference.</param>
+        /// <returns>a collection of lars 'annula values' for this learning aim reference</returns>
+        IReadOnlyCollection<ILARSAnnualValue> GetAnnualValuesFor(string thisAimRef);
+
+        /// <summary>
+        /// Gets the standard validity for  (this standard code).
+        /// </summary>
+        /// <param name="thisStandardCode">this standard code.</param>
+        /// <returns>a LARS Standard Validity</returns>
+        ILARSStandardValidity GetStandardValidityFor(int thisStandardCode);
+
+        /// <summary>
+        /// Determines whether [has known learn direct class system code 3 for] [the specified this learn aim reference].
+        /// </summary>
+        /// <param name="thisLearnAimRef">The this learn aim reference.</param>
+        /// <returns>
+        ///   <c>true</c> if [has known learn direct class system code 3 for] [the specified this learn aim reference]; otherwise, <c>false</c>.
+        /// </returns>
+        bool HasKnownLearnDirectClassSystemCode3For(string thisLearnAimRef);
+
+        string GetNotionalNVQLevelv2ForLearnAimRef(string learnAimRef);
+
         bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date);
 
+        bool EnglishPrescribedIdsExistsforLearnAimRef(string learnAimRef, HashSet<int?> engPrscIDs);
+
         bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
+
+        bool FrameWorkComponentTypeExistsInFrameworkAims(string learnAimRef, HashSet<int?> frameworkTypeComponents);
 
         bool FrameworkCodeExistsForCommonComponent(string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
 
@@ -46,8 +92,25 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         bool LearnDirectClassSystemCode1MatchForLearnAimRef(string learnAimRef);
 
+        bool LearnDirectClassSystemCode2MatchForLearnAimRef(string learnAimRef);
+
         bool BasicSkillsMatchForLearnAimRef(string learnAimRef, int basicSkills);
 
         bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate);
+
+        bool LearnStartDateGreaterThanFrameworkEffectiveTo(DateTime learnStartDate, int? progType, int? fWorkCode, int? pwayCode);
+
+        bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
+
+        bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime? origLearnStartDate, string learnAimRef, string validityCategory);
+
+        bool LearnStartDateGreaterThanStandardsEffectiveTo(int? stdCode, DateTime learnStartDate);
+
+        bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types);
+
+        bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(
+            DateTime? origLearnStartDate,
+            string learnAimRef,
+            IEnumerable<string> categoriesHashSet);
     }
 }

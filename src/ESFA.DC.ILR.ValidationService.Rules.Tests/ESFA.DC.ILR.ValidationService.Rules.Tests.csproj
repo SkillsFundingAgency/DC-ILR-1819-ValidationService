@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
-  <Import Project="..\packages\xunit.core.2.3.1\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.3.1\build\xunit.core.props')" />
+  <Import Project="..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -89,24 +89,52 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.abstractions.2.0.1\lib\net35\xunit.abstractions.dll</HintPath>
+      <HintPath>..\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.assert, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.assert.2.3.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.core, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.extensibility.core.2.3.1\lib\netstandard1.1\xunit.core.dll</HintPath>
+    <Reference Include="xunit.core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.4.1\lib\net452\xunit.core.dll</HintPath>
     </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.extensibility.execution.2.3.1\lib\net452\xunit.execution.desktop.dll</HintPath>
+    <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
+    <Compile Include="CrossEntity\R06RuleTests.cs" />
+    <Compile Include="CrossEntity\R117RuleTests.cs" />
+    <Compile Include="CrossEntity\R118RuleTests.cs" />
+    <Compile Include="CrossEntity\R104RuleTests.cs" />
+    <Compile Include="CrossEntity\R102RuleTests.cs" />
+    <Compile Include="CrossEntity\R106RuleTests.cs" />
+    <Compile Include="CrossEntity\R113RuleTests.cs" />
+    <Compile Include="CrossEntity\R31RuleTests.cs" />
+    <Compile Include="CrossEntity\R30RuleTests.cs" />
+    <Compile Include="CrossEntity\R45RuleTests.cs" />
+    <Compile Include="CrossEntity\R43RuleTests.cs" />
+    <Compile Include="CrossEntity\R52RuleTests.cs" />
+    <Compile Include="CrossEntity\R63RuleTests.cs" />
+    <Compile Include="CrossEntity\R69RuleTests.cs" />
+    <Compile Include="CrossEntity\R75RuleTests.cs" />
+    <Compile Include="CrossEntity\R71RuleTests.cs" />
+    <Compile Include="CrossEntity\R47RuleTests.cs" />
+    <Compile Include="CrossEntity\R20RuleTests.cs" />
+    <Compile Include="CrossEntity\R68RuleTests.cs" />
+    <Compile Include="CrossEntity\R107RuleTests.cs" />
     <Compile Include="CrossEntity\R108RuleTests.cs" />
+    <Compile Include="CrossEntity\R66RuleTests.cs" />
+    <Compile Include="CrossEntity\R70RuleTests.cs" />
     <Compile Include="CrossEntity\R112RuleTests.cs" />
     <Compile Include="CrossEntity\R85RuleTests.cs" />
     <Compile Include="CrossEntity\R07RuleTests.cs" />
+    <Compile Include="CrossEntity\R91RuleTests.cs" />
+    <Compile Include="CrossEntity\R96RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_05RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_14RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_22RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_27RuleTests.cs" />
     <Compile Include="Derived\DerivedData_28RuleTests.cs" />
     <Compile Include="Derived\DerivedData_29RuleTests.cs" />
     <Compile Include="Derived\DerivedData_21RuleTests.cs" />
@@ -114,23 +142,85 @@
     <Compile Include="Derived\DD04Tests.cs" />
     <Compile Include="Derived\DD06Tests.cs" />
     <Compile Include="Derived\DD07Tests.cs" />
+    <Compile Include="Derived\DerivedData_31RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_32RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_02RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutEndDate\OutEndDate_01RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_01RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutStartDate\OutStartDate_02RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutType\OutType_05RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutType\OutType_01RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutType\OutType_03RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutType\OutType_02RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutType\OutType_04RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutULN\OutULN_01RuleTests.cs" />
+    <Compile Include="DestinationAndProgression\OutULN\OutULN_02RuleTests.cs" />
+    <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_02RuleTests.cs" />
+    <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpId\EmpId_02RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpId\EmpId_13RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpId\EmpId_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpId\EmpId_10RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_18RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_15RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_14RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_11RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_17RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_10RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_09RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_05RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_04RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_12RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_10RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_07RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_05RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_09RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_11RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_08RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_02RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_12RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_15RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
-    <Compile Include="HE\Domicile\Domicile_01RuleTests.cs" />
+    <Compile Include="HE\DOMICILE\DOMICILE_02RuleTests.cs" />
+    <Compile Include="HE\DOMICILE\DOMICILE_01RuleTests.cs" />
     <Compile Include="HE\ELQ\ELQ_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02RuleTests.cs" />
+    <Compile Include="HE\FUNDLEV\FUNDLEV_03RuleTests.cs" />
+    <Compile Include="HE\GROSSFEE\GROSSFEE_01RuleTests.cs" />
+    <Compile Include="HE\GROSSFEE\GROSSFEE_02RuleTests.cs" />
+    <Compile Include="HE\GROSSFEE\GROSSFEE_03RuleTests.cs" />
+    <Compile Include="HE\HEPostcode\HEPostCode_01RuleTests.cs" />
+    <Compile Include="HE\HEPostcode\HEPostCode_02RuleTests.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02RuleTests.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03RuleTests.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_07RuleTests.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08RuleTests.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_04RuleTests.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_03RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02RuleTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02RuleTests.cs" />
+    <Compile Include="HE\PCFLDCS\PCFLDCS_03RuleTests.cs" />
+    <Compile Include="HE\PCSLDCS\PCSLDCS_01RuleTests.cs" />
+    <Compile Include="HE\PCTLDCS\PCTLDCS_01RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02RuleTests.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01RuleTests.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01RuleTests.cs" />
+    <Compile Include="HE\QUALENT3\QUALENT3_03RuleTests.cs" />
+    <Compile Include="HE\SOC2000\SOC2000RuleTests.cs" />
+    <Compile Include="HE\STULOAD_04\STULOAD_04RuleTests.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02RuleTests.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01RuleTests.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04RuleTests.cs" />
     <Compile Include="HE\LearnerHE_02RuleTests.cs" />
+    <Compile Include="Learner\AddLine1\Addline1_03RuleTests.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_02RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_28RuleTests.cs" />
@@ -159,7 +249,11 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53RuleTests.cs" />
+    <Compile Include="Learner\EngGrade\EngGrade_01RuleTests.cs" />
+    <Compile Include="Learner\EngGrade\EngGrade_02RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03RuleTests.cs" />
+    <Compile Include="Learner\EngGrade\EngGrade_04RuleTests.cs" />
+    <Compile Include="Learner\Ethnicity\Ethnicity_01RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_01RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_02RuleTests.cs" />
     <Compile Include="Learner\FamilyName\FamilyName_04RuleTests.cs" />
@@ -169,14 +263,23 @@
     <Compile Include="Learner\LearnFAMType\LearnFAMType_16RuleTests.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule01Tests.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule02Tests.cs" />
+    <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_01RuleTests.cs" />
+    <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_06RuleTests.cs" />
+    <Compile Include="Learner\MathGrade\MathGrade_01RuleTests.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_03RuleTests.cs" />
+    <Compile Include="Learner\MathGrade\MathGrade_04RuleTests.cs" />
+    <Compile Include="Learner\NINumber\NINumber_01Tests.cs" />
+    <Compile Include="Learner\NINumber\NINumber_02Tests.cs" />
+    <Compile Include="Learner\PlanEEPHours\PlanEEPHours_01RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_01RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03RuleTests.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04RuleTests.cs" />
     <Compile Include="Learner\PMUKPRN\PMUKPRN_01RuleTests.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_01RuleTests.cs" />
+    <Compile Include="Learner\PostcodePrior\PostcodePrior_02RuleTests.cs" />
     <Compile Include="Learner\Postcode\Postcode_14RuleTests.cs" />
+    <Compile Include="Learner\Postcode\Postcode_15RuleTests.cs" />
     <Compile Include="Learner\PrevUKPRN\PrevUKPRN_01RuleTests.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_01RuleTests.cs" />
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_02RuleTests.cs" />
@@ -184,7 +287,66 @@
     <Compile Include="Learner\PrimaryLLDD\PrimaryLLDD_04RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_02RuleTests.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_01RuleTests.cs" />
-    <Compile Include="Learner\UKPRN\UKPRN_06RuleTests.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_04RuleTests.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\AchDate\AchDate_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\AddHours\AddHours_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18RuleTests.cs" />
+    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17RuleTests.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_72RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_73RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_81RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_87RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_86RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_85RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_84RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_16RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_15RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_65RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_69RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_68RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_67RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_27RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_06RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_53RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_48RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_18RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_60RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_61RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnPlanEndDate\LearnPlanEndDate_02RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_09RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_06RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_05RuleTests.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_05RuleTests.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_09RuleTests.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_06RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_05RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_09RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_13RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_12RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_11RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_15RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_14RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_10RuleTests.cs" />
+    <Compile Include="LearningDelivery\UKPRN\UKPRN_06RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_02RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_03RuleTests.cs" />
     <Compile Include="Learner\ULN\ULN_04RuleTests.cs" />
@@ -208,10 +370,14 @@
     <Compile Include="LearningDelivery\AddHours\AddHours_05RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_06RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_02RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_04RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_10RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_11RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_12RuleTests.cs" />
-    <Compile Include="LearningDelivery\AFinType\AFinType_09RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinType\AFinType_14RuleTests.cs" />
     <Compile Include="LearningDelivery\AimSeqNumber\AimSeqNumber_02RuleTests.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_01RuleTests.cs" />
     <Compile Include="LearningDelivery\AimType\AimType_05RuleTests.cs" />
@@ -244,16 +410,18 @@
     <Compile Include="LearningDelivery\FworkCode\FworkCode_01RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_04RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnActEndDate\LearnActEndDate_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRefRuleBaseTestRule.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_88RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRefRuleBaseTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_01RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_30RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_29RuleTests.cs" />
-    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_38RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_55RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_56RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_57RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_59RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_80RuleTests.cs" />
-    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_37RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_89RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_04RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMDateFrom\LearnDelFAMDateFrom_02RuleTests.cs" />
@@ -265,25 +433,50 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_01RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_08RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_14RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_35RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_39RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_44RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_09RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_45RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_54RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_63RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_64RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_62RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_66RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_22RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_71RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_06RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_12RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_02RuleTests.cs" />
     <Compile Include="LearningDelivery\OtherFundAdj\OtherFundAdj_01RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_03RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_03RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_02RuleTests.cs" />
     <Compile Include="LearningDelivery\PartnerUKPRN\PartnerUKPRN_01RuleTests.cs" />
     <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_01RuleTests.cs" />
-    <Compile Include="LearningDelivery\PriorLearnFundAdj\PriorLearnFundAdj_02RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_14RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_13RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_08RuleTests.cs" />
-    <Compile Include="LearningDelivery\SWSSupAimId\SWSSupAimId_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\PwayCode\PwayCode_02RuleTests.cs" />
+    <Compile Include="LearningDelivery\PwayCode\PwayCode_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\StdCode\StdCode_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\StdCode\StdCode_02RuleTests.cs" />
+    <Compile Include="LearningDelivery\StdCode\StdCode_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\SWSupAimId\SWSupAimId_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_02RuleTests.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_05RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceMode\WorkPlaceMode_01RuleTests.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_03RuleTests.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1RuleTests.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07RuleTests.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2RuleTests.cs" />
@@ -294,9 +487,11 @@
     <Compile Include="LearningDelivery\ProgType\ProgType_01RuleTests.cs" />
     <Compile Include="Message\UKPRN\UKPRN_03RuleTests.cs" />
     <Compile Include="Mocks\ValidationErrorHandlerMock.cs" />
+    <Compile Include="MoqUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryServiceTests.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
+    <Compile Include="Query\LearnerEmploymentStatusQueryServiceTests.cs" />
     <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryServiceTests.cs" />
     <Compile Include="Query\LearnerDPQueryServiceTests.cs" />
     <Compile Include="Query\LearnerFAMQueryServiceTests.cs" />
@@ -304,8 +499,11 @@
     <Compile Include="Query\LearningDeliveryAppFinRecordQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryFAMQueryServiceTests.cs" />
     <Compile Include="Query\LearningDeliveryQueryServiceTests.cs" />
+    <Compile Include="Query\LearningDeliveryWorkPlacementQueryServicesTests.cs" />
+    <Compile Include="Query\RuleCommonOperationsProviderTests.cs" />
     <Compile Include="Query\PostcodeQueryServiceTests.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_01RuleTests.cs" />
+    <Compile Include="CrossEntity\R114RuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -335,17 +533,16 @@
     <Analyzer Include="..\packages\Lindhart.Analyser.MissingAwaitWarning.1.0.1\analyzers\dotnet\cs\Lindhart.Analyser.MissingAwaitWarning.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-    <Analyzer Include="..\packages\xunit.analyzers.0.9.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+    <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\xunit.core.2.3.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.3.1\build\xunit.core.props'))" />
-    <Error Condition="!Exists('..\packages\xunit.core.2.3.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.3.1\build\xunit.core.targets'))" />
-    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
+    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
-  <Import Project="..\packages\xunit.core.2.3.1\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.3.1\build\xunit.core.targets')" />
+  <Import Project="..\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
 </Project>

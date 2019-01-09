@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
@@ -151,9 +148,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
-
-            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeFalse();
+            // fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
+            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new List<TestLearnerDestinationAndProgression> { learnerDestinationAndProgression }, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeFalse();
         }
 
         [Fact]
@@ -175,9 +171,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var fileDataServiceMock = new Mock<IFileDataService>();
 
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
-
-            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeTrue();
+            // fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
+            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new List<TestLearnerDestinationAndProgression> { learnerDestinationAndProgression }, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeTrue();
         }
 
         [Theory]
@@ -199,8 +194,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void Validate_Error()
         {
-            string learnRefNumber = "00100309";
-
             var learner = new TestLearner()
             {
                 LearnRefNumber = "00100309",
@@ -233,24 +226,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
+            var message = new TestMessage()
+            {
+                Learners = new TestLearner[] { learner },
+                LearnerDestinationAndProgressions = new TestLearnerDestinationAndProgression[]
+                    {
+                    learnerDestinationAndProgression
+                    }
+            };
+
             var fileDataServiceMock = new Mock<IFileDataService>();
 
             fileDataServiceMock.Setup(fds => fds.FilePreparationDate()).Returns(DateTime.Now.AddMonths(4));
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    fileDataService: fileDataServiceMock.Object).Validate(learner);
+                    fileDataService: fileDataServiceMock.Object).Validate(message);
             }
         }
 
         [Fact]
         public void Validate_NoError()
         {
-            string learnRefNumber = "00100309";
-
             var learner = new TestLearner()
             {
                 LearnRefNumber = "00100309",
@@ -283,16 +282,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
+            var message = new TestMessage()
+            {
+                Learners = new TestLearner[] { learner },
+                LearnerDestinationAndProgressions = new TestLearnerDestinationAndProgression[] { learnerDestinationAndProgression }
+            };
+
             var fileDataServiceMock = new Mock<IFileDataService>();
 
             fileDataServiceMock.Setup(fds => fds.FilePreparationDate()).Returns(new DateTime(2018, 03, 01));
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    fileDataService: fileDataServiceMock.Object).Validate(learner);
+                    fileDataService: fileDataServiceMock.Object).Validate(message);
             }
         }
 

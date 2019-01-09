@@ -17,10 +17,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             NewRule().RuleName.Should().Be("LearnAimRef_29");
         }
 
-        [Fact]
-        public void ConditionMet_True()
+        [Theory]
+        [InlineData("ZESF0001")]
+        [InlineData("zesf0001")]
+        public void ConditionMet_True(string learnAimRef)
         {
-            NewRule().ConditionMet("ZESF0001", 1).Should().BeTrue();
+            NewRule().ConditionMet(learnAimRef, 1).Should().BeTrue();
         }
 
         [Fact]

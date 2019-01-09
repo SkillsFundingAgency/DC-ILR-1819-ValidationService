@@ -5,7 +5,6 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
@@ -41,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                         objectToValidate.DateOfBirthNullable,
                         learningDelivery.LearningDeliveryFAMs))
                     {
-                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable, learningDelivery.ProgTypeNullable));
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnPlanEndDate, learningDelivery.LearnStartDate));
                         return;
                     }
                 }
@@ -96,12 +95,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             return !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, "RES");
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth, int? progType)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnPlanEndDate, DateTime learnStartDate)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth),
-                BuildErrorMessageParameter(PropertyNameConstants.ProgType, progType)
+                BuildErrorMessageParameter(PropertyNameConstants.LearnPlanEndDate, learnPlanEndDate),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnPlanEndDate)
             };
         }
     }

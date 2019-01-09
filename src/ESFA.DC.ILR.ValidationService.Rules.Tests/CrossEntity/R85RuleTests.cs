@@ -1,203 +1,262 @@
-﻿using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using FluentAssertions;
+using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 {
-    public class R85RuleTests : AbstractRuleTests<R85Rule>
+    public class R85RuleTests
     {
+        /// <summary>
+        /// New rule with null message handler throws.
+        /// </summary>
         [Fact]
-        public void RuleName()
+        public void NewRuleWithNullMessageHandlerThrows()
         {
-            NewRule().RuleName.Should().Be("R85");
+            Assert.Throws<ArgumentNullException>(() => new R85Rule(null));
         }
 
+        /// <summary>
+        /// Rule name 1, matches a literal.
+        /// </summary>
         [Fact]
-        public void ConditionMet_True()
+        public void RuleName1()
         {
-            var learnRefNumber = "Learner3";
-            var uln = 9999999999;
-            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
-            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
-            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
-            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+            // arrange
+            var sut = NewRule();
 
-            IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
-            {
-                learnerDP1,
-                learnerDP2,
-                learnerDP3,
-                learnerDP4
-            };
+            // act
+            var result = sut.RuleName;
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
-            var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
-
-            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDP3);
-            learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(false);
-
-            NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeTrue();
+            // assert
+            Assert.Equal("R85", result);
         }
 
+        /// <summary>
+        /// Rule name 2, matches the constant.
+        /// </summary>
         [Fact]
-        public void ConditionMet_False()
+        public void RuleName2()
         {
-            var learnRefNumber = "Learner1";
-            var uln = 9999999999;
-            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
-            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
-            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
-            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+            // arrange
+            var sut = NewRule();
 
-            IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
-            {
-                learnerDP1,
-                learnerDP2,
-                learnerDP3,
-                learnerDP4
-            };
+            // act
+            var result = sut.RuleName;
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
-            var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
-
-            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDP1);
-            learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(true);
-
-            NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
+            // assert
+            Assert.Equal(R85Rule.Name, result);
         }
 
+        /// <summary>
+        /// Rule name 3 test, account for potential false positives.
+        /// </summary>
         [Fact]
-        public void ConditionMet_False_MisMatch()
+        public void RuleName3()
         {
-            var learnRefNumber = "Learner1";
-            var uln = 9999999999;
-            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
-            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+            // arrange
+            var sut = NewRule();
 
-            IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
-            {
-                learnerDP3,
-                learnerDP4
-            };
+            // act
+            var result = sut.RuleName;
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
-            var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
-
-            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns((ILearnerDestinationAndProgression)null);
-            learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(false);
-
-            NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
+            // assert
+            Assert.NotEqual("SomeOtherRuleName_07", result);
         }
 
+        /// <summary>
+        /// Validate with null learner throws.
+        /// </summary>
         [Fact]
-        public void ConditionMet_False_NullDP()
+        public void ValidateWithNullMessageThrows()
         {
-            var learnRefNumber = "Learner1";
-            var uln = 9999999999;
-            TestLearnerDestinationAndProgression learnerDP = null;
+            // arrange
+            var sut = NewRule();
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
-            var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
-
-            learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, learnerDP)).Returns(false);
-
-            NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object).ConditionMet(learnRefNumber, uln).Should().BeFalse();
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
         }
 
-        [Fact]
-        public void Validate_Error()
+        /// <summary>
+        /// Blahes the meets expectation.
+        /// </summary>
+        /// <param name="dAndPULN">The destination and progression uln.</param>
+        /// <param name="learnerULN">The learner uln.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(99998, 99999, true)]
+        [InlineData(99999, 99999, false)]
+        [InlineData(99958, 92959, true)]
+        [InlineData(92958, 92958, false)]
+        public void IsNotMatchingLearnerNumberMeetsExpectation(long dAndPULN, long learnerULN, bool expectation)
         {
-            var learnRefNumber = "Learner3";
-            var uln = 9999999999;
-            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
-            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
-            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999997 };
-            var learnerDP4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+            // arrange
+            var sut = NewRule();
 
-            IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
-            {
-                learnerDP1,
-                learnerDP2,
-                learnerDP3,
-                learnerDP4
-            };
+            var dAndP = new Mock<ILearnerDestinationAndProgression>();
+            dAndP.SetupGet(x => x.ULN).Returns(dAndPULN);
 
-            var learner = new TestLearner
-            {
-                LearnRefNumber = learnRefNumber,
-                ULN = uln
-            };
+            var learner = new Mock<ILearner>();
+            learner.SetupGet(x => x.ULN).Returns(learnerULN);
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
-            var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
+            // act
+            var result = sut.IsNotMatchingLearnerNumber(dAndP.Object, learner.Object);
 
-            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDP3);
-            learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(false);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
+            // assert
+            Assert.Equal(expectation, result);
         }
 
-        [Fact]
-        public void Validate_NoError()
+        [Theory]
+        [InlineData("99998", "99999", false)]
+        [InlineData("99999", "99999", true)]
+        [InlineData("99958", "92959", false)]
+        [InlineData("92958", "92958", true)]
+        public void HasMatchingReferenceNumberMeetsExpectation(string dAndPRefNum, string learnerRefNum, bool expectation)
         {
-            var learnRefNumber = "Learner3";
-            var uln = 9999999999;
-            var learnerDP1 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999999 };
-            var learnerDP2 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner1", ULN = 9999999998 };
-            var learnerDP3 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner3", ULN = 9999999999 };
-            var learnerDlearnerDP3P4 = new TestLearnerDestinationAndProgression() { LearnRefNumber = "Learner4", ULN = 9999999999 };
+            // arrange
+            var sut = NewRule();
 
-            IEnumerable<ILearnerDestinationAndProgression> learnerDPs = new TestLearnerDestinationAndProgression[]
-            {
-                learnerDP1,
-                learnerDP2,
-                learnerDP3
-            };
+            var dAndP = new Mock<ILearnerDestinationAndProgression>();
+            dAndP.SetupGet(x => x.LearnRefNumber).Returns(dAndPRefNum);
 
-            var learner = new TestLearner
-            {
-                LearnRefNumber = learnRefNumber,
-                ULN = uln
-            };
+            var learner = new Mock<ILearner>();
+            learner.SetupGet(x => x.LearnRefNumber).Returns(learnerRefNum);
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
-            var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
+            // act
+            var result = sut.HasMatchingReferenceNumber(dAndP.Object, learner.Object);
 
-            fileDataServiceMock.Setup(dc => dc.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDP3);
-            learnerDPQueryServiceMock.Setup(qs => qs.HasULNForLearnRefNumber(learnRefNumber, uln, It.IsAny<ILearnerDestinationAndProgression>())).Returns(true);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(fileDataServiceMock.Object, learnerDPQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
+            // assert
+            Assert.Equal(expectation, result);
         }
 
+        /// <summary>
+        /// Invalid item raises validation message.
+        /// </summary>
         [Fact]
-        public void BuildErrorMessageParameters()
+        public void InvalidItemRaisesValidationMessage()
         {
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            // arrange
+            const string LearnRefNumber = "123456789X";
+            const long learnerULN = 999998;
+            const long dAndP__ULN = 999999;
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ULN", 9999999999)).Verifiable();
+            var learner = new Mock<ILearner>();
+            learner
+                .SetupGet(y => y.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            learner
+                .SetupGet(y => y.ULN)
+                .Returns(learnerULN);
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(9999999999);
+            var learners = Collection.Empty<ILearner>();
+            learners.Add(learner.Object);
 
-            validationErrorHandlerMock.Verify();
+            var dAndP = new Mock<ILearnerDestinationAndProgression>();
+            dAndP
+                .SetupGet(y => y.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            dAndP
+                .SetupGet(y => y.ULN)
+                .Returns(dAndP__ULN);
+
+            var records = Collection.Empty<ILearnerDestinationAndProgression>();
+            records.Add(dAndP.Object);
+
+            var message = new Mock<IMessage>();
+            message
+                .SetupGet(y => y.Learners)
+                .Returns(learners.AsSafeReadOnlyList());
+            message
+                .SetupGet(x => x.LearnerDestinationAndProgressions)
+                .Returns(records.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle(R85Rule.Name, LearnRefNumber, null, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("ULN", learnerULN))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("LearnerDestinationandProgression.ULN", dAndP__ULN))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("LearnerDestinationandProgression.LearnRefNumber", LearnRefNumber))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            var sut = new R85Rule(handler.Object);
+
+            // act
+            sut.Validate(message.Object);
+
+            // assert
+            handler.VerifyAll();
         }
 
-        private R85Rule NewRule(IFileDataService fileDataService = null, ILearnerDPQueryService learnerDPQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        /// <summary>
+        /// Valid item does not raise a validation message.
+        /// </summary>
+        [Fact]
+        public void ValidItemDoesNotRaiseAValidationMessage()
         {
-            return new R85Rule(fileDataService, learnerDPQueryService, validationErrorHandler);
+            // arrange
+            const string LearnRefNumber = "123456789X";
+            const int learnerULN = 999999;
+            const int dAndP__ULN = 999999;
+
+            var dAndP = new Mock<ILearnerDestinationAndProgression>();
+            dAndP
+                .SetupGet(y => y.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            dAndP
+                .SetupGet(y => y.ULN)
+                .Returns(dAndP__ULN);
+
+            var learner = new Mock<ILearner>();
+            learner
+                .SetupGet(y => y.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            learner
+                .SetupGet(y => y.ULN)
+                .Returns(learnerULN);
+
+            var records = Collection.Empty<ILearnerDestinationAndProgression>();
+            records.Add(dAndP.Object);
+
+            var learners = Collection.Empty<ILearner>();
+            learners.Add(learner.Object);
+
+            var message = new Mock<IMessage>();
+            message
+                .SetupGet(y => y.Learners)
+                .Returns(learners.AsSafeReadOnlyList());
+            message
+                .SetupGet(x => x.LearnerDestinationAndProgressions)
+                .Returns(records.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var sut = new R85Rule(handler.Object);
+
+            // act
+            sut.Validate(message.Object);
+
+            // assert
+            handler.VerifyAll();
+        }
+
+        /// <summary>
+        /// New rule.
+        /// </summary>
+        /// <returns>a new rule (with a strict mock message handler)</returns>
+        private R85Rule NewRule()
+        {
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            return new R85Rule(handler.Object);
         }
     }
 }

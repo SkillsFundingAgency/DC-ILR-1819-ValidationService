@@ -11,11 +11,9 @@
         Domicile,
         ESMType,
         TBFinType,
-        LearnDelFAMType,
         LearnFAMType,
         OutGrade,
         OutType,
-        QualEnt3,
         Sex,
     }
 }

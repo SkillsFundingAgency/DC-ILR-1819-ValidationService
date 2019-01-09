@@ -1,8 +1,11 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
@@ -37,6 +40,115 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         public void HasAnyLearnerFAMCodesForType_False_Null()
         {
             NewService().HasULNForLearnRefNumber("Learner1", 9999999998, null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void OutTypesForStartDate()
+        {
+            var outTypes = new List<string>
+            {
+                OutTypeConstants.PaidEmployment,
+                OutTypeConstants.GapYear,
+                OutTypeConstants.NotInPaidEmployment,
+                OutTypeConstants.Other,
+                OutTypeConstants.SocialDestination,
+                OutTypeConstants.VoluntaryWork
+            };
+
+        var dpOutcomes = new List<TestDPOutcome>
+            {
+                new TestDPOutcome
+                {
+                    OutStartDate = new DateTime(2018, 8, 1),
+                    OutType = "GAP"
+                },
+                new TestDPOutcome
+                {
+                    OutStartDate = new DateTime(2018, 8, 1),
+                    OutType = "GAP"
+                },
+                new TestDPOutcome
+                {
+                    OutStartDate = new DateTime(2018, 9, 1),
+                    OutType = "EMP"
+                }
+            };
+
+            var dictionary = new Dictionary<DateTime, List<string>>
+            {
+                { new DateTime(2018, 8, 1), new List<string> { "GAP", "GAP" } },
+                { new DateTime(2018, 9, 1), new List<string> { "EMP" } }
+            };
+
+            NewService().OutTypesForStartDateAndTypes(dpOutcomes, outTypes).Should().BeEquivalentTo(dictionary);
+        }
+
+        [Fact]
+        public void OutTypesForStartDate_NullDPOutcomes()
+        {
+            var outTypes = new List<string>
+            {
+                OutTypeConstants.PaidEmployment,
+                OutTypeConstants.GapYear,
+                OutTypeConstants.NotInPaidEmployment,
+                OutTypeConstants.Other,
+                OutTypeConstants.SocialDestination,
+                OutTypeConstants.VoluntaryWork
+            };
+
+            var dpOutcomes = new List<TestDPOutcome>();
+
+            NewService().OutTypesForStartDateAndTypes(dpOutcomes, outTypes).Should().BeNull();
+        }
+
+        [Fact]
+        public void OutTypesForStartDate_NullOutTypes()
+        {
+            var dpOutcomes = new List<TestDPOutcome>
+            {
+                new TestDPOutcome
+                {
+                    OutStartDate = new DateTime(2018, 8, 1),
+                    OutType = "GAP"
+                },
+                new TestDPOutcome
+                {
+                    OutStartDate = new DateTime(2018, 8, 1),
+                    OutType = "GAP"
+                },
+                new TestDPOutcome
+                {
+                    OutStartDate = new DateTime(2018, 9, 1),
+                    OutType = "EMP"
+                }
+            };
+
+            NewService().OutTypesForStartDateAndTypes(dpOutcomes, null).Should().BeNull();
+        }
+
+        [Fact]
+        public void OutTypesForStartDate_MisMatch()
+        {
+            var outTypes = new List<string>
+            {
+                OutTypeConstants.PaidEmployment,
+                OutTypeConstants.GapYear,
+                OutTypeConstants.NotInPaidEmployment,
+                OutTypeConstants.Other,
+                OutTypeConstants.SocialDestination,
+                OutTypeConstants.VoluntaryWork
+            };
+
+            var dpOutcomes = new List<TestDPOutcome>
+            {
+                new TestDPOutcome
+                {
+                    OutStartDate = new DateTime(2018, 8, 1),
+                    OutType = "EDU"
+                }
+            };
+
+            NewService().OutTypesForStartDateAndTypes(dpOutcomes, outTypes).Should().BeNull();
         }
 
         private ILearnerDestinationAndProgression[] SetupLearnerDPs()

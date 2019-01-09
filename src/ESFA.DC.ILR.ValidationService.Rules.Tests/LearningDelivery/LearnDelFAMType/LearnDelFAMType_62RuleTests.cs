@@ -185,6 +185,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         /// <summary>
+        /// Last inviable date meets expectation.
+        /// </summary>
+        [Fact]
+        public void LastInviableDateMeetsExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.LastInviableDate;
+
+            // assert
+            Assert.Equal(DateTime.Parse("2017-07-31"), result);
+        }
+
+        /// <summary>
         /// Is learner in custody with learning delivery fam meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -1004,13 +1020,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(LARSNotionalNVQLevelV2.Level2);
 
-            var larsDeliveries = Collection.Empty<ILARSLearningDelivery>();
-            larsDeliveries.Add(mock.Object);
-
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetDeliveriesFor(learnAimRef))
-                .Returns(larsDeliveries.AsSafeReadOnlyList());
+                .Setup(x => x.GetDeliveryFor(learnAimRef))
+                .Returns(mock.Object);
 
             var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
             var mockDDRule21 = new Mock<IDerivedData_21Rule>(MockBehavior.Strict);
@@ -1102,13 +1115,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .SetupGet(x => x.LearningDeliveryCategories)
                 .Returns(larsCats.AsSafeReadOnlyList());
 
-            var larsDeliveries = Collection.Empty<ILARSLearningDelivery>();
-            larsDeliveries.Add(mockLARSDel.Object);
-
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetDeliveriesFor(learnAimRef))
-                .Returns(larsDeliveries.AsSafeReadOnlyList());
+                .Setup(x => x.GetDeliveryFor(learnAimRef))
+                .Returns(mockLARSDel.Object);
 
             var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
             var mockDDRule21 = new Mock<IDerivedData_21Rule>(MockBehavior.Strict);

@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
         }
 
         public FundModel_08Rule()
-            : base(null, null)
+            : base(null, RuleNameConstants.FundModel_08)
         {
         }
 

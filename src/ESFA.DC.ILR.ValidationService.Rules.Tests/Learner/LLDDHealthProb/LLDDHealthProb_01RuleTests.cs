@@ -1,66 +1,79 @@
-﻿using System;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
 {
-    public class LLDDHealthProb_01RuleTests
+    public class LLDDHealthProb_01RuleTests : AbstractRuleTests<LLDDHealthProb_01Rule>
     {
-        [Theory]
-        [InlineData(100)]
-        [InlineData(0)]
-        public void ConditionMet_True(long? value)
+        [Fact]
+        public void RuleName()
         {
-            var rule = NewRule();
-            rule.ConditionMet(value).Should().BeTrue();
+            NewRule().RuleName.Should().Be("LLDDHealthProb_01");
+        }
+
+        [Fact]
+        public void ConditionMet_True()
+        {
+            var llddHealthProb = 5;
+
+            NewRule().ConditionMet(llddHealthProb).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(null)]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(9)]
-        public void ConditionMet_False(long? value)
+        public void ConditionMet_False(int llddHealthProb)
         {
-            var rule = NewRule();
-            rule.ConditionMet(value).Should().BeFalse();
+            NewRule().ConditionMet(llddHealthProb).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_False()
+        public void ValidateError()
         {
             var learner = new TestLearner()
             {
-                LLDDHealthProbNullable = 0
+                LLDDHealthProb = 5
             };
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LLDDHealthProb_01", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(9)]
+        public void ValidateNoError(int llddHealthProb)
+        {
+            var learner = new TestLearner()
+            {
+                LLDDHealthProb = llddHealthProb
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_True()
+        public void BuildErrorMessageParameters()
         {
-            var learner = new TestLearner()
-            {
-                LLDDHealthProbNullable = 1
-            };
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LLDDHealthProb_01", null, null, null);
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LLDDHealthProb", 1)).Verifiable();
+
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(1);
+
+            validationErrorHandlerMock.Verify();
         }
 
         private LLDDHealthProb_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null)

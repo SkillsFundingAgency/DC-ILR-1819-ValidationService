@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
@@ -34,6 +35,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
                    && learningDeliveryFAMs.Any(ldfam => famTypes.Contains(ldfam.LearnDelFAMType));
         }
 
+        public bool HasLearningDeliveryFAMTypeForDate(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType, DateTime date)
+        {
+            return learningDeliveryFAMs != null
+                && famType != null
+                && learningDeliveryFAMs
+                .Any(ldfam => ldfam.LearnDelFAMType == famType
+                    && ldfam.LearnDelFAMDateFromNullable == date);
+        }
+
         public ILearningDeliveryFAM GetLearningDeliveryFAMByTypeAndLatestByDateFrom(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string learnDelFAMType)
         {
             return learningDeliveryFAMs?
@@ -41,5 +51,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
                 .OrderByDescending(f => f.LearnDelFAMDateFromNullable)
                 .FirstOrDefault();
         }
+
+        public int GetLearningDeliveryFAMsCountByFAMType(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs, string famType)
+            => learningDeliveryFAMs?.Where(d => d.LearnDelFAMType == famType).Count() ?? 0;
     }
 }

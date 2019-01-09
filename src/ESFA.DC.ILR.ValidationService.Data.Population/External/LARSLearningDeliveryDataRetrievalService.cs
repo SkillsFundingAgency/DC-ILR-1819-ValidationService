@@ -1,10 +1,10 @@
 ﻿using ESFA.DC.Data.LARS.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,12 +23,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public async Task<IReadOnlyDictionary<string, LearningDelivery>> RetrieveAsync(CancellationToken cancellationToken)
         {
-            var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToList();
+            var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToCaseInsensitiveHashSet();
 
             return await _lars
                 .LARS_LearningDelivery
                 .Where(ld => learnAimRefs.Contains(ld.LearnAimRef))
-                .ToDictionaryAsync(
+                .ToCaseInsensitiveAsyncDictionary(
                     ld => ld.LearnAimRef,
                     ld => new LearningDelivery()
                     {
@@ -36,9 +36,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                         LearnAimRef = ld.LearnAimRef,
                         EffectiveFrom = ld.EffectiveFrom,
                         EffectiveTo = ld.EffectiveTo,
+                        LearnAimRefType = ld.LearnAimRefType,
+                        EnglPrscID = ld.EnglPrscID,
                         NotionalNVQLevel = ld.NotionalNVQLevel,
                         NotionalNVQLevelv2 = ld.NotionalNVQLevelv2,
-                        LearnDirectClassSystemCode1 = ld.LearnDirectClassSystemCode1,
+                        LearnDirectClassSystemCode1 = new LearnDirectClassSystemCode(ld.LearnDirectClassSystemCode1),
+                        LearnDirectClassSystemCode2 = new LearnDirectClassSystemCode(ld.LearnDirectClassSystemCode2),
+                        LearnDirectClassSystemCode3 = new LearnDirectClassSystemCode(ld.LearnDirectClassSystemCode3),
+                        SectorSubjectAreaTier1 = ld.SectorSubjectAreaTier1,
+                        SectorSubjectAreaTier2 = ld.SectorSubjectAreaTier2,
                         AnnualValues = ld.LARS_AnnualValue
                             .Select(av => new AnnualValue()
                             {

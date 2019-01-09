@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.AimType.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -9,12 +9,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
 {
     public class AimType_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IAimTypeDataService _aimTypeInternalDataService;
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public AimType_01Rule(IAimTypeDataService aimTypeInternalDataService, IValidationErrorHandler validationErrorHandler)
+        public AimType_01Rule(IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.AimType_01)
         {
-            _aimTypeInternalDataService = aimTypeInternalDataService;
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
 
         public bool ConditionMet(int aimType)
         {
-            return !_aimTypeInternalDataService.Exists(aimType);
+            return !_provideLookupDetails.Contains(LookupSimpleKey.AimType, aimType);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int aimType)

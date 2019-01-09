@@ -8,18 +8,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
     {
         IAcademicYear AcademicYear { get; }
 
-        IReadOnlyCollection<int> AimTypes { get; }
-
-        IReadOnlyCollection<int> CompStatuses { get; }
-
-        IReadOnlyCollection<int> EmpOutcomes { get; }
-
-        IReadOnlyCollection<int> FundModels { get; }
-
-        IDictionary<int, ValidityPeriods> LLDDCats { get; }
-
-        IReadOnlyCollection<string> QUALENT3s { get; }
-
         /// <summary>
         /// Gets the simple lookups.
         /// </summary>
@@ -31,8 +19,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IDictionary<LookupCodedKey, IReadOnlyCollection<string>> CodedLookups { get; }
 
         /// <summary>
+        /// Gets the coded lookups
+        /// </summary>
+        IDictionary<LookupCodedKeyDictionary, IDictionary<string, IReadOnlyCollection<string>>> CodedDictionaryLookups { get; }
+
+        /// <summary>
         /// Gets the time restricted lookups.
         /// </summary>
-        IDictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> LimitedLifeLookups { get; }
+        IDictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> LimitedLifeLookups { get; }
+
+        IDictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>> CodedComplexLookups
+        {
+            get;
+        }
     }
 }

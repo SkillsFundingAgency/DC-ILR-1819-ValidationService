@@ -1,6 +1,8 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using FluentAssertions;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -40,6 +42,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
 
             // assert
             Assert.Equal(expectation, result);
+        }
+
+        [Theory]
+        [InlineData(TypeOfQualEnt3.CertificateOfHigherEducation, "2013/01/01", true)]
+        [InlineData(TypeOfQualEnt3.ProfessionalQualificationAtLevel3, "2013/07/31", true)]
+        [InlineData(TypeOfQualEnt3.CambridgePreUDiploma31072013, "2014/07/31", false)]
+        [InlineData("Z12345", "2018/10/28", false)]
+        public void ProviderIsCurrentValuesMatchForQualent3(string qualent3, string dateToCheckString, bool expectedResult)
+        {
+            var dateToCheck = DateTime.Parse(dateToCheckString);
+
+            NewService().IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, dateToCheck).Should().Be(expectedResult);
         }
 
         /// <summary>
@@ -109,6 +123,32 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
         }
 
         /// <summary>
+        /// Provider contains Dictionary Lookup value matches expectation.
+        /// </summary>
+        /// <param name="keyCandidate">The dictionary key candidate.</param>
+        /// <param name="valueCandidate">The dictionary value candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("TNP", 1, true)]
+        [InlineData("TNP", 2, true)]
+        [InlineData("TNP", 5, false)]
+        [InlineData("PMR", 1, true)]
+        [InlineData("PMR", 2, true)]
+        [InlineData("PMR", 5, false)]
+        [InlineData("TXX", 1, false)]
+        public void ProviderContainsCodedKeyDictionaryMatchesExpectation(string keyCandidate, int valueCandidate, bool expectation)
+        {
+            // arrange
+            var sut = NewService();
+
+            // act
+            var result = sut.ContainsValueForKey(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, keyCandidate, valueCandidate);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// New service.
         /// </summary>
         /// <returns>a <seealso cref="LookupDetailsProvider"/></returns>
@@ -118,19 +158,35 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var cache = new InternalDataCache();
             var finTypes = new List<int>() { 1, 2, 4, 5, 6, 9, 24, 25, 29, 45 };
             var codedTypes = new List<string>() { "TNP", "PMR", "AEC", "UI", "OT", "ME", "YOU" };
-            var tTAccomItems = new Dictionary<int, ValidityPeriods>()
+
+            var tTAccomItems = new Dictionary<string, ValidityPeriods>()
             {
-                [1] = new ValidityPeriods(validFrom: DateTime.Parse("2013-06-14"), validTo: DateTime.Parse("2020-06-14")),
-                [2] = new ValidityPeriods(validFrom: DateTime.Parse("2009-04-28"), validTo: DateTime.Parse("2020-06-14")),
-                [4] = new ValidityPeriods(validFrom: DateTime.Parse("2012-09-06"), validTo: DateTime.Parse("2015-02-28")),
-                [5] = new ValidityPeriods(validFrom: DateTime.Parse("2010-11-21"), validTo: DateTime.Parse("2020-06-14")),
-                [6] = new ValidityPeriods(validFrom: DateTime.Parse("2018-07-02"), validTo: DateTime.Parse("2020-06-14")),
-                [9] = new ValidityPeriods(validFrom: DateTime.Parse("2000-02-01"), validTo: DateTime.Parse("2008-08-26")),
+                ["1"] = new ValidityPeriods(validFrom: DateTime.Parse("2013-06-14"), validTo: DateTime.Parse("2020-06-14")),
+                ["2"] = new ValidityPeriods(validFrom: DateTime.Parse("2009-04-28"), validTo: DateTime.Parse("2020-06-14")),
+                ["4"] = new ValidityPeriods(validFrom: DateTime.Parse("2012-09-06"), validTo: DateTime.Parse("2015-02-28")),
+                ["5"] = new ValidityPeriods(validFrom: DateTime.Parse("2010-11-21"), validTo: DateTime.Parse("2020-06-14")),
+                ["6"] = new ValidityPeriods(validFrom: DateTime.Parse("2018-07-02"), validTo: DateTime.Parse("2020-06-14")),
+                ["9"] = new ValidityPeriods(validFrom: DateTime.Parse("2000-02-01"), validTo: DateTime.Parse("2008-08-26")),
+            };
+
+            var qualent3s = new Dictionary<string, ValidityPeriods>()
+            {
+                ["C20"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.MaxValue),
+                ["P69"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31")),
+                ["P70"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31"))
+            };
+
+            var apprenticeshipFinancialRecords = new Dictionary<string, IReadOnlyCollection<string>>
+            {
+                ["TNP"] = new List<string> { "1", "2", "3", "4" },
+                ["PMR"] = new List<string> { "1", "2", "3" },
             };
 
             cache.SimpleLookups.Add(LookupSimpleKey.FINTYPE, finTypes);
             cache.CodedLookups.Add(LookupCodedKey.AppFinRecord, codedTypes);
             cache.LimitedLifeLookups.Add(LookupTimeRestrictedKey.TTAccom, tTAccomItems);
+            cache.LimitedLifeLookups.Add(LookupTimeRestrictedKey.QualEnt3, qualent3s);
+            cache.CodedDictionaryLookups.Add(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, apprenticeshipFinancialRecords);
 
             cacheFactory
                 .Setup(c => c.Create())

@@ -174,7 +174,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         public static bool IsInRange<T>(T source, params T[] target)
             where T : IComparable
         {
-            var values = target.AsSafeList();
+            var values = target.AsSafeReadOnlyList();
             return values.Contains(source);
         }
 
@@ -200,10 +200,37 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <param name="source">The source.</param>
         /// <param name="target">The target.</param>
         /// <returns>true or false</returns>
+        public static bool IsInRange(string source, params string[] target)
+        {
+            var values = target.AsSafeDistinctKeySet();
+            return values.Contains(source);
+        }
+
+        /// <summary>
+        /// Determines whether [is out of range] [the specified source].
+        /// </summary>
+        /// <typeparam name="T">of value type</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>
+        ///   <c>true</c> if [is out of range] [the specified source]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsOutOfRange(string source, params string[] target)
+        {
+            return !IsInRange(source, target);
+        }
+
+        /// <summary>
+        /// Determines whether [is in range] [the specified source].
+        /// </summary>
+        /// <typeparam name="T">of value type</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        /// <returns>true or false</returns>
         public static bool IsInRange<T>(T? source, params T[] target)
             where T : struct, IComparable, IFormattable
         {
-            var values = target.AsSafeList();
+            var values = target.AsSafeDistinctKeySet();
             return Has(source) && values.Contains(source.Value);
         }
 
@@ -219,8 +246,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         public static bool IsOutOfRange<T>(T? source, params T[] target)
             where T : struct, IComparable, IFormattable
         {
-            var values = target.AsSafeList();
-            return Has(source) && !values.Contains(source.Value);
+            return !IsInRange(source, target);
         }
 
         /// <summary>
@@ -252,6 +278,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         public static bool IsBetween(TimeSpan candidate, TimeSpan min, TimeSpan max, bool includeBoundaries = true)
         {
+            (max < min)
+                .AsGuard<ArgumentOutOfRangeException>(nameof(max));
+
             return includeBoundaries
                 ? candidate >= min && candidate <= max
                 : candidate > min && candidate < max;
@@ -259,6 +288,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
 
         /// <summary>
         /// Determines whether the specified candidate is between.
+        /// out of range exception where max is less than min
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="min">The minimum.</param>
@@ -269,6 +299,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         public static bool IsBetween(DateTime candidate, DateTime min, DateTime max, bool includeBoundaries = true)
         {
+            (max < min)
+                .AsGuard<ArgumentOutOfRangeException>(nameof(max));
+
             return includeBoundaries
                 ? candidate >= min && candidate <= max
                 : candidate > min && candidate < max;
@@ -276,6 +309,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
 
         /// <summary>
         /// Determines whether [is out of range] [the specified candidate].
+        /// out of range exception where max is less than min
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="min">The minimum.</param>

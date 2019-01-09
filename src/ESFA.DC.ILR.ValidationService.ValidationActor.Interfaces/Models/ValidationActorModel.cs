@@ -1,15 +1,8 @@
-﻿namespace ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models
+﻿using ESFA.DC.ILR.ValidationService.ValidationActor.Model;
+
+namespace ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models
 {
-    public class ValidationActorModel
+    public class ValidationActorModel : ActorModel
     {
-        public string JobId { get; set; }
-
-        public byte[] Message { get; set; }
-
-        public byte[] InternalDataCache { get; set; }
-
-        public byte[] ExternalDataCache { get; set; }
-
-        public byte[] FileDataCache { get; set; }
     }
 }

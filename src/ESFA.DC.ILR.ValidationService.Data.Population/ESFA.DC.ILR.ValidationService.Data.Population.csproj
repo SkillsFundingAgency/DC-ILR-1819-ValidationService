@@ -74,6 +74,9 @@
     <Reference Include="ESFA.DC.ILR.Model.Interface, Version=0.1.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ESFA.DC.ILR.1819.Model.Interface.0.1.4-beta0001\lib\netstandard2.0\ESFA.DC.ILR.Model.Interface.dll</HintPath>
     </Reference>
+    <Reference Include="ESFA.DC.ReferenceData.FCS.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ESFA.DC.ReferenceData.FCS.Model.0.1.95\lib\net461\ESFA.DC.ReferenceData.FCS.Model.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -93,9 +96,12 @@
     <Compile Include="External\ErrorLookupPopulationService.cs" />
     <Compile Include="External\ExternalDataCachePopulationService.cs" />
     <Compile Include="External\LARSFrameworkDataRetrievalService.cs" />
-    <Compile Include="External\LARSLearningDeliveryDataRetrievalService.cs" />
     <Compile Include="External\EPAOrganisationsDataRetrievalService.cs" />
+    <Compile Include="External\LARSLearningDeliveryDataRetrievalService.cs" />
+    <Compile Include="External\LARSStandardDataRetrievalService.cs" />
+    <Compile Include="External\LARSStandardValidityDataRetrievalService.cs" />
     <Compile Include="External\OrganisationsDataRetrievalService.cs" />
+    <Compile Include="External\FCSDataRetrievalService.cs" />
     <Compile Include="External\PostcodesDataRetrievalService.cs" />
     <Compile Include="External\ULNDataRetrievalService.cs" />
     <Compile Include="External\ValidationErrorsDataRetrievalService.cs" />
@@ -105,12 +111,15 @@
     <Compile Include="Interface\IExternalDataRetrievalService.cs" />
     <Compile Include="Interface\IFileDataCachePopulationService.cs" />
     <Compile Include="Interface\IInternalDataCachePopulationService.cs" />
+    <Compile Include="Interface\ILARSStandardDataRetrievalService.cs" />
+    <Compile Include="Interface\ILARSStandardValidityDataRetrievalService.cs" />
     <Compile Include="Interface\ILARSFrameworkDataRetrievalService.cs" />
     <Compile Include="Interface\ILARSLearningDeliveryDataRetrievalService.cs" />
     <Compile Include="Interface\IMessageCachePopulationService.cs" />
     <Compile Include="Interface\IEPAOrganisationsDataRetrievalService.cs" />
     <Compile Include="Interface\IOrganisationsDataRetrievalService.cs" />
     <Compile Include="Interface\IPopulationService.cs" />
+    <Compile Include="Interface\IFCSDataRetrievalService.cs" />
     <Compile Include="Interface\IPostcodesDataRetrievalService.cs" />
     <Compile Include="Interface\IULNDataRetrievalService.cs" />
     <Compile Include="Interface\IValidationErrorsDataRetrievalService.cs" />
@@ -121,6 +130,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Extensions\ESFA.DC.ILR.ValidationService.Data.Extensions.csproj">
+      <Project>{7a822136-deec-4899-8907-6afa86e421c4}</Project>
+      <Name>ESFA.DC.ILR.ValidationService.Data.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
       <Project>{FAACF863-EB2E-473F-8EF9-F7FA9613F556}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Data</Name>
@@ -135,14 +148,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="App.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Lindhart.Analyser.MissingAwaitWarning.1.0.1\analyzers\dotnet\cs\Lindhart.Analyser.MissingAwaitWarning.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -151,6 +157,11 @@
     <EmbeddedResource Include="Files\Lookups.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Lindhart.Analyser.MissingAwaitWarning.1.0.1\analyzers\dotnet\cs\Lindhart.Analyser.MissingAwaitWarning.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

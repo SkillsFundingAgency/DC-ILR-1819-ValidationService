@@ -91,6 +91,27 @@
             public const string IndustryPlacement = "ZWRKX002";
 
             /// <summary>
+            /// esf learner start and assessment
+            /// </summary>
+            public const string ESFLearnerStartandAssessment = "ZESF0001";
+
+            /// <summary>
+            /// Gets the vocational studies not leading to a recognised qualification.
+            /// </summary>
+            public static string[] VocationalStudiesNotLeadingToARecognisedQualification => new[]
+            {
+                "ZVOC0001", "ZVOC0002", "ZVOC0003", "ZVOC0004", "ZVOC0005", "ZVOC0006",
+                "ZVOC0007", "ZVOC0008", "ZVOC0009", "ZVOC0010", "ZVOC0011", "ZVOC0012",
+                "ZVOC0013", "ZVOC0014", "ZVOC0015", "ZUXA103E", "ZUXA105C", "ZUXA107C",
+                "ZUXA108B", "ZUXA203E", "ZUXA204A", "ZUXA204C", "ZUXA205C", "ZUXA206B",
+                "ZUXA206C", "ZUXA207C", "ZUXA208B", "ZUXA209A", "ZUXA214A", "ZUXA214B",
+                "ZUXA215A", "ZUXA301A", "ZUXA301B", "ZUXA302B", "ZUXA303E", "ZUXA304A",
+                "ZUXA304C", "ZUXA305A", "ZUXA305C", "ZUXA306B", "ZUXA307C", "ZUXA314B",
+                "ZUXA315A", "ZUXAE05C", "ZUXAE06B", "ZUXAE14A", "ZUXAH01B", "ZUXAH09C",
+                "ZUXAH15A", "ZUXAH15B"
+            };
+
+            /// <summary>
             /// Gets the work placement codes.
             /// </summary>
             public static string[] AsWorkPlacementCodes => new[]

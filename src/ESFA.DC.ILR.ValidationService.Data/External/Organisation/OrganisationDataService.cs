@@ -14,9 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation
 
         public bool LegalOrgTypeMatchForUkprn(long ukprn, string legalOrgType)
         {
-            _referenceDataCache.Organisations.TryGetValue(ukprn, out var organisation);
-
-            return organisation != null && organisation.LegalOrgType == legalOrgType;
+            return legalOrgType == GetLegalOrgTypeForUkprn(ukprn);
         }
 
         public bool UkprnExists(long ukprn)
@@ -29,6 +27,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation
             _referenceDataCache.Organisations.TryGetValue(ukprn, out var organisation);
 
             return organisation != null && organisation.PartnerUKPRN == true;
+        }
+
+        public string GetLegalOrgTypeForUkprn(long ukprn)
+        {
+            _referenceDataCache.Organisations.TryGetValue(ukprn, out var organisation);
+
+            return organisation?.LegalOrgType;
         }
     }
 }

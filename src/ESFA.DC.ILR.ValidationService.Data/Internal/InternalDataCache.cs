@@ -18,25 +18,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         private Dictionary<LookupCodedKey, IReadOnlyCollection<string>> _codedLookups;
 
         /// <summary>
+        /// The coded lookups
+        /// </summary>
+        private Dictionary<LookupCodedKeyDictionary, IDictionary<string, IReadOnlyCollection<string>>> _codedDictionaryLookups;
+
+        private Dictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>> _codedComplexLookups;
+
+        /// <summary>
         /// The time restricted lookups
         /// </summary>
-        private Dictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> _limitedLifeLookups;
+        private Dictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> _limitedLifeLookups;
 
         public IAcademicYear AcademicYear { get; set; }
-
-        public IReadOnlyCollection<int> AimTypes { get; set; }
-
-        public IReadOnlyCollection<int> CompStatuses { get; set; }
-
-        public IReadOnlyCollection<int> EmpOutcomes { get; set; }
-
-        public IReadOnlyCollection<int> FundModels { get; set; }
-
-        public IDictionary<int, ValidityPeriods> LLDDCats { get; set; }
-
-        public IReadOnlyCollection<string> QUALENT3s { get; set; }
-
-        public IDictionary<int, ValidityPeriods> TTAccoms { get; set; }
 
         /// <summary>
         /// Gets the simple lookups.
@@ -63,14 +56,35 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         }
 
         /// <summary>
+        /// Gets the complex coded lookups.
+        /// </summary>
+        public IDictionary<LookupCodedKeyDictionary, IDictionary<string, IReadOnlyCollection<string>>> CodedDictionaryLookups
+        {
+            get
+            {
+                return _codedDictionaryLookups
+                  ?? (_codedDictionaryLookups = new Dictionary<LookupCodedKeyDictionary, IDictionary<string, IReadOnlyCollection<string>>>());
+            }
+        }
+
+        /// <summary>
         /// Gets the time limited lookups.
         /// </summary>
-        public IDictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> LimitedLifeLookups
+        public IDictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> LimitedLifeLookups
         {
             get
             {
                 return _limitedLifeLookups
-                  ?? (_limitedLifeLookups = new Dictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>>());
+                  ?? (_limitedLifeLookups = new Dictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>>());
+            }
+        }
+
+        public IDictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>> CodedComplexLookups
+        {
+            get
+            {
+                return _codedComplexLookups
+                       ?? (_codedComplexLookups = new Dictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>>());
             }
         }
     }

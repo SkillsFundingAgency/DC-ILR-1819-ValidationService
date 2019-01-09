@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Internal.LLDDCat.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
@@ -26,9 +23,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
         {
             var llddCat = 1;
 
-            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+            var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            llddCatDataServiceMock.Setup(ds => ds.Exists(llddCat)).Returns(false);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(false);
 
             NewRule(llddCatDataServiceMock.Object).ConditionMet(llddCat).Should().BeTrue();
         }
@@ -38,9 +35,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
         {
             var llddCat = 1;
 
-            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+            var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            llddCatDataServiceMock.Setup(ds => ds.Exists(llddCat)).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(true);
 
             NewRule(llddCatDataServiceMock.Object).ConditionMet(llddCat).Should().BeFalse();
         }
@@ -62,9 +59,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
                 }
             };
 
-            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+            var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            llddCatDataServiceMock.Setup(ds => ds.Exists(llddCat)).Returns(false);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -89,9 +86,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
                 }
             };
 
-            var llddCatDataServiceMock = new Mock<ILLDDCatDataService>();
+            var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            llddCatDataServiceMock.Setup(ds => ds.Exists(llddCat)).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -111,9 +108,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
             validationErrorHandlerMock.Verify();
         }
 
-        private LLDDCat_01Rule NewRule(ILLDDCatDataService llddCatDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private LLDDCat_01Rule NewRule(IProvideLookupDetails provideLookupDetails = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new LLDDCat_01Rule(llddCatDataService, validationErrorHandler);
+            return new LLDDCat_01Rule(provideLookupDetails, validationErrorHandler);
         }
     }
 }

@@ -1,104 +1,180 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.NiNumber;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.NINumber
 {
-    public class NINumber_02Tests
+    public class NINumber_02Tests : AbstractRuleTests<NINumber_02Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("NINumber_02");
+        }
+
         [Theory]
+        [InlineData("")]
         [InlineData(" ")]
         [InlineData(null)]
-        public void ConditionMet_True(string niNumber)
+        public void NiNumberConditionMet_True(string niNumber)
         {
-            var rule = new NINumber_02Rule(null, null);
-            rule.ConditionMet(niNumber, true).Should().BeTrue();
+            NewRule().NiNumberConditionMet(niNumber).Should().BeTrue();
         }
 
         [Fact]
-        public void ConditionMet_False_NonNullNiNumber()
+        public void NiNumberConditionMet_False()
         {
-            var rule = new NINumber_02Rule(null, null);
-            rule.ConditionMet("NINUMBER", true).Should().BeFalse();
+            var niNumber = "AA123456A";
+
+            NewRule().NiNumberConditionMet(niNumber).Should().BeFalse();
         }
 
         [Fact]
-        public void ConditionMet_False_NotApplicableFAM()
+        public void ConditionMet_True()
         {
-            var rule = new NINumber_02Rule(null, null);
-            rule.ConditionMet(null, false).Should().BeFalse();
+            var famType = "ACT";
+            var famCode = "1";
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = famType,
+                    LearnDelFAMCode = famCode
+                }
+            };
+
+            var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFamQueryServiceMock
+                .Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, famType, famCode))
+                .Returns(true);
+
+            NewRule(learningDeliveryFamQueryServiceMock.Object).ConditionMet(learningDeliveryFAMs).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(" ", "ACT", "2")]
-        [InlineData(null, "ACT", "2")]
-        [InlineData(null, "XYZ", "1")]
-        [InlineData("AZ123456C", "ACT", "1")]
-        public void Validate_NoErrors(string niNumber, string famCode, string famType)
+        [Fact]
+        public void ConditionMet_False()
         {
-            var learningDeliveries = new TestLearningDelivery()
+            var famType = "XXX";
+            var famCode = "5";
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
             {
-                LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { }
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = famType,
+                    LearnDelFAMCode = famCode
+                }
             };
+
+            var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFamQueryServiceMock
+                .Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, famType, famCode))
+                .Returns(false);
+
+            NewRule(learningDeliveryFamQueryServiceMock.Object).ConditionMet(learningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ValidateError()
+        {
+            var famType = "ACT";
+            var famCode = "1";
 
             var learner = new TestLearner()
             {
-                NINumber = niNumber,
-                LearningDeliveries = new TestLearningDelivery[] { learningDeliveries }
+                NINumber = " ",
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = famType,
+                                LearnDelFAMCode = famCode
+                            }
+                        }
+                    }
+                }
             };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("NINumber_02", null, null, null);
+            var learningDeliveryFAMs = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
 
-            var famQueryService = new Mock<ILearningDeliveryFAMQueryService>();
+            var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFamQueryServiceMock
+                .Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, famType, famCode))
+                .Returns(true);
 
-            famQueryService.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                                        It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), famType, famCode))
-                                        .Returns(famType == "ACT" && famCode == "1");
-
-            var rule = new NINumber_02Rule(validationErrorHandlerMock.Object, famQueryService.Object);
-
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(learningDeliveryFamQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
-        [Theory]
-        [InlineData(" ")]
-        [InlineData(null)]
-        public void Validate_Error(string niNumber)
+        [Fact]
+        public void ValidateNoError()
         {
-            var learningDelivery = new TestLearningDelivery()
-            {
-                LearningDeliveryFAMs = new TestLearningDeliveryFAM[] { }
-            };
+            var famType = "XXX";
+            var famCode = "1";
 
             var learner = new TestLearner()
             {
-                NINumber = niNumber,
-                LearningDeliveries = new TestLearningDelivery[] { learningDelivery }
+                NINumber = "AA123456A",
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = famType,
+                                LearnDelFAMCode = famCode
+                            }
+                        }
+                    }
+                }
             };
 
+            var learningDeliveryFAMs = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
+
+            var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            learningDeliveryFamQueryServiceMock
+                .Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, famType, famCode))
+                .Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(learningDeliveryFamQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("NINumber_02", null, null, null);
 
-            var famQueryService = new Mock<ILearningDeliveryFAMQueryService>();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("NINumber", " ")).Verifiable();
 
-            famQueryService.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                                        It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), "ACT", "1"))
-                                        .Returns(true);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(" ");
 
-            var rule = new NINumber_02Rule(validationErrorHandlerMock.Object, famQueryService.Object);
+            validationErrorHandlerMock.Verify();
+        }
 
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+        private NINumber_02Rule NewRule(
+            ILearningDeliveryFAMQueryService learningDeliveryFamQueryService = null,
+            IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new NINumber_02Rule(learningDeliveryFamQueryService, validationErrorHandler);
         }
     }
 }

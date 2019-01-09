@@ -15,6 +15,8 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces;
 using ESFA.DC.ILR.ValidationService.ValidationActor.Interfaces.Models;
+using ESFA.DC.ILR.ValidationService.ValidationDPActor.Interfaces;
+using ESFA.DC.ILR.ValidationService.ValidationDPActor.Interfaces.Models;
 using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 using Microsoft.ServiceFabric.Actors;
@@ -26,49 +28,43 @@ namespace ESFA.DC.ILR.ValidationService.Providers
     {
         private readonly IPopulationService _preValidationPopulationService;
         private readonly IErrorLookupPopulationService _errorLookupPopulationService;
-        private readonly ILearnerPerActorService _learnerPerActorService;
+        private readonly ILearnerPerActorProviderService _learnerPerActorProviderService;
+        private readonly ILearnerDPPerActorProviderService _learnerDPPerActorProviderService;
         private readonly IJsonSerializationService _jsonSerializationService;
         private readonly IInternalDataCache _internalDataCache;
         private readonly IExternalDataCache _externalDataCache;
         private readonly IFileDataCache _fileDataCache;
-        private readonly ICache<string> _cache;
-        private readonly IMessageStreamProviderService _streamProvider;
         private readonly IValidationErrorCache<U> _validationErrorCache;
-        private readonly IValidationOutputService<U> _validationOutputService;
+        private readonly IValidationOutputService _validationOutputService;
         private readonly IRuleSetOrchestrationService<IMessage, U> _ruleSetOrchestrationService;
         private readonly ILogger _logger;
-        private readonly IValidateXMLSchemaService _validateXmlSchemaService;
 
         public PreValidationOrchestrationSfService(
             IPopulationService preValidationPopulationService,
             IErrorLookupPopulationService errorLookupPopulationService,
-            ILearnerPerActorService learnerPerActorService,
+            ILearnerPerActorProviderService learnerPerActorProviderService,
+            ILearnerDPPerActorProviderService learnerDPPerActorProviderService,
             IJsonSerializationService jsonSerializationService,
             IInternalDataCache internalDataCache,
             IExternalDataCache externalDataCache,
             IFileDataCache fileDataCache,
-            ICache<string> cache,
-            IMessageStreamProviderService streamProvider,
             IValidationErrorCache<U> validationErrorCache,
-            IValidationOutputService<U> validationOutputService,
+            IValidationOutputService validationOutputService,
             IRuleSetOrchestrationService<IMessage, U> ruleSetOrchestrationService,
-            ILogger logger,
-            IValidateXMLSchemaService validateXMLSchemaService)
+            ILogger logger)
         {
             _preValidationPopulationService = preValidationPopulationService;
             _errorLookupPopulationService = errorLookupPopulationService;
-            _learnerPerActorService = learnerPerActorService;
+            _learnerPerActorProviderService = learnerPerActorProviderService;
+            _learnerDPPerActorProviderService = learnerDPPerActorProviderService;
             _jsonSerializationService = jsonSerializationService;
             _internalDataCache = internalDataCache;
             _externalDataCache = externalDataCache;
             _fileDataCache = fileDataCache;
-            _cache = cache;
-            _streamProvider = streamProvider;
             _validationErrorCache = validationErrorCache;
             _validationOutputService = validationOutputService;
             _ruleSetOrchestrationService = ruleSetOrchestrationService;
             _logger = logger;
-            _validateXmlSchemaService = validateXMLSchemaService;
         }
 
         public async Task ExecuteAsync(IPreValidationContext validationContext, CancellationToken cancellationToken)
@@ -82,36 +78,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 await _errorLookupPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
                 _logger.LogDebug($"Error lookup service completed in: {stopWatch.ElapsedMilliseconds}");
 
-                // Todo: Remove this when XML is known to be schema valid
-                Stream fileStream = await _streamProvider.Provide(cancellationToken);
-                if (fileStream != null)
-                {
-                    fileStream.Seek(0, SeekOrigin.Begin);
-                    UTF8Encoding utF8Encoding = new UTF8Encoding(false, true);
-                    using (StreamReader reader = new StreamReader(fileStream, utF8Encoding, true, 1024, true))
-                    {
-                        Cache<string> fileContentCache = (Cache<string>)_cache;
-                        fileContentCache.Item = reader.ReadToEnd();
-                    }
-                }
-
                 if (_validationErrorCache.ValidationErrors.Any())
                 {
                     return;
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-
-                // Call XSD validation
-                _validateXmlSchemaService.Validate();
-                _logger.LogDebug($"XML validation schema service completed in: {stopWatch.ElapsedMilliseconds}");
-
-                if (_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
-                {
-                    _logger.LogDebug(
-                        $"Possible xsd validation failure: {_validationErrorCache.ValidationErrors.Count}");
-                    return;
-                }
 
                 await _preValidationPopulationService.PopulateAsync(cancellationToken).ConfigureAwait(false);
                 _logger.LogDebug($"Population service completed in: {stopWatch.ElapsedMilliseconds}");
@@ -120,14 +92,14 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 _fileDataCache.FileName = validationContext.Input;
 
                 // File Validation
-                await _ruleSetOrchestrationService.Execute(cancellationToken).ConfigureAwait(false);
+                await _ruleSetOrchestrationService.ExecuteAsync(validationContext.Tasks, cancellationToken).ConfigureAwait(false);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (_validationErrorCache.ValidationErrors.Any(IsErrorOrFail))
+                if (_validationErrorCache.ValidationErrors.Any(IsFail))
                 {
                     _logger.LogDebug(
-                        $"Header validation failed, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
+                        $"File schema catastrophic error, so will not execute learner validation actors, error count: {_validationErrorCache.ValidationErrors.Count}");
                     return;
                 }
 
@@ -135,6 +107,11 @@ namespace ESFA.DC.ILR.ValidationService.Providers
 
                 _logger.LogDebug(
                     $"Actors results collated {_validationErrorCache.ValidationErrors.Count} validation errors");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Validation Critical Error", ex);
+                throw;
             }
             finally
             {
@@ -151,49 +128,138 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                 new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"));
         }
 
+        private IValidationDPActor GetValidationDPActor()
+        {
+            return ActorProxy.Create<IValidationDPActor>(
+                ActorId.CreateRandom(),
+                new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationDPActorService"));
+        }
+
+        private async Task DestroyValidationActorAsync(IValidationActor validationActor, CancellationToken cancellationToken)
+        {
+            try
+            {
+                ActorId actorId = validationActor.GetActorId();
+
+                IActorService myActorServiceProxy = ActorServiceProxy.Create(
+                    new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"),
+                    actorId);
+
+                await myActorServiceProxy.DeleteActorAsync(actorId, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Problem deleting actor", ex);
+            }
+        }
+
+        private async Task DestroyValidationDPActorAsync(IValidationDPActor validationDPActor, CancellationToken cancellationToken)
+        {
+            try
+            {
+                ActorId actorId = validationDPActor.GetActorId();
+
+                IActorService myActorServiceProxy = ActorServiceProxy.Create(
+                    new Uri($"{FabricRuntime.GetActivationContext().ApplicationName}/ValidationActorService"),
+                    actorId);
+
+                await myActorServiceProxy.DeleteActorAsync(actorId, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Problem deleting actor", ex);
+            }
+        }
+
         private async Task ExecuteValidationActors(IPreValidationContext validationContext, CancellationToken cancellationToken)
         {
             // Get L/A and split the learners into separate lists
-            IEnumerable<IMessage> messageShards = _learnerPerActorService.Process();
+            IEnumerable<IMessage> learnerMessageShards = await _learnerPerActorProviderService.ProvideAsync();
+            IEnumerable<IMessage> learnerDPMessageShards = await _learnerDPPerActorProviderService.ProvideAsync();
 
+            List<IValidationActor> learnerValidationActors = new List<IValidationActor>();
+            List<IValidationDPActor> learnerDPValidationActors = new List<IValidationDPActor>();
             List<Task<string>> actorTasks = new List<Task<string>>();
+            List<Task> actorDestroys = new List<Task>();
 
-            foreach (IMessage messageShard in messageShards)
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            _logger.LogDebug($"Validation will create {learnerMessageShards.Count()} actors");
+            _logger.LogDebug($"DP Validation will create {learnerDPMessageShards?.Count() ?? 0} actors");
+
+            string internalDataCacheAsString =
+                _jsonSerializationService.Serialize(_internalDataCache);
+            _logger.LogDebug($"_internalDataCache {internalDataCacheAsString.Length}");
+            string fileDataCacheAsString =
+                _jsonSerializationService.Serialize(_fileDataCache);
+            _logger.LogDebug($"fileDataCacheAsString {fileDataCacheAsString.Length}");
+            string externalDataCacheAsString =
+                _jsonSerializationService.Serialize(_externalDataCache);
+            _logger.LogDebug($"ExternalDataCache: {externalDataCacheAsString.Length}");
+            string taskListAsString = _jsonSerializationService.Serialize(validationContext.Tasks);
+            _logger.LogDebug($"taskListAsString {taskListAsString.Length}");
+
+            foreach (IMessage messageShard in learnerMessageShards)
             {
-                _logger.LogDebug($"validation Shard has {messageShard.Learners.Count} learners");
+                _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
 
                 // create actors for each Shard.
                 IValidationActor actor = GetValidationActor();
+                learnerValidationActors.Add(actor);
 
                 // TODO:get reference data per each shard and send it to Actors
-                byte[] ilrMessageAsBytes = Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(messageShard));
-
-                byte[] internalDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_internalDataCache));
-                byte[] externalDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_externalDataCache));
-                byte[] fileDataCacheAsBytes =
-                    Encoding.UTF8.GetBytes(_jsonSerializationService.Serialize(_fileDataCache));
+                string ilrMessageAsString = _jsonSerializationService.Serialize(messageShard);
 
                 ValidationActorModel validationActorModel = new ValidationActorModel
                 {
                     JobId = validationContext.JobId,
-                    Message = ilrMessageAsBytes,
-                    InternalDataCache = internalDataCacheAsBytes,
-                    ExternalDataCache = externalDataCacheAsBytes,
-                    FileDataCache = fileDataCacheAsBytes,
+                    Message = ilrMessageAsString,
+                    InternalDataCache = internalDataCacheAsString,
+                    ExternalDataCache = externalDataCacheAsString,
+                    FileDataCache = fileDataCacheAsString,
+                    TaskList = taskListAsString
                 };
 
                 actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
             }
 
-            _logger.LogDebug($"Starting {actorTasks.Count} validation actors");
+            if (learnerDPMessageShards != null)
+            {
+                foreach (IMessage messageShard in learnerDPMessageShards)
+                {
+                    _logger.LogDebug($"DP Validation Shard has {messageShard.LearnerDestinationAndProgressions.Count} learner DP records");
+
+                    // create actors for each Shard.
+                    IValidationDPActor actor = GetValidationDPActor();
+                    learnerDPValidationActors.Add(actor);
+
+                    // TODO:get reference data per each shard and send it to Actors
+                    string ilrMessageAsString = _jsonSerializationService.Serialize(messageShard);
+
+                    ValidationDPActorModel validationActorModel = new ValidationDPActorModel
+                    {
+                        JobId = validationContext.JobId,
+                        Message = ilrMessageAsString,
+                        InternalDataCache = internalDataCacheAsString,
+                        ExternalDataCache = externalDataCacheAsString,
+                        FileDataCache = fileDataCacheAsString,
+                        TaskList = taskListAsString
+                    };
+
+                    actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
+                }
+            }
+
+            _logger.LogDebug($"Starting {actorTasks.Count} validation actors after {stopWatch.ElapsedMilliseconds}ms prep time");
+            stopWatch.Restart();
 
             await Task.WhenAll(actorTasks.ToArray()).ConfigureAwait(false);
 
-            _logger.LogDebug("All Validation Actors completed");
-
             cancellationToken.ThrowIfCancellationRequested();
+
+            _logger.LogDebug($"Collating {actorTasks.Count} validation actors after {stopWatch.ElapsedMilliseconds}ms execution time");
+            stopWatch.Restart();
 
             foreach (Task<string> actorTask in actorTasks)
             {
@@ -204,12 +270,32 @@ namespace ESFA.DC.ILR.ValidationService.Providers
                     _validationErrorCache.Add(error);
                 }
             }
+
+            _logger.LogDebug($"Destroying {actorTasks.Count} validation actors after {stopWatch.ElapsedMilliseconds}ms collation time");
+
+            foreach (IValidationActor validationActor in learnerValidationActors)
+            {
+                actorDestroys.Add(DestroyValidationActorAsync(validationActor, cancellationToken));
+            }
+
+            foreach (IValidationDPActor validationDPActor in learnerDPValidationActors)
+            {
+                actorDestroys.Add(DestroyValidationDPActorAsync(validationDPActor, cancellationToken));
+            }
+
+            await Task.WhenAll(actorDestroys.ToArray()).ConfigureAwait(false);
         }
 
         private bool IsErrorOrFail(U item)
         {
             Severity severity = ((IValidationError)item).Severity ?? Severity.Error;
             return severity == Severity.Error || severity == Severity.Fail;
+        }
+
+        private bool IsFail(U item)
+        {
+            Severity severity = ((IValidationError)item).Severity ?? Severity.Error;
+            return severity == Severity.Fail;
         }
     }
 }

@@ -48,11 +48,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         /// </returns>
         public bool IsWorkExperience(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef);
+            var categories = _larsData.GetCategoriesFor(delivery.LearnAimRef);
 
-            return deliveries
-                .SelectMany(x => x.LearningDeliveryCategories)
-                .SafeAny(IsWorkExperience);
+            return categories.SafeAny(IsWorkExperience);
         }
 
         /// <summary>
