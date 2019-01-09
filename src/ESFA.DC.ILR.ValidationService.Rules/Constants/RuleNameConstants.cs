@@ -31,6 +31,8 @@
         public const string AFinType_11 = "AFinType_11";
         public const string AFinType_14 = "AFinType_14";
 
+        public const string AgreeId_02 = "AgreeId_02";
+
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
 
         public const string AimType_01 = "AimType_01";
