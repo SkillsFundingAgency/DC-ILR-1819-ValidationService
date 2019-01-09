@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -59,8 +60,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.AgreeId
                 return
                     !learningDeliveryFAMs
                     .Any(f =>
-                        f.LearnDelFAMType == _famType
-                    && f.LearnDelFAMCode == _famCode
+                        f.LearnDelFAMType.CaseInsensitiveEquals(_famType)
+                    && f.LearnDelFAMCode.CaseInsensitiveEquals(_famCode)
                     && f.LearnDelFAMDateFromNullable >= dateEmpStat);
             }
 
