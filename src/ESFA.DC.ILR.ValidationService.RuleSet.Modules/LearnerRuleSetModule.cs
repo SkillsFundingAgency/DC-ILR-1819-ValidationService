@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnPlanEndDate;
+
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
@@ -277,7 +279,9 @@
                 typeof(LearnDelFAMType_09Rule),
                 typeof(LearnDelFAMType_14Rule),
                 typeof(LearnDelFAMType_15Rule),
+                typeof(LearnDelFAMType_16Rule),
                 typeof(LearnDelFAMType_18Rule),
+                typeof(LearnDelFAMType_20Rule),
                 typeof(LearnDelFAMType_22Rule),
                 typeof(LearnDelFAMType_27Rule),
                 typeof(LearnDelFAMType_35Rule),
@@ -304,12 +308,15 @@
                 typeof(LearningDeliveryHE_08Rule),
                 typeof(LearnerHE_02Rule),
                 typeof(LearnFAMType_16Rule),
+                typeof(LearnStartDate_02Rule),
                 typeof(LearnStartDate_03Rule),
                 typeof(LearnStartDate_05Rule),
                 typeof(LearnStartDate_06Rule),
                 typeof(LearnStartDate_07Rule),
                 typeof(LearnStartDate_12Rule),
                 typeof(LearnStartDate_13Rule),
+                typeof(LearnPlanEndDate_02Rule),
+                typeof(LearnPlanEndDate_03Rule),
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
                 typeof(LLDDHealthProb_01Rule),
@@ -390,6 +397,7 @@
                 typeof(R47Rule),
                 typeof(R52Rule),
                 typeof(R63Rule),
+                typeof(R64Rule),
                 typeof(R66Rule),
                 typeof(R68Rule),
                 typeof(R70Rule),
@@ -403,6 +411,8 @@
                 typeof(R112Rule),
                 typeof(R113Rule),
                 typeof(R114Rule),
+                typeof(R117Rule),
+                typeof(R118Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SWSupAimId_01Rule),
                 typeof(StdCode_01Rule),
@@ -437,8 +447,10 @@
                 typeof(WithdrawReason_04Rule),
                 typeof(WorkPlaceEndDate_02Rule),
                 typeof(WorkPlaceStartDate_01Rule),
+                typeof(WorkPlaceStartDate_02Rule),
                 typeof(WorkPlaceStartDate_03Rule),
                 typeof(WorkPlaceMode_01Rule),
+                typeof(WorkPlaceEmpId_03Rule),
                 typeof(WorkPlaceEmpId_04Rule),
                 typeof(WorkPlaceEmpId_05Rule),
             };
