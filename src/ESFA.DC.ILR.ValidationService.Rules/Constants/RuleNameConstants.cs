@@ -20,6 +20,8 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinDate_04 = "AFinDate_04";
+
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
         public const string AFinType_04 = "AFinType_04";
@@ -28,6 +30,8 @@
         public const string AFinType_10 = "AFinType_10";
         public const string AFinType_11 = "AFinType_11";
         public const string AFinType_14 = "AFinType_14";
+
+        public const string AgreeId_02 = "AgreeId_02";
 
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
 
@@ -44,6 +48,8 @@
 
         public const string ConRefNumber_01 = "ConRefNumber_01";
         public const string ConRefNumber_03 = "ConRefNumber_03";
+
+        public const string ContPrefType_06 = "ContPrefType_06";
 
         public const string DateOfBirth_01 = "DateOfBirth_01";
         public const string DateOfBirth_02 = "DateOfBirth_02";
@@ -170,6 +176,7 @@
         public const string LearnDelFAMType_16 = "LearnDelFAMType_16";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
         public const string LearnDelFAMType_20 = "LearnDelFAMType_20";
+        public const string LearnDelFAMType_24 = "LearnDelFAMType_24";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";

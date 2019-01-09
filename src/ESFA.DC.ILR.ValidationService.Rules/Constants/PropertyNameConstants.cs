@@ -14,6 +14,7 @@
         public const string AFinCode = "AFinCode";
         public const string AFinType = "AFinType";
         public const string AFinDate = "AFinDate";
+        public const string AgreeId = "AgreeId";
         public const string AimSeqNumber = "AimSeqNumber";
         public const string AimType = "AimType";
         public const string CompStatus = "CompStatus";

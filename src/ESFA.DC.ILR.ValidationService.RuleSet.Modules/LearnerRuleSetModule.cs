@@ -5,6 +5,7 @@
     using ESFA.DC.ILR.Model.Interface;
     using ESFA.DC.ILR.ValidationService.Interface;
     using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
+    using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.AgreeId;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.DateEmpStatApp;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
@@ -115,6 +116,7 @@
                 typeof(AddHours_06Rule),
                 typeof(AddLine1_03Rule),
                 typeof(AFinDate_03Rule),
+                typeof(AFinDate_04Rule),
                 typeof(AFinType_01Rule),
                 typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
@@ -125,6 +127,7 @@
                 typeof(AFinType_12Rule),
                 typeof(AFinType_13Rule),
                 typeof(AFinType_14Rule),
+                typeof(AgreeId_02Rule),
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
@@ -138,6 +141,7 @@
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(ContPrefType_02Rule),
+                typeof(ContPrefType_06Rule),
                 typeof(DateEmpStatApp_01Rule),
                 typeof(DateEmpStatApp_02Rule),
                 typeof(DateOfBirth_01Rule),
@@ -282,6 +286,7 @@
                 typeof(LearnDelFAMType_18Rule),
                 typeof(LearnDelFAMType_20Rule),
                 typeof(LearnDelFAMType_22Rule),
+                typeof(LearnDelFAMType_24Rule),
                 typeof(LearnDelFAMType_27Rule),
                 typeof(LearnDelFAMType_35Rule),
                 typeof(LearnDelFAMType_39Rule),

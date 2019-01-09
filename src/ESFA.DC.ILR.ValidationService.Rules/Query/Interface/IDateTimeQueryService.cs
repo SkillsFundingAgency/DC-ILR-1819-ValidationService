@@ -9,7 +9,5 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         int MonthsBetween(DateTime start, DateTime end);
 
         double DaysBetween(DateTime start, DateTime end);
-
-        DateTime DateAddYears(DateTime date, int years);
     }
 }

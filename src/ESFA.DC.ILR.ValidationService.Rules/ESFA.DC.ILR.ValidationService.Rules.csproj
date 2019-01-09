@@ -162,6 +162,7 @@
     <Compile Include="DestinationAndProgression\OutType\OutType_04Rule.cs" />
     <Compile Include="DestinationAndProgression\OutULN\OutULN_01Rule.cs" />
     <Compile Include="DestinationAndProgression\OutULN\OutULN_02Rule.cs" />
+    <Compile Include="EmploymentStatus\AgreeId\AgreeId_02Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_02Rule.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_02Rule.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_06Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
@@ -299,6 +301,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_08Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_03Rule.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_04Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRuleBase{TEligibilityItem}.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18Rule.cs" />
@@ -317,6 +320,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_06Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_20Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_24Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_16Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_15Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_65Rule.cs" />
@@ -559,6 +563,5 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
