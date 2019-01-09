@@ -169,6 +169,7 @@
         public const string LearnDelFAMType_15 = "LearnDelFAMType_15";
         public const string LearnDelFAMType_16 = "LearnDelFAMType_16";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
+        public const string LearnDelFAMType_20 = "LearnDelFAMType_20";
         public const string LearnDelFAMType_24 = "LearnDelFAMType_24";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
@@ -315,6 +316,7 @@
         public const string R47 = "R47";
         public const string R52 = "R52";
         public const string R63 = "R63";
+        public const string R64 = "R64";
         public const string R66 = "R66";
         public const string R69 = "R69";
         public const string R70 = "R70";
@@ -373,6 +375,7 @@
 
         public const string WorkPlaceMode_01 = "WorkPlaceMode_01";
 
+        public const string WorkPlaceStartDate_02 = "WorkPlaceStartDate_02";
         public const string WorkPlaceStartDate_03 = "WorkPlaceStartDate_03";
     }
 }

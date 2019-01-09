@@ -104,6 +104,7 @@
     <Compile Include="CrossEntity\R45Rule.cs" />
     <Compile Include="CrossEntity\R43Rule.cs" />
     <Compile Include="CrossEntity\R52Rule.cs" />
+    <Compile Include="CrossEntity\R64Rule.cs" />
     <Compile Include="CrossEntity\R63Rule.cs" />
     <Compile Include="CrossEntity\R69Rule.cs" />
     <Compile Include="CrossEntity\R71Rule.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_06Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_20Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_24Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_16Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_15Rule.cs" />
@@ -485,6 +487,7 @@
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_05Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceMode\WorkPlaceMode_01Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_02Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_03Rule.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07Rule.cs" />
