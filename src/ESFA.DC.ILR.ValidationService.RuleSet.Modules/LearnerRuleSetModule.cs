@@ -440,6 +440,7 @@
                 typeof(WorkPlaceStartDate_01Rule),
                 typeof(WorkPlaceStartDate_03Rule),
                 typeof(WorkPlaceMode_01Rule),
+                typeof(WorkPlaceEmpId_02Rule),
                 typeof(WorkPlaceEmpId_03Rule),
                 typeof(WorkPlaceEmpId_04Rule),
                 typeof(WorkPlaceEmpId_05Rule),
