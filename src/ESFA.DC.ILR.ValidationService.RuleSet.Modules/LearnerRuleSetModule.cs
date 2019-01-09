@@ -1,10 +1,13 @@
-﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnPlanEndDate;
+
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
     using ESFA.DC.ILR.Model.Interface;
     using ESFA.DC.ILR.ValidationService.Interface;
     using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
+    using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.AgreeId;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.DateEmpStatApp;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
@@ -114,6 +117,7 @@
                 typeof(AddHours_06Rule),
                 typeof(AddLine1_03Rule),
                 typeof(AFinDate_03Rule),
+                typeof(AFinDate_04Rule),
                 typeof(AFinType_01Rule),
                 typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
@@ -124,6 +128,7 @@
                 typeof(AFinType_12Rule),
                 typeof(AFinType_13Rule),
                 typeof(AFinType_14Rule),
+                typeof(AgreeId_02Rule),
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
@@ -137,6 +142,7 @@
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(ContPrefType_02Rule),
+                typeof(ContPrefType_06Rule),
                 typeof(DateEmpStatApp_01Rule),
                 typeof(DateEmpStatApp_02Rule),
                 typeof(DateOfBirth_01Rule),
@@ -277,8 +283,11 @@
                 typeof(LearnDelFAMType_09Rule),
                 typeof(LearnDelFAMType_14Rule),
                 typeof(LearnDelFAMType_15Rule),
+                typeof(LearnDelFAMType_16Rule),
                 typeof(LearnDelFAMType_18Rule),
+                typeof(LearnDelFAMType_20Rule),
                 typeof(LearnDelFAMType_22Rule),
+                typeof(LearnDelFAMType_24Rule),
                 typeof(LearnDelFAMType_27Rule),
                 typeof(LearnDelFAMType_35Rule),
                 typeof(LearnDelFAMType_39Rule),
@@ -304,12 +313,15 @@
                 typeof(LearningDeliveryHE_08Rule),
                 typeof(LearnerHE_02Rule),
                 typeof(LearnFAMType_16Rule),
+                typeof(LearnStartDate_02Rule),
                 typeof(LearnStartDate_03Rule),
                 typeof(LearnStartDate_05Rule),
                 typeof(LearnStartDate_06Rule),
                 typeof(LearnStartDate_07Rule),
                 typeof(LearnStartDate_12Rule),
                 typeof(LearnStartDate_13Rule),
+                typeof(LearnPlanEndDate_02Rule),
+                typeof(LearnPlanEndDate_03Rule),
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
                 typeof(LLDDHealthProb_01Rule),
@@ -390,6 +402,7 @@
                 typeof(R47Rule),
                 typeof(R52Rule),
                 typeof(R63Rule),
+                typeof(R64Rule),
                 typeof(R66Rule),
                 typeof(R68Rule),
                 typeof(R70Rule),
@@ -438,6 +451,7 @@
                 typeof(WithdrawReason_04Rule),
                 typeof(WorkPlaceEndDate_02Rule),
                 typeof(WorkPlaceStartDate_01Rule),
+                typeof(WorkPlaceStartDate_02Rule),
                 typeof(WorkPlaceStartDate_03Rule),
                 typeof(WorkPlaceMode_01Rule),
                 typeof(WorkPlaceEmpId_02Rule),

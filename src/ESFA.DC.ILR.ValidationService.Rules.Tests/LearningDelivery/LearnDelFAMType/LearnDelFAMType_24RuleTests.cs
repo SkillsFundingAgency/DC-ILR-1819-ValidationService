@@ -12,16 +12,16 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAMType
 {
-    public class LearnDelFAMType_15RuleTests : AbstractRuleTests<LearnDelFAMType_15Rule>
+    public class LearnDelFAMType_24RuleTests : AbstractRuleTests<LearnDelFAMType_24Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("LearnDelFAMType_15");
+            NewRule().RuleName.Should().Be("LearnDelFAMType_24");
         }
 
         [Fact]
-        public void ValidationPasses_EndDateNull()
+        public void ValidationPasses_StartDate()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -31,13 +31,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery
                     {
-                        LearnActEndDateNullable = null,
+                        LearnStartDate = new DateTime(2012, 9, 1),
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
-                                LearnDelFAMCode = "118"
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.HEM,
+                                LearnDelFAMCode = "1"
                             }
                         }
                     }
@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             };
 
             NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
-            VerifyHandleNotCalled(validationErrorHandlerMock);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
         [Fact]
@@ -59,13 +59,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery
                     {
-                        LearnActEndDateNullable = new DateTime(2018, 11, 2),
+                        LearnStartDate = new DateTime(2012, 8, 31),
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.SOF,
-                                LearnDelFAMCode = "118"
+                                LearnDelFAMCode = "1"
                             }
                         }
                     }
@@ -73,7 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             };
 
             NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
-            VerifyHandleNotCalled(validationErrorHandlerMock);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
         [Fact]
@@ -87,12 +87,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery
                     {
-                        LearnActEndDateNullable = new DateTime(2018, 11, 2),
+                        LearnStartDate = new DateTime(2012, 8, 31),
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.HEM,
                                 LearnDelFAMCode = "119"
                             }
                         }
@@ -101,7 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             };
 
             NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
-            VerifyHandleNotCalled(validationErrorHandlerMock);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
         [Fact]
@@ -112,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var testLearner = new TestLearner();
 
             NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
-            VerifyHandleNotCalled(validationErrorHandlerMock);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
         [Fact]
@@ -126,12 +126,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery
                     {
-                        LearnActEndDateNullable = new DateTime(2018, 11, 2)
+                        LearnStartDate = new DateTime(2012, 8, 31),
                     }
                 }
             };
 
             NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
         [Fact]
@@ -145,13 +146,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery
                     {
-                        LearnActEndDateNullable = new DateTime(2017, 10, 31),
+                        LearnStartDate = new DateTime(2012, 8, 31),
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
-                                LearnDelFAMCode = "118"
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.HEM,
+                                LearnDelFAMCode = "1"
                             }
                         }
                     }
@@ -159,18 +160,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             };
 
             NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock, 1);
         }
 
-        private LearnDelFAMType_15Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        private LearnDelFAMType_24Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new LearnDelFAMType_15Rule(validationErrorHandler);
+            return new LearnDelFAMType_24Rule(validationErrorHandler);
         }
 
-        private void VerifyHandleNotCalled(ValidationErrorHandlerMock errorHandlerMock)
+        private void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)
         {
             errorHandlerMock.Verify(
                 m => m.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()),
-                Times.Never);
+                Times.Exactly(times));
         }
     }
 }
