@@ -45,6 +45,8 @@
         public const string ConRefNumber_01 = "ConRefNumber_01";
         public const string ConRefNumber_03 = "ConRefNumber_03";
 
+        public const string ContPrefType_06 = "ContPrefType_06";
+
         public const string DateOfBirth_01 = "DateOfBirth_01";
         public const string DateOfBirth_02 = "DateOfBirth_02";
         public const string DateOfBirth_03 = "DateOfBirth_03";
