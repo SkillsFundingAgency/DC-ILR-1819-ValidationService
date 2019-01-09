@@ -207,6 +207,7 @@
         public const string LearnStartDate_13 = "LearnStartDate_13";
 
         public const string LearnPlanEndDate_02 = "LearnPlanEndDate_02";
+        public const string LearnPlanEndDate_03 = "LearnPlanEndDate_03";
 
         public const string MathGrade_01 = "MathGrade_01";
         public const string MathGrade_03 = "MathGrade_03";
