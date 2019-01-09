@@ -156,6 +156,7 @@
     <Compile Include="DestinationAndProgression\OutType\OutType_04RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutULN\OutULN_01RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutULN\OutULN_02RuleTests.cs" />
+    <Compile Include="EmploymentStatus\AgreeId\AgreeId_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\DateEmpStatApp\DateEmpStatApp_01RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_02RuleTests.cs" />

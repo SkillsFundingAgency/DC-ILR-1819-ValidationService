@@ -7,6 +7,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
     using ESFA.DC.ILR.Model.Interface;
     using ESFA.DC.ILR.ValidationService.Interface;
     using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
+    using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.AgreeId;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.DateEmpStatApp;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
@@ -126,6 +127,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AFinType_12Rule),
                 typeof(AFinType_13Rule),
                 typeof(AFinType_14Rule),
+                typeof(AgreeId_02Rule),
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
