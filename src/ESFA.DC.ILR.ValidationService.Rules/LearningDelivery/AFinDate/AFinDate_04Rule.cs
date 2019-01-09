@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
 {
     public class AFinDate_04Rule : AbstractRule, IRule<ILearner>
     {
-        private const string _aFinType = ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice;
+        private const string _aFinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice;
 
         public AFinDate_04Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.AFinDate_04)

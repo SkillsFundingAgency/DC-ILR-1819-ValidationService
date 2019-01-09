@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\AbstractRule.cs" />
-    <Compile Include="Constants\ApprenticeshipFinanicalRecord.cs" />
+    <Compile Include="Constants\ApprenticeshipFinancialRecord.cs" />
     <Compile Include="Constants\CompletionState.cs" />
     <Compile Include="Constants\FundingStreamPeriodCodeConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />

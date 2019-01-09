@@ -4,7 +4,7 @@
     /// types of apprenticeship financial record
     /// contains the list of valid type code combinations
     /// </summary>
-    public class ApprenticeshipFinancialRecord
+    public static class ApprenticeshipFinancialRecord
     {
         /// <summary>
         /// The total training price
