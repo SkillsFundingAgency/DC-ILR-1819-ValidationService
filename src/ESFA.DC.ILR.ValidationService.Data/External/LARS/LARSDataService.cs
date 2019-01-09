@@ -339,7 +339,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             return validities.Any(lv =>
                 caseInsensitveCategoriesHashSet.Contains(lv.ValidityCategory)
                 && origLearnStartDate >= lv.StartDate
-                && origLearnStartDate <= lv.EndDate);
+                && origLearnStartDate <= (lv.EndDate.HasValue ? lv.EndDate : DateTime.MaxValue));
         }
 
         // TODO: this should happen in the rule, but may require an accessor => GetStandard(s)For(int thisStandardCode)
