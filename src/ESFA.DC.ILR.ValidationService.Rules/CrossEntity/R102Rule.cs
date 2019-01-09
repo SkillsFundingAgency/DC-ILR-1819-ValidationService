@@ -25,11 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                var learningDeliveryFAMs = objectToValidate.LearningDeliveries
-              .Where(l => l.LearningDeliveryFAMs != null)
-              .SelectMany(ld => ld.LearningDeliveryFAMs);
-
-                if (ConditionMet(learningDelivery.LearnStartDate, learningDeliveryFAMs))
+                if (ConditionMet(learningDelivery.LearnStartDate, learningDelivery.LearningDeliveryFAMs))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, _famTypeACT));
                 }

@@ -11,15 +11,12 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEmpId
 {
-    /// <summary>
-    /// from version 1.1 validation spread sheet
-    /// </summary>
-    public class WorkPlaceEmpId_04RuleTests
+    public class WorkPlaceEmpId_03RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
         /// </summary>
-        [Fact]
+        [Fact(Skip = "this can't be tested for any more")]
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange
@@ -27,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
             var service = new Mock<IFileDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new WorkPlaceEmpId_04Rule(null, service.Object));
+            Assert.Throws<ArgumentNullException>(() => new WorkPlaceEmpId_03Rule(null, service.Object));
         }
 
         /// <summary>
@@ -41,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
             var service = new Mock<IFileDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new WorkPlaceEmpId_04Rule(handler.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new WorkPlaceEmpId_03Rule(handler.Object, null));
         }
 
         /// <summary>
@@ -57,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("WorkPlaceEmpId_04", result);
+            Assert.Equal("WorkPlaceEmpId_03", result);
         }
 
         /// <summary>
@@ -73,7 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(RuleNameConstants.WorkPlaceEmpId_04, result);
+            Assert.Equal(WorkPlaceEmpId_03Rule.Name, result);
         }
 
         /// <summary>
@@ -144,15 +141,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
         /// <param name="fileDate">The file date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData("2015-04-15", "2015-06-13", false)]
-        [InlineData("2015-04-15", "2015-06-14", false)]
-        [InlineData("2015-04-15", "2015-06-15", true)]
-        [InlineData("2015-04-15", "2015-06-16", true)]
-        [InlineData("2016-06-14", "2016-08-15", true)]
-        [InlineData("2016-06-15", "2016-08-15", true)]
-        [InlineData("2016-06-16", "2016-08-15", false)]
-        [InlineData("2016-06-17", "2016-08-15", false)]
-        public void HasExceedRegistrationPeriodMeetsExpectation(string startDate, string fileDate, bool expectation)
+        [InlineData("2015-04-15", "2015-06-13", true)]
+        [InlineData("2015-04-15", "2015-06-14", true)]
+        [InlineData("2015-04-15", "2015-06-15", false)]
+        [InlineData("2015-04-15", "2015-06-16", false)]
+        [InlineData("2016-06-14", "2016-08-15", false)]
+        [InlineData("2016-06-15", "2016-08-15", false)]
+        [InlineData("2016-06-16", "2016-08-15", true)]
+        [InlineData("2016-06-17", "2016-08-15", true)]
+        public void IsInsideTheRegistrationPeriodMeetsExpectation(string startDate, string fileDate, bool expectation)
         {
             // arrange
             var mockItem = new Mock<ILearningDeliveryWorkPlacement>();
@@ -166,10 +163,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
                 .Setup(xc => xc.FilePreparationDate())
                 .Returns(DateTime.Parse(fileDate));
 
-            var sut = new WorkPlaceEmpId_04Rule(handler.Object, service.Object);
+            var sut = new WorkPlaceEmpId_03Rule(handler.Object, service.Object);
 
             // act
-            var result = sut.HasExceedRegistrationPeriod(mockItem.Object);
+            var result = sut.IsInsideTheRegistrationPeriod(mockItem.Object);
 
             // assert
             Assert.Equal(expectation, result);
@@ -181,7 +178,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(WorkPlaceEmpId_04Rule.TemporaryEmpID, true)]
+        [InlineData(WorkPlaceEmpId_03Rule.TemporaryEmpID, true)]
         [InlineData(123456, false)]
         [InlineData(null, false)]
         public void RequiresEmployerRegistrationMeetsExpectation(int? candidate, bool expectation)
@@ -213,73 +210,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
             var mockItem = new Mock<ILearningDeliveryWorkPlacement>();
             mockItem
                 .SetupGet(y => y.WorkPlaceEmpIdNullable)
-                .Returns(WorkPlaceEmpId_04Rule.TemporaryEmpID);
-            mockItem
-                .SetupGet(y => y.WorkPlaceStartDate)
-                .Returns(DateTime.Parse("2018-05-14"));
-
-            var placements = Collection.Empty<ILearningDeliveryWorkPlacement>();
-            placements.Add(mockItem.Object);
-
-            var mockDelivery = new Mock<ILearningDelivery>();
-            mockDelivery
-                .SetupGet(y => y.ProgTypeNullable)
-                .Returns(TypeOfLearningProgramme.Traineeship);
-            mockDelivery
-                .SetupGet(y => y.LearningDeliveryWorkPlacements)
-                .Returns(placements.AsSafeReadOnlyList());
-
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
-
-            var mockLearner = new Mock<ILearner>();
-            mockLearner
-                .SetupGet(x => x.LearnRefNumber)
-                .Returns(LearnRefNumber);
-            mockLearner
-                .SetupGet(x => x.LearningDeliveries)
-                .Returns(deliveries.AsSafeReadOnlyList());
-
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            handler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == RuleNameConstants.WorkPlaceEmpId_04),
-                Moq.It.Is<string>(y => y == LearnRefNumber),
-                0,
-                Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
-            handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == PropertyNameConstants.WorkPlaceEmpId),
-                    WorkPlaceEmpId_04Rule.TemporaryEmpID))
-                .Returns(new Mock<IErrorMessageParameter>().Object);
-
-            var service = new Mock<IFileDataService>(MockBehavior.Strict);
-            service
-                .Setup(xc => xc.FilePreparationDate())
-                .Returns(DateTime.Parse("2018-08-14"));
-
-            var sut = new WorkPlaceEmpId_04Rule(handler.Object, service.Object);
-
-            // act
-            sut.Validate(mockLearner.Object);
-
-            // assert
-            handler.VerifyAll();
-            service.VerifyAll();
-        }
-
-        /// <summary>
-        /// Valid item does not raise a validation message.
-        /// </summary>
-        [Fact]
-        public void ValidItemDoesNotRaiseAValidationMessage()
-        {
-            // arrange
-            const string LearnRefNumber = "123456789X";
-
-            var mockItem = new Mock<ILearningDeliveryWorkPlacement>();
-            mockItem
-                .SetupGet(y => y.WorkPlaceEmpIdNullable)
-                .Returns(WorkPlaceEmpId_04Rule.TemporaryEmpID);
+                .Returns(WorkPlaceEmpId_03Rule.TemporaryEmpID);
             mockItem
                 .SetupGet(y => y.WorkPlaceStartDate)
                 .Returns(DateTime.Parse("2018-06-15"));
@@ -307,12 +238,73 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
                 .Returns(deliveries.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle(WorkPlaceEmpId_03Rule.Name, LearnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            handler
+                .Setup(x => x.BuildErrorMessageParameter(PropertyNameConstants.WorkPlaceEmpId, WorkPlaceEmpId_03Rule.TemporaryEmpID))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
             var service = new Mock<IFileDataService>(MockBehavior.Strict);
             service
                 .Setup(xc => xc.FilePreparationDate())
                 .Returns(DateTime.Parse("2018-08-14"));
 
-            var sut = new WorkPlaceEmpId_04Rule(handler.Object, service.Object);
+            var sut = new WorkPlaceEmpId_03Rule(handler.Object, service.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            service.VerifyAll();
+        }
+
+        /// <summary>
+        /// Valid item does not raise a validation message.
+        /// </summary>
+        [Fact]
+        public void ValidItemDoesNotRaiseAValidationMessage()
+        {
+            // arrange
+            const string LearnRefNumber = "123456789X";
+
+            var mockItem = new Mock<ILearningDeliveryWorkPlacement>();
+            mockItem
+                .SetupGet(y => y.WorkPlaceEmpIdNullable)
+                .Returns(WorkPlaceEmpId_03Rule.TemporaryEmpID);
+            mockItem
+                .SetupGet(y => y.WorkPlaceStartDate)
+                .Returns(DateTime.Parse("2018-05-14"));
+
+            var placements = Collection.Empty<ILearningDeliveryWorkPlacement>();
+            placements.Add(mockItem.Object);
+
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.ProgTypeNullable)
+                .Returns(TypeOfLearningProgramme.Traineeship);
+            mockDelivery
+                .SetupGet(y => y.LearningDeliveryWorkPlacements)
+                .Returns(placements.AsSafeReadOnlyList());
+
+            var deliveries = Collection.Empty<ILearningDelivery>();
+            deliveries.Add(mockDelivery.Object);
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<IFileDataService>(MockBehavior.Strict);
+            service
+                .Setup(xc => xc.FilePreparationDate())
+                .Returns(DateTime.Parse("2018-08-14"));
+
+            var sut = new WorkPlaceEmpId_03Rule(handler.Object, service.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -326,12 +318,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public WorkPlaceEmpId_04Rule NewRule()
+        public WorkPlaceEmpId_03Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<IFileDataService>(MockBehavior.Strict);
 
-            return new WorkPlaceEmpId_04Rule(handler.Object, service.Object);
+            return new WorkPlaceEmpId_03Rule(handler.Object, service.Object);
         }
     }
 }

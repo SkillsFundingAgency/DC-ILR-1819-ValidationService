@@ -344,32 +344,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void Validate_Error()
         {
-            var learningDeliveryFams = new TestLearningDeliveryFAM[]
-            {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                    LearnDelFAMType = "ACT"
-                }
-            };
-
             var learner = new TestLearner()
             {
                 LearnRefNumber = "00100309",
@@ -380,16 +354,40 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AimSeqNumber = 1,
                         LearnActEndDateNullable = new DateTime(2018, 10, 1),
                         LearnPlanEndDate = new DateTime(2018, 10, 1),
-                        LearningDeliveryFAMs = learningDeliveryFams
+                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                                LearnDelFAMType = "LSF"
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
+                                LearnDelFAMType = "ACT"
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 10),
+                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
+                                LearnDelFAMType = "ACT"
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
+                                LearnDelFAMType = "ACT"
+                            }
+                        }
                     }
                 }
             };
 
-            var ldFams = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
+            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
 
             var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams as IReadOnlyCollection<ILearningDeliveryFAM>, _famTypeACT)).Returns(3);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(3);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -429,11 +427,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var ldFams = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
+            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
 
             var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams as IReadOnlyCollection<ILearningDeliveryFAM>, _famTypeACT)).Returns(1);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(1);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -485,11 +483,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var ldFams = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
+            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
 
             var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams as IReadOnlyCollection<ILearningDeliveryFAM>, _famTypeACT)).Returns(3);
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(3);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

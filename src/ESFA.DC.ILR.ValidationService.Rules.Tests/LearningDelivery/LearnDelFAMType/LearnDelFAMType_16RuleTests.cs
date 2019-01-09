@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
@@ -12,18 +14,24 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAMType
 {
-    public class LearnDelFAMType_15RuleTests : AbstractRuleTests<LearnDelFAMType_15Rule>
+    public class LearnDelFAMType_16RuleTests : AbstractRuleTests<LearnDelFAMType_16Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("LearnDelFAMType_15");
+            NewRule().RuleName.Should().Be("LearnDelFAMType_16");
         }
 
         [Fact]
-        public void ValidationPasses_EndDateNull()
+        public void ValidationPasses_SubmissionBeforeYearEnd()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+
+            var academicYearServiceMock = new Mock<IAcademicYearDataService>();
+            academicYearServiceMock.Setup(m => m.End()).Returns(new DateTime(2018, 7, 31));
+
+            var fileDataServiceMock = new Mock<IFileDataService>();
+            fileDataServiceMock.Setup(m => m.FilePreparationDate()).Returns(new DateTime(2018, 3, 31));
 
             var testLearner = new TestLearner
             {
@@ -31,7 +39,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery
                     {
-                        LearnActEndDateNullable = null,
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
@@ -44,7 +51,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, fileDataServiceMock.Object).Validate(testLearner);
             VerifyHandleNotCalled(validationErrorHandlerMock);
         }
 
@@ -53,13 +60,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
+            var academicYearServiceMock = new Mock<IAcademicYearDataService>();
+            academicYearServiceMock.Setup(m => m.End()).Returns(new DateTime(2018, 7, 31));
+
+            var fileDataServiceMock = new Mock<IFileDataService>();
+            fileDataServiceMock.Setup(m => m.FilePreparationDate()).Returns(new DateTime(2018, 9, 30));
+
             var testLearner = new TestLearner
             {
                 LearningDeliveries = new List<TestLearningDelivery>
                 {
                     new TestLearningDelivery
                     {
-                        LearnActEndDateNullable = new DateTime(2018, 11, 2),
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
@@ -72,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, fileDataServiceMock.Object).Validate(testLearner);
             VerifyHandleNotCalled(validationErrorHandlerMock);
         }
 
@@ -80,6 +92,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         public void ValidationPassesIrrelevantFamCode()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+
+            var academicYearServiceMock = new Mock<IAcademicYearDataService>();
+            academicYearServiceMock.Setup(m => m.End()).Returns(new DateTime(2018, 7, 31));
+
+            var fileDataServiceMock = new Mock<IFileDataService>();
+            fileDataServiceMock.Setup(m => m.FilePreparationDate()).Returns(new DateTime(2018, 9, 30));
 
             var testLearner = new TestLearner
             {
@@ -100,7 +118,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, fileDataServiceMock.Object).Validate(testLearner);
             VerifyHandleNotCalled(validationErrorHandlerMock);
         }
 
@@ -124,20 +142,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             {
                 LearningDeliveries = new List<TestLearningDelivery>
                 {
-                    new TestLearningDelivery
-                    {
-                        LearnActEndDateNullable = new DateTime(2018, 11, 2)
-                    }
+                    new TestLearningDelivery()
                 }
             };
 
             NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            VerifyHandleNotCalled(validationErrorHandlerMock);
         }
 
         [Fact]
         public void ValidationFails()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
+
+            var academicYearServiceMock = new Mock<IAcademicYearDataService>();
+            academicYearServiceMock.Setup(m => m.End()).Returns(new DateTime(2018, 7, 31));
+
+            var fileDataServiceMock = new Mock<IFileDataService>();
+            fileDataServiceMock.Setup(m => m.FilePreparationDate()).Returns(new DateTime(2018, 9, 30));
 
             var testLearner = new TestLearner
             {
@@ -158,12 +180,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, fileDataServiceMock.Object).Validate(testLearner);
         }
 
-        private LearnDelFAMType_15Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        private LearnDelFAMType_16Rule NewRule(
+            IValidationErrorHandler validationErrorHandler = null,
+            IAcademicYearDataService academicYearDataService = null,
+            IFileDataService fileDataService = null)
         {
-            return new LearnDelFAMType_15Rule(validationErrorHandler);
+            return new LearnDelFAMType_16Rule(academicYearDataService, fileDataService, validationErrorHandler);
         }
 
         private void VerifyHandleNotCalled(ValidationErrorHandlerMock errorHandlerMock)

@@ -9,12 +9,7 @@ using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
 {
-    /// <summary>
-    /// from version 1.1 validation spread sheet
-    /// these rules are singleton's; they can't hold state...
-    /// </summary>
-    /// <seealso cref="Interface.IRule{ILearner}" />
-    public class WorkPlaceEmpId_04Rule :
+    public class WorkPlaceEmpId_03Rule :
         AbstractRule,
         IRule<ILearner>
     {
@@ -24,22 +19,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
         public const int TemporaryEmpID = 999999999;
 
         /// <summary>
+        /// Gets the name of the rule.
+        /// </summary>
+        public const string Name = "WorkPlaceEmpId_03";
+
+        /// <summary>
         /// The file data service
         /// </summary>
         private readonly IFileDataService _fileDataService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WorkPlaceEmpId_04Rule" /> class.
+        /// Initializes a new instance of the <see cref="WorkPlaceEmpId_03Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="fileDataService">The file data service.</param>
-        public WorkPlaceEmpId_04Rule(
+        public WorkPlaceEmpId_03Rule(
             IValidationErrorHandler validationErrorHandler,
-                        IFileDataService fileDataService)
-            : base(validationErrorHandler, RuleNameConstants.WorkPlaceEmpId_04)
+            IFileDataService fileDataService)
+            : base(
+                validationErrorHandler,
+                Name)
         {
-            It.IsNull(validationErrorHandler)
-                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(fileDataService)
                 .AsGuard<ArgumentNullException>(nameof(fileDataService));
 
@@ -62,14 +62,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
             It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.Traineeship);
 
         /// <summary>
-        /// Determines whether [has exceed registration period] [the specified placement].
+        /// Determines whether [is inside the registration period] [the specified placement].
         /// </summary>
         /// <param name="placement">The placement.</param>
         /// <returns>
-        ///   <c>true</c> if [has exceed registration period] [the specified placement]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [is inside the registration period] [the specified placement]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasExceedRegistrationPeriod(ILearningDeliveryWorkPlacement placement) =>
-            (_fileDataService.FilePreparationDate() - placement.WorkPlaceStartDate) > SixtyDays;
+        public bool IsInsideTheRegistrationPeriod(ILearningDeliveryWorkPlacement placement) =>
+            (_fileDataService.FilePreparationDate() - placement.WorkPlaceStartDate) <= SixtyDays;
 
         /// <summary>
         /// Requires employer registration.
@@ -87,7 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
         ///   <c>true</c> if [is not valid] [the specified placement]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(ILearningDeliveryWorkPlacement placement) =>
-            RequiresEmployerRegistration(placement) && HasExceedRegistrationPeriod(placement);
+            RequiresEmployerRegistration(placement) && IsInsideTheRegistrationPeriod(placement);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
@@ -126,6 +126,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
             HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildErrorMessageParameters());
         }
 
+        /// <summary>
+        /// Builds the error message parameters.
+        /// </summary>
+        /// <returns>returns a list of mesasge parameters</returns>
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters()
         {
             return new[]
