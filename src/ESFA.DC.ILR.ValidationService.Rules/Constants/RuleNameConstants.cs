@@ -50,6 +50,7 @@
         public const string ConRefNumber_03 = "ConRefNumber_03";
 
         public const string ContPrefType_06 = "ContPrefType_06";
+        public const string ContPrefType_07 = "ContPrefType_07";
 
         public const string DateOfBirth_01 = "DateOfBirth_01";
         public const string DateOfBirth_02 = "DateOfBirth_02";
@@ -178,11 +179,13 @@
         public const string LearnDelFAMType_20 = "LearnDelFAMType_20";
         public const string LearnDelFAMType_24 = "LearnDelFAMType_24";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
+        public const string LearnDelFAMType_30 = "LearnDelFAMType_30";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
+        public const string LearnDelFAMType_50 = "LearnDelFAMType_50";
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
@@ -325,6 +328,7 @@
         public const string R63 = "R63";
         public const string R64 = "R64";
         public const string R66 = "R66";
+        public const string R67 = "R67";
         public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
@@ -377,6 +381,7 @@
         public const string WithdrawReason_02 = "WithdrawReason_02";
         public const string WithdrawReason_04 = "WithdrawReason_04";
 
+        public const string WorkPlaceEmpId_02 = "WorkPlaceEmpId_02";
         public const string WorkPlaceEmpId_04 = "WorkPlaceEmpId_04";
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
