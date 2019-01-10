@@ -306,6 +306,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_08Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_03Rule.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_05Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_04Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
