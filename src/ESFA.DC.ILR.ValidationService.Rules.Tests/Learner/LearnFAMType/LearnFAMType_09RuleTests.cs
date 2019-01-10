@@ -77,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         }
 
         [Fact]
-        public void Validate_WtihNoLearnerFAMS_Returns_NoError()
+        public void Validate_WithNoLearnerFAMS_Returns_NoError()
         {
             var learner = new TestLearner();
 
