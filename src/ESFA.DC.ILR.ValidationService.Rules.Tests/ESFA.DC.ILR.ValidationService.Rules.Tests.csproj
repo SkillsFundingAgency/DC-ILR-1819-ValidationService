@@ -122,7 +122,6 @@
     <Compile Include="CrossEntity\R63RuleTests.cs" />
     <Compile Include="CrossEntity\R64RuleTests.cs" />
     <Compile Include="CrossEntity\R69RuleTests.cs" />
-    <Compile Include="CrossEntity\R59RuleTests.cs" />
     <Compile Include="CrossEntity\R75RuleTests.cs" />
     <Compile Include="CrossEntity\R71RuleTests.cs" />
     <Compile Include="CrossEntity\R47RuleTests.cs" />
@@ -302,6 +301,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_07RuleTests.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_08RuleTests.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_03RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_06RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_05RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_04RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_01RuleTests.cs" />

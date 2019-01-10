@@ -22,6 +22,7 @@
 
         public const string AFinDate_04 = "AFinDate_04";
         public const string AFinDate_05 = "AFinDate_05";
+        public const string AFinDate_06 = "AFinDate_06";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
@@ -330,9 +331,6 @@
         public const string R45 = "R45";
         public const string R47 = "R47";
         public const string R52 = "R52";
-        public const string R53 = "R53";
-        public const string R54 = "R54";
-        public const string R55 = "R55";
         public const string R56 = "R56";
         public const string R59 = "R59";
         public const string R63 = "R63";
