@@ -21,6 +21,7 @@
         public const string Addline1_03 = "Addline1_03";
 
         public const string AFinDate_04 = "AFinDate_04";
+        public const string AFinDate_05 = "AFinDate_05";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
@@ -49,6 +50,7 @@
         public const string ConRefNumber_01 = "ConRefNumber_01";
         public const string ConRefNumber_03 = "ConRefNumber_03";
 
+        public const string ContPrefType_05 = "ContPrefType_05";
         public const string ContPrefType_06 = "ContPrefType_06";
         public const string ContPrefType_07 = "ContPrefType_07";
 
@@ -180,7 +182,9 @@
         public const string LearnDelFAMType_24 = "LearnDelFAMType_24";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_30 = "LearnDelFAMType_30";
+        public const string LearnDelFAMType_31 = "LearnDelFAMType_31";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
+        public const string LearnDelFAMType_36 = "LearnDelFAMType_36";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
@@ -202,6 +206,7 @@
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
         public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
+        public const string LearnFAMType_09 = "LearnFAMType_09";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
@@ -349,6 +354,7 @@
         public const string R112 = "R112";
         public const string R113 = "R113";
         public const string R114 = "R114";
+        public const string R115 = "R115";
         public const string R117 = "R117";
         public const string R118 = "R118";
 

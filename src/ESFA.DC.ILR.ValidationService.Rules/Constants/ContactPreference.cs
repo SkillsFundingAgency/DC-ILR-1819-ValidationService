@@ -85,5 +85,76 @@
             /// </summary>
             public const string PreferredMethodOfContact = "PMC";
         }
+
+        /// <summary>
+        /// contact preference codes
+        /// </summary>
+        public static class ContactPrefCodes
+        {
+            /// <summary>
+            /// no contact courses or opportunities (pre GDPR)
+            /// </summary>
+            public const int RUI_NoContactCoursesOrOpportunitiesPreGDPR = 1;
+
+            /// <summary>
+            /// no contact surveys and research (pre GDPR)
+            /// </summary>
+            public const int RUI_NoContactSurveysAndResearchPreGDPR = 2;
+
+            /// <summary>
+            /// no contact illness or died valid to 2013-07-31
+            /// </summary>
+            public const int RUI_NoContactIllnessOrDied_ValidTo20130731 = 3;
+
+            /// <summary>
+            /// no contact due to illness
+            /// </summary>
+            public const int RUI_NoContactDueToIllness = 4;
+
+            /// <summary>
+            /// no contact due to death
+            /// </summary>
+            public const int RUI_NoContactDueToDeath = 5;
+
+            /// <summary>
+            /// agrees contact courses or opportunities (post GDPR)
+            /// </summary>
+            public const int RUI_AgreesContactCoursesOrOpportunitiesPostGDPR = 6;
+
+            /// <summary>
+            /// agrees contact surveys and research (post GDPR)
+            /// </summary>
+            public const int RUI_AgreesContactSurveysAndResearchPostGDPR = 7;
+
+            /// <summary>
+            /// no contact by post (pre GDPR)
+            /// </summary>
+            public const int PMC_NoContactByPostPreGDPR = 1;
+
+            /// <summary>
+            /// no contact by phone (pre GDPR)
+            /// </summary>
+            public const int PMC_NoContactByPhonePreGDPR = 2;
+
+            /// <summary>
+            /// no contact by email (pre GDPR)
+            /// </summary>
+            public const int PMC_NoContactByEmailPreGDPR = 3;
+
+            /// <summary>
+            /// agrees contact by post (post GDPR)
+            /// </summary>
+            public const int PMC_AgreesContactByPostPostGDPR = 4;
+
+            /// <summary>
+            /// agrees contact by phone (post GDPR)
+            /// </summary>
+            public const int PMC_AgreesContactByPhonePostGDPR = 5;
+
+            /// <summary>
+            /// agrees contact by email (post GDPR)
+            /// </summary>
+            public const int PMC_AgreesContactByEmailPostGDPR = 6;
+        }
     }
 }
