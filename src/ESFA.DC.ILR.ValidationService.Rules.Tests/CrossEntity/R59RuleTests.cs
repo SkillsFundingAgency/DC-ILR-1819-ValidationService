@@ -112,10 +112,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.ULN, 12345678)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.UKPRN, 87654321)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.UKPRN, (long)546)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.ULN, (long)123467)).Verifiable();
 
-            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(87654321, 12345678);
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(546, 123467);
 
             validationErrorHandlerMock.Verify();
         }
