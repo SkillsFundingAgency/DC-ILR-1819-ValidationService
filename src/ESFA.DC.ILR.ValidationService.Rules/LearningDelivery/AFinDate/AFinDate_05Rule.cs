@@ -11,8 +11,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
 {
     public class AFinDate_05Rule : AbstractRule, IRule<ILearner>
     {
-        private const string _TNP1 = ApprenticeshipFinanicalRecord.TotalTrainingPrice;
-        private const string _TNP3 = ApprenticeshipFinanicalRecord.ResidualTrainingPrice;
+        private const string _TNP1 = ApprenticeshipFinancialRecord.TotalTrainingPrice;
+        private const string _TNP3 = ApprenticeshipFinancialRecord.ResidualTrainingPrice;
 
         public AFinDate_05Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.AFinDate_05)
