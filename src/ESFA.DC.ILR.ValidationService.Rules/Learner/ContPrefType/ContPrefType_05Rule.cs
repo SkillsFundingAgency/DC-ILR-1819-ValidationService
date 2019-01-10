@@ -10,8 +10,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType
 {
     public class ContPrefType_05Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly int[] _contPrefCodesSet1 = { 1, 2, 3 };
-        private readonly int[] _contPrefCodesSet2 = { 4, 5, 6 };
+        private readonly int[] _contPrefCodesSet1 =
+        {
+            ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+            ContactPreference.ContactPrefCodes.PMC_NoContactByPhonePreGDPR,
+            ContactPreference.ContactPrefCodes.PMC_NoContactByEmailPreGDPR
+        };
+
+        private readonly int[] _contPrefCodesSet2 =
+        {
+            ContactPreference.ContactPrefCodes.PMC_AgreesContactByPostPostGDPR,
+            ContactPreference.ContactPrefCodes.PMC_AgreesContactByPhonePostGDPR,
+            ContactPreference.ContactPrefCodes.PMC_AgreesContactByEmailPostGDPR
+        };
 
         public ContPrefType_05Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.ContPrefType_05)

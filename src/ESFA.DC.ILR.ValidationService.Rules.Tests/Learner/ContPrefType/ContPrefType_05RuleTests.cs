@@ -21,13 +21,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         [Fact]
         public void HasAnyPMUContactPreferenceForCodes_True()
         {
-            var contPrefCodes = new[] { 1, 2, 3 };
+            var contPrefCodes = new[]
+            {
+                ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                ContactPreference.ContactPrefCodes.PMC_NoContactByPhonePreGDPR,
+                ContactPreference.ContactPrefCodes.PMC_NoContactByEmailPreGDPR
+            };
 
             var contactPreferences = new List<TestContactPreference>
             {
-                new TestContactPreference { ContPrefCode = 1, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
-                new TestContactPreference { ContPrefCode = 2, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
-                new TestContactPreference { ContPrefCode = 3, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPhonePreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByEmailPreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
             };
 
             NewRule().HasAnyPMUContactPreferenceForCodes(contactPreferences, contPrefCodes).Should().BeTrue();
@@ -36,13 +53,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         [Fact]
         public void HasAnyPMUContactPreferenceForCodes_False_NoPMUMatch()
         {
-            var contPrefCodes = new[] { 1, 2, 3 };
+            var contPrefCodes = new[]
+            {
+                ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                ContactPreference.ContactPrefCodes.PMC_NoContactByPhonePreGDPR,
+                ContactPreference.ContactPrefCodes.PMC_NoContactByEmailPreGDPR
+            };
 
             var contactPreferences = new List<TestContactPreference>
             {
-                new TestContactPreference { ContPrefCode = 1, ContPrefType = ContactPreference.Types.RestrictedUserInteraction },
-                new TestContactPreference { ContPrefCode = 2, ContPrefType = ContactPreference.Types.RestrictedUserInteraction },
-                new TestContactPreference { ContPrefCode = 3, ContPrefType = ContactPreference.Types.RestrictedUserInteraction },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                    ContPrefType = ContactPreference.Types.RestrictedUserInteraction
+                },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPhonePreGDPR,
+                    ContPrefType = ContactPreference.Types.RestrictedUserInteraction
+                },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByEmailPreGDPR,
+                    ContPrefType = ContactPreference.Types.RestrictedUserInteraction
+                },
             };
 
             NewRule().HasAnyPMUContactPreferenceForCodes(contactPreferences, contPrefCodes).Should().BeFalse();
@@ -51,13 +85,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         [Fact]
         public void HasAnyPMUContactPreferenceForCodes_False_NoCodeMatch()
         {
-            var contPrefCodes = new[] { 4, 5, 6 };
+            var contPrefCodes = new[]
+            {
+                ContactPreference.ContactPrefCodes.PMC_AgreesContactByPostPostGDPR,
+                ContactPreference.ContactPrefCodes.PMC_AgreesContactByPhonePostGDPR,
+                ContactPreference.ContactPrefCodes.PMC_AgreesContactByEmailPostGDPR
+            };
 
             var contactPreferences = new List<TestContactPreference>
             {
-                new TestContactPreference { ContPrefCode = 1, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
-                new TestContactPreference { ContPrefCode = 2, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
-                new TestContactPreference { ContPrefCode = 3, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPhonePreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByEmailPreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
             };
 
             NewRule().HasAnyPMUContactPreferenceForCodes(contactPreferences, contPrefCodes).Should().BeFalse();
@@ -68,8 +119,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         {
             var contactPreferences = new List<TestContactPreference>
             {
-                new TestContactPreference { ContPrefCode = 1, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
-                new TestContactPreference { ContPrefCode = 6, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_AgreesContactByEmailPostGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
             };
 
             NewRule().ConditionMet(contactPreferences).Should().BeTrue();
@@ -80,8 +139,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         {
             var contactPreferences = new List<TestContactPreference>
             {
-                new TestContactPreference { ContPrefCode = 1, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
-                new TestContactPreference { ContPrefCode = 2, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
+                new TestContactPreference
+                {
+                    ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPhonePreGDPR,
+                    ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                },
             };
 
             NewRule().ConditionMet(contactPreferences).Should().BeFalse();
@@ -94,8 +161,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
             {
                 ContactPreferences = new List<TestContactPreference>()
                 {
-                    new TestContactPreference { ContPrefCode = 1, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
-                    new TestContactPreference { ContPrefCode = 6, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
+                    new TestContactPreference
+                    {
+                        ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                        ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                    },
+                    new TestContactPreference
+                    {
+                        ContPrefCode = ContactPreference.ContactPrefCodes.PMC_AgreesContactByEmailPostGDPR,
+                        ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                    },
                 }
             };
 
@@ -113,9 +188,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
                 ContactPreferences = new List<TestContactPreference>()
                 {
                     new TestContactPreference
-                        { ContPrefCode = 1, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
+                    {
+                        ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPostPreGDPR,
+                        ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                    },
                     new TestContactPreference
-                        { ContPrefCode = 2, ContPrefType = ContactPreference.Types.PreferredMethodOfContact },
+                    {
+                        ContPrefCode = ContactPreference.ContactPrefCodes.PMC_NoContactByPhonePreGDPR,
+                        ContPrefType = ContactPreference.Types.PreferredMethodOfContact
+                    },
                 }
             };
 
