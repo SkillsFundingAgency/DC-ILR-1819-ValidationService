@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
-        public void ValidationPasses_IrrelevantFamType()
+        public void ValidatePasses_IrrelevantFamType()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
-        public void ValidationPasses_IrrelevantFundingModel()
+        public void ValidatePasses_AllowedFundingModel()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -74,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
-        public void ValidationPasses_ExceptionApplies()
+        public void ValidatePasses_ExceptionApplies()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -106,7 +106,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
-        public void ValidationPasses_NoLDs()
+        public void ValidatePasses_NoLDs()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -117,7 +117,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
-        public void ValidationPasses_NoFAMs()
+        public void ValidatePasses_NoFAMs()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -137,7 +137,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
-        public void ValidationFails_ALB_ButNoExceptionOnSameDelivery()
+        public void ValidateFails_ALB_ButNoExceptionOnSameDelivery()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
 
