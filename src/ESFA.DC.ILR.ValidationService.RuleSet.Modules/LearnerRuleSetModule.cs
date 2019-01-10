@@ -453,6 +453,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(WorkPlaceStartDate_01Rule),
                 typeof(WorkPlaceStartDate_02Rule),
                 typeof(WorkPlaceStartDate_03Rule),
+                typeof(WorkPlaceStartDate_04Rule),
                 typeof(WorkPlaceMode_01Rule),
                 typeof(WorkPlaceEmpId_03Rule),
                 typeof(WorkPlaceEmpId_04Rule),
