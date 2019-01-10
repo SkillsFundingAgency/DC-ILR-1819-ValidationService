@@ -89,26 +89,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         public void CompStatusConditionMet_False()
         {
             DateTime? learnActEndDate = null;
+            DateTime learnActEndDateExpected = new DateTime(2018, 06, 01);
 
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
             {
                 new TestLearningDelivery() { LearnActEndDateNullable = null, CompStatus = 5 },
-                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 06, 01), CompStatus = 6 }
+                new TestLearningDelivery() { LearnActEndDateNullable = learnActEndDateExpected, CompStatus = 6 }
             };
             NewRule().CompStatusConditionMet(learningDeliveries, out learnActEndDate).Should().BeFalse();
+            learnActEndDate.Should().Be(learnActEndDateExpected);
         }
 
         [Fact]
         public void CompStatusConditionMet_True()
         {
             DateTime? learnActEndDate = null;
+            DateTime learnActEndDateExpected = new DateTime(2018, 06, 01);
 
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
             {
                 new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2017, 05, 02), CompStatus = 5 },
-                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 06, 01) }
+                new TestLearningDelivery() { LearnActEndDateNullable = learnActEndDateExpected }
             };
             NewRule().CompStatusConditionMet(learningDeliveries, out learnActEndDate).Should().BeTrue();
+            learnActEndDate.Should().Be(learnActEndDateExpected);
         }
 
         [Fact]
@@ -134,7 +138,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             string learnRefNumber = "00100310";
             string ldapLearnRefNumber = string.Empty;
-            DateTime? outStartDate = null;
 
             var learnerDestinationAndProgression = new TestLearnerDestinationAndProgression()
             {
@@ -150,8 +153,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 learnRefNumber,
                 new List<TestLearnerDestinationAndProgression> { learnerDestinationAndProgression },
                 new DateTime(2018, 06, 01),
-                out ldapLearnRefNumber,
-                out outStartDate).Should().BeFalse();
+                out ldapLearnRefNumber).Should().BeFalse();
+            ldapLearnRefNumber.Should().BeEmpty();
         }
 
         [Theory]
@@ -160,7 +163,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         public void DPOutComeConditionMet_True(string learnRefNumber)
         {
             string ldapLearnRefNumber = string.Empty;
-            DateTime? outStartDate = null;
 
             var learnerDestinationAndProgression = new TestLearnerDestinationAndProgression()
             {
@@ -172,13 +174,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
+            string ldapLearnRefNumberExpectedValue =
+                learnRefNumber == learnerDestinationAndProgression.LearnRefNumber
+                ? learnRefNumber
+                : string.Empty;
+
             NewRule()
                 .DPOutComeConditionMet(
                 learnRefNumber,
                 new List<TestLearnerDestinationAndProgression> { learnerDestinationAndProgression },
                 new DateTime(2018, 06, 01),
-                out ldapLearnRefNumber,
-                out outStartDate).Should().BeTrue();
+                out ldapLearnRefNumber).Should().BeTrue();
+            ldapLearnRefNumber.Should().Be(ldapLearnRefNumberExpectedValue);
         }
 
         [Fact]
@@ -186,7 +193,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             string learnRefNumber = "00100309";
             string ldapLearnRefNumber = string.Empty;
-            DateTime? outStartDate = null;
 
             List<TestLearnerDestinationAndProgression> learnerDestinationAndProgression = null;
 
@@ -195,8 +201,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 learnRefNumber,
                 learnerDestinationAndProgression,
                 new DateTime(2018, 06, 01),
-                out ldapLearnRefNumber,
-                out outStartDate).Should().BeTrue();
+                out ldapLearnRefNumber).Should().BeTrue();
+            ldapLearnRefNumber.Should().BeEmpty();
         }
 
         [Fact]
@@ -341,9 +347,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.CompStatus, 5)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, "01/06/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, "00100309")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.OutStartDate, "01/06/2018")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(FundModelConstants.AdultSkills, 5, new DateTime(2018, 06, 01), "00100309", new DateTime(2018, 06, 01));
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(FundModelConstants.AdultSkills, 5, new DateTime(2018, 06, 01), "00100309");
 
             validationErrorHandlerMock.Verify();
         }

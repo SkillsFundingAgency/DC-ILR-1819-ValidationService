@@ -43,20 +43,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 foreach (ILearner learner in message.Learners)
                 {
                     DateTime? learnActEndDateLatest = null;
-                    DateTime? outStartDate = null;
                     string ldapLearnRefNumber = string.Empty;
 
                     if (learner?.LearningDeliveries == null
                         || !FundModelConditionMet(learner.LearningDeliveries)
                         || !AllAimsClosedConditionMet(learner.LearningDeliveries)
                         || !CompStatusConditionMet(learner.LearningDeliveries, out learnActEndDateLatest)
-                        || (!learnActEndDateLatest.HasValue || !FilePreparationDateConditionMet(DateTime.Parse(learnActEndDateLatest?.ToString())))
-                        || (!learnActEndDateLatest.HasValue || !DPOutComeConditionMet(
-                            learner.LearnRefNumber,
-                            message?.LearnerDestinationAndProgressions,
-                            DateTime.Parse(learnActEndDateLatest?.ToString()),
-                            out ldapLearnRefNumber,
-                            out outStartDate)))
+                        || (!learnActEndDateLatest.HasValue
+                            || (!FilePreparationDateConditionMet(learnActEndDateLatest.Value)
+                                || !DPOutComeConditionMet(
+                                    learner.LearnRefNumber,
+                                    message?.LearnerDestinationAndProgressions,
+                                    learnActEndDateLatest.Value,
+                                    out ldapLearnRefNumber))))
                     {
                         continue;
                     }
@@ -72,8 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                                 learningDelivery.FundModel,
                                 learningDelivery.CompStatus,
                                 learningDelivery.LearnActEndDateNullable,
-                                ldapLearnRefNumber,
-                                outStartDate));
+                                ldapLearnRefNumber));
                         }
                     }
                 }
@@ -86,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             learningDeliveries.Any(ld => _fundModels.Contains(ld.FundModel));
 
         public bool AllAimsClosedConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries) =>
-            learningDeliveries.Where(ld => ld.LearnActEndDateNullable.HasValue).Count() == learningDeliveries.Count();
+            learningDeliveries.All(ld => ld.LearnActEndDateNullable.HasValue);
 
         public bool CompStatusConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries, out DateTime? learnActEndDateLatest)
         {
@@ -100,7 +98,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             if (learningDelivery != null)
             {
                 learnActEndDateLatest = learningDelivery.LearnActEndDateNullable;
-                compStatusCondition = learningDelivery.CompStatus != 6;
+                compStatusCondition = learningDelivery.CompStatus != CompStatus.LearnerTemporarilyWithdrawn;
             }
 
             return compStatusCondition;
@@ -113,10 +111,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             string learnRefNumber,
             IEnumerable<ILearnerDestinationAndProgression> lDAPs,
             DateTime learnActEndDateLatest,
-            out string ldapLearnRefNumber,
-            out DateTime? outStartDate)
+            out string ldapLearnRefNumber)
         {
-            outStartDate = null;
             ldapLearnRefNumber = string.Empty;
             bool conditionMet = false;
 
@@ -146,16 +142,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             int fundModel,
             int compStatus,
             DateTime? learnActEndDateNullable,
-            string ldapLearnRefNumber,
-            DateTime? outStartDate)
+            string ldapLearnRefNumber)
         {
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
                 BuildErrorMessageParameter(PropertyNameConstants.CompStatus, compStatus),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDateNullable),
-                BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, ldapLearnRefNumber),
-                BuildErrorMessageParameter(PropertyNameConstants.OutStartDate, outStartDate)
+                BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, ldapLearnRefNumber)
             };
         }
     }
