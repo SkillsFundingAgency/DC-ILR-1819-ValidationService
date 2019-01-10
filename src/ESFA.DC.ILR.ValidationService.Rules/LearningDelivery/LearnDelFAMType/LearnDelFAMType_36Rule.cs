@@ -44,8 +44,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 }
 
                 var exceptionApplies = learningDelivery.LearningDeliveryFAMs
-                    .Any(ldf => ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.LDM)
-                    && ldf.LearnDelFAMCode.CaseInsensitiveEquals(LearningDeliveryFAMCodeConstants.LDM_CareerLearningPilot));
+                    .Any(ldf => ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.LDM) &&
+                                ldf.LearnDelFAMCode.CaseInsensitiveEquals(LearningDeliveryFAMCodeConstants.LDM_CareerLearningPilot));
 
                 if (!exceptionApplies)
                 {
