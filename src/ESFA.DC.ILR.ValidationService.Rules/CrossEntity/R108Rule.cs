@@ -14,10 +14,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
     {
         private readonly HashSet<int> _fundModels = new HashSet<int>()
         {
-            FundModelConstants.CommunityLearning,
-            FundModelConstants.AdultSkills,
-            FundModelConstants.ESF,
-            FundModelConstants.OtherAdult
+            TypeOfFunding.Age16To19ExcludingApprenticeships,
+            TypeOfFunding.AdultSkills,
+            TypeOfFunding.EuropeanSocialFund,
+            TypeOfFunding.OtherAdult
         };
 
         private readonly HashSet<int?> _progTypes = new HashSet<int?>()
