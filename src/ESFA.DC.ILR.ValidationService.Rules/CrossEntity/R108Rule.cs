@@ -98,7 +98,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             if (learningDelivery != null)
             {
                 learnActEndDateLatest = learningDelivery.LearnActEndDateNullable;
-                compStatusCondition = learningDelivery.CompStatus != CompStatus.LearnerTemporarilyWithdrawn;
+                compStatusCondition = learningDelivery.CompStatus != CompletionState.HasTemporarilyWithdrawn;
             }
 
             return compStatusCondition;

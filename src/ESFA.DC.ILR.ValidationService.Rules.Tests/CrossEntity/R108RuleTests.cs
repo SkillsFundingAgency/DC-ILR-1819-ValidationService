@@ -93,8 +93,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
             {
-                new TestLearningDelivery() { LearnActEndDateNullable = null, CompStatus = 5 },
-                new TestLearningDelivery() { LearnActEndDateNullable = learnActEndDateExpected, CompStatus = 6 }
+                new TestLearningDelivery() { LearnActEndDateNullable = null, CompStatus = CompletionState.IsOngoing },
+                new TestLearningDelivery() { LearnActEndDateNullable = learnActEndDateExpected, CompStatus = CompletionState.HasTemporarilyWithdrawn }
             };
             NewRule().CompStatusConditionMet(learningDeliveries, out learnActEndDate).Should().BeFalse();
             learnActEndDate.Should().Be(learnActEndDateExpected);
@@ -108,7 +108,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
             {
-                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2017, 05, 02), CompStatus = 5 },
+                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2017, 05, 02), CompStatus = CompletionState.IsOngoing },
                 new TestLearningDelivery() { LearnActEndDateNullable = learnActEndDateExpected }
             };
             NewRule().CompStatusConditionMet(learningDeliveries, out learnActEndDate).Should().BeTrue();
@@ -220,14 +220,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             ProgTypeNullable = 24,
                             FundModel = TypeOfFunding.AdultSkills,
                             LearnActEndDateNullable = new DateTime(2017, 05, 01),
-                            CompStatus = 7
+                            CompStatus = CompletionState.IsOngoing
                         },
                         new TestLearningDelivery()
                         {
                             ProgTypeNullable = null,
                             FundModel = TypeOfFunding.EuropeanSocialFund,
                             LearnActEndDateNullable = new DateTime(2018, 06, 01),
-                            CompStatus = 8
+                            CompStatus = CompletionState.HasCompleted
                         }
                     }
                 },
@@ -241,14 +241,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             ProgTypeNullable = 12,
                             FundModel = TypeOfFunding.AdultSkills,
                             LearnActEndDateNullable = new DateTime(2017, 05, 01),
-                            CompStatus = 7
+                            CompStatus = CompletionState.IsOngoing
                         },
                         new TestLearningDelivery()
                         {
                             ProgTypeNullable = null,
                             FundModel = TypeOfFunding.EuropeanSocialFund,
                             LearnActEndDateNullable = new DateTime(2018, 06, 01),
-                            CompStatus = 8
+                            CompStatus = CompletionState.HasCompleted
                         }
                     }
                 }
@@ -298,14 +298,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         ProgTypeNullable = 24,
                         FundModel = TypeOfFunding.NotFundedByESFA,
                         LearnActEndDateNullable = null,
-                        CompStatus = 5
+                        CompStatus = CompletionState.HasCompleted
                     },
                     new TestLearningDelivery()
                     {
                         ProgTypeNullable = 25,
                         FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                         LearnActEndDateNullable = new DateTime(2018, 06, 01),
-                        CompStatus = 6
+                        CompStatus = CompletionState.HasTemporarilyWithdrawn
                     }
                 }
             };
@@ -344,11 +344,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.CompStatus, 5)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.CompStatus, CompletionState.HasTemporarilyWithdrawn)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, "01/06/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, "00100309")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(TypeOfFunding.AdultSkills, 5, new DateTime(2018, 06, 01), "00100309");
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(TypeOfFunding.AdultSkills, CompletionState.HasTemporarilyWithdrawn, new DateTime(2018, 06, 01), "00100309");
 
             validationErrorHandlerMock.Verify();
         }
