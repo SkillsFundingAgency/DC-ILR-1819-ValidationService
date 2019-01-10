@@ -142,6 +142,7 @@
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(ContPrefType_02Rule),
+                typeof(ContPrefType_05Rule),
                 typeof(ContPrefType_06Rule),
                 typeof(ContPrefType_07Rule),
                 typeof(DateEmpStatApp_01Rule),
