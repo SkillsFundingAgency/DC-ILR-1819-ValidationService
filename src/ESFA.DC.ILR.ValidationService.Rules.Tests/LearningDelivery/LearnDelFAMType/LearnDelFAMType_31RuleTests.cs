@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -40,6 +41,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
                             },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            }
+                        }
+                    },
+                    new TestLearningDelivery
+                    {
+                        LearningDeliveryFAMs = new List<ILearningDeliveryFAM>
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            }
+                        }
+                    },
+                    new TestLearningDelivery
+                    {
+                        LearningDeliveryFAMs = new List<ILearningDeliveryFAM>
+                        {
                             new TestLearningDeliveryFAM
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
@@ -106,6 +139,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
                             },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
+                            }
+                        }
+                    },
+                    new TestLearningDelivery
+                    {
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                        {
                             new TestLearningDeliveryFAM
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM
