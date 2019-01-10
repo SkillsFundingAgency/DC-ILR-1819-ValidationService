@@ -10,6 +10,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
     public class LearnDelFAMType_31Rule : AbstractRule, IRule<ILearner>
     {
+        private const int MaxNumberOfLdmFamTypes = 4;
+
         public LearnDelFAMType_31Rule(
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_31)
@@ -29,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
             foreach (var learningDelivery in learner.LearningDeliveries)
             {
-                if (learningDelivery.LearningDeliveryFAMs == null || learningDelivery.LearningDeliveryHEEntity != null)
+                if (learningDelivery.LearningDeliveryFAMs == null)
                 {
                     continue;
                 }
@@ -37,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 var count = learningDelivery.LearningDeliveryFAMs
                     .Count(ldf => ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.LDM));
 
-                if (count > 4)
+                if (count > MaxNumberOfLdmFamTypes)
                 {
                     RaiseValidationMessage(learner.LearnRefNumber, learningDelivery);
                 }
