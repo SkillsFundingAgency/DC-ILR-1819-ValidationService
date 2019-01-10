@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
     public class LearnDelFAMType_14Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { FundModelConstants.AdultSkills, FundModelConstants.Apprenticeships, FundModelConstants.OtherAdult };
+        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { TypeOfFunding.AdultSkills, TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfFunding.OtherAdult };
 
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
         private readonly IDD07 _dd07;

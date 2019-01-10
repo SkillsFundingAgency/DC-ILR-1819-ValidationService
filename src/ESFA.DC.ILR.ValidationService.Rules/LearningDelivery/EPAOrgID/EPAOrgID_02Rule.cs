@@ -64,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EPAOrgID
         ///   <c>true</c> if [is assessment price] [the specified record]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsAssessmentPrice(IAppFinRecord record) =>
-            It.IsInRange($"{record.AFinType}{record.AFinCode}", ApprenticeshipFinanicalRecord.TotalAssessmentPrice, ApprenticeshipFinanicalRecord.ResidualAssessmentPrice);
+            It.IsInRange($"{record.AFinType}{record.AFinCode}", ApprenticeshipFinancialRecord.TotalAssessmentPrice, ApprenticeshipFinancialRecord.ResidualAssessmentPrice);
 
         /// <summary>
         /// Determines whether [has assessment price] [the specified delivery].

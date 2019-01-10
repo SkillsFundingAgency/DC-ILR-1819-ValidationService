@@ -26,12 +26,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         [Fact]
         public void FundModelConditionMet_False()
         {
-            NewRule().FundModelConditionMet(FundModelConstants.Apprenticeships).Should().BeFalse();
+            NewRule().FundModelConditionMet(TypeOfFunding.ApprenticeshipsFrom1May2017).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills)]
-        [InlineData(FundModelConstants.OtherAdult)]
+        [InlineData(TypeOfFunding.AdultSkills)]
+        [InlineData(TypeOfFunding.OtherAdult)]
         public void FundModelConditionMet_True(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
@@ -181,11 +181,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(FundModelConstants.Apprenticeships, null, "2016-12-01", null, 2, null, null)]
-        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", null, 3, null, null)]
-        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", 25, 3, null, null)]
-        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", 25, 3, "2016-10-01", null)]
-        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", 25, 3, "2016-10-01", 3)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, null, "2016-12-01", null, 2, null, null)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, "2002-05-01", "2016-12-01", null, 3, null, null)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, "2002-05-01", "2016-12-01", 25, 3, null, null)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, "2002-05-01", "2016-12-01", 25, 3, "2016-10-01", null)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, "2002-05-01", "2016-12-01", 25, 3, "2016-10-01", 3)]
         public void ConditionMet_False(
             int fundModel,
             string dateOfBirthString,
@@ -221,8 +221,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills, "1994-01-01", "2016-12-01", 23, 1, "2017-03-01", 1)]
-        [InlineData(FundModelConstants.OtherAdult, "1994-05-01", "2016-12-01", 23, 1, "2017-03-01", 1)]
+        [InlineData(TypeOfFunding.AdultSkills, "1994-01-01", "2016-12-01", 23, 1, "2017-03-01", 1)]
+        [InlineData(TypeOfFunding.OtherAdult, "1994-05-01", "2016-12-01", 23, 1, "2017-03-01", 1)]
         public void ConditionMet_True(
             int fundModel,
             string dateOfBirthString,
@@ -276,7 +276,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                         AimType = 1,
                         LearnStartDate = new DateTime(2016, 06, 01),
                         LearnActEndDateNullable = new DateTime(2016, 09, 01),
-                        FundModel = FundModelConstants.AdultSkills,
+                        FundModel = TypeOfFunding.AdultSkills,
                         OutcomeNullable = 1,
                         ProgTypeNullable = 23,
                         LearningDeliveryFAMs = learningDeliveryFAMs.ToList()
@@ -322,7 +322,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                         AimType = 1,
                         LearnStartDate = new DateTime(2016, 06, 01),
                         LearnActEndDateNullable = new DateTime(2018, 01, 01),
-                        FundModel = FundModelConstants.Apprenticeships,
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                         OutcomeNullable = 2,
                         ProgTypeNullable = 25,
                         LearningDeliveryFAMs = learningDeliveryFAMs.ToList()
@@ -356,7 +356,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, "01/01/2001")).Verifiable();
             validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.AimType, 1)).Verifiable();
             validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, "01/06/2011")).Verifiable();
-            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.FundModel, FundModelConstants.AdultSkills)).Verifiable();
+            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills)).Verifiable();
             validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.ProgType, 25)).Verifiable();
             validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, "01/06/2017")).Verifiable();
             validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.Outcome, 1)).Verifiable();
@@ -366,7 +366,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 new DateTime(2001, 01, 01),
                 1,
                 new DateTime(2011, 06, 01),
-                FundModelConstants.AdultSkills,
+                TypeOfFunding.AdultSkills,
                 25,
                 new DateTime(2017, 06, 01),
                 1,
