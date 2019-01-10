@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void ValidationPasses_DuplicateTempUln()
+        public void Validate_Pass_DuplicateTempUln()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
             var testMessage = new TestMessage()
@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void ValidationPasses()
+        public void Validate_Pass()
         {
             var testMessage = new TestMessage()
             {
@@ -75,7 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void ValidationFails()
+        public void Validate_Fail()
         {
             var testMessage = new TestMessage()
             {
