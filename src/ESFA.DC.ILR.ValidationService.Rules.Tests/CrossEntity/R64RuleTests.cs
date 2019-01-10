@@ -406,29 +406,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             validationErrorHandlerMock.Verify();
         }
 
-        //private ILearningDelivery BuildLearningDelivery(
-        //    string learnAimRef = null,
-        //    int? aimType = null,
-        //    int fundModel = 35,
-        //    int? frameworkCode = null,
-        //    int? standardCode = null,
-        //    int? pwayCode = null,
-        //    int? progType = null,
-        //    DateTime? learnStartDateTime = null)
-        //{
-        //    return new TestLearningDelivery()
-        //    {
-        //        LearnAimRef = learnAimRef,
-        //        AimType = aimType ?? TypeOfAim.ComponentAimInAProgramme,
-        //        FundModel = fundModel,
-        //        ProgTypeNullable = progType,
-        //        FworkCodeNullable = frameworkCode,
-        //        PwayCodeNullable = pwayCode,
-        //        StdCodeNullable = standardCode,
-        //        LearnStartDate = learnStartDateTime ?? DateTime.MinValue
-        //    };
-        //}
-
         private R64Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILARSDataService larsDataService = null)
         {
             return new R64Rule(larsDataService, validationErrorHandler);
