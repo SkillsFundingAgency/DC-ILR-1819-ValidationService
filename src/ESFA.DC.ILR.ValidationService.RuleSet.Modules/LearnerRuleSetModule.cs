@@ -296,6 +296,7 @@
                 typeof(LearnDelFAMType_44Rule),
                 typeof(LearnDelFAMType_45Rule),
                 typeof(LearnDelFAMType_48Rule),
+                typeof(LearnDelFAMType_50Rule),
                 typeof(LearnDelFAMType_53Rule),
                 typeof(LearnDelFAMType_54Rule),
                 typeof(LearnDelFAMType_60Rule),
