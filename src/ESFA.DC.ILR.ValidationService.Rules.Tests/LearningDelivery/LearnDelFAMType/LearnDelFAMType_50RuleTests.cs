@@ -23,6 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         public void ValidationPasses_IrrelevantFundModel()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+            const int fictitiousFundModel = 1;
 
             var testLearner = new TestLearner
             {
@@ -30,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery
                     {
-                        FundModel = 1,
+                        FundModel = fictitiousFundModel,
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
                             new TestLearningDeliveryFAM
@@ -47,11 +48,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(25)]
-        [InlineData(82)]
-        [InlineData(10)]
-        [InlineData(70)]
-        [InlineData(99)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships)]
+        [InlineData(TypeOfFunding.Other16To19)]
+        [InlineData(TypeOfFunding.CommunityLearning)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund)]
+        [InlineData(TypeOfFunding.NotFundedByESFA)]
         public void ValidationPassesIrrelevantFamType(int fundModel)
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
@@ -107,11 +108,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(25)]
-        [InlineData(82)]
-        [InlineData(10)]
-        [InlineData(70)]
-        [InlineData(99)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships)]
+        [InlineData(TypeOfFunding.Other16To19)]
+        [InlineData(TypeOfFunding.CommunityLearning)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund)]
+        [InlineData(TypeOfFunding.NotFundedByESFA)]
         public void ValidationFails(int fundModel)
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
