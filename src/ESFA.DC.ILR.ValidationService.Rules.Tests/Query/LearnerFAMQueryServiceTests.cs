@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
 using Moq;
@@ -106,6 +107,56 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             var learnerFams = SetupLearnerFams();
 
             NewService().HasAnyLearnerFAMTypes(learnerFams, null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void GetLearningFAMsCountByFAMType_CountCheckForFound()
+        {
+            var testLearningFAMs = new TestLearnerFAM[]
+                {
+                    new TestLearnerFAM
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.EHC
+                    },
+                    new TestLearnerFAM
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.EHC
+                    },
+                    new TestLearnerFAM
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.DLA
+                    },
+                };
+
+            NewService().GetLearnerFAMsCountByFAMType(testLearningFAMs, LearnerFAMTypeConstants.EHC).Should().Be(2);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_CountCheckForNotFound()
+        {
+            var testLearningFAMs = new TestLearnerFAM[]
+            {
+                new TestLearnerFAM
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.EHC
+                },
+                new TestLearnerFAM
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.HNS
+                },
+                new TestLearnerFAM
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.DLA
+                },
+            };
+
+            NewService().GetLearnerFAMsCountByFAMType(testLearningFAMs, LearnerFAMTypeConstants.FME).Should().Be(0);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_NullCheck()
+        {
+            NewService().GetLearnerFAMsCountByFAMType(null, LearnerFAMTypeConstants.FME).Should().Be(0);
         }
 
         private ILearnerFAM[] SetupLearnerFams()
