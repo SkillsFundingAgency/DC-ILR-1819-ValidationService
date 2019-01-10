@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDat
 
         public bool ConditionMet(string learnAimRef, int fundModel)
         {
-            return string.Equals(learnAimRef, TypeOfAim.References.IndustryPlacement, StringComparison.OrdinalIgnoreCase) && fundModel != FundModelConstants.CommunityLearning;
+            return string.Equals(learnAimRef, TypeOfAim.References.IndustryPlacement, StringComparison.OrdinalIgnoreCase) && fundModel != TypeOfFunding.Age16To19ExcludingApprenticeships;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)
