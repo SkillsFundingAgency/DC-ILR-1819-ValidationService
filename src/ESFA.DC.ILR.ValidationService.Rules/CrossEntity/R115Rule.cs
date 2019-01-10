@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -24,10 +23,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             : base(validationErrorHandler, RuleNameConstants.R115)
         {
         }
-
-        //There is more than one financial record with the same combination of AFinType, AFinCode and AFinDate
-        //    across all programme aims(AimType = 1) with the same combination of ProgType, FworkCode and PwayCode
-        //where(FundModel = 36 and ProgType = 2, 3, 20, 21, 22, 23)
 
         public void Validate(ILearner learner)
         {
