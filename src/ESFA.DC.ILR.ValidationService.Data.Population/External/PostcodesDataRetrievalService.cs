@@ -47,20 +47,22 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public async Task<IEnumerable<string>> RetrieveAsync(CancellationToken cancellationToken)
         {
-            var uniquePostcodes = UniquePostcodesFromMessage(_messageCache.Item).ToCaseInsensitiveHashSet();
-            List<string> result = new List<string>(uniquePostcodes.Count());
+            var matchingPostcodes = new List<string>();
 
-            var postcodeShards = uniquePostcodes.SplitList(5000);
+            var postcodeShards = UniquePostcodesFromMessage(_messageCache.Item)
+                .SplitList(5000)
+                .Select(p => p.ToCaseInsensitiveHashSet());
+
             foreach (var shard in postcodeShards)
             {
-                result.AddRange(
+                matchingPostcodes.AddRange(
                     await _postcodes.MasterPostcodes
                 .Where(p => shard.Contains(p.Postcode))
                 .Select(p => p.Postcode)
                 .ToListAsync(cancellationToken));
             }
 
-            return result;
+            return matchingPostcodes;
         }
 
         /// <summary>

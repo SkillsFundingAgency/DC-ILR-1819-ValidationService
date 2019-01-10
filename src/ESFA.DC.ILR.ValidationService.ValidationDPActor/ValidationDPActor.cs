@@ -101,7 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationDPActor
                 externalDataCache = new ExternalDataCache
                 {
                     ULNs = externalDataCacheGet.ULNs,
-                    ValidationErrors = ((IDictionary<string, ValidationError>)externalDataCacheGet.ValidationErrors).ToCaseInsensitiveDictionary()
+                    ValidationErrors = externalDataCacheGet.ValidationErrors.ToCaseInsensitiveDictionary()
                 };
 
                 validationContext = new ValidationContext

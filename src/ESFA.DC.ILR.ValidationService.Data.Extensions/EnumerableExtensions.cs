@@ -9,9 +9,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Extensions
 {
     public static class EnumerableExtensions
     {
-        public static HashSet<T> ToCaseInsensitiveHashSet<T>(this IEnumerable<T> source)
+        public static HashSet<string> ToCaseInsensitiveHashSet(this IEnumerable<string> source)
         {
-            return new HashSet<T>(source, StringComparer.OrdinalIgnoreCase as IEqualityComparer<T>);
+            return new HashSet<string>(source, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -21,19 +21,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Extensions
         /// <typeparam name="TValue">The type of value.</typeparam>
         /// <param name="source">The source.</param>
         /// <returns>a case insensitive readonly dictionary</returns>
-        public static IReadOnlyDictionary<string, TValue> AsCIReadOnlyDictionary<TValue>(this IReadOnlyDictionary<string, TValue> source)
+        public static IReadOnlyDictionary<string, TValue> ToCaseInsensitiveDictionary<TValue>(this IReadOnlyDictionary<string, TValue> source)
         {
             if (source == null)
             {
                 return new Dictionary<string, TValue>(StringComparer.OrdinalIgnoreCase);
             }
 
-            return new Dictionary<string, TValue>(source.ToDictionary(kvp => kvp.Key, kvp => kvp.Value), StringComparer.OrdinalIgnoreCase);
-        }
-
-        public static Dictionary<string, TValue> ToCaseInsensitiveDictionary<TValue>(this IDictionary<string, TValue> dictionary)
-        {
-            return new Dictionary<string, TValue>(dictionary, StringComparer.OrdinalIgnoreCase);
+            return source.ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase);
         }
 
         public static Dictionary<string, TValue> ToCaseInsensitiveDictionary<TValue, TInput>(this IEnumerable<TInput> enumerable, Func<TInput, string> keySelector, Func<TInput, TValue> valueSelector)
@@ -52,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Extensions
 
             for (var i = 0; i < l.Count; i += nSize)
             {
-                yield return l.GetRange(i, Math.Min(nSize, l.Count - i)).ToCaseInsensitiveHashSet();
+                yield return l.GetRange(i, Math.Min(nSize, l.Count - i));
             }
         }
     }
