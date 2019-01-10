@@ -359,10 +359,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [InlineData("2018-07-01", "2014-07-12", "2018-08-30", "2018-07-16", "2014-05-11", "2014-07-12")]
         [InlineData("2016-11-17", "2016-11-17", "2016-11-17")]
         [InlineData("2016-11-17", "2016-11-17", "2016-11-07", "2016-11-18", "2016-11-17")]
-        public void GetQualifyingEmploymentStatusMeetsExpectation(string candidate, string expectation, params string[] starts)
+        public void GetEmploymentStatusOnMeetsExpectation(string candidate, string expectation, params string[] starts)
         {
             // arrange
             var sut = NewService();
+            var learnDate = DateTime.Parse(candidate);
             var expectedDate = DateTime.Parse(expectation);
 
             var employments = Collection.Empty<ILearnerEmploymentStatus>();
@@ -377,18 +378,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 employments.Add(mockItem.Object);
             });
 
-            var learner = new Mock<ILearner>();
-            learner
-                .SetupGet(x => x.LearnerEmploymentStatuses)
-                .Returns(employments.AsSafeReadOnlyList());
-
-            var delivery = new Mock<ILearningDelivery>();
-            delivery
-                .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse(candidate));
-
             // act
-            var result = sut.GetQualifyingEmploymentStatus(learner.Object, delivery.Object);
+            var result = sut.GetEmploymentStatusOn(learnDate, employments.AsSafeReadOnlyList());
 
             // assert
             Assert.Equal(expectedDate, result.DateEmpStatApp);
