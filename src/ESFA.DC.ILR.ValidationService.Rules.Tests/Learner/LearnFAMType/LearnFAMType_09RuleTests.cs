@@ -21,6 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         }
 
         [Theory]
+        [InlineData(LearnerFAMTypeConstants.HNS, 0, false)]
         [InlineData(LearnerFAMTypeConstants.HNS, 1, false)]
         [InlineData(LearnerFAMTypeConstants.EHC, 1, false)]
         [InlineData(LearnerFAMTypeConstants.DLA, 1, false)]
@@ -70,6 +71,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
                 .Returns(2);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(learnerFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_WtihNoLearnerFAMS_Returns_NoError()
+        {
+            var learner = new TestLearner();
+
+            var learnerFAMQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+            learnerFAMQueryServiceMock
+                .Setup(x => x.GetLearnerFAMsCountByFAMType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>()))
+                .Returns(1);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(learnerFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
