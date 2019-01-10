@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 
         public int GetLearnerFAMsCountByFAMType(IEnumerable<ILearnerFAM> learnerFaMs, string famType)
         {
-            return learnerFaMs?.Where(d => d.LearnFAMType == famType).Count() ?? 0;
+            return learnerFaMs?.Count(d => d.LearnFAMType == famType) ?? 0;
         }
     }
 }
