@@ -10,7 +10,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
     public class LearnDelFAMType_50Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly int[] _fundModels = { 25, 82, 10, 70, 99 };
+        private readonly int[] _fundModels =
+        {
+            TypeOfFunding.Age16To19ExcludingApprenticeships,
+            TypeOfFunding.Other16To19,
+            TypeOfFunding.CommunityLearning,
+            TypeOfFunding.EuropeanSocialFund,
+            TypeOfFunding.NotFundedByESFA
+        };
 
         public LearnDelFAMType_50Rule(
             IValidationErrorHandler validationErrorHandler)
