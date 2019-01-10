@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ConRefNumber
 
         public virtual bool FundModelConditionMet(int fundModel)
         {
-            return fundModel == FundModelConstants.ESF;
+            return fundModel == TypeOfFunding.EuropeanSocialFund;
         }
 
         public virtual bool ConRefNumberConditionMet(string conRefNumber)

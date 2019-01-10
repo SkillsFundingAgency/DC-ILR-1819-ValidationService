@@ -13,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
     public class EmpStat_08Rule : AbstractRule, IRule<ILearner>
     {
         private readonly DateTime _augustFirst2014 = new DateTime(2014, 08, 01);
-        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { FundModelConstants.AdultSkills, FundModelConstants.OtherAdult, FundModelConstants.NonFunded };
+        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { TypeOfFunding.AdultSkills, TypeOfFunding.OtherAdult, TypeOfFunding.NotFundedByESFA };
 
         private readonly IDD07 _dd07;
         private readonly IDateTimeQueryService _dateTimeQueryService;

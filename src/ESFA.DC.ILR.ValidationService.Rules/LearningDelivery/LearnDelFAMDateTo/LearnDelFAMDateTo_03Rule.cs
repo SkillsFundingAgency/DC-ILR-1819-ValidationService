@@ -12,10 +12,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo
     {
         private readonly IEnumerable<int> _fundModels = new HashSet<int>()
         {
-            FundModelConstants.Apprenticeships,
-            FundModelConstants.AdultSkills,
-            FundModelConstants.OtherAdult,
-            FundModelConstants.NonFunded,
+            TypeOfFunding.ApprenticeshipsFrom1May2017,
+            TypeOfFunding.AdultSkills,
+            TypeOfFunding.OtherAdult,
+            TypeOfFunding.NotFundedByESFA,
         };
 
         public LearnDelFAMDateTo_03Rule(IValidationErrorHandler validationErrorHandler)

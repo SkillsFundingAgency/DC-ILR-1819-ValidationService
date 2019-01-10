@@ -38,15 +38,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanLearnHours
 
         [Theory]
         [InlineData(0)]
-        [InlineData(FundModelConstants.Apprenticeships)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017)]
         public void FundModelConditionMet_False(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(FundModelConstants.CommunityLearning)]
-        [InlineData(FundModelConstants.SixteenToNineteen)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships)]
+        [InlineData(TypeOfFunding.Other16To19)]
         public void FundModelConditionMet_True(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
@@ -54,15 +54,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanLearnHours
 
         [Theory]
         [InlineData(0)]
-        [InlineData(FundModelConstants.Apprenticeships)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017)]
         public void ConditionMet_False(int fundModel)
         {
             NewRule().ConditionMet(fundModel).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(FundModelConstants.CommunityLearning)]
-        [InlineData(FundModelConstants.SixteenToNineteen)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships)]
+        [InlineData(TypeOfFunding.Other16To19)]
         public void ConditionMet_True(int fundModel)
         {
             NewRule().ConditionMet(fundModel).Should().BeTrue();
@@ -79,11 +79,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanLearnHours
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = FundModelConstants.SixteenToNineteen
+                        FundModel = TypeOfFunding.Other16To19
                     },
                     new TestLearningDelivery()
                     {
-                        FundModel = FundModelConstants.CommunityLearning
+                        FundModel = TypeOfFunding.Age16To19ExcludingApprenticeships
                     }
                 }
             };
@@ -105,7 +105,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanLearnHours
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = FundModelConstants.AdultSkills
+                        FundModel = TypeOfFunding.AdultSkills
                     },
                     new TestLearningDelivery()
                     {

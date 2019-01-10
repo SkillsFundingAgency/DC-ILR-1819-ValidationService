@@ -38,8 +38,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(FundModelConstants.NonFunded)]
-        [InlineData(FundModelConstants.Apprenticeships)]
+        [InlineData(TypeOfFunding.NotFundedByESFA)]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017)]
         public void FundModelConditionMet_False(int fundModel)
         {
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
@@ -50,10 +50,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(FundModelConstants.CommunityLearning)]
-        [InlineData(FundModelConstants.AdultSkills)]
-        [InlineData(FundModelConstants.ESF)]
-        [InlineData(FundModelConstants.OtherAdult)]
+        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships)]
+        [InlineData(TypeOfFunding.AdultSkills)]
+        [InlineData(TypeOfFunding.EuropeanSocialFund)]
+        [InlineData(TypeOfFunding.OtherAdult)]
         public void FundModelConditionMet_True(int fundModel)
         {
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
@@ -296,14 +296,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         ProgTypeNullable = 24,
-                        FundModel = FundModelConstants.NonFunded,
+                        FundModel = TypeOfFunding.NotFundedByESFA,
                         LearnActEndDateNullable = null,
                         CompStatus = 5
                     },
                     new TestLearningDelivery()
                     {
                         ProgTypeNullable = 25,
-                        FundModel = FundModelConstants.Apprenticeships,
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                         LearnActEndDateNullable = new DateTime(2018, 06, 01),
                         CompStatus = 6
                     }

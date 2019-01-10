@@ -109,13 +109,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EPAOrgID
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(ApprenticeshipFinanicalRecord.AssessmentPayment, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.EmployerPaymentReimbursedByProvider, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.ResidualAssessmentPrice, true)]
-        [InlineData(ApprenticeshipFinanicalRecord.ResidualTrainingPrice, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.TotalAssessmentPrice, true)]
-        [InlineData(ApprenticeshipFinanicalRecord.TotalTrainingPrice, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.TrainingPayment, false)]
+        [InlineData(ApprenticeshipFinancialRecord.AssessmentPayment, false)]
+        [InlineData(ApprenticeshipFinancialRecord.EmployerPaymentReimbursedByProvider, false)]
+        [InlineData(ApprenticeshipFinancialRecord.ResidualAssessmentPrice, true)]
+        [InlineData(ApprenticeshipFinancialRecord.ResidualTrainingPrice, false)]
+        [InlineData(ApprenticeshipFinancialRecord.TotalAssessmentPrice, true)]
+        [InlineData(ApprenticeshipFinancialRecord.TotalTrainingPrice, false)]
+        [InlineData(ApprenticeshipFinancialRecord.TrainingPayment, false)]
         [InlineData("NOT1", false)]
         public void IsAssessmentPriceMeetsExpectation(string candidate, bool expectation)
         {
@@ -179,10 +179,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EPAOrgID
         /// <param name="financeType">Type of the finance.</param>
         /// <param name="epaOrgID">The epa org identifier.</param>
         [Theory]
-        [InlineData(ApprenticeshipFinanicalRecord.ResidualAssessmentPrice, null)]
-        [InlineData(ApprenticeshipFinanicalRecord.TotalAssessmentPrice, null)]
-        [InlineData(ApprenticeshipFinanicalRecord.ResidualAssessmentPrice, "EPA0003")]
-        [InlineData(ApprenticeshipFinanicalRecord.TotalAssessmentPrice, "EPA0004")]
+        [InlineData(ApprenticeshipFinancialRecord.ResidualAssessmentPrice, null)]
+        [InlineData(ApprenticeshipFinancialRecord.TotalAssessmentPrice, null)]
+        [InlineData(ApprenticeshipFinancialRecord.ResidualAssessmentPrice, "EPA0003")]
+        [InlineData(ApprenticeshipFinancialRecord.TotalAssessmentPrice, "EPA0004")]
         public void InvalidItemRaisesValidationMessage(string financeType, string epaOrgID)
         {
             // arrange
@@ -253,13 +253,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EPAOrgID
         /// <param name="epaOrgID">The epa org identifier.</param>
         /// <param name="isKnownRequired">if set to <c>true</c> [is known required].</param>
         [Theory]
-        [InlineData(ApprenticeshipFinanicalRecord.AssessmentPayment, "EPA0001", false)]
-        [InlineData(ApprenticeshipFinanicalRecord.EmployerPaymentReimbursedByProvider, "EPA0002", false)]
-        [InlineData(ApprenticeshipFinanicalRecord.ResidualAssessmentPrice, "EPA0003", true)]
-        [InlineData(ApprenticeshipFinanicalRecord.ResidualTrainingPrice, "EPA0004", false)]
-        [InlineData(ApprenticeshipFinanicalRecord.TotalAssessmentPrice, "EPA0005", true)]
-        [InlineData(ApprenticeshipFinanicalRecord.TotalTrainingPrice, "EPA0006", false)]
-        [InlineData(ApprenticeshipFinanicalRecord.TrainingPayment, "EPA0007", false)]
+        [InlineData(ApprenticeshipFinancialRecord.AssessmentPayment, "EPA0001", false)]
+        [InlineData(ApprenticeshipFinancialRecord.EmployerPaymentReimbursedByProvider, "EPA0002", false)]
+        [InlineData(ApprenticeshipFinancialRecord.ResidualAssessmentPrice, "EPA0003", true)]
+        [InlineData(ApprenticeshipFinancialRecord.ResidualTrainingPrice, "EPA0004", false)]
+        [InlineData(ApprenticeshipFinancialRecord.TotalAssessmentPrice, "EPA0005", true)]
+        [InlineData(ApprenticeshipFinancialRecord.TotalTrainingPrice, "EPA0006", false)]
+        [InlineData(ApprenticeshipFinancialRecord.TrainingPayment, "EPA0007", false)]
         [InlineData("NOT1", "EPA0008", false)]
         public void ValidItemDoesNotRaiseAValidationMessage(string financeType, string epaOrgID, bool isKnownRequired)
         {

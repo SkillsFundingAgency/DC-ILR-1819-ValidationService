@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EPAOrgID
 
             return !string.IsNullOrWhiteSpace(epaOrgID)
                 && !_learningDeliveryAppFinRecordQueryService
-                       .HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, appFinCodes);
+                       .HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, appFinCodes);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string epaOrgID)
