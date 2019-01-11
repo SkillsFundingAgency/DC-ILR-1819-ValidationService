@@ -122,9 +122,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void Validate_False_NullLearningDelivery()
+        public void Validate_True_NullLearningDelivery()
         {
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(new TestLearner());
             }
@@ -240,7 +240,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
         public R61Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new R61Rule(validationErrorHandler: validationErrorHandler);
+            return new R61Rule(validationErrorHandler);
         }
     }
 }
