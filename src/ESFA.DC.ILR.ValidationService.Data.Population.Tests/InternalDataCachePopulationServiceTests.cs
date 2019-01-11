@@ -102,6 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         /// <returns>a task</returns>
         [Theory]
         [InlineData(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, 2)]
+        [InlineData(LookupCodedKeyDictionary.LearnerFAM, 11)]
         public async Task CodedDictionaryLookupsArePresentAndMatchExpectedCount(LookupCodedKeyDictionary thisKey, int expectedCount)
         {
             // arrange
