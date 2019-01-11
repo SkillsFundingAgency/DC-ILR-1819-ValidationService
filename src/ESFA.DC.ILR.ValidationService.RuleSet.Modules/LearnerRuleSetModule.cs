@@ -316,6 +316,7 @@
                 typeof(LearningDeliveryHE_07Rule),
                 typeof(LearningDeliveryHE_08Rule),
                 typeof(LearnerHE_02Rule),
+                typeof(LearnFAMType_01Rule),
                 typeof(LearnFAMType_09Rule),
                 typeof(LearnFAMType_16Rule),
                 typeof(LearnStartDate_02Rule),

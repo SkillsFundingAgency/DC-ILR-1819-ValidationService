@@ -204,6 +204,7 @@
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
         public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
+        public const string LearnFAMType_01 = "LearnFAMType_01";
         public const string LearnFAMType_09 = "LearnFAMType_09";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
