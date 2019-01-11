@@ -145,7 +145,7 @@
     <Compile Include="Derived\DerivedData_28RuleTests.cs" />
     <Compile Include="Derived\DerivedData_29RuleTests.cs" />
     <Compile Include="Derived\DerivedData_21RuleTests.cs" />
-    <Compile Include="Derived\DD01Tests.cs" />
+    <Compile Include="Derived\DeriveData_01RuleTests.cs" />
     <Compile Include="Derived\DD04Tests.cs" />
     <Compile Include="Derived\DD06Tests.cs" />
     <Compile Include="Derived\DD07Tests.cs" />

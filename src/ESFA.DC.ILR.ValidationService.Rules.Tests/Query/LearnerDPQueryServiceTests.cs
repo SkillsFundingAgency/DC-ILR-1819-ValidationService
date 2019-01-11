@@ -13,36 +13,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
     public class LearnerDPQueryServiceTests
     {
         [Fact]
-        public void HasAnyLearnerFAMCodesForType_True()
-        {
-            var learnerDPs = SetupLearnerDPs();
-
-            NewService().HasULNForLearnRefNumber("Learner1", 9999999999, learnerDPs[0]).Should().BeTrue();
-        }
-
-        [Fact]
-        public void HasAnyLearnerFAMCodesForType_False()
-        {
-            var learnerDPs = SetupLearnerDPs();
-
-            NewService().HasULNForLearnRefNumber("Learner1", 1000000000, learnerDPs[0]).Should().BeFalse();
-        }
-
-        [Fact]
-        public void HasAnyLearnerFAMCodesForType_False_MisMatch()
-        {
-            var learnerDPs = SetupLearnerDPs();
-
-            NewService().HasULNForLearnRefNumber("Learner3", 1000000000, learnerDPs[0]).Should().BeFalse();
-        }
-
-        [Fact]
-        public void HasAnyLearnerFAMCodesForType_False_Null()
-        {
-            NewService().HasULNForLearnRefNumber("Learner1", 9999999998, null).Should().BeFalse();
-        }
-
-        [Fact]
         public void OutTypesForStartDate()
         {
             var outTypes = new List<string>
