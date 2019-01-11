@@ -1,12 +1,13 @@
-﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Abstract;
-using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using System;
-using System.Collections.Generic;
-
-namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate
+﻿namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate
 {
+    using System;
+    using System.Collections.Generic;
+    using ESFA.DC.ILR.Model.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.Extensions;
+    using ESFA.DC.ILR.ValidationService.Interface;
+    using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+    using ESFA.DC.ILR.ValidationService.Rules.Constants;
+
     public class WorkPlaceStartDate_04Rule : AbstractRule, IRule<ILearner>
     {
         public WorkPlaceStartDate_04Rule(IValidationErrorHandler validationErrorHandler)
@@ -35,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDat
 
         public bool ConditionMet(string learnAimRef, int fundModel)
         {
-            return string.Equals(learnAimRef, TypeOfAim.References.IndustryPlacement, StringComparison.OrdinalIgnoreCase) && fundModel != TypeOfFunding.Age16To19ExcludingApprenticeships;
+            return learnAimRef.CaseInsensitiveEquals(TypeOfAim.References.IndustryPlacement) && fundModel != TypeOfFunding.Age16To19ExcludingApprenticeships;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)

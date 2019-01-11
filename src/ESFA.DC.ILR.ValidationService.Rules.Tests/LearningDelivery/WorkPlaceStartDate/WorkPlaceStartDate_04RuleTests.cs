@@ -100,6 +100,68 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceSt
         }
 
         [Fact]
+        public void Validate_Error_InMultipleDeliveries()
+        {
+            var learner = new TestLearner
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "ZWRKX002",
+                        FundModel = 25
+                    },
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "ZWRKX002",
+                        FundModel = 35
+                    },
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "ZWRKX001",
+                        FundModel = 25
+                    },
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "ZWRKX001",
+                        FundModel = 35
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_InMultipleDeliveries()
+        {
+            var learner = new TestLearner
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "ZWRKX001",
+                        FundModel = 25
+                    },
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "ZWRKX001",
+                        FundModel = 35
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
         public void BuildErrorMessageParameters()
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
