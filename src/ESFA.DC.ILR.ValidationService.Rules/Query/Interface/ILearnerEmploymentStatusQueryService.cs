@@ -7,23 +7,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
     public interface ILearnerEmploymentStatusQueryService
     {
         /// <summary>
-        /// Returns all employment statuses where they could apply
-        /// </summary>
-        /// <param name="learnerEmploymentStatuses"></param>
-        /// <param name="dateEmpStatApp"></param>
-        /// <returns></returns>
-        // IEnumerable<int> EmpStatsForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateEmpStatApp);
-
-        /// <summary>
-        /// returns the latest employment status that applies
+        /// returns the latest Learner Employment Status that applies for a given Date
         /// </summary>
         /// <param name="learnerEmploymentStatuses"></param>
         /// <param name="dateValue"></param>
         /// <returns></returns>
-        int EmpStatForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateValue);
+        ILearnerEmploymentStatus LearnerEmploymentStatusForDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime datetime);
 
-        bool EmpStatsNotExistBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate);
+        bool EmpStatsNotExistBeforeDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date);
 
-        bool EmpStatsNotExistOnOrBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate);
+        bool EmpStatsNotExistOnOrBeforeDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date);
     }
 }

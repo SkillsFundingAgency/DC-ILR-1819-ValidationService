@@ -88,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         public bool EmploymentStatusConditionMet(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime learnStartDate)
         {
-            return _learnerEmploymentStatusQueryService.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate);
+            return _learnerEmploymentStatusQueryService.EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate);
         }
 
         public bool DD07ConditionMet(int? progType)

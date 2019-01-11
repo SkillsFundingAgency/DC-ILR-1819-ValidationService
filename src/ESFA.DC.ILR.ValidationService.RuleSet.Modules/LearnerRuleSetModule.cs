@@ -427,6 +427,7 @@
                 typeof(R102Rule),
                 typeof(R104Rule),
                 typeof(R106Rule),
+                typeof(R110Rule),
                 typeof(R112Rule),
                 typeof(R113Rule),
                 typeof(R114Rule),
