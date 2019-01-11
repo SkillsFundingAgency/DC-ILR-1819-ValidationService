@@ -80,14 +80,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
         [Fact]
         public void TNP2DateEqualToTNP4Date_ReturnsEntity()
         {
-            var tnp1Entity = new TestAppFinRecord
+            var tnp2Entity = new TestAppFinRecord
             {
                 AFinType = "TNP",
                 AFinCode = 2,
                 AFinDate = new DateTime(2018, 9, 1)
             };
 
-            var tnp3Entity = new TestAppFinRecord
+            var tnp4Entity = new TestAppFinRecord
             {
                 AFinType = "TNP",
                 AFinCode = 4,
@@ -96,31 +96,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
 
             var appFinRecords = new List<TestAppFinRecord>
             {
-                tnp1Entity,
-                tnp3Entity
+                tnp2Entity,
+                tnp4Entity
             };
 
-            NewRule().TNP2DateEqualToTNP4Date(appFinRecords).Should().Be(tnp1Entity);
+            NewRule().TNP2DateEqualToTNP4Date(appFinRecords).Should().Be(tnp2Entity);
         }
 
         [Fact]
-        public void TNP2DateEqualToTNP4Date_MultipleTNP3ReturnsNull()
+        public void TNP2DateEqualToTNP4Date_MultipleTNP4ReturnsNull()
         {
-            var tnp1Entity = new TestAppFinRecord
+            var tnp2Entity = new TestAppFinRecord
             {
                 AFinType = "TNP",
                 AFinCode = 2,
                 AFinDate = new DateTime(2018, 10, 1)
             };
 
-            var tnp3EntityOne = new TestAppFinRecord
+            var tnp4EntityOne = new TestAppFinRecord
             {
                 AFinType = "TNP",
                 AFinCode = 4,
                 AFinDate = new DateTime(2018, 9, 1)
             };
 
-            var tnp3EntityTwo = new TestAppFinRecord
+            var tnp4EntityTwo = new TestAppFinRecord
             {
                 AFinType = "TNP",
                 AFinCode = 4,
@@ -129,32 +129,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
 
             var appFinRecords = new List<TestAppFinRecord>
             {
-                tnp1Entity,
-                tnp3EntityOne,
-                tnp3EntityTwo
+                tnp2Entity,
+                tnp4EntityOne,
+                tnp4EntityTwo
             };
 
             NewRule().TNP2DateEqualToTNP4Date(appFinRecords).Should().BeNull();
         }
 
         [Fact]
-        public void TNP2DateEqualToTNP4Date_MultipleTNP3ReturnsEntity()
+        public void TNP2DateEqualToTNP4Date_MultipleTNP4ReturnsEntity()
         {
-            var tnp1Entity = new TestAppFinRecord
+            var tnp2Entity = new TestAppFinRecord
             {
                 AFinType = "TNP",
                 AFinCode = 2,
                 AFinDate = new DateTime(2018, 9, 1)
             };
 
-            var tnp3EntityOne = new TestAppFinRecord
+            var tnp4EntityOne = new TestAppFinRecord
             {
                 AFinType = "TNP",
                 AFinCode = 4,
                 AFinDate = new DateTime(2018, 9, 1)
             };
 
-            var tnp3EntityTwo = new TestAppFinRecord
+            var tnp4EntityTwo = new TestAppFinRecord
             {
                 AFinType = "TNP",
                 AFinCode = 4,
@@ -163,12 +163,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
 
             var appFinRecords = new List<TestAppFinRecord>
             {
-                tnp1Entity,
-                tnp3EntityOne,
-                tnp3EntityTwo
+                tnp2Entity,
+                tnp4EntityOne,
+                tnp4EntityTwo
             };
 
-            NewRule().TNP2DateEqualToTNP4Date(appFinRecords).Should().Be(tnp1Entity);
+            NewRule().TNP2DateEqualToTNP4Date(appFinRecords).Should().Be(tnp2Entity);
         }
 
         [Fact]
@@ -209,6 +209,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
                     AFinType = "TNP",
                     AFinCode = 4,
                     AFinDate = new DateTime(2018, 10, 1)
+                }
+            };
+
+            NewRule().TNP2DateEqualToTNP4Date(appFinRecords).Should().BeNull();
+        }
+
+        [Fact]
+        public void TNP2DateEqualToTNP4Date_NoTNP4ReturnsNull()
+        {
+            var appFinRecords = new List<TestAppFinRecord>
+            {
+                new TestAppFinRecord
+                {
+                    AFinType = "TNP",
+                    AFinCode = 2,
+                    AFinDate = new DateTime(2018, 9, 1)
                 }
             };
 
