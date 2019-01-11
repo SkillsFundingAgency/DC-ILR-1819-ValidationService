@@ -23,7 +23,7 @@
         public const string AFinDate_04 = "AFinDate_04";
         public const string AFinDate_05 = "AFinDate_05";
         public const string AFinDate_06 = "AFinDate_06";
-        public const string AFinDate_07 = "AFinDate_07";
+        public const string AFinDate_08 = "AFinDate_08";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
@@ -209,7 +209,6 @@
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
         public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
-        public const string LearnFAMType_01 = "LearnFAMType_01";
         public const string LearnFAMType_09 = "LearnFAMType_09";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
