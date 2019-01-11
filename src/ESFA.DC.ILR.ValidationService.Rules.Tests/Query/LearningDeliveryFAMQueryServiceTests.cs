@@ -175,48 +175,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
-        public void HasAnyLearningDeliveryFAMTypes_True()
-        {
-            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
-            {
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "A" },
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
-            };
-
-            var famTypes = new List<string>() { "A", "D" };
-
-            NewService().HasAnyLearningDeliveryFAMTypes(learningDeliveryFAMs, famTypes).Should().BeTrue();
-        }
-
-        [Fact]
-        public void HasAnyLearningDeliveryFAMTypes_False()
-        {
-            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
-            {
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "A" },
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "B" },
-                new TestLearningDeliveryFAM() { LearnDelFAMType = "C" }
-            };
-
-            var famTypes = new List<string>() { "D", "E" };
-
-            NewService().HasAnyLearningDeliveryFAMTypes(learningDeliveryFAMs, famTypes).Should().BeFalse();
-        }
-
-        [Fact]
-        public void HasAnyLearningDeliveryFAMTypes_False_NullLearningDeliveryFAMs()
-        {
-            NewService().HasAnyLearningDeliveryFAMTypes(null, new List<string>());
-        }
-
-        [Fact]
-        public void HasAnyLearningDeliveryFAMTypes_False_NullFAMTypes()
-        {
-            NewService().HasAnyLearningDeliveryFAMTypes(new List<ILearningDeliveryFAM>(), null);
-        }
-
-        [Fact]
         public void HasLearningDeliveryFAMTypeForDate_True()
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
