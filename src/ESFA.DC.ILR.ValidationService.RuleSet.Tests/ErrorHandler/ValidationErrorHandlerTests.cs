@@ -119,7 +119,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Tests.ErrorHandler
         [Fact]
         public void BuildErrorMessageParameters_Null()
         {
-            var errorMessageParameter = NewHandler().BuildErrorMessageParameter("Property", null);
+            var errorMessageParameter = NewHandler().BuildErrorMessageParameter("Property", default(int?));
 
             errorMessageParameter.PropertyName.Should().Be("Property");
             errorMessageParameter.Value.Should().Be(null);

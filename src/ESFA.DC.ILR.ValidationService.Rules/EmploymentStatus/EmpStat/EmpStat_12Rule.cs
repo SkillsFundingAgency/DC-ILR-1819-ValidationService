@@ -73,8 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         public bool EmpStatConditionMet(DateTime learnStartDate, IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses)
         {
-            var empStat = _learnerEmploymentStatusQueryService.EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate);
-            return empStat != 10;
+            return _learnerEmploymentStatusQueryService.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)?.EmpStat != TypeOfEmploymentStatus.InPaidEmployment;
         }
 
         public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
