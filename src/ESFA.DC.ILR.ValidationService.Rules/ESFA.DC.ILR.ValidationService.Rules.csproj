@@ -296,6 +296,7 @@
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_05Rule.cs" />
     <Compile Include="Learner\PMUKPRN\PMUKPRN_01Rule.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_01Rule.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_02Rule.cs" />

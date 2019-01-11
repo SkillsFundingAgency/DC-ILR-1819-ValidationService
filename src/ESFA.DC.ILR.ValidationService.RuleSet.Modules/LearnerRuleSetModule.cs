@@ -377,6 +377,7 @@
                 typeof(PlanLearnHours_02Rule),
                 typeof(PlanLearnHours_03Rule),
                 typeof(PlanLearnHours_04Rule),
+                typeof(PlanLearnHours_05Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(Postcode_14Rule),
                 typeof(Postcode_15Rule),
