@@ -26,7 +26,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(
+                if (learningDelivery.LearningDeliveryFAMs != null
+                    && ConditionMet(
                     learningDelivery.LearnActEndDateNullable,
                     learningDelivery.LearningDeliveryFAMs,
                     out string learnDelFAMType,
@@ -65,7 +66,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             out DateTime? learnDelFAMDateTo)
         {
             var latestLearnDelFAMDate = learningDeliveryFAMs?
-                .Where(f => f.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ACT)?
+                .Where(f => f.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ACT
+                && f.LearnDelFAMDateFromNullable.HasValue)?
                 .OrderByDescending(o => o.LearnDelFAMDateFromNullable)
                 .FirstOrDefault();
 
