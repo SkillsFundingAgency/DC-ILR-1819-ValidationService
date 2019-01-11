@@ -12,13 +12,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [Fact]
         public void EmpStatForDateEmpStatApp_Zero()
         {
-            NewService().EmpStatForDateEmpStatApp(null, new DateTime(2018, 8, 1)).Should().Be(0);
+            NewService().LearnerEmploymentStatusForDate(null, new DateTime(2018, 8, 1)).Should().BeNull();
         }
 
         [Fact]
         public void EmpStatForDateEmpStatApp_Zero_DateTooLate()
         {
             var learnStartDate = new DateTime(2018, 7, 1);
+
             var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
             {
                 new TestLearnerEmploymentStatus
@@ -28,55 +29,62 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 }
             };
 
-            NewService().EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate).Should().Be(0);
+            NewService().LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate).Should().BeNull();
         }
 
         [Fact]
         public void EmpStatForDateEmpStatApp()
         {
             var learnStartDate = new DateTime(2018, 8, 1);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+
+            var matchingLearnerEmploymentStatus = new TestLearnerEmploymentStatus
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 10,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                EmpStat = 10,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
             };
 
-            NewService().EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate).Should().Be(10);
+            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+            {
+                matchingLearnerEmploymentStatus
+            };
+
+            NewService().LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate).Should().Be(matchingLearnerEmploymentStatus);
         }
 
         [Fact]
         public void EmpStatForDateEmpStatApp_MiddleOne()
         {
             var learnStartDate = new DateTime(2018, 8, 13);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+
+            var earlyLearnerEmploymentStatus = new TestLearnerEmploymentStatus
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 10,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 8, 13)
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 10,
-                    DateEmpStatApp = new DateTime(2018, 8, 19)
-                }
+                DateEmpStatApp = new DateTime(2018, 8, 1)
             };
 
-            NewService().EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate).Should().Be(11);
+            var matchingLearnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                DateEmpStatApp = new DateTime(2018, 8, 13)
+            };
+
+            var laterLearningEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                DateEmpStatApp = new DateTime(2018, 8, 19)
+            };
+
+            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+            {
+                earlyLearnerEmploymentStatus,
+                matchingLearnerEmploymentStatus,
+                laterLearningEmploymentStatus
+            };
+
+            NewService().LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate).Should().Be(matchingLearnerEmploymentStatus);
         }
 
         [Fact]
         public void EmpStatsNotExistBeforeLearnStartDate_True_Null()
         {
-            NewService().EmpStatsNotExistBeforeLearnStartDate(null, new DateTime(2018, 8, 1)).Should().BeTrue();
+            NewService().EmpStatsNotExistBeforeDate(null, new DateTime(2018, 8, 1)).Should().BeTrue();
         }
 
         [Fact]
@@ -92,7 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 }
             };
 
-            NewService().EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate).Should().BeTrue();
+            NewService().EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate).Should().BeTrue();
         }
 
         [Fact]
@@ -108,13 +116,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 }
             };
 
-            NewService().EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate).Should().BeFalse();
+            NewService().EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate).Should().BeFalse();
         }
 
         [Fact]
         public void EmpStatsNotExistOnOrBeforeLearnStartDate_True_Null()
         {
-            NewService().EmpStatsNotExistOnOrBeforeLearnStartDate(null, new DateTime(2018, 8, 1)).Should().BeTrue();
+            NewService().EmpStatsNotExistOnOrBeforeDate(null, new DateTime(2018, 8, 1)).Should().BeTrue();
         }
 
         [Fact]
@@ -130,7 +138,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 }
             };
 
-            NewService().EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate).Should().BeTrue();
+            NewService().EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate).Should().BeTrue();
         }
 
         [Fact]
@@ -146,7 +154,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 }
             };
 
-            NewService().EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate).Should().BeFalse();
+            NewService().EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate).Should().BeFalse();
         }
 
         private LearnerEmploymentStatusQueryService NewService()

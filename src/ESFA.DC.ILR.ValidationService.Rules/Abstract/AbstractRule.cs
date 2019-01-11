@@ -48,12 +48,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
         }
 
         /// <summary>
-        /// Builds a message parameter.
+        /// Build Error Message
         /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>a date message parameter</returns>
-        protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, object value)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <param name="value"></param>
+        /// <returns>Error Message Parameter</returns>
+        protected IErrorMessageParameter BuildErrorMessageParameter<T>(string propertyName, T value)
         {
             return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value);
         }

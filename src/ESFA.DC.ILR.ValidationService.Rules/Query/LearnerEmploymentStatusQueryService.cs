@@ -8,38 +8,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class LearnerEmploymentStatusQueryService : ILearnerEmploymentStatusQueryService
     {
-        //public IEnumerable<int> EmpStatsForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateValue)
-        //{
-        //    return learnerEmploymentStatuses?.Where(les => dateValue >= les.DateEmpStatApp).Select(les => les.EmpStat).ToList();
-        //}
-
-        public int EmpStatForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateValue)
+        public ILearnerEmploymentStatus LearnerEmploymentStatusForDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date)
         {
-            int result = learnerEmploymentStatuses?
-                .Where(les => dateValue >= les.DateEmpStatApp)
+            return learnerEmploymentStatuses?
+                .Where(les => date >= les.DateEmpStatApp)
                 .OrderByDescending(les => les.DateEmpStatApp)
-                .FirstOrDefault()?.EmpStat ?? 0;
-            return result;
+                .FirstOrDefault();
         }
 
-        public bool EmpStatsNotExistBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate)
+        public bool EmpStatsNotExistBeforeDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date)
         {
             if (learnerEmploymentStatuses == null)
             {
                 return true;
             }
 
-            return !learnerEmploymentStatuses.Any(les => les.DateEmpStatApp < dateLearnStartDate);
+            return !learnerEmploymentStatuses.Any(les => les.DateEmpStatApp < date);
         }
 
-        public bool EmpStatsNotExistOnOrBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate)
+        public bool EmpStatsNotExistOnOrBeforeDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date)
         {
             if (learnerEmploymentStatuses == null)
             {
                 return true;
             }
 
-            return !learnerEmploymentStatuses.Any(les => les.DateEmpStatApp <= dateLearnStartDate);
+            return !learnerEmploymentStatuses.Any(les => les.DateEmpStatApp <= date);
         }
     }
 }

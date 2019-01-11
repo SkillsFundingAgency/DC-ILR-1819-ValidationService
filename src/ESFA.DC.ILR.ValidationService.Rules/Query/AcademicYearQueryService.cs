@@ -33,5 +33,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         {
             return dateTime < currentYear && dateTime >= currentYear.AddYears(-1);
         }
+
+        public DateTime FirstAugustForDateInAcademicYear(DateTime dateTime)
+        {
+            return dateTime.Month > 8 ? new DateTime(dateTime.Year + 1, 8, 1) : new DateTime(dateTime.Year, 8, 1);
+        }
     }
 }

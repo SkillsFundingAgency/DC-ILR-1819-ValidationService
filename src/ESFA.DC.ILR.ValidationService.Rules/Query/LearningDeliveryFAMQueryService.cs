@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Query
@@ -26,13 +27,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         public bool HasLearningDeliveryFAMType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType)
         {
             return learningDeliveryFAMs != null && learningDeliveryFAMs.Any(ldfam => ldfam.LearnDelFAMType == famType);
-        }
-
-        public bool HasAnyLearningDeliveryFAMTypes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, IEnumerable<string> famTypes)
-        {
-            return learningDeliveryFAMs != null
-                   && famTypes != null
-                   && learningDeliveryFAMs.Any(ldfam => famTypes.Contains(ldfam.LearnDelFAMType));
         }
 
         public bool HasLearningDeliveryFAMTypeForDate(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType, DateTime date)

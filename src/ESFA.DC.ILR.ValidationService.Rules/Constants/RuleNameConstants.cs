@@ -23,6 +23,8 @@
         public const string AFinDate_04 = "AFinDate_04";
         public const string AFinDate_05 = "AFinDate_05";
         public const string AFinDate_06 = "AFinDate_06";
+        public const string AFinDate_07 = "AFinDate_07";
+        public const string AFinDate_08 = "AFinDate_08";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
@@ -82,6 +84,7 @@
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
+        public const string DateOfBirth_50 = "DateOfBirth_50";
         public const string DateOfBirth_53 = "DateOfBirth_53";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
@@ -208,7 +211,9 @@
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
         public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
+        public const string LearnFAMType_01 = "LearnFAMType_01";
         public const string LearnFAMType_09 = "LearnFAMType_09";
+        public const string LearnFAMType_10 = "LearnFAMType_10";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
@@ -345,11 +350,13 @@
         public const string R85 = "R85";
         public const string R91 = "R91";
         public const string R96 = "R96";
+        public const string R99 = "R99";
         public const string R100 = "R100";
         public const string R102 = "R102";
         public const string R104 = "R104";
         public const string R106 = "R106";
         public const string R108 = "R108";
+        public const string R110 = "R110";
         public const string R112 = "R112";
         public const string R113 = "R113";
         public const string R114 = "R114";
