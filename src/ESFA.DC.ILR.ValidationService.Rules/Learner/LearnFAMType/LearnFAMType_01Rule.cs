@@ -26,14 +26,14 @@
 
             foreach (var learnerFam in objectToValidate.LearnerFAMs)
             {
-                if (ConditionMet(learnerFam, objectToValidate.LearnerFAMs))
+                if (ConditionMet(learnerFam))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learnerFam.LearnFAMType, learnerFam.LearnFAMCode));
                 }
             }
         }
 
-        public bool ConditionMet(ILearnerFAM learnerFam, IEnumerable<ILearnerFAM> learnerFAMs)
+        public bool ConditionMet(ILearnerFAM learnerFam)
         {
             return learnerFam.LearnFAMType != null
                    && !_lookupDetails.ContainsValueForKey(LookupCodedKeyDictionary.LearnerFAM, learnerFam.LearnFAMType, learnerFam.LearnFAMCode);

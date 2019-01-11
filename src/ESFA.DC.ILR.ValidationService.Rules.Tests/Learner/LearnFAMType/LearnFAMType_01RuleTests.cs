@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
                 learnFamCode)).Returns(lookUpResult);
             var testLearnerFam = new TestLearnerFAM() { LearnFAMType = learnFamType, LearnFAMCode = learnFamCode };
 
-            NewRule(lookupsMock.Object).ConditionMet(testLearnerFam, It.IsAny<List<ILearnerFAM>>()).Should().Be(expectation);
+            NewRule(lookupsMock.Object).ConditionMet(testLearnerFam).Should().Be(expectation);
         }
 
         [Fact]
