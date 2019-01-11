@@ -271,6 +271,7 @@
     <Compile Include="Learner\GivenNames\GivenNames_02RuleTests.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_04RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_01RuleTests.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_10RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_09RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_16RuleTests.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule01Tests.cs" />
