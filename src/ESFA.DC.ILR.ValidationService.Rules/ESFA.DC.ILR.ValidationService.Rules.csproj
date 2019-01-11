@@ -319,6 +319,7 @@
     <Compile Include="LearningDelivery\AFinDate\AFinDate_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_05Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_04Rule.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_09Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_08Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRuleBase{TEligibilityItem}.cs" />

@@ -311,6 +311,7 @@
     <Compile Include="LearningDelivery\AFinDate\AFinDate_06RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_05RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_09RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_08RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_01RuleTests.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_07RuleTests.cs" />
