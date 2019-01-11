@@ -10,6 +10,7 @@
         /// The apprenticeship financial record
         /// </summary>
         ApprenticeshipFinancialRecord,
-        LearningDeliveryFAM
+        LearningDeliveryFAM,
+        LearnerFAM
     }
 }

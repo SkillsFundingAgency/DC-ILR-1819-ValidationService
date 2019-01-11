@@ -9,6 +9,7 @@
         AppFinRecord,
         ContPrefType,
         Domicile,
+        EngGrade,
         ESMType,
         TBFinType,
         LearnFAMType,

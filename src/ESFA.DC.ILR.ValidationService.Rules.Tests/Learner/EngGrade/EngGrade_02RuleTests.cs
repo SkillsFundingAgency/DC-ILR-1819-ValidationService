@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade;
@@ -26,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
         [Fact]
         public void BuildErrorMessageParameters()
         {
-            string engGrade = "33310";
+            string engGrade = Grades.AstarA;
 
             var validaionErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
@@ -38,158 +39,92 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
         }
 
         [Fact]
-        public void ConditionMet_False()
+        public void EngGradeConditionMet_False()
         {
-            string learnAimRef = "ABC123456";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
+            string engGrade = "ABC";
 
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.EngGrade, engGrade)).Returns(true);
 
-            NewRule(lARSDataService: larsDataServiceMock.Object).ConditionMet(learnAimRef).Should().BeFalse();
+            NewRule(provideLookupDetails: provideLookupDetails.Object).EngGradeConditionMet(engGrade).Should().BeFalse();
         }
 
-        [Fact]
-        public void ConditionMet_True()
+        [Theory]
+        [InlineData(Grades.AstarA)]
+        [InlineData("a*a*")]
+        public void EngGradeConditionMet_True(string engGrade)
         {
-            string learnAimRef = "ABC98765";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.EngGrade, engGrade)).Returns(false);
 
-            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(false);
+            NewRule(provideLookupDetails: provideLookupDetails.Object).EngGradeConditionMet(engGrade).Should().BeTrue();
+        }
 
-            NewRule(lARSDataService: larsDataServiceMock.Object).ConditionMet(learnAimRef).Should().BeTrue();
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData(Grades.NONE)]
+        [InlineData("none")]
+        public void EngGradeSuppliedAndNotNone_False(string engGrade)
+        {
+            NewRule().EngGradeSuppliedAndNotNone(engGrade).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("a*a")]
+        [InlineData(Grades.AstarAstar)]
+        public void EngGradeSuppliedAndNotNone_True(string engGrade)
+        {
+            NewRule().EngGradeSuppliedAndNotNone(engGrade).Should().BeTrue();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            string learnAimRef = "ABC98765";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
-
+            string engGrade = "QQ";
             var testLearner = new TestLearner()
             {
                 LearnRefNumber = "AB12345",
-                EngGrade = "33310",
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = learnAimRef
-                    }
-                }
+                EngGrade = engGrade,
             };
 
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.EngGrade, engGrade)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    lARSDataService: larsDataServiceMock.Object)
+                    provideLookupDetails: provideLookupDetails.Object)
                     .Validate(testLearner);
             }
         }
 
         [Theory]
-        [InlineData("123")]
-        [InlineData("A**")]
-        public void Validate_EngGrade_AimTypeGCSE_NoError(string grade)
+        [InlineData(Grades.NONE)]
+        [InlineData("")]
+        [InlineData(Grades.AB)]
+        [InlineData("ab")]
+        public void Validate_NoError(string engGrade)
         {
-            string learnAimRef = "ABC98765";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
-
             var testLearner = new TestLearner()
             {
                 LearnRefNumber = "AB12345",
-                EngGrade = grade,
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = learnAimRef
-                    }
-                }
+                EngGrade = engGrade,
             };
 
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.EngGrade, engGrade)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    lARSDataService: larsDataServiceMock.Object)
-                    .Validate(testLearner);
-            }
-        }
-
-        [Theory]
-        [InlineData("123")]
-        [InlineData("A**")]
-        public void Validate_EngGrade_AimTypeNotGCSE_Error(string grade)
-        {
-            string learnAimRef = "ABC98765";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
-
-            var testLearner = new TestLearner()
-            {
-                LearnRefNumber = "AB12345",
-                EngGrade = grade,
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = learnAimRef
-                    }
-                }
-            };
-
-            var larsDataServiceMock = new Mock<ILARSDataService>();
-
-            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(false);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(
-                    validationErrorHandler: validationErrorHandlerMock.Object,
-                    lARSDataService: larsDataServiceMock.Object)
-                    .Validate(testLearner);
-            }
-        }
-
-        [Fact]
-        public void Validate_NoError()
-        {
-            string learnAimRef = "ABC98765";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999", "NONE" };
-
-            var testLearner = new TestLearner()
-            {
-                LearnRefNumber = "AB12345",
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = learnAimRef
-                    }
-                }
-            };
-
-            var larsDataServiceMock = new Mock<ILARSDataService>();
-
-            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(true);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(
-                    validationErrorHandler: validationErrorHandlerMock.Object,
-                    lARSDataService: larsDataServiceMock.Object)
+                    provideLookupDetails: provideLookupDetails.Object)
                     .Validate(testLearner);
             }
         }
@@ -197,9 +132,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
         [Fact]
         public void Validate_NoGradeSupplied_NoError()
         {
-            string learnAimRef = "ABC98765";
-            HashSet<string> learnAimRefTypes = new HashSet<string>() { "0003", "1422", "2999" };
-
             var testLearner = new TestLearner()
             {
                 LearnRefNumber = "AB12345",
@@ -207,31 +139,49 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
                 {
                     new TestLearningDelivery()
                     {
-                        LearnAimRef = learnAimRef
+                        LearnAimRef = "1A234"
                     }
                 }
             };
 
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            larsDataServiceMock.Setup(l => l.HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.EngGrade, Grades.AstarA)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    lARSDataService: larsDataServiceMock.Object)
+                    provideLookupDetails: provideLookupDetails.Object)
+                    .Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_NullCheck()
+        {
+            TestLearner testLearner = null;
+
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
+
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.EngGrade, Grades.AstarA)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    provideLookupDetails: provideLookupDetails.Object)
                     .Validate(testLearner);
             }
         }
 
         public EngGrade_02Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
-            ILARSDataService lARSDataService = null)
+            IProvideLookupDetails provideLookupDetails = null)
         {
             return new EngGrade_02Rule(
                 validationErrorHandler: validationErrorHandler,
-                lARSDataService: lARSDataService);
+                provideLookupDetails: provideLookupDetails);
         }
     }
 }

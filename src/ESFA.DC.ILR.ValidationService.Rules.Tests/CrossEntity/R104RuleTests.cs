@@ -424,6 +424,54 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
+        public void Validate_NoError_LearnDelDateFromNull()
+        {
+            var learner = new TestLearner()
+            {
+                LearnRefNumber = "00100309",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 1,
+                        LearnActEndDateNullable = new DateTime(2018, 10, 1),
+                        LearnPlanEndDate = new DateTime(2018, 10, 1),
+                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "LSF"
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "ACT"
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "ACT"
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "ACT"
+                            }
+                        }
+                    }
+                }
+            };
+
+            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
+
+            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(3);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(learningeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
         public void Validate_NoError_ACTCount()
         {
             var learningDeliveryFams = new TestLearningDeliveryFAM[]
