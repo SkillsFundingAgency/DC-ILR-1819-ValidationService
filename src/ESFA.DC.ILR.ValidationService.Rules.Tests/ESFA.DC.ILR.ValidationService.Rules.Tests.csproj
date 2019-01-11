@@ -117,6 +117,7 @@
     <Compile Include="CrossEntity\R30RuleTests.cs" />
     <Compile Include="CrossEntity\R45RuleTests.cs" />
     <Compile Include="CrossEntity\R43RuleTests.cs" />
+    <Compile Include="CrossEntity\R99RuleTests.cs" />
     <Compile Include="CrossEntity\R56RuleTests.cs" />
     <Compile Include="CrossEntity\R59RuleTests.cs" />
     <Compile Include="CrossEntity\R67RuleTests.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_50RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_02RuleTests.cs" />
@@ -272,6 +274,7 @@
     <Compile Include="Learner\GivenNames\GivenNames_02RuleTests.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_04RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_01RuleTests.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_10RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_09RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_16RuleTests.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule01Tests.cs" />

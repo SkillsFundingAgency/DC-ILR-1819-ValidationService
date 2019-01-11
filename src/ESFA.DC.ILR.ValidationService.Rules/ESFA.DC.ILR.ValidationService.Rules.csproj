@@ -107,6 +107,7 @@
     <Compile Include="CrossEntity\R30Rule.cs" />
     <Compile Include="CrossEntity\R45Rule.cs" />
     <Compile Include="CrossEntity\R43Rule.cs" />
+    <Compile Include="CrossEntity\R99Rule.cs" />
     <Compile Include="CrossEntity\R59Rule.cs" />
     <Compile Include="CrossEntity\R67Rule.cs" />
     <Compile Include="CrossEntity\R52Rule.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_46Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_50Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_02Rule.cs" />
@@ -280,6 +282,7 @@
     <Compile Include="Learner\GivenNames\GivenNames_02Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_04Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_01Rule.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_10Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_09Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_16Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_01Rule.cs" />

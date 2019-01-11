@@ -9,5 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         DateTime AugustThirtyFirstOfLearnStartDate(DateTime dateTime);
 
         bool DateIsInPrevAcademicYear(DateTime dateTime, DateTime currentYear);
+
+        DateTime FirstAugustForDateInAcademicYear(DateTime dateTime);
     }
 }
