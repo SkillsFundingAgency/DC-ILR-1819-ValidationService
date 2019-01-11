@@ -223,7 +223,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 validationErrorHandlerMock.Verify(h => h.BuildErrorMessageParameter(It.IsAny<string>(), It.IsAny<int>()), Times.Exactly(2));
             }
         }
-        
+
         [Fact]
         public void BuildErrorMessageParameters()
         {
