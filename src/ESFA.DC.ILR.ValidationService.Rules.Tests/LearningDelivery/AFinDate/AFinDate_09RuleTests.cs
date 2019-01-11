@@ -234,6 +234,82 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
         }
 
         [Fact]
+        public void Validate_Error_MultipleAFinRecords()
+        {
+            var progType = 2;
+
+            var learner = new TestLearner()
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimType = 1,
+                        LearnStartDate = new DateTime(2018, 8, 1),
+                        ProgTypeNullable = progType,
+                        AppFinRecords = new List<TestAppFinRecord>
+                        {
+                            new TestAppFinRecord
+                            {
+                                AFinType = "TNP",
+                                AFinCode = 2,
+                                AFinDate = new DateTime(2015, 9, 1)
+                            },
+                            new TestAppFinRecord
+                            {
+                                AFinType = "TNP",
+                                AFinCode = 4,
+                                AFinDate = new DateTime(2015, 9, 1)
+                            },
+                            new TestAppFinRecord
+                            {
+                                AFinType = "PMR",
+                                AFinCode = 2,
+                                AFinDate = new DateTime(2018, 9, 1)
+                            }
+                        }
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimType = 1,
+                        LearnStartDate = new DateTime(2018, 8, 1),
+                        ProgTypeNullable = progType,
+                        AppFinRecords = new List<TestAppFinRecord>
+                        {
+                            new TestAppFinRecord
+                            {
+                                AFinType = "TNP",
+                                AFinCode = 2,
+                                AFinDate = new DateTime(2015, 9, 1)
+                            },
+                            new TestAppFinRecord
+                            {
+                                AFinType = "TNP",
+                                AFinCode = 4,
+                                AFinDate = new DateTime(2015, 10, 1)
+                            },
+                            new TestAppFinRecord
+                            {
+                                AFinType = "PMR",
+                                AFinCode = 2,
+                                AFinDate = new DateTime(2018, 9, 1)
+                            }
+                        }
+                    }
+                }
+            };
+
+            var dd07Mock = new Mock<IDD07>();
+
+            dd07Mock.Setup(d => d.IsApprenticeship(progType)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
         public void Validate_NoError_NullLearningDeliveries()
         {
             var learner = new TestLearner()
