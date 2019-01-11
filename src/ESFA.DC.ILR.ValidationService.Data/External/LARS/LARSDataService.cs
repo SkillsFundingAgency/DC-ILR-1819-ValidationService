@@ -63,7 +63,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         }
 
         /// <summary>
-        /// Gets the categories for.
+        /// Gets a collection of (lars) learning categories for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>
@@ -79,6 +80,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
         /// <summary>
         /// Gets a collection of (lars) learning delivery periods of validity for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>
@@ -93,11 +95,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         }
 
         /// <summary>
-        /// Gets the (lars) annual values for(this aim reference).
+        /// Gets the (lars) annual values for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">The this aim reference.</param>
         /// <returns>
-        /// a collection of lars 'annula values' for this learning aim reference
+        /// a collection of lars 'annual values' for this learning aim reference
         /// </returns>
         public IReadOnlyCollection<ILARSAnnualValue> GetAnnualValuesFor(string thisAimRef)
         {
@@ -108,7 +111,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         }
 
         /// <summary>
+        /// Gets the (lars) framework aims for (this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">The this aim reference.</param>
+        /// <returns>
+        /// a collection of lars 'framework aims' for this learning aim reference
+        /// </returns>
+        public IReadOnlyCollection<ILARSFrameworkAim> GetFrameworkAimsFor(string thisAimRef)
+        {
+            var delivery = GetDeliveryFor(thisAimRef);
+
+            return delivery?.FrameworkAims.AsSafeReadOnlyList()
+                ?? Collection.EmptyAndReadOnly<ILARSFrameworkAim>();
+        }
+
+        /// <summary>
         /// Gets the collection of (lars) standard periods of validity for (this standard code).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisStandardCode">this standard code.</param>
         /// <returns>
@@ -164,27 +183,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             return engPrscIDs.Contains(GetDeliveryFor(learnAimRef)?.EnglPrscID);
         }
 
-        // TODO: access to frameworks needs to be thought out, as this isn't right => GetFrameworkAimsFor(string thisAimRef)
+        // TODO: this should happen in the rule
         public bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
-            return _externalDataCache.Frameworks
-                .SafeWhere(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims)
-                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                    && fa.ProgType == progType
-                    && fa.FworkCode == fworkCode
-                    && fa.PwayCode == pwayCode);
+            var frameworkAims = GetFrameworkAimsFor(learnAimRef);
+
+            return frameworkAims.Any(
+                fa => fa.ProgType == progType
+                && fa.FworkCode == fworkCode
+                && fa.PwayCode == pwayCode);
         }
 
-        // TODO: access to frameworks needs to be thought out, as this isn't right => GetFrameworkAimsFor(string thisAimRef)
+        // TODO: this should happen in the rule
         public bool FrameWorkComponentTypeExistsInFrameworkAims(string learnAimRef, HashSet<int?> frameworkTypeComponents)
         {
-            return _externalDataCache.Frameworks
-                .SafeWhere(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims)
-                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                    && fa.FrameworkComponentType.HasValue
-                    && frameworkTypeComponents.Contains(fa.FrameworkComponentType));
+            var frameworkAims = GetFrameworkAimsFor(learnAimRef);
+
+            return frameworkAims.Any(fa => frameworkTypeComponents.Contains(fa.FrameworkComponentType));
         }
 
         // TODO: needs to be thought out, this isn't right either...

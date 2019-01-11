@@ -26,7 +26,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         ILARSLearningDelivery GetDeliveryFor(string thisAimRef);
 
         /// <summary>
-        /// Gets the (lars) categories for (this aim reference).
+        /// Gets a collection of (lars) learning categories for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>a collection of lars learning categories for this learning aim reference</returns>
@@ -34,6 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         /// <summary>
         /// Gets a collection of (lars) learning delivery periods of validity for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>a collection of lars learing delivery periods of validity for this learning aim reference</returns>
@@ -41,13 +43,25 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         /// <summary>
         /// Gets the (lars) annual values for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">The this aim reference.</param>
         /// <returns>a collection of lars 'annula values' for this learning aim reference</returns>
         IReadOnlyCollection<ILARSAnnualValue> GetAnnualValuesFor(string thisAimRef);
 
         /// <summary>
+        /// Gets the (lars) framework aims for (this aim reference).
+        ///  i should never return null
+        /// </summary>
+        /// <param name="thisAimRef">The this aim reference.</param>
+        /// <returns>
+        /// a collection of lars 'framework aims' for this learning aim reference
+        /// </returns>
+        IReadOnlyCollection<ILARSFrameworkAim> GetFrameworkAimsFor(string thisAimRef);
+
+        /// <summary>
         /// Gets the collection of (lars) standard periods of validity for (this standard code).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisStandardCode">this standard code.</param>
         /// <returns>a collection of lars standard periods of validity for this standard code</returns>
@@ -62,13 +76,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// </returns>
         bool ContainsStandardFor(int thisStandardCode);
 
-        /// <summary>
-        /// Determines whether [has known learn direct class system code 3 for] [the specified this learn aim reference].
-        /// </summary>
-        /// <param name="thisLearnAimRef">The this learn aim reference.</param>
-        /// <returns>
-        ///   <c>true</c> if [has known learn direct class system code 3 for] [the specified this learn aim reference]; otherwise, <c>false</c>.
-        /// </returns>
         bool HasKnownLearnDirectClassSystemCode3For(string thisLearnAimRef);
 
         string GetNotionalNVQLevelv2ForLearnAimRef(string learnAimRef);
