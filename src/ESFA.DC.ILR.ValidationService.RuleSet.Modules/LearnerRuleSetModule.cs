@@ -120,6 +120,7 @@
                 typeof(AFinDate_05Rule),
                 typeof(AFinDate_06Rule),
                 typeof(AFinDate_07Rule),
+                typeof(AFinDate_08Rule),
                 typeof(AFinType_01Rule),
                 typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
