@@ -65,7 +65,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             if (learningDeliveryFAMs != null)
             {
-                var fams = learningDeliveryFAMs.Where(f => f.LearnDelFAMType == _famTypeACT).OrderBy(ldf => ldf.LearnDelFAMDateFromNullable).ToArray();
+                var fams = learningDeliveryFAMs?
+                    .Where(f =>
+                    f.LearnDelFAMType == _famTypeACT
+                 && f.LearnDelFAMDateFromNullable != null)
+                 .OrderBy(ldf => ldf.LearnDelFAMDateFromNullable).ToArray();
+
                 var famCount = fams.Count();
 
                 if (famCount < 2)
@@ -73,18 +78,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                     return null;
                 }
 
-                var i = 0;
+                var i = 1;
 
                 while (i < famCount)
                 {
                     var errorConditionMet =
-                        fams[i].LearnDelFAMDateToNullable == null || fams[i + 1].LearnDelFAMDateFromNullable == null
+                        fams[i - 1].LearnDelFAMDateToNullable == null || fams[i].LearnDelFAMDateFromNullable == null
                         ? false
-                        : fams[i].LearnDelFAMDateToNullable >= fams[i + 1].LearnDelFAMDateFromNullable == true;
+                        : fams[i - 1].LearnDelFAMDateToNullable >= fams[i].LearnDelFAMDateFromNullable == true;
 
                     if (errorConditionMet == true)
                     {
-                        return fams[i];
+                        return fams[i - 1];
                     }
 
                     i++;

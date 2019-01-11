@@ -72,6 +72,7 @@
     <Compile Include="Constants\FundingStreamPeriodCodeConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
+    <Compile Include="Constants\LearningDeliveryFAMCodeConstants.cs" />
     <Compile Include="Constants\LegalOrgTypeConstants.cs" />
     <Compile Include="Constants\Monitoring.cs" />
     <Compile Include="Constants\OutcomeConstants.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="CrossEntity\R30Rule.cs" />
     <Compile Include="CrossEntity\R45Rule.cs" />
     <Compile Include="CrossEntity\R43Rule.cs" />
+    <Compile Include="CrossEntity\R59Rule.cs" />
     <Compile Include="CrossEntity\R67Rule.cs" />
     <Compile Include="CrossEntity\R52Rule.cs" />
     <Compile Include="CrossEntity\R64Rule.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="CrossEntity\R66Rule.cs" />
     <Compile Include="CrossEntity\R70Rule.cs" />
     <Compile Include="CrossEntity\R112Rule.cs" />
+    <Compile Include="CrossEntity\R56Rule.cs" />
     <Compile Include="CrossEntity\R75Rule.cs" />
     <Compile Include="CrossEntity\R85Rule.cs" />
     <Compile Include="CrossEntity\R07Rule.cs" />
@@ -307,6 +310,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_08Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_03Rule.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_05Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_04Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
@@ -327,6 +331,9 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_06Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_20Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_31Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_38Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_36Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_50Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_30Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_24Rule.cs" />

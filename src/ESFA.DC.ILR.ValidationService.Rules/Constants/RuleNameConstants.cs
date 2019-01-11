@@ -22,6 +22,7 @@
 
         public const string AFinDate_04 = "AFinDate_04";
         public const string AFinDate_05 = "AFinDate_05";
+        public const string AFinDate_06 = "AFinDate_06";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
@@ -182,7 +183,10 @@
         public const string LearnDelFAMType_24 = "LearnDelFAMType_24";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
         public const string LearnDelFAMType_30 = "LearnDelFAMType_30";
+        public const string LearnDelFAMType_31 = "LearnDelFAMType_31";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
+        public const string LearnDelFAMType_36 = "LearnDelFAMType_36";
+        public const string LearnDelFAMType_38 = "LearnDelFAMType_38";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
@@ -329,6 +333,8 @@
         public const string R45 = "R45";
         public const string R47 = "R47";
         public const string R52 = "R52";
+        public const string R56 = "R56";
+        public const string R59 = "R59";
         public const string R63 = "R63";
         public const string R64 = "R64";
         public const string R66 = "R66";
