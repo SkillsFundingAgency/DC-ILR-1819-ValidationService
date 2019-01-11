@@ -4,16 +4,21 @@ using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using System;
 using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_50Rule : AbstractRule, IRule<ILearner>
     {
+        private readonly IAcademicYearQueryService _academicYearQueryService;
         private readonly DateTime _julyThirtyFirst2016 = new DateTime(2016, 7, 31);
 
-        public DateOfBirth_50Rule(IValidationErrorHandler validationErrorHandler)
+        public DateOfBirth_50Rule(
+            IAcademicYearQueryService academicYearQueryService,
+            IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_50)
         {
+            _academicYearQueryService = academicYearQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -26,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             if (objectToValidate.DateOfBirthNullable.HasValue)
             {
                 var learnersSixteenthBirthdate = objectToValidate.DateOfBirthNullable.Value.AddYears(16);
-                var firstAugustForAcademicYearOfLearnersSixteenthBirthDate = FirstAugustForDateInAcademicYear(learnersSixteenthBirthdate);
+                var firstAugustForAcademicYearOfLearnersSixteenthBirthDate = _academicYearQueryService.FirstAugustForDateInAcademicYear(learnersSixteenthBirthdate);
 
                 foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
@@ -49,11 +54,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                    && learningDelivery.AimType == TypeOfAim.ProgrammeAim
                    && learningDelivery.LearnStartDate > _julyThirtyFirst2016
                    && learningDelivery.LearnStartDate < firstAugustForAcademicYearOfLearnersSixteenthBirthDate;
-        }
-
-        public DateTime FirstAugustForDateInAcademicYear(DateTime dateTime)
-        {
-            return dateTime.Month > 8 ? new DateTime(dateTime.Year + 1, 8, 1) : new DateTime(dateTime.Year, 8, 1);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth, DateTime learnStartDate)

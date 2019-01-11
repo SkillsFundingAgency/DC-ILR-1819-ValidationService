@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
@@ -79,19 +80,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             NewRule().ConditionMet(learningDelivery, firstAugustForAcademicYearOfLearnersSixteenthBirthDate).Should().BeFalse();
         }
 
-        [Theory]
-        [InlineData("2017-1-1", "2017-8-1")]
-        [InlineData("2017-8-31", "2017-8-1")]
-        [InlineData("2017-9-1", "2018-8-1")]
-        [InlineData("2018-8-31", "2018-8-1")]
-        public void FirstAugustForDateInAcademicYear(string inputDate, string expectedDate)
-        {
-            var inputDateTime = DateTime.Parse(inputDate);
-            var expectedDateTime = DateTime.Parse(expectedDate);
-
-            NewRule().FirstAugustForDateInAcademicYear(inputDateTime).Should().Be(expectedDateTime);
-        }
-
         [Fact]
         public void ValidateError()
         {
@@ -111,9 +99,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
+            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
+            academicYearQueryServiceMock
+                .Setup(qs => qs.FirstAugustForDateInAcademicYear(It.IsAny<DateTime>()))
+                .Returns(new DateTime(2018, 08, 01));
+
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(academicYearQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -136,7 +129,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -159,9 +152,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
+            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
+            academicYearQueryServiceMock
+                .Setup(qs => qs.FirstAugustForDateInAcademicYear(It.IsAny<DateTime>()))
+                .Returns(new DateTime(2018, 08, 01));
+
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(academicYearQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
@@ -178,9 +176,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             validationErrorHandlerMock.Verify();
         }
 
-        private DateOfBirth_50Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        private DateOfBirth_50Rule NewRule(IAcademicYearQueryService academicYearQueryService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new DateOfBirth_50Rule(validationErrorHandler);
+            return new DateOfBirth_50Rule(academicYearQueryService, validationErrorHandler);
         }
     }
 }
