@@ -4,9 +4,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
     /// <summary>
     /// the lars learning delivery
+    /// dates removed to ensure validity is determined using the right classes, removed: ISupportFundingWithdrawal
     /// </summary>
-    public interface ILARSLearningDelivery :
-        ISupportFundingWithdrawal
+    public interface ILARSLearningDelivery
     {
         /// <summary>
         /// Gets the learn aim reference.
@@ -79,8 +79,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         IReadOnlyCollection<ILARSAnnualValue> AnnualValues { get; }
 
         /// <summary>
-        /// Gets the lars validities.
+        /// Gets the (lars) learning delivery periods of validity.
         /// </summary>
-        IReadOnlyCollection<ILARSValidity> LARSValidities { get; }
+        IReadOnlyCollection<ILARSLearningDeliveryValidity> Validities { get; }
     }
 }

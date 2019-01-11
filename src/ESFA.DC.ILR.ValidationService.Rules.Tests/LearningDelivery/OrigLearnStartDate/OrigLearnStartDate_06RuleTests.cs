@@ -174,7 +174,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
             var dd07Mock = new Mock<IDD07>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(It.IsAny<int>())).Returns(true);
 
-            NewRule(dd07Mock.Object).ConditionMet(origLearnStartDate, 35, It.IsAny<int>(), It.IsAny<string>())
+            NewRule(dd07Mock.Object, new Mock<ILARSDataService>().Object).ConditionMet(origLearnStartDate, 35, It.IsAny<int>(), It.IsAny<string>())
                 .Should()
                 .BeFalse();
         }

@@ -125,6 +125,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// <summary>
         /// Gets the lars validities.
         /// </summary>
-        IReadOnlyCollection<ILARSValidity> ILARSLearningDelivery.LARSValidities => LARSValidities.AsSafeReadOnlyList();
+        IReadOnlyCollection<ILARSLearningDeliveryValidity> ILARSLearningDelivery.Validities => LARSValidities.AsSafeReadOnlyList();
     }
 }

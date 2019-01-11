@@ -26,32 +26,41 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         ILARSLearningDelivery GetDeliveryFor(string thisAimRef);
 
         /// <summary>
-        /// Gets the (lars) categories for  (this aim reference).
+        /// Gets the (lars) categories for (this aim reference).
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>a collection of lars learning categories for this learning aim reference</returns>
         IReadOnlyCollection<ILARSLearningCategory> GetCategoriesFor(string thisAimRef);
 
         /// <summary>
-        /// Gets the (lars) validities for  (this aim reference).
+        /// Gets a collection of (lars) learning delivery periods of validity for (this aim reference).
         /// </summary>
-        /// <param name="forThisAimRef">this aim reference.</param>
-        /// <returns>a collection of lars 'validities' for this learning aim reference</returns>
-        IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string forThisAimRef);
+        /// <param name="thisAimRef">this aim reference.</param>
+        /// <returns>a collection of lars learing delivery periods of validity for this learning aim reference</returns>
+        IReadOnlyCollection<ILARSLearningDeliveryValidity> GetValiditiesFor(string thisAimRef);
 
         /// <summary>
-        /// Gets the (lars) annual values for(this aim reference).
+        /// Gets the (lars) annual values for (this aim reference).
         /// </summary>
         /// <param name="thisAimRef">The this aim reference.</param>
         /// <returns>a collection of lars 'annula values' for this learning aim reference</returns>
         IReadOnlyCollection<ILARSAnnualValue> GetAnnualValuesFor(string thisAimRef);
 
         /// <summary>
-        /// Gets the standard validity for  (this standard code).
+        /// Gets the collection of (lars) standard periods of validity for (this standard code).
         /// </summary>
         /// <param name="thisStandardCode">this standard code.</param>
-        /// <returns>a LARS Standard Validity</returns>
-        ILARSStandardValidity GetStandardValidityFor(int thisStandardCode);
+        /// <returns>a collection of lars standard periods of validity for this standard code</returns>
+        IReadOnlyCollection<ILARSStandardValidity> GetStandardValiditiesFor(int thisStandardCode);
+
+        /// <summary>
+        /// Contains the (lars) standard for (this standard code).
+        /// </summary>
+        /// <param name="thisStandardCode">The this standard code.</param>
+        /// <returns>
+        ///   <c>true</c> if [contains standard for] [the specified this standard code]; otherwise, <c>false</c>.
+        /// </returns>
+        bool ContainsStandardFor(int thisStandardCode);
 
         /// <summary>
         /// Determines whether [has known learn direct class system code 3 for] [the specified this learn aim reference].
@@ -102,14 +111,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 
         bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode);
 
-        bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime? origLearnStartDate, string learnAimRef, string validityCategory);
+        bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime origLearnStartDate, string learnAimRef, string validityCategory);
 
-        bool LearnStartDateGreaterThanStandardsEffectiveTo(int? stdCode, DateTime learnStartDate);
+        bool LearnStartDateGreaterThanStandardsEffectiveTo(int stdCode, DateTime learnStartDate);
 
         bool HasAnyLearningDeliveryForLearnAimRefAndTypes(string learnAimRef, IEnumerable<string> types);
 
         bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(
-            DateTime? origLearnStartDate,
+            DateTime origLearnStartDate,
             string learnAimRef,
             IEnumerable<string> categoriesHashSet);
     }

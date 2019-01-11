@@ -52,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         [Fact]
         public void LARSConditionMet_True()
         {
-            int? stdCode = 1;
+            int stdCode = 1;
             var learnStartDate = new DateTime(2018, 01, 01);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -64,9 +64,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         }
 
         [Theory]
-        [InlineData(null)]
+        [InlineData(null, Skip = "not relevant")]
         [InlineData(0)]
-        public void LARSConditionMet_False(int? stdCode)
+        public void LARSConditionMet_False(int stdCode)
         {
             var learnStartDate = new DateTime(2018, 01, 01);
 

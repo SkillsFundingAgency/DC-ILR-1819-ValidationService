@@ -36,10 +36,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
         public WorkPlaceEmpId_03Rule(
             IValidationErrorHandler validationErrorHandler,
             IFileDataService fileDataService)
-            : base(
-                validationErrorHandler,
-                Name)
+            : base(validationErrorHandler, Name)
         {
+            // this check should be in the base class
+            It.IsNull(validationErrorHandler)
+                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(fileDataService)
                 .AsGuard<ArgumentNullException>(nameof(fileDataService));
 
