@@ -12,8 +12,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
 
         bool HasLearningDeliveryFAMType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType);
 
-        bool HasAnyLearningDeliveryFAMTypes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, IEnumerable<string> famTypes);
-
         bool HasLearningDeliveryFAMTypeForDate(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType, DateTime date);
 
         ILearningDeliveryFAM GetLearningDeliveryFAMByTypeAndLatestByDateFrom(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string learnDelFAMType);

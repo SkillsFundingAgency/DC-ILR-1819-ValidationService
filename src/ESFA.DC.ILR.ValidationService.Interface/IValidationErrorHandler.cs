@@ -6,6 +6,6 @@ namespace ESFA.DC.ILR.ValidationService.Interface
     {
         void Handle(string ruleName, string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null);
 
-        IErrorMessageParameter BuildErrorMessageParameter<T>(string propertyName, T value);
+        IErrorMessageParameter BuildErrorMessageParameter(string propertyName, object value);
     }
 }

@@ -8,18 +8,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class LearnerEmploymentStatusQueryService : ILearnerEmploymentStatusQueryService
     {
-        //public IEnumerable<int> EmpStatsForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateValue)
-        //{
-        //    return learnerEmploymentStatuses?.Where(les => dateValue >= les.DateEmpStatApp).Select(les => les.EmpStat).ToList();
-        //}
-
         public int EmpStatForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateValue)
         {
-            int result = learnerEmploymentStatuses?
+            return learnerEmploymentStatuses?
                 .Where(les => dateValue >= les.DateEmpStatApp)
                 .OrderByDescending(les => les.DateEmpStatApp)
                 .FirstOrDefault()?.EmpStat ?? 0;
-            return result;
         }
 
         public bool EmpStatsNotExistBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate)
