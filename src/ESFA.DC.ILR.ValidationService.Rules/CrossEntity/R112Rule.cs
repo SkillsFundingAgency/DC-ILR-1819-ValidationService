@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -27,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return;
             }
 
-            ILearningDelivery ldToCheck = DetermineLatestFAMDateFrom(learner.LearningDeliveries);
+            ILearningDelivery ldToCheck = GetLearningDeliveryWithLatestFAMDateFrom(learner.LearningDeliveries);
 
             if (ldToCheck == null)
             {
@@ -62,7 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             };
         }
 
-        private ILearningDelivery DetermineLatestFAMDateFrom(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        private ILearningDelivery GetLearningDeliveryWithLatestFAMDateFrom(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
         {
             DateTime latestACTFAMFrom = DateTime.MinValue;
             ILearningDelivery result = null;
@@ -70,13 +71,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 if (learningDelivery.LearningDeliveryFAMs != null)
                 {
-                    ILearningDeliveryFAM ldfam =
-                        _learningDeliveryFAMQueryService.GetLearningDeliveryFAMByTypeAndLatestByDateFrom(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT);
-                    if (ldfam != null &&
-                        ldfam.LearnDelFAMDateFromNullable.HasValue &&
-                        ldfam.LearnDelFAMDateFromNullable.Value > latestACTFAMFrom)
+                    ILearningDeliveryFAM ldfamWithLatestDateFrom =
+                        _learningDeliveryFAMQueryService.GetLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT)
+                            .Where(fam => fam.LearnDelFAMDateFromNullable.HasValue)
+                            .OrderByDescending(f => f.LearnDelFAMDateFromNullable)
+                            .FirstOrDefault();
+
+                    if (ldfamWithLatestDateFrom != null &&
+                        ldfamWithLatestDateFrom.LearnDelFAMDateFromNullable.HasValue &&
+                        ldfamWithLatestDateFrom.LearnDelFAMDateFromNullable.Value > latestACTFAMFrom)
                     {
-                        latestACTFAMFrom = ldfam.LearnDelFAMDateFromNullable.Value;
+                        latestACTFAMFrom = ldfamWithLatestDateFrom.LearnDelFAMDateFromNullable.Value;
                         if (learningDelivery.LearnActEndDateNullable.HasValue)
                         {
                             result = learningDelivery;
