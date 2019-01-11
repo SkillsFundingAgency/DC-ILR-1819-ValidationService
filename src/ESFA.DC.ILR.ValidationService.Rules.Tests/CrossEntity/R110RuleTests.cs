@@ -28,6 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         public void Validate_Error()
         {
             var dateFrom = new DateTime(2017, 1, 1);
+
             var learningDeliveryFams = new List<ILearningDeliveryFAM>()
             {
                 new TestLearningDeliveryFAM()
@@ -38,7 +39,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var learnerEmploymentStatuses = new List<ILearnerEmploymentStatus>();
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus()
+            {
+                EmpStat = TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable
+            };
+
+            var learnerEmploymentStatuses = new List<ILearnerEmploymentStatus>()
+            {
+                learnerEmploymentStatus
+            };
 
             var learner = new TestLearner
             {
@@ -55,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatForDateEmpStatApp(learnerEmploymentStatuses, dateFrom)).Returns(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, dateFrom)).Returns(learnerEmploymentStatus);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -79,6 +88,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var learnerEmploymentStatuses = new List<ILearnerEmploymentStatus>();
 
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus()
+            {
+                EmpStat = TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable
+            };
+
             var learner = new TestLearner
             {
                 LearnerEmploymentStatuses = learnerEmploymentStatuses,
@@ -94,7 +108,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatForDateEmpStatApp(learnerEmploymentStatuses, dateFrom)).Returns(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, dateFrom)).Returns(learnerEmploymentStatus);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -202,11 +216,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         public void LearnerNotEmployedOnDate_True()
         {
             var learnerEmploymentStatuses = new List<ILearnerEmploymentStatus>();
+
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus()
+            {
+                EmpStat = TypeOfEmploymentStatus.InPaidEmployment
+            };
+
             var learningDeliveryFamDateFrom = new DateTime(2018, 1, 1);
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learningDeliveryFamDateFrom)).Returns(TypeOfEmploymentStatus.InPaidEmployment);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learningDeliveryFamDateFrom)).Returns(learnerEmploymentStatus);
 
             NewRule(learnerEmploymentStatusQueryServiceMock.Object).LearnerNotEmployedOnDate(learnerEmploymentStatuses, learningDeliveryFamDateFrom).Should().BeFalse();
         }
@@ -214,12 +234,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void LearnerNotEmployedOnDate_False()
         {
-            var learnerEmploymentStatuses = new List<ILearnerEmploymentStatus>();
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus()
+            {
+                EmpStat = TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable
+            };
+
+            var learnerEmploymentStatuses = new List<ILearnerEmploymentStatus>()
+            {
+                learnerEmploymentStatus
+            };
+
             var learningDeliveryFamDateFrom = new DateTime(2018, 1, 1);
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatForDateEmpStatApp(learnerEmploymentStatuses, learningDeliveryFamDateFrom)).Returns(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learningDeliveryFamDateFrom)).Returns(learnerEmploymentStatus);
 
             NewRule(learnerEmploymentStatusQueryServiceMock.Object).LearnerNotEmployedOnDate(learnerEmploymentStatuses, learningDeliveryFamDateFrom).Should().BeTrue();
         }
