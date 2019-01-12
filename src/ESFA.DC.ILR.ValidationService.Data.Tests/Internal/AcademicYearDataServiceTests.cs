@@ -113,7 +113,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var result = sut.GetAcademicYearOfLearningDate(testDate, forThisDate);
 
             // assert
-            Assert.Equal(DateTime.Parse(expectation), result);
+            result.Should().Be(DateTime.Parse(expectation));
         }
 
         private AcademicYearDataService NewService(IInternalDataCache internalDataCache = null)
