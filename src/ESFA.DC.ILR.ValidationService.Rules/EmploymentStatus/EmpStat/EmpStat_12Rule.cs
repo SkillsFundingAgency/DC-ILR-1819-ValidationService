@@ -73,21 +73,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         public bool EmpStatConditionMet(DateTime learnStartDate, IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses)
         {
-            var empStats = _learnerEmploymentStatusQueryService.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate);
-
-            return empStats != null ? empStats.Any(es => es != 10) : true;
+            return _learnerEmploymentStatusQueryService.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)?.EmpStat != TypeOfEmploymentStatus.InPaidEmployment;
         }
 
         public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return !_learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", _famCodes);
+            return !_learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, _famCodes);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate)
             };
         }
     }

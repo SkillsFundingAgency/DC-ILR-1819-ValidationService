@@ -20,6 +20,12 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinDate_04 = "AFinDate_04";
+        public const string AFinDate_05 = "AFinDate_05";
+        public const string AFinDate_06 = "AFinDate_06";
+        public const string AFinDate_07 = "AFinDate_07";
+        public const string AFinDate_08 = "AFinDate_08";
+
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
         public const string AFinType_04 = "AFinType_04";
@@ -28,6 +34,8 @@
         public const string AFinType_10 = "AFinType_10";
         public const string AFinType_11 = "AFinType_11";
         public const string AFinType_14 = "AFinType_14";
+
+        public const string AgreeId_02 = "AgreeId_02";
 
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
 
@@ -44,6 +52,10 @@
 
         public const string ConRefNumber_01 = "ConRefNumber_01";
         public const string ConRefNumber_03 = "ConRefNumber_03";
+
+        public const string ContPrefType_05 = "ContPrefType_05";
+        public const string ContPrefType_06 = "ContPrefType_06";
+        public const string ContPrefType_07 = "ContPrefType_07";
 
         public const string DateOfBirth_01 = "DateOfBirth_01";
         public const string DateOfBirth_02 = "DateOfBirth_02";
@@ -72,6 +84,7 @@
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
+        public const string DateOfBirth_50 = "DateOfBirth_50";
         public const string DateOfBirth_53 = "DateOfBirth_53";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
@@ -169,12 +182,19 @@
         public const string LearnDelFAMType_15 = "LearnDelFAMType_15";
         public const string LearnDelFAMType_16 = "LearnDelFAMType_16";
         public const string LearnDelFAMType_18 = "LearnDelFAMType_18";
+        public const string LearnDelFAMType_20 = "LearnDelFAMType_20";
+        public const string LearnDelFAMType_24 = "LearnDelFAMType_24";
         public const string LearnDelFAMType_27 = "LearnDelFAMType_27";
+        public const string LearnDelFAMType_30 = "LearnDelFAMType_30";
+        public const string LearnDelFAMType_31 = "LearnDelFAMType_31";
         public const string LearnDelFAMType_35 = "LearnDelFAMType_35";
+        public const string LearnDelFAMType_36 = "LearnDelFAMType_36";
+        public const string LearnDelFAMType_38 = "LearnDelFAMType_38";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
+        public const string LearnDelFAMType_50 = "LearnDelFAMType_50";
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
@@ -191,6 +211,9 @@
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
         public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
+        public const string LearnFAMType_01 = "LearnFAMType_01";
+        public const string LearnFAMType_09 = "LearnFAMType_09";
+        public const string LearnFAMType_10 = "LearnFAMType_10";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
@@ -206,6 +229,7 @@
         public const string LearnStartDate_13 = "LearnStartDate_13";
 
         public const string LearnPlanEndDate_02 = "LearnPlanEndDate_02";
+        public const string LearnPlanEndDate_03 = "LearnPlanEndDate_03";
 
         public const string MathGrade_01 = "MathGrade_01";
         public const string MathGrade_03 = "MathGrade_03";
@@ -313,8 +337,12 @@
         public const string R45 = "R45";
         public const string R47 = "R47";
         public const string R52 = "R52";
+        public const string R56 = "R56";
+        public const string R59 = "R59";
         public const string R63 = "R63";
+        public const string R64 = "R64";
         public const string R66 = "R66";
+        public const string R67 = "R67";
         public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
@@ -322,13 +350,17 @@
         public const string R85 = "R85";
         public const string R91 = "R91";
         public const string R96 = "R96";
+        public const string R99 = "R99";
+        public const string R100 = "R100";
         public const string R102 = "R102";
         public const string R104 = "R104";
         public const string R106 = "R106";
         public const string R108 = "R108";
+        public const string R110 = "R110";
         public const string R112 = "R112";
         public const string R113 = "R113";
         public const string R114 = "R114";
+        public const string R115 = "R115";
         public const string R117 = "R117";
         public const string R118 = "R118";
 
@@ -365,6 +397,7 @@
         public const string WithdrawReason_02 = "WithdrawReason_02";
         public const string WithdrawReason_04 = "WithdrawReason_04";
 
+        public const string WorkPlaceEmpId_02 = "WorkPlaceEmpId_02";
         public const string WorkPlaceEmpId_04 = "WorkPlaceEmpId_04";
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
@@ -372,6 +405,7 @@
 
         public const string WorkPlaceMode_01 = "WorkPlaceMode_01";
 
+        public const string WorkPlaceStartDate_02 = "WorkPlaceStartDate_02";
         public const string WorkPlaceStartDate_03 = "WorkPlaceStartDate_03";
     }
 }

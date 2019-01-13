@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
@@ -71,65 +73,60 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void EmpStatConditionMet_True()
         {
-            var empStats = new List<int> { 11 };
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                EmpStat = TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
+            };
+
             var learnStartDate = new DateTime(2018, 8, 1);
+
             var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                learnerEmploymentStatus
             };
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(learnerEmploymentStatus);
 
-            NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeTrue();
+            NewRule(learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeTrue();
         }
 
         [Fact]
         public void EmpStatConditionMet_False_EmpStat()
         {
             var learnStartDate = new DateTime(2018, 8, 1);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 10,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                EmpStat = TypeOfEmploymentStatus.InPaidEmployment,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
             };
 
-            var empStats = new List<int> { 10 };
+            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+            {
+                learnerEmploymentStatus
+            };
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(learnerEmploymentStatus);
 
-            NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeFalse();
+            NewRule(learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeFalse();
         }
 
         [Fact]
         public void EmpStatConditionMet_True_NoDateMatch()
         {
-            IEnumerable<int> nullResult = null;
             var learnStartDate = new DateTime(2018, 7, 1);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 10,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
-            };
+            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>();
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(nullResult);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(null as ILearnerEmploymentStatus);
 
-            NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeTrue();
+            NewRule(learnerEmploymentStatusQueryServiceMock.Object).EmpStatConditionMet(learnStartDate, learnerEmploymentStatuses).Should().BeTrue();
         }
 
         [Fact]
@@ -175,17 +172,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void ConditionMet_True()
         {
-            var empStats = new List<int> { 11 };
             var aimType = 1;
             var progType = 24;
             var learnStartDate = new DateTime(2018, 8, 1);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                EmpStat = TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
+            };
+
+            var learnerEmploymentStatuses = new List<ILearnerEmploymentStatus>
+            {
+                learnerEmploymentStatus
             };
 
             var famCodes = new List<string> { "353", "354", "355" };
@@ -203,7 +202,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(learnerEmploymentStatus);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", famCodes)).Returns(false);
 
             NewRule(learnerEmploymentStatusQueryServiceMock.Object, dd07Mock.Object, learningDeliveryFAMQueryServiceMock.Object)
@@ -213,17 +212,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void ConditionMet_False_AimType()
         {
-            var empStats = new List<int> { 11 };
             var aimType = 2;
             var progType = 24;
             var learnStartDate = new DateTime(2018, 8, 1);
+
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                EmpStat = TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
+            };
+
             var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                learnerEmploymentStatus
             };
 
             var famCodes = new List<string> { "353", "354", "355" };
@@ -241,7 +242,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(learnerEmploymentStatus);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", famCodes)).Returns(false);
 
             NewRule(learnerEmploymentStatusQueryServiceMock.Object, dd07Mock.Object, learningDeliveryFAMQueryServiceMock.Object)
@@ -251,17 +252,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void ConditionMet_False_DD07()
         {
-            var empStats = new List<int> { 11 };
             var aimType = 1;
             var progType = 24;
             var learnStartDate = new DateTime(2018, 8, 1);
+
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                EmpStat = TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
+            };
+
             var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                learnerEmploymentStatus
             };
 
             var famCodes = new List<string> { "353", "354", "355" };
@@ -279,7 +282,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(learnerEmploymentStatus);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", famCodes)).Returns(false);
 
             NewRule(learnerEmploymentStatusQueryServiceMock.Object, dd07Mock.Object, learningDeliveryFAMQueryServiceMock.Object)
@@ -287,20 +290,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         [Fact]
-        public void ConditionMet_False_EmpStat()
+        public void ConditionMet_True_NoApplicableEmpStat()
         {
-            var empStats = new List<int>();
             var aimType = 1;
             var progType = 24;
             var learnStartDate = new DateTime(2018, 8, 1);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 9, 1)
-                }
-            };
+            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>();
 
             var famCodes = new List<string> { "353", "354", "355" };
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
@@ -317,27 +312,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(null as ILearnerEmploymentStatus);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", famCodes)).Returns(false);
 
             NewRule(learnerEmploymentStatusQueryServiceMock.Object, dd07Mock.Object, learningDeliveryFAMQueryServiceMock.Object)
-                .ConditionMet(progType, aimType, learnStartDate, learnerEmploymentStatuses, learningDeliveryFAMs).Should().BeFalse();
+                .ConditionMet(progType, aimType, learnStartDate, learnerEmploymentStatuses, learningDeliveryFAMs).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_False_FAMCodes()
         {
-            var empStats = new List<int> { 11 };
             var aimType = 1;
             var progType = 24;
             var learnStartDate = new DateTime(2018, 8, 1);
+
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                EmpStat = TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
+            };
+
             var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                learnerEmploymentStatus
             };
 
             var famCodes = new List<string> { "353", "354", "355" };
@@ -355,7 +352,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(learnerEmploymentStatus);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", famCodes)).Returns(true);
 
             NewRule(learnerEmploymentStatusQueryServiceMock.Object, dd07Mock.Object, learningDeliveryFAMQueryServiceMock.Object)
@@ -365,18 +362,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void Validate_Error()
         {
-            var empStats = new List<int> { 11 };
             var aimType = 1;
             var progType = 24;
             var learnStartDate = new DateTime(2018, 8, 1);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                EmpStat = TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
             };
+
+            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>();
 
             var famCodes = new List<string> { "353", "354", "355" };
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
@@ -408,7 +404,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(learnerEmploymentStatus);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", famCodes)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -420,18 +416,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void Validate_NoError()
         {
-            var empStats = new List<int> { 11 };
             var aimType = 1;
             var progType = 24;
             var learnStartDate = new DateTime(2018, 8, 1);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
             {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = 11,
-                    DateEmpStatApp = new DateTime(2018, 8, 1)
-                }
+                EmpStat = TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable,
+                DateEmpStatApp = new DateTime(2018, 8, 1)
             };
+
+            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>();
 
             var famCodes = new List<string> { "353", "354", "355" };
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
@@ -463,7 +458,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate)).Returns(empStats);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)).Returns(learnerEmploymentStatus);
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", famCodes)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())

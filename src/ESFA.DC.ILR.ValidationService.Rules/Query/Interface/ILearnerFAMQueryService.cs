@@ -12,5 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool HasLearnerFAMType(IEnumerable<ILearnerFAM> learnerFAMs, string famType);
 
         bool HasAnyLearnerFAMTypes(IEnumerable<ILearnerFAM> learnerFams, IEnumerable<string> famTypes);
+
+        int GetLearnerFAMsCountByFAMType(IEnumerable<ILearnerFAM> learnerFaMs, string famType);
     }
 }

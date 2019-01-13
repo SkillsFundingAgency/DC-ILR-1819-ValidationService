@@ -27,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
                     learningDelivery.AimType,
                     learningDelivery.AppFinRecords))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(ApprenticeshipFinanicalRecord.Types.PaymentRecord, _aFinCodeForError));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(ApprenticeshipFinancialRecord.Types.PaymentRecord, _aFinCodeForError));
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public bool PMRConditionMet(IEnumerable<IAppFinRecord> appFinRecords)
         {
             return _learningDeliveryAppFinRecordQueryService
-                .HasAnyLearningDeliveryAFinCodeForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.PaymentRecord, 1);
+                .HasAnyLearningDeliveryAFinCodeForType(appFinRecords, ApprenticeshipFinancialRecord.Types.PaymentRecord, 1);
         }
 
         public bool TNPConditionMet(IEnumerable<IAppFinRecord> appFinRecords)
@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
             return
             !_learningDeliveryAppFinRecordQueryService
-            .HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, aFinCodes);
+            .HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, aFinCodes);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string aFinType, int? aFinCode)

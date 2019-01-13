@@ -1,12 +1,11 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnPlanEndDate;
-
-namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
     using ESFA.DC.ILR.Model.Interface;
     using ESFA.DC.ILR.ValidationService.Interface;
     using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
+    using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.AgreeId;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.DateEmpStatApp;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
     using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
@@ -68,6 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateFrom;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMDateTo;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+    using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnPlanEndDate;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OtherFundAdj;
@@ -116,6 +116,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_06Rule),
                 typeof(AddLine1_03Rule),
                 typeof(AFinDate_03Rule),
+                typeof(AFinDate_04Rule),
+                typeof(AFinDate_05Rule),
+                typeof(AFinDate_06Rule),
+                typeof(AFinDate_07Rule),
+                typeof(AFinDate_08Rule),
                 typeof(AFinType_01Rule),
                 typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
@@ -126,6 +131,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AFinType_12Rule),
                 typeof(AFinType_13Rule),
                 typeof(AFinType_14Rule),
+                typeof(AgreeId_02Rule),
                 typeof(AimSeqNumber_02Rule),
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
@@ -139,6 +145,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
                 typeof(ContPrefType_02Rule),
+                typeof(ContPrefType_05Rule),
+                typeof(ContPrefType_06Rule),
+                typeof(ContPrefType_07Rule),
                 typeof(DateEmpStatApp_01Rule),
                 typeof(DateEmpStatApp_02Rule),
                 typeof(DateOfBirth_01Rule),
@@ -168,6 +177,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_46Rule),
                 typeof(DateOfBirth_47Rule),
                 typeof(DateOfBirth_48Rule),
+                typeof(DateOfBirth_50Rule),
                 typeof(DateOfBirth_53Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
@@ -281,13 +291,20 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_15Rule),
                 typeof(LearnDelFAMType_16Rule),
                 typeof(LearnDelFAMType_18Rule),
+                typeof(LearnDelFAMType_20Rule),
                 typeof(LearnDelFAMType_22Rule),
+                typeof(LearnDelFAMType_24Rule),
                 typeof(LearnDelFAMType_27Rule),
+                typeof(LearnDelFAMType_30Rule),
+                typeof(LearnDelFAMType_31Rule),
                 typeof(LearnDelFAMType_35Rule),
+                typeof(LearnDelFAMType_36Rule),
+                typeof(LearnDelFAMType_38Rule),
                 typeof(LearnDelFAMType_39Rule),
                 typeof(LearnDelFAMType_44Rule),
                 typeof(LearnDelFAMType_45Rule),
                 typeof(LearnDelFAMType_48Rule),
+                typeof(LearnDelFAMType_50Rule),
                 typeof(LearnDelFAMType_53Rule),
                 typeof(LearnDelFAMType_54Rule),
                 typeof(LearnDelFAMType_60Rule),
@@ -306,6 +323,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearningDeliveryHE_07Rule),
                 typeof(LearningDeliveryHE_08Rule),
                 typeof(LearnerHE_02Rule),
+                typeof(LearnFAMType_01Rule),
+                typeof(LearnFAMType_09Rule),
+                typeof(LearnFAMType_10Rule),
                 typeof(LearnFAMType_16Rule),
                 typeof(LearnStartDate_02Rule),
                 typeof(LearnStartDate_03Rule),
@@ -316,6 +336,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnStartDate_13Rule),
                 typeof(LearnStartDate_14Rule),
                 typeof(LearnPlanEndDate_02Rule),
+                typeof(LearnPlanEndDate_03Rule),
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
                 typeof(LLDDHealthProb_01Rule),
@@ -395,19 +416,26 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R45Rule),
                 typeof(R47Rule),
                 typeof(R52Rule),
+                typeof(R56Rule),
                 typeof(R63Rule),
+                typeof(R64Rule),
                 typeof(R66Rule),
+                typeof(R67Rule),
                 typeof(R68Rule),
                 typeof(R70Rule),
                 typeof(R75Rule),
                 typeof(R91Rule),
                 typeof(R96Rule),
+                typeof(R99Rule),
+                typeof(R100Rule),
                 typeof(R102Rule),
                 typeof(R104Rule),
                 typeof(R106Rule),
+                typeof(R110Rule),
                 typeof(R112Rule),
                 typeof(R113Rule),
                 typeof(R114Rule),
+                typeof(R115Rule),
                 typeof(R117Rule),
                 typeof(R118Rule),
                 typeof(SOC2000_02Rule),
@@ -444,8 +472,10 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(WithdrawReason_04Rule),
                 typeof(WorkPlaceEndDate_02Rule),
                 typeof(WorkPlaceStartDate_01Rule),
+                typeof(WorkPlaceStartDate_02Rule),
                 typeof(WorkPlaceStartDate_03Rule),
                 typeof(WorkPlaceMode_01Rule),
+                typeof(WorkPlaceEmpId_02Rule),
                 typeof(WorkPlaceEmpId_03Rule),
                 typeof(WorkPlaceEmpId_04Rule),
                 typeof(WorkPlaceEmpId_05Rule),

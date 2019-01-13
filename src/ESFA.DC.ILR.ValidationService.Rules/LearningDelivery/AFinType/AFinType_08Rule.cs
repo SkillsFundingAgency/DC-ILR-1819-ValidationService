@@ -9,7 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 {
     public class AFinType_08Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly string _aFinType = ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice;
+        private readonly string _aFinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice;
         private readonly HashSet<int> _appFinCodes = new HashSet<int> { 3, 4 };
 
         private readonly ILearningDeliveryAppFinRecordQueryService _appFindRecordQueryService;

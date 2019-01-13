@@ -9,7 +9,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AddHours
 {
     public class AddHours_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IReadOnlyCollection<int> _fundModels = new HashSet<int>() { FundModelConstants.CommunityLearning, FundModelConstants.SixteenToNineteen, FundModelConstants.OtherSixteenToNineteen, FundModelConstants.NonFunded };
+        private readonly IReadOnlyCollection<int> _fundModels = new HashSet<int>()
+        {
+            TypeOfFunding.Age16To19ExcludingApprenticeships,
+            TypeOfFunding.Other16To19,
+            TypeOfFunding.CommunityLearning,
+            TypeOfFunding.NotFundedByESFA
+        };
 
         public AddHours_02Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.AddHours_02)

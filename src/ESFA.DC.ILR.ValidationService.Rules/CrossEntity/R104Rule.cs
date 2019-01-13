@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -14,8 +13,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
     {
         private readonly string _famTypeACT = LearningDeliveryFAMTypeConstants.ACT;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
-        private DateTime? _errorDateFrom;
-        private DateTime? _errorDateTo;
 
         public R104Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R104)
@@ -25,27 +22,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate.LearningDeliveries == null)
+            {
+                return;
+            }
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.LearningDeliveryFAMs))
+                if (!ACTCountConditionMet(learningDelivery.LearningDeliveryFAMs))
+                {
+                    return;
+                }
+
+                var learningDeliveryFAMs = ACTDateConditionMet(learningDelivery.LearningDeliveryFAMs);
+
+                if (learningDeliveryFAMs != null)
                 {
                     HandleValidationError(
-                        objectToValidate.LearnRefNumber,
-                        learningDelivery.AimSeqNumber,
-                        BuildErrorMessageParameters(
-                            learningDelivery.LearnPlanEndDate,
-                            learningDelivery.LearnActEndDateNullable,
-                            _famTypeACT,
-                            _errorDateFrom,
-                            _errorDateTo));
+                            objectToValidate.LearnRefNumber,
+                            learningDelivery.AimSeqNumber,
+                            BuildErrorMessageParameters(
+                                learningDelivery.LearnPlanEndDate,
+                                learningDelivery.LearnActEndDateNullable,
+                                _famTypeACT,
+                                learningDeliveryFAMs.LearnDelFAMDateFromNullable,
+                                learningDeliveryFAMs.LearnDelFAMDateToNullable));
                 }
             }
-        }
-
-        public bool ConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
-        {
-            return ACTCountConditionMet(learningDeliveryFAMs)
-                   && ACTDateConditionMet(learningDeliveryFAMs);
         }
 
         public bool ACTCountConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
@@ -58,41 +61,44 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             return false;
         }
 
-        public bool ACTDateConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public ILearningDeliveryFAM ACTDateConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             if (learningDeliveryFAMs != null)
             {
-                var fams = learningDeliveryFAMs.Where(f => f.LearnDelFAMType == _famTypeACT).OrderBy(ldf => ldf.LearnDelFAMDateFromNullable).ToArray();
+                var fams = learningDeliveryFAMs?
+                    .Where(f =>
+                    f.LearnDelFAMType == _famTypeACT
+                 && f.LearnDelFAMDateFromNullable != null)
+                 .OrderBy(ldf => ldf.LearnDelFAMDateFromNullable).ToArray();
+
                 var famCount = fams.Count();
 
-                if (famCount == 0)
+                if (famCount < 2)
                 {
-                    return false;
+                    return null;
                 }
 
-                var i = 0;
+                var i = 1;
 
                 while (i < famCount)
                 {
-                    var condition =
-                        fams[i].LearnDelFAMDateToNullable == null || fams[i + 1].LearnDelFAMDateFromNullable == null
+                    var errorConditionMet =
+                        fams[i - 1].LearnDelFAMDateToNullable == null || fams[i].LearnDelFAMDateFromNullable == null
                         ? false
-                        : fams[i].LearnDelFAMDateToNullable >= fams[i + 1].LearnDelFAMDateFromNullable == true;
+                        : fams[i - 1].LearnDelFAMDateToNullable >= fams[i].LearnDelFAMDateFromNullable == true;
 
-                    if (condition == true)
+                    if (errorConditionMet == true)
                     {
-                        _errorDateFrom = fams[i].LearnDelFAMDateFromNullable;
-                        _errorDateTo = fams[i].LearnDelFAMDateToNullable;
-                        return true;
+                        return fams[i - 1];
                     }
 
                     i++;
                 }
 
-                return false;
+                return null;
             }
 
-            return false;
+            return null;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnPlanEndDate, DateTime? learnActEndDate, string famType, DateTime? learnDelFamDateFrom, DateTime? learnDelFamDateTo)

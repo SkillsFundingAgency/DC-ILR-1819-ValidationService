@@ -8,29 +8,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class LearnerEmploymentStatusQueryService : ILearnerEmploymentStatusQueryService
     {
-        public IEnumerable<int> EmpStatsForDateEmpStatApp(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateValue)
+        public ILearnerEmploymentStatus LearnerEmploymentStatusForDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date)
         {
-            return learnerEmploymentStatuses?.Where(les => dateValue >= les.DateEmpStatApp).Select(les => les.EmpStat).ToList();
+            return learnerEmploymentStatuses?
+                .Where(les => date >= les.DateEmpStatApp)
+                .OrderByDescending(les => les.DateEmpStatApp)
+                .FirstOrDefault();
         }
 
-        public bool EmpStatsNotExistBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate)
+        public bool EmpStatsNotExistBeforeDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date)
         {
             if (learnerEmploymentStatuses == null)
             {
                 return true;
             }
 
-            return learnerEmploymentStatuses.Where(les => les.DateEmpStatApp < dateLearnStartDate).Count() == 0;
+            return !learnerEmploymentStatuses.Any(les => les.DateEmpStatApp < date);
         }
 
-        public bool EmpStatsNotExistOnOrBeforeLearnStartDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime dateLearnStartDate)
+        public bool EmpStatsNotExistOnOrBeforeDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date)
         {
             if (learnerEmploymentStatuses == null)
             {
                 return true;
             }
 
-            return learnerEmploymentStatuses.Where(les => les.DateEmpStatApp <= dateLearnStartDate).Count() == 0;
+            return !learnerEmploymentStatuses.Any(les => les.DateEmpStatApp <= date);
         }
     }
 }

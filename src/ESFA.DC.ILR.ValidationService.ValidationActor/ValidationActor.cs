@@ -101,7 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
 
                 externalDataCache = new ExternalDataCache
                 {
-                    LearningDeliveries = ((IDictionary<string, LearningDelivery>)externalDataCacheGet.LearningDeliveries).ToCaseInsensitiveDictionary(),
+                    LearningDeliveries = externalDataCacheGet.LearningDeliveries.ToCaseInsensitiveDictionary(),
                     EPAOrganisations = externalDataCacheGet.EPAOrganisations,
                     ERNs = externalDataCacheGet.ERNs,
                     ESFEligibilityRuleEmploymentStatuses = externalDataCacheGet.ESFEligibilityRuleEmploymentStatuses,
@@ -114,7 +114,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     Standards = externalDataCacheGet.Standards,
                     StandardValidities = externalDataCacheGet.StandardValidities,
                     ULNs = externalDataCacheGet.ULNs,
-                    ValidationErrors = ((IDictionary<string, ValidationError>)externalDataCacheGet.ValidationErrors).ToCaseInsensitiveDictionary()
+                    ValidationErrors = externalDataCacheGet.ValidationErrors.ToCaseInsensitiveDictionary()
                 };
 
                 validationContext = new ValidationContext

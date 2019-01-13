@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             _externalDataCache = externalDataCache;
 
             // de-sensitise the lars deliveries
-            _larsDeliveries = externalDataCache.LearningDeliveries.AsCIReadOnlyDictionary();
+            _larsDeliveries = externalDataCache.LearningDeliveries.ToCaseInsensitiveDictionary();
         }
 
         /// <summary>

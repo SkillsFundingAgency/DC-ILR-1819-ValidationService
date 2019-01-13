@@ -11,10 +11,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome
     {
         private readonly IEnumerable<int> _fundModels = new HashSet<int>()
         {
-            FundModelConstants.CommunityLearning,
-            FundModelConstants.SixteenToNineteen,
-            FundModelConstants.OtherSixteenToNineteen,
-            FundModelConstants.NonFunded,
+            TypeOfFunding.Age16To19ExcludingApprenticeships,
+            TypeOfFunding.Other16To19,
+            TypeOfFunding.CommunityLearning,
+            TypeOfFunding.NotFundedByESFA,
         };
 
         public EmpOutcome_01Rule(IValidationErrorHandler validationErrorHandler)

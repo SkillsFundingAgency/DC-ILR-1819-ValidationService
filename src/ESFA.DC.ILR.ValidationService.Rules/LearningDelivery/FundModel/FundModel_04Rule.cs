@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 
         public virtual bool FundModelConditionMet(int fundModel)
         {
-            return fundModel == FundModelConstants.CommunityLearning || fundModel == FundModelConstants.SixteenToNineteen;
+            return fundModel == TypeOfFunding.Age16To19ExcludingApprenticeships || fundModel == TypeOfFunding.Other16To19;
         }
 
         public virtual bool ApprenticeshipConditionMet(int? progType)
