@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
+
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
@@ -404,6 +406,7 @@
                 typeof(ProgType_14Rule),
                 typeof(PwayCode_02Rule),
                 typeof(PwayCode_03Rule),
+                typeof(ProvSpecLearnMonOccur_01Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(QUALENT3_03Rule),

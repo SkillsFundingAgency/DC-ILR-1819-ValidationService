@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
         private readonly HashSet<string> _validProvSpecLearnMonOccurValues = new HashSet<string>() { "A", "B" };
 
         public ProvSpecLearnMonOccur_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.ProvSpecLearnMonOccur_01Rule)
         {
         }
 
@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
                 {
                     if (ConditionMet(providerSpecLearnerMonitoring.ProvSpecLearnMonOccur))
                     {
-                        HandleValidationError(RuleNameConstants.ProvSpecLearnMonOccur_01Rule, objectToValidate.LearnRefNumber);
+                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(providerSpecLearnerMonitoring.ProvSpecLearnMonOccur));
                     }
                 }
             }
@@ -37,6 +37,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
         public bool ConditionMet(string provSpecLearnMonOccur)
         {
             return !string.IsNullOrWhiteSpace(provSpecLearnMonOccur) && !_validProvSpecLearnMonOccurValues.Contains(provSpecLearnMonOccur);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string provSpecLearnMonOccur)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.ProvSpecLearnMonOccur, provSpecLearnMonOccur)
+            };
         }
     }
 }
