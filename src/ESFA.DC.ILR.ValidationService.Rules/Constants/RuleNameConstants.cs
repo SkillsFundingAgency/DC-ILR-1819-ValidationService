@@ -191,6 +191,7 @@
         public const string LearnDelFAMType_36 = "LearnDelFAMType_36";
         public const string LearnDelFAMType_38 = "LearnDelFAMType_38";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
+        public const string LearnDelFAMType_40 = "LearnDelFAMType_40";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
