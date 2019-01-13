@@ -1479,7 +1479,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_True(string larsValidityType)
         {
             var learnAimRef = "123456789";
-            DateTime origLearnStartDate = new DateTime(2017, 11, 01);
+            var origLearnStartDate = new DateTime(2017, 11, 01);
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -1522,7 +1522,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory_True()
         {
             var learnAimRef = "123456789";
-            DateTime origLearnStartDate = new DateTime(2017, 11, 01);
+            var origLearnStartDate = new DateTime(2017, 11, 01);
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -1572,7 +1572,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory_False()
         {
             var learnAimRef = "123456789";
-            DateTime origLearnStartDate = new DateTime(2017, 11, 01);
+            var origLearnStartDate = new DateTime(2017, 11, 01);
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -1621,7 +1621,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_FalseNullOrigLearnStartDate()
         {
             var learnAimRef = "123456789";
-            DateTime origLearnStartDate = DateTime.MaxValue; // = null;
+            var origLearnStartDate = DateTime.MaxValue; // = null;
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -1664,7 +1664,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_FalseOrigLearnStartDateNotInRange()
         {
             var learnAimRef = "123456789";
-            DateTime origLearnStartDate = new DateTime(2018, 11, 01);
+            var origLearnStartDate = new DateTime(2018, 11, 01);
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -1707,7 +1707,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_TrueEndDateNullInLARS()
         {
             var learnAimRef = "123456789";
-            DateTime? origLearnStartDate = new DateTime(2018, 11, 01);
+            var origLearnStartDate = new DateTime(2018, 11, 01);
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -1750,7 +1750,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_FalseCategoryMisMatch()
         {
             var learnAimRef = "123456789";
-            DateTime origLearnStartDate = new DateTime(2018, 09, 01);
+            var origLearnStartDate = new DateTime(2018, 09, 01);
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -1793,7 +1793,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_FalseLearnAimRefMisMatch()
         {
             var learnAimRef = "123456789";
-            DateTime origLearnStartDate = new DateTime(2018, 09, 01);
+            var origLearnStartDate = new DateTime(2018, 09, 01);
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -1836,7 +1836,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_FalseNull()
         {
             var learnAimRef = "123456789";
-            DateTime origLearnStartDate = new DateTime(2017, 11, 01);
+            var origLearnStartDate = new DateTime(2017, 11, 01);
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>();
 
@@ -1852,7 +1852,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void FrameWorkComponentTypeExistsInFrameworkAims_False()
         {
-            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
             var learnAimRef = "ZESF12345";
 
             var frameworks = new List<Framework>()
@@ -1908,7 +1908,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void FrameWorkComponentTypeExistsInFrameworkAims_FalseNull()
         {
-            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
             var learnAimRef = "ZESF12345";
 
             var frameworks = new List<Framework>()
@@ -1989,8 +1989,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void EnglishPrescribedIdsExistsforLearnAimRef_False()
         {
-            string learnAimRef = "ESF123456";
-            HashSet<int?> englishPrescribedIDs = new HashSet<int?>() { 1, 2 };
+            var learnAimRef = "ESF123456";
+            var englishPrescribedIDs = new HashSet<int?>() { 1, 2 };
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
                 {
@@ -2013,8 +2013,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void EnglishPrescribedIdsExistsforLearnAimRef_True()
         {
-            string learnAimRef = "ESF123456";
-            HashSet<int?> englishPrescribedIDs = new HashSet<int?>() { 1, 2 };
+            var learnAimRef = "ESF123456";
+            var englishPrescribedIDs = new HashSet<int?>() { 1, 2 };
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
                 {
@@ -2037,7 +2037,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNoMatch()
         {
-            int stdCode = 1;
+            var stdCode = 1;
             var learnStartDate = new DateTime(2018, 10, 01);
 
             var standards = new List<LARSStandard>()
@@ -2074,11 +2074,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNoStandards()
         {
-            int stdCode = 1;
+            var stdCode = 1;
             var learnStartDate = new DateTime(2018, 10, 01);
-
             var standards = new List<LARSStandard>();
-
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
             externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
@@ -2089,7 +2087,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact(Skip = "standard code no longer be null in this instance, as it's a 'key'")]
         public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNullSTDCode()
         {
-            int stdCode = 0; // = null;
+            var stdCode = 0; // = null;
             var learnStartDate = new DateTime(2018, 10, 01);
 
             var standards = new List<LARSStandard>()
@@ -2126,7 +2124,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void LearnStartDateGreaterThanStandardsEffectiveTo_True()
         {
-            int stdCode = 1;
+            var stdCode = 1;
             var learnStartDate = new DateTime(2017, 10, 01);
 
             var standards = new List<LARSStandardValidity>()
@@ -2164,7 +2162,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void GetNotionalNVQLevelv2ForLearnAimRef()
         {
-            string learnAimRef = "ESF123456";
+            var learnAimRef = "ESF123456";
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
@@ -2189,7 +2187,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void GetNotionalNVQLevelv2ForLearnAimRef_NullCheck()
         {
-            string learnAimRef = "ESF09876";
+            var learnAimRef = "ESF09876";
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
