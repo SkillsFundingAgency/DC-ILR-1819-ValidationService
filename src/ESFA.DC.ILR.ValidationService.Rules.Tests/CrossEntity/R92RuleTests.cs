@@ -12,8 +12,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 {
     public class R92RuleTests : AbstractRuleTests<R92Rule>
     {
-        private const string _learnAimRef = ValidationConstants.ZESF0001;
-
         [Fact]
         public void RuleName()
         {
@@ -223,9 +221,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void Validate_NoError_NoLearningDeliveries()
         {
-            var learner = new TestLearner()
-            {
-            };
+            var learner = new TestLearner();
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

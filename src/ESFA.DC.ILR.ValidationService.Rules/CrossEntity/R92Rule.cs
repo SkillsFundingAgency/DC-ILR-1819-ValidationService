@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
@@ -40,8 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             var conRefNumbers = learningDeliveries?
                 .Where(ld => ld.LearnAimRef.CaseInsensitiveEquals(_learnAimRef))
-                .Select(ld => ld.ConRefNumber)
-                .GroupBy(c => c)
+                .GroupBy(ld => ld.ConRefNumber, StringComparer.OrdinalIgnoreCase)
                 .Where(c => c.Count() > 1)
                 .Select(c => c.Key);
 
