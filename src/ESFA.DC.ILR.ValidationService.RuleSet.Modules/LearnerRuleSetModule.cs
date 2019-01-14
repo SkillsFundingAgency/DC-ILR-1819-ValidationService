@@ -435,6 +435,7 @@
                 typeof(R70Rule),
                 typeof(R75Rule),
                 typeof(R91Rule),
+                typeof(R92Rule),
                 typeof(R96Rule),
                 typeof(R99Rule),
                 typeof(R100Rule),
