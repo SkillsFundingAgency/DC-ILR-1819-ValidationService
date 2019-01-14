@@ -1,16 +1,13 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProvSpecDelMonOccur
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using ESFA.DC.ILR.Model.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.Extensions;
-    using ESFA.DC.ILR.ValidationService.Interface;
-    using ESFA.DC.ILR.ValidationService.Rules.Abstract;
-    using ESFA.DC.ILR.ValidationService.Rules.Constants;
-    using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
+namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProvSpecDelMonOccur
+{
     public class ProvSpecDelMonOccur_01Rule : AbstractRule, IRule<ILearner>
     {
         public ProvSpecDelMonOccur_01Rule(IValidationErrorHandler validationErrorHandler)
