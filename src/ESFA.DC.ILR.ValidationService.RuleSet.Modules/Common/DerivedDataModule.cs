@@ -8,7 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<DD01>().As<IDD01>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData01_Rule>().As<IDerivedData_01Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DD04>().As<IDD04>().InstancePerLifetimeScope();
             builder.RegisterType<DD06>().As<IDD06>().InstancePerLifetimeScope();
             builder.RegisterType<DD07>().As<IDD07>().InstancePerLifetimeScope();
@@ -16,6 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
             builder.RegisterType<DerivedData_11Rule>().As<IDerivedData_11Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_14Rule>().As<IDerivedData_14Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_15Rule>().As<IDerivedData_15Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_18Rule>().As<IDerivedData_18Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_21Rule>().As<IDerivedData_21Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_22Rule>().As<IDerivedData_22Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_27Rule>().As<IDerivedData_27Rule>().InstancePerLifetimeScope();

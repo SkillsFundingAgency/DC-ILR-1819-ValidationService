@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
         /// <param name="fileDataService">The file data service.</param>
         public WorkPlaceEmpId_04Rule(
             IValidationErrorHandler validationErrorHandler,
-                        IFileDataService fileDataService)
+            IFileDataService fileDataService)
             : base(validationErrorHandler, RuleNameConstants.WorkPlaceEmpId_04)
         {
             It.IsNull(validationErrorHandler)

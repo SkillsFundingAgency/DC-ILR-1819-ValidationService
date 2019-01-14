@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
                 ULN = 1000000043,
             };
 
-            var dd01Mock = new Mock<IDD01>();
+            var dd01Mock = new Mock<IDerivedData_01Rule>();
 
             dd01Mock.Setup(dd => dd.Derive(1000000043)).Returns("Y");
 
@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
                 ULN = 1000000042,
             };
 
-            var dd01Mock = new Mock<IDD01>();
+            var dd01Mock = new Mock<IDerivedData_01Rule>();
 
             dd01Mock.Setup(dd => dd.Derive(1000000042)).Returns("N");
 
@@ -81,7 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
             validationErrorHandlerMock.Verify();
         }
 
-        private ULN_04Rule NewRule(IDD01 dd01 = null, IValidationErrorHandler validationErrorHandler = null)
+        private ULN_04Rule NewRule(IDerivedData_01Rule dd01 = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new ULN_04Rule(dd01, validationErrorHandler);
         }
