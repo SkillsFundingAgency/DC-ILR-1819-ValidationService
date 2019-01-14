@@ -300,6 +300,7 @@
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
         public const string PlanLearnHours_03 = "PlanLearnHours_03";
         public const string PlanLearnHours_04 = "PlanLearnHours_04";
+        public const string PlanLearnHours_05 = "PlanLearnHours_05";
 
         public const string PMUKPRN_01 = "PMUKPRN_01";
 
