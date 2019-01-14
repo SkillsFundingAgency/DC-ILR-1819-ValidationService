@@ -34,11 +34,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
 
         public bool ConditionMet(IEnumerable<ILearnerFAM> learnerFAMs)
         {
-            return LearnerFAMsConditionMet(learnerFAMs);
-        }
-
-        public bool LearnerFAMsConditionMet(IEnumerable<ILearnerFAM> learnerFAMs)
-        {
             return _learnerFAMQueryService.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.SEN, 1)
                    && _learnerFAMQueryService.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.EHC, 1);
         }

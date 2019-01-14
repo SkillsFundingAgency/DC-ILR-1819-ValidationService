@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
             learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(It.IsAny<IEnumerable<ILearnerFAM>>(), LearnerFAMTypeConstants.SEN, 1)).Returns(learnFamTypeSENExists);
             learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(It.IsAny<IEnumerable<ILearnerFAM>>(), LearnerFAMTypeConstants.EHC, 1)).Returns(learnFamTypeEHCExists);
 
-            NewRule(learnerFAMQueryService: learnerFAMsQueryServiceMock.Object).LearnerFAMsConditionMet(It.IsAny<IEnumerable<ILearnerFAM>>()).Should().Be(expectation);
+            NewRule(learnerFAMsQueryServiceMock.Object).ConditionMet(It.IsAny<IEnumerable<ILearnerFAM>>()).Should().Be(expectation);
         }
 
         [Fact]
@@ -40,6 +40,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         {
             var learner = new TestLearner
             {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                     new TestLearningDelivery()
+                     {
+                         FundModel = 35
+                     }
+                },
                 LearnerFAMs = new List<TestLearnerFAM>()
                 {
                     new TestLearnerFAM()
@@ -68,13 +75,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         {
             var learner = new TestLearner
             {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35
+                    }
+                },
                 LearnerFAMs = new List<TestLearnerFAM>()
                 {
                     new TestLearnerFAM()
                     {
                         LearnFAMType = LearnerFAMTypeConstants.SEN,
                         LearnFAMCode = 1
-                    }
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.DLA,
+                        LearnFAMCode = 1
+                    },
                 }
             };
             var learnerFAMsQueryServiceMock = new Mock<ILearnerFAMQueryService>();
