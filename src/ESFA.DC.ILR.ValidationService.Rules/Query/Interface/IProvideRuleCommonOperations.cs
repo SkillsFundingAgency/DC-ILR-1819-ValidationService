@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
 {
@@ -80,6 +81,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool IsTraineeship(ILearningDelivery delivery);
 
         /// <summary>
+        /// Determines whether [is standard apprencticeship] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is standard apprencticeship] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsStandardApprencticeship(ILearningDelivery delivery);
+
+        /// <summary>
         /// Determines whether the specified learning delivery has qualifying funding
         /// </summary>
         /// <param name="delivery">The delivery.</param>
@@ -112,11 +122,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool HasQualifyingStart(ILearnerEmploymentStatus employment, DateTime minStart, DateTime? maxStart = null);
 
         /// <summary>
-        /// Gets the (closest) qualifying employment status to the learner start date.
+        /// Gets the (closest) qualifying employment status to the start date.
         /// </summary>
-        /// <param name="learner">The learner.</param>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>returns the latest applicable employment status</returns>
-        ILearnerEmploymentStatus GetQualifyingEmploymentStatus(ILearner learner, ILearningDelivery delivery);
+        /// <param name="thisStartDate">this start date.</param>
+        /// <param name="usingSources">The using sources.</param>
+        /// <returns>
+        /// returns the latest applicable employment status
+        /// </returns>
+        ILearnerEmploymentStatus GetEmploymentStatusOn(DateTime? thisStartDate, IReadOnlyCollection<ILearnerEmploymentStatus> usingSources);
     }
 }

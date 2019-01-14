@@ -28,6 +28,7 @@
     using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
     using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
     using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
+    using ESFA.DC.ILR.ValidationService.Rules.Learner.Accom;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
@@ -100,6 +101,7 @@
 
             Rules = new List<Type>()
             {
+                typeof(Accom_01Rule),
                 typeof(AchDate_02Rule),
                 typeof(AchDate_03Rule),
                 typeof(AchDate_04Rule),
@@ -122,6 +124,7 @@
                 typeof(AFinDate_07Rule),
                 typeof(AFinDate_08Rule),
                 typeof(AFinDate_09Rule),
+                typeof(AFinDate_12Rule),
                 typeof(AFinType_01Rule),
                 typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
@@ -178,6 +181,7 @@
                 typeof(DateOfBirth_46Rule),
                 typeof(DateOfBirth_47Rule),
                 typeof(DateOfBirth_48Rule),
+                typeof(DateOfBirth_51Rule),
                 typeof(DateOfBirth_50Rule),
                 typeof(DateOfBirth_53Rule),
                 typeof(DelLocPostCode_03Rule),
@@ -302,6 +306,7 @@
                 typeof(LearnDelFAMType_36Rule),
                 typeof(LearnDelFAMType_38Rule),
                 typeof(LearnDelFAMType_39Rule),
+                typeof(LearnDelFAMType_40Rule),
                 typeof(LearnDelFAMType_44Rule),
                 typeof(LearnDelFAMType_45Rule),
                 typeof(LearnDelFAMType_48Rule),
@@ -327,6 +332,8 @@
                 typeof(LearnFAMType_01Rule),
                 typeof(LearnFAMType_09Rule),
                 typeof(LearnFAMType_10Rule),
+                typeof(LearnFAMType_11Rule),
+                typeof(LearnFAMType_14Rule),
                 typeof(LearnFAMType_16Rule),
                 typeof(LearnStartDate_02Rule),
                 typeof(LearnStartDate_03Rule),
@@ -335,6 +342,7 @@
                 typeof(LearnStartDate_07Rule),
                 typeof(LearnStartDate_12Rule),
                 typeof(LearnStartDate_13Rule),
+                typeof(LearnStartDate_14Rule),
                 typeof(LearnPlanEndDate_02Rule),
                 typeof(LearnPlanEndDate_03Rule),
                 typeof(LLDDCat_01Rule),
@@ -380,6 +388,7 @@
                 typeof(PlanLearnHours_02Rule),
                 typeof(PlanLearnHours_03Rule),
                 typeof(PlanLearnHours_04Rule),
+                typeof(PlanLearnHours_05Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(Postcode_14Rule),
                 typeof(Postcode_15Rule),
@@ -415,6 +424,7 @@
                 typeof(R43Rule),
                 typeof(R45Rule),
                 typeof(R47Rule),
+                typeof(R50Rule),
                 typeof(R52Rule),
                 typeof(R56Rule),
                 typeof(R61Rule),
@@ -471,6 +481,7 @@
                 typeof(WithdrawReason_02Rule),
                 typeof(WithdrawReason_03Rule),
                 typeof(WithdrawReason_04Rule),
+                typeof(WithdrawReason_05Rule),
                 typeof(WorkPlaceEndDate_02Rule),
                 typeof(WorkPlaceStartDate_01Rule),
                 typeof(WorkPlaceStartDate_02Rule),

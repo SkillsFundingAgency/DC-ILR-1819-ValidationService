@@ -4,6 +4,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Query
@@ -153,6 +154,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.Traineeship);
 
         /// <summary>
+        /// Determines whether [is standard apprencticeship] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is standard apprencticeship] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsStandardApprencticeship(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.ProgTypeNullable, TypeOfLearningProgramme.ApprenticeshipStandard);
+
+        /// <summary>
         /// Determines whether the specified learning delivery has qualifying funding
         /// </summary>
         /// <param name="delivery">The delivery.</param>
@@ -190,14 +201,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         /// <summary>
         /// Gets the (closest) qualifying employment status to the learner start date.
         /// </summary>
-        /// <param name="learner">The learner.</param>
-        /// <param name="delivery">The delivery.</param>
+        /// <param name="thisStartDate">this start date.</param>
+        /// <param name="usingSources">using sources.</param>
         /// <returns>
         /// returns the latest applicable employment status
         /// </returns>
-        public ILearnerEmploymentStatus GetQualifyingEmploymentStatus(ILearner learner, ILearningDelivery delivery) =>
-            learner.LearnerEmploymentStatuses
-                .SafeWhere(x => x.DateEmpStatApp <= delivery.LearnStartDate)
+        public ILearnerEmploymentStatus GetEmploymentStatusOn(DateTime? thisStartDate, IReadOnlyCollection<ILearnerEmploymentStatus> usingSources) =>
+            usingSources
+                .SafeWhere(x => x.DateEmpStatApp <= thisStartDate)
                 .OrderByDescending(x => x.DateEmpStatApp)
                 .FirstOrDefault();
     }

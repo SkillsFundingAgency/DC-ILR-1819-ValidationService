@@ -35,10 +35,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         public LearnStartDate_02Rule(
             IValidationErrorHandler validationErrorHandler,
             IAcademicYearDataService yearData)
-            : base(
-                validationErrorHandler,
-                Name)
+            : base(validationErrorHandler, Name)
         {
+            It.IsNull(validationErrorHandler)
+               .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(yearData)
                 .AsGuard<ArgumentNullException>(nameof(yearData));
 
@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         /// </returns>
         public bool IsOutsideValidSubmissionPeriod(ILearningDelivery delivery) =>
             delivery.LearnStartDate < _yearData
-                .GetAcademicYearOfLearningDate(_yearData.Today, AcademicYearDates.Commencment)
+                .GetAcademicYearOfLearningDate(_yearData.Today, AcademicYearDates.Commencement)
                 .AddYears(OldestLearningSubmissionOffset);
 
         /// <summary>

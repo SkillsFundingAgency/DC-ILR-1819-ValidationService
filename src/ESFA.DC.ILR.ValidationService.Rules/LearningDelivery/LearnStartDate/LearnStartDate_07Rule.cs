@@ -8,6 +8,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 {
@@ -75,7 +76,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 
         public bool FrameworkAimsConditionMet(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
-            return _larsDataService.DD04DateGreaterThanFrameworkAimEffectiveTo(dd04Date, learnAimRef, progType, fworkCode, pwayCode);
+            return It.Has(dd04Date)
+                && _larsDataService.DD04DateGreaterThanFrameworkAimEffectiveTo(dd04Date.Value, learnAimRef, progType, fworkCode, pwayCode);
         }
 
         public bool Excluded(int? progType, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
@@ -88,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate),
                 BuildErrorMessageParameter(PropertyNameConstants.PwayCode, pwayCode),
                 BuildErrorMessageParameter(PropertyNameConstants.ProgType, progType),
                 BuildErrorMessageParameter(PropertyNameConstants.FworkCode, fWorkCode),
