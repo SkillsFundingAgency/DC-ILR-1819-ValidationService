@@ -350,6 +350,7 @@
         public const string R50 = "R50";
         public const string R52 = "R52";
         public const string R56 = "R56";
+        public const string R58 = "R58";
         public const string R59 = "R59";
         public const string R61 = "R61";
         public const string R62 = "R62";
