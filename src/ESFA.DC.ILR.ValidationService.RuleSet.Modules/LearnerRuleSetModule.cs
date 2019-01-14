@@ -28,6 +28,7 @@
     using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
     using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
     using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
+    using ESFA.DC.ILR.ValidationService.Rules.Learner.Accom;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
@@ -100,6 +101,7 @@
 
             Rules = new List<Type>()
             {
+                typeof(Accom_01Rule),
                 typeof(AchDate_02Rule),
                 typeof(AchDate_03Rule),
                 typeof(AchDate_04Rule),
