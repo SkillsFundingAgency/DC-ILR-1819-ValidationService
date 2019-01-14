@@ -1,24 +1,24 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using System;
 using System.Collections.Generic;
-using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_50Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IAcademicYearQueryService _academicYearQueryService;
+        private readonly IAcademicYearDataService _academicYearDataService;
         private readonly DateTime _julyThirtyFirst2016 = new DateTime(2016, 7, 31);
 
         public DateOfBirth_50Rule(
-            IAcademicYearQueryService academicYearQueryService,
+            IAcademicYearDataService academicYearDataService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_50)
         {
-            _academicYearQueryService = academicYearQueryService;
+            _academicYearDataService = academicYearDataService;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             if (objectToValidate.DateOfBirthNullable.HasValue)
             {
                 var learnersSixteenthBirthdate = objectToValidate.DateOfBirthNullable.Value.AddYears(16);
-                var firstAugustForAcademicYearOfLearnersSixteenthBirthDate = _academicYearQueryService.FirstAugustForDateInAcademicYear(learnersSixteenthBirthdate);
+                var firstAugustForAcademicYearOfLearnersSixteenthBirthDate = _academicYearDataService.GetAcademicYearOfLearningDate(learnersSixteenthBirthdate, AcademicYearDates.Commencement);
 
                 foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {

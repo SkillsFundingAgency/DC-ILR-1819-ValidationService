@@ -25,6 +25,7 @@
         public const string AFinDate_06 = "AFinDate_06";
         public const string AFinDate_07 = "AFinDate_07";
         public const string AFinDate_08 = "AFinDate_08";
+        public const string AFinDate_09 = "AFinDate_09";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
@@ -340,6 +341,7 @@
         public const string R52 = "R52";
         public const string R56 = "R56";
         public const string R59 = "R59";
+        public const string R61 = "R61";
         public const string R63 = "R63";
         public const string R64 = "R64";
         public const string R66 = "R66";
@@ -408,5 +410,6 @@
 
         public const string WorkPlaceStartDate_02 = "WorkPlaceStartDate_02";
         public const string WorkPlaceStartDate_03 = "WorkPlaceStartDate_03";
+        public const string WorkPlaceStartDate_04 = "WorkPlaceStartDate_04";
     }
 }

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 {
-    public class DD01Tests
+    public class DeriveData_01RuleTests
     {
         [Fact]
         public void CalculateChecksum()
@@ -36,9 +36,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             NewDD().Derive(9999999999).Should().Be("Y");
         }
 
-        private DD01 NewDD()
+        private DerivedData01_Rule NewDD()
         {
-            return new DD01();
+            return new DerivedData01_Rule();
         }
     }
 }
