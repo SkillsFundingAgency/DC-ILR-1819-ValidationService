@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
+﻿using System.Collections.Generic;
+
+namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
     /// type(s) of monitoring (learner, learning delivery and employment status)
@@ -151,6 +153,11 @@
             /// financed by advanced learner loans
             /// </summary>
             public const string FinancedByAdvancedLearnerLoans = "ADL1";
+
+            /// <summary>
+            /// valid Provider specified learning delivery monitoring occurance values
+            /// </summary>
+            public static readonly HashSet<string> ValidProvSpecDelMonOccurValues = new HashSet<string>() { "A", "B", "C", "D" };
 
             /// <summary>
             /// funding and monitoring types
