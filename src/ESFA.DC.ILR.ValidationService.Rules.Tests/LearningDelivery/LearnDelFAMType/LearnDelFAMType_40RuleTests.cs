@@ -31,8 +31,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
         [Theory]
         [InlineData(LearningDeliveryFAMTypeConstants.ADL, true)]
+        [InlineData("adL", true)]
         [InlineData(LearningDeliveryFAMTypeConstants.EEF, false)]
-        [InlineData(LearningDeliveryFAMTypeConstants.ACT, false)]
+        [InlineData("ABC", false)]
+        [InlineData(null, false)]
+        [InlineData(LearningDeliveryFAMTypeConstants.FLN, false)]
         public void FAMTypeConditionMetMeetsExpectation(string learnDelFamType, bool expectation)
         {
             NewRule().FAMTypeConditionMet(learnDelFamType).Should().Be(expectation);
