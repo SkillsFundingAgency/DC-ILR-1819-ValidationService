@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
         private readonly IDD07 _dd07;
 
         public AFinDate_12Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.AFinDate_08)
+            : base(validationErrorHandler, RuleNameConstants.AFinDate_12)
         {
             _dd07 = dd07;
         }
