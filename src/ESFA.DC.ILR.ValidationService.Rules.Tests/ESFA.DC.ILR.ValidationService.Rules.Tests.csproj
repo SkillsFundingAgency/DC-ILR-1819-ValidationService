@@ -281,6 +281,7 @@
     <Compile Include="Learner\LearnFAMType\LearnFAMType_01RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_11RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_14RuleTests.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_15RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_10RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_09RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_16RuleTests.cs" />
