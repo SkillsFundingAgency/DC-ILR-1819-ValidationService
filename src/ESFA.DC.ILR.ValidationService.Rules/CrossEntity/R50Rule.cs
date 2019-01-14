@@ -27,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 if (learningDelivery.ProviderSpecDeliveryMonitorings != null)
                 {
                     var duplicates = learningDelivery.ProviderSpecDeliveryMonitorings
-                        .GroupBy(pdm => new { ProvSpecDelMonOccur = pdm.ProvSpecDelMonOccur?.ToLower() })
+                        .GroupBy(pdm => pdm.ProvSpecDelMonOccur?.ToUpper())
                         .Where(grp => grp.Count() > 1);
 
                     foreach (var duplicate in duplicates)
@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                         HandleValidationError(
                             objectToValidate.LearnRefNumber,
                             learningDelivery.AimSeqNumber,
-                            BuildErrorMessageParameters(duplicate.Key.ProvSpecDelMonOccur));
+                            BuildErrorMessageParameters(duplicate.Key));
                     }
                 }
             }
