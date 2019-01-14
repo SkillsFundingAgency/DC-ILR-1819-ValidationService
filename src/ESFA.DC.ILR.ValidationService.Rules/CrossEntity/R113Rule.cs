@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -66,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             out DateTime? learnDelFAMDateTo)
         {
             var latestLearnDelFAMDate = learningDeliveryFAMs?
-                .Where(f => f.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ACT
+                .Where(f => f.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.ACT)
                 && f.LearnDelFAMDateFromNullable.HasValue)?
                 .OrderByDescending(o => o.LearnDelFAMDateFromNullable)
                 .FirstOrDefault();
