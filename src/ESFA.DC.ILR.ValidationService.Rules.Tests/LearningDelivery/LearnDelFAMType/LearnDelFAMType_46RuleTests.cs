@@ -43,6 +43,137 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Fact]
+        public void ConditionMet_True()
+        {
+            var fundModel = TypeOfFunding.NotFundedByESFA;
+            var learnDelFamType = LearningDeliveryFAMTypeConstants.FLN;
+
+            NewRule().ConditionMet(fundModel, learnDelFamType).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ConditionMet_False_InvalidFundModel()
+        {
+            var fundModel = TypeOfFunding.AdultSkills;
+            var learnDelFamType = LearningDeliveryFAMTypeConstants.FLN;
+
+            NewRule().ConditionMet(fundModel, learnDelFamType).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_InvalidFAMType()
+        {
+            var fundModel = TypeOfFunding.NotFundedByESFA;
+            var learnDelFamType = LearningDeliveryFAMTypeConstants.ADL;
+
+            NewRule().ConditionMet(fundModel, learnDelFamType).Should().BeFalse();
+        }
+
+        [Fact]
+        public void Validate_Error()
+        {
+            var learner = new TestLearner()
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = TypeOfFunding.AdultSkills
+                    },
+                    new TestLearningDelivery()
+                    {
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
+                        LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.FLN
+                            }
+                        }
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
+        {
+            var learner = new TestLearner()
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017
+                    },
+                    new TestLearningDelivery()
+                    {
+                        FundModel = TypeOfFunding.AdultSkills,
+                        LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                        {
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL
+                            },
+                            new TestLearningDeliveryFAM()
+                            {
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.FLN
+                            }
+                        }
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_NoLearningDeliveries()
+        {
+            var learner = new TestLearner()
+            {
+                LearnRefNumber = "123"
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_NoLearningDeliveryFams()
+        {
+            var learner = new TestLearner()
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = TypeOfFunding.AdultSkills
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
         public void BuildErrorMessageParameters()
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
@@ -55,7 +186,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
         public LearnDelFAMType_46Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new LearnDelFAMType_46Rule(validationErrorHandler: validationErrorHandler);
+            return new LearnDelFAMType_46Rule(validationErrorHandler);
         }
     }
 }
