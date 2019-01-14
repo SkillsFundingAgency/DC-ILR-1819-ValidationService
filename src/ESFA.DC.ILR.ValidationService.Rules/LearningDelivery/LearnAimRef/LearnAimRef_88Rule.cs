@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <returns>
         ///   <c>true</c> if [in valid start range] [the specified validity]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasValidStartRange(ILARSValidity validity, ILearningDelivery delivery) =>
+        public bool HasValidStartRange(ILARSLearningDeliveryValidity validity, ILearningDelivery delivery) =>
             validity.IsCurrent(delivery.LearnStartDate, validity.LastNewStartDate);
 
         /// <summary>

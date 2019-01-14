@@ -142,6 +142,7 @@
     <Compile Include="CrossEntity\R96RuleTests.cs" />
     <Compile Include="Derived\DerivedData_05RuleTests.cs" />
     <Compile Include="Derived\DerivedData_14RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_18RuleTests.cs" />
     <Compile Include="Derived\DerivedData_22RuleTests.cs" />
     <Compile Include="Derived\DerivedData_27RuleTests.cs" />
     <Compile Include="Derived\DerivedData_28RuleTests.cs" />
@@ -361,6 +362,7 @@
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_14RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13RuleTests.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_01RuleTests.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_08RuleTests.cs" />

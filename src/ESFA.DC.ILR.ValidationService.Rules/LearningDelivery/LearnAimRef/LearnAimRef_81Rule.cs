@@ -99,7 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// </returns>
         public bool InReceiptOfAnotherStateBenefit(ILearningDelivery delivery, ILearner learner)
         {
-            var candidate = _check.GetQualifyingEmploymentStatus(learner, delivery);
+            var candidate = _check.GetEmploymentStatusOn(delivery.LearnStartDate, learner.LearnerEmploymentStatuses);
 
             var esms = candidate?.EmploymentStatusMonitorings.AsSafeReadOnlyList();
             return esms.SafeAny(InReceiptOfAnotherStateBenefit);

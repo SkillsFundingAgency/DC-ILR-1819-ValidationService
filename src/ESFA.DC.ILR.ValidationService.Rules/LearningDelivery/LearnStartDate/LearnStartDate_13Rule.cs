@@ -4,6 +4,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -46,10 +47,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 
         public bool ConditionMet(int? progType, int aimType, DateTime learnStartDate, int? stdCode, IEnumerable<ILearningDeliveryFAM> learningDeliveryFams)
         {
-            return ProgTypeConditionMet(progType)
-                   && AimTypeConditionMet(aimType)
-                   && LARSConditionMet(stdCode, learnStartDate)
-                   && !Excluded(learningDeliveryFams);
+            return !Excluded(learningDeliveryFams)
+                && ProgTypeConditionMet(progType)
+                && AimTypeConditionMet(aimType)
+                && It.Has(stdCode)
+                && LARSConditionMet(stdCode.Value, learnStartDate);
         }
 
         public bool ProgTypeConditionMet(int? progType)
@@ -62,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
             return aimType == 1;
         }
 
-        public bool LARSConditionMet(int? stdCode, DateTime learnStartDate)
+        public bool LARSConditionMet(int stdCode, DateTime learnStartDate)
         {
             return _larsDataService.LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate);
         }
