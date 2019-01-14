@@ -3,19 +3,13 @@ using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate
 {
     public class OrigLearnStartDate_07Rule : AbstractRule, IRule<ILearner>
     {
-        private const int FundModel81 = 81;
-        private const int FundModel36 = 36;
-        private const int ProgType25 = 25;
-
         private readonly ILARSDataService _larsDataService;
 
         public OrigLearnStartDate_07Rule(
@@ -53,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
         {
             return OrigLearnStartDateConditionMet(origLearnStartDate)
                    && FundModelConditionMet(fundModel, progType)
-                   && LARSConditionMet(origLearnStartDate, learnAimRef);
+                   && LARSConditionMet(origLearnStartDate.Value, learnAimRef);
         }
 
         public bool OrigLearnStartDateConditionMet(DateTime? origLearnStartDate)
@@ -63,10 +57,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         public bool FundModelConditionMet(int fundModel, int? progType)
         {
-            return fundModel == FundModel81 || (fundModel == FundModel36 && progType.HasValue && progType == ProgType25);
+            return fundModel == TypeOfFunding.OtherAdult
+                || (fundModel == TypeOfFunding.ApprenticeshipsFrom1May2017 && progType.HasValue && progType == TypeOfLearningProgramme.ApprenticeshipStandard);
         }
 
-        public bool LARSConditionMet(DateTime? origLearnStartDate, string learnAimRef)
+        public bool LARSConditionMet(DateTime origLearnStartDate, string learnAimRef)
         {
             return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Any);
         }

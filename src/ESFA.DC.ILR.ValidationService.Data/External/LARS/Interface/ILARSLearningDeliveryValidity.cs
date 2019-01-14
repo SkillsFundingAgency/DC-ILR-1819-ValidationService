@@ -3,9 +3,9 @@
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
     /// <summary>
-    /// lars validity
+    /// lars learning delivery validity
     /// </summary>
-    public interface ILARSValidity :
+    public interface ILARSLearningDeliveryValidity :
         ISupportFundingWithdrawal
     {
         /// <summary>

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -30,6 +32,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 LearnDelFAMDateToNullable = new DateTime(2018, 06, 02)
             };
 
+            var learningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+            {
+                learningDeliveryFAM
+            };
+
             var learner = new TestLearner()
             {
                 LearningDeliveries = new TestLearningDelivery[]
@@ -37,19 +44,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         LearnActEndDateNullable = new DateTime(2018, 06, 01),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            learningDeliveryFAM
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFAMs
                     }
                 }
             };
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMByTypeAndLatestByDateFrom(
-                learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
-                .Returns(learningDeliveryFAM);
+            learningDeliveryFAMsQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
+                .Returns(learningDeliveryFAMs);
 
             learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.HasLearningDeliveryFAMType(
                 learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
@@ -57,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).Validate(learner);
+                NewRule(validationErrorHandlerMock.Object, learningDeliveryFAMsQueryServiceMock.Object).Validate(learner);
             }
         }
 
@@ -71,6 +74,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 LearnDelFAMDateToNullable = null
             };
 
+            var learningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+            {
+                learningDeliveryFAM
+            };
+
             var learner = new TestLearner()
             {
                 LearningDeliveries = new TestLearningDelivery[]
@@ -78,19 +86,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         LearnActEndDateNullable = new DateTime(2018, 06, 01),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            learningDeliveryFAM
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFAMs
                     }
                 }
             };
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMByTypeAndLatestByDateFrom(
-                learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
-                .Returns(learningDeliveryFAM);
+            learningDeliveryFAMsQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
+                .Returns(learningDeliveryFAMs);
 
             learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.HasLearningDeliveryFAMType(
                 learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
@@ -112,6 +116,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 LearnDelFAMDateToNullable = new DateTime(2018, 06, 01)
             };
 
+            var learningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+            {
+                learningDeliveryFAM
+            };
+
             var learner = new TestLearner()
             {
                 LearningDeliveries = new TestLearningDelivery[]
@@ -119,19 +128,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         LearnActEndDateNullable = null,
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            learningDeliveryFAM
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFAMs
                     }
                 }
             };
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMByTypeAndLatestByDateFrom(
-                learner.LearningDeliveries.FirstOrDefault().LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
-                .Returns(learningDeliveryFAM);
+            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMsForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
+                .Returns(learningDeliveryFAMs);
             learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.HasLearningDeliveryFAMType(
                 learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
                 .Returns(true);
@@ -159,6 +164,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 LearnDelFAMDateToNullable = new DateTime(2018, 09, 07)
             };
 
+            var learningDeliveryFamsOne = new List<ILearningDeliveryFAM>()
+            {
+                learningDeliveryFAMAim1
+            };
+
+            var learningDeliveryFamsTwo = new List<ILearningDeliveryFAM>()
+            {
+                learningDeliveryFAMAim2
+            };
+
             var learner = new TestLearner()
             {
                 LearningDeliveries = new TestLearningDelivery[]
@@ -166,33 +181,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         LearnActEndDateNullable = new DateTime(2018, 09, 19),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            learningDeliveryFAMAim1
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFamsOne
                     },
                     new TestLearningDelivery()
                     {
                         LearnActEndDateNullable = new DateTime(2018, 09, 07),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            learningDeliveryFAMAim2
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFamsTwo
                     }
                 }
             };
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMByTypeAndLatestByDateFrom(
-                learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
-                .Returns(learningDeliveryFAMAim1);
+            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMsForType(learningDeliveryFamsOne, LearningDeliveryFAMTypeConstants.ACT))
+                .Returns(learningDeliveryFamsOne);
             learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.HasLearningDeliveryFAMType(
                 learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
                 .Returns(true);
-            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMByTypeAndLatestByDateFrom(
-                learner.LearningDeliveries.ElementAt(1).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
-                .Returns(learningDeliveryFAMAim2);
+            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMsForType(learningDeliveryFamsTwo, LearningDeliveryFAMTypeConstants.ACT))
+                .Returns(learningDeliveryFamsTwo);
             learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.HasLearningDeliveryFAMType(
                 learner.LearningDeliveries.ElementAt(1).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
                 .Returns(true);
@@ -220,6 +227,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 LearnDelFAMDateToNullable = null
             };
 
+            var learningDeliveryFAMsOne = new List<ILearningDeliveryFAM>()
+            {
+                learningDeliveryFAMAim1
+            };
+
+            var learningDeliveryFAMsTwo = new List<ILearningDeliveryFAM>()
+            {
+                learningDeliveryFAMAim2
+            };
+
             var learner = new TestLearner()
             {
                 LearningDeliveries = new TestLearningDelivery[]
@@ -227,34 +244,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         LearnActEndDateNullable = new DateTime(2018, 09, 19),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            learningDeliveryFAMAim1
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFAMsOne
                     },
                     new TestLearningDelivery()
                     {
                         LearnActEndDateNullable = new DateTime(2018, 09, 07),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            learningDeliveryFAMAim2
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFAMsTwo
                     }
                 }
             };
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMByTypeAndLatestByDateFrom(
-                learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
-                .Returns(learningDeliveryFAMAim1);
+            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMsForType(learningDeliveryFAMsOne, LearningDeliveryFAMTypeConstants.ACT))
+                .Returns(learningDeliveryFAMsOne);
             learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.HasLearningDeliveryFAMType(
                 learner.LearningDeliveries.ElementAt(0).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
                 .Returns(true);
 
-            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMByTypeAndLatestByDateFrom(
-                learner.LearningDeliveries.ElementAt(1).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
-                .Returns(learningDeliveryFAMAim2);
+            learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.GetLearningDeliveryFAMsForType(learningDeliveryFAMsTwo, LearningDeliveryFAMTypeConstants.ACT))
+                .Returns(learningDeliveryFAMsTwo);
             learningDeliveryFAMsQueryServiceMock.Setup(fam => fam.HasLearningDeliveryFAMType(
                 learner.LearningDeliveries.ElementAt(1).LearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.ACT))
                 .Returns(true);

@@ -122,17 +122,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
         }
 
         [Theory]
-        [InlineData(2)]
-        [InlineData(23)]
-        [InlineData(38)]
-        public void IsValidStandardCodeLARSDataServiceVerifiesOK(int candidate)
+        [InlineData(2, true)]
+        [InlineData(23, true)]
+        [InlineData(38, true)]
+        [InlineData(2, false)]
+        [InlineData(23, false)]
+        [InlineData(38, false)]
+        public void IsValidStandardCodeLARSDataServiceVerifiesOK(int candidate, bool expectation)
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetStandardValidityFor(candidate))
-                .Returns(new Mock<ILARSStandardValidity>().Object);
+                .Setup(x => x.ContainsStandardFor(candidate))
+                .Returns(expectation);
 
             var sut = new StdCode_02Rule(handler.Object, service.Object);
 
@@ -145,7 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
             var result = sut.IsValidStandardCode(mockItem.Object);
 
             // assert
-            Assert.True(result);
+            Assert.Equal(expectation, result);
             handler.VerifyAll();
             service.VerifyAll();
         }
@@ -195,8 +198,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetStandardValidityFor(candidate))
-                .Returns((ILARSStandardValidity)null);
+                .Setup(x => x.ContainsStandardFor(candidate))
+                .Returns(false);
 
             var sut = new StdCode_02Rule(handler.Object, service.Object);
 
@@ -241,8 +244,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.StdCode
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetStandardValidityFor(candidate))
-                .Returns(new Mock<ILARSStandardValidity>().Object);
+                .Setup(x => x.ContainsStandardFor(candidate))
+                .Returns(true);
 
             var sut = new StdCode_02Rule(handler.Object, service.Object);
 

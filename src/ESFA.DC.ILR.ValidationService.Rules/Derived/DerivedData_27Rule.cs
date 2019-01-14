@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 {
     public class DerivedData_27Rule : IDerivedData_27Rule
     {
-        private readonly string[] _legalOrgTypes =
+        private readonly IEnumerable<string> _legalOrgTypes = new HashSet<string>()
         {
             LegalOrgTypeConstants.USFC,
             LegalOrgTypeConstants.USDC,

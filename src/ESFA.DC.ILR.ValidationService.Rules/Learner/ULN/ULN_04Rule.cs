@@ -10,9 +10,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 {
     public class ULN_04Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD01 _dd01;
+        private readonly IDerivedData_01Rule _dd01;
 
-        public ULN_04Rule(IDD01 dd01, IValidationErrorHandler validationErrorHandler)
+        public ULN_04Rule(IDerivedData_01Rule dd01, IValidationErrorHandler validationErrorHandler)
              : base(validationErrorHandler, RuleNameConstants.ULN_04)
         {
             _dd01 = dd01;

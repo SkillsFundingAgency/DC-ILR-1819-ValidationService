@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode
         ///   <c>true</c> if [is valid standard code] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsValidStandardCode(ILearningDelivery delivery) =>
-            It.Has(_larsData.GetStandardValidityFor(delivery.StdCodeNullable.Value));
+            _larsData.ContainsStandardFor(delivery.StdCodeNullable.Value);
 
         /// <summary>
         /// Determines whether [has standard code] [the specified delivery].

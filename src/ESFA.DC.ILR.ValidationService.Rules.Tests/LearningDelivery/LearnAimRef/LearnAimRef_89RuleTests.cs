@@ -230,10 +230,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             startDates.ForEach(sd =>
             {
-                var mockValidity = new Mock<ILARSValidity>();
+                var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
                 mockValidity
                     .SetupGet(x => x.StartDate)
                     .Returns(DateTime.Parse(sd));
@@ -292,10 +292,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             startDates.ForEach(sd =>
             {
-                var mockValidity = new Mock<ILARSValidity>();
+                var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
                 mockValidity
                     .SetupGet(x => x.StartDate)
                     .Returns(DateTime.Parse(sd));
@@ -394,10 +394,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                     learnAimRef))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             startDates.ForEach(sd =>
             {
-                var mockValidity = new Mock<ILARSValidity>();
+                var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
                 mockValidity
                     .SetupGet(x => x.ValidityCategory)
                     .Returns(category);
@@ -489,10 +489,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             startDates.ForEach(sd =>
             {
-                var mockValidity = new Mock<ILARSValidity>();
+                var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
                 mockValidity
                     .SetupGet(x => x.ValidityCategory)
                     .Returns(category);
