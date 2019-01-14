@@ -22,23 +22,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule().RuleName.Should().Be("R113");
         }
 
-        [Fact]
-        public void LearningDeliveryFAMsConditionMet_False()
+        [Theory]
+        [InlineData("2018-07-01")]
+        [InlineData(null)]
+        public void LearningDeliveryFAMsConditionMet_False(string dateFrom)
         {
             string learnDelFAMType = string.Empty;
             DateTime? learnDelFAMDateTo = null;
+            DateTime? learnDelFAMDateFrom = string.IsNullOrEmpty(dateFrom)
+                ? (DateTime?)null
+                : DateTime.Parse(dateFrom);
+
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
             {
                 new TestLearningDeliveryFAM()
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL,
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 07, 01),
+                    LearnDelFAMDateFromNullable = learnDelFAMDateFrom,
                     LearnDelFAMDateToNullable = null,
                     LearnDelFAMCode = "213"
                 }
             };
 
             NewRule().LearningDeliveryFAMsConditionMet(testLearningDeliveryFAMs, out learnDelFAMType, out learnDelFAMDateTo).Should().BeFalse();
+            learnDelFAMType.Should().BeEmpty();
+            learnDelFAMDateTo.Should().BeNull();
         }
 
         [Fact]
@@ -49,6 +57,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             TestLearningDeliveryFAM[] testLearningDeliveryFAMs = null;
 
             NewRule().LearningDeliveryFAMsConditionMet(testLearningDeliveryFAMs, out learnDelFAMType, out learnDelFAMDateTo).Should().BeFalse();
+            learnDelFAMType.Should().BeEmpty();
+            learnDelFAMDateTo.Should().BeNull();
         }
 
         [Fact]
@@ -56,6 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             string learnDelFAMType = string.Empty;
             DateTime? learnDelFAMDateTo = null;
+            DateTime? learnDelFAMDateToExpected = new DateTime(2018, 11, 01);
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
             {
                 new TestLearningDeliveryFAM()
@@ -69,12 +80,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
                     LearnDelFAMDateFromNullable = new DateTime(2018, 09, 02),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 11, 01),
+                    LearnDelFAMDateToNullable = learnDelFAMDateToExpected,
                     LearnDelFAMCode = "213"
                 },
             };
 
             NewRule().LearningDeliveryFAMsConditionMet(testLearningDeliveryFAMs, out learnDelFAMType, out learnDelFAMDateTo).Should().BeTrue();
+            learnDelFAMType.Should().Be(LearningDeliveryFAMTypeConstants.ACT);
+            learnDelFAMDateTo.Should().Be(learnDelFAMDateToExpected);
         }
 
         [Fact]
@@ -95,6 +108,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             };
 
             NewRule().ConditionMet(learnActEndDate, testLearningDeliveryFAMs, out learnDelFAMType, out learnDelFAMDateTo).Should().BeFalse();
+            learnDelFAMType.Should().BeEmpty();
+            learnDelFAMDateTo.Should().BeNull();
         }
 
         [Fact]
@@ -106,6 +121,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             TestLearningDeliveryFAM[] testLearningDeliveryFAMs = null;
 
             NewRule().ConditionMet(learnActEndDate, testLearningDeliveryFAMs, out learnDelFAMType, out learnDelFAMDateTo).Should().BeFalse();
+            learnDelFAMType.Should().BeEmpty();
+            learnDelFAMDateTo.Should().BeNull();
         }
 
         [Fact]
@@ -114,6 +131,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             DateTime? learnActEndDate = null;
             string learnDelFAMType = string.Empty;
             DateTime? learnDelFAMDateTo = null;
+            DateTime learnDelFAMDateToExpected = new DateTime(2018, 11, 01);
+
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
             {
                 new TestLearningDeliveryFAM()
@@ -127,12 +146,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
                     LearnDelFAMDateFromNullable = new DateTime(2018, 09, 02),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 11, 01),
+                    LearnDelFAMDateToNullable = learnDelFAMDateToExpected,
                     LearnDelFAMCode = "213"
                 }
             };
 
             NewRule().ConditionMet(learnActEndDate, testLearningDeliveryFAMs, out learnDelFAMType, out learnDelFAMDateTo).Should().BeTrue();
+            learnDelFAMType.Should().Be(LearningDeliveryFAMTypeConstants.ACT);
+            learnDelFAMDateTo.Should().Be(learnDelFAMDateToExpected);
         }
 
         [Fact]
@@ -143,16 +164,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDeliveryFAM()
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 07, 01),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 09, 01),
-                    LearnDelFAMCode = "213"
+                    LearnDelFAMDateFromNullable = new DateTime(0001, 01, 01),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 10, 08),
+                    LearnDelFAMCode = "1"
                 },
                 new TestLearningDeliveryFAM()
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 09, 02),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 11, 01),
-                    LearnDelFAMCode = "213"
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 08, 01),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 12, 08),
+                    LearnDelFAMCode = "1"
+                },
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = null,
+                    LearnDelFAMDateToNullable = new DateTime(2018, 12, 08),
+                    LearnDelFAMCode = "1"
+                },
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateToNullable = new DateTime(2018, 12, 08),
+                    LearnDelFAMCode = "1"
                 }
             };
             var testLearner = new TestLearner()
@@ -207,6 +241,43 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         LearnActEndDateNullable = new DateTime(2018, 07, 01),
+                        LearningDeliveryFAMs = testLearningDeliveryFAMs
+                    }
+                },
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_ForDateFromNull()
+        {
+            var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+            {
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = null,
+                    LearnDelFAMDateToNullable = new DateTime(2018, 12, 08),
+                    LearnDelFAMCode = "1"
+                },
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateToNullable = new DateTime(2018, 12, 08),
+                    LearnDelFAMCode = "1"
+                }
+            };
+            var testLearner = new TestLearner()
+            {
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearnActEndDateNullable = null,
                         LearningDeliveryFAMs = testLearningDeliveryFAMs
                     }
                 },

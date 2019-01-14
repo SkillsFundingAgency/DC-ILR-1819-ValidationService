@@ -28,6 +28,7 @@
         public const string AFinDate_07 = "AFinDate_07";
         public const string AFinDate_08 = "AFinDate_08";
         public const string AFinDate_09 = "AFinDate_09";
+        public const string AFinDate_12 = "AFinDate_12";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
@@ -82,11 +83,13 @@
         public const string DateOfBirth_32 = "DateOfBirth_32";
         public const string DateOfBirth_35 = "DateOfBirth_35";
         public const string DateOfBirth_36 = "DateOfBirth_36";
+        public const string DateOfBirth_37 = "DateOfBirth_37";
         public const string DateOfBirth_38 = "DateOfBirth_38";
         public const string DateOfBirth_39 = "DateOfBirth_39";
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
+        public const string DateOfBirth_51 = "DateOfBirth_51";
         public const string DateOfBirth_50 = "DateOfBirth_50";
         public const string DateOfBirth_53 = "DateOfBirth_53";
 
@@ -219,6 +222,8 @@
         public const string LearnFAMType_09 = "LearnFAMType_09";
         public const string LearnFAMType_10 = "LearnFAMType_10";
         public const string LearnFAMType_11 = "LearnFAMType_11";
+        public const string LearnFAMType_14 = "LearnFAMType_14";
+        public const string LearnFAMType_15 = "LearnFAMType_15";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
@@ -342,6 +347,7 @@
         public const string R43 = "R43";
         public const string R45 = "R45";
         public const string R47 = "R47";
+        public const string R50 = "R50";
         public const string R52 = "R52";
         public const string R56 = "R56";
         public const string R59 = "R59";
