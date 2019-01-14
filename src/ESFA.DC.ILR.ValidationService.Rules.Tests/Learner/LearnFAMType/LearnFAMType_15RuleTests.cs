@@ -54,12 +54,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         {
             TestLearner testLearner = new TestLearner
             {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35
+                    }
+                },
                 LearnerFAMs = new TestLearnerFAM[]
                 {
                     new TestLearnerFAM()
                     {
                         LearnFAMCode = 1,
                         LearnFAMType = LearnerFAMTypeConstants.MCF
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMCode = 1,
+                        LearnFAMType = LearnerFAMTypeConstants.LSR
                     }
                 }
             };
@@ -83,6 +95,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         {
             TestLearner testLearner = new TestLearner
             {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35
+                    }
+                },
                 LearnerFAMs = new TestLearnerFAM[]
                 {
                     new TestLearnerFAM()
