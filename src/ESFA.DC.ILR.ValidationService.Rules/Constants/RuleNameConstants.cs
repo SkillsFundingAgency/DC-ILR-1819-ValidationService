@@ -28,6 +28,7 @@
         public const string AFinDate_07 = "AFinDate_07";
         public const string AFinDate_08 = "AFinDate_08";
         public const string AFinDate_09 = "AFinDate_09";
+        public const string AFinDate_12 = "AFinDate_12";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";

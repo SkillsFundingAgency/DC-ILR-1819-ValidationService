@@ -124,6 +124,7 @@
                 typeof(AFinDate_07Rule),
                 typeof(AFinDate_08Rule),
                 typeof(AFinDate_09Rule),
+                typeof(AFinDate_12Rule),
                 typeof(AFinType_01Rule),
                 typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
