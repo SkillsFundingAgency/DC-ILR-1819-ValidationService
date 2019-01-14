@@ -10,13 +10,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
     public class FrameworkCommonComponent :
         ILARSFrameworkCommonComponent
     {
-        /*
-        /// <summary>
-        /// not applicable (shouldn't be here and apparently not used anyway...)
-        /// </summary>
-        public const int NotApplicable = -2; // ???
-        */
-
         /// <summary>
         /// Gets or sets the framework work code.
         /// </summary>

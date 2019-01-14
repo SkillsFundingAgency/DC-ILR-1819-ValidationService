@@ -138,7 +138,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
             return IsV2NotionalLevel2(larsDelivery)
-                && larsDelivery.LearningDeliveryCategories.SafeAny(IsLegallyEntitled);
+                && larsDelivery.Categories.SafeAny(IsLegallyEntitled);
         }
 
         public bool IsV2NotionalLevel2(ILARSLearningDelivery delivery)

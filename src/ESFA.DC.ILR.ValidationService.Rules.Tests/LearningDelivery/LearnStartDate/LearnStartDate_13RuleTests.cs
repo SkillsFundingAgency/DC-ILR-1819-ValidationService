@@ -64,7 +64,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         }
 
         [Theory]
-        [InlineData(null, Skip = "not relevant")]
         [InlineData(0)]
         public void LARSConditionMet_False(int stdCode)
         {

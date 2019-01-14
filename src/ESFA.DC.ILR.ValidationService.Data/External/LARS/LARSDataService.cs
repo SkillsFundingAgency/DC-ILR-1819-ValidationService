@@ -74,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return delivery?.LearningDeliveryCategories.AsSafeReadOnlyList()
+            return delivery?.Categories
                 ?? Collection.EmptyAndReadOnly<ILARSLearningCategory>();
         }
 
@@ -90,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return delivery?.Validities.AsSafeReadOnlyList()
+            return delivery?.Validities
                 ?? Collection.EmptyAndReadOnly<ILARSLearningDeliveryValidity>();
         }
 
@@ -106,7 +106,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return delivery?.AnnualValues.AsSafeReadOnlyList()
+            return delivery?.AnnualValues
                 ?? Collection.EmptyAndReadOnly<ILARSAnnualValue>();
         }
 
@@ -121,7 +121,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return delivery?.FrameworkAims.AsSafeReadOnlyList()
+            return delivery?.FrameworkAims
                 ?? Collection.EmptyAndReadOnly<ILARSFrameworkAim>();
         }
 
@@ -335,20 +335,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     && learnStartDate > f.EffectiveTo);
         }
 
-        // TODO: this should happen in the rule
-        public bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
+        // TODO: this should happen in the rule, and it's now improperly named...
+        public bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
-            return _externalDataCache
-                .Frameworks
-                .SafeWhere(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims)
-                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                    && fa.ProgType == progType
-                    && fa.FworkCode == fworkCode
-                    && fa.PwayCode == pwayCode
+            var frameworkAims = GetFrameworkAimsFor(learnAimRef);
 
-                    // && f.EffectiveTo != null <= not needed with uplifting operators
-                    && dd04Date > fa.EffectiveTo);
+            return frameworkAims.Any(
+                fa => fa.ProgType == progType
+                && fa.FworkCode == fworkCode
+                && fa.PwayCode == pwayCode
+                && !fa.IsCurrent(dd04Date));
         }
 
         // TODO: this should happen in the rule

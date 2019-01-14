@@ -13,6 +13,26 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         ILARSLearningDelivery
     {
         /// <summary>
+        /// The learning categories
+        /// </summary>
+        private IReadOnlyCollection<ILARSLearningCategory> _categories;
+
+        /// <summary>
+        /// The learning delivery validities
+        /// </summary>
+        private IReadOnlyCollection<ILARSLearningDeliveryValidity> _validities;
+
+        /// <summary>
+        /// The annual values
+        /// </summary>
+        private IReadOnlyCollection<ILARSAnnualValue> _annualValues;
+
+        /// <summary>
+        /// The frameworks
+        /// </summary>
+        private IReadOnlyCollection<ILARSFrameworkAim> _frameworks;
+
+        /// <summary>
         /// Gets or sets the learn aim reference.
         /// </summary>
         public string LearnAimRef { get; set; }
@@ -90,41 +110,37 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// <summary>
         /// Gets or sets the learning delivery categories.
         /// </summary>
-        public IEnumerable<LearningDeliveryCategory> LearningDeliveryCategories { get; set; }
+        public IReadOnlyCollection<ILARSLearningCategory> Categories
+        {
+            get => _categories ?? (_categories = Collection.EmptyAndReadOnly<ILARSLearningCategory>());
+            set => _categories = value;
+        }
 
         /// <summary>
-        /// Gets or sets the lars validities.
+        /// Gets or sets the learning delivery periods of validity.
         /// </summary>
-        public IEnumerable<LARSValidity> LARSValidities { get; set; }
+        public IReadOnlyCollection<ILARSLearningDeliveryValidity> Validities
+        {
+            get => _validities ?? (_validities = Collection.EmptyAndReadOnly<ILARSLearningDeliveryValidity>());
+            set => _validities = value;
+        }
 
         /// <summary>
         /// Gets or sets the framework aims.
         /// </summary>
-        public IEnumerable<FrameworkAim> FrameworkAims { get; set; }
+        public IReadOnlyCollection<ILARSFrameworkAim> FrameworkAims
+        {
+            get => _frameworks ?? (_frameworks = Collection.EmptyAndReadOnly<ILARSFrameworkAim>());
+            set => _frameworks = value;
+        }
 
         /// <summary>
         /// Gets or sets the annual values.
         /// </summary>
-        public IEnumerable<AnnualValue> AnnualValues { get; set; }
-
-        /// <summary>
-        /// Gets the learning delivery categories.
-        /// </summary>
-        IReadOnlyCollection<ILARSLearningCategory> ILARSLearningDelivery.LearningDeliveryCategories => LearningDeliveryCategories.AsSafeReadOnlyList();
-
-        /// <summary>
-        /// Gets the framework aims.
-        /// </summary>
-        IReadOnlyCollection<ILARSFrameworkAim> ILARSLearningDelivery.FrameworkAims => FrameworkAims.AsSafeReadOnlyList();
-
-        /// <summary>
-        /// Gets the annual values.
-        /// </summary>
-        IReadOnlyCollection<ILARSAnnualValue> ILARSLearningDelivery.AnnualValues => AnnualValues.AsSafeReadOnlyList();
-
-        /// <summary>
-        /// Gets the lars validities.
-        /// </summary>
-        IReadOnlyCollection<ILARSLearningDeliveryValidity> ILARSLearningDelivery.Validities => LARSValidities.AsSafeReadOnlyList();
+        public IReadOnlyCollection<ILARSAnnualValue> AnnualValues
+        {
+            get => _annualValues ?? (_annualValues = Collection.EmptyAndReadOnly<ILARSAnnualValue>());
+            set => _annualValues = value;
+        }
     }
 }

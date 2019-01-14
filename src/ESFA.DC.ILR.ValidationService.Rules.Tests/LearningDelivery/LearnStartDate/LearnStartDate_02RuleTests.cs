@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         /// <summary>
         /// New rule with null message handler throws.
         /// </summary>
-        [Fact(Skip = "this can't be tested for any more")]
+        [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange

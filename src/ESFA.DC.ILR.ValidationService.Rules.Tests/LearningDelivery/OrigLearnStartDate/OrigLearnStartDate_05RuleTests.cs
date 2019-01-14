@@ -157,28 +157,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
                 .BeTrue();
         }
 
-        [Fact(Skip = "invalid test as the as a check for 'currency / validity' is invalid if there is no date")]
-        public void ConditionMet_FalseOrigLearnStartDate()
-        {
-            DateTime origLearnStartDate = DateTime.MinValue; // = null;
-            var fundModel = 35;
-            var progType = 22;
-            var aimType = 3;
-            var learnAimRef = "123456789";
-
-            var dd07Mock = new Mock<IDD07>();
-            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
-
-            var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock
-                .Setup(ldsm => ldsm.OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Apprenticeships))
-                .Returns(false);
-
-            NewRule(dd07Mock.Object, larsDataServiceMock.Object).ConditionMet(origLearnStartDate, fundModel, progType, aimType, learnAimRef)
-                .Should()
-                .BeFalse();
-        }
-
         [Fact]
         public void ConditionMet_FalseFundModel()
         {

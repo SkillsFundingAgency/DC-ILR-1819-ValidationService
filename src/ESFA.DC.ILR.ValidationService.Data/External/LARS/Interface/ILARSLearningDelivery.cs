@@ -66,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// <summary>
         /// Gets the learning delivery categories.
         /// </summary>
-        IReadOnlyCollection<ILARSLearningCategory> LearningDeliveryCategories { get; }
+        IReadOnlyCollection<ILARSLearningCategory> Categories { get; }
 
         /// <summary>
         /// Gets the framework aims.
