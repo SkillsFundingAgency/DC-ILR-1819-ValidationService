@@ -1,6 +1,4 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProvSpecDelMonOccur;
-
-namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
@@ -78,6 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
+    using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProvSpecDelMonOccur;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PwayCode;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId;
@@ -404,9 +403,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ProgType_08Rule),
                 typeof(ProgType_13Rule),
                 typeof(ProgType_14Rule),
+                typeof(ProvSpecDelMonOccur_01Rule),
                 typeof(PwayCode_02Rule),
                 typeof(PwayCode_03Rule),
-                typeof(ProvSpecDelMonOccur_01Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(QUALENT3_03Rule),
