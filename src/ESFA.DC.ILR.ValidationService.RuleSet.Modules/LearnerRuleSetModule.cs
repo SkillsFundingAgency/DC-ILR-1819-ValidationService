@@ -424,6 +424,7 @@
                 typeof(R43Rule),
                 typeof(R45Rule),
                 typeof(R47Rule),
+                typeof(R50Rule),
                 typeof(R52Rule),
                 typeof(R56Rule),
                 typeof(R61Rule),
