@@ -1,9 +1,11 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
 {
@@ -13,27 +15,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
     public class WorkPlaceEmpId_04Rule :
+        AbstractRule,
         IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = "WorkPlaceEmpId";
-
         /// <summary>
         /// The temporary employer identifier
         /// </summary>
         public const int TemporaryEmpID = 999999999;
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "WorkPlaceEmpId_04";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
 
         /// <summary>
         /// The file data service
@@ -47,21 +35,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
         /// <param name="fileDataService">The file data service.</param>
         public WorkPlaceEmpId_04Rule(
             IValidationErrorHandler validationErrorHandler,
-                        IFileDataService fileDataService)
+            IFileDataService fileDataService)
+            : base(validationErrorHandler, RuleNameConstants.WorkPlaceEmpId_04)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(fileDataService)
                 .AsGuard<ArgumentNullException>(nameof(fileDataService));
 
-            _messageHandler = validationErrorHandler;
             _fileDataService = fileDataService;
         }
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
 
         /// <summary>
         /// Gets sixty days.
@@ -140,10 +123,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
         /// <param name="thisDelivery">this delivery.</param>
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, TemporaryEmpID));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildErrorMessageParameters());
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters()
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.WorkPlaceEmpId, TemporaryEmpID)
+            };
         }
     }
 }

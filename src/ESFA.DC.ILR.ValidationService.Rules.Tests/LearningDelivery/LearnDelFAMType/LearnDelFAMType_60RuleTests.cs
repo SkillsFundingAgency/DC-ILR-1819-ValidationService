@@ -464,7 +464,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockItem = new Mock<ILARSLearningDelivery>();
 
             mockItem.SetupGet(y => y.NotionalNVQLevelv2).Returns(candidate);
-            larsDataService.Setup(x => x.GetDeliveriesFor(Moq.It.IsAny<string>())).Returns(new List<ILARSLearningDelivery>() { mockItem.Object });
+            larsDataService
+                .Setup(x => x.GetDeliveryFor(Moq.It.IsAny<string>()))
+                .Returns(mockItem.Object);
 
             var sut = new LearnDelFAMType_60Rule(handler.Object, larsDataService.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object, organisationDataService.Object, fileDataService.Object);
 
@@ -700,30 +702,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Returns(deliveries.AsSafeReadOnlyList());
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, Monitoring.Delivery.Types.FullOrCoFunding)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, "1")).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, DateTime.Parse("2016-08-01").ToString("d", new CultureInfo("en-GB")))).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, DateTime.Parse("1990-07-01").ToString("d", new CultureInfo("en-GB")))).Verifiable();
+            validationErrorHandlerMock
+                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, Monitoring.Delivery.Types.FullOrCoFunding))
+                .Verifiable();
+            validationErrorHandlerMock
+                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, "1"))
+                .Verifiable();
+            validationErrorHandlerMock
+                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills))
+                .Verifiable();
+            validationErrorHandlerMock
+                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, DateTime.Parse("2016-08-01").ToString("d", new CultureInfo("en-GB"))))
+                .Verifiable();
+            validationErrorHandlerMock
+                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, DateTime.Parse("1990-07-01").ToString("d", new CultureInfo("en-GB"))))
+                .Verifiable();
 
             var mock = new Mock<ILARSLearningDelivery>();
             mock
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(LARSNotionalNVQLevelV2.Level2);
 
-            var larsDeliveries = Collection.Empty<ILARSLearningDelivery>();
-            larsDeliveries.Add(mock.Object);
-
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
-                .Setup(x => x.GetDeliveriesFor(learnAimRef))
-                .Returns(larsDeliveries.AsSafeReadOnlyList());
+                .Setup(x => x.GetDeliveryFor(learnAimRef))
+                .Returns(mock.Object);
 
             var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
             var mockDDRule21 = new Mock<IDerivedData_21Rule>(MockBehavior.Strict);
             var mockDDRule28 = new Mock<IDerivedData_28Rule>(MockBehavior.Strict);
             var mockDDRule29 = new Mock<IDerivedData_29Rule>(MockBehavior.Strict);
-            var organisationDataService = new Mock<IOrganisationDataService>();
+            var organisationDataService = new Mock<IOrganisationDataService>(MockBehavior.Strict);
             var fileDataService = new Mock<IFileDataService>(MockBehavior.Strict);
 
             var sut = new LearnDelFAMType_60Rule(validationErrorHandlerMock.Object, service.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object, organisationDataService.Object, fileDataService.Object);
@@ -738,6 +747,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             mockDDRule21.VerifyAll();
             mockDDRule28.VerifyAll();
             mockDDRule29.VerifyAll();
+            organisationDataService.VerifyAll();
+            fileDataService.VerifyAll();
         }
 
         [Fact]
@@ -801,7 +812,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(LARSNotionalNVQLevelV2.Level2);
             mockLARSDel
-                .SetupGet(x => x.LearningDeliveryCategories)
+                .SetupGet(x => x.Categories)
                 .Returns(larsCats.AsSafeReadOnlyList());
 
             var larsDeliveries = Collection.Empty<ILARSLearningDelivery>();
@@ -813,7 +824,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockDDRule28 = new Mock<IDerivedData_28Rule>(MockBehavior.Strict);
             var mockDDRule29 = new Mock<IDerivedData_29Rule>(MockBehavior.Strict);
 
-            var organisationDataService = new Mock<IOrganisationDataService>();
+            var organisationDataService = new Mock<IOrganisationDataService>(MockBehavior.Strict);
             var fileDataService = new Mock<IFileDataService>(MockBehavior.Strict);
 
             var sut = new LearnDelFAMType_60Rule(validationErrorHandlerMock.Object, service.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object, organisationDataService.Object, fileDataService.Object);
@@ -828,6 +839,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             mockDDRule21.VerifyAll();
             mockDDRule28.VerifyAll();
             mockDDRule29.VerifyAll();
+            organisationDataService.VerifyAll();
+            fileDataService.VerifyAll();
         }
 
         public LearnDelFAMType_60Rule NewRule()

@@ -159,13 +159,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsBasicSkillsLearner(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef)
-                .Where(x => It.IsBetween(delivery.LearnStartDate, x.EffectiveFrom, x.EffectiveTo ?? DateTime.MaxValue))
-                .AsSafeReadOnlyList();
+            var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef);
+            var annualValues = _larsData.GetAnnualValuesFor(delivery.LearnAimRef);
 
-            return deliveries
-                .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
-                .Any(x => IsBasicSkillsLearner(x) || IsESOLBasicSkillsLearner(x));
+            return validities.Any(x => x.IsCurrent(delivery.LearnStartDate))
+                && annualValues.Any(x => IsBasicSkillsLearner(x) || IsESOLBasicSkillsLearner(x));
         }
 
         /// <summary>
@@ -296,12 +294,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsEntitledLevel2NVQ(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
+            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
-            return deliveries
-                .Where(IsV2NotionalLevel2)
-                .SelectMany(x => x.LearningDeliveryCategories.AsSafeReadOnlyList())
-                .Any(IsLegallyEntitled);
+            return IsV2NotionalLevel2(larsDelivery)
+                && larsDelivery.Categories.SafeAny(IsLegallyEntitled);
         }
 
         /// <summary>

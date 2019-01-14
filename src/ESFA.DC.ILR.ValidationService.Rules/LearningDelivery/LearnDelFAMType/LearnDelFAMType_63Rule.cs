@@ -63,13 +63,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsBasicSkillsLearner(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef)
-                .Where(x => It.IsBetween(delivery.LearnStartDate, x.EffectiveFrom, x.EffectiveTo ?? DateTime.MaxValue))
-                .AsSafeReadOnlyList();
+            var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef);
+            var annualValues = _larsData.GetAnnualValuesFor(delivery.LearnAimRef);
 
-            return deliveries
-                .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
-                .Any(IsBasicSkillsLearner);
+            return validities.Any(x => x.IsCurrent(delivery.LearnStartDate))
+                && annualValues.Any(IsBasicSkillsLearner);
         }
 
         /// <summary>
@@ -120,7 +118,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is core part of a programme] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsCorePartOfAProgramme(ILearningDelivery delivery) =>
-            IsComponentAim(delivery) && IsBasicSkillsLearner(delivery);
+            IsComponentAim(delivery)
+                && IsBasicSkillsLearner(delivery);
 
         /// <summary>
         /// Determines whether the specified delivery is excluded.
@@ -129,10 +128,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <returns>
         ///   <c>true</c> if the specified delivery is excluded; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsExcluded(ILearningDelivery delivery)
-        {
-            return IsApprenticeship(delivery) && (IsProgrammeAim(delivery) || IsCorePartOfAProgramme(delivery));
-        }
+        public bool IsExcluded(ILearningDelivery delivery) =>
+            IsApprenticeship(delivery)
+                && (IsProgrammeAim(delivery) || IsCorePartOfAProgramme(delivery));
 
         /// <summary>
         /// Checks the delivery fams.
@@ -163,6 +161,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public bool IsApprenticeshipContract(ILearningDelivery delivery) =>
             CheckDeliveryFAMs(delivery, IsApprenticeshipContract);
 
+        public bool IsNotValid(ILearningDelivery delivery) =>
+            !IsExcluded(delivery)
+                && IsApprenticeshipContract(delivery);
+
         /// <summary>
         /// Validates the specified object.
         /// </summary>
@@ -175,16 +177,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(x => !IsExcluded(x))
-                .ForEach(x =>
-                {
-                    var failedValidation = IsApprenticeshipContract(x);
-
-                    if (failedValidation)
-                    {
-                        RaiseValidationMessage(learnRefNumber, x);
-                    }
-                });
+                .SafeWhere(IsNotValid)
+                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
         }
 
         /// <summary>

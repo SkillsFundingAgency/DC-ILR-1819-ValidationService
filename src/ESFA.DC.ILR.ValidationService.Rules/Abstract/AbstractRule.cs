@@ -1,45 +1,84 @@
-﻿using System;
+﻿using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
-using ESFA.DC.ILR.ValidationService.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
 {
     public abstract class AbstractRule
     {
+        /// <summary>
+        /// The required culture (for date time formatting)
+        /// </summary>
+        public static readonly IFormatProvider RequiredCulture = new CultureInfo("en-GB");
+
         private readonly IValidationErrorHandler _validationErrorHandler;
 
-        private readonly string _ruleName;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractRule"/> class.
+        /// </summary>
+        /// <param name="validationErrorHandler">The validation error handler.</param>
+        /// <param name="ruleName">Name of the rule.</param>
         protected AbstractRule(IValidationErrorHandler validationErrorHandler, string ruleName)
         {
+            // TODO: these need to be in place, but they can't be at present as they induce thousands of test errors...
+            // It.IsNull(validationErrorHandler)
+            //    .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            // It.IsEmpty(ruleName)
+            //   .AsGuard<ArgumentNullException>(nameof(ruleName));
             _validationErrorHandler = validationErrorHandler;
-            _ruleName = ruleName;
+            RuleName = ruleName;
         }
 
-        public string RuleName
-        {
-            get { return _ruleName; }
-        }
+        /// <summary>
+        /// Gets the name of the rule.
+        /// </summary>
+        public string RuleName { get; }
 
+        /// <summary>
+        /// Raises a validation message using a collection of message parameters.
+        /// </summary>
+        /// <param name="learnRefNumber">The learn reference number.</param>
+        /// <param name="aimSequenceNumber">The aim sequence number.</param>
+        /// <param name="errorMessageParameters">The error message parameters.</param>
         protected void HandleValidationError(string learnRefNumber = null, long? aimSequenceNumber = null, IEnumerable<IErrorMessageParameter> errorMessageParameters = null)
         {
-            _validationErrorHandler.Handle(_ruleName, learnRefNumber, aimSequenceNumber, errorMessageParameters);
+            _validationErrorHandler.Handle(RuleName, learnRefNumber, aimSequenceNumber, errorMessageParameters);
         }
 
-        protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, object value)
+        /// <summary>
+        /// Build Error Message
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <param name="value"></param>
+        /// <returns>Error Message Parameter</returns>
+        protected IErrorMessageParameter BuildErrorMessageParameter<T>(string propertyName, T value)
         {
             return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value);
         }
 
+        /// <summary>
+        /// Builds a date message parameter with the required culture.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>a date message parameter with the required culture</returns>
         protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, DateTime value)
         {
-            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value.ToString("d", new CultureInfo("en-GB")));
+            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value.ToString("d", RequiredCulture));
         }
 
+        /// <summary>
+        /// Builds a nullable date message parameter with the required culture.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>a nullable date message parameter with the required culture</returns>
         protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, DateTime? value)
         {
-            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value?.ToString("d", new CultureInfo("en-GB")));
+            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value?.ToString("d", RequiredCulture));
         }
     }
 }

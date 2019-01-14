@@ -168,7 +168,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <returns>
         ///   <c>true</c> if [has qualifying category] [the specified validity]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasQualifyingCategory(ILARSValidity validity, params string[] desiredCategories) =>
+        public bool HasQualifyingCategory(ILARSLearningDeliveryValidity validity, params string[] desiredCategories) =>
             It.IsInRange(validity.ValidityCategory, desiredCategories);
 
         /// <summary>

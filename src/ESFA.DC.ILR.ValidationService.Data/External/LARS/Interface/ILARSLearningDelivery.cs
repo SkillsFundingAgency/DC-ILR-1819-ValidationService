@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
     /// <summary>
     /// the lars learning delivery
+    /// dates removed to ensure validity is determined using the right classes, removed: ISupportFundingWithdrawal
     /// </summary>
     public interface ILARSLearningDelivery
     {
@@ -12,16 +12,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// Gets the learn aim reference.
         /// </summary>
         string LearnAimRef { get; }
-
-        /// <summary>
-        /// Gets the effective from date.
-        /// </summary>
-        DateTime EffectiveFrom { get; }
-
-        /// <summary>
-        /// Gets the effective to date.
-        /// </summary>
-        DateTime? EffectiveTo { get; }
 
         /// <summary>
         /// Gets the learn aim reference type.
@@ -76,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// <summary>
         /// Gets the learning delivery categories.
         /// </summary>
-        IReadOnlyCollection<ILARSLearningCategory> LearningDeliveryCategories { get; }
+        IReadOnlyCollection<ILARSLearningCategory> Categories { get; }
 
         /// <summary>
         /// Gets the framework aims.
@@ -89,8 +79,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         IReadOnlyCollection<ILARSAnnualValue> AnnualValues { get; }
 
         /// <summary>
-        /// Gets the lars validities.
+        /// Gets the (lars) learning delivery periods of validity.
         /// </summary>
-        IReadOnlyCollection<ILARSValidity> LARSValidities { get; }
+        IReadOnlyCollection<ILARSLearningDeliveryValidity> Validities { get; }
     }
 }

@@ -10,10 +10,12 @@
 
         public const string AddHours = "AddHours";
         public const string AchDate = "AchDate";
+        public const string Accom = "Accom";
         public const string AddLine1 = "AddLine1";
         public const string AFinCode = "AFinCode";
         public const string AFinType = "AFinType";
         public const string AFinDate = "AFinDate";
+        public const string AgreeId = "AgreeId";
         public const string AimSeqNumber = "AimSeqNumber";
         public const string AimType = "AimType";
         public const string CompStatus = "CompStatus";
@@ -71,6 +73,7 @@
         public const string PCFLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
+        public const string ProvSpecDelMonOccur = "ProvSpecDelMonOccur";
         public const string PMUKPRN = "PMUKPRN";
         public const string Postcode = "Postcode";
         public const string PostcodePrior = "PostcodePrior";
@@ -84,6 +87,8 @@
         public const string StdCode = "StdCode";
         public const string UCASAPPID = "UCASAPPID";
         public const string WithdrawReason = "WithdrawReason";
+        public const string WorkPlaceEmpId = "WorkPlaceEmpId";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";
+        public const string WorkPlaceMode = "WorkPlaceMode";
     }
 }

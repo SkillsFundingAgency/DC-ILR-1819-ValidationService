@@ -5,7 +5,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
     /// <summary>
     /// the lars learning category
     /// </summary>
-    public interface ILARSLearningCategory
+    public interface ILARSLearningCategory :
+        ISupportFundingWithdrawal
     {
         /// <summary>
         /// Gets the learn aim reference.
@@ -16,15 +17,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// Gets the category reference.
         /// </summary>
         int CategoryRef { get; }
-
-        /// <summary>
-        /// Gets the effective from date.
-        /// </summary>
-        DateTime EffectiveFrom { get; }
-
-        /// <summary>
-        /// Gets the effective to date.
-        /// </summary>
-        DateTime? EffectiveTo { get; }
     }
 }

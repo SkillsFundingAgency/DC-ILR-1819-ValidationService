@@ -21,12 +21,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
         private readonly IEnumerable<long> _fundModels =
             new HashSet<long>()
             {
-                FundModelConstants.CommunityLearning,
-                FundModelConstants.SixteenToNineteen,
-                FundModelConstants.AdultSkills,
-                FundModelConstants.Apprenticeships,
-                FundModelConstants.OtherAdult,
-                FundModelConstants.ESF,
+                TypeOfFunding.Age16To19ExcludingApprenticeships,
+                TypeOfFunding.Other16To19,
+                TypeOfFunding.AdultSkills,
+                TypeOfFunding.ApprenticeshipsFrom1May2017,
+                TypeOfFunding.OtherAdult,
+                TypeOfFunding.EuropeanSocialFund,
             };
 
         public ULN_03Rule(IFileDataService fileDataService, IAcademicYearDataService academicDataQueryService, ILearnerQueryService learnerQueryService, IValidationErrorHandler validationErrorHandler)

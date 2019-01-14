@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -26,13 +27,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Fact]
         public void FundModelConditionMet_False()
         {
-            NewRule().FundModelConditionMet(FundModelConstants.Apprenticeships).Should().BeFalse();
+            NewRule().FundModelConditionMet(TypeOfFunding.ApprenticeshipsFrom1May2017).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills)]
-        [InlineData(FundModelConstants.OtherAdult)]
-        [InlineData(FundModelConstants.NonFunded)]
+        [InlineData(TypeOfFunding.AdultSkills)]
+        [InlineData(TypeOfFunding.OtherAdult)]
+        [InlineData(TypeOfFunding.NotFundedByESFA)]
         public void FundModelConditionMet_True(int fundModel)
         {
             NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
@@ -47,13 +48,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             DateTime learnStartDate = DateTime.Parse(learnStartDateString);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            var academicYearQueryService = new Mock<IAcademicYearQueryService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
 
-            academicYearQueryService.Setup(dd => dd.AugustThirtyFirstOfLearnStartDate(learnStartDate)).Returns(new DateTime(2012, 08, 31));
+            academicYearDataServiceMock.Setup(ds => ds.GetAcademicYearOfLearningDate(learnStartDate, AcademicYearDates.August31)).Returns(new DateTime(2012, 08, 31));
             dateTimeQueryServiceMock.Setup(dd => dd.YearsBetween(dateOfBirth ?? new DateTime(1994, 08, 31), new DateTime(2012, 08, 31))).Returns(18);
 
             NewRule(
-                academicYearQueryService: academicYearQueryService.Object,
+                academicYearDataService: academicYearDataServiceMock.Object,
                 dateTimeQueryService: dateTimeQueryServiceMock.Object).LearningDeliveryConditionMet(dateOfBirth, learnStartDate).Should().BeFalse();
         }
 
@@ -64,13 +65,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             DateTime learnStartDate = new DateTime(2017, 08, 31);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
 
-            academicYearQueryServiceMock.Setup(dd => dd.AugustThirtyFirstOfLearnStartDate(learnStartDate)).Returns(new DateTime(2017, 08, 31));
+            academicYearDataServiceMock.Setup(ds => ds.GetAcademicYearOfLearningDate(learnStartDate, AcademicYearDates.August31)).Returns(new DateTime(2017, 08, 31));
             dateTimeQueryServiceMock.Setup(dd => dd.YearsBetween(dateOfBirth, learnStartDate)).Returns(20);
 
             NewRule(
-                academicYearQueryService: academicYearQueryServiceMock.Object,
+                academicYearDataService: academicYearDataServiceMock.Object,
                 dateTimeQueryService: dateTimeQueryServiceMock.Object).LearningDeliveryConditionMet(dateOfBirth, learnStartDate).Should().BeTrue();
         }
 
@@ -89,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
 
             NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmploymentStatusConditionMet(learnerEmploymentStatuses, learnStartDate).Should().BeFalse();
         }
@@ -109,7 +110,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
 
             NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmploymentStatusConditionMet(null, learnStartDate).Should().BeFalse();
         }
@@ -129,7 +130,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmploymentStatusConditionMet(learnerEmploymentStatuses, learnStartDate).Should().BeTrue();
         }
@@ -207,8 +208,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         }
 
         [Theory]
-        [InlineData(FundModelConstants.Apprenticeships, null, "2016-12-01", 2, LearningDeliveryFAMTypeConstants.SOF, "108")]
-        [InlineData(FundModelConstants.Apprenticeships, "2002-05-01", "2016-12-01", 2, LearningDeliveryFAMTypeConstants.LDM, "034")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, null, "2016-12-01", 2, LearningDeliveryFAMTypeConstants.SOF, "108")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, "2002-05-01", "2016-12-01", 2, LearningDeliveryFAMTypeConstants.LDM, "034")]
         public void ConditionMet_False(
            int fundModel,
            string dateOfBirthString,
@@ -237,28 +238,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var dd07Mock = new Mock<IDD07>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            academicYearQueryServiceMock.Setup(dd => dd.AugustThirtyFirstOfLearnStartDate(learnStartDate)).Returns(new DateTime(2018, 08, 31));
+            academicYearDataServiceMock.Setup(ds => ds.GetAcademicYearOfLearningDate(learnStartDate, AcademicYearDates.August31)).Returns(new DateTime(2018, 08, 31));
             dateTimeQueryServiceMock.Setup(dd => dd.YearsBetween(dateOfBirth ?? new DateTime(2000, 06, 01), learnStartDate)).Returns(18);
             learningDeliveryFAMsQueryServiceMock.Setup(dd => dd.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, learnDelFAMType, learnDelFAMCode)).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
 
             NewRule(
-                dd07: dd07Mock.Object,
-                dateTimeQueryService: dateTimeQueryServiceMock.Object,
-                academicYearQueryService: academicYearQueryServiceMock.Object,
-                learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object,
-                learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object).ConditionMet(fundModel, dateOfBirth, learnStartDate, progType, learnerEmploymentStatuses, learningDeliveryFAMs).Should().BeFalse();
+                dd07Mock.Object,
+                dateTimeQueryServiceMock.Object,
+                academicYearDataServiceMock.Object,
+                learnerEmploymentStatusQueryServiceMock.Object,
+                learningDeliveryFAMsQueryServiceMock.Object)
+                .ConditionMet(fundModel, dateOfBirth, learnStartDate, progType, learnerEmploymentStatuses, learningDeliveryFAMs).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills, "1997-08-31", "2017-08-31", 4, LearningDeliveryFAMTypeConstants.ACT, "022")]
-        [InlineData(FundModelConstants.OtherAdult, "1997-08-31", "2017-08-31", 5, LearningDeliveryFAMTypeConstants.ADL, "022")]
-        [InlineData(FundModelConstants.NonFunded, "1997-08-31", "2017-08-31", null, LearningDeliveryFAMTypeConstants.RES, "022")]
+        [InlineData(TypeOfFunding.AdultSkills, "1997-08-31", "2017-08-31", 4, LearningDeliveryFAMTypeConstants.ACT, "022")]
+        [InlineData(TypeOfFunding.OtherAdult, "1997-08-31", "2017-08-31", 5, LearningDeliveryFAMTypeConstants.ADL, "022")]
+        [InlineData(TypeOfFunding.NotFundedByESFA, "1997-08-31", "2017-08-31", null, LearningDeliveryFAMTypeConstants.RES, "022")]
         public void ConditionMet_True(
            int fundModel,
            string dateOfBirthString,
@@ -285,20 +287,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             DateTime? dateOfBirth = string.IsNullOrEmpty(dateOfBirthString) ? (DateTime?)null : DateTime.Parse(dateOfBirthString);
 
             var dd07Mock = new Mock<IDD07>();
-            var academicYearQueryService = new Mock<IAcademicYearQueryService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            academicYearQueryService.Setup(dd => dd.AugustThirtyFirstOfLearnStartDate(learnStartDate)).Returns(new DateTime(2017, 08, 31));
+            academicYearDataServiceMock.Setup(ds => ds.GetAcademicYearOfLearningDate(learnStartDate, AcademicYearDates.August31)).Returns(new DateTime(2017, 08, 31));
             dateTimeQueryServiceMock.Setup(dd => dd.YearsBetween(dateOfBirth ?? new DateTime(1997, 08, 31), learnStartDate)).Returns(20);
             learningDeliveryFAMsQueryServiceMock.Setup(dd => dd.HasLearningDeliveryFAMType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.RES)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             NewRule(
                 dd07: dd07Mock.Object,
-                academicYearQueryService: academicYearQueryService.Object,
+                academicYearDataService: academicYearDataServiceMock.Object,
                 dateTimeQueryService: dateTimeQueryServiceMock.Object,
                 learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object,
                 learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).ConditionMet(fundModel, dateOfBirth, learnStartDate, progType, learnerEmploymentStatuses, learningDeliveryFAMs).Should().BeTrue();
@@ -334,7 +336,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                     {
                         AimType = 1,
                         LearnStartDate = learnStartDate,
-                        FundModel = FundModelConstants.AdultSkills,
+                        FundModel = TypeOfFunding.AdultSkills,
                         ProgTypeNullable = 4,
                         LearningDeliveryFAMs = learningDeliveryFAMs.ToList()
                     }
@@ -344,21 +346,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var dd07Mock = new Mock<IDD07>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(4)).Returns(false);
-            academicYearQueryServiceMock.Setup(dd => dd.AugustThirtyFirstOfLearnStartDate(learnStartDate)).Returns(new DateTime(2017, 08, 31));
+            academicYearDataServiceMock.Setup(ds => ds.GetAcademicYearOfLearningDate(learnStartDate, AcademicYearDates.August31)).Returns(new DateTime(2017, 08, 31));
             dateTimeQueryServiceMock.Setup(dd => dd.YearsBetween(dateOfBirth, learnStartDate)).Returns(20);
             learningDeliveryFAMsQueryServiceMock.Setup(dd => dd.HasLearningDeliveryFAMType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.RES)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(
                     dd07: dd07Mock.Object,
-                    academicYearQueryService: academicYearQueryServiceMock.Object,
+                    academicYearDataService: academicYearDataServiceMock.Object,
                     dateTimeQueryService: dateTimeQueryServiceMock.Object,
                     learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object,
                     learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object,
@@ -396,7 +398,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                     {
                         AimType = 1,
                         LearnStartDate = new DateTime(2016, 06, 01),
-                        FundModel = FundModelConstants.Apprenticeships,
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                         ProgTypeNullable = 23,
                         LearningDeliveryFAMs = learningDeliveryFAMs.ToList()
                     }
@@ -406,22 +408,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var dd07Mock = new Mock<IDD07>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
+            var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(23)).Returns(false);
-            academicYearQueryServiceMock.Setup(dd => dd.AugustThirtyFirstOfLearnStartDate(learnStartDate)).Returns(new DateTime(2018, 08, 31));
+            academicYearDataServiceMock.Setup(ds => ds.GetAcademicYearOfLearningDate(learnStartDate, AcademicYearDates.August31)).Returns(new DateTime(2018, 08, 31));
             dateTimeQueryServiceMock.Setup(dd => dd.YearsBetween(dateOfBirth, learnStartDate)).Returns(18);
             learningDeliveryFAMsQueryServiceMock.Setup(dd => dd.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "034")).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(
                     dd07: dd07Mock.Object,
                     dateTimeQueryService: dateTimeQueryServiceMock.Object,
-                    academicYearQueryService: academicYearQueryServiceMock.Object,
+                    academicYearDataService: academicYearDataServiceMock.Object,
                     learningDeliveryFAMQueryService: learningDeliveryFAMsQueryServiceMock.Object,
                     learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object,
                     validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
@@ -433,9 +435,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
             validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, "01/08/2014")).Verifiable();
-            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.FundModel, FundModelConstants.AdultSkills)).Verifiable();
+            validationErrorHandlerMock.Setup(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills)).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2014, 08, 01), FundModelConstants.AdultSkills);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(new DateTime(2014, 08, 01), TypeOfFunding.AdultSkills);
 
             validationErrorHandlerMock.Verify();
         }
@@ -443,7 +445,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         public EmpStat_08Rule NewRule(
             IDD07 dd07 = null,
             IDateTimeQueryService dateTimeQueryService = null,
-            IAcademicYearQueryService academicYearQueryService = null,
+            IAcademicYearDataService academicYearDataService = null,
             ILearnerEmploymentStatusQueryService learnerEmploymentStatusQueryService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)
@@ -451,7 +453,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             return new EmpStat_08Rule(
                 dd07: dd07,
                 dateTimeQueryService: dateTimeQueryService,
-                academicYearQueryService: academicYearQueryService,
+                academicYearDataService: academicYearDataService,
                 learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryService,
                 learningDeliveryFAMQueryService: learningDeliveryFAMQueryService,
                 validationErrorHandler: validationErrorHandler);

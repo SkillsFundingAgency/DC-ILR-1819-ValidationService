@@ -73,7 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(WorkPlaceEmpId_04Rule.Name, result);
+            Assert.Equal(RuleNameConstants.WorkPlaceEmpId_04, result);
         }
 
         /// <summary>
@@ -242,13 +242,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == WorkPlaceEmpId_04Rule.Name),
+                Moq.It.Is<string>(y => y == RuleNameConstants.WorkPlaceEmpId_04),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 0,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == WorkPlaceEmpId_04Rule.MessagePropertyName),
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.WorkPlaceEmpId),
                     WorkPlaceEmpId_04Rule.TemporaryEmpID))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 

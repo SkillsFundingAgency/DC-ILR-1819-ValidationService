@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
         public bool AppFinConditionMet(IEnumerable<IAppFinRecord> appFinRecords)
         {
-            return !_learningDeliveryAppFinRecordQueryService.HasAnyLearningDeliveryAFinCodeForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 1);
+            return !_learningDeliveryAppFinRecordQueryService.HasAnyLearningDeliveryAFinCodeForType(appFinRecords, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 1);
         }
     }
 }

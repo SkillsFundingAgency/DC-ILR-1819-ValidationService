@@ -343,7 +343,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // arrange
             var sut = NewRule();
 
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
@@ -385,12 +385,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             larsValidities.Add(mockValidity.Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
@@ -607,7 +607,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             // we just need to get a 'valid' category to get through the restrictions
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
@@ -618,7 +618,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(x => x.EndDate)
                 .Returns(DateTime.MaxValue);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             larsValidities.Add(mockValidity.Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
@@ -723,7 +723,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
             // we just need to get a 'valid' category to get through the restrictions
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
@@ -734,7 +734,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(x => x.EndDate)
                 .Returns(DateTime.MaxValue);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             larsValidities.Add(mockValidity.Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);

@@ -96,7 +96,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmploymentStatusConditionMet(learnerEmploymentStatuses, learnStartDate).Should().BeTrue();
         }
@@ -108,7 +108,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(null, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(null, learnStartDate)).Returns(true);
 
             NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmploymentStatusConditionMet(null, learnStartDate).Should().BeTrue();
         }
@@ -128,7 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
 
             NewRule(learnerEmploymentStatusQueryService: learnerEmploymentStatusQueryServiceMock.Object).EmploymentStatusConditionMet(learnerEmploymentStatuses, learnStartDate).Should().BeFalse();
         }
@@ -152,7 +152,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             NewRule(
                 dd07: dd07Mock.Object,
@@ -179,7 +179,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             NewRule(
                 dd07: dd07Mock.Object,
@@ -206,7 +206,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             NewRule(
                 dd07: dd07Mock.Object,
@@ -233,7 +233,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(false);
 
             NewRule(
                 dd07: dd07Mock.Object,
@@ -260,7 +260,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             NewRule(
                 dd07: dd07Mock.Object,
@@ -287,7 +287,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             ILearner learner = new TestLearner()
             {
@@ -325,7 +325,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             ILearner learner = new TestLearner()
             {
@@ -368,7 +368,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
-            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
+            learnerEmploymentStatusQueryServiceMock.Setup(qs => qs.EmpStatsNotExistOnOrBeforeDate(learnerEmploymentStatuses, learnStartDate)).Returns(true);
 
             ILearner learner = new TestLearner()
             {

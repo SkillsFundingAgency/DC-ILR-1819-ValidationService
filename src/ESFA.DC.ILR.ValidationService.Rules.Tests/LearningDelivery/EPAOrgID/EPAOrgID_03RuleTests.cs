@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EPAOrgID
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, appFinCodes))
+                .Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, appFinCodes))
                 .Returns(false);
 
             NewRule(learningDeliveryAppFinRecordQueryServiceMock.Object).ConditionMet("X", It.IsAny<IEnumerable<IAppFinRecord>>())
@@ -52,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EPAOrgID
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, appFinCodes))
+                .Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(It.IsAny<IEnumerable<IAppFinRecord>>(), ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, appFinCodes))
                 .Returns(true);
 
             NewRule(learningDeliveryAppFinRecordQueryServiceMock.Object).ConditionMet("X", It.IsAny<IEnumerable<IAppFinRecord>>())
@@ -88,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EPAOrgID
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, appFinCodes))
+                .Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, appFinCodes))
                 .Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -125,7 +125,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EPAOrgID
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, appFinCodes))
+                .Setup(qs => qs.HasAnyLearningDeliveryAFinCodesForType(appFinRecords, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, appFinCodes))
                 .Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())

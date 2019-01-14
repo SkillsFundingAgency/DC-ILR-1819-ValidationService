@@ -75,6 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupCodedKey.AppFinRecord, 2)]
         [InlineData(LookupCodedKey.ContPrefType, 2)]
         [InlineData(LookupCodedKey.Domicile, 264)]
+        [InlineData(LookupCodedKey.EngGrade, 35)]
         [InlineData(LookupCodedKey.ESMType, 7)]
         [InlineData(LookupCodedKey.LearnFAMType, 11)]
         [InlineData(LookupCodedKey.OutGrade, 502)]
@@ -102,6 +103,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         /// <returns>a task</returns>
         [Theory]
         [InlineData(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, 2)]
+        [InlineData(LookupCodedKeyDictionary.LearnerFAM, 11)]
         public async Task CodedDictionaryLookupsArePresentAndMatchExpectedCount(LookupCodedKeyDictionary thisKey, int expectedCount)
         {
             // arrange

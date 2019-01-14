@@ -70,13 +70,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public bool IsBasicSkillsLearner(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef)
-                .Where(x => It.IsBetween(delivery.LearnStartDate, x.EffectiveFrom, x.EffectiveTo ?? DateTime.MaxValue))
-                .AsSafeReadOnlyList();
+            var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef);
+            var annualValues = _larsData.GetAnnualValuesFor(delivery.LearnAimRef);
 
-            return deliveries
-                .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
-                .Any(x => IsBasicSkillsLearner(x));
+            return validities.Any(x => x.IsCurrent(delivery.LearnStartDate))
+                && annualValues.Any(IsBasicSkillsLearner);
         }
 
         public bool IsBasicSkillsLearner(ILARSAnnualValue monitor)
@@ -137,12 +135,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public bool IsEntitledLevel2Nvq(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
+            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
-            return deliveries
-                .Where(IsV2NotionalLevel2)
-                .SelectMany(x => x.LearningDeliveryCategories.AsSafeReadOnlyList())
-                .Any(IsLegallyEntitled);
+            return IsV2NotionalLevel2(larsDelivery)
+                && larsDelivery.Categories.SafeAny(IsLegallyEntitled);
         }
 
         public bool IsV2NotionalLevel2(ILARSLearningDelivery delivery)
@@ -185,7 +181,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null)
+            if (objectToValidate?.LearningDeliveries == null)
             {
                 return;
             }

@@ -45,29 +45,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <returns>
         ///   <c>true</c> if [in valid start range] [the specified validity]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasValidStartRange(ILARSValidity validity, ILearningDelivery delivery)
-        {
-            if (delivery.LearnStartDate < validity.StartDate)
-            {
-                return false;
-            }
-
-            if (validity.LastNewStartDate.HasValue && delivery.LearnStartDate > validity.LastNewStartDate)
-            {
-                return false;
-            }
-
-            if (validity.EndDate.HasValue && delivery.LearnStartDate > validity.EndDate)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        // this also works, but it does raise exceptions for a limited range of cases where the end date is less than the start date
-        // public bool HasValidStartRange(ILARSValidity validity, ILearningDelivery delivery) =>
-        //    SafeActions.Try(() => It.IsBetween(delivery.LearnStartDate, validity.StartDate, validity.LastNewStartDate ?? validity.EndDate ?? DateTime.MaxValue));
+        public bool HasValidStartRange(ILARSLearningDeliveryValidity validity, ILearningDelivery delivery) =>
+            validity.IsCurrent(delivery.LearnStartDate, validity.LastNewStartDate);
 
         /// <summary>
         /// Determines whether [has valid learning aim] [the specified delivery].
@@ -78,10 +57,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// </returns>
         public bool HasValidLearningAim(ILearningDelivery delivery)
         {
-            var validities = LarsData.GetValiditiesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
+            var validities = LarsData.GetValiditiesFor(delivery.LearnAimRef);
 
             return validities
-                .Any(x => HasValidStartRange(x, delivery));
+                .SafeAny(x => HasValidStartRange(x, delivery));
         }
 
         /// <summary>

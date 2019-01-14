@@ -68,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 EffectiveFrom = fa.EffectiveFrom,
                                 EffectiveTo = fa.EffectiveTo
                             }).ToList(),
-                        LearningDeliveryCategories = ld.LARS_LearningDeliveryCategory
+                        Categories = ld.LARS_LearningDeliveryCategory
                             .Select(ldc => new LearningDeliveryCategory()
                             {
                                 LearnAimRef = ldc.LearnAimRef,
@@ -76,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 EffectiveFrom = ldc.EffectiveFrom,
                                 EffectiveTo = ldc.EffectiveTo,
                             }).ToList(),
-                        LARSValidities = ld.LARS_Validity
+                        Validities = ld.LARS_Validity
                             .Select(ldc => new LARSValidity
                             {
                                 LearnAimRef = ldc.LearnAimRef,
