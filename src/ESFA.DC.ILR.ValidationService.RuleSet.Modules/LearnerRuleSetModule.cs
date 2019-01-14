@@ -418,6 +418,7 @@
                 typeof(R52Rule),
                 typeof(R56Rule),
                 typeof(R61Rule),
+                typeof(R62Rule),
                 typeof(R63Rule),
                 typeof(R64Rule),
                 typeof(R66Rule),
