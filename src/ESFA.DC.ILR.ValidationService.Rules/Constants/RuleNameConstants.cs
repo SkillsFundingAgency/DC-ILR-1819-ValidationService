@@ -327,6 +327,7 @@
 
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
+        public const string PriorAttain_03 = "PriorAttain_03";
         public const string PriorAttain_04 = "PriorAttain_04";
         public const string PriorAttain_07 = "PriorAttain_07";
 
