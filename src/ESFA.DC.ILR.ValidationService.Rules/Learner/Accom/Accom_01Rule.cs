@@ -1,31 +1,44 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.Accom
 {
     public class Accom_01Rule : AbstractRule, IRule<ILearner>
     {
-        private const int AccomValue = 5;
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public Accom_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+        public Accom_01Rule(IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.Accom_01)
         {
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.AccomNullable))
+            if (objectToValidate != null && objectToValidate.AccomNullable.HasValue)
             {
-                HandleValidationError(RuleNameConstants.Accom_01Rule, objectToValidate.LearnRefNumber);
+                if (ConditionMet(objectToValidate.AccomNullable.Value))
+                {
+                    HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.AccomNullable.Value));
+                }
             }
         }
 
-        public bool ConditionMet(long? accomValue)
+        public bool ConditionMet(int accomValue)
         {
-            return accomValue.HasValue
-                && accomValue.Value != AccomValue;
+            return !_provideLookupDetails.Contains(LookupSimpleKey.Accom, accomValue);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int accom)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.Accom, accom)
+            };
         }
     }
 }

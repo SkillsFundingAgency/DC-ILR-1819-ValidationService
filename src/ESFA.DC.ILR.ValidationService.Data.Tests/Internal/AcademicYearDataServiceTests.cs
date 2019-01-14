@@ -78,27 +78,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
         /// <param name="expectation">The expectation.</param>
         [Theory]
         [InlineData("2017-08-26", AcademicYearDates.PreviousYearEnd, "2016-07-31")]
-        [InlineData("2017-08-26", AcademicYearDates.Commencment, "2016-08-01")]
+        [InlineData("2017-08-26", AcademicYearDates.Commencement, "2016-08-01")]
         [InlineData("2017-08-26", AcademicYearDates.August31, "2016-08-31")]
         [InlineData("2017-08-26", AcademicYearDates.CurrentYearEnd, "2018-07-31")]
         [InlineData("2017-08-26", AcademicYearDates.NextYearCommencement, "2018-08-01")]
         [InlineData("2017-08-31", AcademicYearDates.PreviousYearEnd, "2016-07-31")]
-        [InlineData("2017-08-31", AcademicYearDates.Commencment, "2016-08-01")]
+        [InlineData("2017-08-31", AcademicYearDates.Commencement, "2016-08-01")]
         [InlineData("2017-08-31", AcademicYearDates.August31, "2016-08-31")]
         [InlineData("2017-08-31", AcademicYearDates.CurrentYearEnd, "2018-07-31")]
         [InlineData("2017-08-31", AcademicYearDates.NextYearCommencement, "2018-08-01")]
         [InlineData("2017-09-01", AcademicYearDates.PreviousYearEnd, "2017-07-31")]
-        [InlineData("2017-09-01", AcademicYearDates.Commencment, "2017-08-01")]
+        [InlineData("2017-09-01", AcademicYearDates.Commencement, "2017-08-01")]
         [InlineData("2017-09-01", AcademicYearDates.August31, "2017-08-31")]
         [InlineData("2017-09-01", AcademicYearDates.CurrentYearEnd, "2018-07-31")]
         [InlineData("2017-09-01", AcademicYearDates.NextYearCommencement, "2018-08-01")]
         [InlineData("2018-02-06", AcademicYearDates.PreviousYearEnd, "2017-07-31")]
-        [InlineData("2018-02-06", AcademicYearDates.Commencment, "2017-08-01")]
+        [InlineData("2018-02-06", AcademicYearDates.Commencement, "2017-08-01")]
         [InlineData("2018-02-06", AcademicYearDates.August31, "2017-08-31")]
         [InlineData("2018-02-06", AcademicYearDates.CurrentYearEnd, "2018-07-31")]
         [InlineData("2018-02-06", AcademicYearDates.NextYearCommencement, "2018-08-01")]
         [InlineData("2018-07-31", AcademicYearDates.PreviousYearEnd, "2017-07-31")]
-        [InlineData("2018-07-31", AcademicYearDates.Commencment, "2017-08-01")]
+        [InlineData("2018-07-31", AcademicYearDates.Commencement, "2017-08-01")]
         [InlineData("2018-07-31", AcademicYearDates.August31, "2017-08-31")]
         [InlineData("2018-07-31", AcademicYearDates.CurrentYearEnd, "2018-07-31")]
         [InlineData("2018-07-31", AcademicYearDates.NextYearCommencement, "2018-08-01")]
@@ -113,7 +113,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var result = sut.GetAcademicYearOfLearningDate(testDate, forThisDate);
 
             // assert
-            Assert.Equal(DateTime.Parse(expectation), result);
+            result.Should().Be(DateTime.Parse(expectation));
         }
 
         private AcademicYearDataService NewService(IInternalDataCache internalDataCache = null)

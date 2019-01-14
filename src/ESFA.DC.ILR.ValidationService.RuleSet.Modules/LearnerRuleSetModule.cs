@@ -28,6 +28,7 @@
     using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
     using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
     using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
+    using ESFA.DC.ILR.ValidationService.Rules.Learner.Accom;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
@@ -100,6 +101,7 @@
 
             Rules = new List<Type>()
             {
+                typeof(Accom_01Rule),
                 typeof(AchDate_02Rule),
                 typeof(AchDate_03Rule),
                 typeof(AchDate_04Rule),
@@ -121,6 +123,7 @@
                 typeof(AFinDate_06Rule),
                 typeof(AFinDate_07Rule),
                 typeof(AFinDate_08Rule),
+                typeof(AFinDate_09Rule),
                 typeof(AFinType_01Rule),
                 typeof(AFinType_02Rule),
                 typeof(AFinType_04Rule),
@@ -301,6 +304,7 @@
                 typeof(LearnDelFAMType_36Rule),
                 typeof(LearnDelFAMType_38Rule),
                 typeof(LearnDelFAMType_39Rule),
+                typeof(LearnDelFAMType_40Rule),
                 typeof(LearnDelFAMType_44Rule),
                 typeof(LearnDelFAMType_45Rule),
                 typeof(LearnDelFAMType_48Rule),
@@ -326,6 +330,7 @@
                 typeof(LearnFAMType_01Rule),
                 typeof(LearnFAMType_09Rule),
                 typeof(LearnFAMType_10Rule),
+                typeof(LearnFAMType_11Rule),
                 typeof(LearnFAMType_16Rule),
                 typeof(LearnStartDate_02Rule),
                 typeof(LearnStartDate_03Rule),
@@ -380,6 +385,7 @@
                 typeof(PlanLearnHours_02Rule),
                 typeof(PlanLearnHours_03Rule),
                 typeof(PlanLearnHours_04Rule),
+                typeof(PlanLearnHours_05Rule),
                 typeof(PMUKPRN_01Rule),
                 typeof(Postcode_14Rule),
                 typeof(Postcode_15Rule),
@@ -417,6 +423,7 @@
                 typeof(R47Rule),
                 typeof(R52Rule),
                 typeof(R56Rule),
+                typeof(R61Rule),
                 typeof(R63Rule),
                 typeof(R64Rule),
                 typeof(R66Rule),
@@ -470,10 +477,12 @@
                 typeof(WithdrawReason_02Rule),
                 typeof(WithdrawReason_03Rule),
                 typeof(WithdrawReason_04Rule),
+                typeof(WithdrawReason_05Rule),
                 typeof(WorkPlaceEndDate_02Rule),
                 typeof(WorkPlaceStartDate_01Rule),
                 typeof(WorkPlaceStartDate_02Rule),
                 typeof(WorkPlaceStartDate_03Rule),
+                typeof(WorkPlaceStartDate_04Rule),
                 typeof(WorkPlaceMode_01Rule),
                 typeof(WorkPlaceEmpId_02Rule),
                 typeof(WorkPlaceEmpId_03Rule),

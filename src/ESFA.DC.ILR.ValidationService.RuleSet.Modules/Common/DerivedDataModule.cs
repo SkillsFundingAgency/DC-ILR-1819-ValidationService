@@ -8,7 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<DD01>().As<IDD01>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData01_Rule>().As<IDerivedData_01Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DD04>().As<IDD04>().InstancePerLifetimeScope();
             builder.RegisterType<DD06>().As<IDD06>().InstancePerLifetimeScope();
             builder.RegisterType<DD07>().As<IDD07>().InstancePerLifetimeScope();
