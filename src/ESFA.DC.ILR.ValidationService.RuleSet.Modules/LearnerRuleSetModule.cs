@@ -473,6 +473,7 @@
                 typeof(WithdrawReason_02Rule),
                 typeof(WithdrawReason_03Rule),
                 typeof(WithdrawReason_04Rule),
+                typeof(WithdrawReason_05Rule),
                 typeof(WorkPlaceEndDate_02Rule),
                 typeof(WorkPlaceStartDate_01Rule),
                 typeof(WorkPlaceStartDate_02Rule),
