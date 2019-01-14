@@ -2,6 +2,8 @@
 {
     public static class RuleNameConstants
     {
+        public const string Accom_01 = "Accom_01";
+
         public const string AchDate_02 = "AchDate_02";
         public const string AchDate_03 = "AchDate_03";
         public const string AchDate_04 = "AchDate_04";
@@ -192,6 +194,7 @@
         public const string LearnDelFAMType_36 = "LearnDelFAMType_36";
         public const string LearnDelFAMType_38 = "LearnDelFAMType_38";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
+        public const string LearnDelFAMType_40 = "LearnDelFAMType_40";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
@@ -215,6 +218,7 @@
         public const string LearnFAMType_01 = "LearnFAMType_01";
         public const string LearnFAMType_09 = "LearnFAMType_09";
         public const string LearnFAMType_10 = "LearnFAMType_10";
+        public const string LearnFAMType_11 = "LearnFAMType_11";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
@@ -299,6 +303,7 @@
         public const string PlanLearnHours_02 = "PlanLearnHours_02";
         public const string PlanLearnHours_03 = "PlanLearnHours_03";
         public const string PlanLearnHours_04 = "PlanLearnHours_04";
+        public const string PlanLearnHours_05 = "PlanLearnHours_05";
 
         public const string PMUKPRN_01 = "PMUKPRN_01";
 
@@ -399,6 +404,7 @@
 
         public const string WithdrawReason_02 = "WithdrawReason_02";
         public const string WithdrawReason_04 = "WithdrawReason_04";
+        public const string WithdrawReason_05 = "WithdrawReason_05";
 
         public const string WorkPlaceEmpId_02 = "WorkPlaceEmpId_02";
         public const string WorkPlaceEmpId_04 = "WorkPlaceEmpId_04";
