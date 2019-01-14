@@ -21,6 +21,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             NewRule().RuleName.Should().Be("LearnDelFAMType_46");
         }
 
+        [Theory]
+        [InlineData(TypeOfFunding.NotFundedByESFA, true)]
+        [InlineData(TypeOfFunding.CommunityLearning, true)]
+        [InlineData(TypeOfFunding.AdultSkills, false)]
+        public void FundModelConditionMetMeetsExpectation(int fundModel, bool expectation)
+        {
+            NewRule().FundModelConditionMet(fundModel).Should().Be(expectation);
+        }
+
+        [Theory]
+        [InlineData(LearningDeliveryFAMTypeConstants.ADL, false)]
+        [InlineData(LearningDeliveryFAMTypeConstants.EEF, false)]
+        [InlineData("ABC", false)]
+        [InlineData(null, false)]
+        [InlineData(LearningDeliveryFAMTypeConstants.FLN, true)]
+        [InlineData("fln", true)]
+        public void FAMTypeConditionMetMeetsExpectation(string learnDelFamType, bool expectation)
+        {
+            NewRule().FAMTypeConditionMet(learnDelFamType).Should().Be(expectation);
+        }
+
         [Fact]
         public void BuildErrorMessageParameters()
         {
