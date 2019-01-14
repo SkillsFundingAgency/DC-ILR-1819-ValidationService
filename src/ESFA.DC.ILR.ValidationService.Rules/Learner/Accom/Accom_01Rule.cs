@@ -9,8 +9,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.Accom
 {
     public class Accom_01Rule : AbstractRule, IRule<ILearner>
     {
-        private const int AccomValue = 5;
-
         private readonly IProvideLookupDetails _provideLookupDetails;
 
         public Accom_01Rule(IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
