@@ -47,11 +47,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             return false;
         }
 
-        // If an apprenticeship programme is funded through a contract for services with an employer
-        //     , the learner must have an employment status of 'Employed
-        // "Where FundModel = 36 and LearnDelFAMType = ACT and LearnDelFAMCode = 1
-        // Error if the EmpStat applicable on LearnDelFAMDateFrom is not EmpStat = 10"
-
         public bool IsApprenticeshipProgramme(ILearningDelivery learningDelivery)
         {
             return learningDelivery.FundModel == TypeOfFunding.ApprenticeshipsFrom1May2017;
