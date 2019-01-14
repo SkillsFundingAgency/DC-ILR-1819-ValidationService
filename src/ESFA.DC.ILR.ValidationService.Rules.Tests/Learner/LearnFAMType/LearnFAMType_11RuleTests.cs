@@ -24,6 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         [InlineData(LearnerFAMTypeConstants.HNS, 0, false)]
         [InlineData(LearnerFAMTypeConstants.NLM, 2, false)]
         [InlineData(LearnerFAMTypeConstants.EDF, 2, false)]
+        [InlineData("edF", 2, false)]
         [InlineData(LearnerFAMTypeConstants.PPE, 2, false)]
         [InlineData(LearnerFAMTypeConstants.LSR, 4, false)]
         [InlineData(LearnerFAMTypeConstants.SEN, 1, false)]
@@ -33,6 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         [InlineData("ABC", 2, false)]
         [InlineData(null, 1, false)]
         [InlineData(LearnerFAMTypeConstants.NLM, 3, true)]
+        [InlineData("nlm", 3, true)]
         [InlineData(LearnerFAMTypeConstants.EDF, 3, true)]
         [InlineData(LearnerFAMTypeConstants.PPE, 3, true)]
         public void ConditionMetMeetsExpectation(string learnFamType, int count, bool expectation)
@@ -49,12 +51,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         {
             var learner = new TestLearner
             {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35
+                    }
+                },
                 LearnerFAMs = new List<TestLearnerFAM>()
                 {
                     new TestLearnerFAM()
                     {
                         LearnFAMType = LearnerFAMTypeConstants.NLM
-                    }
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.DLA
+                    },
                 }
             };
 
@@ -90,12 +103,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         {
             var learner = new TestLearner
             {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35
+                    }
+                },
                 LearnerFAMs = new List<TestLearnerFAM>()
                 {
                     new TestLearnerFAM()
                     {
                         LearnFAMType = LearnerFAMTypeConstants.NLM
-                    }
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.DLA
+                    },
                 }
             };
 
