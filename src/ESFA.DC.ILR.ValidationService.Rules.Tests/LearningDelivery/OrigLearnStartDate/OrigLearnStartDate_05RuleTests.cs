@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -12,6 +7,8 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDate;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnStartDate
@@ -158,28 +155,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
             NewRule(dd07Mock.Object, larsDataServiceMock.Object).ConditionMet(origLearnStartDate, fundModel, progType, aimType, learnAimRef)
                 .Should()
                 .BeTrue();
-        }
-
-        [Fact]
-        public void ConditionMet_FalseOrigLearnStartDate()
-        {
-            DateTime? origLearnStartDate = null;
-            var fundModel = 35;
-            var progType = 22;
-            var aimType = 3;
-            var learnAimRef = "123456789";
-
-            var dd07Mock = new Mock<IDD07>();
-            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
-
-            var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock
-                .Setup(ldsm => ldsm.OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Apprenticeships))
-                .Returns(false);
-
-            NewRule(dd07Mock.Object, larsDataServiceMock.Object).ConditionMet(origLearnStartDate, fundModel, progType, aimType, learnAimRef)
-                .Should()
-                .BeFalse();
         }
 
         [Fact]

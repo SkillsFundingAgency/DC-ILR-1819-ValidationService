@@ -12,8 +12,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 {
     public class OrigLearnStartDate_08Rule : AbstractRule, IRule<ILearner>
     {
-        private const int FundModel99 = 99;
-
         private readonly ILARSDataService _larsDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
 
@@ -55,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             return OrigLearnStartDateConditionMet(origLearnStartDate)
                    && FundModelConditionMet(fundModel)
                    && _learningDeliveryFamQueryService.HasLearningDeliveryFAMType(learningDeliveryFams, LearningDeliveryFAMTypeConstants.ADL)
-                   && LARSConditionMet(origLearnStartDate, learnAimRef);
+                   && LARSConditionMet(origLearnStartDate.Value, learnAimRef);
         }
 
         public bool OrigLearnStartDateConditionMet(DateTime? origLearnStartDate)
@@ -65,10 +63,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         public bool FundModelConditionMet(int fundModel)
         {
-            return fundModel == FundModel99;
+            return fundModel == TypeOfFunding.NotFundedByESFA;
         }
 
-        public bool LARSConditionMet(DateTime? origLearnStartDate, string learnAimRef)
+        public bool LARSConditionMet(DateTime origLearnStartDate, string learnAimRef)
         {
             return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.AdvancedLearnerLoan);
         }

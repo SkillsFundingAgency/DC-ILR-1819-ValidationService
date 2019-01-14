@@ -758,7 +758,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(LARSNotionalNVQLevelV2.Level2);
             mockLARSDel
-                .SetupGet(x => x.LearningDeliveryCategories)
+                .SetupGet(x => x.Categories)
                 .Returns(larsCats.AsSafeReadOnlyList());
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);

@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         /// <summary>
         /// New rule with null message handler throws.
         /// </summary>
-        [Fact(Skip = "this can't be tested for any more")]
+        [Fact]
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange
@@ -133,7 +133,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 .SetupGet(x => x.Today)
                 .Returns(testDate);
             service
-                .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.Commencment))
+                .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.Commencement))
                 .Returns(DateTime.Parse(commencementDate));
 
             var sut = new LearnStartDate_02Rule(handler.Object, service.Object);
@@ -192,7 +192,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 .SetupGet(x => x.Today)
                 .Returns(opDate);
             service
-                .Setup(x => x.GetAcademicYearOfLearningDate(opDate, AcademicYearDates.Commencment))
+                .Setup(x => x.GetAcademicYearOfLearningDate(opDate, AcademicYearDates.Commencement))
                 .Returns(DateTime.Parse(commencementDate));
 
             var sut = new LearnStartDate_02Rule(handler.Object, service.Object);
@@ -244,7 +244,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 .SetupGet(x => x.Today)
                 .Returns(opDate);
             service
-                .Setup(x => x.GetAcademicYearOfLearningDate(opDate, AcademicYearDates.Commencment))
+                .Setup(x => x.GetAcademicYearOfLearningDate(opDate, AcademicYearDates.Commencement))
                 .Returns(DateTime.Parse(commencementDate));
 
             var sut = new LearnStartDate_02Rule(handler.Object, service.Object);

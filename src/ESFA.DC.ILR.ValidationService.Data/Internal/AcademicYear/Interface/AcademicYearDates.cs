@@ -6,9 +6,9 @@
     public enum AcademicYearDates
     {
         /// <summary>
-        /// The commencment date
+        /// The commencement date
         /// </summary>
-        Commencment,
+        Commencement,
 
         /// <summary>
         /// The last years end date
@@ -16,7 +16,7 @@
         PreviousYearEnd,
 
         /// <summary>
-        /// The august 31 date
+        /// The August 31 date
         /// </summary>
         August31,
 
