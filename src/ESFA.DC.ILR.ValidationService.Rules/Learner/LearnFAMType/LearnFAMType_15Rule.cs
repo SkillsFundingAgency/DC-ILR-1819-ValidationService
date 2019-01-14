@@ -9,6 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
 {
     public class LearnFAMType_15Rule : AbstractRule, IRule<ILearner>
     {
+        private const int LearnFamCode = 1;
         private readonly ILearnerFAMQueryService _learnerFAMQueryService;
         private readonly IEnumerable<string> _learnerFAMTypes = new HashSet<string>() { LearnerFAMTypeConstants.SEN, LearnerFAMTypeConstants.EHC };
 
@@ -29,17 +30,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
             {
                 HandleValidationError(
                     learnRefNumber: objectToValidate.LearnRefNumber,
-                    errorMessageParameters: BuildErrorMessageParameters(LearnerFAMTypeConstants.MCF, "1"));
+                    errorMessageParameters: BuildErrorMessageParameters(LearnerFAMTypeConstants.MCF, LearnFamCode));
             }
         }
 
         public bool ConditionMet(IEnumerable<ILearnerFAM> learnerFAMs)
         {
-            return _learnerFAMQueryService.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.MCF, 1)
+            return _learnerFAMQueryService.HasLearnerFAMCodeForType(learnerFAMs, LearnerFAMTypeConstants.MCF, LearnFamCode)
                    && !_learnerFAMQueryService.HasAnyLearnerFAMTypes(learnerFAMs, _learnerFAMTypes);
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnFAMType, string learnFAMCode)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnFAMType, int learnFAMCode)
         {
             return new[]
             {
