@@ -60,19 +60,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             NewService().DateIsInPrevAcademicYear(date, academicYearStart).Should().BeFalse();
         }
 
-        [Theory]
-        [InlineData("2017-1-1", "2017-8-1")]
-        [InlineData("2017-8-31", "2017-8-1")]
-        [InlineData("2017-9-1", "2018-8-1")]
-        [InlineData("2018-8-31", "2018-8-1")]
-        public void FirstAugustForDateInAcademicYear(string inputDate, string expectedDate)
-        {
-            var inputDateTime = DateTime.Parse(inputDate);
-            var expectedDateTime = DateTime.Parse(expectedDate);
-
-            NewService().FirstAugustForDateInAcademicYear(inputDateTime).Should().Be(expectedDateTime);
-        }
-
         private AcademicYearQueryService NewService()
         {
             return new AcademicYearQueryService();

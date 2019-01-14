@@ -9,17 +9,6 @@ namespace ESFA.DC.ILR.ValidationService.Utility
     public static class Format
     {
         /// <summary>
-        /// Invariant culture format the specified string using the list of items.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="items">The items.</param>
-        /// <returns>the formatted string</returns>
-        public static string String(string format, params object[] items)
-        {
-            return string.Format(CultureInfo.InvariantCulture, format, items);
-        }
-
-        /// <summary>
         /// Compares (the item) with any candidate.
         /// this is a case and culture insensitive comparison
         /// </summary>
@@ -42,20 +31,6 @@ namespace ESFA.DC.ILR.ValidationService.Utility
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Determines whether [contains] [the specified candidate].
-        /// </summary>
-        /// <param name="item">The item.</param>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="comparison">The comparison.</param>
-        /// <returns>
-        ///   <c>true</c> if [contains] [the specified candidate]; otherwise, <c>false</c>.
-        /// </returns>
-        public static bool Contains(this string item, string candidate, StringComparison comparison)
-        {
-            return item?.IndexOf(candidate, comparison) >= 0;
         }
     }
 }

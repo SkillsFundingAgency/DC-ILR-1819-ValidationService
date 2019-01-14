@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         /// </returns>
         public bool IsOutsideValidSubmissionPeriod(ILearningDelivery delivery) =>
             delivery.LearnStartDate < _yearData
-                .GetAcademicYearOfLearningDate(_yearData.Today, AcademicYearDates.Commencment)
+                .GetAcademicYearOfLearningDate(_yearData.Today, AcademicYearDates.Commencement)
                 .AddYears(OldestLearningSubmissionOffset);
 
         /// <summary>
