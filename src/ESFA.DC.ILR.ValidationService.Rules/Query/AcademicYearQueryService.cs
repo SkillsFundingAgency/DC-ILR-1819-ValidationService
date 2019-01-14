@@ -5,11 +5,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class AcademicYearQueryService : IAcademicYearQueryService
     {
-        public DateTime FirstSeptemberForDateInAcademicYear(DateTime dateTime)
-        {
-            return dateTime.Month > 8 ? new DateTime(dateTime.Year, 9, 1) : new DateTime(dateTime.Year - 1, 9, 1);
-        }
-
         public DateTime LastFridayInJuneForDateInAcademicYear(DateTime dateTime)
         {
             return LastFridayInMonth(dateTime.Month > 8 ? new DateTime(dateTime.Year + 1, 6, 1) : new DateTime(dateTime.Year, 6, 1));
@@ -24,19 +19,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             return firstDayOfNextMonth.AddDays(-vector);
         }
 
-        public DateTime AugustThirtyFirstOfLearnStartDate(DateTime dateLearnStartDate)
-        {
-            return new DateTime(dateLearnStartDate.Year, 08, 31);
-        }
-
         public bool DateIsInPrevAcademicYear(DateTime dateTime, DateTime currentYear)
         {
             return dateTime < currentYear && dateTime >= currentYear.AddYears(-1);
-        }
-
-        public DateTime FirstAugustForDateInAcademicYear(DateTime dateTime)
-        {
-            return dateTime.Month > 8 ? new DateTime(dateTime.Year + 1, 8, 1) : new DateTime(dateTime.Year, 8, 1);
         }
     }
 }

@@ -107,6 +107,7 @@
     <Compile Include="CrossEntity\R30Rule.cs" />
     <Compile Include="CrossEntity\R45Rule.cs" />
     <Compile Include="CrossEntity\R43Rule.cs" />
+    <Compile Include="CrossEntity\R61Rule.cs" />
     <Compile Include="CrossEntity\R99Rule.cs" />
     <Compile Include="CrossEntity\R59Rule.cs" />
     <Compile Include="CrossEntity\R67Rule.cs" />
@@ -138,7 +139,7 @@
     <Compile Include="Derived\DerivedData_28Rule.cs" />
     <Compile Include="Derived\DerivedData_29Rule.cs" />
     <Compile Include="Derived\DerivedData_21Rule.cs" />
-    <Compile Include="Derived\DD01.cs" />
+    <Compile Include="Derived\DerivedData01_Rule.cs" />
     <Compile Include="Derived\DD04.cs" />
     <Compile Include="Derived\DD06.cs" />
     <Compile Include="Derived\DD07.cs" />
@@ -148,7 +149,7 @@
     <Compile Include="Derived\Interface\IDerivedData_05Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_15Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_27Rule.cs" />
-    <Compile Include="Derived\Interface\IDD01.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_01Rule.cs" />
     <Compile Include="Derived\Interface\IDD04.cs" />
     <Compile Include="Derived\Interface\IDD06.cs" />
     <Compile Include="Derived\Interface\IDD07.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
+    <Compile Include="Learner\Accom\Accom_01Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_05Rule.cs" />
@@ -282,6 +284,7 @@
     <Compile Include="Learner\GivenNames\GivenNames_02Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_04Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_01Rule.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_11Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_10Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_09Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_14Rule.cs" />
@@ -300,6 +303,7 @@
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_02Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_03Rule.cs" />
     <Compile Include="Learner\PlanLearnHours\PlanLearnHours_04Rule.cs" />
+    <Compile Include="Learner\PlanLearnHours\PlanLearnHours_05Rule.cs" />
     <Compile Include="Learner\PMUKPRN\PMUKPRN_01Rule.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_01Rule.cs" />
     <Compile Include="Learner\PostcodePrior\PostcodePrior_02Rule.cs" />
@@ -320,6 +324,7 @@
     <Compile Include="LearningDelivery\AFinDate\AFinDate_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_05Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_04Rule.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_09Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_08Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRuleBase{TEligibilityItem}.cs" />
@@ -510,6 +515,7 @@
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_02Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04Rule.cs" />
+    <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_05Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_02Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_03Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
@@ -518,6 +524,7 @@
     <Compile Include="LearningDelivery\WorkPlaceMode\WorkPlaceMode_01Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_02Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_03Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_04Rule.cs" />
     <Compile Include="Message\FileLevel\Entity\Entity_1Rule.cs" />
     <Compile Include="LearningDelivery\ProgType\ProgType_07Rule.cs" />
     <Compile Include="Message\FileLevel\Header\Header_2Rule.cs" />
