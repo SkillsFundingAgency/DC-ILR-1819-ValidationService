@@ -183,7 +183,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ProvSpecDelMonOccur
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.ProvSpecDelMonOccur, "A")).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("ProvSpecDelMonOccur", "A")).Verifiable();
 
             NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters("A");
 

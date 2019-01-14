@@ -54,7 +54,7 @@
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.ProvSpecDelMonOccur, provSpecDelMonOccur)
+                BuildErrorMessageParameter("ProvSpecDelMonOccur", provSpecDelMonOccur)
             };
         }
     }
