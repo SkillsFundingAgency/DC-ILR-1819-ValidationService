@@ -331,6 +331,7 @@
                 typeof(LearnFAMType_09Rule),
                 typeof(LearnFAMType_10Rule),
                 typeof(LearnFAMType_11Rule),
+                typeof(LearnFAMType_14Rule),
                 typeof(LearnFAMType_16Rule),
                 typeof(LearnStartDate_02Rule),
                 typeof(LearnStartDate_03Rule),

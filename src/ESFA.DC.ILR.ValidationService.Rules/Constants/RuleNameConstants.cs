@@ -219,6 +219,7 @@
         public const string LearnFAMType_09 = "LearnFAMType_09";
         public const string LearnFAMType_10 = "LearnFAMType_10";
         public const string LearnFAMType_11 = "LearnFAMType_11";
+        public const string LearnFAMType_14 = "LearnFAMType_14";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
