@@ -63,7 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         {
             var conRefNumber = "conRefNumber";
 
-            NewRule().LearnerOnBenefitsAtStartOfCompletedZESF0001AimForContract(null, conRefNumber).Should().BeTrue();
+            NewRule().LearnerOnBenefitsAtStartOfCompletedZESF0001AimForContract(null, conRefNumber).Should().BeFalse();
         }
 
         [Fact]
