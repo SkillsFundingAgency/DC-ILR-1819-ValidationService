@@ -189,9 +189,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-+            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.AimType), thisDelivery.AimType));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.FundModel), thisDelivery.FundModel));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, Monitoring.Delivery.Types.ApprenticeshipContract));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.AimType, thisDelivery.AimType));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.FundModel, thisDelivery.FundModel));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, Monitoring.Delivery.Types.ApprenticeshipContract));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
