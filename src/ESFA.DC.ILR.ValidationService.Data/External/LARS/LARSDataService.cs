@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         }
 
         /// <summary>
-        /// Gets the delivery for.
+        /// Gets the (lars) delivery for (this aim reference).
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>
@@ -63,7 +63,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         }
 
         /// <summary>
-        /// Gets the categories for.
+        /// Gets a collection of (lars) learning categories for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>
@@ -73,50 +74,83 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return delivery?.LearningDeliveryCategories.AsSafeReadOnlyList()
+            return delivery?.Categories
                 ?? Collection.EmptyAndReadOnly<ILARSLearningCategory>();
         }
 
         /// <summary>
-        /// Gets the validities for.
+        /// Gets a collection of (lars) learning delivery periods of validity for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">this aim reference.</param>
         /// <returns>
-        /// a collection of lars 'validities' for this learning aim reference
+        /// a collection of lars learing delivery periods of validity for this learning aim reference
         /// </returns>
-        public IReadOnlyCollection<ILARSValidity> GetValiditiesFor(string thisAimRef)
+        public IReadOnlyCollection<ILARSLearningDeliveryValidity> GetValiditiesFor(string thisAimRef)
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return delivery?.LARSValidities.AsSafeReadOnlyList()
-                ?? Collection.EmptyAndReadOnly<ILARSValidity>();
+            return delivery?.Validities
+                ?? Collection.EmptyAndReadOnly<ILARSLearningDeliveryValidity>();
         }
 
         /// <summary>
-        /// Gets the (lars) annual values for(this aim reference).
+        /// Gets the (lars) annual values for (this aim reference).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisAimRef">The this aim reference.</param>
         /// <returns>
-        /// a collection of lars 'annula values' for this learning aim reference
+        /// a collection of lars 'annual values' for this learning aim reference
         /// </returns>
         public IReadOnlyCollection<ILARSAnnualValue> GetAnnualValuesFor(string thisAimRef)
         {
             var delivery = GetDeliveryFor(thisAimRef);
 
-            return delivery?.AnnualValues.AsSafeReadOnlyList()
+            return delivery?.AnnualValues
                 ?? Collection.EmptyAndReadOnly<ILARSAnnualValue>();
         }
 
         /// <summary>
-        /// Gets the standard validity for.
+        /// Gets the (lars) framework aims for (this aim reference).
+        /// </summary>
+        /// <param name="thisAimRef">The this aim reference.</param>
+        /// <returns>
+        /// a collection of lars 'framework aims' for this learning aim reference
+        /// </returns>
+        public IReadOnlyCollection<ILARSFrameworkAim> GetFrameworkAimsFor(string thisAimRef)
+        {
+            var delivery = GetDeliveryFor(thisAimRef);
+
+            return delivery?.FrameworkAims
+                ?? Collection.EmptyAndReadOnly<ILARSFrameworkAim>();
+        }
+
+        /// <summary>
+        /// Gets the collection of (lars) standard periods of validity for (this standard code).
+        ///  i should never return null
         /// </summary>
         /// <param name="thisStandardCode">this standard code.</param>
-        /// <returns>a LARS Standard Validity</returns>
-        public ILARSStandardValidity GetStandardValidityFor(int thisStandardCode)
+        /// <returns>
+        /// a collection of lars standard periods of validity for this standard code
+        /// </returns>
+        public IReadOnlyCollection<ILARSStandardValidity> GetStandardValiditiesFor(int thisStandardCode)
         {
             return _externalDataCache.StandardValidities
-                .Where(x => x.StandardCode == thisStandardCode)
-                .FirstOrDefault();
+                .SafeWhere(x => x.StandardCode == thisStandardCode)
+                .AsSafeReadOnlyList();
+        }
+
+        /// <summary>
+        /// Contains the (lars) standard for (this standard code).
+        /// </summary>
+        /// <param name="thisStandardCode">The this standard code.</param>
+        /// <returns>
+        ///   <c>true</c> if [contains standard for] [the specified this standard code]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool ContainsStandardFor(int thisStandardCode)
+        {
+            return _externalDataCache.Standards
+                .Any(x => x.StandardCode == thisStandardCode);
         }
 
         /// <summary>
@@ -138,9 +172,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         // TODO: this should happen in the rule
         public bool EffectiveDatesValidforLearnAimRef(string learnAimRef, DateTime date)
         {
-            var delivery = GetDeliveryFor(learnAimRef);
+            var validities = GetValiditiesFor(learnAimRef);
 
-            return It.Has(delivery) && delivery.IsCurrent(date);
+            return validities.Any(x => x.IsCurrent(date));
         }
 
         // TODO: this should happen in the rule
@@ -149,27 +183,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             return engPrscIDs.Contains(GetDeliveryFor(learnAimRef)?.EnglPrscID);
         }
 
-        // TODO: access to frameworks needs to be thought out, as this isn't right => GetFrameworkAimsFor(string thisAimRef)
+        // TODO: this should happen in the rule
         public bool FrameworkCodeExistsForFrameworkAims(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
-            return _externalDataCache.Frameworks
-                .SafeWhere(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims)
-                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                    && fa.ProgType == progType
-                    && fa.FworkCode == fworkCode
-                    && fa.PwayCode == pwayCode);
+            var frameworkAims = GetFrameworkAimsFor(learnAimRef);
+
+            return frameworkAims.Any(
+                fa => fa.ProgType == progType
+                && fa.FworkCode == fworkCode
+                && fa.PwayCode == pwayCode);
         }
 
-        // TODO: access to frameworks needs to be thought out, as this isn't right => GetFrameworkAimsFor(string thisAimRef)
+        // TODO: this should happen in the rule
         public bool FrameWorkComponentTypeExistsInFrameworkAims(string learnAimRef, HashSet<int?> frameworkTypeComponents)
         {
-            return _externalDataCache.Frameworks
-                .SafeWhere(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims)
-                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                    && fa.FrameworkComponentType.HasValue
-                    && frameworkTypeComponents.Contains(fa.FrameworkComponentType));
+            var frameworkAims = GetFrameworkAimsFor(learnAimRef);
+
+            return frameworkAims.Any(fa => frameworkTypeComponents.Contains(fa.FrameworkComponentType));
         }
 
         // TODO: needs to be thought out, this isn't right either...
@@ -305,24 +335,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                     && learnStartDate > f.EffectiveTo);
         }
 
-        // TODO: this should happen in the rule
-        public bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
+        // TODO: this should happen in the rule, and it's now improperly named...
+        public bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
-            return _externalDataCache
-                .Frameworks
-                .SafeWhere(f => f.FrameworkAims != null)
-                .SelectMany(f => f.FrameworkAims)
-                .Any(fa => fa.LearnAimRef.CaseInsensitiveEquals(learnAimRef)
-                    && fa.ProgType == progType
-                    && fa.FworkCode == fworkCode
-                    && fa.PwayCode == pwayCode
+            var frameworkAims = GetFrameworkAimsFor(learnAimRef);
 
-                    // && f.EffectiveTo != null <= not needed with uplifting operators
-                    && dd04Date > fa.EffectiveTo);
+            return frameworkAims.Any(
+                fa => fa.ProgType == progType
+                && fa.FworkCode == fworkCode
+                && fa.PwayCode == pwayCode
+                && !fa.IsCurrent(dd04Date));
         }
 
         // TODO: this should happen in the rule
-        public bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime? origLearnStartDate, string learnAimRef, string validityCategory)
+        public bool OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(DateTime origLearnStartDate, string learnAimRef, string validityCategory)
         {
             return OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(
                 origLearnStartDate,
@@ -331,28 +357,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         }
 
         // TODO: this should happen in the rule
-        public bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(DateTime? origLearnStartDate, string learnAimRef, IEnumerable<string> categoriesHashSet)
+        public bool OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(DateTime origLearnStartDate, string learnAimRef, IEnumerable<string> categoriesHashSet)
         {
             var validities = GetValiditiesFor(learnAimRef);
             var caseInsensitveCategoriesHashSet = categoriesHashSet.ToCaseInsensitiveHashSet();
 
             return validities.Any(lv =>
                 caseInsensitveCategoriesHashSet.Contains(lv.ValidityCategory)
-                && origLearnStartDate >= lv.StartDate
-                && origLearnStartDate <= (lv.EndDate.HasValue ? lv.EndDate : DateTime.MaxValue));
+                && lv.IsCurrent(origLearnStartDate));
         }
 
         // TODO: this should happen in the rule, but may require an accessor => GetStandard(s)For(int thisStandardCode)
         // and what is the point of sending in a 'key' that might null?!?
-        public bool LearnStartDateGreaterThanStandardsEffectiveTo(int? stdCode, DateTime learnStartDate)
+        public bool LearnStartDateGreaterThanStandardsEffectiveTo(int stdCode, DateTime learnStartDate)
         {
-            return stdCode.HasValue
-                   && _externalDataCache.Standards
-                    .Any(s =>
+            var validities = GetStandardValiditiesFor(stdCode);
 
-                        // s.EffectiveTo != null <= not required with uplifting operators
-                        learnStartDate > s.EffectiveTo
-                        && s.StandardCode == stdCode);
+            return validities.Any(s => s.IsCurrent(learnStartDate));
         }
 
         // TODO: this should happen in the rule

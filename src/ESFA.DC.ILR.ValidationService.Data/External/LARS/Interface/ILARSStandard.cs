@@ -1,9 +1,8 @@
-﻿using System;
-
-namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
+﻿namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
     /// <summary>
     /// lars standard
+    /// dates removed to ensure validity is determined using the right classes
     /// </summary>
     public interface ILARSStandard
     {
@@ -25,11 +24,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         /// <summary>
         /// Gets the effective from date.
         /// </summary>
-        DateTime? EffectiveFrom { get; }
+        // DateTime? EffectiveFrom { get; }
 
         /// <summary>
         /// Gets the effective to date.
         /// </summary>
-        DateTime? EffectiveTo { get; }
+        // DateTime? EffectiveTo { get; }
     }
 }

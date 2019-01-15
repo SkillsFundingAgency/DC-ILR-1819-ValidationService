@@ -24,16 +24,43 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return;
             }
 
+            bool bFundModelExists = false;
+            bool bAimTypeExists = false;
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.FundModel, learningDelivery.AimType))
+                if (FundModelConditionMet(learningDelivery.FundModel))
                 {
-                    HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, aimSequenceNumber: learningDelivery.AimSeqNumber);
+                    bFundModelExists = true;
+                    if (AimTypeConditionMet(learningDelivery.AimType))
+                    {
+                        bAimTypeExists = true;
+                        break;
+                    }
                 }
+            }
+
+            if (bFundModelExists
+                && !bAimTypeExists)
+            {
+                HandleValidationError(
+                            learnRefNumber: objectToValidate.LearnRefNumber,
+                            errorMessageParameters: BuildErrorMessageParameters(
+                                TypeOfFunding.Age16To19ExcludingApprenticeships,
+                                TypeOfAim.CoreAim16To19ExcludingApprenticeships));
             }
         }
 
-        public bool ConditionMet(int fundModel, int aimType) => fundModel == TypeOfFunding.Age16To19ExcludingApprenticeships
-            && !(aimType == TypeOfAim.CoreAim16To19ExcludingApprenticeships);
+        public bool FundModelConditionMet(int fundModel) => fundModel == TypeOfFunding.Age16To19ExcludingApprenticeships;
+
+        public bool AimTypeConditionMet(int aimType) => aimType == TypeOfAim.CoreAim16To19ExcludingApprenticeships;
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, int aimType)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.AimType, aimType)
+            };
+        }
     }
 }

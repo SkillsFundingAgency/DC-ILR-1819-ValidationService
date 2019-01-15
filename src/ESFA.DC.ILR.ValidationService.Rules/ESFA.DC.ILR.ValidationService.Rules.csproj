@@ -105,6 +105,7 @@
     <Compile Include="CrossEntity\R20Rule.cs" />
     <Compile Include="CrossEntity\R31Rule.cs" />
     <Compile Include="CrossEntity\R30Rule.cs" />
+    <Compile Include="CrossEntity\R50Rule.cs" />
     <Compile Include="CrossEntity\R45Rule.cs" />
     <Compile Include="CrossEntity\R43Rule.cs" />
     <Compile Include="CrossEntity\R29Rule.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Derived\DerivedData_11Rule.cs" />
     <Compile Include="Derived\DerivedData_14Rule.cs" />
     <Compile Include="Derived\DerivedData_15Rule.cs" />
+    <Compile Include="Derived\DerivedData_18Rule.cs" />
     <Compile Include="Derived\DerivedData_22Rule.cs" />
     <Compile Include="Derived\DerivedData_24Rule.cs" />
     <Compile Include="Derived\DerivedData_27Rule.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Derived\Interface\IDerivedData_14Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_05Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_15Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_18Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_27Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_01Rule.cs" />
     <Compile Include="Derived\Interface\IDD04.cs" />
@@ -265,12 +268,14 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_29Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_36Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_37Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_38Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_39Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_47Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_46Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_51Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_50Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01Rule.cs" />
@@ -288,6 +293,8 @@
     <Compile Include="Learner\LearnFAMType\LearnFAMType_11Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_10Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_09Rule.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_14Rule.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_15Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_16Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_01Rule.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_02Rule.cs" />
@@ -326,6 +333,7 @@
     <Compile Include="LearningDelivery\AFinDate\AFinDate_04Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_09Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_08Rule.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_12Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRuleBase{TEligibilityItem}.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18Rule.cs" />
@@ -370,6 +378,7 @@
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_14Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_01Rule.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_08Rule.cs" />

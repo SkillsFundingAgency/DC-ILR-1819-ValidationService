@@ -6,9 +6,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
     /// <summary>
     /// the lars validity class
     /// </summary>
-    /// <seealso cref="ILARSValidity" />
+    /// <seealso cref="ILARSLearningDeliveryValidity" />
     public class LARSValidity :
-        ILARSValidity
+        ILARSLearningDeliveryValidity
     {
         /// <summary>
         /// Gets or sets the learn aim reference.
