@@ -10,6 +10,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProvSpecDelMonOcc
 {
     public class ProvSpecDelMonOccur_01Rule : AbstractRule, IRule<ILearner>
     {
+        /// <summary>
+        /// valid Provider specified learning delivery monitoring occurance values
+        /// </summary>
+        private readonly HashSet<string> validProvSpecDelMonOccurValues = new HashSet<string> { "A", "B", "C", "D" };
+
         public ProvSpecDelMonOccur_01Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.ProvSpecDelMonOccur_01Rule)
         {
@@ -44,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProvSpecDelMonOcc
 
         public bool ConditionMet(string provSpecDelMonOccur)
         {
-            return !string.IsNullOrWhiteSpace(provSpecDelMonOccur) && !Monitoring.Delivery.ValidProvSpecDelMonOccurValues.Any(x => x.CaseInsensitiveEquals(provSpecDelMonOccur));
+            return !string.IsNullOrWhiteSpace(provSpecDelMonOccur) && !validProvSpecDelMonOccurValues.Any(x => x.CaseInsensitiveEquals(provSpecDelMonOccur));
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string provSpecDelMonOccur)

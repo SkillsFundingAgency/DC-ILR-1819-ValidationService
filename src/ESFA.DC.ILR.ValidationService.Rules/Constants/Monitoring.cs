@@ -155,11 +155,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Constants
             public const string FinancedByAdvancedLearnerLoans = "ADL1";
 
             /// <summary>
-            /// valid Provider specified learning delivery monitoring occurance values
-            /// </summary>
-            public static readonly HashSet<string> ValidProvSpecDelMonOccurValues = new HashSet<string>() { "A", "B", "C", "D" };
-
-            /// <summary>
             /// funding and monitoring types
             /// </summary>
             public static class Types
