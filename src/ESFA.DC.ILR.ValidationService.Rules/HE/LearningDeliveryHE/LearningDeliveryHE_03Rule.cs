@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
                 LARSNotionalNVQLevelV2.HigherLevel
             };
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IFileDataService _fileDataService;
         private readonly ILARSDataService _lARSDataService;
         private readonly IDerivedData_27Rule _derivedData_27Rule;
@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
             IDerivedData_27Rule derivedData_27Rule,
             ILARSDataService lARSDataService,
             IFileDataService fileDataService,
-            IDD07 dd07)
+            IDerivedData_07Rule dd07)
             : base(validationErrorHandler, RuleNameConstants.LearningDeliveryHE_03)
         {
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;

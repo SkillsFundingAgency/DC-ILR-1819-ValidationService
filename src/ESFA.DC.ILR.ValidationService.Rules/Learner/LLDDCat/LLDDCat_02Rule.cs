@@ -10,10 +10,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat
 {
     public class LLDDCat_02Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD06 _dd06;
+        private readonly IDerivedData_06Rule _dd06;
         private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public LLDDCat_02Rule(IDD06 dd06, IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
+        public LLDDCat_02Rule(IDerivedData_06Rule dd06, IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LLDDCat_02)
         {
             _dd06 = dd06;

@@ -19,19 +19,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
             NewRule().RuleName.Should().Be("EngGrade_04");
         }
 
-        [Fact]
-        public void EngGradeConditionMet_True()
-        {
-            var engGrade = "A";
-
-            NewRule().EngGradeConditionMet(engGrade).Should().BeTrue();
-        }
-
         [Theory]
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
+        [InlineData("A")]
+        [InlineData("b")]
+        public void EngGradeConditionMet_True(string engGrade)
+        {
+            NewRule().EngGradeConditionMet(engGrade).Should().BeTrue();
+        }
+
+        [Theory]
         [InlineData("NONE")]
+        [InlineData("None")]
+        [InlineData("none")]
         public void EngGradeConditionMet_False(string engGrade)
         {
             NewRule().EngGradeConditionMet(engGrade).Should().BeFalse();

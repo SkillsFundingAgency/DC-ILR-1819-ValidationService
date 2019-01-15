@@ -23,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         private readonly IFileDataService _fileDataService;
         private readonly IAcademicYearDataService _academicYearDataService;
         private readonly IAcademicYearQueryService _academicYearQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IFCSDataService _fcsDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
             IAcademicYearDataService academicYearDataService,
             IAcademicYearQueryService academicYearQueryService,
             IFCSDataService fcsDataService,
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.UKPRN_09)

@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             // arrange
             var mockService = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
-            var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var mockDDRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new LearnStartDate_12Rule(null, mockService.Object, mockDDRule07.Object));
@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             // arrange
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var mockDDRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new LearnStartDate_12Rule(mockHandler.Object, null, mockDDRule07.Object));
@@ -131,7 +131,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
-            var rule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var rule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             rule07
                 .Setup(x => x.IsApprenticeship(null))
                 .Returns(expectation);
@@ -168,7 +168,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 .Setup(x => x.End())
                 .Returns(DateTime.Parse(yearEndDate));
 
-            var rule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var rule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
 
             var sut = new LearnStartDate_12Rule(handler.Object, service.Object, rule07.Object);
 
@@ -230,7 +230,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             service
                 .Setup(x => x.End())
                 .Returns(referenceDate.AddYears(-1));
-            var rule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var rule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             rule07
                 .Setup(x => x.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard))
                 .Returns(true);
@@ -281,7 +281,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             service
                 .Setup(x => x.End())
                 .Returns(referenceDate.AddYears(-1).AddDays(1));
-            var rule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var rule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             rule07
                 .Setup(x => x.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard))
                 .Returns(true);
@@ -305,7 +305,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
-            var rule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var rule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
 
             return new LearnStartDate_12Rule(handler.Object, service.Object, rule07.Object);
         }

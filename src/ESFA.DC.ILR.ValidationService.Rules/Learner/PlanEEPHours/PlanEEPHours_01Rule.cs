@@ -10,10 +10,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanEEPHours
 {
     public class PlanEEPHours_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
         public PlanEEPHours_01Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.PlanEEPHours_01)
         {

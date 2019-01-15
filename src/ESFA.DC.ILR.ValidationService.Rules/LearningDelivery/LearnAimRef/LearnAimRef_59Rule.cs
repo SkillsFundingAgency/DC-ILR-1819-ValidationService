@@ -17,12 +17,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         private readonly int _larsCategoryRef = 19;
         private readonly HashSet<int> _priorAttains = new HashSet<int> { 3, 4, 5, 10, 11, 12, 13, 97, 98 };
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILARSDataService _larsDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
 
-        public LearnAimRef_59Rule(IDD07 dd07, IDateTimeQueryService dateTimeQueryService, ILARSDataService larsDataService, ILearningDeliveryFAMQueryService learningDeliveryFamQueryService, IValidationErrorHandler validationErrorHandler)
+        public LearnAimRef_59Rule(IDerivedData_07Rule dd07, IDateTimeQueryService dateTimeQueryService, ILARSDataService larsDataService, ILearningDeliveryFAMQueryService learningDeliveryFamQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LearnAimRef_59)
         {
             _dd07 = dd07;

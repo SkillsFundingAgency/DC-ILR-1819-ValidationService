@@ -118,7 +118,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }

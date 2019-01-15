@@ -23,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
             // act / assert
@@ -88,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
 
             // act / assert
@@ -175,7 +175,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
@@ -249,7 +249,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
@@ -308,7 +308,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
@@ -416,7 +416,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
@@ -511,7 +511,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
@@ -539,7 +539,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 

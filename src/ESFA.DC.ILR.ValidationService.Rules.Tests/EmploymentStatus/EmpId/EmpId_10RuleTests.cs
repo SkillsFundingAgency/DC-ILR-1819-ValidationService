@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange
-            var ddRule07 = new Mock<IDD07>();
+            var ddRule07 = new Mock<IDerivedData_07Rule>();
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new EmpId_10Rule(null, ddRule07.Object));
@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>();
-            var ddRule07 = new Mock<IDD07>();
+            var ddRule07 = new Mock<IDerivedData_07Rule>();
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new EmpId_10Rule(handler.Object, null));
@@ -109,7 +109,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var mockDDRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var mockDDRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             mockDDRule07
                 .Setup(x => x.IsApprenticeship(null))
                 .Returns(expectation);
@@ -294,7 +294,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                     Moq.It.Is<string>(y => y == "DateEmpStatApp"),
                     testDate))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
-            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var ddRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             ddRule07
                 .Setup(x => x.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard))
                 .Returns(true);
@@ -360,7 +360,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Returns(statii.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var ddRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             ddRule07
                 .Setup(x => x.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard))
                 .Returns(true);
@@ -382,7 +382,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         public EmpId_10Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var ddRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
 
             return new EmpId_10Rule(handler.Object, ddRule07.Object);
         }

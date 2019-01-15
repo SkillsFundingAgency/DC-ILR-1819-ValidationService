@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private const string InvalidFamCode = "1";
 
         private readonly ILARSDataService _larsDataService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IDerivedData_28Rule _derivedDataRule28;
         private readonly IDerivedData_29Rule _derivedDataRule29;
 
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public LearnDelFAMType_65Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsDataService,
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IDerivedData_28Rule derivedDataRule28,
             IDerivedData_29Rule derivedDataRule29)
             : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_65)
@@ -73,7 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                     continue;
                 }
 
-                var ageAtCourseStart = Convert.ToInt32((learningDelivery.LearnStartDate - (learner.DateOfBirthNullable ?? DateTime.MinValue)).TotalDays / DaysInYear);
+                var ageAtCourseStart = Convert.ToInt32(Math.Floor((learningDelivery.LearnStartDate - (learner.DateOfBirthNullable ?? DateTime.MinValue)).TotalDays / DaysInYear));
                 if (ageAtCourseStart < MinAge || ageAtCourseStart > MaxAge)
                 {
                     continue;

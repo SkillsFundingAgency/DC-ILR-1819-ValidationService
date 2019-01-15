@@ -65,7 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FworkCode
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -83,7 +83,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FworkCode
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
@@ -107,7 +107,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FworkCode
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -162,7 +162,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FworkCode
             validationErrorHandlerMock.Verify();
         }
 
-        private FworkCode_01Rule NewRule(IDD07 dd07 = null, IValidationErrorHandler validationErrorHandler = null)
+        private FworkCode_01Rule NewRule(IDerivedData_07Rule dd07 = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new FworkCode_01Rule(dd07, validationErrorHandler);
         }
