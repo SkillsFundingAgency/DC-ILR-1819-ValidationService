@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 {
     public class UKPRN_06RuleTests : AbstractRuleTests<UKPRN_06Rule>
     {
-        private readonly int _fundModel = 35;
+        private readonly int _fundModel = TypeOfFunding.AdultSkills;
         private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>
         {
             FundingStreamPeriodCodeConstants.AEBC1819,
@@ -32,9 +32,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             NewRule().RuleName.Should().Be("UKPRN_06");
         }
 
+        [Fact]
+        public void FundModelConditionMet_True()
+        {
+            NewRule().FundModelConditionMet(_fundModel).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(36)]
+        [InlineData(99)]
+        public void FundModelConditionMet_False(int fundModel)
+        {
+            NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
+        }
+
         [Theory]
         [InlineData(LearningDeliveryFAMTypeConstants.LDM, "035")]
         [InlineData(LearningDeliveryFAMTypeConstants.ADL, "034")]
+        [InlineData(LearningDeliveryFAMTypeConstants.ADL, "357")]
         public void LearningDeliveryFAMsConditionMet_True(string learnDelFamType, string learnDelFamCode)
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
@@ -59,25 +74,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(null, LearningDeliveryFAMTypeConstants.LDM, "034")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(null, LearningDeliveryFAMTypeConstants.LDM, "357")).Returns(false);
 
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsConditionMet(null).Should().BeTrue();
         }
 
-        [Fact]
-        public void LearningDeliveryFAMsConditionMet_False()
+        [Theory]
+        [InlineData("357")]
+        [InlineData("034")]
+        public void LearningDeliveryFAMsConditionMet_False(string famCode)
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
                 new TestLearningDeliveryFAM
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
-                    LearnDelFAMCode = "034"
+                    LearnDelFAMCode = famCode
                 }
             };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "034")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, famCode)).Returns(true);
 
             NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsConditionMet(learningDeliveryFAMs).Should().BeFalse();
         }
@@ -86,59 +104,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         public void DD07ConditionMet_True_Null()
         {
             var dd07Mock = new Mock<IDD07>();
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(null)).Returns(false);
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(null, LearningDeliveryFAMTypeConstants.LDM, "357")).Returns(false);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object, dd07: dd07Mock.Object).DD07ConditionMet(null, null).Should().BeTrue();
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(null).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(false, false)]
-        [InlineData(true, false)]
-        [InlineData(false, true)]
-        public void DD07ConditionMet_True(bool dd07, bool fam)
+        [Fact]
+        public void DD07ConditionMet_True()
         {
             var progType = 24;
-            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
-            {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
-                    LearnDelFAMCode = "357"
-                }
-            };
 
             var dd07Mock = new Mock<IDD07>();
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(dd07);
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "357")).Returns(fam);
+            dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object, dd07: dd07Mock.Object).DD07ConditionMet(progType, learningDeliveryFAMs).Should().BeTrue();
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
         }
 
         [Fact]
         public void DD07ConditionMet_False()
         {
             var progType = 25;
-            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
-            {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.LDM,
-                    LearnDelFAMCode = "356"
-                }
-            };
 
             var dd07Mock = new Mock<IDD07>();
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "357")).Returns(true);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object, dd07: dd07Mock.Object).DD07ConditionMet(progType, learningDeliveryFAMs).Should().BeFalse();
+            NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
         }
 
         [Fact]
@@ -198,6 +191,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         [Fact]
         public void ConditionMet_True()
         {
+            var fundModel = _fundModel;
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
             DateTime? learnActEndDate = new DateTime(2018, 8, 1);
@@ -218,26 +212,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 
             var rule = NewRuleMock();
 
+            rule.Setup(r => r.FundModelConditionMet(fundModel)).Returns(true);
             rule.Setup(r => r.LearnActEndDateConditionMet(learnActEndDate, academicYear)).Returns(true);
             rule.Setup(r => r.LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)).Returns(true);
             rule.Setup(r => r.FCTFundingConditionMet()).Returns(true);
-            rule.Setup(r => r.DD07ConditionMet(progType, learningDeliveryFAMs)).Returns(true);
+            rule.Setup(r => r.DD07ConditionMet(progType)).Returns(true);
 
-            rule.Object.ConditionMet(progType, academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeTrue();
+            rule.Object.ConditionMet(fundModel, progType, academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(false, true, true, true)]
-        [InlineData(true, false, true, true)]
-        [InlineData(true, true, false, true)]
-        [InlineData(true, true, true, false)]
-        [InlineData(false, false, false, true)]
-        [InlineData(true, true, false, false)]
-        [InlineData(false, false, true, true)]
-        [InlineData(true, false, false, true)]
-        [InlineData(false, false, false, false)]
-        public void ConditionMet_False(bool condition1, bool condition2, bool condition3, bool condition4)
+        [InlineData(false, true, true, true, true)]
+        [InlineData(true, false, true, true, true)]
+        [InlineData(true, true, false, true, true)]
+        [InlineData(true, true, true, false, true)]
+        [InlineData(true, true, true, true, false)]
+        [InlineData(false, false, false, false, true)]
+        [InlineData(false, true, true, false, false)]
+        [InlineData(false, false, false, true, true)]
+        [InlineData(false, true, false, false, true)]
+        [InlineData(true, true, true, false, false)]
+        [InlineData(true, false, false, true, true)]
+        [InlineData(true, true, false, false, true)]
+        [InlineData(true, true, false, false, false)]
+        [InlineData(false, false, false, false, false)]
+        public void ConditionMet_False(bool condition1, bool condition2, bool condition3, bool condition4, bool condition5)
         {
+            var fundModel = _fundModel;
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
             DateTime? learnActEndDate = new DateTime(2018, 8, 1);
@@ -258,17 +259,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 
             var rule = NewRuleMock();
 
-            rule.Setup(r => r.LearnActEndDateConditionMet(learnActEndDate, academicYear)).Returns(condition1);
-            rule.Setup(r => r.LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)).Returns(condition2);
-            rule.Setup(r => r.FCTFundingConditionMet()).Returns(condition3);
-            rule.Setup(r => r.DD07ConditionMet(progType, learningDeliveryFAMs)).Returns(condition4);
+            rule.Setup(r => r.FundModelConditionMet(fundModel)).Returns(condition1);
+            rule.Setup(r => r.LearnActEndDateConditionMet(learnActEndDate, academicYear)).Returns(condition2);
+            rule.Setup(r => r.LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)).Returns(condition3);
+            rule.Setup(r => r.FCTFundingConditionMet()).Returns(condition4);
+            rule.Setup(r => r.DD07ConditionMet(progType)).Returns(condition5);
 
-            rule.Object.ConditionMet(progType, academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeFalse();
+            rule.Object.ConditionMet(fundModel, progType, academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeFalse();
         }
 
         [Fact]
         public void Validate_Error()
         {
+            var fundModel = _fundModel;
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
             DateTime? learnActEndDate = new DateTime(2018, 8, 1);
@@ -280,7 +283,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = _fundModel,
+                        FundModel = fundModel,
                         LearnStartDate = startDate,
                         LearnActEndDateNullable = learnActEndDate,
                         LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
