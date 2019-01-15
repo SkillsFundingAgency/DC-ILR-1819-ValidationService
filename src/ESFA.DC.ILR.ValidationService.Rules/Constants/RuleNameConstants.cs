@@ -353,6 +353,7 @@
         public const string R56 = "R56";
         public const string R59 = "R59";
         public const string R61 = "R61";
+        public const string R62 = "R62";
         public const string R63 = "R63";
         public const string R64 = "R64";
         public const string R66 = "R66";
@@ -363,6 +364,7 @@
         public const string R75 = "R75";
         public const string R85 = "R85";
         public const string R91 = "R91";
+        public const string R92 = "R92";
         public const string R96 = "R96";
         public const string R99 = "R99";
         public const string R100 = "R100";

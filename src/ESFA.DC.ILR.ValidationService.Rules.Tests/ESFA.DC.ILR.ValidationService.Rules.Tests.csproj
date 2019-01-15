@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="CrossEntity\R06RuleTests.cs" />
+    <Compile Include="CrossEntity\R92RuleTests.cs" />
     <Compile Include="CrossEntity\R110RuleTests.cs" />
     <Compile Include="CrossEntity\R115RuleTests.cs" />
     <Compile Include="CrossEntity\R100RuleTests.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="CrossEntity\R45RuleTests.cs" />
     <Compile Include="CrossEntity\R43RuleTests.cs" />
     <Compile Include="CrossEntity\R29RuleTests.cs" />
+    <Compile Include="CrossEntity\R62RuleTests.cs" />
     <Compile Include="CrossEntity\R50RuleTests.cs" />
     <Compile Include="CrossEntity\R99RuleTests.cs" />
     <Compile Include="CrossEntity\R56RuleTests.cs" />
