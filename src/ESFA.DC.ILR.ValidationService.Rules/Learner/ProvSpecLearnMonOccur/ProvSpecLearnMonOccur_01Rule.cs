@@ -13,6 +13,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
     /// </summary>
     public class ProvSpecLearnMonOccur_01Rule : AbstractRule, IRule<ILearner>
     {
+        /// <summary>
+        /// valid Provider specific Learner Monitoring Occurence Values
+        /// </summary>
+        private static readonly HashSet<string> ValidProvSpecLearnMonOccurValues = new HashSet<string> { "A", "B" };
+
         public ProvSpecLearnMonOccur_01Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.ProvSpecLearnMonOccur_01Rule)
         {
@@ -35,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
 
         public bool ConditionMet(string provSpecLearnMonOccur)
         {
-            return !string.IsNullOrWhiteSpace(provSpecLearnMonOccur) && !Monitoring.Learner.ValidProvSpecLearnMonOccurValues.Any(x => x.CaseInsensitiveEquals(provSpecLearnMonOccur));
+            return !string.IsNullOrWhiteSpace(provSpecLearnMonOccur) && !ValidProvSpecLearnMonOccurValues.Any(x => x.CaseInsensitiveEquals(provSpecLearnMonOccur));
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string provSpecLearnMonOccur)

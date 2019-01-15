@@ -28,14 +28,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Constants
             public static readonly string[] Level1AndLowerGrades = new string[] { "D", "DD", "DE", "E", "EE", "EF", "F", "FF", "FG", "G", "GG", "N", "U" };
 
             /// <summary>
-            /// valid Provider specific Learner Monitoring Occurence Values
+            /// learner monitoring types
             /// </summary>
-            public static readonly HashSet<string> ValidProvSpecLearnMonOccurValues = new HashSet<string>() { "A", "B" };
-
-        /// <summary>
-        /// learner monitoring types
-        /// </summary>
-        public static class Types
+            public static class Types
             {
                 /// <summary>
                 /// high needs students
