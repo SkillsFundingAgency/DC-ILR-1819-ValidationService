@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.AgreeId
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.DateEmpStatApp, dateEmpStatApp.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.DateEmpStatApp, dateEmpStatApp),
                 BuildErrorMessageParameter(PropertyNameConstants.AgreeId, agreeId),
             };
         }
