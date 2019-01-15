@@ -36,9 +36,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             NewDD().Derive(9999999999).Should().Be("Y");
         }
 
-        private DerivedData01_Rule NewDD()
+        private DerivedData_01Rule NewDD()
         {
-            return new DerivedData01_Rule();
+            return new DerivedData_01Rule();
         }
     }
 }

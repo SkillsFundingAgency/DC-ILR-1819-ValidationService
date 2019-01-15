@@ -15,11 +15,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly DateTime _augustFirst2016 = new DateTime(2016, 08, 01);
         private readonly IAcademicYearQueryService _academicYearQueryService;
         private readonly IDD07 _dd07;
-        private readonly IDD04 _dd04;
+        private readonly IDerivedData_04Rule _dd04;
 
         public DateOfBirth_48Rule(
             IDD07 dd07,
-            IDD04 dd04,
+            IDerivedData_04Rule dd04,
             IAcademicYearQueryService academicYearQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_48)
@@ -65,7 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         public bool DD07ConditionMet(int? progType)
         {
             return progType.HasValue
-                && progType != 25
+                && progType != TypeOfLearningProgramme.ApprenticeshipStandard
                 && _dd07.IsApprenticeship(progType);
         }
 

@@ -15,13 +15,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
     public class LearnStartDate_07Rule : AbstractRule, IRule<ILearner>
     {
         private readonly IDD07 _dd07;
-        private readonly IDD04 _dd04;
+        private readonly IDerivedData_04Rule _dd04;
         private readonly ILARSDataService _larsDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public LearnStartDate_07Rule(
             IDD07 dd07,
-            IDD04 dd04,
+            IDerivedData_04Rule dd04,
             ILARSDataService larsDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IValidationErrorHandler validationErrorHandler)

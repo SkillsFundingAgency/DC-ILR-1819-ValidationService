@@ -134,7 +134,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             };
 
             var dd07Mock = new Mock<IDD07>();
-            var dd04Mock = new Mock<IDD04>();
+            var dd04Mock = new Mock<IDerivedData_04Rule>();
             var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(23)).Returns(true);
@@ -175,7 +175,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             };
 
             var dd07Mock = new Mock<IDD07>();
-            var dd04Mock = new Mock<IDD04>();
+            var dd04Mock = new Mock<IDerivedData_04Rule>();
             var datetimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
 
@@ -207,7 +207,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
         private DateOfBirth_48Rule NewRule(
             IDD07 dd07 = null,
-            IDD04 dd04 = null,
+            IDerivedData_04Rule dd04 = null,
             IAcademicYearQueryService academicYearQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {

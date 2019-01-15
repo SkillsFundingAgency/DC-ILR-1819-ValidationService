@@ -144,8 +144,8 @@
     <Compile Include="Derived\DerivedData_28Rule.cs" />
     <Compile Include="Derived\DerivedData_29Rule.cs" />
     <Compile Include="Derived\DerivedData_21Rule.cs" />
-    <Compile Include="Derived\DerivedData01_Rule.cs" />
-    <Compile Include="Derived\DD04.cs" />
+    <Compile Include="Derived\DerivedData_01Rule.cs" />
+    <Compile Include="Derived\DerivedData_04Rule.cs" />
     <Compile Include="Derived\DD06.cs" />
     <Compile Include="Derived\DD07.cs" />
     <Compile Include="Derived\DerivedData_31Rule.cs" />
@@ -157,7 +157,7 @@
     <Compile Include="Derived\Interface\IDerivedData_26Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_27Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_01Rule.cs" />
-    <Compile Include="Derived\Interface\IDD04.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_04Rule.cs" />
     <Compile Include="Derived\Interface\IDD06.cs" />
     <Compile Include="Derived\Interface\IDD07.cs" />
     <Compile Include="Derived\Interface\IDerivedData_11Rule.cs" />
