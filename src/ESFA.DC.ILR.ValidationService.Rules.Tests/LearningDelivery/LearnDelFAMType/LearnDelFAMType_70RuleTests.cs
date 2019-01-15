@@ -1,19 +1,19 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAMType
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using ESFA.DC.ILR.Model.Interface;
-    using ESFA.DC.ILR.Tests.Model;
-    using ESFA.DC.ILR.ValidationService.Interface;
-    using ESFA.DC.ILR.ValidationService.Rules.Constants;
-    using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
-    using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
-    using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-    using FluentAssertions;
-    using Moq;
-    using Xunit;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
+using FluentAssertions;
+using Moq;
+using Xunit;
 
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAMType
+{
     public class LearnDelFAMType_70RuleTests : AbstractRuleTests<LearnDelFAMType_70Rule>
     {
         [Fact]
