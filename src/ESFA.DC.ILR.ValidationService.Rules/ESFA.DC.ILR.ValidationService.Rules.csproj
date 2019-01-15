@@ -332,6 +332,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_03Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_04Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
+    <Compile Include="Learner\ProvSpecLearnMonOccur\ProvSpecLearnMonOccur_01Rule.cs" />
     <Compile Include="Learner\Sex\Sex_01Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_08Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_03Rule.cs" />
