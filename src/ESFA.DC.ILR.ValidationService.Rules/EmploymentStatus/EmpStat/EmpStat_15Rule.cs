@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <summary>
         /// The derived data 07 (rule)
         /// </summary>
-        private readonly IDD07 _derivedData07;
+        private readonly IDerivedData_07Rule _derivedData07;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmpStat_15Rule" /> class.
@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <param name="derivedData07">The derived data 07 rule.</param>
         public EmpStat_15Rule(
             IValidationErrorHandler validationErrorHandler,
-            IDD07 derivedData07)
+            IDerivedData_07Rule derivedData07)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));

@@ -81,6 +81,7 @@
         public const string DateOfBirth_29 = "DateOfBirth_29";
         public const string DateOfBirth_30 = "DateOfBirth_30";
         public const string DateOfBirth_32 = "DateOfBirth_32";
+        public const string DateOfBirth_34 = "DateOfBirth_34";
         public const string DateOfBirth_35 = "DateOfBirth_35";
         public const string DateOfBirth_36 = "DateOfBirth_36";
         public const string DateOfBirth_37 = "DateOfBirth_37";
@@ -89,8 +90,9 @@
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
-        public const string DateOfBirth_51 = "DateOfBirth_51";
         public const string DateOfBirth_50 = "DateOfBirth_50";
+        public const string DateOfBirth_51 = "DateOfBirth_51";
+        public const string DateOfBirth_52 = "DateOfBirth_52";
         public const string DateOfBirth_53 = "DateOfBirth_53";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
@@ -200,6 +202,7 @@
         public const string LearnDelFAMType_40 = "LearnDelFAMType_40";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
+        public const string LearnDelFAMType_46 = "LearnDelFAMType_46";
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
         public const string LearnDelFAMType_50 = "LearnDelFAMType_50";
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
@@ -327,10 +330,13 @@
 
         public const string PriorAttain_01 = "PriorAttain_01";
         public const string PriorAttain_02 = "PriorAttain_02";
+        public const string PriorAttain_03 = "PriorAttain_03";
         public const string PriorAttain_04 = "PriorAttain_04";
         public const string PriorAttain_07 = "PriorAttain_07";
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
+
+        public const string ProvSpecDelMonOccur_01Rule = "ProvSpecDelMonOccur_01";
 
         public const string PwayCode_02 = "PwayCode_02";
         public const string PwayCode_03 = "PwayCode_03";
@@ -342,6 +348,7 @@
         public const string R06 = "R06";
         public const string R07 = "R07";
         public const string R20 = "R20";
+        public const string R29 = "R29";
         public const string R30 = "R30";
         public const string R31 = "R31";
         public const string R43 = "R43";
@@ -380,6 +387,8 @@
         public const string R118 = "R118";
 
         public const string Schema = "Schema";
+
+        public const string Sex_01 = "Sex_01";
 
         public const string SOC2000_02 = "SOC2000_02";
 
