@@ -240,6 +240,10 @@
         public const string LearnStartDate_06 = "LearnStartDate_06";
         public const string LearnStartDate_07 = "LearnStartDate_07";
         public const string LearnStartDate_13 = "LearnStartDate_13";
+        public const string LearnStartDate_14 = "LearnStartDate_14";
+        public const string LearnStartDate_15 = "LearnStartDate_15";
+        public const string LearnStartDate_16 = "LearnStartDate_16";
+        public const string LearnStartDate_17 = "LearnStartDate_17";
 
         public const string LearnPlanEndDate_02 = "LearnPlanEndDate_02";
         public const string LearnPlanEndDate_03 = "LearnPlanEndDate_03";
