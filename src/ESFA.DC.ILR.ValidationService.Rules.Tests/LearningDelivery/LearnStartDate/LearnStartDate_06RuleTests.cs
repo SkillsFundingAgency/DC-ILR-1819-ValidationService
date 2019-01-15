@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             var progType = 24;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ApprenticeshipConditionMet(progType).Should().BeTrue();
@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             var progType = 99;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).ApprenticeshipConditionMet(progType).Should().BeFalse();
@@ -203,7 +203,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(true);
@@ -241,7 +241,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(false);
@@ -279,7 +279,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(true);
@@ -317,7 +317,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(true);
@@ -355,7 +355,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(true);
@@ -409,7 +409,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var learningDeliveryFAMs = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(true);
@@ -463,7 +463,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var learningDeliveryFAMs = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(true);
@@ -497,7 +497,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         }
 
         private LearnStartDate_06Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             ILARSDataService larsDataService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)

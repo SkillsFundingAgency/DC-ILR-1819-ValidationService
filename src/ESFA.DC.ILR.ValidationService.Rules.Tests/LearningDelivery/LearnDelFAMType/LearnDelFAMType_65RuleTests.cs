@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -152,7 +152,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(dd07);
@@ -209,7 +209,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("3");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -266,7 +266,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -323,7 +323,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -380,7 +380,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -437,7 +437,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -496,7 +496,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -553,7 +553,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -598,7 +598,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         private LearnDelFAMType_65Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
             ILARSDataService larsDataService = null,
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IDerivedData_28Rule derivedData28Rule = null,
             IDerivedData_29Rule derivedData29Rule = null)
         {

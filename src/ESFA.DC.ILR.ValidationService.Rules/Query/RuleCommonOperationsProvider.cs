@@ -19,14 +19,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         /// <summary>
         /// the derived data (rule) 07
         /// </summary>
-        private readonly IDD07 _derivedData07;
+        private readonly IDerivedData_07Rule _derivedData07;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RuleCommonOperationsProvider" /> class.
         /// </summary>
         /// <param name="derivedData07">The derived data (rule) 07.</param>
         public RuleCommonOperationsProvider(
-            IDD07 derivedData07)
+            IDerivedData_07Rule derivedData07)
         {
             It.IsNull(derivedData07)
                 .AsGuard<ArgumentNullException>(nameof(derivedData07));

@@ -13,11 +13,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
 {
     public class EmpId_13Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IFileDataService _fileDataService;
 
         public EmpId_13Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IFileDataService fileDataService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.EmpId_13)

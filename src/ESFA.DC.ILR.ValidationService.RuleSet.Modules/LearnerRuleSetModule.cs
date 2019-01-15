@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.Sex;
+
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
@@ -77,6 +79,7 @@
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PartnerUKPRN;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PriorLearnFundAdj;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProgType;
+    using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProvSpecDelMonOccur;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.PwayCode;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.StdCode;
     using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId;
@@ -174,6 +177,7 @@
                 typeof(DateOfBirth_29Rule),
                 typeof(DateOfBirth_30Rule),
                 typeof(DateOfBirth_32Rule),
+                typeof(DateOfBirth_34Rule),
                 typeof(DateOfBirth_35Rule),
                 typeof(DateOfBirth_36Rule),
                 typeof(DateOfBirth_37Rule),
@@ -183,8 +187,9 @@
                 typeof(DateOfBirth_46Rule),
                 typeof(DateOfBirth_47Rule),
                 typeof(DateOfBirth_48Rule),
-                typeof(DateOfBirth_51Rule),
                 typeof(DateOfBirth_50Rule),
+                typeof(DateOfBirth_51Rule),
+                typeof(DateOfBirth_52Rule),
                 typeof(DateOfBirth_53Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
@@ -311,6 +316,7 @@
                 typeof(LearnDelFAMType_40Rule),
                 typeof(LearnDelFAMType_44Rule),
                 typeof(LearnDelFAMType_45Rule),
+                typeof(LearnDelFAMType_46Rule),
                 typeof(LearnDelFAMType_48Rule),
                 typeof(LearnDelFAMType_50Rule),
                 typeof(LearnDelFAMType_53Rule),
@@ -404,6 +410,7 @@
                 typeof(PrimaryLLDD_04Rule),
                 typeof(PriorAttain_01Rule),
                 typeof(PriorAttain_02Rule),
+                typeof(PriorAttain_03Rule),
                 typeof(PriorAttain_04Rule),
                 typeof(PriorAttain_07Rule),
                 typeof(PriorLearnFundAdj_01Rule),
@@ -415,6 +422,7 @@
                 typeof(ProgType_08Rule),
                 typeof(ProgType_13Rule),
                 typeof(ProgType_14Rule),
+                typeof(ProvSpecDelMonOccur_01Rule),
                 typeof(PwayCode_02Rule),
                 typeof(PwayCode_03Rule),
                 typeof(QUALENT3_01Rule),
@@ -422,6 +430,7 @@
                 typeof(QUALENT3_03Rule),
                 typeof(R07Rule),
                 typeof(R20Rule),
+                typeof(R29Rule),
                 typeof(R30Rule),
                 typeof(R31Rule),
                 typeof(R43Rule),
@@ -454,6 +463,7 @@
                 typeof(R115Rule),
                 typeof(R117Rule),
                 typeof(R118Rule),
+                typeof(Sex_01Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SWSupAimId_01Rule),
                 typeof(StdCode_01Rule),

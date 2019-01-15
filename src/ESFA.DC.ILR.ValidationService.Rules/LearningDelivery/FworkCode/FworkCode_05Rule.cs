@@ -10,10 +10,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FworkCode
 {
     public class FworkCode_05Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly ILARSDataService _larsDataService;
 
-        public FworkCode_05Rule(IDD07 dd07, ILARSDataService larsDataService, IValidationErrorHandler validationErrorHandler)
+        public FworkCode_05Rule(IDerivedData_07Rule dd07, ILARSDataService larsDataService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.FworkCode_05)
         {
             _dd07 = dd07;
