@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <summary>
         /// The derived data 07 (rule)
         /// </summary>
-        private readonly IDD07 _derivedData07;
+        private readonly IDerivedData_07Rule _derivedData07;
 
         /// <summary>
         /// The (academic) year data (service)
@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <param name="yearData">The year data.</param>
         public EmpStat_01Rule(
             IValidationErrorHandler validationErrorHandler,
-            IDD07 derivedData07,
+            IDerivedData_07Rule derivedData07,
             IAcademicYearDataService yearData)
         {
             It.IsNull(validationErrorHandler)

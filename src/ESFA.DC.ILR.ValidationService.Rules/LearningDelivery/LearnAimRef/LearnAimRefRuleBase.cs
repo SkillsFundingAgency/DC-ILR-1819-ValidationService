@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         protected LearnAimRefRuleBase(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
-            IDD07 derivedData07,
+            IDerivedData_07Rule derivedData07,
             IDerivedData_11Rule derivedData11)
         {
             It.IsNull(validationErrorHandler)
@@ -74,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <summary>
         /// Gets the derived data 07 (rule)
         /// </summary>
-        protected IDD07 DerivedData07 { get; }
+        protected IDerivedData_07Rule DerivedData07 { get; }
 
         /// <summary>
         /// Gets the derived data 11 (rule)

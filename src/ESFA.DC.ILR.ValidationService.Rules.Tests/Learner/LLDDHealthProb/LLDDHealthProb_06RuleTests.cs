@@ -496,7 +496,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, dd06Date)).Returns(24);
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
             dd06Mock.Setup(dm => dm.Derive(It.IsAny<IEnumerable<ILearningDelivery>>())).Returns(dd06Date);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -544,7 +544,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             dateTimeQueryServiceMock.Setup(qs => qs.YearsBetween(dateOfBirth, dd06Date)).Returns(26);
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
             dd06Mock.Setup(dm => dm.Derive(It.IsAny<IEnumerable<ILearningDelivery>>())).Returns(dd06Date);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
@@ -556,7 +556,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
 
         private LLDDHealthProb_06Rule NewRule(
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService = null,
-            IDD06 dd06 = null,
+            IDerivedData_06Rule dd06 = null,
             IDateTimeQueryService dateTimeQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {

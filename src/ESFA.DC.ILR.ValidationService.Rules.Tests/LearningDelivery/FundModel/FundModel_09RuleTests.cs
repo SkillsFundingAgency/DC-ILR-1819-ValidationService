@@ -186,7 +186,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -204,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
@@ -230,7 +230,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -274,7 +274,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             validationErrorHandlerMock.Verify();
         }
 
-        private FundModel_09Rule NewRule(IDD07 dd07 = null, IValidationErrorHandler validationErrorHandler = null)
+        private FundModel_09Rule NewRule(IDerivedData_07Rule dd07 = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new FundModel_09Rule(dd07, validationErrorHandler);
         }

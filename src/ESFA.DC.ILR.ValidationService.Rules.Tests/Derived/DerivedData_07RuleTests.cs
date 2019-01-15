@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 {
-    public class DD07Tests
+    public class DerivedData_07RuleTests
     {
         [Theory]
         [InlineData(2)]
@@ -29,9 +29,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             NewDD().IsApprenticeship(input).Should().BeFalse();
         }
 
-        private DD07 NewDD()
+        private DerivedData_07Rule NewDD()
         {
-            return new DD07();
+            return new DerivedData_07Rule();
         }
     }
 }

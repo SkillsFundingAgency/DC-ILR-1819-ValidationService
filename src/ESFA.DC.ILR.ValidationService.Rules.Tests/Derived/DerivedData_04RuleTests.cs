@@ -6,7 +6,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 {
-    public class DD04Tests
+    public class DerivedData_04RuleTests
     {
         [Fact]
         public void Derive()
@@ -38,13 +38,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            NewDD().Derive(learner.LearningDeliveries, latestLearningDelivery).Should().Be(new DateTime(2015, 1, 1));
+            NewRule().Derive(learner.LearningDeliveries, latestLearningDelivery).Should().Be(new DateTime(2015, 1, 1));
         }
 
         [Fact]
         public void EarliestLearningDeliveryLearnStartDateFor_NullLearningDelivery()
         {
-            Action action = () => NewDD().EarliestLearningDeliveryLearnStartDateFor(null, 1, 1, 1, 1);
+            Action action = () => NewRule().EarliestLearningDeliveryLearnStartDateFor(null, 1, 1, 1, 1);
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -64,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            NewDD().EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 2).Should().BeNull();
+            NewRule().EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 2).Should().BeNull();
         }
 
         [Fact]
@@ -91,12 +91,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            NewDD().EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 1).Should().Be(learnStartDate);
+            NewRule().EarliestLearningDeliveryLearnStartDateFor(learningDeliveries, 1, 1, 1, 1).Should().Be(learnStartDate);
         }
 
-        private DD04 NewDD()
+        private DerivedData_04Rule NewRule()
         {
-            return new DD04();
+            return new DerivedData_04Rule();
         }
     }
 }

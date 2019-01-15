@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
                 }
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
@@ -70,7 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
                 }
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
@@ -113,7 +113,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
                 LearningDeliveries = learningDeliveries
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
@@ -159,7 +159,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
                 LearningDeliveries = learningDeliveries
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
@@ -172,7 +172,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
         }
 
         private LLDDCat_02Rule NewRule(
-            IDD06 dd06 = null,
+            IDerivedData_06Rule dd06 = null,
             IProvideLookupDetails provideLookupDetails = null,
             IValidationErrorHandler validationErrorHandler = null)
         {

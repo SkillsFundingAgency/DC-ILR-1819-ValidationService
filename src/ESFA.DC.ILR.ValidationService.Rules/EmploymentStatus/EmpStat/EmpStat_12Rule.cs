@@ -16,12 +16,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         private readonly HashSet<string> _famCodes = new HashSet<string> { "353", "354", "355" };
 
         private readonly ILearnerEmploymentStatusQueryService _learnerEmploymentStatusQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public EmpStat_12Rule(
             ILearnerEmploymentStatusQueryService learnerEmploymentStatusQueryService,
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.EmpStat_12)
