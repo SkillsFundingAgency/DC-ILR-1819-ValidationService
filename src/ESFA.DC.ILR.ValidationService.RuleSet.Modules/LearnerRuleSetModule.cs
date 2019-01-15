@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.Sex;
+﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
+
+using ESFA.DC.ILR.ValidationService.Rules.Learner.Sex;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
@@ -424,6 +426,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ProvSpecDelMonOccur_01Rule),
                 typeof(PwayCode_02Rule),
                 typeof(PwayCode_03Rule),
+                typeof(ProvSpecLearnMonOccur_01Rule),
                 typeof(QUALENT3_01Rule),
                 typeof(QUALENT3_02Rule),
                 typeof(QUALENT3_03Rule),
@@ -438,6 +441,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R50Rule),
                 typeof(R52Rule),
                 typeof(R56Rule),
+                typeof(R58Rule),
                 typeof(R61Rule),
                 typeof(R62Rule),
                 typeof(R63Rule),

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -14,18 +15,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 {
     public class UKPRN_06Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
-        private readonly IFCSDataService _fcsDataService;
-        private readonly IAcademicYearDataService _academicYearDataService;
-        private readonly IAcademicYearQueryService _academicYearQueryService;
-        private readonly IDerivedData_07Rule _dd07;
-        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { 35 };
+        private const string _ldm034 = "034";
+        private const string _ldm357 = "357";
+        private const int _fundModel = TypeOfFunding.AdultSkills;
         private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>
         {
             FundingStreamPeriodCodeConstants.AEBC1819,
             FundingStreamPeriodCodeConstants.AEBTO_LS1819,
             FundingStreamPeriodCodeConstants.AEBTO_TOL1819
-        };
+        }.ToCaseInsensitiveHashSet();
+
+        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
+        private readonly IFCSDataService _fcsDataService;
+        private readonly IAcademicYearDataService _academicYearDataService;
+        private readonly IAcademicYearQueryService _academicYearQueryService;
+        private readonly IDerivedData_07Rule _dd07;
 
         public UKPRN_06Rule(
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
@@ -57,32 +61,39 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 
             var academicYearStart = _academicYearDataService.Start();
 
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => _fundModels.Contains(d.FundModel)))
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.ProgTypeNullable, academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.LearningDeliveryFAMs))
+                if (ConditionMet(learningDelivery.FundModel, learningDelivery.ProgTypeNullable, academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.LearningDeliveryFAMs))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel));
                 }
             }
         }
 
-        public bool ConditionMet(int? progType, DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool ConditionMet(int fundModel, int? progType, DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)
-                && DD07ConditionMet(progType, learningDeliveryFAMs)
+            return FundModelConditionMet(fundModel)
+                && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)
+                && DD07ConditionMet(progType)
                 && LearnActEndDateConditionMet(learnActEndDate, academicYearStart)
                 && FCTFundingConditionMet();
         }
 
-        public virtual bool LearningDeliveryFAMsConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public virtual bool FundModelConditionMet(int fundModel)
         {
-            return !_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "034");
+            return fundModel == _fundModel;
         }
 
-        public virtual bool DD07ConditionMet(int? progType, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public virtual bool LearningDeliveryFAMsConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return !(_dd07.IsApprenticeship(progType)
-                && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "357"));
+            return
+                !(_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, _ldm034)
+                || _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, _ldm357));
+        }
+
+        public virtual bool DD07ConditionMet(int? progType)
+        {
+            return !_dd07.IsApprenticeship(progType);
         }
 
         public virtual bool LearnActEndDateConditionMet(DateTime? learnActEndDate, DateTime academicYearStart)

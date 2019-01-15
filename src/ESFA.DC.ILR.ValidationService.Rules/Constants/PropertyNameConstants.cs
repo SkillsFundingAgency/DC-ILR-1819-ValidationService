@@ -83,6 +83,7 @@
         public const string PriorAttain = "PriorAttain";
         public const string PriorLearnFundAdj = "PriorLearnFundAdj";
         public const string PwayCode = "PwayCode";
+        public const string ProvSpecLearnMonOccur = "ProvSpecLearnMonOccur";
         public const string QUALENT3 = "QUALENT3";
         public const string Sex = "Sex";
         public const string StdCode = "StdCode";

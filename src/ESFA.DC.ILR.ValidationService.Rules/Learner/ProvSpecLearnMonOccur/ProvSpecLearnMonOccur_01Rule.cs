@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -12,10 +13,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
     /// </summary>
     public class ProvSpecLearnMonOccur_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<string> _validProvSpecLearnMonOccurValues = new HashSet<string>() { "A", "B" };
+        /// <summary>
+        /// valid Provider specific Learner Monitoring Occurence Values
+        /// </summary>
+        private static readonly HashSet<string> ValidProvSpecLearnMonOccurValues = new HashSet<string> { "A", "B" };
 
         public ProvSpecLearnMonOccur_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.ProvSpecLearnMonOccur_01Rule)
         {
         }
 
@@ -28,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
                 {
                     if (ConditionMet(providerSpecLearnerMonitoring.ProvSpecLearnMonOccur))
                     {
-                        HandleValidationError(RuleNameConstants.ProvSpecLearnMonOccur_01Rule, objectToValidate.LearnRefNumber);
+                        HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(providerSpecLearnerMonitoring.ProvSpecLearnMonOccur));
                     }
                 }
             }
@@ -36,7 +40,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
 
         public bool ConditionMet(string provSpecLearnMonOccur)
         {
-            return !string.IsNullOrWhiteSpace(provSpecLearnMonOccur) && !_validProvSpecLearnMonOccurValues.Contains(provSpecLearnMonOccur);
+            return !string.IsNullOrWhiteSpace(provSpecLearnMonOccur) && !ValidProvSpecLearnMonOccurValues.Any(x => x.CaseInsensitiveEquals(provSpecLearnMonOccur));
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string provSpecLearnMonOccur)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.ProvSpecLearnMonOccur, provSpecLearnMonOccur)
+            };
         }
     }
 }
