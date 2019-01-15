@@ -23,8 +23,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
+        [InlineData(LearningDeliveryFAMTypeConstants.ACT, "2", "2018-01-01", "2018-07-31")]
         [InlineData(LearningDeliveryFAMTypeConstants.ACT, "1", "2018-07-01", "2018-09-01")]
-        [InlineData(LearningDeliveryFAMTypeConstants.ACT, "2", "2018-01-01", "2018-07-01")]
         public void LearnDelFAMCodeConditionMet_False(string fAMType, string fAMCode, string dateFrom, string dateTo)
         {
             string learnDelFAMType;
@@ -34,6 +34,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var learningDeliveryFAMs = new TestLearningDeliveryFAM[]
             {
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = new DateTime(2017, 09, 01),
+                    LearnDelFAMDateToNullable = new DateTime(2017, 12, 31),
+                    LearnDelFAMCode = "1"
+                },
                 new TestLearningDeliveryFAM()
                 {
                     LearnDelFAMType = fAMType,
@@ -68,13 +75,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData("2018-11-01")]
-        [InlineData(null)]
-        public void LearnDelFAMCodeConditionMet_True(string dateTo)
+        [InlineData("1", "2018-11-01", "2")]
+        [InlineData("1", null, "2")]
+        [InlineData("2", "2018-09-01", "2")]
+        public void LearnDelFAMCodeConditionMet_True(string fAMCode, string dateTo, string learnDelFAMCodeExpected)
         {
             string learnDelFAMType;
             string learnDelFAMCode;
-            string learnDelFAMCodeExpected = "2";
             DateTime? learnDelFAMDateTo = string.IsNullOrEmpty(dateTo) ? (DateTime?)null : DateTime.Parse(dateTo);
 
             var learningDeliveryFAMs = new TestLearningDeliveryFAM[]
@@ -82,9 +89,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDeliveryFAM()
                 {
                     LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 01, 01),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 07, 01),
+                    LearnDelFAMCode = "1"
+                },
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
                     LearnDelFAMDateFromNullable = new DateTime(2018, 07, 01),
                     LearnDelFAMDateToNullable = learnDelFAMDateTo,
-                    LearnDelFAMCode = "1"
+                    LearnDelFAMCode = fAMCode
                 },
                 new TestLearningDeliveryFAM()
                 {
