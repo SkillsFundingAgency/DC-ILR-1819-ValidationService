@@ -73,7 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                     continue;
                 }
 
-                var ageAtCourseStart = Convert.ToInt32((learningDelivery.LearnStartDate - (learner.DateOfBirthNullable ?? DateTime.MinValue)).TotalDays / DaysInYear);
+                var ageAtCourseStart = Convert.ToInt32(Math.Floor((learningDelivery.LearnStartDate - (learner.DateOfBirthNullable ?? DateTime.MinValue)).TotalDays / DaysInYear));
                 if (ageAtCourseStart < MinAge || ageAtCourseStart > MaxAge)
                 {
                     continue;
