@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
+
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
@@ -140,6 +142,7 @@
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
                 typeof(AimType_07Rule),
+                typeof(ALSCost_02Rule),
                 typeof(CompStatus_01Rule),
                 typeof(CompStatus_02Rule),
                 typeof(CompStatus_03Rule),
