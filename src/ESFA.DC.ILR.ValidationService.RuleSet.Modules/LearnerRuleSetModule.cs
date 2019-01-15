@@ -377,6 +377,7 @@
                 typeof(Outcome_09Rule),
                 typeof(OutGrade_03Rule),
                 typeof(OutGrade_04Rule),
+                typeof(OutGrade_05Rule),
                 typeof(OutGrade_06Rule),
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
