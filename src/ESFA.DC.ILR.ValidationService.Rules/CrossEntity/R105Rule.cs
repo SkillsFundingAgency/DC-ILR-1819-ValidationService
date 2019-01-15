@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -24,29 +25,76 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return;
             }
 
-            if (LearnDelFAMTypeConditionMet(objectToValidate)
-                && LearnDelFAMCodeConditionMet(objectToValidate))
+            string learnDelFAMType = string.Empty;
+            string learnDelFAMCode = string.Empty;
+
+            var learningDeliverFAMs = objectToValidate.LearningDeliveries
+                .Where(ld => ld.LearningDeliveryFAMs != null)?
+                .SelectMany(ld => ld.LearningDeliveryFAMs)?
+                .Where(f => f.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.ACT))?
+                .OrderBy(f => f.LearnDelFAMDateFromNullable)?.ToList();
+
+            if ((learningDeliverFAMs?.Count() ?? 0) > 1
+                && LearnDelFAMCodeConditionMet(
+                    learningDeliverFAMs,
+                    out learnDelFAMType,
+                    out learnDelFAMCode))
             {
-                HandleValidationError(objectToValidate.LearnRefNumber);
+                HandleValidationError(
+                    learnRefNumber: objectToValidate.LearnRefNumber,
+                    errorMessageParameters: BuildErrorMessageParameters(
+                        learnDelFAMType,
+                        learnDelFAMCode));
             }
         }
 
-        public bool LearnDelFAMCodeConditionMet(ILearner learner)
+        public bool LearnDelFAMCodeConditionMet(
+            IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs,
+            out string learnDelFAMType,
+            out string learnDelFAMCode)
         {
-            return learner.LearningDeliveries?
-                .Where(l => l.LearningDeliveryFAMs != null)?
-                .SelectMany(l => l.LearningDeliveryFAMs)?
-                .GroupBy(f => f.LearnDelFAMCode)?
-                .Any(g => g.Count() > 1) ?? false;
+            int record = 1;
+            bool isConditionMet = false;
+            string previousLearnDelFAMCode = string.Empty;
+            DateTime? previousDateTo = null;
+
+            learnDelFAMType = string.Empty;
+            learnDelFAMCode = string.Empty;
+            if ((learningDeliveryFAMs?.Count() ?? 0) == 0)
+            {
+                return false;
+            }
+
+            foreach (var fam in learningDeliveryFAMs)
+            {
+                if (record > 1)
+                {
+                    if ((!previousDateTo.HasValue
+                        || fam.LearnDelFAMDateFromNullable <= previousDateTo)
+                        && fam.LearnDelFAMCode != previousLearnDelFAMCode)
+                    {
+                        isConditionMet = true;
+                        learnDelFAMType = fam.LearnDelFAMType;
+                        learnDelFAMCode = fam.LearnDelFAMCode;
+                        break;
+                    }
+                }
+
+                previousLearnDelFAMCode = fam.LearnDelFAMCode;
+                previousDateTo = fam.LearnDelFAMDateToNullable;
+                record++;
+            }
+
+            return isConditionMet;
         }
 
-        public bool LearnDelFAMTypeConditionMet(ILearner learner)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnDelFAMType, string learnDelFAMCode)
         {
-            return (learner.LearningDeliveries?
-                .Where(l => l.LearningDeliveryFAMs != null)?
-                .SelectMany(l => l.LearningDeliveryFAMs)?
-                .Where(f => f.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ACT)?
-                .Count() ?? 0) > 1;
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learnDelFAMType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, learnDelFAMCode)
+            };
         }
     }
 }

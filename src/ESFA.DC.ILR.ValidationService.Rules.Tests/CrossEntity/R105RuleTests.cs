@@ -9,6 +9,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
@@ -21,172 +22,106 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule().RuleName.Should().Be("R105");
         }
 
-        [Fact]
-        public void LearnDelFAMTypeConditionMet_False()
+        [Theory]
+        [InlineData(LearningDeliveryFAMTypeConstants.ACT, "1", "2018-07-01", "2018-09-01")]
+        [InlineData(LearningDeliveryFAMTypeConstants.ACT, "2", "2018-01-01", "2018-07-01")]
+        public void LearnDelFAMCodeConditionMet_False(string fAMType, string fAMCode, string dateFrom, string dateTo)
         {
-            var testLearner = new TestLearner()
+            string learnDelFAMType;
+            string learnDelFAMCode;
+            DateTime? learnDelDateFrom = string.IsNullOrEmpty(dateFrom) ? (DateTime?)null : DateTime.Parse(dateFrom);
+            DateTime? learnDelDateTo = string.IsNullOrEmpty(dateTo) ? (DateTime?)null : DateTime.Parse(dateTo);
+
+            var learningDeliveryFAMs = new TestLearningDeliveryFAM[]
             {
-                LearningDeliveries = new TestLearningDelivery[]
+                new TestLearningDeliveryFAM()
                 {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = "5A123",
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL,
-                                LearnDelFAMCode = "123"
-                            }
-                        }
-                    }
+                    LearnDelFAMType = fAMType,
+                    LearnDelFAMDateFromNullable = learnDelDateFrom,
+                    LearnDelFAMDateToNullable = learnDelDateTo,
+                    LearnDelFAMCode = fAMCode
+                },
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 08, 01),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 12, 01),
+                    LearnDelFAMCode = "1"
                 }
             };
 
-            NewRule().LearnDelFAMTypeConditionMet(testLearner).Should().BeFalse();
-        }
-
-        [Fact]
-        public void LearnDelFAMTypeConditionMet_False_NullCheck()
-        {
-            var testLearner = new TestLearner()
-            {
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = "5A123"
-                    }
-                }
-            };
-
-            NewRule().LearnDelFAMTypeConditionMet(testLearner).Should().BeFalse();
-        }
-
-        [Fact]
-        public void LearnDelFAMTypeConditionMet_True()
-        {
-            var testLearner = new TestLearner()
-            {
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = "5A123",
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "123"
-                            }
-                        }
-                    },
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = "5A124",
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "125"
-                            }
-                        }
-                    }
-                }
-            };
-
-            NewRule().LearnDelFAMTypeConditionMet(testLearner).Should().BeTrue();
-        }
-
-        [Fact]
-        public void LearnDelFAMCodeConditionMet_False()
-        {
-            var testLearner = new TestLearner()
-            {
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = "5A123",
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL,
-                                LearnDelFAMCode = "123"
-                            },
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "125"
-                            }
-                        }
-                    }
-                }
-            };
-
-            NewRule().LearnDelFAMCodeConditionMet(testLearner).Should().BeFalse();
+            NewRule().LearnDelFAMCodeConditionMet(learningDeliveryFAMs, out learnDelFAMType, out learnDelFAMCode).Should().BeFalse();
+            learnDelFAMType.Should().BeEmpty();
+            learnDelFAMCode.Should().BeEmpty();
         }
 
         [Fact]
         public void LearnDelFAMCodeConditionMet_False_NullCheck()
         {
-            var testLearner = new TestLearner()
-            {
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = "5A123"
-                    }
-                }
-            };
+            string learnDelFAMType;
+            string learnDelFAMCode;
+            TestLearningDeliveryFAM[] learningDeliveryFAMs = null;
 
-            NewRule().LearnDelFAMCodeConditionMet(testLearner).Should().BeFalse();
+            NewRule().LearnDelFAMCodeConditionMet(learningDeliveryFAMs, out learnDelFAMType, out learnDelFAMCode).Should().BeFalse();
+            learnDelFAMType.Should().BeEmpty();
+            learnDelFAMCode.Should().BeEmpty();
         }
 
-        [Fact]
-        public void LearnDelFAMCodeConditionMet_True()
+        [Theory]
+        [InlineData("2018-11-01")]
+        [InlineData(null)]
+        public void LearnDelFAMCodeConditionMet_True(string dateTo)
         {
-            var testLearner = new TestLearner()
+            string learnDelFAMType;
+            string learnDelFAMCode;
+            string learnDelFAMCodeExpected = "2";
+            DateTime? learnDelFAMDateTo = string.IsNullOrEmpty(dateTo) ? (DateTime?)null : DateTime.Parse(dateTo);
+
+            var learningDeliveryFAMs = new TestLearningDeliveryFAM[]
             {
-                LearningDeliveries = new TestLearningDelivery[]
+                new TestLearningDeliveryFAM()
                 {
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = "5A123",
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL,
-                                LearnDelFAMCode = "125"
-                            }
-                        }
-                    },
-                    new TestLearningDelivery()
-                    {
-                        LearnAimRef = "5A124",
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "125"
-                            }
-                        }
-                    }
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 07, 01),
+                    LearnDelFAMDateToNullable = learnDelFAMDateTo,
+                    LearnDelFAMCode = "1"
+                },
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 01),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 12, 01),
+                    LearnDelFAMCode = learnDelFAMCodeExpected
                 }
             };
 
-            NewRule().LearnDelFAMCodeConditionMet(testLearner).Should().BeTrue();
+            NewRule().LearnDelFAMCodeConditionMet(learningDeliveryFAMs, out learnDelFAMType, out learnDelFAMCode).Should().BeTrue();
+            learnDelFAMType.Should().Be(LearningDeliveryFAMTypeConstants.ACT);
+            learnDelFAMCode.Should().Be(learnDelFAMCodeExpected);
         }
 
         [Fact]
         public void Validate_Error()
         {
+            string learnDelFAMCodeExpected = "2";
+            var learningDeliveryFAMs = new TestLearningDeliveryFAM[]
+            {
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 07, 01),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 11, 01),
+                    LearnDelFAMCode = "1"
+                },
+                new TestLearningDeliveryFAM()
+                {
+                    LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 01),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 12, 01),
+                    LearnDelFAMCode = "1"
+                }
+            };
+
             var testLearner = new TestLearner()
             {
                 LearningDeliveries = new TestLearningDelivery[]
@@ -194,14 +129,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         LearnAimRef = "5A123",
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM()
-                            {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "125"
-                            }
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFAMs
                     },
                     new TestLearningDelivery()
                     {
@@ -211,7 +139,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             new TestLearningDeliveryFAM()
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "125"
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 11, 01),
+                                LearnDelFAMDateToNullable = new DateTime(2018, 12, 01),
+                                LearnDelFAMCode = learnDelFAMCodeExpected
                             }
                         }
                     }
@@ -238,8 +168,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         {
                             new TestLearningDeliveryFAM()
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ADL,
-                                LearnDelFAMCode = "123"
+                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 08, 01),
+                                LearnDelFAMDateToNullable = new DateTime(2018, 12, 01),
+                                LearnDelFAMCode = "1"
                             }
                         }
                     },
@@ -251,7 +183,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             new TestLearningDeliveryFAM()
                             {
                                 LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
-                                LearnDelFAMCode = "125"
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 01, 01),
+                                LearnDelFAMDateToNullable = new DateTime(2018, 07, 01),
+                                LearnDelFAMCode = "1"
                             }
                         }
                     }
@@ -287,6 +221,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             {
                 NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
             }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErroHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErroHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.ACT)).Verifiable();
+            validationErroHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, "1")).Verifiable();
+
+            NewRule(validationErrorHandler: validationErroHandlerMock.Object).BuildErrorMessageParameters(LearningDeliveryFAMTypeConstants.ACT, "1");
+            validationErroHandlerMock.Verify();
         }
 
         public R105Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
