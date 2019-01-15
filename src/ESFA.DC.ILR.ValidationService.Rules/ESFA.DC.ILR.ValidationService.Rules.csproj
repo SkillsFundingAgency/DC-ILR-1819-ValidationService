@@ -596,6 +596,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ESFA.DC.ILR.ValidationService.Rules.ruleset">
       <SubType>Designer</SubType>
     </None>
