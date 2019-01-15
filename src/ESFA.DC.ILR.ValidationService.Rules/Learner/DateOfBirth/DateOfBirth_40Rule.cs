@@ -71,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                     continue;
                 }
 
-                if (learningDelivery.LearnStartDate.AddMonths(MinimumContractMonths) < (learningDelivery.LearnActEndDateNullable ?? DateTime.MinValue))
+                if (learningDelivery.LearnStartDate.AddMonths(MinimumContractMonths) > (learningDelivery.LearnActEndDateNullable ?? DateTime.MaxValue))
                 {
                     RaiseValidationMessage(learner, learningDelivery);
                 }
