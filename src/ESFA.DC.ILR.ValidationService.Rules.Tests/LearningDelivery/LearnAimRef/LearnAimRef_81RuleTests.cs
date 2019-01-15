@@ -288,7 +288,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.HasQualifyingStart(mockDelivery.Object, LearnAimRef_81Rule.FirstViableDate, null))
                 .Returns(true);
             commonChecks
-                .Setup(x => x.GetQualifyingEmploymentStatus(mockLearner.Object, mockDelivery.Object))
+                .Setup(x => x.GetEmploymentStatusOn(testDate, Moq.It.IsAny<IReadOnlyCollection<ILearnerEmploymentStatus>>()))
                 .Returns(mockEmployment.Object);
 
             var sut = new LearnAimRef_81Rule(handler.Object, service.Object, commonChecks.Object);
@@ -375,7 +375,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.HasQualifyingStart(mockDelivery.Object, LearnAimRef_81Rule.FirstViableDate, null))
                 .Returns(true);
             commonChecks
-                .Setup(x => x.GetQualifyingEmploymentStatus(mockLearner.Object, mockDelivery.Object))
+                .Setup(x => x.GetEmploymentStatusOn(testDate, Moq.It.IsAny<IReadOnlyCollection<ILearnerEmploymentStatus>>()))
                 .Returns(mockEmployment.Object);
 
             var sut = new LearnAimRef_81Rule(handler.Object, service.Object, commonChecks.Object);

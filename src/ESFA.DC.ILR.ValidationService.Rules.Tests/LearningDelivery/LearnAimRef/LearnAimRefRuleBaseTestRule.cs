@@ -28,7 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         public LearnAimRefRuleBaseTestRule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
-            IDD07 derivedData07,
+            IDerivedData_07Rule derivedData07,
             IDerivedData_11Rule derivedData11)
                 : base(validationErrorHandler, larsData, derivedData07, derivedData11)
         {

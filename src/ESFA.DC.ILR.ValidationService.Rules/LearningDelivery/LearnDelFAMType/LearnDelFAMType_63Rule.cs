@@ -4,6 +4,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
@@ -62,10 +63,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsBasicSkillsLearner(ILearningDelivery delivery)
         {
-            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
+            var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef);
+            var annualValues = _larsData.GetAnnualValuesFor(delivery.LearnAimRef);
 
-            return larsDelivery.IsCurrent(delivery.LearnStartDate)
-                && larsDelivery.AnnualValues.SafeAny(IsBasicSkillsLearner);
+            return validities.Any(x => x.IsCurrent(delivery.LearnStartDate))
+                && annualValues.Any(IsBasicSkillsLearner);
         }
 
         /// <summary>

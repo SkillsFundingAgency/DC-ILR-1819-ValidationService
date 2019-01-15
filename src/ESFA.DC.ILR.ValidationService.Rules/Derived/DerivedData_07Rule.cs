@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.Constants;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System.Linq;
@@ -8,13 +9,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     /// <summary>
     /// derived data 07 - viable apprenticeship codes
     /// </summary>
-    /// <seealso cref="IDD07" />
-    public class DD07 : IDD07
+    /// <seealso cref="IDerivedData_07Rule" />
+    public class DerivedData_07Rule : IDerivedData_07Rule
     {
         /// <summary>
         /// The allowed programme types
         /// </summary>
-        private static readonly int[] _allowedProgTypes =
+        private static readonly IEnumerable<int?> _allowedProgTypes = new HashSet<int?>()
         {
             TypeOfLearningProgramme.AdvancedLevelApprenticeship,
             TypeOfLearningProgramme.IntermediateLevelApprenticeship,
@@ -34,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         /// </returns>
         public bool IsApprenticeship(int? progType)
         {
-            return It.Has(progType) && _allowedProgTypes.Contains(progType.Value);
+            return _allowedProgTypes.Contains(progType);
         }
     }
 }

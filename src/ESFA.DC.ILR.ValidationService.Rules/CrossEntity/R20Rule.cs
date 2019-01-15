@@ -17,12 +17,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private readonly HashSet<int?> _frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
 
         private readonly ILARSDataService _lARSDataService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
         public R20Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService lARSDataService,
-            IDD07 dd07)
+            IDerivedData_07Rule dd07)
             : base(validationErrorHandler, RuleNameConstants.R20)
         {
             _lARSDataService = lARSDataService;

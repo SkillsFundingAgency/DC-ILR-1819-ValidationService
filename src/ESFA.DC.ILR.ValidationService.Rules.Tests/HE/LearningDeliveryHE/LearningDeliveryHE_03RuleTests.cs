@@ -123,7 +123,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
         [InlineData(TypeOfLearningProgramme.ApprenticeshipStandard)]
         public void DD07ConditionMet_False(int? progType)
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(d => d.IsApprenticeship(progType)).Returns(true);
 
@@ -135,7 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
         [InlineData(null)]
         public void DD07ConditionMet_True(int? progType)
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(d => d.IsApprenticeship(TypeOfLearningProgramme.AdvancedLevelApprenticeship)).Returns(false);
 
@@ -202,7 +202,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             learningDeliveryFAMsQueryServiceMock.Setup(s => s.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "352")).Returns(true);
             larsDataServiceMock.Setup(l => l.NotionalNVQLevelV2MatchForLearnAimRefAndLevels(learnAimRef, _notionalNVQLevels)).Returns(false);
@@ -232,7 +232,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
 
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             learningDeliveryFAMsQueryServiceMock.Setup(s => s.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "352")).Returns(false);
             larsDataServiceMock.Setup(l => l.NotionalNVQLevelV2MatchForLearnAimRefAndLevels(learnAimRef, _notionalNVQLevels)).Returns(true);
@@ -276,7 +276,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
             var derivedDataServiceMock = new Mock<IDerivedData_27Rule>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fileDataServiceMock = new Mock<IFileDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             fileDataServiceMock.Setup(f => f.UKPRN()).Returns(98756789);
             learningDeliveryFAMsQueryServiceMock.Setup(s => s.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "352")).Returns(false);
@@ -335,7 +335,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
             var derivedDataServiceMock = new Mock<IDerivedData_27Rule>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
             var fileDataServiceMock = new Mock<IFileDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             fileDataServiceMock.Setup(f => f.UKPRN()).Returns(123654321);
             learningDeliveryFAMsQueryServiceMock.Setup(s => s.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "352")).Returns(true);
@@ -399,7 +399,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.LearningDeliveryHE
             IDerivedData_27Rule derivedData_27Rule = null,
             ILARSDataService lARSDataService = null,
             IFileDataService fileDataService = null,
-            IDD07 dD07 = null)
+            IDerivedData_07Rule dD07 = null)
         {
             return new LearningDeliveryHE_03Rule(
                 validationErrorHandler: validationErrorHandler,

@@ -41,8 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear
         /// <returns>
         /// an academic date for the year of learning
         /// </returns>
-        public DateTime GetAcademicYearOfLearningDate(DateTime candidate, AcademicYearDates yearDate) =>
-            DateTime.Parse(Format.String(yearDate.GetDateFormat(), yearDate.GetDateYear(candidate)));
+        public DateTime GetAcademicYearOfLearningDate(DateTime candidate, AcademicYearDates yearDate) => yearDate.GetAcademicYearDateFor(candidate);
 
         public DateTime AugustThirtyFirst()
         {

@@ -4,6 +4,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +13,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 {
     public class OrigLearnStartDate_05Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly ILARSDataService _larsDataService;
 
         public OrigLearnStartDate_05Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             ILARSDataService larsDataService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_05)
@@ -51,12 +52,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         public bool ConditionMet(DateTime? origLearnStartDate, int fundModel, int? progType, int aimType, string learnAimRef)
         {
-            return OrigLearnStartDateConditionMet(origLearnStartDate)
-                   && FundModelConditionMet(fundModel)
-                   && DD07ConditionMet(progType)
-                   && AimTypeConditionMet(aimType)
-                   && LARSConditionMet(origLearnStartDate, learnAimRef)
-                   && !Excluded(progType);
+            return !Excluded(progType)
+                && OrigLearnStartDateConditionMet(origLearnStartDate)
+                && FundModelConditionMet(fundModel)
+                && DD07ConditionMet(progType)
+                && AimTypeConditionMet(aimType)
+                && LARSConditionMet(origLearnStartDate.Value, learnAimRef);
         }
 
         public bool OrigLearnStartDateConditionMet(DateTime? origLearnStartDate)
@@ -81,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             return aimType == 3;
         }
 
-        public bool LARSConditionMet(DateTime? origLearnStartDate, string learnAimRef)
+        public bool LARSConditionMet(DateTime origLearnStartDate, string learnAimRef)
         {
             return !_larsDataService.OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Apprenticeships);
         }

@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         public LearnAimRef_88Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
-            IDD07 derivedData07,
+            IDerivedData_07Rule derivedData07,
             IDerivedData_11Rule derivedData11)
                 : base(validationErrorHandler, larsData, derivedData07, derivedData11)
         {
@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <returns>
         ///   <c>true</c> if [in valid start range] [the specified validity]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasValidStartRange(ILARSValidity validity, ILearningDelivery delivery) =>
+        public bool HasValidStartRange(ILARSLearningDeliveryValidity validity, ILearningDelivery delivery) =>
             validity.IsCurrent(delivery.LearnStartDate, validity.LastNewStartDate);
 
         /// <summary>

@@ -9,6 +9,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
@@ -19,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private const string _legalOrgType = "USDC";
         private readonly IValidationErrorHandler _messageHandler;
         private readonly ILARSDataService _larsData;
-        private readonly IDD07 _derivedData07;
+        private readonly IDerivedData_07Rule _derivedData07;
         private readonly IDerivedData_21Rule _derivedData21;
         private readonly IDerivedData_28Rule _derivedData28;
         private readonly IDerivedData_29Rule _derivedData29;
@@ -40,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public LearnDelFAMType_60Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
-            IDD07 derivedData07,
+            IDerivedData_07Rule derivedData07,
             IDerivedData_21Rule derivedData21,
             IDerivedData_28Rule derivedData28,
             IDerivedData_29Rule derivedData29,
@@ -188,10 +189,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsBasicSkillsLearner(ILearningDelivery delivery)
         {
-            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
+            var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef);
+            var annualValues = _larsData.GetAnnualValuesFor(delivery.LearnAimRef);
 
-            return larsDelivery.IsCurrent(delivery.LearnStartDate)
-                && larsDelivery.AnnualValues.SafeAny(IsBasicSkillsLearner);
+            return validities.Any(x => x.IsCurrent(delivery.LearnStartDate))
+                && annualValues.Any(IsBasicSkillsLearner);
         }
 
         /// <summary>

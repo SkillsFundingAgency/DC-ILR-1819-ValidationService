@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         private readonly IFCSDataService _fcsDataService;
         private readonly IAcademicYearDataService _academicYearDataService;
         private readonly IAcademicYearQueryService _academicYearQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IEnumerable<int> _fundModels = new HashSet<int>() { 35 };
         private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>
         {
@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         public UKPRN_06Rule(
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IFCSDataService fcsDataService,
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IAcademicYearDataService academicYearDataService,
             IAcademicYearQueryService academicYearQueryService,
             IValidationErrorHandler validationErrorHandler)

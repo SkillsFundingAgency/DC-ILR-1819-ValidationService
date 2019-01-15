@@ -8,19 +8,20 @@ using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 {
     public class LearnStartDate_07Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
-        private readonly IDD04 _dd04;
+        private readonly IDerivedData_07Rule _dd07;
+        private readonly IDerivedData_04Rule _dd04;
         private readonly ILARSDataService _larsDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public LearnStartDate_07Rule(
-            IDD07 dd07,
-            IDD04 dd04,
+            IDerivedData_07Rule dd07,
+            IDerivedData_04Rule dd04,
             ILARSDataService larsDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IValidationErrorHandler validationErrorHandler)
@@ -75,7 +76,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 
         public bool FrameworkAimsConditionMet(DateTime? dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
-            return _larsDataService.DD04DateGreaterThanFrameworkAimEffectiveTo(dd04Date, learnAimRef, progType, fworkCode, pwayCode);
+            return It.Has(dd04Date)
+                && _larsDataService.DD04DateGreaterThanFrameworkAimEffectiveTo(dd04Date.Value, learnAimRef, progType, fworkCode, pwayCode);
         }
 
         public bool Excluded(int? progType, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
@@ -88,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate),
                 BuildErrorMessageParameter(PropertyNameConstants.PwayCode, pwayCode),
                 BuildErrorMessageParameter(PropertyNameConstants.ProgType, progType),
                 BuildErrorMessageParameter(PropertyNameConstants.FworkCode, fWorkCode),

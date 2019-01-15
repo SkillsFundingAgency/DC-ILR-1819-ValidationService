@@ -55,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
         {
             var progType = 22;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).Excluded(progType).Should().BeTrue();
@@ -66,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
         [InlineData(0)]
         public void DD07ConditionMet_False(int? progType)
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).Excluded(progType).Should().BeFalse();
@@ -115,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
             var progType = 22;
             var learnAimRef = "123456789";
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -153,7 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
             var progType = 22;
             var learnAimRef = "123456789";
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -171,10 +171,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
         {
             var origLearnStartDate = new DateTime(2018, 10, 01);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(It.IsAny<int>())).Returns(true);
 
-            NewRule(dd07Mock.Object).ConditionMet(origLearnStartDate, 35, It.IsAny<int>(), It.IsAny<string>())
+            NewRule(dd07Mock.Object, new Mock<ILARSDataService>().Object).ConditionMet(origLearnStartDate, 35, It.IsAny<int>(), It.IsAny<string>())
                 .Should()
                 .BeFalse();
         }
@@ -201,7 +201,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -237,7 +237,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -264,7 +264,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OrigLearnSt
         }
 
         private OrigLearnStartDate_06Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             ILARSDataService larsDataService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {

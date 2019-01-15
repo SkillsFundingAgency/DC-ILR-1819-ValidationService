@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -15,16 +16,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         private readonly DateTime _augustFirst2014 = new DateTime(2014, 08, 01);
         private readonly IEnumerable<int> _fundModels = new HashSet<int>() { TypeOfFunding.AdultSkills, TypeOfFunding.OtherAdult, TypeOfFunding.NotFundedByESFA };
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IDateTimeQueryService _dateTimeQueryService;
-        private readonly IAcademicYearQueryService _academicYearQueryService;
+        private readonly IAcademicYearDataService _academicYearDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
         private readonly ILearnerEmploymentStatusQueryService _learnerEmploymentStatusQueryService;
 
         public EmpStat_08Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IDateTimeQueryService dateTimeQueryService,
-            IAcademicYearQueryService academicYearQueryService,
+            IAcademicYearDataService academicYearDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             ILearnerEmploymentStatusQueryService learnerEmploymentStatusQueryService,
             IValidationErrorHandler validationErrorHandler)
@@ -32,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         {
             _dd07 = dd07;
             _dateTimeQueryService = dateTimeQueryService;
-            _academicYearQueryService = academicYearQueryService;
+            _academicYearDataService = academicYearDataService;
             _learnerEmploymentStatusQueryService = learnerEmploymentStatusQueryService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
@@ -83,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         {
             return dateOfBirth.HasValue
                 && learnStartDate >= _augustFirst2014
-                && _dateTimeQueryService.YearsBetween((DateTime)dateOfBirth, _academicYearQueryService.AugustThirtyFirstOfLearnStartDate(learnStartDate)) >= 19;
+                && _dateTimeQueryService.YearsBetween(dateOfBirth.Value, _academicYearDataService.GetAcademicYearOfLearningDate(learnStartDate, AcademicYearDates.August31)) >= 19;
         }
 
         public bool EmploymentStatusConditionMet(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime learnStartDate)

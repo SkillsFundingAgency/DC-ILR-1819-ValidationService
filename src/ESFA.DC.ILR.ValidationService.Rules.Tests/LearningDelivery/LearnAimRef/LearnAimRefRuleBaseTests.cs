@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
 
             // act / assert
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
 
             // act / assert
@@ -68,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new LearnAimRefRuleBaseTestRule(handler.Object, service.Object, derivedData07.Object, null));
@@ -146,7 +146,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             derivedData11
                 .Setup(x => x.IsAdultFundedOnBenefitsAtStartOfAim(mockDelivery.Object, employments))
@@ -180,7 +180,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             derivedData07
                 .Setup(x => x.IsApprenticeship(null))
                 .Returns(expectation);
@@ -343,7 +343,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             // arrange
             var sut = NewRule();
 
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
@@ -385,12 +385,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             larsValidities.Add(mockValidity.Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
@@ -398,7 +398,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
 
             var sut = new LearnAimRefRuleBaseTestRule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object);
@@ -607,7 +607,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             // we just need to get a 'valid' category to get through the restrictions
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
@@ -618,7 +618,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(x => x.EndDate)
                 .Returns(DateTime.MaxValue);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             larsValidities.Add(mockValidity.Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
@@ -626,7 +626,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             if (dd07Return != null)
             {
                 derivedData07
@@ -723,7 +723,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
             // we just need to get a 'valid' category to get through the restrictions
-            var mockValidity = new Mock<ILARSValidity>();
+            var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
             mockValidity
                 .SetupGet(x => x.ValidityCategory)
                 .Returns(category);
@@ -734,7 +734,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(x => x.EndDate)
                 .Returns(DateTime.MaxValue);
 
-            var larsValidities = Collection.Empty<ILARSValidity>();
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             larsValidities.Add(mockValidity.Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
@@ -742,7 +742,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             if (dd07Return != null)
             {
                 derivedData07
@@ -781,7 +781,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
 
             return new LearnAimRefRuleBaseTestRule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object);
