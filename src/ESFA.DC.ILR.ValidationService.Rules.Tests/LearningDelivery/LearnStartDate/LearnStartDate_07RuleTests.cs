@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             var progType = 2;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(true);
@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             var progType = 0;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(dm => dm.IsApprenticeship(progType))
                 .Returns(false);
@@ -186,7 +186,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -224,7 +224,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -262,7 +262,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -300,7 +300,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -338,7 +338,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -392,10 +392,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var learningDeliveryFams = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
 
-            var dd04Mock = new Mock<IDD04>();
+            var dd04Mock = new Mock<IDerivedData_04Rule>();
             dd04Mock.Setup(dm => dm.Derive(It.IsAny<IEnumerable<ILearningDelivery>>(), It.IsAny<ILearningDelivery>())).Returns(dd04Date);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -449,10 +449,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var learningDeliveryFams = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
 
-            var dd04Mock = new Mock<IDD04>();
+            var dd04Mock = new Mock<IDerivedData_04Rule>();
             dd04Mock.Setup(dm => dm.Derive(It.IsAny<IEnumerable<ILearningDelivery>>(), It.IsAny<ILearningDelivery>())).Returns(dd04Date);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
@@ -491,8 +491,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         }
 
         private LearnStartDate_07Rule NewRule(
-            IDD07 dd07 = null,
-            IDD04 dd04 = null,
+            IDerivedData_07Rule dd07 = null,
+            IDerivedData_04Rule dd04 = null,
             ILARSDataService larsDataService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)

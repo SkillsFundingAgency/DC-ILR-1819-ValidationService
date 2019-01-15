@@ -13,11 +13,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
     {
         private readonly DateTime _julyThirtyFirst2014 = new DateTime(2014, 07, 31);
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly ILearnerEmploymentStatusQueryService _learnerEmploymentStatusQueryService;
 
         public EmpStat_02Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             ILearnerEmploymentStatusQueryService learnerEmploymentStatusQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.EmpStat_02)

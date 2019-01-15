@@ -4,7 +4,7 @@ using ESFA.DC.ILR.Model.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived.Interface
 {
-    public interface IDD06
+    public interface IDerivedData_06Rule
     {
         DateTime Derive(IEnumerable<ILearningDelivery> learningDeliveries);
     }
