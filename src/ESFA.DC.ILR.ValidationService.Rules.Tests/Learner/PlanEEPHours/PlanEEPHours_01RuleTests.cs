@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
             var progType = 23;
             var fundModel = 99;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).Excluded(progType, fundModel).Should().BeTrue();
@@ -58,7 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
         {
             var fundModel = 70;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(null)).Returns(false);
 
             NewRule(dd07Mock.Object).Excluded(null, fundModel).Should().BeTrue();
@@ -119,7 +119,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
             int? planEEPHours = null;
             int? progType = null;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).ConditionMet(fundModel, planEEPHours, progType).Should().BeTrue();
@@ -132,7 +132,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
             int? planEEPHours = null;
             int? progType = null;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).ConditionMet(fundModel, planEEPHours, progType).Should().BeFalse();
@@ -145,7 +145,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
             int? planEEPHours = 1;
             int? progType = null;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).ConditionMet(fundModel, planEEPHours, progType).Should().BeFalse();
@@ -158,7 +158,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
             int? planEEPHours = null;
             int? progType = 2;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(fundModel, planEEPHours, progType).Should().BeFalse();
@@ -179,7 +179,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(null)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -204,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(null)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
@@ -226,7 +226,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
         }
 
         private PlanEEPHours_01Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
             return new PlanEEPHours_01Rule(dd07, validationErrorHandler);

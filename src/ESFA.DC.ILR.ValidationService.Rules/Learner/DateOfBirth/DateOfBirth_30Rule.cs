@@ -14,13 +14,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
     {
         private readonly HashSet<int> _fundModels = new HashSet<int> { 25, 35, 81, 82 };
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IAcademicYearDataService _academicYearDataService;
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILearnerFAMQueryService _learnerFAMQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public DateOfBirth_30Rule(IDD07 dd07, IAcademicYearDataService academicYearDataService, IDateTimeQueryService dateTimeQueryService, ILearnerFAMQueryService learnerFAMQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+        public DateOfBirth_30Rule(IDerivedData_07Rule dd07, IAcademicYearDataService academicYearDataService, IDateTimeQueryService dateTimeQueryService, ILearnerFAMQueryService learnerFAMQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_30)
         {
             _dd07 = dd07;

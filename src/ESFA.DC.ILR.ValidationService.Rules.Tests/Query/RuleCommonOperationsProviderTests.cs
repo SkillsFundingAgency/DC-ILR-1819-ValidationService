@@ -172,7 +172,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             // arrange
             var mockItem = new Mock<ILearningDelivery>();
 
-            var derivedData07 = new Mock<IDD07>(MockBehavior.Strict);
+            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             derivedData07
                 .Setup(x => x.IsApprenticeship(null))
                 .Returns(expectation);
@@ -391,7 +391,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         /// <returns>a new service</returns>
         private RuleCommonOperationsProvider NewService()
         {
-            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var ddRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
 
             return new RuleCommonOperationsProvider(ddRule07.Object);
         }

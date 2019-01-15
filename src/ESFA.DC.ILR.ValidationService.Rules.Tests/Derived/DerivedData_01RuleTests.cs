@@ -4,7 +4,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 {
-    public class DeriveData_01RuleTests
+    public class DerivedData_01RuleTests
     {
         [Fact]
         public void CalculateChecksum()

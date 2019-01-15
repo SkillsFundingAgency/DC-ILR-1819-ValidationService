@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// The derived data 07 (rule)
         /// </summary>
-        private readonly IDD07 _derivedData07;
+        private readonly IDerivedData_07Rule _derivedData07;
 
         /// <summary>
         /// The derived data 21 (rule)
@@ -64,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public LearnDelFAMType_62Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
-            IDD07 derivedData07,
+            IDerivedData_07Rule derivedData07,
             IDerivedData_21Rule derivedData21,
             IDerivedData_28Rule derivedData28,
             IDerivedData_29Rule derivedData29)

@@ -152,10 +152,10 @@
     <Compile Include="Derived\DerivedData_28RuleTests.cs" />
     <Compile Include="Derived\DerivedData_29RuleTests.cs" />
     <Compile Include="Derived\DerivedData_21RuleTests.cs" />
-    <Compile Include="Derived\DeriveData_01RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_01RuleTests.cs" />
     <Compile Include="Derived\DerivedData_04RuleTests.cs" />
     <Compile Include="Derived\DerivedData_06RuleTests.cs" />
-    <Compile Include="Derived\DD07Tests.cs" />
+    <Compile Include="Derived\DerivedData_07RuleTests.cs" />
     <Compile Include="Derived\DerivedData_31RuleTests.cs" />
     <Compile Include="Derived\DerivedData_32RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />

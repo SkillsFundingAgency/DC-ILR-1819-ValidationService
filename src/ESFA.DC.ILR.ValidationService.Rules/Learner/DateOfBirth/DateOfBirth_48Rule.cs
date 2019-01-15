@@ -14,11 +14,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
     {
         private readonly DateTime _augustFirst2016 = new DateTime(2016, 08, 01);
         private readonly IAcademicYearQueryService _academicYearQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IDerivedData_04Rule _dd04;
 
         public DateOfBirth_48Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IDerivedData_04Rule dd04,
             IAcademicYearQueryService academicYearQueryService,
             IValidationErrorHandler validationErrorHandler)
