@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void DD07ConditionMet_False()
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(d => d.IsApprenticeship(55)).Returns(false);
 
@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void DD07ConditionMet_True()
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(d => d.IsApprenticeship(TypeOfLearningProgramme.HigherApprenticeshipLevel6)).Returns(true);
 
@@ -131,7 +131,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(d => d.IsApprenticeship(TypeOfLearningProgramme.ApprenticeshipStandard)).Returns(false);
             larsDataServiceMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
@@ -153,7 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             DateTime? learnActEndDate = string.IsNullOrEmpty(learnActEndDateString) ? (DateTime?)null : DateTime.Parse(learnActEndDateString);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(d => d.IsApprenticeship(progType)).Returns(true);
             larsDataServiceMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(true);
@@ -217,7 +217,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(d => d.IsApprenticeship(2)).Returns(true);
             larsDataServiceMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(true);
@@ -252,7 +252,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(d => d.IsApprenticeship(2)).Returns(true);
             larsDataServiceMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
@@ -287,7 +287,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         public R20Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
             ILARSDataService larsDataService = null,
-            IDD07 dd07 = null)
+            IDerivedData_07Rule dd07 = null)
         {
             return new R20Rule(
                 validationErrorHandler: validationErrorHandler,

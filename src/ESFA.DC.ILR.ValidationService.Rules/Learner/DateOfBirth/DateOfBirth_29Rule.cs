@@ -16,10 +16,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly DateTime _firstAug2014 = new DateTime(2014, 08, 01);
 
         private readonly IDateTimeQueryService _dateTimeQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public DateOfBirth_29Rule(IDateTimeQueryService dateTimeQueryService, IDD07 dd07, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+        public DateOfBirth_29Rule(IDateTimeQueryService dateTimeQueryService, IDerivedData_07Rule dd07, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
            : base(validationErrorHandler, RuleNameConstants.DateOfBirth_29)
         {
             _dateTimeQueryService = dateTimeQueryService;

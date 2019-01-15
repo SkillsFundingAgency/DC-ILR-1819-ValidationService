@@ -1,24 +1,24 @@
-﻿using System;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Sex;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Sex
 {
-    public class Sex_01RuleTests
+    public class Sex_01RuleTests : AbstractRuleTests<Sex_01Rule>
     {
         [Theory]
-        [InlineData("f")]
-        [InlineData("m")]
         [InlineData("A")]
         public void ConditionMet_True(string sex)
         {
-            var rule = NewRule();
-            rule.ConditionMet(sex).Should().BeTrue();
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.Sex, sex)).Returns(false);
+            NewRule(provideLookupDetails: provideLookupDetails.Object).ConditionMet(sex).Should().BeTrue();
         }
 
         [Theory]
@@ -29,45 +29,57 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Sex
         [InlineData(" ")]
         public void ConditionMet_False(string sex)
         {
-            var rule = NewRule();
-            rule.ConditionMet(sex).Should().BeFalse();
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.Sex, sex)).Returns(true);
+            NewRule(provideLookupDetails: provideLookupDetails.Object).ConditionMet(sex).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_False()
+        public void Validate_Error()
         {
             var learner = new TestLearner()
             {
                 Sex = "X"
             };
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("Sex_01", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.Sex, learner.Sex)).Returns(false);
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object, provideLookupDetails.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_True()
+        public void Validate_NoError()
         {
             var learner = new TestLearner()
             {
                 Sex = "F"
             };
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("Sex_01", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var provideLookupDetails = new Mock<IProvideLookupDetails>();
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.Sex, learner.Sex)).Returns(true);
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object, provideLookupDetails.Object).Validate(learner);
+            }
         }
 
-        private Sex_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void BuildErrorMessageParameters()
         {
-            return new Sex_01Rule(validationErrorHandler);
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.Sex, "A")).Verifiable();
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters("A");
+            validationErrorHandlerMock.Verify();
+        }
+
+        private Sex_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null, IProvideLookupDetails provideLookupDetails = null)
+        {
+            return new Sex_01Rule(validationErrorHandler, provideLookupDetails);
         }
     }
 }

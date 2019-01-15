@@ -11,9 +11,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
     public class TTACCOM_04Rule : AbstractRule, IRule<ILearner>
     {
         private readonly DateTime _augustFirst2013 = new DateTime(2013, 08, 01);
-        private readonly IDD06 _dd06;
+        private readonly IDerivedData_06Rule _dd06;
 
-        public TTACCOM_04Rule(IDD06 dd06, IValidationErrorHandler validationErrorHandler)
+        public TTACCOM_04Rule(IDerivedData_06Rule dd06, IValidationErrorHandler validationErrorHandler)
           : base(validationErrorHandler, RuleNameConstants.TTACCOM_04)
         {
             _dd06 = dd06;

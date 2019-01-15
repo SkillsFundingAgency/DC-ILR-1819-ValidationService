@@ -10,9 +10,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours
 {
     public class PlanLearnHours_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
-        public PlanLearnHours_01Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
+        public PlanLearnHours_01Rule(IDerivedData_07Rule dd07, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.PlanLearnHours_01)
         {
             _dd07 = dd07;

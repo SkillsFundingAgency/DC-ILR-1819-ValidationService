@@ -122,7 +122,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
                 }
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
 
             dd06Mock.Setup(dd => dd.Derive(learner.LearningDeliveries)).Returns(new DateTime(2013, 08, 01));
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -164,14 +164,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             validationErrorHandlerMock.Verify();
         }
 
-        private TTACCOM_04Rule NewRule(IDD06 dd06 = null, IValidationErrorHandler validationErrorHandler = null)
+        private TTACCOM_04Rule NewRule(IDerivedData_06Rule dd06 = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new TTACCOM_04Rule(dd06, validationErrorHandler);
         }
 
-        private DD06 NewDD06()
+        private DerivedData_06Rule NewDD06()
         {
-            return new DD06();
+            return new DerivedData_06Rule();
         }
     }
 }

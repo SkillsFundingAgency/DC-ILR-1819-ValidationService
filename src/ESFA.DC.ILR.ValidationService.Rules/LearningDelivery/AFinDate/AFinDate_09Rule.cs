@@ -16,9 +16,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
         private const int _aimType = 1;
         private const int _numberOfYears = -1;
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
-        public AFinDate_09Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
+        public AFinDate_09Rule(IDerivedData_07Rule dd07, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.AFinDate_09)
         {
             _dd07 = dd07;
