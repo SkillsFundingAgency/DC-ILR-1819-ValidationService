@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Extensions
 
             for (var i = 0; i < l.Count; i += pageSize)
             {
-                yield return l.GetRange(i, Math.Min(pageSize, l.Count - i));
+                yield return l.Skip(i).Take(pageSize);
             }
         }
     }
