@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
+﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.Sex;
+
+namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
     using System;
     using System.Collections.Generic;
@@ -458,6 +460,7 @@
                 typeof(R115Rule),
                 typeof(R117Rule),
                 typeof(R118Rule),
+                typeof(Sex_01Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SWSupAimId_01Rule),
                 typeof(StdCode_01Rule),
