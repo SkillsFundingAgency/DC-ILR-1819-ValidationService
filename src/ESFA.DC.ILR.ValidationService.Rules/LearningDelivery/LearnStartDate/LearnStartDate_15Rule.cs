@@ -15,12 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         IRule<ILearner>
     {
         /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "LearnStartDate_15";
-
-        /// <summary>
-        /// The derived date (rule) 18
+        /// The derived date (rule) 22
         /// </summary>
         private readonly IDerivedData_22Rule _derivedData22;
 
@@ -39,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
             IValidationErrorHandler validationErrorHandler,
             IDerivedData_22Rule derivedData22,
             IProvideRuleCommonOperations commonOperations)
-            : base(validationErrorHandler, Name)
+            : base(validationErrorHandler, RuleNameConstants.LearnStartDate_15)
         {
             // this check should be in the base class
             It.IsNull(validationErrorHandler)
@@ -123,7 +118,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         {
             return new[]
             {
-                BuildErrorMessageParameter(nameof(thisDelivery.LearnStartDate), thisDelivery.LearnStartDate)
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate)
             };
         }
     }
