@@ -103,7 +103,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         [Fact]
         public void DD07ConditionMet_True_Null()
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(null)).Returns(false);
 
@@ -115,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         {
             var progType = 24;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
@@ -127,7 +127,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         {
             var progType = 25;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -303,7 +303,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
@@ -365,7 +365,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             var fcsDataServiceMock = new Mock<IFCSDataService>();
@@ -408,7 +408,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         private UKPRN_06Rule NewRule(
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
             IFCSDataService fCSDataService = null,
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IAcademicYearDataService academicYearDataService = null,
             IAcademicYearQueryService academicYearQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)
