@@ -12,11 +12,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 {
     public class LearnStartDate_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IAcademicYearDataService _academicYearDataService;
 
         public LearnStartDate_03Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IAcademicYearDataService academicYearDataService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LearnStartDate_03)

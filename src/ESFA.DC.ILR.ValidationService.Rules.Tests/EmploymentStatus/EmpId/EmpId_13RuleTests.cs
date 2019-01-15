@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         {
             var progType = 2;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
@@ -68,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         [InlineData(null)]
         public void DD07ConditionMet_False(int? progType)
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
@@ -124,7 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var learnStartDate = new DateTime(2018, 7, 1);
             var filePrepDate = new DateTime(2018, 10, 1);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(progType, aimType, learnStartDate, filePrepDate).Should().BeTrue();
@@ -138,7 +138,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var learnStartDate = new DateTime(2018, 7, 1);
             var filePrepDate = new DateTime(2018, 10, 1);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).ConditionMet(progType, aimType, learnStartDate, filePrepDate).Should().BeFalse();
@@ -152,7 +152,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var learnStartDate = new DateTime(2018, 7, 1);
             var filePrepDate = new DateTime(2018, 10, 1);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(progType, aimType, learnStartDate, filePrepDate).Should().BeFalse();
@@ -166,7 +166,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var learnStartDate = new DateTime(2018, 9, 1);
             var filePrepDate = new DateTime(2018, 10, 1);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(progType, aimType, learnStartDate, filePrepDate).Should().BeFalse();
@@ -199,7 +199,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var fileDataServiceMock = new Mock<IFileDataService>();
 
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
@@ -238,7 +238,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var fileDataServiceMock = new Mock<IFileDataService>();
 
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
@@ -263,7 +263,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         }
 
         private EmpId_13Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IFileDataService fileDataService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
