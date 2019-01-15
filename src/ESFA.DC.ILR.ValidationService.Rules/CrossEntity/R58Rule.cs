@@ -19,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public void Validate(ILearner objectToValidate)
         {
-            var coreAims = objectToValidate.LearningDeliveries?.Where(ld => ld.AimType == _aimType);
+            var coreAims = objectToValidate.LearningDeliveries?.Where(ld => ld.AimType == _aimType).ToList();
 
             if (DoesNotHaveMultipleCoreAims(coreAims))
             {
@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 var coreAims = learningDeliveries.OrderBy(ld => ld.LearnStartDate).ToArray();
 
-                var coreAimCount = coreAims.Count();
+                var coreAimCount = coreAims.Length;
 
                 var i = 1;
 
@@ -57,9 +57,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                     var errorConditionMet =
                         coreAims[i - 1].LearnActEndDateNullable == null
                         ? false
-                        : coreAims[i - 1].LearnActEndDateNullable >= coreAims[i].LearnStartDate == true;
+                        : coreAims[i - 1].LearnActEndDateNullable >= coreAims[i].LearnStartDate;
 
-                    if (errorConditionMet == true)
+                    if (errorConditionMet)
                     {
                         return coreAims[i - 1].LearnActEndDateNullable;
                     }
