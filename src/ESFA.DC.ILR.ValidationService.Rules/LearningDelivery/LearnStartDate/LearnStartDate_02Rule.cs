@@ -35,10 +35,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         public LearnStartDate_02Rule(
             IValidationErrorHandler validationErrorHandler,
             IAcademicYearDataService yearData)
-            : base(
-                validationErrorHandler,
-                Name)
+            : base(validationErrorHandler, Name)
         {
+            It.IsNull(validationErrorHandler)
+               .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(yearData)
                 .AsGuard<ArgumentNullException>(nameof(yearData));
 

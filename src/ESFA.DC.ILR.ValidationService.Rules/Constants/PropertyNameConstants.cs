@@ -10,6 +10,7 @@
 
         public const string AddHours = "AddHours";
         public const string AchDate = "AchDate";
+        public const string Accom = "Accom";
         public const string AddLine1 = "AddLine1";
         public const string AFinCode = "AFinCode";
         public const string AFinType = "AFinType";
@@ -72,6 +73,7 @@
         public const string PCFLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
+        public const string ProvSpecDelMonOccur = "ProvSpecDelMonOccur";
         public const string PMUKPRN = "PMUKPRN";
         public const string Postcode = "Postcode";
         public const string PostcodePrior = "PostcodePrior";

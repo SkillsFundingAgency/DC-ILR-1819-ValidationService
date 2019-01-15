@@ -70,10 +70,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public bool IsBasicSkillsLearner(ILearningDelivery delivery)
         {
-            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
+            var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef);
+            var annualValues = _larsData.GetAnnualValuesFor(delivery.LearnAimRef);
 
-            return larsDelivery.IsCurrent(delivery.LearnStartDate)
-                && larsDelivery.AnnualValues.SafeAny(IsBasicSkillsLearner);
+            return validities.Any(x => x.IsCurrent(delivery.LearnStartDate))
+                && annualValues.Any(IsBasicSkillsLearner);
         }
 
         public bool IsBasicSkillsLearner(ILARSAnnualValue monitor)
@@ -137,7 +138,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
             return IsV2NotionalLevel2(larsDelivery)
-                && larsDelivery.LearningDeliveryCategories.SafeAny(IsLegallyEntitled);
+                && larsDelivery.Categories.SafeAny(IsLegallyEntitled);
         }
 
         public bool IsV2NotionalLevel2(ILARSLearningDelivery delivery)

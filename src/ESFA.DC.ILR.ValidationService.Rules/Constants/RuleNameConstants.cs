@@ -2,6 +2,8 @@
 {
     public static class RuleNameConstants
     {
+        public const string Accom_01 = "Accom_01";
+
         public const string AchDate_02 = "AchDate_02";
         public const string AchDate_03 = "AchDate_03";
         public const string AchDate_04 = "AchDate_04";
@@ -26,6 +28,7 @@
         public const string AFinDate_07 = "AFinDate_07";
         public const string AFinDate_08 = "AFinDate_08";
         public const string AFinDate_09 = "AFinDate_09";
+        public const string AFinDate_12 = "AFinDate_12";
 
         public const string AFinType_01 = "AFinType_01";
         public const string AFinType_02 = "AFinType_02";
@@ -80,11 +83,13 @@
         public const string DateOfBirth_32 = "DateOfBirth_32";
         public const string DateOfBirth_35 = "DateOfBirth_35";
         public const string DateOfBirth_36 = "DateOfBirth_36";
+        public const string DateOfBirth_37 = "DateOfBirth_37";
         public const string DateOfBirth_38 = "DateOfBirth_38";
         public const string DateOfBirth_39 = "DateOfBirth_39";
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
+        public const string DateOfBirth_51 = "DateOfBirth_51";
         public const string DateOfBirth_50 = "DateOfBirth_50";
         public const string DateOfBirth_53 = "DateOfBirth_53";
 
@@ -192,6 +197,7 @@
         public const string LearnDelFAMType_36 = "LearnDelFAMType_36";
         public const string LearnDelFAMType_38 = "LearnDelFAMType_38";
         public const string LearnDelFAMType_39 = "LearnDelFAMType_39";
+        public const string LearnDelFAMType_40 = "LearnDelFAMType_40";
         public const string LearnDelFAMType_44 = "LearnDelFAMType_44";
         public const string LearnDelFAMType_45 = "LearnDelFAMType_45";
         public const string LearnDelFAMType_48 = "LearnDelFAMType_48";
@@ -216,6 +222,8 @@
         public const string LearnFAMType_09 = "LearnFAMType_09";
         public const string LearnFAMType_10 = "LearnFAMType_10";
         public const string LearnFAMType_11 = "LearnFAMType_11";
+        public const string LearnFAMType_14 = "LearnFAMType_14";
+        public const string LearnFAMType_15 = "LearnFAMType_15";
         public const string LearnFAMType_16 = "LearnFAMType_16";
 
         public const string LLDDCat_01 = "LLDDCat_01";
@@ -339,10 +347,12 @@
         public const string R43 = "R43";
         public const string R45 = "R45";
         public const string R47 = "R47";
+        public const string R50 = "R50";
         public const string R52 = "R52";
         public const string R56 = "R56";
         public const string R59 = "R59";
         public const string R61 = "R61";
+        public const string R62 = "R62";
         public const string R63 = "R63";
         public const string R64 = "R64";
         public const string R66 = "R66";
@@ -353,6 +363,7 @@
         public const string R75 = "R75";
         public const string R85 = "R85";
         public const string R91 = "R91";
+        public const string R92 = "R92";
         public const string R96 = "R96";
         public const string R99 = "R99";
         public const string R100 = "R100";
