@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate),
                 BuildErrorMessageParameter(PropertyNameConstants.DOMICILE, domicile),
                 BuildErrorMessageParameter(PropertyNameConstants.UCASAPPID, ucasAppId)
             };

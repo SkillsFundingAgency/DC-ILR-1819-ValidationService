@@ -81,6 +81,7 @@
         public const string DateOfBirth_29 = "DateOfBirth_29";
         public const string DateOfBirth_30 = "DateOfBirth_30";
         public const string DateOfBirth_32 = "DateOfBirth_32";
+        public const string DateOfBirth_34 = "DateOfBirth_34";
         public const string DateOfBirth_35 = "DateOfBirth_35";
         public const string DateOfBirth_36 = "DateOfBirth_36";
         public const string DateOfBirth_37 = "DateOfBirth_37";
@@ -89,8 +90,9 @@
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
-        public const string DateOfBirth_51 = "DateOfBirth_51";
         public const string DateOfBirth_50 = "DateOfBirth_50";
+        public const string DateOfBirth_51 = "DateOfBirth_51";
+        public const string DateOfBirth_52 = "DateOfBirth_52";
         public const string DateOfBirth_53 = "DateOfBirth_53";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";

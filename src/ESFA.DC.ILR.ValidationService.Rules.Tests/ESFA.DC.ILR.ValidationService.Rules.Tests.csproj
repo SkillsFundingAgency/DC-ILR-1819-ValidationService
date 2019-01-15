@@ -271,7 +271,9 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_51RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_50RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_52RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_34RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_02RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03RuleTests.cs" />
