@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var progType = TypeOfLearningProgramme.AdvancedLevelApprenticeship;
             var aimType = TypeOfAim.ProgrammeAim;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var fundModel = TypeOfFunding.ApprenticeshipsFrom1May2017;
             var aimType = TypeOfAim.ProgrammeAim;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -87,7 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var progType = TypeOfLearningProgramme.AdvancedLevelApprenticeship;
             var aimType = TypeOfAim.ProgrammeAim;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -113,7 +113,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var progType = TypeOfLearningProgramme.AdvancedLevelApprenticeship;
             var aimType = TypeOfAim.ProgrammeAim;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -139,7 +139,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var progType = 0;
             var aimType = TypeOfAim.ProgrammeAim;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -165,7 +165,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var progType = TypeOfLearningProgramme.AdvancedLevelApprenticeship;
             var aimType = 0;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -191,7 +191,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var progType = TypeOfLearningProgramme.AdvancedLevelApprenticeship;
             var aimType = TypeOfAim.ProgrammeAim;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -230,7 +230,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -269,7 +269,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
@@ -287,7 +287,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         private DateOfBirth_52Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService = null,
             IDateTimeQueryService dateTimeQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)
