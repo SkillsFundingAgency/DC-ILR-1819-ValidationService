@@ -89,7 +89,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate)
             };
         }
     }

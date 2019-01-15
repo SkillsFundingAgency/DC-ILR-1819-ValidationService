@@ -659,8 +659,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         public void InvalidItemRaisesValidationMessage()
         {
             // arrange
+            IFormatProvider requiredCulture = new CultureInfo("en-GB");
             const string LearnRefNumber = "123456789X";
             const string learnAimRef = "salddfkjeifdnase";
+            DateTime learnStartDate = new DateTime(2016, 8, 1);
+            DateTime? dateOfBirth = new DateTime(1990, 7, 1);
 
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
@@ -679,7 +682,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Returns(learnAimRef);
             mockDelivery
                 .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse("2016-08-01"));
+                .Returns(learnStartDate);
             mockDelivery
                 .SetupGet(y => y.FundModel)
                 .Returns(TypeOfFunding.AdultSkills);
@@ -696,7 +699,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Returns(LearnRefNumber);
             mockLearner
                 .SetupGet(x => x.DateOfBirthNullable)
-                .Returns(DateTime.Parse("1990-07-01"));
+                .Returns(dateOfBirth);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
@@ -712,10 +715,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills))
                 .Verifiable();
             validationErrorHandlerMock
-                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, DateTime.Parse("2016-08-01").ToString("d", new CultureInfo("en-GB"))))
+                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", requiredCulture)))
                 .Verifiable();
             validationErrorHandlerMock
-                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, DateTime.Parse("1990-07-01").ToString("d", new CultureInfo("en-GB"))))
+                .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth.Value.ToString("d", requiredCulture)))
                 .Verifiable();
 
             var mock = new Mock<ILARSLearningDelivery>();

@@ -108,8 +108,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB"))),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnPlanEndDate, learnPlanEndDate.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnPlanEndDate, learnPlanEndDate),
                 BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, famType),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, famCode)
