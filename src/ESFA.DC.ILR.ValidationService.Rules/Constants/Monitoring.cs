@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
+﻿using System.Collections.Generic;
+
+namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
     /// type(s) of monitoring (learner, learning delivery and employment status)

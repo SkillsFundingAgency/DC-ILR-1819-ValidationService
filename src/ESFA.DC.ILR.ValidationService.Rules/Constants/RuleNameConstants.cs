@@ -332,6 +332,8 @@
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
+        public const string ProvSpecDelMonOccur_01Rule = "ProvSpecDelMonOccur_01";
+
         public const string PwayCode_02 = "PwayCode_02";
         public const string PwayCode_03 = "PwayCode_03";
 
