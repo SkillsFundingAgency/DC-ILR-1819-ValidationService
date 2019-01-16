@@ -100,6 +100,7 @@
     <Compile Include="CrossEntity\R118Rule.cs" />
     <Compile Include="CrossEntity\R104Rule.cs" />
     <Compile Include="CrossEntity\R102Rule.cs" />
+    <Compile Include="CrossEntity\R105Rule.cs" />
     <Compile Include="CrossEntity\R106Rule.cs" />
     <Compile Include="CrossEntity\R113Rule.cs" />
     <Compile Include="CrossEntity\R114Rule.cs" />

@@ -465,6 +465,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R100Rule),
                 typeof(R102Rule),
                 typeof(R104Rule),
+                typeof(R105Rule),
                 typeof(R106Rule),
                 typeof(R110Rule),
                 typeof(R112Rule),
