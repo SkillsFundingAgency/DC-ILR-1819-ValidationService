@@ -55,11 +55,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External
         public IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; set; }
 
         /// <summary>
-        /// Gets or sets the FCS contracts.
-        /// </summary>
-        public IReadOnlyCollection<IFcsContract> FCSContracts { get; set; }
-
-        /// <summary>
         /// Gets or sets the FCS contract allocations.
         /// </summary>
         public IReadOnlyCollection<IFcsContractAllocation> FCSContractAllocations { get; set; }

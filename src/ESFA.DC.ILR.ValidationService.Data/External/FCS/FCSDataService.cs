@@ -60,9 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>true if it does</returns>
         public bool ConRefNumberExists(string conRefNumber)
         {
-            return _contractAllocations
-                .Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber))
-                .Any();
+            return _contractAllocations.Any(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber));
         }
 
         /// <summary>
@@ -74,9 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         {
             var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList().ToCaseInsensitiveHashSet();
 
-            return _contractAllocations
-               .Where(ca => fsCodes.Contains(ca.FundingStreamPeriodCode))
-               .Any();
+            return _contractAllocations.Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
         }
 
         /// <summary>

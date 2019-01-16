@@ -53,33 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         /// <returns>
         /// a task running the collection builder
         /// </returns>
-        public async Task<IReadOnlyCollection<FcsContract>> RetrieveAsync(CancellationToken cancellationToken)
-        {
-            var ukprn = UKPRNFromMessage(_messageCache.Item);
-
-            return await _fcs.Contractors
-                .Where(c => c.Ukprn == ukprn)
-                .SelectMany(c => c.Contracts)
-                .Select(con => new FcsContract
-                {
-                    ID = con.Id,
-                    ContractorID = con.ContractorId,
-                    ContractNumber = con.ContractNumber,
-                    MajorVersion = con.ContractVersionNumber, // MinorVersion = con.ContractSubVersionNumber,
-                    StartDate = con.StartDate,
-                    EndDate = con.EndDate,
-                })
-                .ToListAsync(cancellationToken);
-        }
-
-        /// <summary>
-        /// Retrieves the contract allocations asynchronous.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>
-        /// a task running the collection builder
-        /// </returns>
-        public async Task<IReadOnlyCollection<IFcsContractAllocation>> RetrieveContractAllocationsAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyCollection<IFcsContractAllocation>> RetrieveAsync(CancellationToken cancellationToken)
         {
             var ukprn = UKPRNFromMessage(_messageCache.Item);
 
@@ -88,22 +62,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                 .Select(ca => new FcsContractAllocation
                 {
                     ContractAllocationNumber = ca.ContractAllocationNumber,
-                    FundingStreamCode = ca.FundingStreamCode,
                     FundingStreamPeriodCode = ca.FundingStreamPeriodCode,
-                    Period = ca.Period,
-                    StartDate = ca.StartDate,
-                    EndDate = ca.EndDate,
-                    ID = ca.Id,
-                    ContractID = ca.ContractId,
-                    DeliveryOrganisation = ca.DeliveryOrganisation,
-                    DeliveryUKPRN = ca.DeliveryUKPRN.Value,
-                    LearningRatePremiumFactor = ca.LearningRatePremiumFactor,
                     LotReference = ca.LotReference,
-                    PeriodTypeCode = ca.PeriodTypeCode,
-                    StopNewStartsFromDate = ca.StopNewStartsFromDate,
-                    TenderSpecReference = ca.TenderSpecReference,
-                    TerminationDate = ca.TerminationDate,
-                    UoPCode = ca.UoPCode
+                    TenderSpecReference = ca.TenderSpecReference
                 })
                 .ToListAsync(cancellationToken);
         }
@@ -120,8 +81,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             return await _fcs.EsfEligibilityRuleEmploymentStatuses
                 .Select(er => new EsfEligibilityRuleEmploymentStatus
                 {
-                    // ID = 0,
-                    // EligibilityRuleID = 0, not yet offered by the class EsfEligibilityRule = er.EsfEligibilityRule,
                     Code = er.Code,
                     LotReference = er.LotReference,
                     TenderSpecReference = er.TenderSpecReference
@@ -141,8 +100,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             return await _fcs.EsEligibilityRulefLocalAuthorities
                 .Select(er => new EsfEligibilityRuleLocalAuthority
                 {
-                    // ID = 0,
-                    // EligibilityRuleID = 0, not yet offered by the class EsfEligibilityRule = er.EsfEligibilityRule,
                     Code = er.Code,
                     LotReference = er.LotReference,
                     TenderSpecReference = er.TenderSpecReference
@@ -162,8 +119,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             return await _fcs.EsfEligibilityRuleLocalEnterprisePartnerships
                 .Select(er => new EsfEligibilityRuleLocalEnterprisePartnership
                 {
-                    // ID = 0,
-                    // EligibilityRuleID = 0, not yet offered by the class EsfEligibilityRule = er.EsfEligibilityRule,
                     Code = er.Code,
                     LotReference = er.LotReference,
                     TenderSpecReference = er.TenderSpecReference

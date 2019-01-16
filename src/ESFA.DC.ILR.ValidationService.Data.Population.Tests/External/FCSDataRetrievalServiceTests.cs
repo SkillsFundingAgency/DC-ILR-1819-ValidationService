@@ -32,87 +32,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             result.Should().Be(12345678);
         }
 
-        [Fact]
-        public async Task RetrieveAsync()
-        {
-            // arrange
-            var message = new TestMessage
-            {
-                LearningProviderEntity = new TestLearningProvider
-                {
-                    UKPRN = 1
-                }
-            };
-
-            var fcsContractor = new List<Contractor>
-            {
-                new Contractor
-                {
-                    Ukprn = 1,
-                    OrganisationIdentifier = "Identifier_1",
-                    Contracts = new List<Contract>
-                    {
-                        new Contract
-                        {
-                            ContractNumber = "1",
-                            StartDate = new DateTime(2018, 8, 1),
-                            EndDate = new DateTime(2018, 9, 1),
-                        }
-                    }
-                },
-                new Contractor
-                {
-                    Ukprn = 1,
-                    OrganisationIdentifier = "Identifier_1",
-                    Contracts = new List<Contract>
-                    {
-                        new Contract
-                        {
-                            ContractNumber = "1.1",
-                            StartDate = new DateTime(2018, 8, 1),
-                        }
-                    }
-                },
-                new Contractor
-                {
-                    Ukprn = 2,
-                    OrganisationIdentifier = "Identifier_2",
-                    Contracts = new List<Contract>
-                    {
-                        new Contract
-                        {
-                            ContractNumber = "2",
-                            StartDate = new DateTime(2018, 8, 1),
-                        }
-                    }
-                }
-            }.AsMockDbSet();
-
-            var fcsMock = new Mock<IFcsContext>();
-            var messageCacheMock = new Mock<ICache<IMessage>>();
-
-            fcsMock
-                .Setup(f => f.Contractors)
-                .Returns(fcsContractor);
-            messageCacheMock
-                .SetupGet(mc => mc.Item)
-                .Returns(message);
-
-            var service = NewService(fcsMock.Object, messageCacheMock.Object);
-
-            // act
-            var fcs = await service.RetrieveAsync(CancellationToken.None);
-
-            // assert
-            Assert.Equal(2, fcs.Count);
-        }
-
         /// <summary>
-        /// Retrieves the contract allocations asynchronous.
+        /// Retrieve Contract Allocations Async.
         /// </summary>
         /// <returns>the test task</returns>
         [Fact]
-        public async Task RetrieveContractAllocationsAsync()
+        public async Task RetrieveAsync()
         {
             // arrange
             var message = new TestMessage
@@ -197,7 +122,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             var service = NewService(fcsMock.Object, messageCacheMock.Object);
 
             // act
-            var fcsa = await service.RetrieveContractAllocationsAsync(CancellationToken.None);
+            var fcsa = await service.RetrieveAsync(CancellationToken.None);
 
             // assert
             Assert.Equal(4, fcsa.Count);

@@ -107,7 +107,6 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     ESFEligibilityRuleEmploymentStatuses = externalDataCacheGet.ESFEligibilityRuleEmploymentStatuses,
                     EsfEligibilityRuleSectorSubjectAreaLevels = externalDataCacheGet.EsfEligibilityRuleSectorSubjectAreaLevels,
                     FCSContractAllocations = externalDataCacheGet.FCSContractAllocations,
-                    FCSContracts = externalDataCacheGet.FCSContracts,
                     Frameworks = externalDataCacheGet.Frameworks,
                     Organisations = externalDataCacheGet.Organisations,
                     Postcodes = externalDataCacheGet.Postcodes.ToCaseInsensitiveHashSet(),

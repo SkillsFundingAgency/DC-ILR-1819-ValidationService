@@ -57,8 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
             externalDataCache.Organisations = await _organisationsDataRetrievalService.RetrieveAsync(cancellationToken);
 
-            externalDataCache.FCSContracts = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
-            externalDataCache.FCSContractAllocations = await _fcsDataRetrievalService.RetrieveContractAllocationsAsync(cancellationToken);
+            externalDataCache.FCSContractAllocations = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.ESFEligibilityRuleLocalAuthorities = await _fcsDataRetrievalService.RetrieveEligibilityRuleLocalAuthoritiesAsync(cancellationToken);
             externalDataCache.ESFEligibilityRuleEnterprisePartnerships = await _fcsDataRetrievalService.RetrieveEligibilityRuleEnterprisePartnershipsAsync(cancellationToken);
             externalDataCache.ESFEligibilityRuleEmploymentStatuses = await _fcsDataRetrievalService.RetrieveEligibilityRuleEmploymentStatusesAsync(cancellationToken);

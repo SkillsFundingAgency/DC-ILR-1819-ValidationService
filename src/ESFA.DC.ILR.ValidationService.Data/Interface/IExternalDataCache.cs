@@ -52,11 +52,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; }
 
         /// <summary>
-        /// Gets the FCS contracts.
-        /// </summary>
-        IReadOnlyCollection<IFcsContract> FCSContracts { get; }
-
-        /// <summary>
         /// Gets the FCS contract allocations.
         /// </summary>
         IReadOnlyCollection<IFcsContractAllocation> FCSContractAllocations { get; }

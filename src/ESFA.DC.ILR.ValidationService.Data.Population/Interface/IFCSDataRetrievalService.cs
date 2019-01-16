@@ -11,15 +11,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
     /// </summary>
     /// <seealso cref="Interface.IExternalDataRetrievalService{IReadOnlyCollection{FcsContract}}" />
     public interface IFCSDataRetrievalService :
-        IExternalDataRetrievalService<IReadOnlyCollection<FcsContract>>
+        IExternalDataRetrievalService<IReadOnlyCollection<IFcsContractAllocation>>
     {
-        /// <summary>
-        /// Retrieves the contract allocations asynchronous.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>a task running the collection builder</returns>
-        Task<IReadOnlyCollection<IFcsContractAllocation>> RetrieveContractAllocationsAsync(CancellationToken cancellationToken);
-
         /// <summary>
         /// Retrieves the eligibility rule employment statuses asynchronously.
         /// </summary>
