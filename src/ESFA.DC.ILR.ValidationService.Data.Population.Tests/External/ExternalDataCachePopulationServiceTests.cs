@@ -15,6 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             IULNDataRetrievalService ulnDataRetrievalService = null,
             IPostcodesDataRetrievalService postcodesDataRetrievalService = null,
             IOrganisationsDataRetrievalService organisationsDataRetrievalService = null,
+            ICampusIdentifierDataRetrievalService campusIdentifierDataRetrievalService = null,
             IFCSDataRetrievalService fcsDataRetrievalService = null)
         {
             return new ExternalDataCachePopulationService(
@@ -26,6 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 ulnDataRetrievalService,
                 postcodesDataRetrievalService,
                 organisationsDataRetrievalService,
+                campusIdentifierDataRetrievalService,
                 fcsDataRetrievalService);
         }
     }
