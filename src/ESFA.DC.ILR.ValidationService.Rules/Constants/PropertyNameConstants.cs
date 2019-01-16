@@ -32,6 +32,7 @@
         public const string EngGrade = "EngGrade";
         public const string EPAOrgID = "EPAOrgID";
         public const string ESMType = "ESMType";
+        public const string ESMCode = "ESMCode";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
         public const string FUNDLEV = "FUNDLEV";
