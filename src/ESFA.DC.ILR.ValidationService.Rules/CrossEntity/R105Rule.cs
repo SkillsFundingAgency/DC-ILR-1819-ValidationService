@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 .Where(f => f.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.ACT))
                 .OrderBy(f => f.LearnDelFAMDateFromNullable).ToList();
 
-            if ((learningDeliverFAMs?.Count() ?? 0) > 1
+            if (learningDeliverFAMs.Count > 1
                 && LearnDelFAMCodeConditionMet(
                     learningDeliverFAMs,
                     out learnDelFAMType,
@@ -60,10 +60,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             learnDelFAMType = string.Empty;
             learnDelFAMCode = string.Empty;
-            if ((learningDeliveryFAMs?.Count() ?? 0) == 0)
-            {
-                return false;
-            }
 
             foreach (var fam in learningDeliveryFAMs)
             {

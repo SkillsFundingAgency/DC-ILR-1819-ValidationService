@@ -24,7 +24,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
         [Theory]
         [InlineData(LearningDeliveryFAMTypeConstants.ACT, "2", "2018-01-01", "2018-07-31")]
+        [InlineData("act", "2", "2018-01-01", "2018-07-31")]
         [InlineData(LearningDeliveryFAMTypeConstants.ACT, "1", "2018-07-01", "2018-09-01")]
+        [InlineData("act", "1", "2018-07-01", "2018-09-01")]
         public void LearnDelFAMCodeConditionMet_False(string fAMType, string fAMCode, string dateFrom, string dateTo)
         {
             string learnDelFAMType;
@@ -56,18 +58,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     LearnDelFAMCode = "1"
                 }
             };
-
-            NewRule().LearnDelFAMCodeConditionMet(learningDeliveryFAMs, out learnDelFAMType, out learnDelFAMCode).Should().BeFalse();
-            learnDelFAMType.Should().BeEmpty();
-            learnDelFAMCode.Should().BeEmpty();
-        }
-
-        [Fact]
-        public void LearnDelFAMCodeConditionMet_False_NullCheck()
-        {
-            string learnDelFAMType;
-            string learnDelFAMCode;
-            TestLearningDeliveryFAM[] learningDeliveryFAMs = null;
 
             NewRule().LearnDelFAMCodeConditionMet(learningDeliveryFAMs, out learnDelFAMType, out learnDelFAMCode).Should().BeFalse();
             learnDelFAMType.Should().BeEmpty();
