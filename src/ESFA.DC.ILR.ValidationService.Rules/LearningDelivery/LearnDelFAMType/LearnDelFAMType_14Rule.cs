@@ -17,12 +17,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private readonly IEnumerable<int> _fundModels = new HashSet<int>() { TypeOfFunding.AdultSkills, TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfFunding.OtherAdult };
 
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
         public LearnDelFAMType_14Rule(
             IValidationErrorHandler validationErrorHandler,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
-            IDD07 dd07)
+            IDerivedData_07Rule dd07)
             : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_14)
         {
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;

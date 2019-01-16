@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -37,16 +38,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade
 
         public bool EngGradeConditionMet(string engGrade)
         {
-            return !string.IsNullOrWhiteSpace(engGrade)
-                   && engGrade != "NONE";
+            return !engGrade.CaseInsensitiveEquals(ValidationConstants.None);
         }
 
         public bool LearnerFAMConditionMet(IEnumerable<ILearnerFAM> learnerFAMs)
         {
-            var famType = "ECF";
             var famCodes = new[] { 2, 3, 4 };
 
-            return _learnerFamQueryService.HasAnyLearnerFAMCodesForType(learnerFAMs, famType, famCodes);
+            return _learnerFamQueryService.HasAnyLearnerFAMCodesForType(learnerFAMs, Monitoring.Learner.Types.GCSEEnglishConditionOfFunding, famCodes);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string engGrade)

@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
         {
             var progType = 2;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
@@ -67,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
         {
             var progType = 50;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
@@ -79,7 +79,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
             int? pwayCode = null;
             var progType = 2;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(pwayCode, progType).Should().BeTrue();
@@ -91,7 +91,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
             int? pwayCode = null;
             var progType = 25;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(pwayCode, progType).Should().BeFalse();
@@ -103,7 +103,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
             int? pwayCode = 1;
             var progType = 2;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(pwayCode, progType).Should().BeFalse();
@@ -115,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
             int? pwayCode = null;
             var progType = 50;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).ConditionMet(pwayCode, progType).Should().BeFalse();
@@ -139,7 +139,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -166,7 +166,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(mockResult);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
@@ -192,7 +192,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.PwayCode
         }
 
         private PwayCode_03Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
             return new PwayCode_03Rule(dd07, validationErrorHandler);

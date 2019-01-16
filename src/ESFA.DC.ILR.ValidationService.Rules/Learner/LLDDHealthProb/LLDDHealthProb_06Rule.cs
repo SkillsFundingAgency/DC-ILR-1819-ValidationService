@@ -13,12 +13,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
     public class LLDDHealthProb_06Rule : AbstractRule, IRule<ILearner>
     {
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
-        private readonly IDD06 _dd06;
+        private readonly IDerivedData_06Rule _dd06;
         private readonly IDateTimeQueryService _dateTimeQueryService;
 
         public LLDDHealthProb_06Rule(
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService,
-            IDD06 dd06,
+            IDerivedData_06Rule dd06,
             IDateTimeQueryService dateTimeQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LLDDHealthProb_06)

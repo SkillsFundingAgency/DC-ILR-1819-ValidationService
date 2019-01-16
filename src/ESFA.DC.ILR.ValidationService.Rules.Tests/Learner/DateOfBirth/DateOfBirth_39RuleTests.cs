@@ -68,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         [InlineData(25)]
         public void DD07ConditionMet_False(int? progType)
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07: dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
@@ -77,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         [Fact]
         public void DD07ConditionMet_True()
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dd => dd.IsApprenticeship(23)).Returns(false);
 
             NewRule(dd07: dd07Mock.Object).DD07ConditionMet(23).Should().BeFalse();
@@ -205,7 +205,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             DateTime? dateOfBirth = string.IsNullOrEmpty(dateOfBirthString) ? (DateTime?)null : DateTime.Parse(dateOfBirthString);
             DateTime? learnActEndDate = string.IsNullOrEmpty(learnActEndDateString) ? (DateTime?)null : DateTime.Parse(learnActEndDateString);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -242,7 +242,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             DateTime? dateOfBirth = string.IsNullOrEmpty(dateOfBirthString) ? (DateTime?)null : DateTime.Parse(dateOfBirthString);
             DateTime? learnActEndDate = string.IsNullOrEmpty(learnActEndDateString) ? (DateTime?)null : DateTime.Parse(learnActEndDateString);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -284,7 +284,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -330,7 +330,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -376,7 +376,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
         public DateOfBirth_39Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IDateTimeQueryService dateTimeQueryService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null)
         {

@@ -9,9 +9,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome
 {
     public class EmpOutcome_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
-        public EmpOutcome_03Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
+        public EmpOutcome_03Rule(IDerivedData_07Rule dd07, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.EmpOutcome_03)
         {
             _dd07 = dd07;

@@ -276,13 +276,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         public void InvalidItemRaisesValidationMessage()
         {
             // arrange
-            const string LearnRefNumber = "123456789X";
+            const string learnRefNumber = "123456789X";
             const string learnAimRef = "salddfkjeifdnase";
+            const int fundModel = TypeOfFunding.ApprenticeshipsFrom1May2017;
+            const int aimType = 2;
+            const string famType = Monitoring.Delivery.Types.ApprenticeshipContract;
 
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
                 .SetupGet(x => x.LearnDelFAMType)
-                .Returns(Monitoring.Delivery.Types.ApprenticeshipContract);
+                .Returns(famType);
 
             var fams = Collection.Empty<ILearningDeliveryFAM>();
             fams.Add(mockFAM.Object);
@@ -292,11 +295,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .SetupGet(y => y.LearnAimRef)
                 .Returns(learnAimRef);
             mockDelivery
+                .SetupGet(y => y.AimType)
+                .Returns(aimType);
+            mockDelivery
                 .SetupGet(y => y.LearnStartDate)
                 .Returns(DateTime.Parse("2017-08-01"));
             mockDelivery
                 .SetupGet(y => y.FundModel)
-                .Returns(TypeOfFunding.AdultSkills);
+                .Returns(fundModel);
             mockDelivery
                 .SetupGet(y => y.LearningDeliveryFAMs)
                 .Returns(fams.AsSafeReadOnlyList());
@@ -307,22 +313,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockLearner = new Mock<ILearner>();
             mockLearner
                 .SetupGet(x => x.LearnRefNumber)
-                .Returns(LearnRefNumber);
+                .Returns(learnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == LearnDelFAMType_63Rule.Name),
-                    Moq.It.Is<string>(y => y == LearnRefNumber),
-                    0,
-                    Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+                .Setup(x => x.Handle("LearnDelFAMType_63", learnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == LearnDelFAMType_63Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                .Setup(x => x.BuildErrorMessageParameter("AimType", aimType))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("FundModel", fundModel))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("LearnDelFAMType", famType))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);

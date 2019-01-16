@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         public LearnAimRef_89Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
-            IDD07 derivedData07,
+            IDerivedData_07Rule derivedData07,
             IDerivedData_11Rule derivedData11,
             IAcademicYearDataService yearService)
                 : base(validationErrorHandler, larsData, derivedData07, derivedData11)

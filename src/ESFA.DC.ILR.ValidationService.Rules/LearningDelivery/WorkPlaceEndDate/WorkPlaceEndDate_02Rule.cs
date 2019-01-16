@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEndDate
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDate?.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDate)
             };
         }
     }
