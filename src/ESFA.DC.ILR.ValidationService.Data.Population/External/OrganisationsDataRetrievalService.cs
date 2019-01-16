@@ -28,19 +28,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public async Task<IReadOnlyDictionary<long, Organisation>> RetrieveAsync(CancellationToken cancellationToken)
         {
-            var ukprns = UniqueUKPRNsFromMessage(_messageCache.Item).ToList();
+            return await Task.Run(
+                () =>
+                {
+                    var ukprns = UniqueUKPRNsFromMessage(_messageCache.Item).ToList();
 
-            return await _organisations
-                .MasterOrganisations
-                .Where(o => ukprns.Contains(o.Ukprn))
-                .ToDictionaryAsync(
-                    o => o.Ukprn,
-                    o => new Organisation
-                    {
-                        UKPRN = o.OrgDetail?.Ukprn,
-                        LegalOrgType = o.OrgDetail?.LegalOrgType,
-                        PartnerUKPRN = o.OrgPartnerUkprns.Any(op => op.Ukprn == o.Ukprn)
-                    }, cancellationToken);
+                    return _organisations
+                        .MasterOrganisations
+                        .Where(o => ukprns.Contains(o.Ukprn))
+                        .ToDictionary(
+                            o => o.Ukprn,
+                            o => new Organisation
+                            {
+                                UKPRN = o.OrgDetail?.Ukprn,
+                                LegalOrgType = o.OrgDetail?.LegalOrgType,
+                                PartnerUKPRN = o.OrgPartnerUkprns.Any(op => op.Ukprn == o.Ukprn)
+                            });
+                }, cancellationToken);
         }
     }
 }
