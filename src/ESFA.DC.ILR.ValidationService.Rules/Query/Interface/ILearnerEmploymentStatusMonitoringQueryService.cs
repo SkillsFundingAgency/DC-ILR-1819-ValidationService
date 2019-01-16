@@ -14,6 +14,5 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus(ILearnerEmploymentStatus learnerEmploymentStatus, string esmType, IEnumerable<int> esmCodes);
 
         bool HasAnyEmploymentStatusMonitoringTypeAndCodeForEmploymentStatus(ILearnerEmploymentStatus learnerEmploymentStatus, string esmType, int esmCode);
-
     }
 }
