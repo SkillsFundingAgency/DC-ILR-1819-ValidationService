@@ -168,8 +168,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             }
         }
 
-        [Fact]
-        public void Validate_NoError()
+        [Theory]
+        [InlineData(LearningDeliveryFAMTypeConstants.ACT)]
+        [InlineData(LearningDeliveryFAMTypeConstants.LDM)]
+        public void Validate_NoError(string famType)
         {
             var testLearner = new TestLearner()
             {
@@ -182,7 +184,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         {
                             new TestLearningDeliveryFAM()
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                                LearnDelFAMType = famType,
                                 LearnDelFAMDateFromNullable = new DateTime(2018, 08, 01),
                                 LearnDelFAMDateToNullable = new DateTime(2018, 12, 01),
                                 LearnDelFAMCode = "1"
@@ -196,7 +198,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         {
                             new TestLearningDeliveryFAM()
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                                LearnDelFAMType = famType,
                                 LearnDelFAMDateFromNullable = new DateTime(2018, 01, 01),
                                 LearnDelFAMDateToNullable = new DateTime(2018, 07, 01),
                                 LearnDelFAMCode = "1"

@@ -29,10 +29,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             string learnDelFAMCode = string.Empty;
 
             var learningDeliverFAMs = objectToValidate.LearningDeliveries
-                .Where(ld => ld.LearningDeliveryFAMs != null)?
-                .SelectMany(ld => ld.LearningDeliveryFAMs)?
-                .Where(f => f.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.ACT))?
-                .OrderBy(f => f.LearnDelFAMDateFromNullable)?.ToList();
+                .Where(ld => ld.LearningDeliveryFAMs != null)
+                .SelectMany(ld => ld.LearningDeliveryFAMs)
+                .Where(f => f.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.ACT))
+                .OrderBy(f => f.LearnDelFAMDateFromNullable).ToList();
 
             if ((learningDeliverFAMs?.Count() ?? 0) > 1
                 && LearnDelFAMCodeConditionMet(
