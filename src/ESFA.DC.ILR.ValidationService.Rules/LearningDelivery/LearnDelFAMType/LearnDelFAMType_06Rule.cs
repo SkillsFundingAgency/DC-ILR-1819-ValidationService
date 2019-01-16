@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -25,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <param name="objectToValidate">The object to validate.</param>
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null || objectToValidate.LearningDeliveries == null)
+            if (objectToValidate?.LearningDeliveries == null)
             {
                 return;
             }
@@ -37,13 +39,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                     continue;
                 }
 
+                if (learningDelivery.LearningDeliveryFAMs.Any(ldf => ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.RES)))
+                {
+                    continue;
+                }
+
                 foreach (var learningDeliveryFam in learningDelivery.LearningDeliveryFAMs)
                 {
-                    if (learningDeliveryFam.LearnDelFAMType == LearningDeliveryFAMTypeConstants.RES)
-                    {
-                        continue;
-                    }
-
                     if (!IsValid(learningDelivery, learningDeliveryFam))
                     {
                         RaiseValidationMessage(objectToValidate.LearnRefNumber, learningDeliveryFam);

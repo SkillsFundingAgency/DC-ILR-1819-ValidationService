@@ -42,6 +42,7 @@
         public const string AgreeId_02 = "AgreeId_02";
 
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
+        public const string ALSCost_02 = "ALSCost_02";
 
         public const string AimType_01 = "AimType_01";
         public const string AimType_05 = "AimType_05";
@@ -87,6 +88,7 @@
         public const string DateOfBirth_37 = "DateOfBirth_37";
         public const string DateOfBirth_38 = "DateOfBirth_38";
         public const string DateOfBirth_39 = "DateOfBirth_39";
+        public const string DateOfBirth_40 = "DateOfBirth_40";
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
@@ -214,6 +216,7 @@
         public const string LearnDelFAMType_67 = "LearnDelFAMType_67";
         public const string LearnDelFAMType_68 = "LearnDelFAMType_68";
         public const string LearnDelFAMType_69 = "LearnDelFAMType_69";
+        public const string LearnDelFAMType_70 = "LearnDelFAMType_70";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
 
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
@@ -287,6 +290,7 @@
         public const string OutGrade_01 = "OutGrade_01";
         public const string OutGrade_03 = "OutGrade_03";
         public const string OutGrade_04 = "OutGrade_04";
+        public const string OutGrade_05 = "OutGrade_05";
         public const string OutGrade_06 = "OutGrade_06";
 
         public const string OutStartDate_01 = "OutStartDate_01";

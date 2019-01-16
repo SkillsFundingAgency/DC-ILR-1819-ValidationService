@@ -53,6 +53,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 
         public const string FG = "FG";
 
+        public const string FL = "FL";
+
         public const string G = "G";
 
         public const string GG = "GG";
@@ -60,6 +62,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Constants
         public const string N = "N";
 
         public const string U = "U";
+
+        public const string X = "X";
+
+        public const string Y = "Y";
 
         public const string Grade1 = "1";
 
