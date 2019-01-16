@@ -18,11 +18,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
             TypeOfLARSValidity.OLASSAdult
         };
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly ILARSDataService _larsDataService;
 
         public OrigLearnStartDate_06Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             ILARSDataService larsDataService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.OrigLearnStartDate_06)

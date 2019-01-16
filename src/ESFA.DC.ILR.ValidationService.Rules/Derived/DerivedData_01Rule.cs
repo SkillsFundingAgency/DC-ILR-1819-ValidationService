@@ -5,7 +5,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Extensions;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 {
-    public class DerivedData01_Rule : IDerivedData_01Rule
+    public class DerivedData_01Rule : IDerivedData_01Rule
     {
         public string Derive(long uln)
         {

@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         /// <summary>
         /// The derived data 07 (rule)
         /// </summary>
-        private readonly IDD07 _derivedData07;
+        private readonly IDerivedData_07Rule _derivedData07;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LearnStartDate_12Rule" /> class.
@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         public LearnStartDate_12Rule(
             IValidationErrorHandler validationErrorHandler,
             IAcademicYearDataService yearData,
-            IDD07 derivedData07)
+            IDerivedData_07Rule derivedData07)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));

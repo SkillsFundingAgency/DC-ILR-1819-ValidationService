@@ -12,12 +12,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_25Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IAcademicYearDataService _academicYearDataService;
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public DateOfBirth_25Rule(IDD07 dd07, IAcademicYearDataService academicYearDataService, IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+        public DateOfBirth_25Rule(IDerivedData_07Rule dd07, IAcademicYearDataService academicYearDataService, IDateTimeQueryService dateTimeQueryService, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_25)
         {
             _dd07 = dd07;

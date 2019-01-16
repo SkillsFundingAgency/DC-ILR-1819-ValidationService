@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
+﻿using System.Collections.Generic;
+
+namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
     /// type(s) of monitoring (learner, learning delivery and employment status)
@@ -43,7 +45,7 @@
                 /// <summary>
                 /// disabled students allowance
                 /// </summary>
-                public const string DisabledStudentsAllowance = "DSA";
+                public const string DisabledStudentsAllowance = "DLA";
 
                 /// <summary>
                 /// learner support reason
@@ -83,7 +85,7 @@
                 /// <summary>
                 /// pupil premium funding
                 /// </summary>
-                public const string PupilPremiumFunding = "PPF";
+                public const string PupilPremiumFunding = "PPE";
             }
         }
 

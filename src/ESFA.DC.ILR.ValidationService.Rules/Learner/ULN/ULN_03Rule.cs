@@ -76,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
-                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, filePreparationDate.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, filePreparationDate)
             };
         }
     }

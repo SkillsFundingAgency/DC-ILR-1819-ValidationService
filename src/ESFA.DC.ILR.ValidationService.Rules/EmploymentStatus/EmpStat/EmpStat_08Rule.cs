@@ -16,14 +16,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         private readonly DateTime _augustFirst2014 = new DateTime(2014, 08, 01);
         private readonly IEnumerable<int> _fundModels = new HashSet<int>() { TypeOfFunding.AdultSkills, TypeOfFunding.OtherAdult, TypeOfFunding.NotFundedByESFA };
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly IAcademicYearDataService _academicYearDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
         private readonly ILearnerEmploymentStatusQueryService _learnerEmploymentStatusQueryService;
 
         public EmpStat_08Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IDateTimeQueryService dateTimeQueryService,
             IAcademicYearDataService academicYearDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,

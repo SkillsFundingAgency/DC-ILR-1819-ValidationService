@@ -14,9 +14,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PrimaryLLDD
         private readonly DateTime _firstAugust2015 = new DateTime(2015, 08, 01);
         private readonly HashSet<long> _excludeLlddCatValues = new HashSet<long>() { 98, 99 };
 
-        private readonly IDD06 _dd06;
+        private readonly IDerivedData_06Rule _dd06;
 
-        public PrimaryLLDD_01Rule(IDD06 dd06, IValidationErrorHandler validationErrorHandler)
+        public PrimaryLLDD_01Rule(IDerivedData_06Rule dd06, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.PrimaryLLDD_01)
         {
             _dd06 = dd06;
