@@ -38,7 +38,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private readonly HashSet<int> BasicSkillTypes = new HashSet<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
 
         private readonly ILARSDataService _larsDataService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
+        private readonly IDerivedData_12Rule _dd12;
         private readonly IDerivedData_21Rule _derivedDataRule21;
         private readonly ILearningDeliveryFAMQueryService _famQueryService;
         private readonly IFileDataService _fileDataService;
@@ -47,7 +48,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public LearnDelFAMType_56Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsDataService,
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
+            IDerivedData_12Rule dd12,
             IDerivedData_21Rule derivedDataRule21,
             ILearningDeliveryFAMQueryService famQueryService,
             IFileDataService fileDataService,
@@ -56,6 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         {
             _larsDataService = larsDataService;
             _dd07 = dd07;
+            _dd12 = dd12;
             _derivedDataRule21 = derivedDataRule21;
             _famQueryService = famQueryService;
             _fileDataService = fileDataService;
@@ -114,7 +117,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             }
 
             var ageAtCourseStart = Convert.ToInt32((learnStartDate - dateOfBirth.Value).TotalDays / DaysInYear);
-            if (ageAtCourseStart >= MinAge || ageAtCourseStart <= MaxAge)
+            if (ageAtCourseStart >= MinAge && ageAtCourseStart <= MaxAge)
             {
                 return true;
             }
@@ -156,15 +159,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return _organisationDataService.LegalOrgTypeMatchForUkprn(_fileDataService.UKPRN(), LegalOrgTypeConstants.USDC);
         }
 
-        private bool IsLearningDeliveryExcluded(ILearner learner, ILearningDelivery learningDelivery)
+        public bool IsLearningDeliveryExcluded(ILearner learner, ILearningDelivery learningDelivery)
         {
-            if (_dd07.IsApprenticeship(learningDelivery.ProgTypeNullable))
+            if (learningDelivery.ProgTypeNullable.HasValue &&
+                learningDelivery.ProgTypeNullable.Value == TypeOfLearningProgramme.Traineeship)
             {
                 return true;
             }
 
-            if (learningDelivery.ProgTypeNullable.HasValue &&
-                learningDelivery.ProgTypeNullable.Value == TypeOfLearningProgramme.Traineeship)
+            if (_dd07.IsApprenticeship(learningDelivery.ProgTypeNullable))
             {
                 return true;
             }
@@ -177,7 +180,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 return true;
             }
 
-            //TODO: Add DD12
+            if (_dd12.IsAdultSkillsFundedOnBenefits(learner.LearnerEmploymentStatuses, learningDelivery))
+            {
+                return true;
+            }
 
             if (_derivedDataRule21.IsAdultFundedUnemployedWithOtherStateBenefits(learner))
             {
@@ -207,7 +213,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return false;
         }
 
-        private IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long ukprn, ILearner learner, ILearningDelivery learningDelivery)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long ukprn, ILearner learner, ILearningDelivery learningDelivery)
         {
             return new List<IErrorMessageParameter>
             {
