@@ -7,32 +7,42 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost
 {
-    /// <summary>
-    /// Learner.ALSCost not null and LearnerFAM.LearnFAMType not HNS
-    /// </summary>
     public class ALSCost_02Rule : AbstractRule, IRule<ILearner>
     {
-        private const string HnsFamCode = "HNS";
         private readonly ILearnerFAMQueryService _learnerFamQueryService;
 
         public ALSCost_02Rule(ILearnerFAMQueryService learnerFamQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.ALSCost_02)
         {
             _learnerFamQueryService = learnerFamQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate == null)
+            {
+                return;
+            }
+
             if (ConditionMet(objectToValidate.ALSCostNullable, objectToValidate.LearnerFAMs))
             {
-                HandleValidationError(RuleNameConstants.ALSCost_02Rule, objectToValidate.LearnRefNumber);
+                HandleValidationError(RuleNameConstants.ALSCost_02, null, BuildErrorMessageParameters(objectToValidate.ALSCostNullable));
             }
         }
 
         public bool ConditionMet(long? aLsCostNullable, IReadOnlyCollection<ILearnerFAM> learnerFams)
         {
             return aLsCostNullable.HasValue
-                && !_learnerFamQueryService.HasLearnerFAMType(learnerFams, HnsFamCode);
+                && !_learnerFamQueryService.HasLearnerFAMType(learnerFams, LearnerFAMTypeConstants.HNS);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(long? alsCost)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.ALSCost, alsCost),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.HNS),
+            };
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
+﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
+
+using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
 
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Sex;
 
@@ -145,6 +147,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AimType_01Rule),
                 typeof(AimType_05Rule),
                 typeof(AimType_07Rule),
+                typeof(ALSCost_02Rule),
                 typeof(CompStatus_01Rule),
                 typeof(CompStatus_02Rule),
                 typeof(CompStatus_03Rule),
