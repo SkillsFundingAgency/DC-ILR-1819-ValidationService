@@ -25,29 +25,68 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
 
             int record = 1;
-            foreach (var learnerEmpoyementStatus in objectToValidate.LearnerEmploymentStatuses.OrderBy(e => e.DateEmpStatApp))
+            ILearnerEmploymentStatus previousLearnerEmploymentStatus = null;
+            foreach (var learnerEmploymentStatus in
+                objectToValidate.LearnerEmploymentStatuses.OrderBy(e => e.DateEmpStatApp))
             {
-                if (record > 1)
+                if (learnerEmploymentStatus == null)
                 {
+                    continue;
                 }
 
-                record++;
-            }
+                if (record > 1)
+                {
+                    if (LearnerEmploymentStatusConditionMet(
+                        previousLearnerEmploymentStatus,
+                        learnerEmploymentStatus))
+                    {
+                        var employmentStatusMonitoring = LearnerEmploymentStatusMonitoringConditionMet(
+                            previousLearnerEmploymentStatus.EmploymentStatusMonitorings,
+                            learnerEmploymentStatus.EmploymentStatusMonitorings);
 
-            if (true)
-            {
-                //HandleValidationError(
-                //    learnRefNumber: objectToValidate.LearnRefNumber,
-                //    errorMessageParameters: BuildErrorMessageParameter(
-                //        learnerEmpoyementStatus.EmpStat,
-                //        learnerEmpoyementStatus.DateEmpStatApp,
-                //        learnerEmpoyementStatus.EmpIdNullable,
-                //        learnerEmpoyementStatus.EmploymentStatusMonitorings.FirstOrDefault().ESMType,
-                //        learnerEmpoyementStatus.EmploymentStatusMonitorings.FirstOrDefault().ESMCode));
+                        if (employmentStatusMonitoring != null)
+                        {
+                            HandleValidationError(
+                                learnRefNumber: objectToValidate.LearnRefNumber,
+                                errorMessageParameters: BuildErrorMessageParameters(
+                                    learnerEmploymentStatus.EmpStat,
+                                    learnerEmploymentStatus.DateEmpStatApp,
+                                    learnerEmploymentStatus.EmpIdNullable,
+                                    employmentStatusMonitoring.ESMType,
+                                    employmentStatusMonitoring.ESMCode));
+                        }
+                    }
+                }
+
+                previousLearnerEmploymentStatus = learnerEmploymentStatus;
+                record++;
             }
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameter(
+        public IEmploymentStatusMonitoring LearnerEmploymentStatusMonitoringConditionMet(
+            IReadOnlyCollection<IEmploymentStatusMonitoring> previousEmploymentStatusMonitorings,
+            IReadOnlyCollection<IEmploymentStatusMonitoring> employmentStatusMonitorings)
+        {
+            if (previousEmploymentStatusMonitorings != null
+                && employmentStatusMonitorings != null)
+            {
+                return previousEmploymentStatusMonitorings.Join(
+                    employmentStatusMonitorings,
+                    previous => new { previous.ESMType, previous.ESMCode },
+                    current => new { current.ESMType, current.ESMCode },
+                    (previous, current) => previous).FirstOrDefault();
+            }
+
+            return null;
+        }
+
+        public bool LearnerEmploymentStatusConditionMet(
+            ILearnerEmploymentStatus previousLearnerEmploymentStatus,
+            ILearnerEmploymentStatus learnerEmploymentStatus) => learnerEmploymentStatus.AgreeId == previousLearnerEmploymentStatus.AgreeId
+                && learnerEmploymentStatus.EmpStat == previousLearnerEmploymentStatus.EmpStat
+                && learnerEmploymentStatus.EmpIdNullable == previousLearnerEmploymentStatus.EmpIdNullable;
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(
             int empStat,
             DateTime dateEmpStatApp,
             int? empId,
