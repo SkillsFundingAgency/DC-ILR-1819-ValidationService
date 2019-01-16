@@ -20,7 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null)
+            if (objectToValidate.LearningDeliveries == null)
             {
                 return;
             }
