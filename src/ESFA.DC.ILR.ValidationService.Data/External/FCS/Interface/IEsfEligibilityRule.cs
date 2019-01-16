@@ -7,12 +7,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
     /// </summary>
     public interface IEsfEligibilityRule
     {
+        string TenderSpecReference { get; }
+
+        string LotReference { get; }
+
         bool? Benefits { get; }
 
-        IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }
+        IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }
 
-        IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> LocalAuthorities { get; }
+        IEnumerable<IEsfEligibilityRuleLocalAuthority> LocalAuthorities { get; }
 
-        IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> LocalEnterprisePartnerships { get; }
+        IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> LocalEnterprisePartnerships { get; }
+
+        IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> SectorSubjectAreaLevels { get; }
     }
 }

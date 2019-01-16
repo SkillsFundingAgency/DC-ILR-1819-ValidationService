@@ -30,6 +30,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
         /// </summary>
         public string FundingStreamPeriodCode { get; set; }
 
-        public IReadOnlyCollection<IEsfEligibilityRule> EsfEligibilityRules { get; set; }
+        public IEsfEligibilityRule EsfEligibilityRule { get; set; }
     }
 }
