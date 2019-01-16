@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ESFA.DC.ILR.ValidationService.Interface.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -169,6 +170,21 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         {
             var safeList = list.SafeReadOnlyList();
             return safeList.Count(expression);
+        }
+
+        /// <summary>
+        /// Maximum or default (might need tinkering with)
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="selector">The selector.</param>
+        /// <returns>
+        /// the maximum element type (or it's default)
+        /// </returns>
+        public static TResult MaxOrDefault<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        {
+            return SafeActions.Try(() => source.Max(selector));
         }
 
         /// <summary>
