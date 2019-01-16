@@ -284,6 +284,7 @@
 
         public const string OutEndDate_01 = "OutEndDate_01";
 
+        public const string OutGrade_01 = "OutGrade_01";
         public const string OutGrade_03 = "OutGrade_03";
         public const string OutGrade_04 = "OutGrade_04";
         public const string OutGrade_06 = "OutGrade_06";
