@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         /// <summary>
         /// The derived data06
         /// </summary>
-        private readonly IDD06 _derivedData06;
+        private readonly IDerivedData_06Rule _derivedData06;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TTACCOM_02Rule" /> class.
@@ -46,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="lookupDetails">The lookup details (provider).</param>
         /// <param name="derivedData06">The derived data 06.</param>
-        public TTACCOM_02Rule(IValidationErrorHandler validationErrorHandler, IProvideLookupDetails lookupDetails, IDD06 derivedData06)
+        public TTACCOM_02Rule(IValidationErrorHandler validationErrorHandler, IProvideLookupDetails lookupDetails, IDerivedData_06Rule derivedData06)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));

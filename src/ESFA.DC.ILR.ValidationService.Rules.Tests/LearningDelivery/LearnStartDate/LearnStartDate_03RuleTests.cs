@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             int? progType = 24;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
@@ -94,7 +94,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             academicYearDataServiceMock.Setup(ds => ds.End()).Returns(academicYearEnd);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object, academicYearDataServiceMock.Object).ConditionMet(learnStartDate, progType)
@@ -112,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             academicYearDataServiceMock.Setup(ds => ds.End()).Returns(academicYearEnd);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object, academicYearDataServiceMock.Object).ConditionMet(learnStartDate, progType)
@@ -130,7 +130,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             academicYearDataServiceMock.Setup(ds => ds.End()).Returns(academicYearEnd);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object, academicYearDataServiceMock.Object).ConditionMet(learnStartDate, progType)
@@ -159,7 +159,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             academicYearDataServiceMock.Setup(ds => ds.End()).Returns(academicYearEnd);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -189,7 +189,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var academicYearDataServiceMock = new Mock<IAcademicYearDataService>();
             academicYearDataServiceMock.Setup(ds => ds.End()).Returns(academicYearEnd);
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
@@ -211,7 +211,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         }
 
         private LearnStartDate_03Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IAcademicYearDataService academicYearDataService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {

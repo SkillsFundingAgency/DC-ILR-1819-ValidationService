@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         {
             var progType = 24;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -51,7 +51,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         {
             var progType = 25;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
@@ -63,7 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         {
             int? progType = null;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
@@ -197,7 +197,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -237,7 +237,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -277,7 +277,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -307,7 +307,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -347,7 +347,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -399,7 +399,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -453,7 +453,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var learnerEmploymentStatusQueryServiceMock = new Mock<ILearnerEmploymentStatusQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -481,7 +481,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
         private EmpStat_12Rule NewRule(
             ILearnerEmploymentStatusQueryService learnerEmploymentStatusQueryService = null,
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {

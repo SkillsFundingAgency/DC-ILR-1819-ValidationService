@@ -23,14 +23,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         private readonly ILARSDataService _larsDataService;
         private readonly IOrganisationDataService _organisationDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IFileDataService _fileDataService;
 
         public LearnAimRef_80Rule(
             ILARSDataService larsDataService,
             IOrganisationDataService organisationDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService,
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IFileDataService fileDataService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LearnAimRef_80)

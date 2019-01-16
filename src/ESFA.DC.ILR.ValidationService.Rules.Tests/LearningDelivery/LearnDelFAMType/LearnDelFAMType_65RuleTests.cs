@@ -7,6 +7,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
@@ -37,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -51,6 +52,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -75,7 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -152,7 +158,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(dd07);
@@ -166,6 +172,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(dd29);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -190,7 +201,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -209,7 +220,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("3");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -223,6 +234,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -247,7 +263,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -266,7 +282,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -280,6 +296,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -304,7 +325,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -323,7 +344,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -337,6 +358,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -361,7 +387,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -380,7 +406,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -394,6 +420,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(17);
 
             var testLearner = new TestLearner
             {
@@ -418,7 +449,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -437,7 +468,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -451,6 +482,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -475,7 +511,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -496,7 +532,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -510,6 +546,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -534,7 +575,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -553,7 +594,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.GetNotionalNVQLevelv2ForLearnAimRef(It.IsAny<string>()))
                 .Returns("1");
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock
                 .Setup(m => m.IsApprenticeship(It.IsAny<int?>()))
                 .Returns(false);
@@ -567,6 +608,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             dd29Mock
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -591,18 +637,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
         private LearnDelFAMType_65Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
             ILARSDataService larsDataService = null,
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IDerivedData_28Rule derivedData28Rule = null,
-            IDerivedData_29Rule derivedData29Rule = null)
+            IDerivedData_29Rule derivedData29Rule = null,
+            IDateTimeQueryService dateTimeQueryService = null)
         {
-            return new LearnDelFAMType_65Rule(validationErrorHandler, larsDataService, dd07, derivedData28Rule, derivedData29Rule);
+            return new LearnDelFAMType_65Rule(validationErrorHandler, larsDataService, dd07, derivedData28Rule, derivedData29Rule, dateTimeQueryService);
         }
     }
 }

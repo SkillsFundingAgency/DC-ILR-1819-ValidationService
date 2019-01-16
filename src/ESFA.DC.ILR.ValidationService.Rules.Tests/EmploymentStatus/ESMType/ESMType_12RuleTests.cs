@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var ddRule07 = new Mock<IDD07>(MockBehavior.Strict);
+            var ddRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
             var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             // act / assert

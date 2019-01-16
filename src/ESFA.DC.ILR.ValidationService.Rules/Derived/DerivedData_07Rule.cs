@@ -9,8 +9,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     /// <summary>
     /// derived data 07 - viable apprenticeship codes
     /// </summary>
-    /// <seealso cref="IDD07" />
-    public class DD07 : IDD07
+    /// <seealso cref="IDerivedData_07Rule" />
+    public class DerivedData_07Rule : IDerivedData_07Rule
     {
         /// <summary>
         /// The allowed programme types

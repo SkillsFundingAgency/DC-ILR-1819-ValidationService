@@ -99,6 +99,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\IDictionaryExtensionsTests.cs" />
+    <Compile Include="Extensions\IEnumerableExtensionsTests.cs" />
+    <Compile Include="Extensions\StringExtensionTests.cs" />
     <Compile Include="External\EDRSDataOperationsProviderTests.cs" />
     <Compile Include="External\LARSDataServiceTests.cs" />
     <Compile Include="External\EPAOrganisationDetailsProviderTests.cs" />
@@ -120,10 +123,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Extensions\ESFA.DC.ILR.ValidationService.Data.Extensions.csproj">
-      <Project>{7a822136-deec-4899-8907-6afa86e421c4}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.Data.Extensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Population\ESFA.DC.ILR.ValidationService.Data.Population.csproj">
       <Project>{ACACD78D-34BD-45A9-A756-C637CB8987A7}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Data.Population</Name>

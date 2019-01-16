@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 {
-    public class DD06Tests
+    public class DerivedData_06RuleTests
     {
         [Fact]
         public void Derive()
@@ -25,13 +25,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 },
             };
 
-            NewDD().Derive(learningDeliveries).Should().Be(new DateTime(2015, 1, 1));
+            NewRule().Derive(learningDeliveries).Should().Be(new DateTime(2015, 1, 1));
         }
 
         [Fact]
         public void DeriveFor_NullLearningDelivery()
         {
-            Action action = () => NewDD().Derive(null);
+            Action action = () => NewRule().Derive(null);
 
             action.Should().Throw<ArgumentNullException>();
         }
@@ -44,15 +44,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         public void DeriveUsingEmptyCollectionThrowsInvalidOperationException()
         {
             // arrange
-            var rule = NewDD();
+            var rule = NewRule();
 
             // act / assert
             Assert.Throws<InvalidOperationException>(() => rule.Derive(Collection.Empty<ILearningDelivery>()));
         }
 
-        private DD06 NewDD()
+        private DerivedData_06Rule NewRule()
         {
-            return new DD06();
+            return new DerivedData_06Rule();
         }
     }
 }

@@ -73,7 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB"))),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate),
                 BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
                 BuildErrorMessageParameter(PropertyNameConstants.PriorAttain, priorAttain),
                 BuildErrorMessageParameter(PropertyNameConstants.ProgType, progType),

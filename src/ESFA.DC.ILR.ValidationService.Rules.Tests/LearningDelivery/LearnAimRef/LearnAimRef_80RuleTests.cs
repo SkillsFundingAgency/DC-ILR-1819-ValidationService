@@ -277,7 +277,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
@@ -289,7 +289,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -373,7 +373,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
             var fileDataServiceMock = new Mock<IFileDataService>();
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
@@ -422,7 +422,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var organisationDataServiceMock = new Mock<IOrganisationDataService>();
             var fileDataServiceMock = new Mock<IFileDataService>();
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
@@ -470,7 +470,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             ILARSDataService larsDataService = null,
             IOrganisationDataService organisationDataService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFamQueryService = null,
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IFileDataService fileDataService = null,
             IValidationErrorHandler validationErrorHandler = null)
         {

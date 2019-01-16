@@ -47,7 +47,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [InlineData(TypeOfLearningProgramme.Traineeship, false, false)]
         public void DD07ConditionMetMeetsExpectation(int progType, bool isApprenticeship, bool expectation)
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(isApprenticeship);
 
             NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().Be(expectation);
@@ -60,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var progType = TypeOfLearningProgramme.ApprenticeshipStandard;
             var learnDelFamType = LearningDeliveryFAMTypeConstants.ADL;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(fundModel, progType, learnDelFamType).Should().BeTrue();
@@ -73,7 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var progType = TypeOfLearningProgramme.ApprenticeshipStandard;
             var learnDelFamType = LearningDeliveryFAMTypeConstants.ADL;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(fundModel, progType, learnDelFamType).Should().BeFalse();
@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var progType = TypeOfLearningProgramme.ApprenticeshipStandard;
             var learnDelFamType = LearningDeliveryFAMTypeConstants.ALB;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             NewRule(dd07Mock.Object).ConditionMet(fundModel, progType, learnDelFamType).Should().BeFalse();
@@ -99,7 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var progType = TypeOfLearningProgramme.Traineeship;
             var learnDelFamType = LearningDeliveryFAMTypeConstants.ADL;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             NewRule(dd07Mock.Object).ConditionMet(fundModel, progType, learnDelFamType).Should().BeFalse();
@@ -131,7 +131,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -166,7 +166,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
@@ -189,7 +189,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         private LearnDelFAMType_40Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IValidationErrorHandler validationErrorHandler = null)
         {
             return new LearnDelFAMType_40Rule(dd07, validationErrorHandler);

@@ -58,7 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth?.ToString("d", new CultureInfo("en-GB")))
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth)
             };
         }
     }

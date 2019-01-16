@@ -108,8 +108,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
-                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, filePrepDate.ToString("d", new CultureInfo("en-GB"))),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
+                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, filePrepDate),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate)
             };
         }
     }
