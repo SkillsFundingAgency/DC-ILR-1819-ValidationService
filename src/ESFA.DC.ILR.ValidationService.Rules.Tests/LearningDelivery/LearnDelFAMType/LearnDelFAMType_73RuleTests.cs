@@ -21,10 +21,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, true)]
-        [InlineData(TypeOfFunding.CommunityLearning, true)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, false)]
-        [InlineData(TypeOfFunding.OtherAdult, false)]
+        [InlineData(35, true)]
+        [InlineData(10, true)]
+        [InlineData(99, false)]
+        [InlineData(81, false)]
         public void FundModelConditionMetMeetsExpectation(int fundModel, bool expectation)
         {
             NewRule().FundModelConditionMet(fundModel).Should().Be(expectation);
@@ -75,13 +75,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(TypeOfFunding.OtherAdult, false, false)]
-        [InlineData(TypeOfFunding.OtherAdult, true, false)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, false, false)]
-        [InlineData(TypeOfFunding.NotFundedByESFA, true, false)]
-        [InlineData(TypeOfFunding.AdultSkills, true, true)]
-        [InlineData(TypeOfFunding.CommunityLearning, true, true)]
-        [InlineData(TypeOfFunding.CommunityLearning, false, false)]
+        [InlineData(81, false, false)]
+        [InlineData(81, true, false)]
+        [InlineData(99, false, false)]
+        [InlineData(99, true, false)]
+        [InlineData(35, true, true)]
+        [InlineData(10, true, true)]
+        [InlineData(10, false, false)]
         public void ConditionMetMeetsExpectation(int fundModel, bool famQueryServiceResult, bool expectation)
         {
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
