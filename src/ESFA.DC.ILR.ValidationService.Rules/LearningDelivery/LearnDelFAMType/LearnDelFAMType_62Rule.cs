@@ -23,6 +23,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public const string Name = "LearnDelFAMType_62";
 
         /// <summary>
+        /// Gets the FAM Type for Error parameter.
+        /// </summary>
+        public const string _famTypeForError = Monitoring.Delivery.Types.FullOrCoFunding;
+
+        /// <summary>
+        /// Gets the FAM Code for Error parameter.
+        /// </summary>
+        public const string _famCodeForError = "2";
+
+        /// <summary>
         /// The message handler
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
@@ -343,6 +353,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return IsAdultFundedUnemployedWithOtherStateBenefits(candidate)
                 || IsAdultFundedUnemployedWithBenefits(candidate)
                 || IsInflexibleElementOfTrainingAim(candidate)
+                || IsHigherAchiever(candidate)
                 || CheckLearningDeliveries(candidate, IsApprenticeship)
                 || CheckLearningDeliveries(candidate, IsBasicSkillsLearner)
                 || CheckLearningDeliveries(candidate, x => CheckDeliveryFAMs(x, IsLearnerInCustody))
@@ -376,7 +387,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public void ValidateDeliveries(ILearner candidate)
         {
             var learnRefNumber = candidate.LearnRefNumber;
-            var higherAchiever = IsHigherAchiever(candidate);
+            var dateOfBirth = candidate.DateOfBirthNullable;
 
             /*
             LearningDelivery.LearnStartDate > 2017-07-31                                                        <= for a delivery after the given date
@@ -392,11 +403,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 .SafeWhere(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsCoFunded))
                 .ForEach(x =>
                 {
-                    var failedValidation = !(higherAchiever && IsEntitledLevel2NVQ(x));
+                    var failedValidation = !IsEntitledLevel2NVQ(x);
 
                     if (failedValidation)
                     {
-                        RaiseValidationMessage(learnRefNumber, x);
+                        RaiseValidationMessage(learnRefNumber, dateOfBirth, x);
                     }
                 });
         }
@@ -404,12 +415,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// Raises the validation message.
         /// </summary>
-        /// <param name="learnRefNumber">The learn reference number.</param>
+        /// <param name="learnRefNumber">The learner reference number.</param>
+        /// <param name="dateOfBirth">The date of birth of the learner.</param>
         /// <param name="thisDelivery">this delivery.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
+        public void RaiseValidationMessage(string learnRefNumber, DateTime? dateOfBirth, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.FundModel, thisDelivery.FundModel));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, _famTypeForError));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, _famCodeForError));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
