@@ -281,6 +281,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_34RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_54RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_55RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_02RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03RuleTests.cs" />
