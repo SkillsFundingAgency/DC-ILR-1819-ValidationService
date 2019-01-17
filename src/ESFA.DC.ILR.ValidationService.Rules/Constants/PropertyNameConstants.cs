@@ -88,6 +88,7 @@
         public const string QUALENT3 = "QUALENT3";
         public const string Sex = "Sex";
         public const string StdCode = "StdCode";
+        public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
         public const string WithdrawReason = "WithdrawReason";
         public const string WorkPlaceEmpId = "WorkPlaceEmpId";

@@ -347,7 +347,7 @@
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
-        public const string ProvSpecDelMonOccur_01Rule = "ProvSpecDelMonOccur_01";
+        public const string ProvSpecDelMonOccur_01 = "ProvSpecDelMonOccur_01";
 
         public const string PwayCode_02 = "PwayCode_02";
         public const string PwayCode_03 = "PwayCode_03";
@@ -410,6 +410,8 @@
         public const string STULOAD_04 = "STULOAD_04";
 
         public const string TTACCOM_04 = "TTACCOM_04";
+
+        public const string TYPEYR_01 = "TYPEYR_01";
 
         public const string UKPRN_03 = "UKPRN_03";
         public const string UKPRN_05 = "UKPRN_05";
