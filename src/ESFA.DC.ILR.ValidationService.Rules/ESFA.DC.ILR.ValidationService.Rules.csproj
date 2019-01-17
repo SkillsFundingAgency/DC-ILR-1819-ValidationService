@@ -84,6 +84,7 @@
     <Compile Include="Constants\ContactPreference.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfEthnicity.cs" />
+    <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
     <Compile Include="Constants\WorkPlaceModeConstants.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
@@ -287,6 +288,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_52Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_34Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_55Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_02Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03Rule.cs" />
