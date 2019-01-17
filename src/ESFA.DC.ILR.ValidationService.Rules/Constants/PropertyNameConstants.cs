@@ -72,6 +72,8 @@
         public const string OutULN = "OutULN";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PCFLDCS = "PCFLDCS";
+        public const string PCSLDCS = "PCFLDCS";
+        public const string PCTLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
         public const string ProvSpecDelMonOccur = "ProvSpecDelMonOccur";
