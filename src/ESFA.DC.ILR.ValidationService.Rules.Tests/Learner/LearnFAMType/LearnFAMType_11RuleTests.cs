@@ -6,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Mocks;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -80,6 +81,53 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
             {
                 NewRule(learnerFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
+        }
+
+        [Fact]
+        public void Validate_Error_CalledOnceForEachFamType()
+        {
+            var learner = new TestLearner
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35
+                    }
+                },
+                LearnerFAMs = new List<TestLearnerFAM>()
+                {
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.NLM
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.EDF
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.PPE
+                    },
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.HNS
+                    },
+                }
+            };
+
+            var learnerFAMQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+            learnerFAMQueryServiceMock
+                .Setup(x => x.GetLearnerFAMsCountByFAMType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>()))
+                .Returns(3);
+
+            var validationErrorHandlerMock = new ValidationErrorHandlerMock(true);
+            NewRule(learnerFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.NLM), Times.Exactly(1));
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.EDF), Times.Exactly(1));
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.PPE), Times.Exactly(1));
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.HNS), Times.Never);
         }
 
         [Fact]
