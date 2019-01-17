@@ -356,7 +356,7 @@
         public const string PwayCode_02 = "PwayCode_02";
         public const string PwayCode_03 = "PwayCode_03";
 
-        public const string ProvSpecLearnMonOccur_01Rule = "ProvSpecLearnMonOccur_01Rule";
+        public const string ProvSpecLearnMonOccur_01 = "ProvSpecLearnMonOccur_01";
 
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
