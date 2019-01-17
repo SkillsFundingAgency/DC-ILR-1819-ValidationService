@@ -257,6 +257,8 @@
         public const string MathGrade_03 = "MathGrade_03";
         public const string MathGrade_04 = "MathGrade_04";
 
+        public const string MODESTUD_03Rule = "MODESTUD_03Rule";
+
         public const string MSTUFEE_03 = "MSTUFEE_03";
         public const string MSTUFEE_04 = "MSTUFEE_04";
 
