@@ -19,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private readonly IEnumerable<int> EnglishOrMathsBasicSkillsTypes = new HashSet<int>(TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills);
 
         public R90Rule(IValidationErrorHandler validationErrorHandler, ILARSDataService larsDataService)
-            : base(validationErrorHandler, RuleNameConstants.R89)
+            : base(validationErrorHandler, RuleNameConstants.R90)
         {
             _larsDataService = larsDataService;
         }
