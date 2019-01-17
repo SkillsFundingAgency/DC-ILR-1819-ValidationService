@@ -97,22 +97,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
                 },
                 LearnerFAMs = new List<TestLearnerFAM>()
                 {
-                    new TestLearnerFAM()
-                    {
-                        LearnFAMType = LearnerFAMTypeConstants.NLM
-                    },
-                    new TestLearnerFAM()
-                    {
-                        LearnFAMType = LearnerFAMTypeConstants.EDF
-                    },
-                    new TestLearnerFAM()
-                    {
-                        LearnFAMType = LearnerFAMTypeConstants.PPE
-                    },
-                    new TestLearnerFAM()
-                    {
-                        LearnFAMType = LearnerFAMTypeConstants.HNS
-                    },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.NLM },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.NLM },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.EDF },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.EDF },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.EDF },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.PPE },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.HNS },
                 }
             };
 
@@ -124,9 +115,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
             var validationErrorHandlerMock = new ValidationErrorHandlerMock(true);
             NewRule(learnerFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
 
-            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.NLM), Times.Exactly(1));
-            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.EDF), Times.Exactly(1));
-            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.PPE), Times.Exactly(1));
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.NLM), Times.Once);
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.EDF), Times.Once);
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.PPE), Times.Once);
             validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.HNS), Times.Never);
         }
 
