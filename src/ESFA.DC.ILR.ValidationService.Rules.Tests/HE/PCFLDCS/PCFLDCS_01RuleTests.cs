@@ -119,6 +119,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCFLDCS
         }
 
         [Fact]
+        public void ValidateNoError_NullHEEntity()
+        {
+            var learner = new TestLearner
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearnStartDate = new DateTime(2018, 01, 01),
+                        LearningDeliveryHEEntity = null
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
         public void BuildErrorMessageParameters()
         {
             decimal? pcfldcs = 40.5m;

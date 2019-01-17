@@ -26,22 +26,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (learningDelivery.LearningDeliveryHEEntity != null)
+                if (learningDelivery.LearningDeliveryHEEntity == null)
                 {
-                    if (ConditionMet(
-                        learningDelivery.LearnStartDate,
-                        learningDelivery.LearningDeliveryHEEntity.PCFLDCSNullable,
-                        learningDelivery.LearningDeliveryHEEntity.PCSLDCSNullable,
-                        learningDelivery.LearningDeliveryHEEntity.PCTLDCSNullable))
-                    {
-                        HandleValidationError(
-                            objectToValidate.LearnRefNumber,
-                            learningDelivery.AimSeqNumber,
-                            BuildErrorMessageParameters(
-                                learningDelivery.LearningDeliveryHEEntity.PCFLDCSNullable,
-                                learningDelivery.LearningDeliveryHEEntity.PCSLDCSNullable,
-                                learningDelivery.LearningDeliveryHEEntity.PCTLDCSNullable));
-                    }
+                    continue;
+                }
+
+                if (ConditionMet(
+                    learningDelivery.LearnStartDate,
+                    learningDelivery.LearningDeliveryHEEntity.PCFLDCSNullable,
+                    learningDelivery.LearningDeliveryHEEntity.PCSLDCSNullable,
+                    learningDelivery.LearningDeliveryHEEntity.PCTLDCSNullable))
+                {
+                    HandleValidationError(
+                        objectToValidate.LearnRefNumber,
+                        learningDelivery.AimSeqNumber,
+                        BuildErrorMessageParameters(
+                            learningDelivery.LearningDeliveryHEEntity.PCFLDCSNullable,
+                            learningDelivery.LearningDeliveryHEEntity.PCSLDCSNullable,
+                            learningDelivery.LearningDeliveryHEEntity.PCTLDCSNullable));
                 }
             }
         }
