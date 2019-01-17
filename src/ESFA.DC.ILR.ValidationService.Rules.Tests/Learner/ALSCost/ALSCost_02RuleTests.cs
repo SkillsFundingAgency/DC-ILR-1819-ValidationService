@@ -7,98 +7,113 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ALSCost
 {
-    public class ALSCost_02RuleTests
+    public class ALSCost_02RuleTests : AbstractRuleTests<ALSCost_02Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("ALSCost_02");
+        }
+
+        [Fact]
+        public void Validate_Null_Learner()
+        {
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(null);
+            }
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
-            var learnerFamQueryService = new LearnerFAMQueryService();
+            var learnerFamQueryService = new Mock<ILearnerFAMQueryService>();
+            learnerFamQueryService
+                .Setup(x => x.HasLearnerFAMType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>()))
+                .Returns(false);
 
-            var learnerFams = new[]
-            {
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = "XYZ"
-                }
-            };
-
-            var rule = NewRule(learnerFamQueryService);
-
-            rule.ConditionMet(10, learnerFams).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(null, "XYZ")]
-        [InlineData(100, "HNS")]
-        public void ConditionMet_False(long? alsCost, string famType)
-        {
-            var learnerFamQueryService = new LearnerFAMQueryService();
-
-            var fams = new List<TestLearnerFAM>()
-            {
-                new TestLearnerFAM()
-                {
-                    LearnFAMType = famType
-                }
-            };
-
-            var rule = NewRule(learnerFamQueryService);
-
-            rule.ConditionMet(alsCost, fams).Should().BeFalse();
+            NewRule(null, learnerFamQueryService.Object).ConditionMet(10, new List<ILearnerFAM>()).Should().BeTrue();
         }
 
         [Fact]
-        public void Validate_Error()
+        public void ConditionMet_False_AlsCost_Null()
         {
-            var learner = SetupLearner(null);
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ALSCost_02", null, null, null);
-
-            var rule = NewRule(new LearnerFAMQueryService(), validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            NewRule(null, null).ConditionMet(null, new List<ILearnerFAM>()).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_NoError()
+        public void ConditionMet_False()
         {
-            var learner = SetupLearner("HNS");
+            var learnerFamQueryService = new Mock<ILearnerFAMQueryService>();
+            learnerFamQueryService
+                .Setup(x => x.HasLearnerFAMType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>()))
+                .Returns(true);
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ALSCost_02", null, null, null);
-
-            var rule = NewRule(new LearnerFAMQueryService(), validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            NewRule(null, learnerFamQueryService.Object).ConditionMet(10, new List<ILearnerFAM>()).Should().BeFalse();
         }
 
-        private ILearner SetupLearner(string learnFamType)
+        [Fact]
+        public void Validate_Fail()
         {
-            return new TestLearner()
+            var testLearner = new TestLearner()
             {
-                ALSCostNullable = 10,
-                LearnerFAMs = new TestLearnerFAM[]
+                LearnRefNumber = "123456789",
+                ALSCostNullable = 1,
+                LearnerFAMs = new List<ILearnerFAM>()
                 {
                     new TestLearnerFAM()
                     {
-                        LearnFAMType = learnFamType
+                        LearnFAMType = "XYZ"
                     }
                 }
             };
+
+            var learnerFamQueryService = new Mock<ILearnerFAMQueryService>();
+            learnerFamQueryService
+                .Setup(x => x.HasLearnerFAMType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>()))
+                .Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object, learnerFamQueryService.Object).Validate(testLearner);
+            }
         }
 
-        private ALSCost_02Rule NewRule(ILearnerFAMQueryService learnerFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void Validate_Pass()
+        {
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "123456789",
+                ALSCostNullable = 1,
+                LearnerFAMs = new List<ILearnerFAM>()
+                {
+                    new TestLearnerFAM()
+                    {
+                        LearnFAMType = "HNS"
+                    }
+                }
+            };
+
+            var learnerFamQueryService = new Mock<ILearnerFAMQueryService>();
+            learnerFamQueryService
+                .Setup(x => x.HasLearnerFAMType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>()))
+                .Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object, learnerFamQueryService.Object).Validate(testLearner);
+            }
+        }
+
+        private ALSCost_02Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILearnerFAMQueryService learnerFAMQueryService = null)
         {
             return new ALSCost_02Rule(learnerFAMQueryService, validationErrorHandler);
         }

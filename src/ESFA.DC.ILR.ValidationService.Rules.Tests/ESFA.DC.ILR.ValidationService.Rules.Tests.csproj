@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="CrossEntity\R06RuleTests.cs" />
+    <Compile Include="CrossEntity\R58RuleTests.cs" />
     <Compile Include="CrossEntity\R92RuleTests.cs" />
     <Compile Include="CrossEntity\R110RuleTests.cs" />
     <Compile Include="CrossEntity\R115RuleTests.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="CrossEntity\R118RuleTests.cs" />
     <Compile Include="CrossEntity\R104RuleTests.cs" />
     <Compile Include="CrossEntity\R102RuleTests.cs" />
+    <Compile Include="CrossEntity\R105RuleTests.cs" />
     <Compile Include="CrossEntity\R106RuleTests.cs" />
     <Compile Include="CrossEntity\R113RuleTests.cs" />
     <Compile Include="CrossEntity\R31RuleTests.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="Derived\DerivedData_05RuleTests.cs" />
     <Compile Include="Derived\DerivedData_14RuleTests.cs" />
     <Compile Include="Derived\DerivedData_18RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_23RuleTests.cs" />
     <Compile Include="Derived\DerivedData_22RuleTests.cs" />
     <Compile Include="Derived\DerivedData_26RuleTests.cs" />
     <Compile Include="Derived\DerivedData_27RuleTests.cs" />
@@ -238,6 +241,7 @@
     <Compile Include="HE\LearnerHE_02RuleTests.cs" />
     <Compile Include="Learner\Accom\Accom_01RuleTests.cs" />
     <Compile Include="Learner\AddLine1\Addline1_03RuleTests.cs" />
+    <Compile Include="Learner\ALSCost\ALSCost_02RuleTests.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02RuleTests.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_05RuleTests.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_06RuleTests.cs" />
@@ -261,6 +265,8 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_29RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_43RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_40RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_36RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_37RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_38RuleTests.cs" />
@@ -275,6 +281,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_52RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_34RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_54RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_02RuleTests.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03RuleTests.cs" />
@@ -372,12 +379,14 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_18RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_60RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_61RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_70RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnPlanEndDate\LearnPlanEndDate_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnPlanEndDate\LearnPlanEndDate_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_02RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_15RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_14RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13RuleTests.cs" />
     <Compile Include="LearningDelivery\OrigLearnStartDate\OrigLearnStartDate_01RuleTests.cs" />
@@ -391,6 +400,8 @@
     <Compile Include="LearningDelivery\Outcome\Outcome_05RuleTests.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_05RuleTests.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_01RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_06RuleTests.cs" />
     <Compile Include="LearningDelivery\ProvSpecDelMonOccur\ProvSpecDelMonOccur_01RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05RuleTests.cs" />

@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// <summary>
         /// The framework aims
         /// </summary>
-        private IReadOnlyCollection<ILARSFrameworkAim> _frameworkAims;
+        private IEnumerable<ILARSFrameworkAim> _frameworkAims;
 
         /// <summary>
         /// The framework common components
@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// <summary>
         /// Gets or sets the framework aims.
         /// </summary>
-        public IReadOnlyCollection<ILARSFrameworkAim> FrameworkAims
+        public IEnumerable<ILARSFrameworkAim> FrameworkAims
         {
             get => _frameworkAims ?? (_frameworkAims = Collection.EmptyAndReadOnly<ILARSFrameworkAim>());
             set => _frameworkAims = value;

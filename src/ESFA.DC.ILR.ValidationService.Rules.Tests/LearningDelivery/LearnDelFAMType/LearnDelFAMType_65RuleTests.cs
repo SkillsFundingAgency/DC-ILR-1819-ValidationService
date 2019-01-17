@@ -7,6 +7,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
@@ -52,6 +53,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1997, 8, 1),
@@ -75,7 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -167,6 +173,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(dd29);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1997, 8, 1),
@@ -190,7 +201,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -224,6 +235,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1997, 8, 1),
@@ -247,7 +263,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -281,6 +297,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1997, 8, 1),
@@ -304,7 +325,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -338,6 +359,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1997, 8, 1),
@@ -361,7 +387,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -395,6 +421,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(17);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1999, 8, 1),
@@ -418,7 +449,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -452,6 +483,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1997, 8, 1),
@@ -475,7 +511,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -511,6 +547,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1997, 8, 1),
@@ -534,7 +575,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -568,6 +609,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(m => m.IsInflexibleElementOfTrainingAim(It.IsAny<ILearner>()))
                 .Returns(false);
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1997, 8, 1),
@@ -591,7 +637,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object)
+            NewRule(validationErrorHandlerMock.Object, larsService.Object, dd07Mock.Object, dd28Mock.Object, dd29Mock.Object, dateTimeServiceMock.Object)
                 .Validate(testLearner);
         }
 
@@ -600,9 +646,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             ILARSDataService larsDataService = null,
             IDerivedData_07Rule dd07 = null,
             IDerivedData_28Rule derivedData28Rule = null,
-            IDerivedData_29Rule derivedData29Rule = null)
+            IDerivedData_29Rule derivedData29Rule = null,
+            IDateTimeQueryService dateTimeQueryService = null)
         {
-            return new LearnDelFAMType_65Rule(validationErrorHandler, larsDataService, dd07, derivedData28Rule, derivedData29Rule);
+            return new LearnDelFAMType_65Rule(validationErrorHandler, larsDataService, dd07, derivedData28Rule, derivedData29Rule, dateTimeQueryService);
         }
     }
 }

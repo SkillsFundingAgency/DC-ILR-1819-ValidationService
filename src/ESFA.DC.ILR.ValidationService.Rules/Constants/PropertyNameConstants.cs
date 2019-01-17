@@ -18,6 +18,7 @@
         public const string AgreeId = "AgreeId";
         public const string AimSeqNumber = "AimSeqNumber";
         public const string AimType = "AimType";
+        public const string ALSCost = "ALSCost";
         public const string CompStatus = "CompStatus";
         public const string ConRefNumber = "ConRefNumber";
         public const string ContPrefCode = "ContPrefCode";

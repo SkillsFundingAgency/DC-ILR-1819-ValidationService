@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Configuration\Interface\IReferenceDataOptions.cs" />
     <Compile Include="Configuration\ReferenceDataOptions.cs" />
+    <Compile Include="Extensions\IQueryableExtensions.cs" />
     <Compile Include="External\AbstractDataRetrievalService.cs" />
     <Compile Include="External\AbstractOrganisationsDataRetrievalService.cs" />
     <Compile Include="External\AbstractLARSDataRetrievalService.cs" />
@@ -130,10 +131,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Extensions\ESFA.DC.ILR.ValidationService.Data.Extensions.csproj">
-      <Project>{7a822136-deec-4899-8907-6afa86e421c4}</Project>
-      <Name>ESFA.DC.ILR.ValidationService.Data.Extensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data\ESFA.DC.ILR.ValidationService.Data.csproj">
       <Project>{FAACF863-EB2E-473F-8EF9-F7FA9613F556}</Project>
       <Name>ESFA.DC.ILR.ValidationService.Data</Name>
