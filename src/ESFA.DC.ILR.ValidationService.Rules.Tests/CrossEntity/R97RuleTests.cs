@@ -100,7 +100,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             NewRule().LearnerEmploymentStatusMonitoringConditionMet(
                 previousEmploymentStatusMonitorings,
-                employmentStatusMonitorings).Should().BeNullOrEmpty();
+                employmentStatusMonitorings).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnerEmploymentStatusMonitoringConditionMet_False_DataNullCheck()
+        {
+            var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                {
+                    new TestEmploymentStatusMonitoring()
+                    {
+                        ESMType = "LOE",
+                        ESMCode = 2
+                    },
+                    new TestEmploymentStatusMonitoring()
+                    {
+                        ESMType = "EII",
+                        ESMCode = 3
+                    }
+                };
+
+            TestEmploymentStatusMonitoring[] previousEmploymentStatusMonitorings = null;
+
+            NewRule().LearnerEmploymentStatusMonitoringConditionMet(
+                previousEmploymentStatusMonitorings,
+                employmentStatusMonitorings)
+                .Should().BeFalse();
         }
 
         [Fact]
@@ -137,8 +162,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule().LearnerEmploymentStatusMonitoringConditionMet(
                 previousEmploymentStatusMonitorings,
                 employmentStatusMonitorings)
-                .Should()
-                .BeEquivalentTo(employmentStatusMonitorings);
+                .Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnerEmploymentStatusMonitoringConditionMet_True_NullCheck()
+        {
+            TestEmploymentStatusMonitoring[] employmentStatusMonitorings = null;
+
+            TestEmploymentStatusMonitoring[] previousEmploymentStatusMonitorings = null;
+
+            NewRule().LearnerEmploymentStatusMonitoringConditionMet(
+                previousEmploymentStatusMonitorings,
+                employmentStatusMonitorings)
+                .Should().BeTrue();
         }
 
         [Fact]

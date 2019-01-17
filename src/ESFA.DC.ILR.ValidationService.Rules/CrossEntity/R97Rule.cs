@@ -34,25 +34,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 if (record > 1)
                 {
-                    if (LearnerEmploymentStatusConditionMet(
-                        previousLearnerEmploymentStatus,
-                        learnerEmploymentStatus))
-                    {
-                        var employmentStatusMonitoring = LearnerEmploymentStatusMonitoringConditionMet(
+                    if (LearnerEmploymentStatusConditionMet(previousLearnerEmploymentStatus, learnerEmploymentStatus)
+                        && LearnerEmploymentStatusMonitoringConditionMet(
                             previousLearnerEmploymentStatus.EmploymentStatusMonitorings,
-                            learnerEmploymentStatus.EmploymentStatusMonitorings);
-
-                        if (employmentStatusMonitoring?.Count > 0)
-                        {
-                            HandleValidationError(
-                                learnRefNumber: objectToValidate.LearnRefNumber,
-                                errorMessageParameters: BuildErrorMessageParameters(
-                                    learnerEmploymentStatus.EmpStat,
-                                    learnerEmploymentStatus.DateEmpStatApp,
-                                    learnerEmploymentStatus.EmpIdNullable,
-                                    employmentStatusMonitoring.FirstOrDefault().ESMType,
-                                    employmentStatusMonitoring.FirstOrDefault().ESMCode));
-                        }
+                            learnerEmploymentStatus.EmploymentStatusMonitorings))
+                    {
+                        HandleValidationError(
+                            learnRefNumber: objectToValidate.LearnRefNumber,
+                            errorMessageParameters: BuildErrorMessageParameters(
+                                learnerEmploymentStatus.EmpStat,
+                                learnerEmploymentStatus.DateEmpStatApp,
+                                learnerEmploymentStatus.EmpIdNullable,
+                                learnerEmploymentStatus.EmploymentStatusMonitorings.FirstOrDefault().ESMType,
+                                learnerEmploymentStatus.EmploymentStatusMonitorings.FirstOrDefault().ESMCode));
                     }
                 }
 
@@ -61,15 +55,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
         }
 
-        public IReadOnlyCollection<IEmploymentStatusMonitoring> LearnerEmploymentStatusMonitoringConditionMet(
+        public bool LearnerEmploymentStatusMonitoringConditionMet(
             IReadOnlyCollection<IEmploymentStatusMonitoring> previousEmploymentStatusMonitorings,
             IReadOnlyCollection<IEmploymentStatusMonitoring> employmentStatusMonitorings)
         {
-            return previousEmploymentStatusMonitorings.Where(p => p != null).Join(
-                employmentStatusMonitorings.Where(e => e != null),
-                prev => new { type = prev.ESMType.ToLowerInvariant(), code = prev.ESMCode },
-                emp => new { type = emp.ESMType.ToLowerInvariant(), code = emp.ESMCode },
-                (prev, emp) => emp).ToList();
+            if (previousEmploymentStatusMonitorings == null
+                && employmentStatusMonitorings == null)
+            {
+                return true;
+            }
+
+            if (previousEmploymentStatusMonitorings == null
+                || employmentStatusMonitorings == null)
+            {
+                return false;
+            }
+
+            return previousEmploymentStatusMonitorings.Where(p => p != null).Select(p => new { type = p.ESMType.ToLowerInvariant(), code = p.ESMCode })
+                .Except(employmentStatusMonitorings.Where(e => e != null).Select(e => new { type = e.ESMType.ToLowerInvariant(), code = e.ESMCode })).Count() == 0;
         }
 
         public bool LearnerEmploymentStatusConditionMet(
