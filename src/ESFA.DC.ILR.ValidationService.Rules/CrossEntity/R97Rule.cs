@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -27,13 +28,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             int record = 1;
             ILearnerEmploymentStatus previousLearnerEmploymentStatus = null;
             foreach (var learnerEmploymentStatus in
-                objectToValidate.LearnerEmploymentStatuses.OrderBy(e => e.DateEmpStatApp))
+                objectToValidate.LearnerEmploymentStatuses
+                .Where(e => e != null)
+                .OrderBy(e => e.DateEmpStatApp))
             {
-                if (learnerEmploymentStatus == null)
-                {
-                    continue;
-                }
-
                 if (record > 1)
                 {
                     if (LearnerEmploymentStatusConditionMet(
@@ -44,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                             previousLearnerEmploymentStatus.EmploymentStatusMonitorings,
                             learnerEmploymentStatus.EmploymentStatusMonitorings);
 
-                        if (employmentStatusMonitoring != null)
+                        if (employmentStatusMonitoring?.Count > 0)
                         {
                             HandleValidationError(
                                 learnRefNumber: objectToValidate.LearnRefNumber,
@@ -52,8 +50,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                                     learnerEmploymentStatus.EmpStat,
                                     learnerEmploymentStatus.DateEmpStatApp,
                                     learnerEmploymentStatus.EmpIdNullable,
-                                    employmentStatusMonitoring.ESMType,
-                                    employmentStatusMonitoring.ESMCode));
+                                    employmentStatusMonitoring.FirstOrDefault().ESMType,
+                                    employmentStatusMonitoring.FirstOrDefault().ESMCode));
                         }
                     }
                 }
@@ -63,26 +61,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
         }
 
-        public IEmploymentStatusMonitoring LearnerEmploymentStatusMonitoringConditionMet(
+        public IReadOnlyCollection<IEmploymentStatusMonitoring> LearnerEmploymentStatusMonitoringConditionMet(
             IReadOnlyCollection<IEmploymentStatusMonitoring> previousEmploymentStatusMonitorings,
             IReadOnlyCollection<IEmploymentStatusMonitoring> employmentStatusMonitorings)
         {
-            if (previousEmploymentStatusMonitorings != null
-                && employmentStatusMonitorings != null)
-            {
-                return previousEmploymentStatusMonitorings.Join(
-                    employmentStatusMonitorings,
-                    previous => new { previous.ESMType, previous.ESMCode },
-                    current => new { current.ESMType, current.ESMCode },
-                    (previous, current) => previous).FirstOrDefault();
-            }
-
-            return null;
+            return previousEmploymentStatusMonitorings.Where(p => p != null).Join(
+                employmentStatusMonitorings.Where(e => e != null),
+                prev => new { type = prev.ESMType.ToLowerInvariant(), code = prev.ESMCode },
+                emp => new { type = emp.ESMType.ToLowerInvariant(), code = emp.ESMCode },
+                (prev, emp) => emp).ToList();
         }
 
         public bool LearnerEmploymentStatusConditionMet(
             ILearnerEmploymentStatus previousLearnerEmploymentStatus,
-            ILearnerEmploymentStatus learnerEmploymentStatus) => learnerEmploymentStatus.AgreeId == previousLearnerEmploymentStatus.AgreeId
+            ILearnerEmploymentStatus learnerEmploymentStatus) =>
+            learnerEmploymentStatus.AgreeId.CaseInsensitiveEquals(previousLearnerEmploymentStatus.AgreeId)
                 && learnerEmploymentStatus.EmpStat == previousLearnerEmploymentStatus.EmpStat
                 && learnerEmploymentStatus.EmpIdNullable == previousLearnerEmploymentStatus.EmpIdNullable;
 
