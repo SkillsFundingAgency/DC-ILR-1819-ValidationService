@@ -15,12 +15,12 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 {
-    public class R89RuleTests : AbstractRuleTests<R89Rule>
+    public class R90RuleTests : AbstractRuleTests<R90Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("R89");
+            NewRule().RuleName.Should().Be("R90");
         }
 
         [Fact]
@@ -353,13 +353,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             validationErrorHandlerMock.Verify();
         }
 
-        private R89Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILARSDataService larsDataService = null)
+        private R90Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILARSDataService larsDataService = null)
         {
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock.Setup(x => x.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<List<int>>(), It.IsAny<string>()))
                 .Returns(false);
 
-            return new R89Rule(validationErrorHandler, larsDataService ?? larsDataServiceMock.Object);
+            return new R90Rule(validationErrorHandler, larsDataService ?? larsDataServiceMock.Object);
         }
     }
 }

@@ -13,12 +13,12 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
-    public class R89Rule : AbstractRule, IRule<ILearner>
+    public class R90Rule : AbstractRule, IRule<ILearner>
     {
         private readonly ILARSDataService _larsDataService;
         private readonly IEnumerable<int> EnglishOrMathsBasicSkillsTypes = new HashSet<int>(TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills);
 
-        public R89Rule(IValidationErrorHandler validationErrorHandler, ILARSDataService larsDataService)
+        public R90Rule(IValidationErrorHandler validationErrorHandler, ILARSDataService larsDataService)
             : base(validationErrorHandler, RuleNameConstants.R89)
         {
             _larsDataService = larsDataService;
