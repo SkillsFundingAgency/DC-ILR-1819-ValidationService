@@ -9,6 +9,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 {
     public class AFinType_01Rule : AbstractRule, IRule<ILearner>
     {
+        private const string _afinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice;
+        private const int _aFinCode = 1;
+
         private readonly ILearningDeliveryAppFinRecordQueryService _learningDeliveryAppFinRecordQueryService;
 
         public AFinType_01Rule(
@@ -21,6 +24,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate.LearningDeliveries == null)
+            {
+                return;
+            }
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 if (ConditionMet(
@@ -31,7 +39,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
                 {
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
-                        learningDelivery.AimSeqNumber);
+                        learningDelivery.AimSeqNumber,
+                        errorMessageParameters: BuildErrorMessageParameters(_afinType, _aFinCode));
                 }
             }
         }
@@ -46,22 +55,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
         public bool FundModelConditionMet(int fundModel)
         {
-            return fundModel == 81;
+            return fundModel == TypeOfFunding.OtherAdult;
         }
 
         public bool ProgTypeConditionMet(int? progType)
         {
-            return progType == 25;
+            return progType == TypeOfLearningProgramme.ApprenticeshipStandard;
         }
 
         public bool AimTypeConditionMet(int aimType)
         {
-            return aimType == 1;
+            return aimType == TypeOfAim.ProgrammeAim;
         }
 
         public bool AppFinConditionMet(IEnumerable<IAppFinRecord> appFinRecords)
         {
-            return !_learningDeliveryAppFinRecordQueryService.HasAnyLearningDeliveryAFinCodeForType(appFinRecords, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 1);
+            return !_learningDeliveryAppFinRecordQueryService.HasAnyLearningDeliveryAFinCodeForType(appFinRecords, _afinType, _aFinCode);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string aFinType, int aFinCode)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.AFinType, aFinType),
+                BuildErrorMessageParameter(PropertyNameConstants.AFinCode, aFinCode)
+            };
         }
     }
 }
