@@ -13,12 +13,12 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 {
-    public class R104RuleTests : AbstractRuleTests<R104Rule>
+    public class R101RuleTests : AbstractRuleTests<R104Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("R104");
+            NewRule().RuleName.Should().Be("R101");
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                learningDeliveryFamTwo
             };
 
-            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo });
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamOne });
         }
 
         [Fact]
@@ -115,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                learningDeliveryFamThree
             };
 
-            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamThree });
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo });
         }
 
         [Fact]
@@ -146,7 +146,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                learningDeliveryFamThree
             };
 
-            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo, learningDeliveryFamThree });
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamOne, learningDeliveryFamTwo });
         }
 
         [Fact]
@@ -455,27 +455,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         public void BuildErrorMessageParameters()
         {
             var famType = Monitoring.Delivery.Types.ApprenticeshipContract;
-            var learnPlanEndDate = new DateTime(2018, 8, 1);
-            var learnActEndDate = new DateTime(2018, 8, 1);
-            var learnDelFamDateFrom = new DateTime(2018, 8, 1);
-            var learnDelFamDateTo = new DateTime(2018, 8, 1);
+            var dateFrom = new DateTime(2018, 8, 1);
+            var dateTo = new DateTime(2018, 8, 1);
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnPlanEndDate", "01/08/2018")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnActEndDate", "01/08/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMType", "ACT")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMDateFrom", "01/08/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMDateTo", "01/08/2018")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(learnPlanEndDate, learnActEndDate, famType, learnDelFamDateFrom, learnDelFamDateTo);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(famType, dateFrom, dateTo);
 
             validationErrorHandlerMock.Verify();
         }
 
-        public R104Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        public R101Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            return new R104Rule(validationErrorHandler);
+            return new R101Rule(validationErrorHandler);
         }
     }
 }

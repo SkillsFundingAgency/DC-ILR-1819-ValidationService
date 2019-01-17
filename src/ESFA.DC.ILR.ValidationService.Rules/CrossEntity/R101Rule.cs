@@ -8,12 +8,12 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
-    public class R104Rule : AbstractRule, IRule<ILearner>
+    public class R101Rule : AbstractRule, IRule<ILearner>
     {
         private readonly string _famTypeACT = Monitoring.Delivery.Types.ApprenticeshipContract;
 
-        public R104Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.R104)
+        public R101Rule(IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.R101)
         {
         }
 
@@ -43,8 +43,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                         objectToValidate.LearnRefNumber,
                         learningDelivery.AimSeqNumber,
                         errorMessageParameters: BuildErrorMessageParameters(
-                            learningDelivery.LearnPlanEndDate,
-                            learningDelivery.LearnActEndDateNullable,
                             _famTypeACT,
                             learningDeliveryFAM.LearnDelFAMDateFromNullable,
                             learningDeliveryFAM.LearnDelFAMDateToNullable));
@@ -77,7 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 {
                     if (ldFAMs[i - 1].LearnDelFAMDateToNullable == null)
                     {
-                        invalidLearningDeliveryFAMs.Add(ldFAMs[i]);
+                        invalidLearningDeliveryFAMs.Add(ldFAMs[i - 1]);
                         i++;
 
                         continue;
@@ -90,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
                     if (errorConditionMet)
                     {
-                        invalidLearningDeliveryFAMs.Add(ldFAMs[i]);
+                        invalidLearningDeliveryFAMs.Add(ldFAMs[i - 1]);
                         i++;
 
                         continue;
@@ -103,15 +101,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             return invalidLearningDeliveryFAMs;
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnPlanEndDate, DateTime? learnActEndDate, string famType, DateTime? learnDelFamDateFrom, DateTime? learnDelFamDateTo)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string famType, DateTime? famDateFrom, DateTime? famDateTo)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnPlanEndDate, learnPlanEndDate),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDate),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, famType),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateFrom, learnDelFamDateFrom),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateTo, learnDelFamDateTo)
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateFrom, famDateFrom),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateTo, famDateTo)
             };
         }
     }
