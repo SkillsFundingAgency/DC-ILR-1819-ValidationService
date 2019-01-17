@@ -91,6 +91,7 @@
         public const string Sex = "Sex";
         public const string SPECFEE = "SPECFEE";
         public const string StdCode = "StdCode";
+        public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
         public const string WithdrawReason = "WithdrawReason";
         public const string WorkPlaceEmpId = "WorkPlaceEmpId";

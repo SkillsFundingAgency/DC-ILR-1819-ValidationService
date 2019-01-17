@@ -490,6 +490,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(TTACCOM_01Rule),
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
+                typeof(TYPEYR_01Rule),
                 typeof(UKPRN_05Rule),
                 typeof(UKPRN_06Rule),
                 typeof(UKPRN_08Rule),
