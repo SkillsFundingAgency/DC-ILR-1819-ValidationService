@@ -45,8 +45,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                                 learnerEmploymentStatus.EmpStat,
                                 learnerEmploymentStatus.DateEmpStatApp,
                                 learnerEmploymentStatus.EmpIdNullable,
-                                learnerEmploymentStatus.EmploymentStatusMonitorings.FirstOrDefault().ESMType,
-                                learnerEmploymentStatus.EmploymentStatusMonitorings.FirstOrDefault().ESMCode));
+                                learnerEmploymentStatus.EmploymentStatusMonitorings?.FirstOrDefault().ESMType,
+                                learnerEmploymentStatus.EmploymentStatusMonitorings?.FirstOrDefault().ESMCode));
                     }
                 }
 
@@ -87,7 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             DateTime dateEmpStatApp,
             int? empId,
             string eSMType,
-            int eSMCode)
+            int? eSMCode)
         {
             return new[]
             {
