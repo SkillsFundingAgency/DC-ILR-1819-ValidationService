@@ -27,13 +27,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
                 LARSNotionalNVQLevelV2.HigherLevel
         };
 
-        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
         private readonly ILARSDataService _lARSDataService;
 
-        public LearningDeliveryHE_06Rule(IValidationErrorHandler validationErrorHandler, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService)
+        public LearningDeliveryHE_06Rule(IValidationErrorHandler validationErrorHandler, ILARSDataService lARSDataService)
             : base(validationErrorHandler, RuleNameConstants.LearningDeliveryHE_06)
         {
-            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
+            _lARSDataService = lARSDataService;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -45,21 +44,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (LARSNotionalNVQLevelV2ConditionMet(learningDelivery.LearnAimRef))
+                if (ConditionMet(learningDelivery)
+                && !LARSNotionalNVQLevelV2Exclusion(learningDelivery.LearnAimRef))
                 {
-                    return;
-                }
-
-                if (ConditionMet(learningDelivery))
-                {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel));
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel));
                 }
             }
         }
 
         public bool ConditionMet(ILearningDelivery learningDelivery)
         {
-            return FundModelConditionMet(learningDelivery.FundModel) && LearningDeliveryHEConditionMet(learningDelivery.LearningDeliveryHEEntity);
+            return FundModelConditionMet(learningDelivery.FundModel) &&
+                LearningDeliveryHEConditionMet(learningDelivery.LearningDeliveryHEEntity);
         }
 
         public bool FundModelConditionMet(int fundModel)
@@ -69,7 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.LearningDeliveryHE
 
        public bool LearningDeliveryHEConditionMet(ILearningDeliveryHE learningDeliveryHEEntity) => learningDeliveryHEEntity != null;
 
-        public bool LARSNotionalNVQLevelV2ConditionMet(string learnAimRef) => _lARSDataService.NotionalNVQLevelV2MatchForLearnAimRefAndLevels(learnAimRef, _notionalNVQLevels);
+        public bool LARSNotionalNVQLevelV2Exclusion(string learnAimRef) => _lARSDataService.NotionalNVQLevelV2MatchForLearnAimRefAndLevels(learnAimRef, _notionalNVQLevels);
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)
         {
