@@ -84,6 +84,7 @@
     <Compile Include="Constants\ContactPreference.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfEthnicity.cs" />
+    <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
     <Compile Include="Constants\WorkPlaceModeConstants.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
@@ -232,11 +233,13 @@
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_07Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08Rule.cs" />
+    <Compile Include="HE\MODESTUD\MODESTUD_03Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_04Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_03Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
+    <Compile Include="HE\PCFLDCS\PCFLDCS_01Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_03Rule.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01Rule.cs" />
@@ -249,6 +252,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
+    <Compile Include="HE\TYPEYR\TYPEYR_01Rule.cs" />
     <Compile Include="Learner\Accom\Accom_01Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\ALSCost\ALSCost_02Rule.cs" />
@@ -292,6 +296,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_34Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_54Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_55Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_02Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03Rule.cs" />
@@ -624,5 +629,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
