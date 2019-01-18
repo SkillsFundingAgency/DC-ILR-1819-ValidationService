@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.ProvSpecLearnMonOccur, provSpecLearnMonOccur)
+                BuildErrorMessageParameter(PropertyNameConstants.ProvSpecLearnMonOccur, provSpecLearnMonOccur ?? string.Empty)
             };
         }
     }

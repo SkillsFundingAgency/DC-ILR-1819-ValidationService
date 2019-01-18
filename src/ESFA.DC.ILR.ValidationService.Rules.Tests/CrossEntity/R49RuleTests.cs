@@ -71,6 +71,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     },
                     new TestProviderSpecLearnerMonitoring()
                     {
+                        ProvSpecLearnMonOccur = null
+                    },
+                    new TestProviderSpecLearnerMonitoring()
+                    {
                         ProvSpecLearnMonOccur = "YXXX"
                     }
                 }
@@ -79,7 +83,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
-                validationErrorHandlerMock.Verify(h => h.Handle(It.IsAny<string>(), It.IsAny<string>(), null, It.IsAny<IEnumerable<IErrorMessageParameter>>()), Times.Exactly(2));
+                validationErrorHandlerMock.Verify(h => h.Handle(It.IsAny<string>(), It.IsAny<string>(), null, It.IsAny<IEnumerable<IErrorMessageParameter>>()), Times.Exactly(3));
             }
         }
 
