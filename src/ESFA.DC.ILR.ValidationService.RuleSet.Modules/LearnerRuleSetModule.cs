@@ -34,6 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
     using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
     using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
     using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
+    using ESFA.DC.ILR.ValidationService.Rules.HE.UCASAPPID;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.Accom;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
@@ -198,6 +199,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_52Rule),
                 typeof(DateOfBirth_53Rule),
                 typeof(DateOfBirth_54Rule),
+                typeof(DateOfBirth_55Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
                 typeof(DelLocPostCode_16Rule),
@@ -340,6 +342,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_69Rule),
                 typeof(LearnDelFAMType_70Rule),
                 typeof(LearnDelFAMType_71Rule),
+                typeof(LearnDelFAMType_73Rule),
                 typeof(LearningDeliveryHE_02Rule),
                 typeof(LearningDeliveryHE_03Rule),
                 typeof(LearningDeliveryHE_07Rule),
@@ -370,6 +373,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(MathGrade_01Rule),
                 typeof(MathGrade_03Rule),
                 typeof(MathGrade_04Rule),
+                typeof(MODESTUD_03Rule),
                 typeof(MSTUFEE_03Rule),
                 typeof(MSTUFEE_04Rule),
                 typeof(NETFEE_01Rule),
@@ -399,6 +403,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
                 typeof(PartnerUKPRN_03Rule),
+                typeof(PCFLDCS_01Rule),
                 typeof(PCFLDCS_02Rule),
                 typeof(PCFLDCS_03Rule),
                 typeof(PCSLDCS_01Rule),
@@ -487,6 +492,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(TTACCOM_01Rule),
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
+                typeof(TYPEYR_01Rule),
+                typeof(UCASAPPID_01Rule),
                 typeof(UKPRN_05Rule),
                 typeof(UKPRN_06Rule),
                 typeof(UKPRN_08Rule),
