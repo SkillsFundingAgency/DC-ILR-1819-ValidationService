@@ -5,16 +5,19 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R101Rule : AbstractRule, IRule<ILearner>
     {
         private readonly string _famTypeACT = Monitoring.Delivery.Types.ApprenticeshipContract;
+        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public R101Rule(IValidationErrorHandler validationErrorHandler)
+        public R101Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R101)
         {
+            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -26,7 +29,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                var learningDeliveryFAMs = learningDelivery?.LearningDeliveryFAMs?.Where(ldf => ldf.LearnDelFAMType == _famTypeACT).ToList();
+                var learningDeliveryFAMs = _learningDeliveryFAMQueryService
+                  .GetLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT).ToList();
 
                 if (DoesNotHaveMultipleACTFams(learningDeliveryFAMs))
                 {
@@ -51,12 +55,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
         }
 
-        public bool DoesNotHaveMultipleACTFams(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool DoesNotHaveMultipleACTFams(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return
-                learningDeliveryFAMs != null
-                ? learningDeliveryFAMs.Count() < 2
-                : true;
+            return _learningDeliveryFAMQueryService.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs, _famTypeACT) < 2;
         }
 
         public IEnumerable<ILearningDeliveryFAM> LearningDeliveryFamForOverlappingACTTypes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
