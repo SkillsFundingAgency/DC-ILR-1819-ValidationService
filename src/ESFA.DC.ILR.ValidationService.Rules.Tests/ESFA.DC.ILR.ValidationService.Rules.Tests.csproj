@@ -207,6 +207,7 @@
     <Compile Include="Extensions\LongExtensionTests.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_02RuleTests.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_01RuleTests.cs" />
+    <Compile Include="HE\ELQ\ELQ_02RuleTests.cs" />
     <Compile Include="HE\ELQ\ELQ_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02RuleTests.cs" />

@@ -26,6 +26,7 @@
         public const string DateEmpStatApp = "DateEmpStatApp";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string DOMICILE = "DOMICILE";
+        public const string ELQ = "ELQ";
         public const string EmpId = "EmpId";
         public const string Ethnicity = "Ethnicity";
         public const string EmpOutcome = "EmpOutcome";
