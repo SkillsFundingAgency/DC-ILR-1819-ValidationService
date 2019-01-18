@@ -98,6 +98,7 @@
         public const string DateOfBirth_52 = "DateOfBirth_52";
         public const string DateOfBirth_53 = "DateOfBirth_53";
         public const string DateOfBirth_54 = "DateOfBirth_54";
+        public const string DateOfBirth_55 = "DateOfBirth_55";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
@@ -257,6 +258,8 @@
         public const string MathGrade_03 = "MathGrade_03";
         public const string MathGrade_04 = "MathGrade_04";
 
+        public const string MODESTUD_03Rule = "MODESTUD_03Rule";
+
         public const string MSTUFEE_03 = "MSTUFEE_03";
         public const string MSTUFEE_04 = "MSTUFEE_04";
 
@@ -311,6 +314,7 @@
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
 
+        public const string PCFLDCS_01 = "PCFLDCS_01";
         public const string PCFLDCS_02 = "PCFLDCS_02";
         public const string PCFLDCS_03 = "PCFLDCS_03";
 
@@ -347,12 +351,12 @@
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
-        public const string ProvSpecDelMonOccur_01Rule = "ProvSpecDelMonOccur_01";
+        public const string ProvSpecDelMonOccur_01 = "ProvSpecDelMonOccur_01";
 
         public const string PwayCode_02 = "PwayCode_02";
         public const string PwayCode_03 = "PwayCode_03";
 
-        public const string ProvSpecLearnMonOccur_01Rule = "ProvSpecLearnMonOccur_01Rule";
+        public const string ProvSpecLearnMonOccur_01 = "ProvSpecLearnMonOccur_01";
 
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
@@ -412,6 +416,8 @@
         public const string STULOAD_04 = "STULOAD_04";
 
         public const string TTACCOM_04 = "TTACCOM_04";
+
+        public const string TYPEYR_01 = "TYPEYR_01";
 
         public const string UKPRN_03 = "UKPRN_03";
         public const string UKPRN_05 = "UKPRN_05";

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -310,6 +311,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             {
                 NewRule(appFinQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var afinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice;
+            var aFinCode = 1;
+
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("AFinType", afinType)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("AFinCode", aFinCode)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(afinType, aFinCode);
+
+            validationErrorHandlerMock.Verify();
         }
 
         private AFinType_01Rule NewRule(

@@ -669,6 +669,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         /// <summary>
+        /// Is higher achiever meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(TypeOfPriorAttainment.FullLevel2, true)]
+        [InlineData(TypeOfPriorAttainment.Level1, false)]
+        [InlineData(null, false)]
+        public void IsHigherAchieverMeetsExpectation(int? candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<ILearner>();
+            mockItem
+                .SetupGet(y => y.PriorAttainNullable)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsHigherAchiever(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// Is basic skills learner meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -895,6 +920,50 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         /// <summary>
+        /// Is excluded for inflexible element of training aim
+        /// </summary>
+        [Fact]
+        public void IsExcludedForHigherAchiever()
+        {
+            // arrange
+            var mockItem = new Mock<ILearner>();
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+            var mockDDRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
+            var mockDDRule21 = new Mock<IDerivedData_21Rule>(MockBehavior.Strict);
+            var mockDDRule28 = new Mock<IDerivedData_28Rule>(MockBehavior.Strict);
+            var mockDDRule29 = new Mock<IDerivedData_29Rule>(MockBehavior.Strict);
+
+            mockItem
+                .SetupGet(y => y.PriorAttainNullable)
+                .Returns(TypeOfPriorAttainment.FullLevel2);
+            mockDDRule21
+               .Setup(x => x.IsAdultFundedUnemployedWithOtherStateBenefits(mockItem.Object))
+               .Returns(false);
+            mockDDRule28
+                .Setup(x => x.IsAdultFundedUnemployedWithBenefits(mockItem.Object))
+                .Returns(false);
+            mockDDRule29
+                .Setup(x => x.IsInflexibleElementOfTrainingAim(mockItem.Object))
+                .Returns(false);
+
+            var sut = new LearnDelFAMType_62Rule(handler.Object, service.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object);
+
+            // act
+            var result = sut.IsExcluded(mockItem.Object);
+
+            // assert
+            Assert.True(result);
+            handler.VerifyAll();
+            service.VerifyAll();
+            mockDDRule07.VerifyAll();
+            mockDDRule21.VerifyAll();
+            mockDDRule28.VerifyAll();
+            mockDDRule29.VerifyAll();
+        }
+
+        /// <summary>
         /// Is excluded for apprenticeship
         /// </summary>
         [Fact]
@@ -959,14 +1028,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             // arrange
             const string LearnRefNumber = "123456789X";
             const string learnAimRef = "salddfkjeifdnase";
+            const int fundModel = TypeOfFunding.AdultSkills;
+            const string famType = Monitoring.Delivery.Types.FullOrCoFunding;
+            const string famCode = "2";
+            DateTime? dateOfBirth = new DateTime(1996, 8, 1);
+            DateTime learnStartDate = new DateTime(2017, 8, 1);
 
             var mockFAM = new Mock<ILearningDeliveryFAM>();
             mockFAM
                 .SetupGet(x => x.LearnDelFAMType)
-                .Returns(Monitoring.Delivery.Types.FullOrCoFunding);
+                .Returns(famType);
             mockFAM
                 .SetupGet(x => x.LearnDelFAMCode)
-                .Returns("2");
+                .Returns(famCode);
 
             var fams = Collection.Empty<ILearningDeliveryFAM>();
             fams.Add(mockFAM.Object);
@@ -977,10 +1051,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Returns(learnAimRef);
             mockDelivery
                 .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse("2017-08-01"));
+                .Returns(learnStartDate);
             mockDelivery
                 .SetupGet(y => y.FundModel)
-                .Returns(TypeOfFunding.AdultSkills);
+                .Returns(fundModel);
             mockDelivery
                 .SetupGet(y => y.LearningDeliveryFAMs)
                 .Returns(fams.AsSafeReadOnlyList());
@@ -997,7 +1071,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Returns(LearnRefNumber);
             mockLearner
                 .SetupGet(x => x.DateOfBirthNullable)
-                .Returns(DateTime.Parse("1996-07-01"));
+                .Returns(dateOfBirth);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
                 .Returns(deliveries.AsSafeReadOnlyList());
@@ -1010,10 +1084,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                     0,
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == LearnDelFAMType_62Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
-                .Returns(new Mock<IErrorMessageParameter>().Object);
+               .Setup(x => x.BuildErrorMessageParameter(
+                   Moq.It.Is<string>(y => y == PropertyNameConstants.FundModel),
+                   Moq.It.Is<int>(y => y == fundModel)))
+               .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+              .Setup(x => x.BuildErrorMessageParameter(
+                  Moq.It.Is<string>(y => y == PropertyNameConstants.LearnDelFAMType),
+                  Moq.It.Is<string>(y => y == famType)))
+              .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+              .Setup(x => x.BuildErrorMessageParameter(
+                  Moq.It.Is<string>(y => y == PropertyNameConstants.LearnDelFAMCode),
+                  Moq.It.Is<string>(y => y == famCode)))
+              .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+              .Setup(x => x.BuildErrorMessageParameter(
+                  Moq.It.Is<string>(y => y == PropertyNameConstants.LearnStartDate),
+                  Moq.It.Is<DateTime>(y => y == learnStartDate)))
+              .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+              .Setup(x => x.BuildErrorMessageParameter(
+                  Moq.It.Is<string>(y => y == PropertyNameConstants.DateOfBirth),
+                  Moq.It.Is<DateTime?>(y => y == dateOfBirth)))
+              .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var mock = new Mock<ILARSLearningDelivery>();
             mock
