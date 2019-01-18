@@ -105,7 +105,9 @@
     <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="CrossEntity\R06RuleTests.cs" />
     <Compile Include="CrossEntity\R49RuleTests.cs" />
+    <Compile Include="CrossEntity\R101RuleTests.cs" />
     <Compile Include="CrossEntity\R58RuleTests.cs" />
+    <Compile Include="CrossEntity\R89RuleTests.cs" />
     <Compile Include="CrossEntity\R92RuleTests.cs" />
     <Compile Include="CrossEntity\R110RuleTests.cs" />
     <Compile Include="CrossEntity\R115RuleTests.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="CrossEntity\R29RuleTests.cs" />
     <Compile Include="CrossEntity\R62RuleTests.cs" />
     <Compile Include="CrossEntity\R50RuleTests.cs" />
+    <Compile Include="CrossEntity\R90RuleTests.cs" />
     <Compile Include="CrossEntity\R99RuleTests.cs" />
     <Compile Include="CrossEntity\R56RuleTests.cs" />
     <Compile Include="CrossEntity\R59RuleTests.cs" />
@@ -161,6 +164,7 @@
     <Compile Include="Derived\DerivedData_04RuleTests.cs" />
     <Compile Include="Derived\DerivedData_06RuleTests.cs" />
     <Compile Include="Derived\DerivedData_07RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_12RuleTests.cs" />
     <Compile Include="Derived\DerivedData_31RuleTests.cs" />
     <Compile Include="Derived\DerivedData_32RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
@@ -242,6 +246,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_04RuleTests.cs" />
     <Compile Include="HE\LearnerHE_02RuleTests.cs" />
     <Compile Include="HE\TYPEYR\TYPEYR_01RuleTests.cs" />
+    <Compile Include="HE\UCASAPPID\UCASAPPID_01RuleTests.cs" />
     <Compile Include="Learner\Accom\Accom_01RuleTests.cs" />
     <Compile Include="Learner\AddLine1\Addline1_03RuleTests.cs" />
     <Compile Include="Learner\ALSCost\ALSCost_02RuleTests.cs" />
@@ -360,6 +365,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_84RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_73RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_31RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_38RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_36RuleTests.cs" />
@@ -371,6 +377,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_20RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_16RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_15RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_56RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_65RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_69RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_68RuleTests.cs" />

@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
+﻿using ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
 
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
 
@@ -34,6 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
     using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
     using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
     using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
+    using ESFA.DC.ILR.ValidationService.Rules.HE.UCASAPPID;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.Accom;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
@@ -329,6 +331,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_50Rule),
                 typeof(LearnDelFAMType_53Rule),
                 typeof(LearnDelFAMType_54Rule),
+                typeof(LearnDelFAMType_56Rule),
                 typeof(LearnDelFAMType_60Rule),
                 typeof(LearnDelFAMType_61Rule),
                 typeof(LearnDelFAMType_62Rule),
@@ -341,6 +344,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_69Rule),
                 typeof(LearnDelFAMType_70Rule),
                 typeof(LearnDelFAMType_71Rule),
+                typeof(LearnDelFAMType_73Rule),
                 typeof(LearningDeliveryHE_02Rule),
                 typeof(LearningDeliveryHE_03Rule),
                 typeof(LearningDeliveryHE_07Rule),
@@ -465,11 +469,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R68Rule),
                 typeof(R70Rule),
                 typeof(R75Rule),
+                typeof(R89Rule),
+                typeof(R90Rule),
                 typeof(R91Rule),
                 typeof(R92Rule),
                 typeof(R96Rule),
                 typeof(R99Rule),
                 typeof(R100Rule),
+                typeof(R101Rule),
                 typeof(R102Rule),
                 typeof(R104Rule),
                 typeof(R105Rule),
@@ -492,6 +499,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
                 typeof(TYPEYR_01Rule),
+                typeof(UCASAPPID_01Rule),
                 typeof(UKPRN_05Rule),
                 typeof(UKPRN_06Rule),
                 typeof(UKPRN_08Rule),

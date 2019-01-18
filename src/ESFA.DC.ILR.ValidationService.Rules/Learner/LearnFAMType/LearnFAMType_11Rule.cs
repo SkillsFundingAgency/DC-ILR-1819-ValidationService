@@ -1,18 +1,18 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using ESFA.DC.ILR.Model.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.Extensions;
-    using ESFA.DC.ILR.ValidationService.Interface;
-    using ESFA.DC.ILR.ValidationService.Rules.Abstract;
-    using ESFA.DC.ILR.ValidationService.Rules.Constants;
-    using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
+namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
+{
     public class LearnFAMType_11Rule : AbstractRule, IRule<ILearner>
     {
         private readonly ILearnerFAMQueryService _learnerFAMQueryService;
-        private readonly string[] _learnFamTypes =
+        private readonly HashSet<string> _learnFamTypes = new HashSet<string>()
         {
             LearnerFAMTypeConstants.NLM,
             LearnerFAMTypeConstants.EDF,
@@ -32,11 +32,13 @@
                 return;
             }
 
-            foreach (var learnerFam in objectToValidate.LearnerFAMs)
+            var learnFamTypes = objectToValidate.LearnerFAMs.Select(x => x.LearnFAMType).Distinct();
+
+            foreach (var learnerFamType in learnFamTypes)
             {
-                if (ConditionMet(learnerFam.LearnFAMType, objectToValidate.LearnerFAMs))
+                if (ConditionMet(learnerFamType, objectToValidate.LearnerFAMs))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learnerFam.LearnFAMType));
+                    HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learnerFamType));
                 }
             }
         }
