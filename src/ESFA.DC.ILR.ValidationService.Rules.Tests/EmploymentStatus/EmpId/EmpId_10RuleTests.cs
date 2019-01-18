@@ -100,7 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
         /// <summary>
         /// Get qualifying date with null throws.
-        /// this routine throws with null, we never expect null to 
+        /// this routine throws with null, we never expect null to
         ///  go in there because it's safe listed
         /// </summary>
         [Fact]
@@ -124,7 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var sut = NewRule();
 
             // act
-            var result = sut.GetQualifyingDate(Collection.EmptyAndReadOnly<ILearningDelivery>()));
+            var result = sut.GetQualifyingDate(Collection.EmptyAndReadOnly<ILearningDelivery>());
 
             // assert
             Assert.Null(result);
