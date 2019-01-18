@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
@@ -49,24 +51,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
 
         [Theory]
         [InlineData("SEI")]
-        [InlineData("EII")]
-        [InlineData("LOU")]
+        [InlineData("eII")]
+        [InlineData("LoU")]
         [InlineData("LOE")]
-        [InlineData("BSI")]
-        [InlineData("PEI")]
-        [InlineData("SEM")]
+        [InlineData("BsI")]
+        [InlineData("PEi")]
+        [InlineData("SEm")]
         public void HasAnyEmploymentStatusMonitoringTypeMoreThanOnce_True(string duplicateType)
         {
             var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
 
             var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
             {
-                new TestEmploymentStatusMonitoring() { ESMType = "SEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "SeI" },
                 new TestEmploymentStatusMonitoring() { ESMType = "EII" },
-                new TestEmploymentStatusMonitoring() { ESMType = "LOU" },
+                new TestEmploymentStatusMonitoring() { ESMType = "lou" },
                 new TestEmploymentStatusMonitoring() { ESMType = "LOE" },
                 new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
-                new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "PeI" },
                 new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
                 new TestEmploymentStatusMonitoring() { ESMType = duplicateType }
             };
@@ -81,13 +83,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
 
             var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
             {
-                new TestEmploymentStatusMonitoring() { ESMType = "SEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "sEI" },
                 new TestEmploymentStatusMonitoring() { ESMType = "EII" },
-                new TestEmploymentStatusMonitoring() { ESMType = "LOU" },
+                new TestEmploymentStatusMonitoring() { ESMType = "LoU" },
                 new TestEmploymentStatusMonitoring() { ESMType = "LOE" },
-                new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "bsI" },
                 new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
-                new TestEmploymentStatusMonitoring() { ESMType = "SEM" }
+                new TestEmploymentStatusMonitoring() { ESMType = "SEm" }
             };
 
             NewService().HasAnyEmploymentStatusMonitoringTypeMoreThanOnce(employmentStatusMonitorings, esmTypes).Should().BeFalse();
@@ -96,7 +98,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [Fact]
         public void HasAnyEmploymentStatusMonitoringTypeMoreThanOnce_FalseNoTypeMatch()
         {
-            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+            var esmTypes = new[] { "seI", "EiI", "LOU", "LOE", "BSI", "pEI", "SEM" };
 
             var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
             {
@@ -110,7 +112,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [Fact]
         public void HasAnyEmploymentStatusMonitoringTypeMoreThanOnce_FalseNull()
         {
-            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+            var esmTypes = new[] { "SEI", "ii", "LOU", "LoE", "BSI", "Pei", "SEM" };
 
             NewService().HasAnyEmploymentStatusMonitoringTypeMoreThanOnce(null, esmTypes).Should().BeFalse();
         }
@@ -118,18 +120,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [Fact]
         public void GetDuplicatedEmploymentStatusMonitoringTypesForTypes_OneMatch()
         {
-            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+            var esmTypes = new[] { "SEI", "eii", "LOU", "LOE", "bSI", "PEI", "sem" };
 
             var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
             {
                 new TestEmploymentStatusMonitoring() { ESMType = "SEI" },
                 new TestEmploymentStatusMonitoring() { ESMType = "EII" },
-                new TestEmploymentStatusMonitoring() { ESMType = "LOU" },
+                new TestEmploymentStatusMonitoring() { ESMType = "LoU" },
                 new TestEmploymentStatusMonitoring() { ESMType = "LOE" },
-                new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "BsI" },
                 new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
-                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
-                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
+                new TestEmploymentStatusMonitoring() { ESMType = "SEm" },
+                new TestEmploymentStatusMonitoring() { ESMType = "SEm" },
             };
 
             NewService().GetDuplicatedEmploymentStatusMonitoringTypesForTypes(employmentStatusMonitorings, esmTypes).Count().Should().Be(1);
@@ -138,20 +140,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [Fact]
         public void GetDuplicatedEmploymentStatusMonitoringTypesForTypes_MultipleMatches()
         {
-            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+            var esmTypes = new[] { "SEI", "eii", "LOU", "LOE", "bsi", "PEI", "sem" };
 
             var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
             {
                 new TestEmploymentStatusMonitoring() { ESMType = "SEI" },
-                new TestEmploymentStatusMonitoring() { ESMType = "EII" },
-                new TestEmploymentStatusMonitoring() { ESMType = "LOU" },
+                new TestEmploymentStatusMonitoring() { ESMType = "EiI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "lOU" },
                 new TestEmploymentStatusMonitoring() { ESMType = "LOE" },
-                new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "BsI" },
                 new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
                 new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
-                new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
-                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
-                new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
+                new TestEmploymentStatusMonitoring() { ESMType = "Pei" },
+                new TestEmploymentStatusMonitoring() { ESMType = "sEM" },
+                new TestEmploymentStatusMonitoring() { ESMType = "Sem" },
             };
 
             NewService().GetDuplicatedEmploymentStatusMonitoringTypesForTypes(employmentStatusMonitorings, esmTypes).Count().Should().Be(3);
@@ -160,7 +162,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [Fact]
         public void GetDuplicatedEmploymentStatusMonitoringTypesForTypes_NoMatch()
         {
-            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+            var esmTypes = new[] { "seI", "EiI", "LoU", "LOE", "bsi", "PEI", "Sem" };
 
             var employmentStatusMonitorings = new TestEmploymentStatusMonitoring[]
             {
@@ -169,7 +171,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 new TestEmploymentStatusMonitoring() { ESMType = "LOU" },
                 new TestEmploymentStatusMonitoring() { ESMType = "LOE" },
                 new TestEmploymentStatusMonitoring() { ESMType = "BSI" },
-                new TestEmploymentStatusMonitoring() { ESMType = "PEI" },
+                new TestEmploymentStatusMonitoring() { ESMType = "pei" },
                 new TestEmploymentStatusMonitoring() { ESMType = "SEM" },
             };
 
@@ -179,9 +181,109 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [Fact]
         public void GetDuplicatedEmploymentStatusMonitoringTypesForTypes_Null()
         {
-            var esmTypes = new[] { "SEI", "EII", "LOU", "LOE", "BSI", "PEI", "SEM" };
+            var esmTypes = new[] { "sei", "EII", "LOU", "loe", "BsI", "PEI", "sEm" };
 
             NewService().GetDuplicatedEmploymentStatusMonitoringTypesForTypes(null, esmTypes).Should().BeNull();
+        }
+
+        [Fact]
+        public void HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus_False_Null()
+        {
+            NewService().HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus(null, It.IsAny<string>(), It.IsAny<IEnumerable<int>>()).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("Sei", 1)]
+        [InlineData("eII", 2)]
+        [InlineData("LOu", 3)]
+        [InlineData("lOe", 4)]
+        public void HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus_True(string esmType, int esmCode)
+        {
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                {
+                    new TestEmploymentStatusMonitoring() { ESMType = "SeI", ESMCode = 1 },
+                    new TestEmploymentStatusMonitoring() { ESMType = "eII", ESMCode = 2 },
+                    new TestEmploymentStatusMonitoring() { ESMType = "LOu", ESMCode = 3 },
+                    new TestEmploymentStatusMonitoring() { ESMType = "lOe", ESMCode = 4 },
+                }
+            };
+
+            NewService()
+                .HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus(
+                    learnerEmploymentStatus,
+                    esmType,
+                    new List<int>() { esmCode, 999 }).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData("Sei", 1)]
+        [InlineData("eII", 2)]
+        [InlineData("LOu", 3)]
+        [InlineData("lOe", 4)]
+        public void HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus_False(string esmType, int esmCode)
+        {
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                {
+                    new TestEmploymentStatusMonitoring() { ESMType = "XYZ", ESMCode = 1 },
+                }
+            };
+
+            NewService()
+                .HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus(
+                    learnerEmploymentStatus,
+                    esmType,
+                    new List<int>() { esmCode }).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("Sei", 1)]
+        [InlineData("eII", 2)]
+        [InlineData("LOu", 3)]
+        [InlineData("lOe", 4)]
+        public void HasAnyEmploymentStatusMonitoringTypeAndCodeForEmploymentStatus_True(string esmType, int esmCode)
+        {
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                {
+                    new TestEmploymentStatusMonitoring() { ESMType = "SeI", ESMCode = 1 },
+                    new TestEmploymentStatusMonitoring() { ESMType = "eII", ESMCode = 2 },
+                    new TestEmploymentStatusMonitoring() { ESMType = "LOu", ESMCode = 3 },
+                    new TestEmploymentStatusMonitoring() { ESMType = "lOe", ESMCode = 4 },
+                }
+            };
+
+            NewService()
+                .HasAnyEmploymentStatusMonitoringTypeAndCodeForEmploymentStatus(
+                    learnerEmploymentStatus,
+                    esmType,
+                    esmCode).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData("Sei", 1)]
+        [InlineData("eII", 2)]
+        [InlineData("LOu", 3)]
+        [InlineData("XYZ", 4)]
+        public void HasAnyEmploymentStatusMonitoringTypeAndCodeForEmploymentStatus_False(string esmType, int esmCode)
+        {
+            var learnerEmploymentStatus = new TestLearnerEmploymentStatus
+            {
+                EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                {
+                    new TestEmploymentStatusMonitoring() { ESMType = "XYZ", ESMCode = 999 },
+                }
+            };
+
+            NewService()
+                .HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus(
+                    learnerEmploymentStatus,
+                    esmType,
+                    new List<int>() { esmCode }).Should().BeFalse();
         }
 
         private ILearnerEmploymentStatus[] SetupLearnerEmploymentStatuses()
@@ -192,10 +294,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
                 {
                     EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
                     {
-                        new TestEmploymentStatusMonitoring() { ESMType = "SEI", ESMCode = 1 },
-                        new TestEmploymentStatusMonitoring() { ESMType = "EII", ESMCode = 2 },
-                        new TestEmploymentStatusMonitoring() { ESMType = "LOU", ESMCode = 3 },
-                        new TestEmploymentStatusMonitoring() { ESMType = "LOE", ESMCode = 4 },
+                        new TestEmploymentStatusMonitoring() { ESMType = "SeI", ESMCode = 1 },
+                        new TestEmploymentStatusMonitoring() { ESMType = "eII", ESMCode = 2 },
+                        new TestEmploymentStatusMonitoring() { ESMType = "LOu", ESMCode = 3 },
+                        new TestEmploymentStatusMonitoring() { ESMType = "lOe", ESMCode = 4 },
                     }
                 }
             };
