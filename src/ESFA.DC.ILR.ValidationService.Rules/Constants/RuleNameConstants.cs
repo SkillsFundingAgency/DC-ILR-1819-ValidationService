@@ -418,6 +418,8 @@
 
         public const string TYPEYR_01 = "TYPEYR_01";
 
+        public const string UCASAPPID_01 = "UCASAPPID_01";
+
         public const string UKPRN_03 = "UKPRN_03";
         public const string UKPRN_05 = "UKPRN_05";
         public const string UKPRN_06 = "UKPRN_06";
