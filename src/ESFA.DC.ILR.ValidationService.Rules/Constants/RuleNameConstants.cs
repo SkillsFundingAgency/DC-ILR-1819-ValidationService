@@ -411,6 +411,8 @@
 
         public const string TTACCOM_04 = "TTACCOM_04";
 
+        public const string UCASAPPID_01 = "UCASAPPID_01";
+
         public const string UKPRN_03 = "UKPRN_03";
         public const string UKPRN_05 = "UKPRN_05";
         public const string UKPRN_06 = "UKPRN_06";

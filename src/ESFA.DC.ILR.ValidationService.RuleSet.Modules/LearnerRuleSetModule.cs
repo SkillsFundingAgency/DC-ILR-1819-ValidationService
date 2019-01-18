@@ -34,6 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
     using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
     using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
     using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
+    using ESFA.DC.ILR.ValidationService.Rules.HE.UCASAPPID;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.Accom;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
     using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
@@ -487,6 +488,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(TTACCOM_01Rule),
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
+                typeof(UCASAPPID_01Rule),
                 typeof(UKPRN_05Rule),
                 typeof(UKPRN_06Rule),
                 typeof(UKPRN_08Rule),
