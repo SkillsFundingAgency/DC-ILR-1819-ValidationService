@@ -37,9 +37,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                     return;
                 }
 
-                var invalidLearningDeliveryFAMs = LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs);
+                var invalidLearningDeliveryFAMs = LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).ToList();
 
-                if (invalidLearningDeliveryFAMs.Count() > 0)
+                if (invalidLearningDeliveryFAMs.Any())
                 {
                     foreach (var learningDeliveryFAM in invalidLearningDeliveryFAMs)
                     {
