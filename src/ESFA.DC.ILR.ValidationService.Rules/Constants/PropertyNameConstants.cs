@@ -72,6 +72,8 @@
         public const string OutULN = "OutULN";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PCFLDCS = "PCFLDCS";
+        public const string PCSLDCS = "PCFLDCS";
+        public const string PCTLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
         public const string ProvSpecDelMonOccur = "ProvSpecDelMonOccur";
@@ -87,7 +89,9 @@
         public const string ProvSpecLearnMonOccur = "ProvSpecLearnMonOccur";
         public const string QUALENT3 = "QUALENT3";
         public const string Sex = "Sex";
+        public const string SPECFEE = "SPECFEE";
         public const string StdCode = "StdCode";
+        public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
         public const string UCASPERID = "UCASPERID";
         public const string WithdrawReason = "WithdrawReason";

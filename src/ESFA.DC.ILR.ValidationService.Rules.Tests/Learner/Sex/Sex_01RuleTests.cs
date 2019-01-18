@@ -12,6 +12,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Sex
 {
     public class Sex_01RuleTests : AbstractRuleTests<Sex_01Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("Sex_01");
+        }
+
         [Theory]
         [InlineData("A")]
         public void ConditionMet_True(string sex)

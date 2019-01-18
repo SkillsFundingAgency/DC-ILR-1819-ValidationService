@@ -19,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur
         private static readonly HashSet<string> ValidProvSpecLearnMonOccurValues = new HashSet<string> { "A", "B" };
 
         public ProvSpecLearnMonOccur_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.ProvSpecLearnMonOccur_01Rule)
+            : base(validationErrorHandler, RuleNameConstants.ProvSpecLearnMonOccur_01)
         {
         }
 
