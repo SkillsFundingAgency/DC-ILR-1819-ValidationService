@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCTLDCS
             string learnAimRef = "123456789";
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock.Setup(ldsm => ldsm.LearnDirectClassSystemCode1MatchForLearnAimRef(learnAimRef))
+            larsDataServiceMock.Setup(ldsm => ldsm.HasKnownLearnDirectClassSystemCode3For(learnAimRef))
                 .Returns(false);
 
             NewRule(larsDataServiceMock.Object).ConditionMet(learnAimRef, pctldcs).Should().BeTrue();
@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCTLDCS
             string learnAimRef = "123456789";
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock.Setup(ldsm => ldsm.LearnDirectClassSystemCode1MatchForLearnAimRef(learnAimRef))
+            larsDataServiceMock.Setup(ldsm => ldsm.HasKnownLearnDirectClassSystemCode3For(learnAimRef))
                 .Returns(larsDataMockResult);
 
             NewRule(larsDataServiceMock.Object).ConditionMet(learnAimRef, pctldcsParam).Should().BeFalse();
@@ -69,7 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCTLDCS
             };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock.Setup(ldsm => ldsm.LearnDirectClassSystemCode1MatchForLearnAimRef(learnAimRef))
+            larsDataServiceMock.Setup(ldsm => ldsm.HasKnownLearnDirectClassSystemCode3For(learnAimRef))
                 .Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -99,7 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCTLDCS
             };
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock.Setup(ldsm => ldsm.LearnDirectClassSystemCode1MatchForLearnAimRef(learnAimRef))
+            larsDataServiceMock.Setup(ldsm => ldsm.HasKnownLearnDirectClassSystemCode3For(learnAimRef))
                 .Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())

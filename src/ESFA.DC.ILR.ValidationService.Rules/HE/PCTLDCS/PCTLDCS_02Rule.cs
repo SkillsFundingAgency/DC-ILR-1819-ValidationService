@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS
         public bool ConditionMet(string learnAimRef, decimal? pctldcs)
         {
             return pctldcs.HasValue
-                   && !_larsDataService.LearnDirectClassSystemCode1MatchForLearnAimRef(learnAimRef);
+                   && !_larsDataService.HasKnownLearnDirectClassSystemCode3For(learnAimRef);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(decimal? pctldcs)
