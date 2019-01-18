@@ -50,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         }
 
         public IReadOnlyCollection<IFcsContractAllocation> GetAllocationsFor(ILearningDelivery thisDelivery) =>
-            _contracts.GetContractAllocationsFor(thisDelivery.ConRefNumber);
+            _contracts.GetContractAllocationsFor(thisDelivery?.ConRefNumber);
 
         /// <summary>
         /// Determines whether [has qualifying start] [the specified this delivery].
@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         ///   <c>true</c> if [has qualifying start] [the specified this delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasQualifyingStart(ILearningDelivery thisDelivery, IReadOnlyCollection<IFcsContractAllocation> allocations) =>
-            allocations.Any(x => It.Has(x.StartDate) && _check.HasQualifyingStart(thisDelivery, x.StartDate.Value));
+            allocations.SafeAny(x => It.Has(x.StartDate) && _check.HasQualifyingStart(thisDelivery, x.StartDate.Value));
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
