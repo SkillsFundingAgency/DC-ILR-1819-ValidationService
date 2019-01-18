@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
+﻿using ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
 
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
 

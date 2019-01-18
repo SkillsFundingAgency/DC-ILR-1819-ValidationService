@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV
+namespace ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD
 {
     public class MODESTUD_03Rule : AbstractRule, IRule<ILearner>
     {
