@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD
 
     public MODESTUD_03Rule(
             IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.MODESTUD_03Rule)
+            : base(validationErrorHandler, RuleNameConstants.MODESTUD_03)
         {
         }
 

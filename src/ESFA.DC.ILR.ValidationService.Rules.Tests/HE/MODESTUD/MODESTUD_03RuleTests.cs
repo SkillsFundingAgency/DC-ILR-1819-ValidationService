@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.MODESTUD
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("MODESTUD_03Rule");
+            NewRule().RuleName.Should().Be("MODESTUD_03");
         }
 
         [Fact]
