@@ -410,6 +410,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PCFLDCS_03Rule),
                 typeof(PCSLDCS_01Rule),
                 typeof(PCTLDCS_01Rule),
+                typeof(PCTLDCS_02Rule),
                 typeof(PlanEEPHours_01Rule),
                 typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),
