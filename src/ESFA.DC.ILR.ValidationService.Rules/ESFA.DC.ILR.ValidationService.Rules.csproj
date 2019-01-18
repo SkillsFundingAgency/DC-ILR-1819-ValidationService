@@ -224,6 +224,7 @@
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_02Rule.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_01Rule.cs" />
+    <Compile Include="HE\ELQ\ELQ_02Rule.cs" />
     <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
