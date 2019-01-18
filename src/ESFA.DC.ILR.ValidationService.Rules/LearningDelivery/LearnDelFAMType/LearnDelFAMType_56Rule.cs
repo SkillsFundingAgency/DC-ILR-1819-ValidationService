@@ -44,6 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private readonly ILearningDeliveryFAMQueryService _famQueryService;
         private readonly IFileDataService _fileDataService;
         private readonly IOrganisationDataService _organisationDataService;
+        private readonly IDateTimeQueryService _dateTimeQueryService;
 
         public LearnDelFAMType_56Rule(
             IValidationErrorHandler validationErrorHandler,
@@ -53,7 +54,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             IDerivedData_21Rule derivedDataRule21,
             ILearningDeliveryFAMQueryService famQueryService,
             IFileDataService fileDataService,
-            IOrganisationDataService organisationDataService)
+            IOrganisationDataService organisationDataService,
+            IDateTimeQueryService dateTimeQueryService)
             : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_56)
         {
             _larsDataService = larsDataService;
@@ -63,6 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             _famQueryService = famQueryService;
             _fileDataService = fileDataService;
             _organisationDataService = organisationDataService;
+            _dateTimeQueryService = dateTimeQueryService;
         }
 
         public void Validate(ILearner learner)
@@ -116,7 +119,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 return false;
             }
 
-            var ageAtCourseStart = Convert.ToInt32((learnStartDate - dateOfBirth.Value).TotalDays / DaysInYear);
+            var ageAtCourseStart = _dateTimeQueryService.AgeAtGivenDate(dateOfBirth.Value, learnStartDate);
             if (ageAtCourseStart >= MinAge && ageAtCourseStart <= MaxAge)
             {
                 return true;

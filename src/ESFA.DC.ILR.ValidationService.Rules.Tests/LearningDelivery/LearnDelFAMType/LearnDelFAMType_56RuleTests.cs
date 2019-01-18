@@ -101,10 +101,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [Theory]
         [InlineData("2000-11-10")]
         [InlineData("1994-10-10")]
-        [InlineData("2001-10-10")]
-        public void AgeConditionMet_False(string dateOfBirth)
+        public void AgeConditionMet_False_Over23(string dateOfBirthString)
         {
-            NewRule().AgeConditionMet(new DateTime(2018, 10, 10), DateTime.Parse(dateOfBirth)).Should().BeFalse();
+            var dateOfBirth = DateTime.Parse(dateOfBirthString);
+
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeQueryServiceMock.Setup(x => x.AgeAtGivenDate(dateOfBirth, It.IsAny<DateTime>())).Returns(24);
+
+            NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object).AgeConditionMet(new DateTime(2018, 10, 10), dateOfBirth).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("2001-10-10")]
+        public void AgeConditionMet_False_Under19(string dateOfBirthString)
+        {
+            var dateOfBirth = DateTime.Parse(dateOfBirthString);
+
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeQueryServiceMock.Setup(x => x.AgeAtGivenDate(dateOfBirth, It.IsAny<DateTime>())).Returns(18);
+
+            NewRule(dateTimeQueryService: dateTimeQueryServiceMock.Object).AgeConditionMet(new DateTime(2018, 10, 10), dateOfBirth).Should().BeFalse();
         }
 
         [Fact]
@@ -677,8 +693,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             IDerivedData_21Rule dd21 = null,
             ILearningDeliveryFAMQueryService famQueryService = null,
             IFileDataService fileDataService = null,
-            IOrganisationDataService organisationDataService = null)
+            IOrganisationDataService organisationDataService = null,
+            IDateTimeQueryService dateTimeQueryService = null)
         {
+            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeQueryServiceMock.Setup(x => x.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(20);
+
             return new LearnDelFAMType_56Rule(
                 validationErrorHandler,
                 larsDataService,
@@ -687,7 +707,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 dd21,
                 famQueryService,
                 fileDataService,
-                organisationDataService);
+                organisationDataService,
+                dateTimeQueryService ?? dateTimeQueryServiceMock.Object);
         }
     }
 }
