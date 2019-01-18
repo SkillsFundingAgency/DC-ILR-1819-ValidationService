@@ -17,36 +17,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate?.LearningDeliveries == null)
+            if (objectToValidate?.ProviderSpecLearnerMonitorings == null)
             {
                 return;
             }
 
+            var duplicates = objectToValidate.ProviderSpecLearnerMonitorings
+                    .GroupBy(pdm => pdm.ProvSpecLearnMonOccur?.ToUpper())
+                    .Where(grp => grp.Count() > 1)
+                    .ToList();
 
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+            foreach (var duplicate in duplicates)
             {
-                if (learningDelivery.ProviderSpecDeliveryMonitorings != null)
-                {
-                    var duplicates = learningDelivery.ProviderSpecDeliveryMonitorings
-                        .GroupBy(pdm => pdm.ProvSpecDelMonOccur?.ToUpper())
-                        .Where(grp => grp.Count() > 1);
-
-                    foreach (var duplicate in duplicates)
-                    {
-                        HandleValidationError(
-                            objectToValidate.LearnRefNumber,
-                            learningDelivery.AimSeqNumber,
-                            BuildErrorMessageParameters(duplicate.Key));
-                    }
-                }
+                HandleValidationError(
+                    objectToValidate.LearnRefNumber,
+                    null,
+                    BuildErrorMessageParameters(duplicate.Key));
             }
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string provSpecDelMonOccur)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string provSpecLearnMonOccur)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.ProvSpecDelMonOccur, provSpecDelMonOccur)
+                BuildErrorMessageParameter(PropertyNameConstants.ProvSpecLearnMonOccur, provSpecLearnMonOccur)
             };
         }
     }
