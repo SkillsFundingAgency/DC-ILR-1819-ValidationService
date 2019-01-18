@@ -112,7 +112,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
-            var qualifyingDate = GetQualifyingDate(objectToValidate.LearningDeliveries);
+            var deliveries = objectToValidate.LearningDeliveries.AsSafeReadOnlyList();
+            var qualifyingDate = GetQualifyingDate(deliveries);
 
             if (It.Has(qualifyingDate))
             {

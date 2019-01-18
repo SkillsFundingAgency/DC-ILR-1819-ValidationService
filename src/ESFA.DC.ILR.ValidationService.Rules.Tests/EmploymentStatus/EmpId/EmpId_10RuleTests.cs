@@ -99,6 +99,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         }
 
         /// <summary>
+        /// Get qualifying date with null throws.
+        /// this routine throws with null, we never expect null to 
+        ///  go in there because it's safe listed
+        /// </summary>
+        [Fact]
+        public void GetQualifyingDateWithNullThrows()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => sut.GetQualifyingDate(null));
+        }
+
+        /// <summary>
+        /// Get qualifying date with empty does not throw.
+        ///  in fact it meets expectation
+        /// </summary>
+        [Fact]
+        public void GetQualifyingDateWithEmptyDoesNotThrow()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.GetQualifyingDate(Collection.EmptyAndReadOnly<ILearningDelivery>()));
+
+            // assert
+            Assert.Null(result);
+        }
+
+        /// <summary>
         /// Is qualifying employment meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
