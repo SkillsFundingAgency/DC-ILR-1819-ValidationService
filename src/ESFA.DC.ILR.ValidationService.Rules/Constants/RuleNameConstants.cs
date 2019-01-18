@@ -320,6 +320,8 @@
 
         public const string PCSLDCS_01 = "PCSLDCS_01";
 
+        public const string PCTLDCS_02 = "PCTLDCS_02";
+
         public const string PlanEEPHours_01 = "PlanEEPHours_01";
 
         public const string PlanLearnHours_01 = "PlanLearnHours_01";
