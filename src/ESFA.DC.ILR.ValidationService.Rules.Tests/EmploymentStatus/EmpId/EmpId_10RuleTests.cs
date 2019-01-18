@@ -261,8 +261,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
-            commonOps.Setup(x => x.InApprenticeship(mockDelivery.Object)).Returns(true);
-            commonOps.Setup(x => x.InAProgramme(mockDelivery.Object)).Returns(true);
+            commonOps
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(true);
+            commonOps
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
 
             var sut = new EmpId_10Rule(handler.Object, commonOps.Object);
 
@@ -326,6 +330,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(true);
+            commonOps
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
 
             var sut = new EmpId_10Rule(handler.Object, commonOps.Object);
 

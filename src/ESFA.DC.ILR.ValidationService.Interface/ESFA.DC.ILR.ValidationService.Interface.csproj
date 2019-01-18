@@ -100,7 +100,6 @@
     <Compile Include="Utility\Format.cs" />
     <Compile Include="Utility\Guard.cs" />
     <Compile Include="Utility\It.cs" />
-    <Compile Include="Utility\SafeActions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ESFA.DC.ILR.ValidationService.Interface.ruleset">

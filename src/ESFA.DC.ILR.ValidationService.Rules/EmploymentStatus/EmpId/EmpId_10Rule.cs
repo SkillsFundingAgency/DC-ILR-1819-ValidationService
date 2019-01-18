@@ -46,7 +46,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         public DateTime? GetQualifyingDate(IReadOnlyCollection<ILearningDelivery> deliveries) =>
             deliveries
                 .Where(IsACandidate)
-                .MaxOrDefault(x => (DateTime?)x.LearnStartDate);
+                .OrderByDescending(x => x.LearnStartDate)
+                .FirstOrDefault()?
+                .LearnStartDate;
 
         /// <summary>
         /// Determines whether the specified delivery is a candidate.
@@ -56,7 +58,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         ///   <c>true</c> if the specified delivery is a candidate; otherwise, <c>false</c>.
         /// </returns>
         public bool IsACandidate(ILearningDelivery delivery) =>
-           _check.InApprenticeship(delivery) && _check.InAProgramme(delivery);
+           _check.InApprenticeship(delivery)
+                && _check.InAProgramme(delivery);
 
         /// <summary>
         /// Determines whether [is qualifying employment] [the specified employment status].
