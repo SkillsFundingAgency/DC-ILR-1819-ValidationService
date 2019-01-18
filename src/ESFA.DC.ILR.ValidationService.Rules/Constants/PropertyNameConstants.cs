@@ -89,6 +89,7 @@
         public const string ProvSpecLearnMonOccur = "ProvSpecLearnMonOccur";
         public const string QUALENT3 = "QUALENT3";
         public const string Sex = "Sex";
+        public const string SEC = "SEC";
         public const string SPECFEE = "SPECFEE";
         public const string StdCode = "StdCode";
         public const string TYPEYR = "TYPEYR";
