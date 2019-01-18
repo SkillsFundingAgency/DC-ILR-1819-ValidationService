@@ -17,28 +17,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         {
             var conRefNumber = "100";
 
-            var allocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>()
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "100",
-                    FundingStreamPeriodCode = "PeriodCode1",
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    FundingStreamPeriodCode = "PeriodCode1",
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "200",
-                    FundingStreamPeriodCode = "PeriodCode1",
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "201",
-                    FundingStreamPeriodCode = "PeriodCode1",
-                }
+                { "100", new FcsContractAllocation { ContractAllocationNumber = "100", FundingStreamPeriodCode = "PeriodCode1" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", FundingStreamPeriodCode = "PeriodCode1" } },
+                { "200", new FcsContractAllocation { ContractAllocationNumber = "200", FundingStreamPeriodCode = "PeriodCode1" } },
+                { "201", new FcsContractAllocation { ContractAllocationNumber = "201", FundingStreamPeriodCode = "PeriodCode1" } }
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
@@ -53,13 +37,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         {
             var conRefNumber = "100";
 
-            var allocations = new List<FcsContractAllocation>();
+            var allocations = new Dictionary<string, IFcsContractAllocation>();
 
-            var externalDataCahceMock = new Mock<IExternalDataCache>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
 
-            externalDataCahceMock.Setup(f => f.FCSContractAllocations).Returns(allocations);
+            externalDataCacheMock.Setup(f => f.FCSContractAllocations).Returns(allocations);
 
-            NewService(externalDataCahceMock.Object).ConRefNumberExists(conRefNumber).Should().BeFalse();
+            NewService(externalDataCacheMock.Object).ConRefNumberExists(conRefNumber).Should().BeFalse();
         }
 
         [Fact]
@@ -67,28 +51,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         {
             var fundingStreamPeriodCodes = new List<string> { "PeriodCode1", "PeriodCode3" };
 
-            var allocations = new List<FcsContractAllocation>
-                    {
-                         new FcsContractAllocation
-                         {
-                             ContractAllocationNumber = "100",
-                             FundingStreamPeriodCode = "PeriodCode1",
-                         },
-                         new FcsContractAllocation
-                         {
-                             ContractAllocationNumber = "101",
-                             FundingStreamPeriodCode = "PeriodCode1",
-                         },
-                         new FcsContractAllocation
-                         {
-                             ContractAllocationNumber = "200",
-                             FundingStreamPeriodCode = "PeriodCode2",
-                         },
-                         new FcsContractAllocation
-                         {
-                             ContractAllocationNumber = "201",
-                             FundingStreamPeriodCode = "PeriodCode3",
-                         }
+            var allocations = new Dictionary<string, IFcsContractAllocation>
+            {
+                { "100", new FcsContractAllocation { ContractAllocationNumber = "100", FundingStreamPeriodCode = "PeriodCode1" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", FundingStreamPeriodCode = "PeriodCode1" } },
+                { "200", new FcsContractAllocation { ContractAllocationNumber = "200", FundingStreamPeriodCode = "PeriodCode2" } },
+                { "201", new FcsContractAllocation { ContractAllocationNumber = "201", FundingStreamPeriodCode = "PeriodCode3" } },
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
@@ -103,28 +71,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         {
             var fundingStreamPeriodCodes = new List<string> { "PeriodCode10" };
 
-            var allocations = new List<FcsContractAllocation>
-                    {
-                         new FcsContractAllocation
-                         {
-                             ContractAllocationNumber = "100",
-                             FundingStreamPeriodCode = "PeriodCode1",
-                         },
-                         new FcsContractAllocation
-                         {
-                             ContractAllocationNumber = "101",
-                             FundingStreamPeriodCode = "PeriodCode1",
-                         },
-                         new FcsContractAllocation
-                         {
-                             ContractAllocationNumber = "200",
-                             FundingStreamPeriodCode = "PeriodCode2",
-                         },
-                         new FcsContractAllocation
-                         {
-                             ContractAllocationNumber = "201",
-                             FundingStreamPeriodCode = "PeriodCode3",
-                         }
+            var allocations = new Dictionary<string, IFcsContractAllocation>
+            {
+                { "100", new FcsContractAllocation { ContractAllocationNumber = "100", FundingStreamPeriodCode = "PeriodCode1" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", FundingStreamPeriodCode = "PeriodCode1" } },
+                { "200", new FcsContractAllocation { ContractAllocationNumber = "200", FundingStreamPeriodCode = "PeriodCode2" } },
+                { "201", new FcsContractAllocation { ContractAllocationNumber = "201", FundingStreamPeriodCode = "PeriodCode3" } },
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
@@ -139,7 +91,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         {
             var fundingStreamPeriodCodes = new List<string> { "PeriodCode1" };
 
-            var fcsContracts = new List<FcsContractAllocation>();
+            var fcsContracts = new Dictionary<string, IFcsContractAllocation>();
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
 
@@ -164,20 +116,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var allocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9972", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } },
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
@@ -194,28 +136,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         {
             string conRefNumber = "ESF0002";
             IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> esfEligibilityRuleSectorSubjectAreaLevels = null;
-            var allocations = new List<FcsContractAllocation>
+
+            var allocations = new Dictionary<string, IFcsContractAllocation>()
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9972", LotReference = "01" } },
+                { "101",  new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
-            var externalDataCahceMock = new Mock<IExternalDataCache>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
 
-            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
-            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
+            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCacheMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
 
-            NewService(externalDataCache: externalDataCahceMock.Object)
+            NewService(externalDataCacheMock.Object)
                 .GetSectorSubjectAreaLevelsForContract(conRefNumber).Should().BeNullOrEmpty();
         }
 
@@ -235,14 +168,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            List<FcsContractAllocation> allocations = null;
+            Dictionary<string, IFcsContractAllocation> allocations = null;
 
-            var externalDataCahceMock = new Mock<IExternalDataCache>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
 
-            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
-            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
+            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCacheMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
 
-            NewService(externalDataCache: externalDataCahceMock.Object)
+            NewService(externalDataCacheMock.Object)
                 .GetSectorSubjectAreaLevelsForContract(conRefNumber).Should().BeNullOrEmpty();
         }
 
@@ -262,28 +195,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var allocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9979",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
-            var externalDataCahceMock = new Mock<IExternalDataCache>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
 
-            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
-            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
+            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCacheMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
 
-            NewService(externalDataCache: externalDataCahceMock.Object).IsSectorSubjectAreaCodeExistsForContract(conRefNumber).Should().BeFalse();
+            NewService(externalDataCacheMock.Object).IsSectorSubjectAreaCodeExistsForContract(conRefNumber).Should().BeFalse();
         }
 
         [Fact]
@@ -293,7 +216,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var sectorSubjectAreaLevelCodes = new EsfEligibilityRuleSectorSubjectAreaLevel[] { };
 
-            var contractAllocations = new List<FcsContractAllocation>();
+            var contractAllocations = new Dictionary<string, IFcsContractAllocation>();
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
@@ -319,28 +242,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var allocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9972", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
-            var externalDataCahceMock = new Mock<IExternalDataCache>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
 
-            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
-            externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
+            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
+            externalDataCacheMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
 
-            NewService(externalDataCache: externalDataCahceMock.Object).IsSectorSubjectAreaCodeExistsForContract(conRefNumber).Should().BeTrue();
+            NewService(externalDataCache: externalDataCacheMock.Object).IsSectorSubjectAreaCodeExistsForContract(conRefNumber).Should().BeTrue();
         }
 
         [Fact]
@@ -359,20 +272,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var allocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9979",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -390,7 +293,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var sectorSubjectAreaLevelCodes = new EsfEligibilityRuleSectorSubjectAreaLevel[] { };
 
-            var contractAllocations = new List<FcsContractAllocation>();
+            var contractAllocations = new Dictionary<string, IFcsContractAllocation>();
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
@@ -417,20 +320,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var allocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
@@ -464,25 +357,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var contractAllocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
-            externalDataCacheMock.Setup(c => c.FCSContractAllocations).Returns(contractAllocations);
+            externalDataCacheMock.Setup(c => c.FCSContractAllocations).Returns(allocations);
             externalDataCacheMock.Setup(c => c.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
 
             NewService(externalDataCache: externalDataCacheMock.Object)
@@ -496,7 +379,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             string conRefNumber = "ESF00019";
 
             var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[] { };
-            var contractAllocations = new List<FcsContractAllocation>() { };
+            var contractAllocations = new Dictionary<string, IFcsContractAllocation>() { };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
@@ -527,28 +410,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var contractAllocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
-            externalDataCacheMock.Setup(c => c.FCSContractAllocations).Returns(contractAllocations);
+            externalDataCacheMock.Setup(c => c.FCSContractAllocations).Returns(allocations);
             externalDataCacheMock.Setup(c => c.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
 
-            NewService(externalDataCache: externalDataCacheMock.Object)
+            NewService(externalDataCacheMock.Object)
                 .IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(notionNVQLevel2, conRefNumber).Should().BeTrue();
         }
 
@@ -574,28 +447,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var contractAllocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
 
-            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(contractAllocations);
+            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
             externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
 
-            NewService(externalDataCache: externalDataCahceMock.Object)
+            NewService(externalDataCahceMock.Object)
                 .IsSubjectAreaAndMinMaxLevelsExistsForContract(conRefNumber).Should().BeFalse();
         }
 
@@ -605,7 +468,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             string conRefNumber = "ZESF22546";
             var externalDataCahceMock = new Mock<IExternalDataCache>();
 
-            List<FcsContractAllocation> contractAllocations = null;
+            Dictionary<string, IFcsContractAllocation> contractAllocations = null;
             List<EsfEligibilityRuleSectorSubjectAreaLevel> sectorSubjectArea = null;
 
             externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(contractAllocations);
@@ -635,25 +498,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var contractAllocations = new List<FcsContractAllocation>
+            var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = conRefNumber,
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { conRefNumber, new FcsContractAllocation { ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
 
-            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(contractAllocations);
+            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
             externalDataCahceMock.Setup(e => e.EsfEligibilityRuleSectorSubjectAreaLevels).Returns(sectorSubjectAreaLevels);
 
             NewService(externalDataCache: externalDataCahceMock.Object)
@@ -691,20 +544,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var contractAllocations = new List<FcsContractAllocation>
+            var contractAllocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "ESF0007",
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { "ESF0007", new FcsContractAllocation { ContractAllocationNumber = "ESF0007", TenderSpecReference = "tt_9972", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
@@ -723,7 +566,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             decimal? sectorSubjectAreaTier1 = 2.3M;
             decimal? sectorSubjectAreaTier2 = 2.3M;
 
-            List<FcsContractAllocation> contractAllocations = null;
+            Dictionary<string, IFcsContractAllocation> contractAllocations = null;
             List<IEsfEligibilityRuleSectorSubjectAreaLevel> sectorSubjectAreaLevels = null;
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
@@ -753,20 +596,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                 }
             };
 
-            var contractAllocations = new List<FcsContractAllocation>
+            var contractAllocations = new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "ESF0007",
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "101",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "04"
-                }
+                { "ESF0007", new FcsContractAllocation { ContractAllocationNumber = "ESF0007", TenderSpecReference = "tt_9972", LotReference = "01" } },
+                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
             var externalDataCahceMock = new Mock<IExternalDataCache>();
@@ -872,35 +705,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         /// Gets the default contract allocation test list.
         /// </summary>
         /// <returns>the default set of contract allocations for testing</returns>
-        internal IReadOnlyCollection<IFcsContractAllocation> GetDefaultContractAllocationTestList()
+        private IReadOnlyDictionary<string, IFcsContractAllocation> GetDefaultContractAllocationTestList()
         {
             // this provides a set of test contract allocations
-            return new List<FcsContractAllocation>
+            return new Dictionary<string, IFcsContractAllocation>
             {
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "ESF0002",
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "ESF0003",
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "02"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "ESF0004",
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "03"
-                },
-                new FcsContractAllocation
-                {
-                    ContractAllocationNumber = "ESF0005",
-                    TenderSpecReference = "tt_9978",
-                    LotReference = "01"
-                }
+                { "ESF0002", new FcsContractAllocation { ContractAllocationNumber = "ESF0002", TenderSpecReference = "tt_9972", LotReference = "01" } },
+                { "ESF0003", new FcsContractAllocation { ContractAllocationNumber = "ESF0003", TenderSpecReference = "tt_9972", LotReference = "02" } },
+                { "ESF0004", new FcsContractAllocation { ContractAllocationNumber = "ESF0004", TenderSpecReference = "tt_9972", LotReference = "03" } },
+                { "ESF0005", new FcsContractAllocation { ContractAllocationNumber = "ESF0005", TenderSpecReference = "tt_9978", LotReference = "01" } },
             };
         }
 
@@ -908,13 +721,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         /// Gets the default strict empty cache.
         /// </summary>
         /// <returns>an i external data cache</returns>
-        internal IExternalDataCache GetDefaultStrictEmptyCache()
+        private IExternalDataCache GetDefaultStrictEmptyCache()
         {
             // this sets up an empty by default, verifiable mocked cache with strict behaviour
             var cache = new Mock<IExternalDataCache>(MockBehavior.Strict);
             cache
                 .Setup(e => e.FCSContractAllocations)
-                .Returns((IReadOnlyCollection<IFcsContractAllocation>)null);
+                .Returns((IReadOnlyDictionary<string, IFcsContractAllocation>)null);
             cache
                 .Setup(e => e.ESFEligibilityRuleEmploymentStatuses)
                 .Returns((IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus>)null);
@@ -931,7 +744,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             return cache.Object;
         }
 
-        internal FCSDataService NewService(IExternalDataCache externalDataCache)
+        private FCSDataService NewService(IExternalDataCache externalDataCache)
         {
             return new FCSDataService(externalDataCache);
         }

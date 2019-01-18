@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Interface
     /// </summary>
     /// <seealso cref="Interface.IExternalDataRetrievalService{IReadOnlyCollection{FcsContract}}" />
     public interface IFCSDataRetrievalService :
-        IExternalDataRetrievalService<IReadOnlyCollection<IFcsContractAllocation>>
+        IExternalDataRetrievalService<IReadOnlyDictionary<string, IFcsContractAllocation>>
     {
         /// <summary>
         /// Retrieves the eligibility rule employment statuses asynchronously.

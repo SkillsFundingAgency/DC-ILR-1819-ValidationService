@@ -33,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <summary>
         /// The contract allocations
         /// </summary>
-        private readonly IReadOnlyCollection<IFcsContractAllocation> _contractAllocations;
+        private readonly IReadOnlyDictionary<string, IFcsContractAllocation> _contractAllocations;
 
         /// <summary>
         /// The Sector Subject Area Levels
@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
             _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses.AsSafeReadOnlyList();
             _localAuthorities = externalDataCache.ESFEligibilityRuleLocalAuthorities.AsSafeReadOnlyList();
             _enterprisePartnerships = externalDataCache.ESFEligibilityRuleEnterprisePartnerships.AsSafeReadOnlyList();
-            _contractAllocations = externalDataCache.FCSContractAllocations.AsSafeReadOnlyList();
+            _contractAllocations = externalDataCache.FCSContractAllocations.ToCaseInsensitiveDictionary();
             _sectorSubjectAreaLevels = externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels;
         }
 
@@ -60,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>true if it does</returns>
         public bool ConRefNumberExists(string conRefNumber)
         {
-            return _contractAllocations.Any(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber));
+            return _contractAllocations.ContainsKey(conRefNumber);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         {
             var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList().ToCaseInsensitiveHashSet();
 
-            return _contractAllocations.Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
+            return _contractAllocations.Values.Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
         }
 
         /// <summary>
@@ -116,8 +116,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// </summary>
         /// <param name="contractReference">The contract reference.</param>
         /// <returns>a contract allocation (if found)</returns>
-        public IFcsContractAllocation GetContractAllocationFor(string contractReference) =>
-            _contractAllocations.FirstOrDefault(x => x.ContractAllocationNumber.ComparesWith(contractReference));
+        public IFcsContractAllocation GetContractAllocationFor(string contractReference)
+        {
+            _contractAllocations.TryGetValue(contractReference, out IFcsContractAllocation fcsContractAllocation);
+
+            return fcsContractAllocation;
+        }
 
         /// <summary>
         /// That matches reference to allocation
@@ -153,7 +157,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         {
             return _sectorSubjectAreaLevels?
                 .Join(
-                    _contractAllocations?.Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber)).ToList(),
+                    _contractAllocations.Values.Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber)).ToList(),
                     ers => new { ers.TenderSpecReference, ers.LotReference },
                     ca => new { ca.TenderSpecReference, ca.LotReference },
                     (ers, ca) => ers).ToList();

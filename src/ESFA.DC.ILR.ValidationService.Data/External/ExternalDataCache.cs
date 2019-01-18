@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External
         /// <summary>
         /// Gets or sets the FCS contract allocations.
         /// </summary>
-        public IReadOnlyCollection<IFcsContractAllocation> FCSContractAllocations { get; set; }
+        public IReadOnlyDictionary<string, IFcsContractAllocation> FCSContractAllocations { get; set; }
 
         /// <summary>
         /// Gets or sets the esf eligibility rule employment statuses.

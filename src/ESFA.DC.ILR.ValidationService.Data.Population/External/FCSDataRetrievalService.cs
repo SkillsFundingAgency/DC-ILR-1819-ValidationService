@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         /// <returns>
         /// a task running the collection builder
         /// </returns>
-        public async Task<IReadOnlyCollection<IFcsContractAllocation>> RetrieveAsync(CancellationToken cancellationToken)
+        public async Task<IReadOnlyDictionary<string, IFcsContractAllocation>> RetrieveAsync(CancellationToken cancellationToken)
         {
             var ukprn = UKPRNFromMessage(_messageCache.Item);
 
@@ -116,7 +116,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                             && r.TenderSpecReference.CaseInsensitiveEquals(contractAllocation.TenderSpecReference));
             }
 
-            return contractAllocations;
+            return contractAllocations.ToCaseInsensitiveDictionary<IFcsContractAllocation, IFcsContractAllocation>(ca => ca.ContractAllocationNumber, ca => ca);
         }
 
         /// <summary>
