@@ -911,6 +911,101 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Fact]
+        public void BasicSkillsTypeMatchForLearnAimRef_False_NoneMatched()
+        {
+            var learnAimRef = "LearnAimRef";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 1
+                            },
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 2
+                            },
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 3
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsTypeMatchForLearnAimRef(new List<int>() { 6, 7 }, learnAimRef).Should().BeFalse();
+        }
+
+        [Fact]
+        public void BasicSkillsTypeMatchForLearnAimRef_PartialMatch_True()
+        {
+            var learnAimRef = "LearnAimRef";
+            var basicSkills = 1;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 1
+                            },
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 2
+                            },
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 3
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsTypeMatchForLearnAimRef(new List<int>() { 3, 9999 }, learnAimRef).Should().BeTrue();
+        }
+
+        [Fact]
+        public void BasicSkillsTypeMatchForLearnAimRef_List_False_Null_LearnAimRef()
+        {
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+            NewService(externalDataCacheMock.Object).BasicSkillsTypeMatchForLearnAimRef(new List<int>(), null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void BasicSkillsTypeMatchForLearnAimRef_List_False_Null_List()
+        {
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+            NewService(externalDataCacheMock.Object).BasicSkillsTypeMatchForLearnAimRef(null, "test").Should().BeFalse();
+        }
+
+        [Fact]
         public void BasicSkillsMatchForLearnAimRef_False_Null_AnnualValue()
         {
             var learnAimRef = "LearnAimRef";

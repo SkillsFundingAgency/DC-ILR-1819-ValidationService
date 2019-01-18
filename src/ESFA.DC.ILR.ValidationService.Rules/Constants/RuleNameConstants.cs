@@ -390,6 +390,8 @@
         public const string R71 = "R71";
         public const string R75 = "R75";
         public const string R85 = "R85";
+        public const string R89 = "R89";
+        public const string R90 = "R90";
         public const string R91 = "R91";
         public const string R92 = "R92";
         public const string R96 = "R96";

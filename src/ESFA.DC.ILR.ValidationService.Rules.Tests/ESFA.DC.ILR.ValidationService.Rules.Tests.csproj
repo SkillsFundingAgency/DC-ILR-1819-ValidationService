@@ -106,6 +106,7 @@
     <Compile Include="CrossEntity\R06RuleTests.cs" />
     <Compile Include="CrossEntity\R101RuleTests.cs" />
     <Compile Include="CrossEntity\R58RuleTests.cs" />
+    <Compile Include="CrossEntity\R89RuleTests.cs" />
     <Compile Include="CrossEntity\R92RuleTests.cs" />
     <Compile Include="CrossEntity\R110RuleTests.cs" />
     <Compile Include="CrossEntity\R115RuleTests.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="CrossEntity\R29RuleTests.cs" />
     <Compile Include="CrossEntity\R62RuleTests.cs" />
     <Compile Include="CrossEntity\R50RuleTests.cs" />
+    <Compile Include="CrossEntity\R90RuleTests.cs" />
     <Compile Include="CrossEntity\R99RuleTests.cs" />
     <Compile Include="CrossEntity\R56RuleTests.cs" />
     <Compile Include="CrossEntity\R59RuleTests.cs" />
