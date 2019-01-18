@@ -108,6 +108,7 @@
 
         public const string ELQ_01 = "ELQ_01";
 
+        public const string EmpId_10 = "EmpId_10";
         public const string EmpId_13 = "EmpId_13";
 
         public const string EmpOutcome_01 = "EmpOutcome_01";
