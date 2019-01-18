@@ -119,20 +119,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         }
 
         [Fact]
-        public void Derive_Returns_Date()
+        public void LatestLearningDeliveryLearnPlanEndDateFor_ReturnsLaterDate()
         {
+            int? progType = 25;
+            int? stdCode = 1;
+
             var earliestLearningDelivery = new TestLearningDelivery()
             {
-                ProgTypeNullable = 25,
-                StdCodeNullable = 1,
+                ProgTypeNullable = progType,
+                StdCodeNullable = progType,
                 AimType = 1,
                 LearnPlanEndDate = new DateTime(2015, 1, 1)
             };
 
             var latestLearningDelivery = new TestLearningDelivery()
             {
-                ProgTypeNullable = 25,
-                StdCodeNullable = 1,
+                ProgTypeNullable = progType,
+                StdCodeNullable = stdCode,
                 AimType = 1,
                 LearnPlanEndDate = new DateTime(2017, 1, 1)
             };
@@ -146,7 +149,75 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            NewRule().Derive(learner.LearningDeliveries, latestLearningDelivery).Should().Be(new DateTime(2017, 1, 1));
+            NewRule().LatestLearningDeliveryLearnPlanEndDateFor(learner.LearningDeliveries, progType, stdCode).Should().Be(new DateTime(2017, 1, 1));
+        }
+
+        [Fact]
+        public void LatestLearningDeliveryLearnPlanEndDateFor_ReturnsEarlierDate()
+        {
+            int? progType = 25;
+            int? stdCode = 1;
+
+            var earliestLearningDelivery = new TestLearningDelivery()
+            {
+                ProgTypeNullable = progType,
+                StdCodeNullable = stdCode,
+                AimType = 1,
+                LearnPlanEndDate = new DateTime(2015, 1, 1)
+            };
+
+            var latestLearningDelivery = new TestLearningDelivery()
+            {
+                ProgTypeNullable = progType,
+                StdCodeNullable = 2,
+                AimType = 1,
+                LearnPlanEndDate = new DateTime(2017, 1, 1)
+            };
+
+            var learner = new TestLearner()
+            {
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    latestLearningDelivery,
+                    earliestLearningDelivery
+                }
+            };
+
+            NewRule().LatestLearningDeliveryLearnPlanEndDateFor(learner.LearningDeliveries, progType, stdCode).Should().Be(new DateTime(2015, 1, 1));
+        }
+
+        [Fact]
+        public void LatestLearningDeliveryLearnPlanEndDateFor_Returns_Null()
+        {
+            int? progType = 25;
+            int? stdCode = 1;
+
+            var earliestLearningDelivery = new TestLearningDelivery()
+            {
+                ProgTypeNullable = progType,
+                StdCodeNullable = 2,
+                AimType = 1,
+                LearnPlanEndDate = new DateTime(2015, 1, 1)
+            };
+
+            var latestLearningDelivery = new TestLearningDelivery()
+            {
+                ProgTypeNullable = progType,
+                StdCodeNullable = 2,
+                AimType = 1,
+                LearnPlanEndDate = new DateTime(2017, 1, 1)
+            };
+
+            var learner = new TestLearner()
+            {
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    latestLearningDelivery,
+                    earliestLearningDelivery
+                }
+            };
+
+            NewRule().LatestLearningDeliveryLearnPlanEndDateFor(learner.LearningDeliveries, progType, stdCode).Should().BeNull();
         }
 
         [Fact]

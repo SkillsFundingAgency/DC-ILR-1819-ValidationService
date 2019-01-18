@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     {
         public DateTime? Derive(IEnumerable<ILearningDelivery> learningDeliveries, ILearningDelivery learningDelivery)
         {
-            var programmeAims = LearningDeliveriesForProgrammeAim(learningDeliveries);
+            var programmeAims = LearningDeliveriesForProgrammeAim(learningDeliveries).ToList();
 
             if (LearningDeliveryHasApprenticeshipStandardType(learningDelivery) && programmeAims.Any())
             {
@@ -23,11 +23,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
         public DateTime? LatestLearningDeliveryLearnPlanEndDateFor(IEnumerable<ILearningDelivery> learningDeliveries, long? progType, long? stdCode)
         {
-            return learningDeliveries
+            var deliveries = learningDeliveries?
                     .Where(ld =>
                     ld.ProgTypeNullable == progType
-                    && ld.StdCodeNullable == stdCode)
-                .Max(ld => (DateTime?)ld.LearnPlanEndDate);
+                    && ld.StdCodeNullable == stdCode) ?? new List<ILearningDelivery>();
+
+            return deliveries.Any() ? deliveries.Max(ld => (DateTime?)ld.LearnPlanEndDate) : null;
         }
 
         public bool LearningDeliveryHasApprenticeshipStandardType(ILearningDelivery learningDelivery)
@@ -41,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         {
             return learningDeliveries?
                 .Where(ld =>
-                ld.AimType == TypeOfAim.ProgrammeAim).ToList() ?? new List<ILearningDelivery>();
+                ld.AimType == TypeOfAim.ProgrammeAim) ?? new List<ILearningDelivery>();
         }
     }
 }
