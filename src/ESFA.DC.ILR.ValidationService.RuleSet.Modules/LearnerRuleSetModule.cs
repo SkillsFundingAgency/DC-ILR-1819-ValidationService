@@ -31,6 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
     using ESFA.DC.ILR.ValidationService.Rules.HE.PCSLDCS;
     using ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS;
     using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
+    using ESFA.DC.ILR.ValidationService.Rules.HE.SEC;
     using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
     using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
     using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
@@ -481,6 +482,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R117Rule),
                 typeof(R118Rule),
                 typeof(Sex_01Rule),
+                typeof(SEC_01Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SWSupAimId_01Rule),
                 typeof(StdCode_01Rule),
