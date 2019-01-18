@@ -9,7 +9,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 {
-    public class DerivedData_12Rule : IDerivedData_12Rule //: IDerivedData_32Rule
+    public class DerivedData_12Rule : IDerivedData_12Rule
     {
         private const int ValidEmploymentStatusCodeForLDM = 4;
         private readonly HashSet<int> ValidEmploymentStatusCodes = new HashSet<int>() { 1, 2 };
