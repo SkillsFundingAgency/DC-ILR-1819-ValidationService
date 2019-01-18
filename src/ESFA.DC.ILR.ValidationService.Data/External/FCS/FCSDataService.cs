@@ -61,8 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         public bool ConRefNumberExists(string conRefNumber)
         {
             return _contractAllocations
-                .Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber))
-                .Any();
+                .Any(ca => ca.ContractAllocationNumber.ComparesWith(conRefNumber));
         }
 
         /// <summary>
@@ -75,8 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
             var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList().ToCaseInsensitiveHashSet();
 
             return _contractAllocations
-               .Where(ca => fsCodes.Contains(ca.FundingStreamPeriodCode))
-               .Any();
+               .Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
         }
 
         /// <summary>
@@ -118,14 +116,30 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <summary>
         /// Gets the contract allocation for.
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
-        /// <returns>a contract allocation (if found)</returns>
-        public IFcsContractAllocation GetContractAllocationFor(string contractReference) =>
-            _contractAllocations.FirstOrDefault(x => x.ContractAllocationNumber.ComparesWith(contractReference));
+        /// <param name="thisContractReference">this contract reference.</param>
+        /// <returns>
+        /// any contract allocations found
+        /// </returns>
+        public IReadOnlyCollection<IFcsContractAllocation> GetContractAllocationsFor(string thisContractReference) =>
+            _contractAllocations
+                .Where(x => x.ContractAllocationNumber.ComparesWith(thisContractReference))
+                .AsSafeReadOnlyList();
 
         /// <summary>
         /// That matches reference to allocation
-        /// 2018-12-05 CME: this routine may require refinement as i'm not convinced i'm filtering with all of the correct criteria
+        /// 2018-12-05 CME: this routine may require refinement as i'm not convinced
+        /// i'm filtering with all of the correct criteria
+        /// </summary>
+        /// <param name="reference">The reference.</param>
+        /// <param name="allocations">The allocations.</param>
+        /// <returns>
+        ///   <c>true</c> if [that matches] [the specified reference]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool ThatMatches(IEsfEligibilityRuleReferences reference, IReadOnlyCollection<IFcsContractAllocation> allocations) =>
+            allocations.Any(x => ThatMatches(reference, x));
+
+        /// <summary>
+        /// Thats the matches.
         /// </summary>
         /// <param name="reference">The reference.</param>
         /// <param name="allocation">The allocation.</param>
@@ -147,10 +161,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         public TResult GetEligibilityRuleItemFor<TResult>(string contractReference, IReadOnlyCollection<TResult> usingSources)
             where TResult : class, IEsfEligibilityRuleReferences
         {
-            var thisAllocation = GetContractAllocationFor(contractReference);
-            return It.Has(thisAllocation)
-                ? usingSources.FirstOrDefault(x => ThatMatches(x, thisAllocation))
-                : null;
+            var allocations = GetContractAllocationsFor(contractReference);
+            return It.Has(allocations)
+                ? usingSources.FirstOrDefault(x => ThatMatches(x, allocations))
+                : default(TResult);
         }
 
         public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
