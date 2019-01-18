@@ -139,6 +139,7 @@
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="CrossEntity\R91Rule.cs" />
     <Compile Include="CrossEntity\R96Rule.cs" />
+    <Compile Include="Derived\DerivedData_19Rule.cs" />
     <Compile Include="Derived\DerivedData_05Rule.cs" />
     <Compile Include="Derived\DerivedData_11Rule.cs" />
     <Compile Include="Derived\DerivedData_14Rule.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Derived\DerivedData_31Rule.cs" />
     <Compile Include="Derived\DerivedData_12Rule.cs" />
     <Compile Include="Derived\DerivedData_32Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_19Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_12Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_14Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_05Rule.cs" />
