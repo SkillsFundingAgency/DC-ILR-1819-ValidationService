@@ -109,6 +109,7 @@
 
         public const string ELQ_01 = "ELQ_01";
 
+        public const string EmpId_10 = "EmpId_10";
         public const string EmpId_13 = "EmpId_13";
 
         public const string EmpOutcome_01 = "EmpOutcome_01";
@@ -213,6 +214,7 @@
         public const string LearnDelFAMType_50 = "LearnDelFAMType_50";
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
+        public const string LearnDelFAMType_56 = "LearnDelFAMType_56";
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
         public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -260,7 +262,7 @@
         public const string MathGrade_03 = "MathGrade_03";
         public const string MathGrade_04 = "MathGrade_04";
 
-        public const string MODESTUD_03Rule = "MODESTUD_03Rule";
+        public const string MODESTUD_03 = "MODESTUD_03";
 
         public const string MSTUFEE_03 = "MSTUFEE_03";
         public const string MSTUFEE_04 = "MSTUFEE_04";
@@ -389,11 +391,14 @@
         public const string R71 = "R71";
         public const string R75 = "R75";
         public const string R85 = "R85";
+        public const string R89 = "R89";
+        public const string R90 = "R90";
         public const string R91 = "R91";
         public const string R92 = "R92";
         public const string R96 = "R96";
         public const string R99 = "R99";
         public const string R100 = "R100";
+        public const string R101 = "R101";
         public const string R102 = "R102";
         public const string R104 = "R104";
         public const string R105 = "R105";

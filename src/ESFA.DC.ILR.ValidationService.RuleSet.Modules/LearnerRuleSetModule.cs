@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
+﻿using ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
 
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
 
@@ -330,6 +331,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_50Rule),
                 typeof(LearnDelFAMType_53Rule),
                 typeof(LearnDelFAMType_54Rule),
+                typeof(LearnDelFAMType_56Rule),
                 typeof(LearnDelFAMType_60Rule),
                 typeof(LearnDelFAMType_61Rule),
                 typeof(LearnDelFAMType_62Rule),
@@ -466,11 +468,14 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R68Rule),
                 typeof(R70Rule),
                 typeof(R75Rule),
+                typeof(R89Rule),
+                typeof(R90Rule),
                 typeof(R91Rule),
                 typeof(R92Rule),
                 typeof(R96Rule),
                 typeof(R99Rule),
                 typeof(R100Rule),
+                typeof(R101Rule),
                 typeof(R102Rule),
                 typeof(R104Rule),
                 typeof(R105Rule),
