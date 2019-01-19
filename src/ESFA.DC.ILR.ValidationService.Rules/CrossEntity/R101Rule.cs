@@ -9,14 +9,13 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
-    public class R104Rule : AbstractRule, IRule<ILearner>
+    public class R101Rule : AbstractRule, IRule<ILearner>
     {
         private readonly string _famTypeACT = Monitoring.Delivery.Types.ApprenticeshipContract;
-
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
-        public R104Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.R104)
+        public R101Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.R101)
         {
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
@@ -31,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 var learningDeliveryFAMs = _learningDeliveryFAMQueryService
-                    .GetLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT).ToList();
+                  .GetLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT).ToList();
 
                 if (DoesNotHaveMultipleACTFams(learningDeliveryFAMs))
                 {
@@ -48,8 +47,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                         objectToValidate.LearnRefNumber,
                         learningDelivery.AimSeqNumber,
                         errorMessageParameters: BuildErrorMessageParameters(
-                            learningDelivery.LearnPlanEndDate,
-                            learningDelivery.LearnActEndDateNullable,
                             _famTypeACT,
                             learningDeliveryFAM.LearnDelFAMDateFromNullable,
                             learningDeliveryFAM.LearnDelFAMDateToNullable));
@@ -79,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 {
                     if (ldFAMs[i - 1].LearnDelFAMDateToNullable == null)
                     {
-                        invalidLearningDeliveryFAMs.Add(ldFAMs[i]);
+                        invalidLearningDeliveryFAMs.Add(ldFAMs[i - 1]);
                         i++;
 
                         continue;
@@ -92,7 +89,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
                     if (errorConditionMet)
                     {
-                        invalidLearningDeliveryFAMs.Add(ldFAMs[i]);
+                        invalidLearningDeliveryFAMs.Add(ldFAMs[i - 1]);
                         i++;
 
                         continue;
@@ -105,15 +102,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             return invalidLearningDeliveryFAMs;
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnPlanEndDate, DateTime? learnActEndDate, string famType, DateTime? learnDelFamDateFrom, DateTime? learnDelFamDateTo)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string famType, DateTime? famDateFrom, DateTime? famDateTo)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnPlanEndDate, learnPlanEndDate),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDate),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, famType),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateFrom, learnDelFamDateFrom),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateTo, learnDelFamDateTo)
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateFrom, famDateFrom),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateTo, famDateTo)
             };
         }
     }

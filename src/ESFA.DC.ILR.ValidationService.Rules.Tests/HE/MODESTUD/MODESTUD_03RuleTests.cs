@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV;
+using ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDLEV
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.MODESTUD
 {
     public class MODESTUD_03RuleTests : AbstractRuleTests<MODESTUD_03Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("MODESTUD_03Rule");
+            NewRule().RuleName.Should().Be("MODESTUD_03");
         }
 
         [Fact]
@@ -48,16 +48,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDLEV
         }
 
         [Theory]
-        [InlineData("08/01/2009", 4, 3, false)]
-        [InlineData("08/02/2009", 4, 3, false)]
-        [InlineData("08/01/2009", 4, 1, true)]
-        [InlineData("08/02/2009", 4, 2, true)]
-        [InlineData("07/31/2009", 4, 3, false)]
-        [InlineData("08/01/2009", 5, 3, false)]
-        [InlineData("08/02/2009", 5, 3, false)]
-        [InlineData("08/01/2009", 5, 1, true)]
-        [InlineData("08/02/2009", 5, 2, true)]
-        [InlineData("07/31/2009", 5, 3, false)]
+        [InlineData("2009-08-01", 4, 3, false)]
+        [InlineData("2009-08-02", 4, 3, false)]
+        [InlineData("2009-08-01", 4, 1, true)]
+        [InlineData("2009-08-02", 4, 2, true)]
+        [InlineData("2009-07-31", 4, 3, false)]
+        [InlineData("2009-08-01", 5, 3, false)]
+        [InlineData("2009-08-02", 5, 3, false)]
+        [InlineData("2009-08-01", 5, 1, true)]
+        [InlineData("2009-08-02", 5, 2, true)]
+        [InlineData("2009-07-31", 5, 3, false)]
         public void ConditionMeetsExpectation(string strLearnStartDate, int specFee, int modeStud, bool expectation)
         {
             var learnStartDate = DateTime.Parse(strLearnStartDate);
