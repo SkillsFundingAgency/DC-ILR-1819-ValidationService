@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
+﻿using ESFA.DC.ILR.ValidationService.Rules.HE.TYPEYR;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
 
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
 
@@ -491,6 +492,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
                 typeof(TYPEYR_01Rule),
+                typeof(TYPEYR_02Rule),
                 typeof(UKPRN_05Rule),
                 typeof(UKPRN_06Rule),
                 typeof(UKPRN_08Rule),
