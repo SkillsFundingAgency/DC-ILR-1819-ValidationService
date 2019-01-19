@@ -244,6 +244,7 @@
     <Compile Include="HE\MODESTUD\MODESTUD_03Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_04Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_03Rule.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_02Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />

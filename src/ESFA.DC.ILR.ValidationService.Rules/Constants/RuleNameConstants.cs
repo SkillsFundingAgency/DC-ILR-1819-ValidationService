@@ -265,6 +265,7 @@
 
         public const string MODESTUD_03 = "MODESTUD_03";
 
+        public const string MSTUFEE_02 = "MSTUFEE_02";
         public const string MSTUFEE_03 = "MSTUFEE_03";
         public const string MSTUFEE_04 = "MSTUFEE_04";
 
