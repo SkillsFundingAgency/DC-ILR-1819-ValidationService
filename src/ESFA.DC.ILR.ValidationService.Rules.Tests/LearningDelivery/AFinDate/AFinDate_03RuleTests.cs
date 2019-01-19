@@ -1,6 +1,8 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
@@ -67,7 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(AFinDate_03Rule.Name, result);
+            Assert.Equal(RuleNameConstants.AFinDate_03, result);
         }
 
         /// <summary>
@@ -149,10 +151,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
             // arrange
             const string LearnRefNumber = "123456789X";
 
+            var testDate = DateTime.Parse(finDate);
+            var preparationDate = DateTime.Parse(fileDate);
+
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinDate)
-                .Returns(DateTime.Parse(finDate));
+                .Returns(testDate);
 
             var records = Collection.Empty<IAppFinRecord>();
             records.Add(mockFinRec.Object);
@@ -175,21 +180,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == AFinDate_03Rule.Name),
-                    Moq.It.Is<string>(y => y == LearnRefNumber),
-                    0,
-                    Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+                .Setup(x => x.Handle(RuleNameConstants.AFinDate_03, LearnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == AFinDate_03Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == mockDelivery.Object)))
+                .Setup(x => x.BuildErrorMessageParameter("AFinDate", testDate.ToString("d", AbstractRule.RequiredCulture)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("FilePrepDate", preparationDate.ToString("d", AbstractRule.RequiredCulture)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             fileData
                 .Setup(x => x.FilePreparationDate())
-                .Returns(DateTime.Parse(fileDate));
+                .Returns(preparationDate);
 
             var sut = new AFinDate_03Rule(handler.Object, fileData.Object);
 
@@ -215,10 +217,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
             // arrange
             const string LearnRefNumber = "123456789X";
 
+            var testDate = DateTime.Parse(finDate);
+            var preparationDate = DateTime.Parse(fileDate);
+
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinDate)
-                .Returns(DateTime.Parse(finDate));
+                .Returns(testDate);
 
             var records = Collection.Empty<IAppFinRecord>();
             records.Add(mockFinRec.Object);
@@ -244,7 +249,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinDate
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             fileData
                 .Setup(x => x.FilePreparationDate())
-                .Returns(DateTime.Parse(fileDate));
+                .Returns(preparationDate);
 
             var sut = new AFinDate_03Rule(handler.Object, fileData.Object);
 

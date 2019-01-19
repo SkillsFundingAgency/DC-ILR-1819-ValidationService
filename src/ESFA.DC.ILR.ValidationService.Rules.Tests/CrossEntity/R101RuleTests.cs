@@ -13,14 +13,14 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 {
-    public class R104RuleTests : AbstractRuleTests<R104Rule>
+    public class R101RuleTests : AbstractRuleTests<R104Rule>
     {
         private readonly string _famTypeACT = Monitoring.Delivery.Types.ApprenticeshipContract;
 
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("R104");
+            NewRule().RuleName.Should().Be("R101");
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                learningDeliveryFamTwo
             };
 
-            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo });
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamOne });
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                learningDeliveryFamThree
             };
 
-            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamThree });
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo });
         }
 
         [Fact]
@@ -160,7 +160,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                learningDeliveryFamThree
             };
 
-            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo, learningDeliveryFamThree });
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamOne, learningDeliveryFamTwo });
         }
 
         [Fact]
@@ -207,23 +207,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
-                }
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                   LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+               },
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                   LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+               },
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
+               }
             };
 
             var learner = new TestLearner()
@@ -261,23 +261,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
-                }
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                   LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+               },
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                   LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+               },
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
+               }
             };
 
             var learner = new TestLearner()
@@ -285,17 +285,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 LearnRefNumber = "00100309",
                 LearningDeliveries = new TestLearningDelivery[]
                 {
-                   new TestLearningDelivery()
-                   {
-                       AimSeqNumber = 1,
-                       LearningDeliveryFAMs = learningDeliveryFAMs
-                   },
-                   new TestLearningDelivery()
-                   {
-                      AimSeqNumber = 2,
-                      LearningDeliveryFAMs = learningDeliveryFAMs
-                   },
-                }
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 1,
+                        LearningDeliveryFAMs = learningDeliveryFAMs
+                    },
+                     new TestLearningDelivery()
+                     {
+                        AimSeqNumber = 2,
+                        LearningDeliveryFAMs = learningDeliveryFAMs
+                    },
+               }
             };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
@@ -314,21 +314,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1)
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1)
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMType = "ACT",
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2)
-                }
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+               },
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1)
+               },
+               new TestLearningDeliveryFAM
+               {
+                   LearnDelFAMType = "ACT",
+                   LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
+               }
             };
 
             var learner = new TestLearner()
@@ -482,27 +482,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         public void BuildErrorMessageParameters()
         {
             var famType = Monitoring.Delivery.Types.ApprenticeshipContract;
-            var learnPlanEndDate = new DateTime(2018, 8, 1);
-            var learnActEndDate = new DateTime(2018, 8, 1);
-            var learnDelFamDateFrom = new DateTime(2018, 8, 1);
-            var learnDelFamDateTo = new DateTime(2018, 8, 1);
+            var dateFrom = new DateTime(2018, 8, 1);
+            var dateTo = new DateTime(2018, 8, 1);
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnPlanEndDate", "01/08/2018")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnActEndDate", "01/08/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMType", "ACT")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMDateFrom", "01/08/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMDateTo", "01/08/2018")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(learnPlanEndDate, learnActEndDate, famType, learnDelFamDateFrom, learnDelFamDateTo);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(famType, dateFrom, dateTo);
 
             validationErrorHandlerMock.Verify();
         }
 
-        public R104Rule NewRule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
+        public R101Rule NewRule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new R104Rule(learningDeliveryFAMQueryService, validationErrorHandler);
+            return new R101Rule(learningDeliveryFAMQueryService, validationErrorHandler);
         }
     }
 }

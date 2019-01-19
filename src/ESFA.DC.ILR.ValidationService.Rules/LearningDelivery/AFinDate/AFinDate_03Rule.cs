@@ -1,33 +1,23 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
 {
     /// <summary>
     /// apprenticeship record financial date
     /// </summary>
+    /// <seealso cref="AbstractRule" />
     /// <seealso cref="Interface.IRule{ILearner}" />
     public class AFinDate_03Rule :
+        AbstractRule,
         IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = "AFINDATE";
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "AFinDate_03";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
         /// <summary>
         /// The file data (service)
         /// </summary>
@@ -39,29 +29,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="fileData">The file data.</param>
         public AFinDate_03Rule(IValidationErrorHandler validationErrorHandler, IFileDataService fileData)
+            : base(validationErrorHandler, RuleNameConstants.AFinDate_03)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(fileData)
                 .AsGuard<ArgumentNullException>(nameof(fileData));
 
-            _messageHandler = validationErrorHandler;
             _fileData = fileData;
         }
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
 
         /// <summary>
         /// Checks the delivery apprecticeship fianancial records.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <param name="matchCondition">The match condition.</param>
-        /// <returns>true if any of the delivery fams match the condition</returns>
-        public bool CheckDeliveryAFRs(ILearningDelivery delivery, Func<IAppFinRecord, bool> matchCondition) =>
-            delivery.AppFinRecords.SafeAny(matchCondition);
+        /// <param name="messageAction">The message action.</param>
+        public void CheckDeliveryAFRs(ILearningDelivery delivery, Func<IAppFinRecord, bool> matchCondition, Action<IAppFinRecord> messageAction) =>
+            delivery.AppFinRecords.ForAny(matchCondition, messageAction);
 
         /// <summary>
         /// Determines whether [has invalid financial date] [the specified record].
@@ -85,8 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(d => CheckDeliveryAFRs(d, HasInvalidFinancialDate))
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+                .ForEach(x => CheckDeliveryAFRs(x, HasInvalidFinancialDate, y => RaiseValidationMessage(learnRefNumber, x, y)));
         }
 
         /// <summary>
@@ -94,12 +78,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
         /// <param name="thisDelivery">this learning delivery.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
+        /// <param name="thisRecord">this financial record.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery, IAppFinRecord thisRecord)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisRecord));
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        /// <summary>
+        /// Builds the error message parameters.
+        /// </summary>
+        /// <param name="thisRecord">this financial record.</param>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(IAppFinRecord thisRecord)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.AFinDate, thisRecord.AFinDate),
+                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, _fileData.FilePreparationDate())
+            };
         }
     }
 }

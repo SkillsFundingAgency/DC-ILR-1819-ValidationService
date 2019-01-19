@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV
+namespace ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD
 {
     public class MODESTUD_03Rule : AbstractRule, IRule<ILearner>
     {
@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV
 
     public MODESTUD_03Rule(
             IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.MODESTUD_03Rule)
+            : base(validationErrorHandler, RuleNameConstants.MODESTUD_03)
         {
         }
 
