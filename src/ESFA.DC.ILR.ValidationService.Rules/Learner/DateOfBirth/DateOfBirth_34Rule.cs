@@ -7,23 +7,26 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_34Rule : AbstractRule, IRule<ILearner>
     {
-        private const double DaysInYear = 365.242199;
         private const int MinAge = 19;
         private const int MaxAge = 24;
 
         private readonly IAcademicYearDataService _academicYearDataService;
+        private readonly IDateTimeQueryService _dateTimeQueryService;
 
         public DateOfBirth_34Rule(
             IAcademicYearDataService academicYearDataService,
-            IValidationErrorHandler validationErrorHandler)
+            IValidationErrorHandler validationErrorHandler,
+            IDateTimeQueryService dateTimeQueryService)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_34)
         {
             _academicYearDataService = academicYearDataService;
+            _dateTimeQueryService = dateTimeQueryService;
         }
 
         /// <summary>
@@ -37,7 +40,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                 return;
             }
 
-            var age = Convert.ToInt32(Math.Floor((_academicYearDataService.AugustThirtyFirst() - (learner.DateOfBirthNullable ?? DateTime.MinValue)).TotalDays / DaysInYear));
+            var age = _dateTimeQueryService.AgeAtGivenDate(
+                learner.DateOfBirthNullable ?? DateTime.MinValue,
+                _academicYearDataService.AugustThirtyFirst());
+
             if (age < MinAge || age > MaxAge)
             {
                 return;

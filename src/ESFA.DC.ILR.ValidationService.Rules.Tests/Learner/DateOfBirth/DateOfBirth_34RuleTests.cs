@@ -5,6 +5,7 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Mocks;
 using FluentAssertions;
@@ -29,6 +30,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var academicYearServiceMock = new Mock<IAcademicYearDataService>();
             academicYearServiceMock.Setup(m => m.AugustThirtyFirst()).Returns(new DateTime(2018, 8, 31));
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(18);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1999, 9, 1),
@@ -48,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, dateTimeServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
@@ -59,6 +65,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var academicYearServiceMock = new Mock<IAcademicYearDataService>();
             academicYearServiceMock.Setup(m => m.AugustThirtyFirst()).Returns(new DateTime(2018, 8, 31));
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -79,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, dateTimeServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
@@ -90,6 +101,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var academicYearServiceMock = new Mock<IAcademicYearDataService>();
             academicYearServiceMock.Setup(m => m.AugustThirtyFirst()).Returns(new DateTime(2018, 8, 31));
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -110,7 +126,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, dateTimeServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
@@ -121,6 +137,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var academicYearServiceMock = new Mock<IAcademicYearDataService>();
             academicYearServiceMock.Setup(m => m.AugustThirtyFirst()).Returns(new DateTime(2018, 8, 31));
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
 
             var testLearner = new TestLearner
             {
@@ -145,7 +166,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, dateTimeServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
@@ -199,6 +220,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var academicYearServiceMock = new Mock<IAcademicYearDataService>();
             academicYearServiceMock.Setup(m => m.AugustThirtyFirst()).Returns(new DateTime(2018, 8, 31));
 
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock
+                .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(20);
+
             var testLearner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1998, 8, 31),
@@ -218,15 +244,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, academicYearServiceMock.Object, dateTimeServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock, 1);
         }
 
         private DateOfBirth_34Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
-            IAcademicYearDataService academicYearDataService = null)
+            IAcademicYearDataService academicYearDataService = null,
+            IDateTimeQueryService dateTimeQueryService = null)
         {
-            return new DateOfBirth_34Rule(academicYearDataService, validationErrorHandler);
+            return new DateOfBirth_34Rule(academicYearDataService, validationErrorHandler, dateTimeQueryService);
         }
 
         private void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)

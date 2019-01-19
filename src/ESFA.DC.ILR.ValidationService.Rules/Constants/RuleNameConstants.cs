@@ -22,6 +22,7 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinDate_03 = "AFinDate_03";
         public const string AFinDate_04 = "AFinDate_04";
         public const string AFinDate_05 = "AFinDate_05";
         public const string AFinDate_06 = "AFinDate_06";
@@ -42,6 +43,7 @@
         public const string AgreeId_02 = "AgreeId_02";
 
         public const string AimSeqNumber_02 = "AimSeqNumber_02";
+        public const string ALSCost_02 = "ALSCost_02";
 
         public const string AimType_01 = "AimType_01";
         public const string AimType_05 = "AimType_05";
@@ -87,6 +89,8 @@
         public const string DateOfBirth_37 = "DateOfBirth_37";
         public const string DateOfBirth_38 = "DateOfBirth_38";
         public const string DateOfBirth_39 = "DateOfBirth_39";
+        public const string DateOfBirth_40 = "DateOfBirth_40";
+        public const string DateOfBirth_43 = "DateOfBirth_43";
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
@@ -94,6 +98,8 @@
         public const string DateOfBirth_51 = "DateOfBirth_51";
         public const string DateOfBirth_52 = "DateOfBirth_52";
         public const string DateOfBirth_53 = "DateOfBirth_53";
+        public const string DateOfBirth_54 = "DateOfBirth_54";
+        public const string DateOfBirth_55 = "DateOfBirth_55";
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
@@ -102,7 +108,9 @@
         public const string Ethnicity_01 = "Ethnicity_01";
 
         public const string ELQ_01 = "ELQ_01";
+        public const string ELQ_02 = "ELQ_02";
 
+        public const string EmpId_10 = "EmpId_10";
         public const string EmpId_13 = "EmpId_13";
 
         public const string EmpOutcome_01 = "EmpOutcome_01";
@@ -207,6 +215,7 @@
         public const string LearnDelFAMType_50 = "LearnDelFAMType_50";
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
+        public const string LearnDelFAMType_56 = "LearnDelFAMType_56";
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
         public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -214,7 +223,9 @@
         public const string LearnDelFAMType_67 = "LearnDelFAMType_67";
         public const string LearnDelFAMType_68 = "LearnDelFAMType_68";
         public const string LearnDelFAMType_69 = "LearnDelFAMType_69";
+        public const string LearnDelFAMType_70 = "LearnDelFAMType_70";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
+        public const string LearnDelFAMType_73 = "LearnDelFAMType_73";
 
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
         public const string LearningDeliveryHE_03 = "LearningDeliveryHE_03";
@@ -252,6 +263,8 @@
         public const string MathGrade_03 = "MathGrade_03";
         public const string MathGrade_04 = "MathGrade_04";
 
+        public const string MODESTUD_03 = "MODESTUD_03";
+
         public const string MSTUFEE_03 = "MSTUFEE_03";
         public const string MSTUFEE_04 = "MSTUFEE_04";
 
@@ -284,8 +297,10 @@
 
         public const string OutEndDate_01 = "OutEndDate_01";
 
+        public const string OutGrade_01 = "OutGrade_01";
         public const string OutGrade_03 = "OutGrade_03";
         public const string OutGrade_04 = "OutGrade_04";
+        public const string OutGrade_05 = "OutGrade_05";
         public const string OutGrade_06 = "OutGrade_06";
 
         public const string OutStartDate_01 = "OutStartDate_01";
@@ -304,10 +319,13 @@
         public const string PartnerUKPRN_02 = "PartnerUKPRN_02";
         public const string PartnerUKPRN_03 = "PartnerUKPRN_03";
 
+        public const string PCFLDCS_01 = "PCFLDCS_01";
         public const string PCFLDCS_02 = "PCFLDCS_02";
         public const string PCFLDCS_03 = "PCFLDCS_03";
 
         public const string PCSLDCS_01 = "PCSLDCS_01";
+
+        public const string PCTLDCS_02 = "PCTLDCS_02";
 
         public const string PlanEEPHours_01 = "PlanEEPHours_01";
 
@@ -340,12 +358,12 @@
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
-        public const string ProvSpecDelMonOccur_01Rule = "ProvSpecDelMonOccur_01";
+        public const string ProvSpecDelMonOccur_01 = "ProvSpecDelMonOccur_01";
 
         public const string PwayCode_02 = "PwayCode_02";
         public const string PwayCode_03 = "PwayCode_03";
 
-        public const string ProvSpecLearnMonOccur_01Rule = "ProvSpecLearnMonOccur_01Rule";
+        public const string ProvSpecLearnMonOccur_01 = "ProvSpecLearnMonOccur_01";
 
         public const string QUALENT3_01 = "QUALENT3_01";
         public const string QUALENT3_02 = "QUALENT3_02";
@@ -376,13 +394,17 @@
         public const string R71 = "R71";
         public const string R75 = "R75";
         public const string R85 = "R85";
+        public const string R89 = "R89";
+        public const string R90 = "R90";
         public const string R91 = "R91";
         public const string R92 = "R92";
         public const string R96 = "R96";
         public const string R99 = "R99";
         public const string R100 = "R100";
+        public const string R101 = "R101";
         public const string R102 = "R102";
         public const string R104 = "R104";
+        public const string R105 = "R105";
         public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R110 = "R110";
@@ -397,11 +419,17 @@
 
         public const string Sex_01 = "Sex_01";
 
+        public const string SEC_01 = "SEC_01";
+
         public const string SOC2000_02 = "SOC2000_02";
 
         public const string STULOAD_04 = "STULOAD_04";
 
         public const string TTACCOM_04 = "TTACCOM_04";
+
+        public const string TYPEYR_01 = "TYPEYR_01";
+
+        public const string UCASAPPID_01 = "UCASAPPID_01";
 
         public const string UKPRN_03 = "UKPRN_03";
         public const string UKPRN_05 = "UKPRN_05";

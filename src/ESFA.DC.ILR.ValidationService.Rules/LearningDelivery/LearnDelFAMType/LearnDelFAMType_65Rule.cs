@@ -8,13 +8,13 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
     public class LearnDelFAMType_65Rule : AbstractRule, IRule<ILearner>
     {
-        private const double DaysInYear = 365.242199;
-        private const int FundingModel = 35;
+        private const int FundingModel = TypeOfFunding.AdultSkills;
 
         private const int MinAge = 19;
         private const int MaxAge = 23;
@@ -25,6 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private readonly IDerivedData_07Rule _dd07;
         private readonly IDerivedData_28Rule _derivedDataRule28;
         private readonly IDerivedData_29Rule _derivedDataRule29;
+        private readonly IDateTimeQueryService _dateTimeQueryService;
 
         private readonly int[] _priorAttain = { 2, 3, 4, 5, 10, 11, 12, 13, 97, 98 };
         private readonly DateTime _startDate = new DateTime(2017, 7, 31);
@@ -39,13 +40,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             ILARSDataService larsDataService,
             IDerivedData_07Rule dd07,
             IDerivedData_28Rule derivedDataRule28,
-            IDerivedData_29Rule derivedDataRule29)
+            IDerivedData_29Rule derivedDataRule29,
+            IDateTimeQueryService dateTimeQueryService)
             : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_65)
         {
             _larsDataService = larsDataService;
             _dd07 = dd07;
             _derivedDataRule28 = derivedDataRule28;
             _derivedDataRule29 = derivedDataRule29;
+            _dateTimeQueryService = dateTimeQueryService;
         }
 
         /// <summary>
@@ -73,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                     continue;
                 }
 
-                var ageAtCourseStart = Convert.ToInt32(Math.Floor((learningDelivery.LearnStartDate - (learner.DateOfBirthNullable ?? DateTime.MinValue)).TotalDays / DaysInYear));
+                var ageAtCourseStart = _dateTimeQueryService.AgeAtGivenDate(learner.DateOfBirthNullable ?? DateTime.MinValue, learningDelivery.LearnStartDate);
                 if (ageAtCourseStart < MinAge || ageAtCourseStart > MaxAge)
                 {
                     continue;

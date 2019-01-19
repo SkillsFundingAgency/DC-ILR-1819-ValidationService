@@ -16,5 +16,6 @@
         OutGrade,
         OutType,
         Sex,
+        TypeYr
     }
 }

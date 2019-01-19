@@ -14,6 +14,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ProvSpecLearnMonOccu
     public class ProvSpecLearnMonOccur_01RuleTests : AbstractRuleTests<ProvSpecLearnMonOccur_01Rule>
     {
         [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("ProvSpecLearnMonOccur_01");
+        }
+
+        [Fact]
         public void ConditionMet_True()
         {
             var rule = NewRule();

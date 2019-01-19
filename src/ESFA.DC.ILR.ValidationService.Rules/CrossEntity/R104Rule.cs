@@ -11,7 +11,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R104Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly string _famTypeACT = LearningDeliveryFAMTypeConstants.ACT;
+        private readonly string _famTypeACT = Monitoring.Delivery.Types.ApprenticeshipContract;
+
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public R104Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
@@ -29,76 +30,79 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (!ACTCountConditionMet(learningDelivery.LearningDeliveryFAMs))
+                var learningDeliveryFAMs = _learningDeliveryFAMQueryService
+                    .GetLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT).ToList();
+
+                if (DoesNotHaveMultipleACTFams(learningDeliveryFAMs))
                 {
                     return;
                 }
 
-                var learningDeliveryFAMs = ACTDateConditionMet(learningDelivery.LearningDeliveryFAMs);
+                var invalidLearningDeliveryFAMs = LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).ToList();
 
-                if (learningDeliveryFAMs != null)
+                if (invalidLearningDeliveryFAMs.Any())
                 {
-                    HandleValidationError(
-                            objectToValidate.LearnRefNumber,
-                            learningDelivery.AimSeqNumber,
-                            BuildErrorMessageParameters(
-                                learningDelivery.LearnPlanEndDate,
-                                learningDelivery.LearnActEndDateNullable,
-                                _famTypeACT,
-                                learningDeliveryFAMs.LearnDelFAMDateFromNullable,
-                                learningDeliveryFAMs.LearnDelFAMDateToNullable));
+                    foreach (var learningDeliveryFAM in invalidLearningDeliveryFAMs)
+                    {
+                        HandleValidationError(
+                        objectToValidate.LearnRefNumber,
+                        learningDelivery.AimSeqNumber,
+                        errorMessageParameters: BuildErrorMessageParameters(
+                            learningDelivery.LearnPlanEndDate,
+                            learningDelivery.LearnActEndDateNullable,
+                            _famTypeACT,
+                            learningDeliveryFAM.LearnDelFAMDateFromNullable,
+                            learningDeliveryFAM.LearnDelFAMDateToNullable));
+                    }
                 }
             }
         }
 
-        public bool ACTCountConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool DoesNotHaveMultipleACTFams(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            if (learningDeliveryFAMs != null)
-            {
-                return _learningDeliveryFAMQueryService.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs as IReadOnlyCollection<ILearningDeliveryFAM>, _famTypeACT) > 1;
-            }
-
-            return false;
+            return _learningDeliveryFAMQueryService.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs, _famTypeACT) < 2;
         }
 
-        public ILearningDeliveryFAM ACTDateConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public IEnumerable<ILearningDeliveryFAM> LearningDeliveryFamForOverlappingACTTypes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
+            var invalidLearningDeliveryFAMs = new List<ILearningDeliveryFAM>();
+
             if (learningDeliveryFAMs != null)
             {
-                var fams = learningDeliveryFAMs?
-                    .Where(f =>
-                    f.LearnDelFAMType == _famTypeACT
-                 && f.LearnDelFAMDateFromNullable != null)
-                 .OrderBy(ldf => ldf.LearnDelFAMDateFromNullable).ToArray();
+                var ldFAMs = learningDeliveryFAMs.OrderBy(ld => ld.LearnDelFAMDateFromNullable).ToArray();
 
-                var famCount = fams.Count();
-
-                if (famCount < 2)
-                {
-                    return null;
-                }
+                var ldFAMsCount = ldFAMs.Length;
 
                 var i = 1;
 
-                while (i < famCount)
+                while (i < ldFAMsCount)
                 {
-                    var errorConditionMet =
-                        fams[i - 1].LearnDelFAMDateToNullable == null || fams[i].LearnDelFAMDateFromNullable == null
-                        ? false
-                        : fams[i - 1].LearnDelFAMDateToNullable >= fams[i].LearnDelFAMDateFromNullable == true;
-
-                    if (errorConditionMet == true)
+                    if (ldFAMs[i - 1].LearnDelFAMDateToNullable == null)
                     {
-                        return fams[i - 1];
+                        invalidLearningDeliveryFAMs.Add(ldFAMs[i]);
+                        i++;
+
+                        continue;
+                    }
+
+                    var errorConditionMet =
+                        ldFAMs[i].LearnDelFAMDateFromNullable == null
+                        ? false
+                        : ldFAMs[i - 1].LearnDelFAMDateToNullable >= ldFAMs[i].LearnDelFAMDateFromNullable;
+
+                    if (errorConditionMet)
+                    {
+                        invalidLearningDeliveryFAMs.Add(ldFAMs[i]);
+                        i++;
+
+                        continue;
                     }
 
                     i++;
                 }
-
-                return null;
             }
 
-            return null;
+            return invalidLearningDeliveryFAMs;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnPlanEndDate, DateTime? learnActEndDate, string famType, DateTime? learnDelFamDateFrom, DateTime? learnDelFamDateTo)

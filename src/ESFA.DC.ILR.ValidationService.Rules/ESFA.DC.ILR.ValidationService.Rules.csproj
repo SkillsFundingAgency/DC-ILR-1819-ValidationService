@@ -84,6 +84,7 @@
     <Compile Include="Constants\ContactPreference.cs" />
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfEthnicity.cs" />
+    <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
     <Compile Include="Constants\WorkPlaceModeConstants.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
     <Compile Include="Constants\TypeOfQualEnt3.cs" />
     <Compile Include="CrossEntity\R06Rule.cs" />
+    <Compile Include="CrossEntity\R101Rule.cs" />
     <Compile Include="CrossEntity\R58Rule.cs" />
     <Compile Include="CrossEntity\R100Rule.cs" />
     <Compile Include="CrossEntity\R110Rule.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="CrossEntity\R118Rule.cs" />
     <Compile Include="CrossEntity\R104Rule.cs" />
     <Compile Include="CrossEntity\R102Rule.cs" />
+    <Compile Include="CrossEntity\R105Rule.cs" />
     <Compile Include="CrossEntity\R106Rule.cs" />
     <Compile Include="CrossEntity\R113Rule.cs" />
     <Compile Include="CrossEntity\R114Rule.cs" />
@@ -112,7 +115,9 @@
     <Compile Include="CrossEntity\R29Rule.cs" />
     <Compile Include="CrossEntity\R62Rule.cs" />
     <Compile Include="CrossEntity\R61Rule.cs" />
+    <Compile Include="CrossEntity\R89Rule.cs" />
     <Compile Include="CrossEntity\R92Rule.cs" />
+    <Compile Include="CrossEntity\R90Rule.cs" />
     <Compile Include="CrossEntity\R99Rule.cs" />
     <Compile Include="CrossEntity\R59Rule.cs" />
     <Compile Include="CrossEntity\R67Rule.cs" />
@@ -134,12 +139,14 @@
     <Compile Include="CrossEntity\R07Rule.cs" />
     <Compile Include="CrossEntity\R91Rule.cs" />
     <Compile Include="CrossEntity\R96Rule.cs" />
+    <Compile Include="Derived\DerivedData_19Rule.cs" />
     <Compile Include="Derived\DerivedData_05Rule.cs" />
     <Compile Include="Derived\DerivedData_11Rule.cs" />
     <Compile Include="Derived\DerivedData_14Rule.cs" />
     <Compile Include="Derived\DerivedData_15Rule.cs" />
     <Compile Include="Derived\DerivedData_18Rule.cs" />
     <Compile Include="Derived\DerivedData_22Rule.cs" />
+    <Compile Include="Derived\DerivedData_23Rule.cs" />
     <Compile Include="Derived\DerivedData_24Rule.cs" />
     <Compile Include="Derived\DerivedData_26Rule.cs" />
     <Compile Include="Derived\DerivedData_27Rule.cs" />
@@ -151,11 +158,15 @@
     <Compile Include="Derived\DerivedData_06Rule.cs" />
     <Compile Include="Derived\DerivedData_07Rule.cs" />
     <Compile Include="Derived\DerivedData_31Rule.cs" />
+    <Compile Include="Derived\DerivedData_12Rule.cs" />
     <Compile Include="Derived\DerivedData_32Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_19Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_12Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_14Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_05Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_15Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_18Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_23Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_26Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_27Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_01Rule.cs" />
@@ -215,6 +226,7 @@
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_02Rule.cs" />
     <Compile Include="HE\DOMICILE\DOMICILE_01Rule.cs" />
+    <Compile Include="HE\ELQ\ELQ_02Rule.cs" />
     <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
@@ -229,25 +241,32 @@
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_07Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08Rule.cs" />
+    <Compile Include="HE\MODESTUD\MODESTUD_03Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_04Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_03Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
+    <Compile Include="HE\PCFLDCS\PCFLDCS_01Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_03Rule.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01Rule.cs" />
     <Compile Include="HE\PCTLDCS\PCTLDCS_01Rule.cs" />
+    <Compile Include="HE\PCTLDCS\PCTLDCS_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_03Rule.cs" />
+    <Compile Include="HE\SEC\SEC_01Rule.cs" />
     <Compile Include="HE\SOC2000\SOC2000_02Rule.cs" />
     <Compile Include="HE\STULOAD\STULOAD_04Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
+    <Compile Include="HE\TYPEYR\TYPEYR_01Rule.cs" />
+    <Compile Include="HE\UCASAPPID\UCASAPPID_01Rule.cs" />
     <Compile Include="Learner\Accom\Accom_01Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
+    <Compile Include="Learner\ALSCost\ALSCost_02Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_05Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_06Rule.cs" />
@@ -255,6 +274,8 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_43Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_40Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_30Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_27Rule.cs" />
@@ -285,6 +306,8 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_52Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_53Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_34Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_54Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_55Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_01Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_02Rule.cs" />
     <Compile Include="Learner\EngGrade\EngGrade_03Rule.cs" />
@@ -365,12 +388,14 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_31Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_38Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_36Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_73Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_46Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_50Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_30Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_24Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_16Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_15Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_56Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_65Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_69Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_68Rule.cs" />
@@ -383,6 +408,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_60Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_61Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_40Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_70Rule.cs" />
     <Compile Include="LearningDelivery\LearnPlanEndDate\LearnPlanEndDate_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnPlanEndDate\LearnPlanEndDate_02Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_02Rule.cs" />
@@ -402,7 +428,9 @@
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_01Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_04Rule.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_05Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_06Rule.cs" />
     <Compile Include="LearningDelivery\ProvSpecDelMonOccur\ProvSpecDelMonOccur_01Rule.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05Rule.cs" />
@@ -614,5 +642,6 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

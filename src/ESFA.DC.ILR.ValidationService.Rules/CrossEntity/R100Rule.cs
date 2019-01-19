@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private readonly IEnumerable<string> _assessmentPriceFinancialRecordKeys =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
-                ApprenticeshipFinancialRecord.TotalTrainingPrice,
+                ApprenticeshipFinancialRecord.ResidualAssessmentPrice,
                 ApprenticeshipFinancialRecord.TotalAssessmentPrice,
             };
 
