@@ -320,6 +320,7 @@
         public const string PCFLDCS_03 = "PCFLDCS_03";
 
         public const string PCSLDCS_01 = "PCSLDCS_01";
+        public const string PCSLDCS_02 = "PCSLDCS_02";
 
         public const string PlanEEPHours_01 = "PlanEEPHours_01";
 
