@@ -380,6 +380,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(MODESTUD_03Rule),
                 typeof(MSTUFEE_03Rule),
                 typeof(MSTUFEE_04Rule),
+                typeof(MSTUFEE_05Rule),
                 typeof(NETFEE_01Rule),
                 typeof(NETFEE_02Rule),
                 typeof(NINumber_01Rule),
