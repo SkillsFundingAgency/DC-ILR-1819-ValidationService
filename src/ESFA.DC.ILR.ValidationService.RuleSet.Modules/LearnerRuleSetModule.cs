@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD;
+﻿using ESFA.DC.ILR.ValidationService.Rules.HE.FUNDCOMP;
+using ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
 
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
@@ -254,6 +255,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FINTYPE_01Rule),
                 typeof(FINTYPE_02Rule),
                 typeof(FUNDLEV_03Rule),
+                typeof(FUNDCOMP_01Rule),
                 typeof(FundModel_01Rule),
                 typeof(FundModel_03Rule),
                 typeof(FundModel_04Rule),
