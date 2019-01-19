@@ -26,6 +26,7 @@
         public const string DateEmpStatApp = "DateEmpStatApp";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string DOMICILE = "DOMICILE";
+        public const string ELQ = "ELQ";
         public const string EmpId = "EmpId";
         public const string Ethnicity = "Ethnicity";
         public const string EmpOutcome = "EmpOutcome";
@@ -90,10 +91,12 @@
         public const string ProvSpecLearnMonOccur = "ProvSpecLearnMonOccur";
         public const string QUALENT3 = "QUALENT3";
         public const string Sex = "Sex";
+        public const string SEC = "SEC";
         public const string SPECFEE = "SPECFEE";
         public const string StdCode = "StdCode";
         public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
+        public const string UCASPERID = "UCASPERID";
         public const string WithdrawReason = "WithdrawReason";
         public const string WorkPlaceEmpId = "WorkPlaceEmpId";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";

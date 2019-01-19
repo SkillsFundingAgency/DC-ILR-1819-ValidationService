@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             new TestAppFinRecord()
                             {
                                 AFinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
-                                AFinCode = 1,
+                                AFinCode = 2,
                             }
                         }
                     }
@@ -184,8 +184,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 1)]
         [InlineData(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 2)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 4)]
         public void IsAssessmentPrice_True(string type, int code)
         {
             var appFinRecord = new TestAppFinRecord()
@@ -216,7 +216,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var assessmentPriceAppFinRecord = new TestAppFinRecord()
             {
                 AFinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
-                AFinCode = 1
+                AFinCode = 2
             };
             var nonAssesssmentPriceAppFinRecord = new TestAppFinRecord();
 
