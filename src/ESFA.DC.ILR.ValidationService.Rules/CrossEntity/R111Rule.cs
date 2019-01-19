@@ -89,7 +89,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             var learnerEmployment = (from emp in learnerEmploymentStatuses
                                       from del in learningDeliveryFAMs
-                                      where emp.DateEmpStatApp >= del.LearnDelFAMDateFromNullable
+                                      where _employmentStatuses.Contains(emp.EmpStat)
+                                        && emp.DateEmpStatApp >= del.LearnDelFAMDateFromNullable
                                         && (!del.LearnDelFAMDateToNullable.HasValue || emp.DateEmpStatApp <= del.LearnDelFAMDateToNullable)
                                         && del.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ACT
                                         && del.LearnDelFAMCode == LearningDeliveryFAMCodeConstants.ACT_ContractEmployer

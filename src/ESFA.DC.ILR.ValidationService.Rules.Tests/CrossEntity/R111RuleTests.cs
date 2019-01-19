@@ -232,11 +232,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData("2018-11-01")]
-        [InlineData(null)]
-        public void LearnerEmploymentDuringLearningDeliveryConditionMet_True(string dateTo)
+        [InlineData(11, "2018-11-01")]
+        [InlineData(12, null)]
+        public void LearnerEmploymentDuringLearningDeliveryConditionMet_True(int empStatExpected, string dateTo)
         {
-            int empStatExpected = 15;
             DateTime dateEmpStatAppExpected = new DateTime(2018, 10, 01);
             DateTime? learnDelFAMDateFromExpected = new DateTime(2018, 09, 01);
             DateTime? learnDelFAMDateToExpected = string.IsNullOrEmpty(dateTo)
@@ -307,7 +306,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestLearnerEmploymentStatus()
                     {
-                        EmpStat = 15,
+                        EmpStat = 11,
                         DateEmpStatApp = new DateTime(2018, 10, 01)
                     },
                     new TestLearnerEmploymentStatus()
