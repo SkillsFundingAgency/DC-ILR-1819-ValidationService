@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD;
+using ESFA.DC.ILR.ValidationService.Rules.HE.PCOLAB;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
 
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
@@ -413,6 +414,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PCSLDCS_01Rule),
                 typeof(PCTLDCS_01Rule),
                 typeof(PCTLDCS_02Rule),
+                typeof(PCOLAB_01Rule),
                 typeof(PlanEEPHours_01Rule),
                 typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),
