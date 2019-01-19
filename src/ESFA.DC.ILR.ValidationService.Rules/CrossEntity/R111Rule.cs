@@ -76,19 +76,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             out DateTime? learnDelFAMDateFrom,
             out DateTime? learnDelFAMDateTo)
         {
+            empStartDateApp = null;
+            empStat = null;
+            learnDelFAMDateFrom = null;
+            learnDelFAMDateTo = null;
+
+            if (learnerEmploymentStatuses == null
+                || learningDeliveryFAMs == null)
+            {
+                return false;
+            }
+
             var learnerEmployment = (from emp in learnerEmploymentStatuses
                                       from del in learningDeliveryFAMs
                                       where emp.DateEmpStatApp >= del.LearnDelFAMDateFromNullable
-                                          && (del.LearnDelFAMDateToNullable.HasValue || emp.DateEmpStatApp <= del.LearnDelFAMDateToNullable)
-                                          && del.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ACT
-                                          && del.LearnDelFAMCode == LearningDeliveryFAMCodeConstants.ACT_ContractEmployer
+                                        && (!del.LearnDelFAMDateToNullable.HasValue || emp.DateEmpStatApp <= del.LearnDelFAMDateToNullable)
+                                        && del.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ACT
+                                        && del.LearnDelFAMCode == LearningDeliveryFAMCodeConstants.ACT_ContractEmployer
                                       select new
                                       {
                                           emp.DateEmpStatApp,
                                           emp.EmpStat,
                                           del.LearnDelFAMDateFromNullable,
                                           del.LearnDelFAMDateToNullable
-                                      })?.FirstOrDefault();
+                                      }).FirstOrDefault();
             if (learnerEmployment != null)
             {
                 empStartDateApp = learnerEmployment.DateEmpStatApp;
