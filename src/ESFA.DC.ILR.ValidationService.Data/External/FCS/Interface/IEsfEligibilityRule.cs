@@ -13,12 +13,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
 
         bool? Benefits { get; }
 
-        IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }
+        IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }
 
-        IEnumerable<IEsfEligibilityRuleLocalAuthority> LocalAuthorities { get; }
+        IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> LocalAuthorities { get; }
 
-        IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> LocalEnterprisePartnerships { get; }
+        IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> LocalEnterprisePartnerships { get; }
 
-        IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> SectorSubjectAreaLevels { get; }
+        IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> SectorSubjectAreaLevels { get; }
     }
 }

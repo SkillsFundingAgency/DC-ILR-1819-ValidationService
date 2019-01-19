@@ -71,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 },
                 new ContractAllocation
                 {
-                    ContractAllocationNumber = "100",
+                    ContractAllocationNumber = "103",
                     FundingStreamCode = "Code1",
                     FundingStreamPeriodCode = "PeriodCode1",
                     Period = "R01",
@@ -81,7 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 },
                 new ContractAllocation
                 {
-                    ContractAllocationNumber = "101",
+                    ContractAllocationNumber = "104",
                     FundingStreamCode = "Code1",
                     FundingStreamPeriodCode = "PeriodCode1",
                     Period = "R01",
@@ -109,10 +109,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 }
             }.AsMockDbSet();
 
+            var eligibilityRules = new List<EsfEligibilityRule>()
+            {
+                new EsfEligibilityRule()
+                {
+                    EsfEligibilityRuleEmploymentStatuses = new List<EsfEligibilityRuleEmploymentStatus>(),
+                    EsfEligibilityRuleLocalAuthorities = new List<EsfEligibilityRuleLocalAuthority>(),
+                    EsfEligibilityRuleLocalEnterprisePartnerships = new List<EsfEligibilityRuleLocalEnterprisePartnership>(),
+                    EsfEligibilityRuleSectorSubjectAreaLevel = new List<EsfEligibilityRuleSectorSubjectAreaLevel>(),
+                }
+            }.AsMockDbSet();
+
             var fcsMock = new Mock<IFcsContext>();
             fcsMock
                 .Setup(f => f.ContractAllocations)
                 .Returns(allocations);
+
+            fcsMock.Setup(f => f.EsfEligibilityRules).Returns(eligibilityRules);
 
             var messageCacheMock = new Mock<ICache<IMessage>>();
             messageCacheMock

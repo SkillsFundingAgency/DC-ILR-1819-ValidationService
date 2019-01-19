@@ -118,6 +118,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>a contract allocation (if found)</returns>
         public IFcsContractAllocation GetContractAllocationFor(string contractReference)
         {
+            if (contractReference == null)
+            {
+                return null;
+            }
+
             _contractAllocations.TryGetValue(contractReference, out IFcsContractAllocation fcsContractAllocation);
 
             return fcsContractAllocation;
@@ -155,12 +160,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
 
         public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
         {
-            return _sectorSubjectAreaLevels?
-                .Join(
-                    _contractAllocations.Values.Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber)).ToList(),
-                    ers => new { ers.TenderSpecReference, ers.LotReference },
-                    ca => new { ca.TenderSpecReference, ca.LotReference },
-                    (ers, ca) => ers).ToList();
+            _contractAllocations.TryGetValue(conRefNumber, out IFcsContractAllocation contractAllocation);
+
+            return contractAllocation?.EsfEligibilityRule?.SectorSubjectAreaLevels ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleSectorSubjectAreaLevel>();
         }
 
         public bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber)
