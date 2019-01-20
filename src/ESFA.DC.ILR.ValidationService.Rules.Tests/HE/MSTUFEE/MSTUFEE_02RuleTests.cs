@@ -96,17 +96,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.MSTUFEE
         }
 
         [Fact]
-        public void Validate_NoLearningDeliveries_NoError()
-        {
-            var testLearner = new TestLearner();
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
-            }
-        }
-
-        [Fact]
         public void Validate_NullLearningDeliveryHEEntity_NoError()
         {
             var testLearner = new TestLearner()
@@ -119,6 +108,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.MSTUFEE
                     }
                 }
             };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoLearningDeliveries_NoError()
+        {
+            var testLearner = new TestLearner();
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

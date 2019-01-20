@@ -32,7 +32,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.MSTUFEE
             {
                 if (ConditionMet(learningDelivery.LearnStartDate, learningDelivery.LearningDeliveryHEEntity.MSTUFEE))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, learningDelivery.LearningDeliveryHEEntity.MSTUFEE));
+                    HandleValidationError(
+                        objectToValidate.LearnRefNumber,
+                        learningDelivery.AimSeqNumber,
+                        BuildErrorMessageParameters(learningDelivery.LearnStartDate, learningDelivery.LearningDeliveryHEEntity.MSTUFEE));
                 }
             }
         }
