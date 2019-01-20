@@ -366,6 +366,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnStartDate_14Rule),
                 typeof(LearnStartDate_15Rule),
                 typeof(LearnStartDate_16Rule),
+                typeof(LearnStartDate_17Rule),
                 typeof(LearnPlanEndDate_02Rule),
                 typeof(LearnPlanEndDate_03Rule),
                 typeof(LLDDCat_01Rule),
