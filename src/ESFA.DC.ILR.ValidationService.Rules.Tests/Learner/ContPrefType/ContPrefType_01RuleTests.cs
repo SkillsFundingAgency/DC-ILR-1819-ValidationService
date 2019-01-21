@@ -1,107 +1,229 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.ContPrefType;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
-using FluentAssertions;
+using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
 {
     public class ContPrefType_01RuleTests
     {
-        [Theory]
-        [InlineData("PMC", 10)]
-        [InlineData("RUI", 99)]
-        [InlineData("XXXX", 100)]
-        public void ConditionMet_True(string type, long? code)
+        /// <summary>
+        /// New rule with null message handler throws.
+        /// </summary>
+        [Fact]
+        public void NewRuleWithNullMessageHandlerThrows()
         {
-            var contactPreferenceService = new Mock<IContactPreferenceInternalDataService>();
-            contactPreferenceService.Setup(x => x.CodeExists(code)).Returns(false);
+            // arrange
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
 
-            var rule = NewRule(null, contactPreferenceService.Object);
-            rule.ConditionMet(type, code).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(null, 1)]
-        [InlineData("", 1)]
-        [InlineData(" ", 1)]
-        [InlineData("PMC", 1)]
-        [InlineData("RUI", 1)]
-        [InlineData("RUI", 2)]
-        [InlineData("RUI", 3)]
-        [InlineData("RUI", 4)]
-        [InlineData("RUI", 5)]
-        [InlineData("XXXX", 1)]
-        public void ConditionMet_False(string type, long? code)
-        {
-            var contactPreferenceService = new Mock<IContactPreferenceInternalDataService>();
-            contactPreferenceService.Setup(x => x.CodeExists(code)).Returns(true);
-
-            var rule = NewRule(null, contactPreferenceService.Object);
-            rule.ConditionMet(type, code).Should().BeFalse();
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new ContPrefType_01Rule(null, provider.Object));
         }
 
         [Fact]
-        public void Validate_True()
+        public void NewRuleWithNullProviderThrows()
         {
-            var learner = new TestLearner()
-            {
-                ContactPreferences = new List<IContactPreference>()
-                {
-                    new TestContactPreference()
-                    {
-                        ContPrefType = "PMC",
-                        ContPrefCodeNullable = 1
-                    }
-                }
-            };
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
 
-            var contactPreferenceService = new Mock<IContactPreferenceInternalDataService>();
-            contactPreferenceService.Setup(x => x.CodeExists(1)).Returns(true);
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ContPrefType_01", null, null, null);
-
-            var rule = NewRule(validationErrorHandlerMock.Object, contactPreferenceService.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new ContPrefType_01Rule(handler.Object, null));
         }
 
+        /// <summary>
+        /// Rule name 1, matches a literal.
+        /// </summary>
         [Fact]
-        public void Validate_False()
+        public void RuleName1()
         {
-            var learner = new TestLearner()
-            {
-                ContactPreferences = new List<IContactPreference>()
-                {
-                    new TestContactPreference()
-                    {
-                        ContPrefType = "XXXX",
-                        ContPrefCodeNullable = 1
-                    }
-                }
-            };
+            // arrange
+            var sut = NewRule();
 
-            var contactPreferenceService = new Mock<IContactPreferenceInternalDataService>();
-            contactPreferenceService.Setup(x => x.CodeExists(1)).Returns(false);
+            // act
+            var result = sut.RuleName;
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ContPrefType_01", null, null, null);
-
-            var rule = NewRule(validationErrorHandlerMock.Object, contactPreferenceService.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            // assert
+            Assert.Equal("ContPrefType_01", result);
         }
 
-        private ContPrefType_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null, IContactPreferenceInternalDataService contactPreferenceDataService = null)
+        /// <summary>
+        /// Rule name 2, matches the constant.
+        /// </summary>
+        [Fact]
+        public void RuleName2()
         {
-            return new ContPrefType_01Rule(validationErrorHandler, contactPreferenceDataService);
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal(RuleNameConstants.ContPrefType_01, result);
+        }
+
+        /// <summary>
+        /// Rule name 3 test, account for potential false positives.
+        /// </summary>
+        [Fact]
+        public void RuleName3()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.NotEqual("SomeOtherRuleName_07", result);
+        }
+
+        /// <summary>
+        /// Validate with null learner throws.
+        /// </summary>
+        [Fact]
+        public void ValidateWithNullLearnerThrows()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act/assert
+            Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
+        }
+
+        /// <summary>
+        /// Invalid item raises validation message.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(ContactPreference.NoContactIllnessOrDied_ValidTo20130731)]
+        [InlineData(ContactPreference.NoContactDueToIllness)]
+        [InlineData(ContactPreference.AgreesContactByEmailPostGDPR)]
+        [InlineData(ContactPreference.AgreesContactCoursesOrOpportunitiesPostGDPR)]
+        [InlineData(ContactPreference.NoContactDueToDeath)]
+        public void InvalidItemRaisesValidationMessage(string candidate)
+        {
+            // arrange
+            const string learnRefNumber = "123456789X";
+
+            var preferences = Collection.Empty<IContactPreference>();
+
+            var prefType = candidate.Substring(0, 3);
+            var prefCode = int.Parse(candidate.Substring(3));
+
+            var preference = new Mock<IContactPreference>();
+            preference
+                .SetupGet(y => y.ContPrefType)
+                .Returns(prefType);
+            preference
+                .SetupGet(y => y.ContPrefCode)
+                .Returns(prefCode);
+            preferences.Add(preference.Object);
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(learnRefNumber);
+            mockLearner
+                .SetupGet(x => x.ContactPreferences)
+                .Returns(preferences.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle("ContPrefType_01", learnRefNumber, null, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            handler
+                .Setup(y => y.BuildErrorMessageParameter("ContPrefType", prefType))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(y => y.BuildErrorMessageParameter("ContPrefCode", prefCode))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            // pass or fail is determined by this call
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.Contains(LookupTimeRestrictedKey.ContactPreference, candidate))
+                .Returns(false);
+
+            var sut = new ContPrefType_01Rule(handler.Object, provider.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+        }
+
+        /// <summary>
+        /// Valid item does not raise validation message.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(ContactPreference.NoContactIllnessOrDied_ValidTo20130731)]
+        [InlineData(ContactPreference.NoContactDueToIllness)]
+        [InlineData(ContactPreference.AgreesContactByEmailPostGDPR)]
+        [InlineData(ContactPreference.AgreesContactCoursesOrOpportunitiesPostGDPR)]
+        [InlineData(ContactPreference.NoContactDueToDeath)]
+        public void ValidItemDoesNotRaiseValidationMessage(string candidate)
+        {
+            // arrange
+            const string learnRefNumber = "123456789X";
+
+            var preferences = Collection.Empty<IContactPreference>();
+
+            var prefType = candidate.Substring(0, 3);
+            var prefCode = int.Parse(candidate.Substring(3));
+
+            var preference = new Mock<IContactPreference>();
+            preference
+                .SetupGet(y => y.ContPrefType)
+                .Returns(prefType);
+            preference
+                .SetupGet(y => y.ContPrefCode)
+                .Returns(prefCode);
+            preferences.Add(preference.Object);
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(learnRefNumber);
+            mockLearner
+                .SetupGet(x => x.ContactPreferences)
+                .Returns(preferences.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            // pass or fail is determined by this call
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.Contains(LookupTimeRestrictedKey.ContactPreference, candidate))
+                .Returns(true);
+
+            var sut = new ContPrefType_01Rule(handler.Object, provider.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+        }
+
+        /// <summary>
+        /// New rule.
+        /// </summary>
+        /// <returns>a newly contructed rule</returns>
+        private ContPrefType_01Rule NewRule()
+        {
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
+
+            return new ContPrefType_01Rule(handler.Object, provider.Object);
         }
     }
 }
