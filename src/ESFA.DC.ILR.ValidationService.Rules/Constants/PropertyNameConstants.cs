@@ -24,6 +24,7 @@
         public const string ContPrefCode = "ContPrefCode";
         public const string ContPrefType = "ContPrefType";
         public const string DateEmpStatApp = "DateEmpStatApp";
+        public const string DD19 = "DD19";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string DOMICILE = "DOMICILE";
         public const string ELQ = "ELQ";
