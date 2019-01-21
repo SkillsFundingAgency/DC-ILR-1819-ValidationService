@@ -324,8 +324,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
         [Fact]
         public void Validate_NullLearningDelivery_NoError()
         {
-            var learnStartDate = new DateTime(2017, 08, 01);
-            DateTime? learnActEndDate = new DateTime(2017, 12, 01);
             var learner = new TestLearner()
             {
                 LearningDeliveries = null
