@@ -226,6 +226,7 @@
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_07RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08RuleTests.cs" />
+    <Compile Include="HE\MODESTUD\MODESTUD_01RuleTests.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_03RuleTests.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_04RuleTests.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_03RuleTests.cs" />
