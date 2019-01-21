@@ -400,6 +400,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(Outcome_01Rule),
                 typeof(Outcome_04Rule),
                 typeof(Outcome_05Rule),
+                typeof(Outcome_08Rule),
                 typeof(Outcome_09Rule),
                 typeof(OutGrade_01Rule),
                 typeof(OutGrade_03Rule),
