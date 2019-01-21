@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.AgreeId;
@@ -10,6 +12,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
+using ESFA.DC.ILR.ValidationService.Rules.HE.FUNDCOMP;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV;
 using ESFA.DC.ILR.ValidationService.Rules.HE.GROSSFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.HEPostcode;
@@ -91,8 +94,6 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceMode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
-using System;
-using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
@@ -253,6 +254,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FINTYPE_02Rule),
                 typeof(FUNDLEV_01Rule),
                 typeof(FUNDLEV_03Rule),
+                typeof(FUNDCOMP_01Rule),
                 typeof(FundModel_01Rule),
                 typeof(FundModel_03Rule),
                 typeof(FundModel_04Rule),
