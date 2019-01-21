@@ -271,6 +271,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
     <Compile Include="HE\TYPEYR\TYPEYR_01Rule.cs" />
+    <Compile Include="HE\TYPEYR\TYPEYR_02Rule.cs" />
     <Compile Include="HE\UCASAPPID\UCASAPPID_01Rule.cs" />
     <Compile Include="Learner\Accom\Accom_01Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />

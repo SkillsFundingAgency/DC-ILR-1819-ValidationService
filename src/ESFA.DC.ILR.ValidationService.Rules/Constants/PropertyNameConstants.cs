@@ -38,6 +38,7 @@
         public const string FundModel = "FundModel";
         public const string FUNDCOMP = "FUNDCOMP";
         public const string FUNDLEV = "FUNDLEV";
+        public const string FUNDCOMP = "FUNDCOMP";
         public const string FworkCode = "FworkCode";
         public const string GivenNames = "GivenNames";
         public const string GrossFee = "GrossFee";
