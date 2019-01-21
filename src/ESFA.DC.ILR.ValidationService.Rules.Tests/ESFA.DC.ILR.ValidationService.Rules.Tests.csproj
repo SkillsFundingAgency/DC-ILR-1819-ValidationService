@@ -219,6 +219,7 @@
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02RuleTests.cs" />
     <Compile Include="HE\FUNDCOMP\FUNDCOMP_01RuleTests.cs" />
     <Compile Include="HE\FUNDLEV\FUNDLEV_03RuleTests.cs" />
+    <Compile Include="HE\FUNDLEV\FUNDLEV_01RuleTests.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_01RuleTests.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_02RuleTests.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_03RuleTests.cs" />
@@ -230,6 +231,7 @@
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08RuleTests.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_01RuleTests.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_03RuleTests.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_05RuleTests.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_04RuleTests.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_03RuleTests.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01RuleTests.cs" />
@@ -237,6 +239,7 @@
     <Compile Include="HE\PCFLDCS\PCFLDCS_01RuleTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02RuleTests.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_03RuleTests.cs" />
+    <Compile Include="HE\PCOLAB\PCOLAB_01RuleTests.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01RuleTests.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_02RuleTests.cs" />
     <Compile Include="HE\PCTLDCS\PCTLDCS_01RuleTests.cs" />

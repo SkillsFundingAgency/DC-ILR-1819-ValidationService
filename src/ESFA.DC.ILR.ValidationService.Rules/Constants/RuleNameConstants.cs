@@ -135,6 +135,7 @@
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
 
+        public const string FUNDLEV_01 = "FUNDLEV_01";
         public const string FUNDCOMP_01 = "FUNDCOMP_01";
         public const string FUNDLEV_03 = "FUNDLEV_03";
 
@@ -269,6 +270,7 @@
 
         public const string MSTUFEE_03 = "MSTUFEE_03";
         public const string MSTUFEE_04 = "MSTUFEE_04";
+        public const string MSTUFEE_05 = "MSTUFEE_05";
 
         public const string NETFEE_01 = "NETFEE_01";
         public const string NETFEE_02 = "NETFEE_02";
@@ -327,6 +329,8 @@
 
         public const string PCSLDCS_01 = "PCSLDCS_01";
         public const string PCSLDCS_02 = "PCSLDCS_02";
+
+        public const string PCOLAB_01 = "PCOLAB_01";
 
         public const string PCTLDCS_02 = "PCTLDCS_02";
 
