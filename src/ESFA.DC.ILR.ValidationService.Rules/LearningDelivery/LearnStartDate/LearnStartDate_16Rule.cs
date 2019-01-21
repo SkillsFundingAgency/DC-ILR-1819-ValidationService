@@ -67,11 +67,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         /// Determines whether [is not valid] [the specified delivery].
         /// </summary>
         /// <param name="thisDelivery">this delivery.</param>
-        /// <param name="usingSources">using sources.</param>
         /// <returns>
         ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsNotValid(ILearningDelivery thisDelivery, IReadOnlyCollection<ILearningDelivery> usingSources) =>
+        public bool IsNotValid(ILearningDelivery thisDelivery) =>
             !HasQualifyingStart(thisDelivery, GetAllocationsFor(thisDelivery));
 
         /// <summary>
@@ -84,11 +83,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
                 .AsGuard<ArgumentNullException>(nameof(objectToValidate));
 
             var learnRefNumber = objectToValidate.LearnRefNumber;
-            var deliveries = objectToValidate.LearningDeliveries.AsSafeReadOnlyList();
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(x => IsNotValid(x, deliveries))
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+                .ForAny(IsNotValid, x => RaiseValidationMessage(learnRefNumber, x));
         }
 
         /// <summary>
