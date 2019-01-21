@@ -285,13 +285,11 @@
     <Compile Include="Learner\ContPrefType\ContPrefType_07Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_43Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_40Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_30Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_27Rule.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_03Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_04Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_06Rule.cs" />
@@ -304,7 +302,6 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_26Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_25Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24Rule.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_29Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_36Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_37Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_38Rule.cs" />
