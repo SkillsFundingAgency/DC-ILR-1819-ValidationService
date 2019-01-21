@@ -16,29 +16,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         IFCSDataService
     {
         /// <summary>
-        /// The employment statuses
-        /// </summary>
-        private readonly IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> _employmentStatuses;
-
-        /// <summary>
-        /// The local authorities
-        /// </summary>
-        private readonly IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> _localAuthorities;
-
-        /// <summary>
-        /// The enterprise partnerships
-        /// </summary>
-        private readonly IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> _enterprisePartnerships;
-
-        /// <summary>
         /// The contract allocations
         /// </summary>
         private readonly IReadOnlyDictionary<string, IFcsContractAllocation> _contractAllocations;
-
-        /// <summary>
-        /// The Sector Subject Area Levels
-        /// </summary>
-        private readonly IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> _sectorSubjectAreaLevels;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FCSDataService"/> class.
@@ -46,11 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <param name="externalDataCache">The external data cache.</param>
         public FCSDataService(IExternalDataCache externalDataCache)
         {
-            _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses.AsSafeReadOnlyList();
-            _localAuthorities = externalDataCache.ESFEligibilityRuleLocalAuthorities.AsSafeReadOnlyList();
-            _enterprisePartnerships = externalDataCache.ESFEligibilityRuleEnterprisePartnerships.AsSafeReadOnlyList();
             _contractAllocations = externalDataCache.FCSContractAllocations.ToCaseInsensitiveDictionary();
-            _sectorSubjectAreaLevels = externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels;
         }
 
         /// <summary>

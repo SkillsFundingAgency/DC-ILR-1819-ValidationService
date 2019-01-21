@@ -104,8 +104,6 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     LearningDeliveries = externalDataCacheGet.LearningDeliveries.ToCaseInsensitiveDictionary(),
                     EPAOrganisations = externalDataCacheGet.EPAOrganisations,
                     ERNs = externalDataCacheGet.ERNs,
-                    ESFEligibilityRuleEmploymentStatuses = externalDataCacheGet.ESFEligibilityRuleEmploymentStatuses,
-                    EsfEligibilityRuleSectorSubjectAreaLevels = externalDataCacheGet.EsfEligibilityRuleSectorSubjectAreaLevels,
                     FCSContractAllocations = externalDataCacheGet.FCSContractAllocations,
                     Frameworks = externalDataCacheGet.Frameworks,
                     Organisations = externalDataCacheGet.Organisations,
