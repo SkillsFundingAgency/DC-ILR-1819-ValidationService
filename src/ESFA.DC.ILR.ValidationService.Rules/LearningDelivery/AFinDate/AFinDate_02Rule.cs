@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
 
                 var latestLearnedPlannedEndDate = _dd19.Derive(objectToValidate.LearningDeliveries, learningDelivery);
 
-                var aFinDatesOneYearAfter = latestLearnedPlannedEndDate == null
+                var aFinDatesOneYearAfter = !latestLearnedPlannedEndDate.HasValue
                     ? new List<DateTime>()
                     : AFInDatesOneYearAfterProgramme(learningDelivery.AppFinRecords, latestLearnedPlannedEndDate);
 
