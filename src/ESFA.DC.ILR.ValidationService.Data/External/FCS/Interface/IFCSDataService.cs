@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// the eligibility rule employment status (if found)
         /// </returns>
-        IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference);
 
         /// <summary>
         /// Gets the eligibility rule local authority for.
@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// an eligibility rule local authority (if found)
         /// </returns>
-        IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference);
 
         /// <summary>
         /// Gets the eligibility rule enterprise partnership for.
@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// an eligibility rule enterprise partnership (if found)
         /// </returns>
-        IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference);
 
         /// <summary>
         /// Gets the eligibility sector subject area levels for.
@@ -62,7 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// esf eligibility rule sector subject area levels
         /// </returns>
-        IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
+        IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
 
         bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber);
 

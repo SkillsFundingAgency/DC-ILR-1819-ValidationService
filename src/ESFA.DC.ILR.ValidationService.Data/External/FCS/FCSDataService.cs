@@ -58,7 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>
         /// the eligibility rule employment status (if found)
         /// </returns>
-        public IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference)
         {
             var contractAllocation = GetContractAllocationFor(contractReference);
 
@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>
         /// an eligibility rule local authority (if found)
         /// </returns>
-        public IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference)
         {
             var contractAllocation = GetContractAllocationFor(contractReference);
 
@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>
         /// an eligibility rule enterprise partnership (if found)
         /// </returns>
-        public IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference)
         {
             var contractAllocation = GetContractAllocationFor(contractReference);
 
@@ -110,7 +110,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
             return fcsContractAllocation;
         }
 
-        public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
+        public IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
         {
             var contractAllocation = GetContractAllocationFor(conRefNumber);
 
