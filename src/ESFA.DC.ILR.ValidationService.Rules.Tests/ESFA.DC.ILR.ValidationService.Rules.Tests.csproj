@@ -227,6 +227,7 @@
     <Compile Include="HE\HEPostcode\HEPostCode_02RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03RuleTests.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_06RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_07RuleTests.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08RuleTests.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_01RuleTests.cs" />

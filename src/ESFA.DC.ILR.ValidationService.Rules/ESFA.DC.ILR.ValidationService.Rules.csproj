@@ -243,6 +243,7 @@
     <Compile Include="HE\LearnerHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_06Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_07Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08Rule.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_01Rule.cs" />
