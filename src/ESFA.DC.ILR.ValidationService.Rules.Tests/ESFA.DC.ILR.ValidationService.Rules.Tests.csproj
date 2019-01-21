@@ -270,10 +270,8 @@
     <Compile Include="Learner\ContPrefType\ContPrefType_07RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02RuleTests.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_28RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_30RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_27RuleTests.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_03RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_04RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_06RuleTests.cs" />
@@ -285,7 +283,6 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_25RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_23RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24RuleTests.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_29RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_43RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_40RuleTests.cs" />
