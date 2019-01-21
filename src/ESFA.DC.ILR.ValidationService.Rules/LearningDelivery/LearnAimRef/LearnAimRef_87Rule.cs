@@ -61,7 +61,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [has disqualifying vocational aim] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasDisqualifyingVocationalAim(ILearningDelivery delivery) =>
-            It.IsInRange(delivery.LearnAimRef, TypeOfAim.References.VocationalStudiesNotLeadingToARecognisedQualification);
+            delivery.LearnAimRef.CommencesWith(
+                TypeOfAim.Branches.VocationalStudiesNotLeadingToARecognisedQualification,
+                TypeOfAim.Branches.NonExternallyCertificatedFEOtherProvision,
+                TypeOfAim.Branches.UnitsOfApprovedNQFProvision);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].

@@ -69,6 +69,7 @@
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ApprenticeshipFinancialRecord.cs" />
     <Compile Include="Constants\CompletionState.cs" />
+    <Compile Include="Constants\DPOutcomeCodeConstants.cs" />
     <Compile Include="Constants\Grades.cs" />
     <Compile Include="Constants\FundingStreamPeriodCodeConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
@@ -232,6 +233,8 @@
     <Compile Include="HE\ELQ\ELQ_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01Rule.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02Rule.cs" />
+    <Compile Include="HE\FUNDLEV\FUNDLEV_01Rule.cs" />
+    <Compile Include="HE\FUNDCOMP\FUNDCOMP_01Rule.cs" />
     <Compile Include="HE\FUNDLEV\FUNDLEV_03Rule.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_01Rule.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_02Rule.cs" />
@@ -241,19 +244,24 @@
     <Compile Include="HE\LearnerHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_02Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
+    <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_06Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_07Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08Rule.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_01Rule.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_03Rule.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_05Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_04Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_03Rule.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_02Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_01Rule.cs" />
     <Compile Include="HE\NETFEE\NETFEE_02Rule.cs" />
     <Compile Include="HE\NUMHUS\NUMHUS_01Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_01Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_03Rule.cs" />
+    <Compile Include="HE\PCOLAB\PCOLAB_01Rule.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01Rule.cs" />
+    <Compile Include="HE\PCSLDCS\PCSLDCS_02Rule.cs" />
     <Compile Include="HE\PCTLDCS\PCTLDCS_01Rule.cs" />
     <Compile Include="HE\PCTLDCS\PCTLDCS_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
@@ -266,6 +274,7 @@
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_04Rule.cs" />
     <Compile Include="HE\TYPEYR\TYPEYR_01Rule.cs" />
+    <Compile Include="HE\TYPEYR\TYPEYR_02Rule.cs" />
     <Compile Include="HE\UCASAPPID\UCASAPPID_01Rule.cs" />
     <Compile Include="Learner\Accom\Accom_01Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
@@ -418,6 +427,8 @@
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_17Rule.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_16Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_15Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_14Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13Rule.cs" />
@@ -430,6 +441,7 @@
     <Compile Include="LearningDelivery\Outcome\Outcome_01Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_08Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_01Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_04Rule.cs" />

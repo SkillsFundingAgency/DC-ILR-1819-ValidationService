@@ -135,6 +135,8 @@
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
 
+        public const string FUNDLEV_01 = "FUNDLEV_01";
+        public const string FUNDCOMP_01 = "FUNDCOMP_01";
         public const string FUNDLEV_03 = "FUNDLEV_03";
 
         public const string FundModel_01 = "FundModel_01";
@@ -229,6 +231,7 @@
 
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
         public const string LearningDeliveryHE_03 = "LearningDeliveryHE_03";
+        public const string LearningDeliveryHE_06 = "LearningDeliveryHE_06";
         public const string LearningDeliveryHE_07 = "LearningDeliveryHE_07";
         public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
@@ -266,8 +269,10 @@
         public const string MODESTUD_01 = "MODESTUD_01";
         public const string MODESTUD_03 = "MODESTUD_03";
 
+        public const string MSTUFEE_02 = "MSTUFEE_02";
         public const string MSTUFEE_03 = "MSTUFEE_03";
         public const string MSTUFEE_04 = "MSTUFEE_04";
+        public const string MSTUFEE_05 = "MSTUFEE_05";
 
         public const string NETFEE_01 = "NETFEE_01";
         public const string NETFEE_02 = "NETFEE_02";
@@ -294,6 +299,7 @@
         public const string Outcome_01 = "Outcome_01";
         public const string Outcome_04 = "Outcome_04";
         public const string Outcome_05 = "Outcome_05";
+        public const string Outcome_08 = "Outcome_08";
         public const string Outcome_09 = "Outcome_09";
 
         public const string OutEndDate_01 = "OutEndDate_01";
@@ -325,6 +331,9 @@
         public const string PCFLDCS_03 = "PCFLDCS_03";
 
         public const string PCSLDCS_01 = "PCSLDCS_01";
+        public const string PCSLDCS_02 = "PCSLDCS_02";
+
+        public const string PCOLAB_01 = "PCOLAB_01";
 
         public const string PCTLDCS_02 = "PCTLDCS_02";
 
@@ -431,6 +440,7 @@
         public const string TTACCOM_04 = "TTACCOM_04";
 
         public const string TYPEYR_01 = "TYPEYR_01";
+        public const string TYPEYR_02 = "TYPEYR_02";
 
         public const string UCASAPPID_01 = "UCASAPPID_01";
 
