@@ -22,6 +22,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes);
 
         /// <summary>
+        /// Gets the allocation for.
+        /// </summary>
+        /// <param name="thisContractReference">this contract reference.</param>
+        /// <returns>a contract allocation detail</returns>
+        IReadOnlyCollection<IFcsContractAllocation> GetContractAllocationsFor(string thisContractReference);
+
+        /// <summary>
         /// Gets the eligibility rule employment status for.
         /// </summary>
         /// <param name="contractReference">The contract reference.</param>
