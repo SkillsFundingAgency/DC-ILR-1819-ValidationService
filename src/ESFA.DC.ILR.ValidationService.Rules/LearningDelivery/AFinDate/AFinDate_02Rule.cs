@@ -38,9 +38,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
 
                 var latestLearnedPlannedEndDate = _dd19.Derive(objectToValidate.LearningDeliveries, learningDelivery);
 
-                var aFinDatesOneYearAfter = !latestLearnedPlannedEndDate.HasValue
+                var aFinDatesOneYearAfter = latestLearnedPlannedEndDate == null
                     ? new List<DateTime>()
-                    : AFInDatesOneYearAfterProgramme(learningDelivery.AppFinRecords, latestLearnedPlannedEndDate);
+                    : AFInDatesOneYearAfterProgramme(learningDelivery.AppFinRecords, latestLearnedPlannedEndDate.Value);
 
                 if (aFinDatesOneYearAfter.Any())
                 {
@@ -52,13 +52,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
             }
         }
 
-        public IReadOnlyCollection<DateTime> AFInDatesOneYearAfterProgramme(IEnumerable<IAppFinRecord> appFinRecords, DateTime? learnPlanEndDate)
+        public IReadOnlyCollection<DateTime> AFInDatesOneYearAfterProgramme(IEnumerable<IAppFinRecord> appFinRecords, DateTime learnPlanEndDate)
         {
             var aFinDates = new List<DateTime>();
 
             foreach (var appFinRecord in appFinRecords)
             {
-                if (appFinRecord.AFinDate > learnPlanEndDate.Value.AddYears(_yearsAfter))
+                if (appFinRecord.AFinDate > learnPlanEndDate.AddYears(_yearsAfter))
                 {
                     aFinDates.Add(appFinRecord.AFinDate);
                 }
