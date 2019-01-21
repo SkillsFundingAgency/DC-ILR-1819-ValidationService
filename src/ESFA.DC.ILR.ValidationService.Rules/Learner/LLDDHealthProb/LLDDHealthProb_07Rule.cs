@@ -10,81 +10,85 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
 {
-    /// <summary>
-    /// If the LLDD and health problem is 'Learner considers himself or herself to have a learning difficulty and/or disability or health problem',
-    /// then a LLDD and Health Problem record must be returned if the Planned learning hours > 10
-    /// </summary>
     public class LLDDHealthProb_07Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly int _validLLDDHealthProblemValue = 1;
-        private readonly IDD06 _dd06;
-        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
+        private const int MaxNumberOfHours = 10;
+        private const int MaxRuleAge = 25;
+        private readonly int ApplicableLLDDCode = LLDDHealthProblemConstants.LearningDifficulty;
+
+        private readonly int[] _applicableFundModels = { TypeOfFunding.NotFundedByESFA, TypeOfFunding.CommunityLearning };
+
+        private readonly IDerivedData_06Rule _derivedData06;
         private readonly IDateTimeQueryService _dateTimeQueryService;
 
-        public LLDDHealthProb_07Rule(IValidationErrorHandler validationErrorHandler, IDD06 dd06, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IDateTimeQueryService dateTimeQueryService)
-            : base(validationErrorHandler)
+        public LLDDHealthProb_07Rule(
+            IDerivedData_06Rule derivedData06,
+            IDateTimeQueryService dateTimeQueryService,
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.LLDDHealthProb_07)
         {
-            _dd06 = dd06;
-            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
+            _derivedData06 = derivedData06;
             _dateTimeQueryService = dateTimeQueryService;
         }
 
-        public void Validate(ILearner objectToValidate)
+        public void Validate(ILearner learner)
         {
-            if (ConditionMet(
-                    objectToValidate.LLDDHealthProbNullable,
-                    objectToValidate.PlanLearnHoursNullable,
-                    objectToValidate.LLDDAndHealthProblems,
-                    objectToValidate.LearningDeliveries) &&
-                !Exclude(objectToValidate.DateOfBirthNullable, _dd06.Derive(objectToValidate.LearningDeliveries)))
+            var learningDeliveries = learner?.LearningDeliveries;
+
+            if (learningDeliveries == null)
             {
-                HandleValidationError(RuleNameConstants.LLDDHealthProb_07Rule, objectToValidate.LearnRefNumber);
+                return;
+            }
+
+            if ((learner.PlanLearnHoursNullable ?? -1) <= MaxNumberOfHours ||
+                learner.LLDDHealthProb != ApplicableLLDDCode ||
+                (learner.LLDDAndHealthProblems?.Any() ?? false))
+            {
+                return;
+            }
+
+            if (learningDeliveries.Any(ld => !_applicableFundModels.Contains(ld.FundModel)))
+            {
+                return;
+            }
+
+            if (ExceptionApplies(learner.DateOfBirthNullable, learningDeliveries))
+            {
+                return;
+            }
+
+            foreach (var learningDelivery in learningDeliveries)
+            {
+                if (learningDelivery.FundModel == TypeOfFunding.NotFundedByESFA &&
+                    (learningDelivery.LearningDeliveryFAMs
+                        ?.Any(ldf => ldf.LearnDelFAMType != LearningDeliveryFAMTypeConstants.SOF ||
+                                    ldf.LearnDelFAMCode != LearningDeliveryFAMCodeConstants.SOF_LA) ?? false))
+                {
+                    return;
+                }
+
+                RaiseValidationMessage(learner, learningDelivery);
             }
         }
 
-        public bool ConditionMet(long? lldHealthProblem, long? planLearnHours, IReadOnlyCollection<ILLDDAndHealthProblem> llddAndHealthProblems, IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        private bool ExceptionApplies(DateTime? dateOfBirth, IEnumerable<ILearningDelivery> learningDeliveries)
         {
-            return LearningDeliveriesConditionMet(learningDeliveries) &&
-                   ConditionLLDHealthConditionMet(lldHealthProblem) &&
-                   ConditionLLDDHealthAndProblemsMet(llddAndHealthProblems) &&
-                   ConditionPlannedLearnHoursMet(planLearnHours);
+            var startDate = _derivedData06.Derive(learningDeliveries);
+
+            return _dateTimeQueryService.AgeAtGivenDate(dateOfBirth ?? DateTime.MaxValue, startDate) >= MaxRuleAge;
         }
 
-        public bool LearningDeliveriesConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        private void RaiseValidationMessage(ILearner learner, ILearningDelivery learningDelivery)
         {
-            return learningDeliveries != null &&
-                   learningDeliveries.All(x =>
-                       ConditionFamValueMet(x.FundModelNullable, x.LearningDeliveryFAMs));
-        }
+            var parameters = new List<IErrorMessageParameter>
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, learner.DateOfBirthNullable),
+                BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, learner.PlanLearnHoursNullable),
+                BuildErrorMessageParameter(PropertyNameConstants.LLDDHealthProb, learner.LLDDHealthProb),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, learningDelivery.FundModel),
+            };
 
-        public bool ConditionLLDHealthConditionMet(long? lldHealthProblem)
-        {
-            return lldHealthProblem.HasValue && lldHealthProblem.Value == _validLLDDHealthProblemValue;
-        }
-
-        public bool ConditionFamValueMet(long? fundModel, IReadOnlyCollection<ILearningDeliveryFAM> fams)
-        {
-            return fundModel.HasValue &&
-                   (
-                       fundModel.Value == 10 ||
-                       (fundModel.Value == 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(fams, LearningDeliveryFAMTypeConstants.SOF, "108")));
-        }
-
-        public bool ConditionPlannedLearnHoursMet(long? planLearnHours)
-        {
-            return planLearnHours.HasValue && planLearnHours.Value > 10;
-        }
-
-        public bool ConditionLLDDHealthAndProblemsMet(IReadOnlyCollection<ILLDDAndHealthProblem> llddAndHealthProblems)
-        {
-            return llddAndHealthProblems == null || !llddAndHealthProblems.Any();
-        }
-
-        public bool Exclude(DateTime? dateOfBirth, DateTime? minimumLearningDeliveryStartDate)
-        {
-            return dateOfBirth.HasValue &&
-                   minimumLearningDeliveryStartDate.HasValue &&
-                   _dateTimeQueryService.YearsBetween(dateOfBirth.Value, minimumLearningDeliveryStartDate.Value) >= 25;
+            HandleValidationError(learner.LearnRefNumber, learningDelivery.AimSeqNumber, parameters);
         }
     }
 }

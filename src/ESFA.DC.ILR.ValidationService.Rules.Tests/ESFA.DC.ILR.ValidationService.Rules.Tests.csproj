@@ -326,6 +326,7 @@
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule02Tests.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_01RuleTests.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_06RuleTests.cs" />
+    <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_07RuleTests.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_01RuleTests.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_03RuleTests.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_04RuleTests.cs" />
