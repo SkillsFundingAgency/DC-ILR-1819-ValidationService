@@ -249,6 +249,7 @@
 
         public const string LLDDHealthProb_01 = "LLDDHealthProb_01";
         public const string LLDDHealthProb_06 = "LLDDHealthProb_06";
+        public const string LLDDHealthProb_07 = "LLDDHealthProb_07";
 
         public const string LearnStartDate_03 = "LearnStartDate_03";
         public const string LearnStartDate_05 = "LearnStartDate_05";
