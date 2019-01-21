@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -61,8 +62,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
             {
                 if (learningDelivery.FundModel == TypeOfFunding.NotFundedByESFA &&
                     (learningDelivery.LearningDeliveryFAMs
-                        ?.Any(ldf => ldf.LearnDelFAMType != LearningDeliveryFAMTypeConstants.SOF ||
-                                    ldf.LearnDelFAMCode != LearningDeliveryFAMCodeConstants.SOF_LA) ?? false))
+                        ?.Any(ldf => !ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.SOF) ||
+                                    !ldf.LearnDelFAMCode.CaseInsensitiveEquals(LearningDeliveryFAMCodeConstants.SOF_LA)) ?? false))
                 {
                     return;
                 }

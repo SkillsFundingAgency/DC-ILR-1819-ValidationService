@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
@@ -32,18 +31,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             {
                 DateOfBirthNullable = new DateTime(1998, 9, 1),
                 PlanLearnHoursNullable = 11,
-                LLDDHealthProb = LLDDHealthProblemConstants.LearningDifficulty,
+                LLDDHealthProb = 1,
                 LLDDAndHealthProblems = null,
                 LearningDeliveries = new List<TestLearningDelivery>
                 {
                     new TestLearningDelivery
                     {
                         LearnStartDate = new DateTime(2018, 9, 1),
-                        FundModel = TypeOfFunding.CommunityLearning
+                        FundModel = 10
                     },
                     new TestLearningDelivery
                     {
-                        FundModel = TypeOfFunding.OtherAdult
+                        FundModel = 81
                     }
                 }
             };
@@ -67,14 +66,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             {
                 DateOfBirthNullable = new DateTime(1978, 9, 1),
                 PlanLearnHoursNullable = 11,
-                LLDDHealthProb = LLDDHealthProblemConstants.LearningDifficulty,
+                LLDDHealthProb = 1,
                 LLDDAndHealthProblems = null,
                 LearningDeliveries = new List<TestLearningDelivery>
                 {
                     new TestLearningDelivery
                     {
                         LearnStartDate = new DateTime(2018, 9, 1),
-                        FundModel = TypeOfFunding.CommunityLearning
+                        FundModel = 10
                     }
                 }
             };
@@ -92,14 +91,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             {
                 DateOfBirthNullable = new DateTime(1998, 9, 1),
                 PlanLearnHoursNullable = 5,
-                LLDDHealthProb = LLDDHealthProblemConstants.LearningDifficulty,
+                LLDDHealthProb = 1,
                 LLDDAndHealthProblems = null,
                 LearningDeliveries = new List<TestLearningDelivery>
                 {
                     new TestLearningDelivery
                     {
                         LearnStartDate = new DateTime(2018, 9, 1),
-                        FundModel = TypeOfFunding.CommunityLearning
+                        FundModel = 10
                     }
                 }
             };
@@ -117,14 +116,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             {
                 DateOfBirthNullable = new DateTime(1998, 9, 1),
                 PlanLearnHoursNullable = 11,
-                LLDDHealthProb = LLDDHealthProblemConstants.NoLearningDifficulty,
+                LLDDHealthProb = 2,
                 LLDDAndHealthProblems = null,
                 LearningDeliveries = new List<TestLearningDelivery>
                 {
                     new TestLearningDelivery
                     {
                         LearnStartDate = new DateTime(2018, 9, 1),
-                        FundModel = TypeOfFunding.CommunityLearning
+                        FundModel = 10
                     }
                 }
             };
@@ -142,7 +141,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             {
                 DateOfBirthNullable = new DateTime(1998, 9, 1),
                 PlanLearnHoursNullable = 11,
-                LLDDHealthProb = LLDDHealthProblemConstants.LearningDifficulty,
+                LLDDHealthProb = 1,
                 LLDDAndHealthProblems = new List<TestLLDDAndHealthProblem>
                 {
                     new TestLLDDAndHealthProblem()
@@ -152,7 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
                     new TestLearningDelivery
                     {
                         LearnStartDate = new DateTime(2018, 9, 1),
-                        FundModel = TypeOfFunding.CommunityLearning
+                        FundModel = 10
                     }
                 }
             };
@@ -170,7 +169,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             {
                 DateOfBirthNullable = new DateTime(1998, 8, 31),
                 PlanLearnHoursNullable = 11,
-                LLDDHealthProb = LLDDHealthProblemConstants.LearningDifficulty,
+                LLDDHealthProb = 1,
                 LLDDAndHealthProblems = null
             };
 
@@ -179,8 +178,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
         }
 
         [Theory]
-        [InlineData(TypeOfFunding.CommunityLearning)]
-        [InlineData(TypeOfFunding.NotFundedByESFA)]
+        [InlineData(10)]
+        [InlineData(99)]
         public void ValidateFails(int fundModel)
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
@@ -196,7 +195,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             {
                 DateOfBirthNullable = new DateTime(1998, 9, 1),
                 PlanLearnHoursNullable = 11,
-                LLDDHealthProb = LLDDHealthProblemConstants.LearningDifficulty,
+                LLDDHealthProb = 1,
                 LLDDAndHealthProblems = null,
                 LearningDeliveries = new List<TestLearningDelivery>
                 {
@@ -208,8 +207,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
                         {
                             new TestLearningDeliveryFAM
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.SOF,
-                                LearnDelFAMCode = LearningDeliveryFAMCodeConstants.SOF_LA
+                                LearnDelFAMType = "SOF",
+                                LearnDelFAMCode = "108"
                             }
                         }
                     }
@@ -220,7 +219,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
             {
                 DateOfBirthNullable = new DateTime(1998, 9, 1),
                 PlanLearnHoursNullable = 11,
-                LLDDHealthProb = LLDDHealthProblemConstants.LearningDifficulty,
+                LLDDHealthProb = 1,
                 LLDDAndHealthProblems = null,
                 LearningDeliveries = new List<TestLearningDelivery>
                 {
@@ -232,14 +231,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
                         {
                             new TestLearningDeliveryFAM
                             {
-                                LearnDelFAMType = LearningDeliveryFAMTypeConstants.SOF,
-                                LearnDelFAMCode = LearningDeliveryFAMCodeConstants.SOF_LA
+                                LearnDelFAMType = "SOF",
+                                LearnDelFAMCode = "108"
                             }
                         }
                     },
                     new TestLearningDelivery
                     {
-                        FundModel = TypeOfFunding.AdultSkills
+                        FundModel = 35
                     }
                 }
             };
