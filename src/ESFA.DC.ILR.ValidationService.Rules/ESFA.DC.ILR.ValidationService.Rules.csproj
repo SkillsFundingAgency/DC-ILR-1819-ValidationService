@@ -93,6 +93,7 @@
     <Compile Include="Constants\TypeOfPriorAttainment.cs" />
     <Compile Include="Constants\TypeOfQualEnt3.cs" />
     <Compile Include="CrossEntity\R06Rule.cs" />
+    <Compile Include="CrossEntity\R49Rule.cs" />
     <Compile Include="CrossEntity\R101Rule.cs" />
     <Compile Include="CrossEntity\R58Rule.cs" />
     <Compile Include="CrossEntity\R100Rule.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_03Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_07Rule.cs" />
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08Rule.cs" />
+    <Compile Include="HE\MODESTUD\MODESTUD_01Rule.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_03Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_04Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_03Rule.cs" />
@@ -252,6 +254,7 @@
     <Compile Include="HE\PCFLDCS\PCFLDCS_02Rule.cs" />
     <Compile Include="HE\PCFLDCS\PCFLDCS_03Rule.cs" />
     <Compile Include="HE\PCSLDCS\PCSLDCS_01Rule.cs" />
+    <Compile Include="HE\PCSLDCS\PCSLDCS_02Rule.cs" />
     <Compile Include="HE\PCTLDCS\PCTLDCS_01Rule.cs" />
     <Compile Include="HE\PCTLDCS\PCTLDCS_02Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_02Rule.cs" />
@@ -416,6 +419,7 @@
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_78Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_05Rule.cs" />
+    <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_16Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_15Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_14Rule.cs" />
     <Compile Include="LearningDelivery\LearnStartDate\LearnStartDate_13Rule.cs" />
