@@ -103,11 +103,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         [Theory]
-        [InlineData(ContactPreference.NoContactIllnessOrDied_ValidTo20130731)]
-        [InlineData(ContactPreference.NoContactDueToIllness)]
-        [InlineData(ContactPreference.AgreesContactByEmailPostGDPR)]
-        [InlineData(ContactPreference.AgreesContactCoursesOrOpportunitiesPostGDPR)]
-        [InlineData(ContactPreference.NoContactDueToDeath)]
+        [InlineData("bla1")]
+        [InlineData("bla2")]
+        [InlineData("bla3")]
+        [InlineData("bla4")]
+        [InlineData("bla5")]
+        [InlineData("bla6")]
         public void InvalidItemRaisesValidationMessage(string candidate)
         {
             // arrange
@@ -165,11 +166,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         [Theory]
-        [InlineData(ContactPreference.NoContactIllnessOrDied_ValidTo20130731)]
-        [InlineData(ContactPreference.NoContactDueToIllness)]
-        [InlineData(ContactPreference.AgreesContactByEmailPostGDPR)]
-        [InlineData(ContactPreference.AgreesContactCoursesOrOpportunitiesPostGDPR)]
-        [InlineData(ContactPreference.NoContactDueToDeath)]
+        [InlineData("bla1")]
+        [InlineData("bla2")]
+        [InlineData("bla3")]
+        [InlineData("bla4")]
+        [InlineData("bla5")]
+        [InlineData("bla6")]
         public void ValidItemDoesNotRaiseValidationMessage(string candidate)
         {
             // arrange
