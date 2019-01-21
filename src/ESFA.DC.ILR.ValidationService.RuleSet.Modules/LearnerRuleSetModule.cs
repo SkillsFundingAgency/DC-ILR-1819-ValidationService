@@ -19,6 +19,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.MSTUFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
+using ESFA.DC.ILR.ValidationService.Rules.HE.PCOLAB;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCSLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
@@ -415,6 +416,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PCSLDCS_02Rule),
                 typeof(PCTLDCS_01Rule),
                 typeof(PCTLDCS_02Rule),
+                typeof(PCOLAB_01Rule),
                 typeof(PlanEEPHours_01Rule),
                 typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),

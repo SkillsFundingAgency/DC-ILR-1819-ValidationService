@@ -329,6 +329,8 @@
         public const string PCSLDCS_01 = "PCSLDCS_01";
         public const string PCSLDCS_02 = "PCSLDCS_02";
 
+        public const string PCOLAB_01 = "PCOLAB_01";
+
         public const string PCTLDCS_02 = "PCTLDCS_02";
 
         public const string PlanEEPHours_01 = "PlanEEPHours_01";
