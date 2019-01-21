@@ -503,6 +503,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(Sex_01Rule),
                 typeof(SEC_01Rule),
                 typeof(SOC2000_02Rule),
+                typeof(SOC2000_03Rule),
                 typeof(SWSupAimId_01Rule),
                 typeof(StdCode_01Rule),
                 typeof(StdCode_02Rule),

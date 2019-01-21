@@ -94,6 +94,7 @@
         public const string SEC = "SEC";
         public const string SPECFEE = "SPECFEE";
         public const string StdCode = "StdCode";
+        public const string SOC2000 = "SOC2000";
         public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
         public const string UCASPERID = "UCASPERID";
