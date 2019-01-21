@@ -253,6 +253,7 @@
     <Compile Include="Learner\Accom\Accom_01RuleTests.cs" />
     <Compile Include="Learner\AddLine1\Addline1_03RuleTests.cs" />
     <Compile Include="Learner\ALSCost\ALSCost_02RuleTests.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_01RuleTests.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02RuleTests.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_05RuleTests.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_06RuleTests.cs" />
