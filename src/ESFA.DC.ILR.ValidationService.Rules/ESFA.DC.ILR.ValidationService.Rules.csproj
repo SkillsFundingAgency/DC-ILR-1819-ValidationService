@@ -69,6 +69,7 @@
     <Compile Include="Abstract\AbstractRule.cs" />
     <Compile Include="Constants\ApprenticeshipFinancialRecord.cs" />
     <Compile Include="Constants\CompletionState.cs" />
+    <Compile Include="Constants\DPOutcomeCodeConstants.cs" />
     <Compile Include="Constants\Grades.cs" />
     <Compile Include="Constants\FundingStreamPeriodCodeConstants.cs" />
     <Compile Include="Constants\LARSNotionalNVQLevelV2.cs" />
@@ -409,6 +410,7 @@
     <Compile Include="LearningDelivery\Outcome\Outcome_01Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_08Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_01Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_04Rule.cs" />
