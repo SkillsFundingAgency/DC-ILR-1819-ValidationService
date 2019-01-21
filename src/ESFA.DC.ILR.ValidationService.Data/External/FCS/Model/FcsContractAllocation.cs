@@ -30,6 +30,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
         /// </summary>
         public string FundingStreamPeriodCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Start Date
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+
         public IEsfEligibilityRule EsfEligibilityRule { get; set; }
     }
 }

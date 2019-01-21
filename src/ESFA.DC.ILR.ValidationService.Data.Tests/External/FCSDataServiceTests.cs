@@ -663,11 +663,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             var sut = new FCSDataService(cache);
 
             // act
-            var result = sut.GetContractAllocationsFor(candidate);
+            var result = sut.GetContractAllocationFor(candidate);
 
             // assert
             // TODO: fix me...
             // Assert.Equal(expectation, result.TenderSpecReference);
+            expectation.Should().Be(result.TenderSpecReference);
             Mock.Get(cache).VerifyAll();
         }
 
@@ -687,49 +688,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             var sut = new FCSDataService(cache);
 
             // act
-            var result = sut.GetContractAllocationsFor(null);
+            var result = sut.GetContractAllocationFor(null);
 
             // assert
-            Assert.Empty(result);
-            Mock.Get(cache).VerifyAll();
-        }
-
-        /// <summary>
-        /// That matches, meets expectation.
-        /// </summary>
-        /// <param name="reference">The reference.</param>
-        /// <param name="allocation">The allocation.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData("ESF0002", "tt_9972", false)]
-        [InlineData("tt_9972", "ESF0002", false)]
-        [InlineData("TT_9972", "tt_9972", true)]
-        [InlineData("tt_9972", "TT_9972", true)]
-        [InlineData("tt_9972", "tt_9972", true)]
-        [InlineData("TT_9973", "tt_9972", false)]
-        [InlineData("tt_9972", "TT_9973", false)]
-        [InlineData("tt_9973", "tt_9972", false)]
-        [InlineData("tt_9972", "tt_9973", false)]
-        public void ThatMatchesMeetsExpectation(string reference, string allocation, bool expectation)
-        {
-            // arrange
-            var cache = GetDefaultStrictEmptyCache();
-            var sut = new FCSDataService(cache);
-
-            var referenceMock = new Mock<IEsfEligibilityRuleReferences>();
-            referenceMock
-                .SetupGet(x => x.TenderSpecReference)
-                .Returns(reference);
-            var allocatonMock = new Mock<IFcsContractAllocation>();
-            allocatonMock
-                .SetupGet(x => x.TenderSpecReference)
-                .Returns(allocation);
-
-            // act
-            var result = sut.ThatMatches(referenceMock.Object, allocatonMock.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
+            result.Should().BeNull();
             Mock.Get(cache).VerifyAll();
         }
 

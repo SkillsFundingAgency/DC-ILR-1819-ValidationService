@@ -28,6 +28,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// </summary>
         string FundingStreamPeriodCode { get; }
 
+        /// <summary>
+        /// Gets the Start Date
+        /// </summary>
+        DateTime? StartDate { get; }
+
+        /// <summary>
+        ///  Gets Esf Eligibility Rule
+        /// </summary>
         IEsfEligibilityRule EsfEligibilityRule { get; }
     }
 }
