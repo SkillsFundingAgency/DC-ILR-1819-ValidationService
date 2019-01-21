@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -53,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SEC
         {
             return learnStartDate >= _firstAugust2013
                    && !string.IsNullOrEmpty(ucasAppId)
-                   && _validDomiciles.Contains(domicile)
+                   && _validDomiciles.Any(domicile.CaseInsensitiveEquals)
                    && !sec.HasValue;
         }
 
