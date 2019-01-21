@@ -19,6 +19,7 @@
         LLDDHealthProb,
         LocType,
         ModeStud,
+        MSTuFee,
         Outcome,
         PriorAttain,
         SEC,

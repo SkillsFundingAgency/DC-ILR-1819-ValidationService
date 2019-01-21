@@ -1,4 +1,6 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.AgreeId;
@@ -10,6 +12,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.ELQ;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FinancialSupport.FINTYPE;
+using ESFA.DC.ILR.ValidationService.Rules.HE.FUNDCOMP;
 using ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV;
 using ESFA.DC.ILR.ValidationService.Rules.HE.GROSSFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.HEPostcode;
@@ -19,6 +22,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.MSTUFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NETFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.NUMHUS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCFLDCS;
+using ESFA.DC.ILR.ValidationService.Rules.HE.PCOLAB;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCSLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
@@ -26,6 +30,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.SEC;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
 using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
+using ESFA.DC.ILR.ValidationService.Rules.HE.TYPEYR;
 using ESFA.DC.ILR.ValidationService.Rules.HE.UCASAPPID;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Accom;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
@@ -90,8 +95,6 @@ using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEndDate;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceMode;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.RuleSet.Modules.Abstract;
-using System;
-using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
 {
@@ -164,7 +167,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateEmpStatApp_02Rule),
                 typeof(DateOfBirth_01Rule),
                 typeof(DateOfBirth_02Rule),
-                typeof(DateOfBirth_03Rule),
                 typeof(DateOfBirth_04Rule),
                 typeof(DateOfBirth_05Rule),
                 typeof(DateOfBirth_06Rule),
@@ -178,8 +180,6 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_25Rule),
                 typeof(DateOfBirth_26Rule),
                 typeof(DateOfBirth_27Rule),
-                typeof(DateOfBirth_28Rule),
-                typeof(DateOfBirth_29Rule),
                 typeof(DateOfBirth_30Rule),
                 typeof(DateOfBirth_32Rule),
                 typeof(DateOfBirth_34Rule),
@@ -250,7 +250,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(FamilyName_04Rule),
                 typeof(FINTYPE_01Rule),
                 typeof(FINTYPE_02Rule),
+                typeof(FUNDLEV_01Rule),
                 typeof(FUNDLEV_03Rule),
+                typeof(FUNDCOMP_01Rule),
                 typeof(FundModel_01Rule),
                 typeof(FundModel_03Rule),
                 typeof(FundModel_04Rule),
@@ -346,6 +348,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_73Rule),
                 typeof(LearningDeliveryHE_02Rule),
                 typeof(LearningDeliveryHE_03Rule),
+                typeof(LearningDeliveryHE_06Rule),
                 typeof(LearningDeliveryHE_07Rule),
                 typeof(LearningDeliveryHE_08Rule),
                 typeof(LearnerHE_02Rule),
@@ -366,6 +369,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnStartDate_14Rule),
                 typeof(LearnStartDate_15Rule),
                 typeof(LearnStartDate_16Rule),
+                typeof(LearnStartDate_17Rule),
                 typeof(LearnPlanEndDate_02Rule),
                 typeof(LearnPlanEndDate_03Rule),
                 typeof(LLDDCat_01Rule),
@@ -377,8 +381,11 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(MathGrade_04Rule),
                 typeof(MODESTUD_01Rule),
                 typeof(MODESTUD_03Rule),
+                typeof(MSTUFEE_01Rule),
+                typeof(MSTUFEE_02Rule),
                 typeof(MSTUFEE_03Rule),
                 typeof(MSTUFEE_04Rule),
+                typeof(MSTUFEE_05Rule),
                 typeof(NETFEE_01Rule),
                 typeof(NETFEE_02Rule),
                 typeof(NINumber_01Rule),
@@ -397,6 +404,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(Outcome_01Rule),
                 typeof(Outcome_04Rule),
                 typeof(Outcome_05Rule),
+                typeof(Outcome_08Rule),
                 typeof(Outcome_09Rule),
                 typeof(OutGrade_01Rule),
                 typeof(OutGrade_03Rule),
@@ -413,6 +421,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(PCSLDCS_02Rule),
                 typeof(PCTLDCS_01Rule),
                 typeof(PCTLDCS_02Rule),
+                typeof(PCOLAB_01Rule),
                 typeof(PlanEEPHours_01Rule),
                 typeof(PlanLearnHours_01Rule),
                 typeof(PlanLearnHours_02Rule),
@@ -503,6 +512,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(TTACCOM_02Rule),
                 typeof(TTACCOM_04Rule),
                 typeof(TYPEYR_01Rule),
+                typeof(TYPEYR_02Rule),
                 typeof(UCASAPPID_01Rule),
                 typeof(UKPRN_05Rule),
                 typeof(UKPRN_06Rule),
