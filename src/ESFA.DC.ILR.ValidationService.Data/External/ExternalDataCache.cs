@@ -59,5 +59,10 @@
         /// Gets or sets the FCS contract allocations.
         /// </summary>
         public IReadOnlyDictionary<string, IFcsContractAllocation> FCSContractAllocations { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Campus Identifiers.
+        /// </summary>
+        public IReadOnlyCollection<ICampusIdentifier> CampusIdentifiers { get; set; }
     }
 }
