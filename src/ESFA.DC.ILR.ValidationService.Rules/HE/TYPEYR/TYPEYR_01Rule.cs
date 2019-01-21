@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV
+namespace ESFA.DC.ILR.ValidationService.Rules.HE.TYPEYR
 {
     public class TYPEYR_01Rule : AbstractRule, IRule<ILearner>
     {
