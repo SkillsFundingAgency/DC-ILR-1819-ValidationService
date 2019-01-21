@@ -159,6 +159,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(CompStatus_06Rule),
                 typeof(ConRefNumber_01Rule),
                 typeof(ConRefNumber_03Rule),
+                typeof(ContPrefType_01Rule),
                 typeof(ContPrefType_02Rule),
                 typeof(ContPrefType_05Rule),
                 typeof(ContPrefType_06Rule),
