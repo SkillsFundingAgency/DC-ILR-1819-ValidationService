@@ -1,14 +1,15 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
-using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
-using System.Collections.Generic;
-
-namespace ESFA.DC.ILR.ValidationService.Data.External
+﻿namespace ESFA.DC.ILR.ValidationService.Data.External
 {
+    using System.Collections.Generic;
+    using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+    using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
+    using ESFA.DC.ILR.ValidationService.Data.Interface;
+
     /// <summary>
     /// The external data cache implementation,
     /// model to be reflected within the validation actor.
@@ -83,5 +84,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External
         /// Gets or sets the esf eligibility rule sector subject area levels.
         /// </summary>
         public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> EsfEligibilityRuleSectorSubjectAreaLevels { get; set; }
+
+        /// <summary>
+        /// Gets or sets the CampusIdentifiers of UKPRN
+        /// </summary>
+        public IReadOnlyCollection<ICampusIdentifier> CampusIdentifiers { get; set; }
     }
 }
