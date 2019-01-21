@@ -135,6 +135,7 @@
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
 
+        public const string FUNDLEV_01 = "FUNDLEV_01";
         public const string FUNDLEV_03 = "FUNDLEV_03";
 
         public const string FundModel_01 = "FundModel_01";
@@ -263,6 +264,7 @@
         public const string MathGrade_03 = "MathGrade_03";
         public const string MathGrade_04 = "MathGrade_04";
 
+        public const string MODESTUD_01 = "MODESTUD_01";
         public const string MODESTUD_03 = "MODESTUD_03";
 
         public const string MSTUFEE_03 = "MSTUFEE_03";
@@ -324,6 +326,7 @@
         public const string PCFLDCS_03 = "PCFLDCS_03";
 
         public const string PCSLDCS_01 = "PCSLDCS_01";
+        public const string PCSLDCS_02 = "PCSLDCS_02";
 
         public const string PCOLAB_01 = "PCOLAB_01";
 
@@ -380,6 +383,7 @@
         public const string R43 = "R43";
         public const string R45 = "R45";
         public const string R47 = "R47";
+        public const string R49 = "R49";
         public const string R50 = "R50";
         public const string R52 = "R52";
         public const string R56 = "R56";
