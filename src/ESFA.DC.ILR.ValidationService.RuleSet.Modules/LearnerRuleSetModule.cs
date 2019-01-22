@@ -28,6 +28,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SEC;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
+using ESFA.DC.ILR.ValidationService.Rules.HE.SPECFEE;
 using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TYPEYR;
@@ -127,6 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AddHours_05Rule),
                 typeof(AddHours_06Rule),
                 typeof(AddLine1_03Rule),
+                typeof(AFinDate_02Rule),
                 typeof(AFinDate_03Rule),
                 typeof(AFinDate_04Rule),
                 typeof(AFinDate_05Rule),
@@ -376,6 +378,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LLDDCat_02Rule),
                 typeof(LLDDHealthProb_01Rule),
                 typeof(LLDDHealthProb_06Rule),
+                typeof(LLDDHealthProb_07Rule),
                 typeof(MathGrade_01Rule),
                 typeof(MathGrade_03Rule),
                 typeof(MathGrade_04Rule),
@@ -502,6 +505,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R118Rule),
                 typeof(Sex_01Rule),
                 typeof(SEC_01Rule),
+                typeof(SEC_02Rule),
+                typeof(SPECFEE_01Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SOC2000_03Rule),
                 typeof(SWSupAimId_01Rule),
