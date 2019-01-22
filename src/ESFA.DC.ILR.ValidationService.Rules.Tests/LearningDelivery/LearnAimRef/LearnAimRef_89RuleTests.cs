@@ -230,10 +230,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
+            var category = "larsCat";
             var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             startDates.ForEach(sd =>
             {
                 var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
+                mockValidity
+                    .SetupGet(x => x.ValidityCategory)
+                    .Returns(category);
                 mockValidity
                     .SetupGet(x => x.StartDate)
                     .Returns(DateTime.Parse(sd));
@@ -259,7 +263,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var sut = new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object);
 
             // act
-            var result = sut.HasValidLearningAim(mockDelivery.Object);
+            var result = sut.HasValidLearningAim(mockDelivery.Object, category);
 
             // assert
             handler.VerifyAll();
@@ -292,10 +296,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
+            var category = "larsCat";
             var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             startDates.ForEach(sd =>
             {
                 var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
+                mockValidity
+                    .SetupGet(x => x.ValidityCategory)
+                    .Returns(category);
                 mockValidity
                     .SetupGet(x => x.StartDate)
                     .Returns(DateTime.Parse(sd));
@@ -318,7 +326,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var sut = new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object);
 
             // act
-            var result = sut.HasValidLearningAim(mockDelivery.Object);
+            var result = sut.HasValidLearningAim(mockDelivery.Object, category);
 
             // assert
             handler.VerifyAll();
