@@ -290,6 +290,7 @@
     <Compile Include="Learner\ALSCost\ALSCost_02Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_01Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_03Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_05Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_06Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_07Rule.cs" />
