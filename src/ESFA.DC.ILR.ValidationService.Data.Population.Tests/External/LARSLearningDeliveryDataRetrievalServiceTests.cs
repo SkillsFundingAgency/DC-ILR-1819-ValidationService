@@ -196,6 +196,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 {
                     LearnAimRef = "ABC123"
                 },
+                 new LARS_FrameworkAims
+                {
+                    LearnAimRef = "ABC123"
+                },
                 new LARS_FrameworkAims
                 {
                     LearnAimRef = "ABC456"

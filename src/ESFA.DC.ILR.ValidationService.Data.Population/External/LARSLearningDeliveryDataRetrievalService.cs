@@ -25,7 +25,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         {
             var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToCaseInsensitiveHashSet();
 
-            var frameworkAims = _lars.LARS_FrameworkAims
+            var larsFrameworkAims =
+                _lars.LARS_FrameworkAims
                 .Where(fa => learnAimRefs.Contains(fa.LearnAimRef))
                 .Select(fa => new FrameworkAim()
                 {
@@ -36,7 +37,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     PwayCode = fa.PwayCode,
                     EffectiveFrom = fa.EffectiveFrom,
                     EffectiveTo = fa.EffectiveTo
-                }).ToList();
+                })
+                 .GroupBy(fa => fa.LearnAimRef)
+                 .ToCaseInsensitiveDictionary(k => k.Key, v => v.ToList());
 
             return await _lars
                 .LARS_LearningDelivery
@@ -70,7 +73,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 EffectiveFrom = av.EffectiveFrom,
                                 EffectiveTo = av.EffectiveTo,
                             }).ToList(),
-                        FrameworkAims = frameworkAims.Where(fa => fa.LearnAimRef.CaseInsensitiveEquals(ld.LearnAimRef)).ToList(),
+
+                        // FrameworkAims Assigned outside of Linq - VSTS #65278
+                        FrameworkAims = GetFrameworkAims(ld.LearnAimRef, larsFrameworkAims),
                         Categories = ld.LARS_LearningDeliveryCategory
                             .Select(ldc => new LearningDeliveryCategory()
                             {
@@ -89,6 +94,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 LastNewStartDate = ldc.LastNewStartDate
                             }).ToList(),
                     }, cancellationToken);
+        }
+
+        private IReadOnlyCollection<FrameworkAim> GetFrameworkAims(string learnAimRef, Dictionary<string, List<FrameworkAim>> frameworkAimsDictionary)
+        {
+            frameworkAimsDictionary.TryGetValue(learnAimRef, out var frameworkAims);
+
+            return frameworkAims as IReadOnlyCollection<FrameworkAim>;
         }
     }
 }
