@@ -30,7 +30,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         };
 
         private readonly HashSet<string> NvqLevelsList = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
-        private readonly HashSet<int> BasicSkillTypes = new HashSet<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
 
         private readonly ILARSDataService _larsDataService;
         private readonly IDerivedData_07Rule _dd07;
@@ -188,7 +187,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             }
 
             if (_larsDataService.BasicSkillsMatchForLearnAimRefAndStartDate(
-                BasicSkillTypes,
+                TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills,
                 learningDelivery.LearnAimRef,
                 learningDelivery.LearnStartDate))
             {
