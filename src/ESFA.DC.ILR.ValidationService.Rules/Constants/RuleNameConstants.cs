@@ -439,6 +439,7 @@
         public const string SPECFEE_01 = "SPECFEE_01";
 
         public const string SOC2000_02 = "SOC2000_02";
+        public const string SOC2000_03 = "SOC2000_03";
 
         public const string STULOAD_04 = "STULOAD_04";
 
