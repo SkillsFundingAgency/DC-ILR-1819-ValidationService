@@ -178,7 +178,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             {
                 new LARS_LearningDelivery
                 {
-                    LearnAimRef = "ABC123"
+                    LearnAimRef = "ABC123",
                 },
                 new LARS_LearningDelivery
                 {
@@ -190,9 +190,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 }
             };
 
+            IEnumerable<LARS_FrameworkAims> larsFrameworkAims = new List<LARS_FrameworkAims>
+            {
+                new LARS_FrameworkAims
+                {
+                    LearnAimRef = "ABC123"
+                },
+                new LARS_FrameworkAims
+                {
+                    LearnAimRef = "ABC456"
+                },
+                new LARS_FrameworkAims
+                {
+                    LearnAimRef = "abc789"
+                }
+            };
+
             var larsLearningDeliveryMock = larsLearningDelieries.AsMockDbSet();
+            var larsFrameworkAimsMock = larsFrameworkAims.AsMockDbSet();
 
             larsMock.Setup(o => o.LARS_LearningDelivery).Returns(larsLearningDeliveryMock);
+            larsMock.Setup(o => o.LARS_FrameworkAims).Returns(larsFrameworkAimsMock);
 
             messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
 
