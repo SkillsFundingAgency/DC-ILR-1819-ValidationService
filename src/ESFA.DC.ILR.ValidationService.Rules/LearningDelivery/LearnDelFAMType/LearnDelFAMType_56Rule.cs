@@ -16,8 +16,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
     public class LearnDelFAMType_56Rule : AbstractRule, IRule<ILearner>
     {
-        private const double DaysInYear = 365.242199;
-
         private const int MinAge = 19;
         private const int MaxAge = 23;
         private const int TradeUnionAimsCategoryRef = 19;

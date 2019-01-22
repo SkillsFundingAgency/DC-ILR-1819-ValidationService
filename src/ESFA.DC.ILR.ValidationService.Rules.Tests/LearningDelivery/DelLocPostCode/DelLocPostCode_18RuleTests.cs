@@ -305,8 +305,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEnterprisePartnershipFor(candidate))
-                .Returns(new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>().Object);
+                .Setup(x => x.GetEligibilityRuleEnterprisePartnershipsFor(candidate))
+                .Returns(new List<IEsfEligibilityRuleLocalEnterprisePartnership>() { new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>().Object });
 
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
@@ -536,10 +536,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .SetupGet(x => x.EffectiveTo)
                 .Returns(toDate);
 
-            var authority = new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>();
-            authority
+            var localEnterprisePartnership = new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>();
+            localEnterprisePartnership
                 .SetupGet(x => x.Code)
                 .Returns(partnership);
+
+            var localEnterprisePartnerships = new List<IEsfEligibilityRuleLocalEnterprisePartnership>()
+            {
+                localEnterprisePartnership.Object
+            };
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -579,8 +584,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEnterprisePartnershipFor(conRefNum))
-                .Returns(authority.Object);
+                .Setup(x => x.GetEligibilityRuleEnterprisePartnershipsFor(conRefNum))
+                .Returns(localEnterprisePartnerships);
 
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
             postcodes
@@ -665,10 +670,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .SetupGet(x => x.EffectiveTo)
                 .Returns(toDate);
 
-            var authority = new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>();
-            authority
+            var localEnterprisePartnership = new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>();
+            localEnterprisePartnership
                 .SetupGet(x => x.Code)
                 .Returns(partnership);
+
+            var localEnterprisePartnerships = new List<IEsfEligibilityRuleLocalEnterprisePartnership>()
+            {
+                localEnterprisePartnership.Object
+            };
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -694,8 +704,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEnterprisePartnershipFor(conRefNum))
-                .Returns(authority.Object);
+                .Setup(x => x.GetEligibilityRuleEnterprisePartnershipsFor(conRefNum))
+                .Returns(localEnterprisePartnerships);
 
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
             postcodes

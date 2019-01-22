@@ -1,308 +1,267 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Mocks;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
 {
-    public class LLDDHealthProb_07RuleTests
+    public class LLDDHealthProb_07RuleTests : AbstractRuleTests<LLDDHealthProb_07Rule>
     {
         [Fact]
-        public void ConditionMet_True_NullLLDHealthAndProblems()
+        public void RuleName()
         {
-            var rule = NewRule();
-            rule.ConditionLLDDHealthAndProblemsMet(null).Should().BeTrue();
+            NewRule().RuleName.Should().Be("LLDDHealthProb_07");
         }
 
         [Fact]
-        public void ConditionMet_True_Empty()
+        public void ValidatePasses_IrrelevantFundModelFound()
         {
-            var rule = NewRule();
-            rule.ConditionLLDDHealthAndProblemsMet(new List<ILLDDAndHealthProblem>()).Should().BeTrue();
-        }
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData(2)]
-        public void ConditionMetHealthProblem_False(long? lldHealthProblem)
-        {
-            var rule = NewRule();
-            rule.ConditionLLDHealthConditionMet(lldHealthProblem).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMetHealthProblem_True()
-        {
-            var rule = NewRule();
-            rule.ConditionLLDHealthConditionMet(1).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionPlanLearnHoursMet_True()
-        {
-            var rule = NewRule();
-            rule.ConditionPlannedLearnHoursMet(11).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData(0)]
-        [InlineData(10)]
-        public void ConditionPlanLearnHoursMet_False(long? planLearnHours)
-        {
-            var rule = NewRule();
-            rule.ConditionPlannedLearnHoursMet(planLearnHours).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData(2)]
-        public void ConditionMet_False(long? llddHealthProblem)
-        {
-            var rule = NewRule();
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(false);
-
-            rule.ConditionMet(llddHealthProblem, It.IsAny<long>(), It.IsAny<IReadOnlyCollection<ILLDDAndHealthProblem>>(), It.IsAny<IReadOnlyCollection<ILearningDelivery>>()).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_True()
-        {
-            var rule = NewRule();
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(true);
-
-            rule.ConditionMet(1, It.IsAny<long>(), It.IsAny<IReadOnlyCollection<ILLDDAndHealthProblem>>(), It.IsAny<IReadOnlyCollection<ILearningDelivery>>()).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData(9)]
-        public void ConditionFundMode10Met_False(long? fundModel)
-        {
-            var rule = NewRule();
-
-            rule.ConditionFamValueMet(fundModel, null).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(10)]
-        public void ConditionFundMode10Met_True(long? fundModel)
-        {
-            var rule = NewRule();
-
-            rule.ConditionFamValueMet(fundModel, null).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData("XYZ", "108")]
-        [InlineData("SOF", "9999")]
-        public void ConditionFundModel99Met_False(string famType, string famCode)
-        {
-            var learningDeliveryFams = new[]
+            var testLearner = new TestLearner
             {
-                new TestLearningDeliveryFAM()
-                {
-                    LearnDelFAMType = famType,
-                    LearnDelFAMCode = famCode
-                }
-            };
-
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(false);
-
-            var rule = NewRule(null, null, learningDeliveryFAMQueryServiceMock.Object);
-            rule.ConditionFamValueMet(99, learningDeliveryFams).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionFundMode99Met_True()
-        {
-            var learningDeliveryFams = SetupLearningDeliveries(It.IsAny<long>()).First().LearningDeliveryFAMs;
-
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), "SOF", "108")).Returns(true);
-
-            var rule = NewRule(null, null, learningDeliveryFAMQueryServiceMock.Object);
-
-            rule.ConditionFamValueMet(99, learningDeliveryFams).Should().BeTrue();
-        }
-
-        [Fact]
-        public void ConditionLearningDeliveriesNull_False()
-        {
-            var rule = NewRule(null);
-            rule.LearningDeliveriesConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionLearningDeliveries_False()
-        {
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(false);
-
-            var rule = NewRule(null, null, learningDeliveryFAMQueryServiceMock.Object);
-            var learningDeliveries = SetupLearningDeliveries(108);
-            rule.LearningDeliveriesConditionMet(learningDeliveries).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionLearningDeliveries_True()
-        {
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), It.IsAny<string>(), It.IsAny<string>())).Returns(true);
-
-            var rule = NewRule(null, null, learningDeliveryFAMQueryServiceMock.Object);
-
-            var learningDeliveries = new[]
-            {
-                new TestLearningDelivery()
-                {
-                    FundModelNullable = 99,
-                    LearningDeliveryFAMs = new[]
-                    {
-                        new TestLearningDeliveryFAM()
-                        {
-                            LearnDelFAMType = "SOF",
-                            LearnDelFAMCode = "108"
-                        }
-                    }
-                },
-                new TestLearningDelivery()
-                {
-                    FundModelNullable = 10
-                }
-            };
-
-            rule.LearningDeliveriesConditionMet(learningDeliveries).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(null, null)]
-        [InlineData("1996-01-01", null)]
-        [InlineData(null, "2017-10-10")]
-        [InlineData("1992-10-11", "2017-10-10")]
-        public void Exclude_False(string dateOfBirth, string minimumLearnStart)
-        {
-            var dateofBirthDate = string.IsNullOrEmpty(dateOfBirth) ? (DateTime?)null : DateTime.Parse(dateOfBirth);
-            var minimumLearnStartDate = string.IsNullOrEmpty(minimumLearnStart) ? (DateTime?)null : DateTime.Parse(minimumLearnStart);
-
-            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            dateTimeQueryServiceMock.Setup(x =>
-                x.YearsBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(24);
-
-            var rule = NewRule(null, null, null, dateTimeQueryServiceMock.Object);
-
-            rule.Exclude(dateofBirthDate, minimumLearnStartDate).Should().BeFalse();
-        }
-
-        [Fact]
-        public void Exclude_True()
-        {
-            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            dateTimeQueryServiceMock.Setup(x =>
-                x.YearsBetween(new DateTime(1992, 10, 10), new DateTime(2017, 10, 10))).Returns(25);
-            var rule = NewRule(null, null, null, dateTimeQueryServiceMock.Object);
-
-            rule.Exclude(new DateTime(1992, 10, 10), new DateTime(2017, 10, 10)).Should().BeTrue();
-        }
-
-        [Fact]
-        public void Validate_False()
-        {
-            var validationErrorHandlerMock = SetupLearnerForValidate(null);
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LLDDHealthProb_07", null, null, null);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
-
-        [Fact]
-        public void Validate_True()
-        {
-            var validationErrorHandlerMock = SetupLearnerForValidate(new List<ILLDDAndHealthProblem>() { new TestLLDDAndHealthProblem() });
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("LLDDHealthProb_07", null, null, null);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
-        }
-
-        private Mock<IValidationErrorHandler> SetupLearnerForValidate(IReadOnlyCollection<ILLDDAndHealthProblem> lldHealthProblems)
-        {
-            var learner = new TestLearner()
-            {
-                LLDDHealthProbNullable = 1,
+                DateOfBirthNullable = new DateTime(1998, 9, 1),
                 PlanLearnHoursNullable = 11,
-                LearningDeliveries = SetupLearningDeliveries(10),
-                LLDDAndHealthProblems = lldHealthProblems
+                LLDDHealthProb = 1,
+                LLDDAndHealthProblems = null,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        LearnStartDate = new DateTime(2018, 9, 1),
+                        FundModel = 10
+                    },
+                    new TestLearningDelivery
+                    {
+                        FundModel = 81
+                    }
+                }
             };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.HasLearningDeliveryFAMCodeForType(
-                It.IsAny<IEnumerable<ILearningDeliveryFAM>>(), "XYZ", "108")).Returns(false);
-
-            var dd06Mock = new Mock<IDD06>();
-            dd06Mock.Setup(x =>
-                x.Derive(It.IsAny<IReadOnlyCollection<ILearningDelivery>>())).Returns(new DateTime(2018, 10, 10));
-
-            var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            dateTimeQueryServiceMock.Setup(x =>
-                x.YearsBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(24);
-
-            var rule = NewRule(validationErrorHandlerMock.Object, dd06Mock.Object, learningDeliveryFAMQueryServiceMock.Object, dateTimeQueryServiceMock.Object);
-            rule.Validate(learner);
-
-            return validationErrorHandlerMock;
+            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
-        private LLDDHealthProb_07Rule NewRule(IValidationErrorHandler validationErrorHandler = null, IDD06 dd06 = null, ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null, IDateTimeQueryService dateTimeQueryService = null)
+        [Fact]
+        public void ValidatePasses_AgeExceptionApplies()
         {
-            return new LLDDHealthProb_07Rule(validationErrorHandler, dd06, learningDeliveryFAMQueryService, dateTimeQueryService);
-        }
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(26);
 
-        private TestLearningDelivery[] SetupLearningDeliveries(long? fundModelNullable, string famType = "SOF")
-        {
-            var learningDeliveries = new[]
+            var derivedDataMock = new Mock<IDerivedData_06Rule>();
+            derivedDataMock.Setup(m => m.Derive(It.IsAny<IEnumerable<ILearningDelivery>>()))
+                .Returns(new DateTime(2018, 9, 1));
+
+            var testLearner = new TestLearner
             {
-                new TestLearningDelivery()
+                DateOfBirthNullable = new DateTime(1978, 9, 1),
+                PlanLearnHoursNullable = 11,
+                LLDDHealthProb = 1,
+                LLDDAndHealthProblems = null,
+                LearningDeliveries = new List<TestLearningDelivery>
                 {
-                    FundModelNullable = fundModelNullable,
-                    LearningDeliveryFAMs = new[]
+                    new TestLearningDelivery
                     {
-                        new TestLearningDeliveryFAM()
+                        LearnStartDate = new DateTime(2018, 9, 1),
+                        FundModel = 10
+                    }
+                }
+            };
+
+            NewRule(validationErrorHandlerMock.Object, derivedDataMock.Object, dateTimeServiceMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
+        }
+
+        [Fact]
+        public void ValidatePasses_PlannedHoursTooLow()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+
+            var testLearner = new TestLearner
+            {
+                DateOfBirthNullable = new DateTime(1998, 9, 1),
+                PlanLearnHoursNullable = 5,
+                LLDDHealthProb = 1,
+                LLDDAndHealthProblems = null,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        LearnStartDate = new DateTime(2018, 9, 1),
+                        FundModel = 10
+                    }
+                }
+            };
+
+            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
+        }
+
+        [Fact]
+        public void ValidatePasses_IrrelevantHealthProblem()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+
+            var testLearner = new TestLearner
+            {
+                DateOfBirthNullable = new DateTime(1998, 9, 1),
+                PlanLearnHoursNullable = 11,
+                LLDDHealthProb = 2,
+                LLDDAndHealthProblems = null,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        LearnStartDate = new DateTime(2018, 9, 1),
+                        FundModel = 10
+                    }
+                }
+            };
+
+            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
+        }
+
+        [Fact]
+        public void ValidatePasses_HealthProblemRecordFound()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+
+            var testLearner = new TestLearner
+            {
+                DateOfBirthNullable = new DateTime(1998, 9, 1),
+                PlanLearnHoursNullable = 11,
+                LLDDHealthProb = 1,
+                LLDDAndHealthProblems = new List<TestLLDDAndHealthProblem>
+                {
+                    new TestLLDDAndHealthProblem()
+                },
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        LearnStartDate = new DateTime(2018, 9, 1),
+                        FundModel = 10
+                    }
+                }
+            };
+
+            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
+        }
+
+        [Fact]
+        public void ValidatePasses_NoLDs()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+
+            var testLearner = new TestLearner
+            {
+                DateOfBirthNullable = new DateTime(1998, 8, 31),
+                PlanLearnHoursNullable = 11,
+                LLDDHealthProb = 1,
+                LLDDAndHealthProblems = null
+            };
+
+            NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
+        }
+
+        [Theory]
+        [InlineData(10)]
+        [InlineData(99)]
+        public void ValidateFails(int fundModel)
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
+
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(20);
+
+            var derivedDataMock = new Mock<IDerivedData_06Rule>();
+            derivedDataMock.Setup(m => m.Derive(It.IsAny<IEnumerable<ILearningDelivery>>()))
+                .Returns(new DateTime(2018, 9, 1));
+
+            var testLearner = new TestLearner
+            {
+                DateOfBirthNullable = new DateTime(1998, 9, 1),
+                PlanLearnHoursNullable = 11,
+                LLDDHealthProb = 1,
+                LLDDAndHealthProblems = null,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        LearnStartDate = new DateTime(2018, 9, 1),
+                        FundModel = fundModel,
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
-                            LearnDelFAMType = famType,
-                            LearnDelFAMCode = "108"
-                        },
-                        new TestLearningDeliveryFAM()
-                        {
-                            LearnDelFAMType = "XXXXX",
-                            LearnDelFAMCode = "11111"
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "SOF",
+                                LearnDelFAMCode = "108"
+                            }
                         }
                     }
                 }
             };
-            return learningDeliveries;
+
+            var testLearnerPasses = new TestLearner
+            {
+                DateOfBirthNullable = new DateTime(1998, 9, 1),
+                PlanLearnHoursNullable = 11,
+                LLDDHealthProb = 1,
+                LLDDAndHealthProblems = null,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        LearnStartDate = new DateTime(2018, 9, 1),
+                        FundModel = fundModel,
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "SOF",
+                                LearnDelFAMCode = "108"
+                            }
+                        }
+                    },
+                    new TestLearningDelivery
+                    {
+                        FundModel = 35
+                    }
+                }
+            };
+
+            var rule = NewRule(validationErrorHandlerMock.Object, derivedDataMock.Object, dateTimeServiceMock.Object);
+            rule.Validate(testLearner);
+            rule.Validate(testLearnerPasses);
+            VerifyErrorHandlerMock(validationErrorHandlerMock, 1);
+        }
+
+        private LLDDHealthProb_07Rule NewRule(
+            IValidationErrorHandler validationErrorHandler = null,
+            IDerivedData_06Rule dd06 = null,
+            IDateTimeQueryService dateTimeQueryService = null)
+        {
+            return new LLDDHealthProb_07Rule(dd06, dateTimeQueryService, validationErrorHandler);
+        }
+
+        private void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)
+        {
+            errorHandlerMock.Verify(
+                m => m.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()),
+                Times.Exactly(times));
         }
     }
 }
