@@ -1,11 +1,13 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
 using Moq;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
@@ -121,6 +123,46 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             NewService().OutTypesForStartDateAndTypes(dpOutcomes, outTypes).Should().BeNull();
         }
 
+        [Fact]
+        public void ProvideDestinationAndProgressionForLearner()
+        {
+            const string testLearnRefNum = "12345";
+
+            var learner = new TestLearner
+            {
+                LearnRefNumber = testLearnRefNum
+            };
+
+            var learnerDPs = new List<TestLearnerDestinationAndProgression>
+            {
+                new TestLearnerDestinationAndProgression
+                {
+                    LearnRefNumber = testLearnRefNum,
+                    DPOutcomes = new List<TestDPOutcome>
+                    {
+                        new TestDPOutcome()
+                    }
+                }
+            };
+
+            var testMessage = new TestMessage()
+            {
+                LearnerDestinationAndProgressions = learnerDPs
+            };
+
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(testMessage);
+
+            var learnerQueryService = NewService(messageCacheMock.Object);
+
+            var result = learnerQueryService.GetDestinationAndProgressionForLearner(learner.LearnRefNumber);
+
+            Assert.NotNull(result?.DPOutcomes);
+            Assert.Equal(result.LearnRefNumber, testLearnRefNum);
+            Assert.Equal(1, result.DPOutcomes.Count);
+        }
+
         private ILearnerDestinationAndProgression[] SetupLearnerDPs()
         {
             var learnerDPs = new TestLearnerDestinationAndProgression[]
@@ -134,9 +176,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             return learnerDPs;
         }
 
-        private LearnerDPQueryService NewService()
+        private LearnerDPQueryService NewService(ICache<IMessage> messageCache = null)
         {
-            return new LearnerDPQueryService();
+            return new LearnerDPQueryService(messageCache);
         }
     }
 }
