@@ -14,25 +14,22 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
-    public class LearnDelFAMType_56Rule : AbstractRule, IRule<ILearner>
+    public class LearnDelFAMType_57Rule : AbstractRule, IRule<ILearner>
     {
-        private const int MinAge = 19;
-        private const int MaxAge = 23;
+        private const int MinAge = 24;
+
         private const int TradeUnionAimsCategoryRef = 19;
         private readonly DateTime MinimumStartDate = new DateTime(2016, 08, 01);
-
-        private readonly HashSet<int> PriorAttainList1 = new HashSet<int>() { 2, 3, 4, 5, 10, 11, 12, 13, 97, 98 };
-        private readonly HashSet<int> PriorAttainList2 = new HashSet<int>() { 3, 4, 5, 10, 11, 12, 13, 97, 98 };
 
         private readonly List<string> FamCodesForExclusion = new List<string>()
         {
             LearningDeliveryFAMCodeConstants.LDM_OLASS,
             LearningDeliveryFAMCodeConstants.LDM_RoTL,
-            LearningDeliveryFAMCodeConstants.LDM_SteelRedundancy
+            LearningDeliveryFAMCodeConstants.LDM_SteelRedundancy,
+            LearningDeliveryFAMCodeConstants.LDM_Military
         };
 
-        private readonly HashSet<string> NvqLevelsList1 = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
-        private readonly HashSet<string> NvqLevelsList2 = new HashSet<string>(new List<string>() { "3", "4" }).ToCaseInsensitiveHashSet();
+        private readonly HashSet<string> NvqLevelsList = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
         private readonly HashSet<int> BasicSkillTypes = new HashSet<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
 
         private readonly ILARSDataService _larsDataService;
@@ -44,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private readonly IOrganisationDataService _organisationDataService;
         private readonly IDateTimeQueryService _dateTimeQueryService;
 
-        public LearnDelFAMType_56Rule(
+        public LearnDelFAMType_57Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsDataService,
             IDerivedData_07Rule dd07,
@@ -54,7 +51,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             IFileDataService fileDataService,
             IOrganisationDataService organisationDataService,
             IDateTimeQueryService dateTimeQueryService)
-            : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_56)
+            : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_57)
         {
             _larsDataService = larsDataService;
             _dd07 = dd07;
@@ -80,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
             foreach (var learningDelivery in learner.LearningDeliveries)
             {
-               if (ConditionMet(learningDelivery, learner.DateOfBirthNullable, learner.PriorAttainNullable) &&
+               if (ConditionMet(learningDelivery, learner.DateOfBirthNullable) &&
                    !IsLearningDeliveryExcluded(learner, learningDelivery))
                 {
                     HandleValidationError(
@@ -91,13 +88,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             }
         }
 
-        public bool ConditionMet(ILearningDelivery learningDelivery, DateTime? dateofBirth, int? priorAttain)
+        public bool ConditionMet(ILearningDelivery learningDelivery, DateTime? dateofBirth)
         {
             return StartDateConditionMet(learningDelivery.LearnStartDate) &&
                    FundModelConditionMet(learningDelivery.FundModel) &&
                    AgeConditionMet(learningDelivery.LearnStartDate, dateofBirth) &&
                    FamConditionMet(learningDelivery.LearningDeliveryFAMs) &&
-                   NvQLevelConditionMet(learningDelivery.LearnAimRef, priorAttain);
+                   NvQLevelConditionMet(learningDelivery.LearnAimRef);
         }
 
         public bool StartDateConditionMet(DateTime learnStartDate)
@@ -118,7 +115,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             }
 
             var ageAtCourseStart = _dateTimeQueryService.AgeAtGivenDate(dateOfBirth.Value, learnStartDate);
-            if (ageAtCourseStart >= MinAge && ageAtCourseStart <= MaxAge)
+            if (ageAtCourseStart >= MinAge)
             {
                 return true;
             }
@@ -131,23 +128,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return _famQueryService.HasLearningDeliveryFAMCodeForType(fams, LearningDeliveryFAMTypeConstants.FFI, LearningDeliveryFAMCodeConstants.FFI_Fully);
         }
 
-        public bool NvQLevelConditionMet(string learnAimRef, int? priorAttain)
+        public bool NvQLevelConditionMet(string learnAimRef)
         {
-            if (!priorAttain.HasValue)
-            {
-                return false;
-            }
-
-            if (!PriorAttainList1.Contains(priorAttain.Value) &&
-                !PriorAttainList2.Contains(priorAttain.Value))
-            {
-                return false;
-            }
-
             var nvqLevel = _larsDataService.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef);
 
-            if ((PriorAttainList1.Contains(priorAttain.Value) && NvqLevelsList1.Contains(nvqLevel)) ||
-                (PriorAttainList2.Contains(priorAttain.Value) && NvqLevelsList2.Contains(nvqLevel)))
+            if (NvqLevelsList.Contains(nvqLevel))
             {
                 return true;
             }
@@ -226,7 +211,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, LearningDeliveryFAMCodeConstants.FFI_Fully),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learningDelivery.LearnStartDate),
                 BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, learner.DateOfBirthNullable),
-                BuildErrorMessageParameter(PropertyNameConstants.PriorAttain, learner.PriorAttainNullable)
             };
         }
     }
