@@ -16,8 +16,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
     public class LearnDelFAMType_59Rule : AbstractRule, IRule<ILearner>
     {
-        private const double DaysInYear = 365.242199;
-
         private const int MinAge = 19;
         private const int MaxAge = 23;
         private readonly DateTime MinimumStartDate = new DateTime(2016, 07, 31);
@@ -54,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             IFileDataService fileDataService,
             IOrganisationDataService organisationDataService,
             IDateTimeQueryService dateTimeQueryService)
-            : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_56)
+            : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_59)
         {
             _larsDataService = larsDataService;
             _dd07 = dd07;
