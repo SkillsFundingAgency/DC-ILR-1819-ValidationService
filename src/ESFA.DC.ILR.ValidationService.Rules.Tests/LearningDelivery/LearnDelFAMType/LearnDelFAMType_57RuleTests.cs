@@ -647,7 +647,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             IDateTimeQueryService dateTimeQueryService = null)
         {
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
-            dateTimeQueryServiceMock.Setup(x => x.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(20);
+            dateTimeQueryServiceMock.Setup(x => x.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(24);
 
             return new LearnDelFAMType_57Rule(
                 validationErrorHandler,
