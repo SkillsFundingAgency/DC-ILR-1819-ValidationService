@@ -25,6 +25,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         {
             var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToCaseInsensitiveHashSet();
 
+            var frameworkAims = _lars.LARS_FrameworkAims
+                .Where(fa => learnAimRefs.Contains(fa.LearnAimRef))
+                .Select(fa => new FrameworkAim()
+                {
+                    LearnAimRef = fa.LearnAimRef,
+                    FrameworkComponentType = fa.FrameworkComponentType,
+                    FworkCode = fa.FworkCode,
+                    ProgType = fa.ProgType,
+                    PwayCode = fa.PwayCode,
+                    EffectiveFrom = fa.EffectiveFrom,
+                    EffectiveTo = fa.EffectiveTo
+                }).ToList();
+
             return await _lars
                 .LARS_LearningDelivery
                 .Where(ld => learnAimRefs.Contains(ld.LearnAimRef))
@@ -57,17 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 EffectiveFrom = av.EffectiveFrom,
                                 EffectiveTo = av.EffectiveTo,
                             }).ToList(),
-                        FrameworkAims = _lars.LARS_FrameworkAims.Where(fa => fa.LearnAimRef == ld.LearnAimRef)
-                            .Select(fa => new FrameworkAim()
-                            {
-                                LearnAimRef = fa.LearnAimRef,
-                                FrameworkComponentType = fa.FrameworkComponentType,
-                                FworkCode = fa.FworkCode,
-                                ProgType = fa.ProgType,
-                                PwayCode = fa.PwayCode,
-                                EffectiveFrom = fa.EffectiveFrom,
-                                EffectiveTo = fa.EffectiveTo
-                            }).ToList(),
+                        FrameworkAims = frameworkAims.Where(fa => fa.LearnAimRef.CaseInsensitiveEquals(ld.LearnAimRef)).ToList(),
                         Categories = ld.LARS_LearningDeliveryCategory
                             .Select(ldc => new LearningDeliveryCategory()
                             {
