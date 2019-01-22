@@ -2,16 +2,14 @@
 {
     public interface IEsfEligibilityRuleSectorSubjectAreaLevel
     {
-        int Id { get; set; }
+        string LotReference { get; }
 
-        string LotReference { get; set; }
+        string MaxLevelCode { get; }
 
-        string MaxLevelCode { get; set; }
+        string MinLevelCode { get; }
 
-        string MinLevelCode { get; set; }
+        decimal? SectorSubjectAreaCode { get; }
 
-        decimal? SectorSubjectAreaCode { get; set; }
-
-        string TenderSpecReference { get; set; }
+        string TenderSpecReference { get; }
     }
 }

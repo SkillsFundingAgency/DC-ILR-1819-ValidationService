@@ -60,6 +60,10 @@
         public const string ConRefNumber_01 = "ConRefNumber_01";
         public const string ConRefNumber_03 = "ConRefNumber_03";
 
+        public const string ContPrefType_01 = "ContPrefType_01";
+        public const string ContPrefType_02 = "ContPrefType_02";
+        public const string ContPrefType_03 = "ContPrefType_03";
+        public const string ContPrefType_04 = "ContPrefType_04";
         public const string ContPrefType_05 = "ContPrefType_05";
         public const string ContPrefType_06 = "ContPrefType_06";
         public const string ContPrefType_07 = "ContPrefType_07";
@@ -121,6 +125,7 @@
         public const string EmpStat_02 = "EmpStat_02";
         public const string EmpStat_08 = "EmpStat_08";
         public const string EmpStat_12 = "EmpStat_12";
+        public const string EmpStat_20 = "EmpStat_20";
 
         public const string EngGrade_01 = "EngGrade_01";
         public const string EngGrade_02 = "EngGrade_02";
@@ -219,6 +224,7 @@
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_56 = "LearnDelFAMType_56";
+        public const string LearnDelFAMType_57 = "LearnDelFAMType_57";
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
         public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -440,6 +446,7 @@
         public const string SPECFEE_02 = "SPECFEE_02";
 
         public const string SOC2000_02 = "SOC2000_02";
+        public const string SOC2000_03 = "SOC2000_03";
 
         public const string STULOAD_04 = "STULOAD_04";
 
@@ -480,6 +487,7 @@
         public const string WorkPlaceEmpId_04 = "WorkPlaceEmpId_04";
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
+        public const string WorkPlaceEndDate_01 = "WorkPlaceEndDate_01";
         public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
 
         public const string WorkPlaceMode_01 = "WorkPlaceMode_01";

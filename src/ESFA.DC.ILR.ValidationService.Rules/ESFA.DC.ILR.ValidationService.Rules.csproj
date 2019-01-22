@@ -202,6 +202,7 @@
     <Compile Include="EmploymentStatus\EmpId\EmpId_02Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_10Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_20Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_15Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_11Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_14Rule.cs" />
@@ -274,6 +275,7 @@
     <Compile Include="HE\SEC\SEC_02Rule.cs" />
     <Compile Include="HE\SOC2000\SOC2000_02Rule.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_01Rule.cs" />
+    <Compile Include="HE\SOC2000\SOC2000_03Rule.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_02Rule.cs" />
     <Compile Include="HE\STULOAD\STULOAD_04Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
@@ -285,6 +287,7 @@
     <Compile Include="Learner\Accom\Accom_01Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\ALSCost\ALSCost_02Rule.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_01Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_05Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_06Rule.cs" />
@@ -405,6 +408,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_31Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_38Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_36Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_57Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_73Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_46Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_50Rule.cs" />
@@ -591,6 +595,7 @@
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_03Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_05Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_01Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceMode\WorkPlaceMode_01Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_02Rule.cs" />
@@ -663,6 +668,5 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

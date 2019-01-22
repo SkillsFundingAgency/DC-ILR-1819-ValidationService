@@ -52,33 +52,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; }
 
         /// <summary>
-        /// Gets the FCS contracts.
-        /// </summary>
-        IReadOnlyCollection<IFcsContract> FCSContracts { get; }
-
-        /// <summary>
         /// Gets the FCS contract allocations.
         /// </summary>
-        IReadOnlyCollection<IFcsContractAllocation> FCSContractAllocations { get; }
-
-        /// <summary>
-        /// Gets the ESF eligibility rule employment statuses.
-        /// </summary>
-        IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> ESFEligibilityRuleEmploymentStatuses { get; }
-
-        /// <summary>
-        /// Gets the esf eligibility rule local authorities.
-        /// </summary>
-        IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> ESFEligibilityRuleLocalAuthorities { get; }
-
-        /// <summary>
-        /// Gets the ESF eligibility rule enterprise partnerships
-        /// </summary>
-        IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> ESFEligibilityRuleEnterprisePartnerships { get; }
-
-        /// <summary>
-        /// Gets the ESF eligibility rule subject area level codes.
-        /// </summary>
-        IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> EsfEligibilityRuleSectorSubjectAreaLevels { get; }
+        IReadOnlyDictionary<string, IFcsContractAllocation> FCSContractAllocations { get; }
     }
 }

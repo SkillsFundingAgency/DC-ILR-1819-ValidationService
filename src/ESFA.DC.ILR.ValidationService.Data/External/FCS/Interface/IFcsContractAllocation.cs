@@ -1,18 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
 {
     /// <summary>
     /// the FCS contract allocation definition
     /// </summary>
-    public interface IFcsContractAllocation :
-        IIdentifiableItem,
-        IEsfEligibilityRuleReferences
+    public interface IFcsContractAllocation
     {
         /// <summary>
-        /// Gets the contract identifier.
+        /// Gets the tender spec reference.
         /// </summary>
-        int ContractID { get; }
+        string TenderSpecReference { get; }
+
+        /// <summary>
+        /// Gets the lot reference.
+        /// </summary>
+        string LotReference { get; }
 
         /// <summary>
         /// Gets the contract allocation number.
@@ -20,63 +24,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         string ContractAllocationNumber { get; }
 
         /// <summary>
-        /// Gets the funding stream code.
-        /// </summary>
-        string FundingStreamCode { get; }
-
-        /// <summary>
         /// Gets the funding stream period code.
         /// </summary>
         string FundingStreamPeriodCode { get; }
 
         /// <summary>
-        /// Gets the period.
-        /// </summary>
-        string Period { get; }
-
-        /// <summary>
-        /// Gets the period type code.
-        /// </summary>
-        string PeriodTypeCode { get; }
-
-        /// <summary>
-        /// Gets the start date.
+        /// Gets the Start Date
         /// </summary>
         DateTime? StartDate { get; }
 
         /// <summary>
-        /// Gets the end date.
+        ///  Gets Esf Eligibility Rule
         /// </summary>
-        DateTime? EndDate { get; }
-
-        /// <summary>
-        /// Gets the stop new starts from date.
-        /// </summary>
-        DateTime? StopNewStartsFromDate { get; }
-
-        /// <summary>
-        /// Gets the termination date.
-        /// </summary>
-        DateTime? TerminationDate { get; }
-
-        /// <summary>
-        /// Gets the delivery UKPRN.
-        /// </summary>
-        int DeliveryUKPRN { get; }
-
-        /// <summary>
-        /// Gets the delivery organisation.
-        /// </summary>
-        string DeliveryOrganisation { get; }
-
-        /// <summary>
-        /// Gets the learning rate premium factor.
-        /// </summary>
-        decimal? LearningRatePremiumFactor { get; }
-
-        /// <summary>
-        /// Gets the UOP code.
-        /// </summary>
-        string UoPCode { get; }
+        IEsfEligibilityRule EsfEligibilityRule { get; }
     }
 }

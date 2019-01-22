@@ -14,7 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
 {
     public abstract class DelLocPostCode_EligibilityRuleBase<TEligibilityItem> :
         IRule<ILearner>
-        where TEligibilityItem : class, IEsfEligibilityRuleSibling, IEsfEligibilityRuleReferences, IEsfEligibilityRuleCode<string>
+        where TEligibilityItem : class, IEsfEligibilityRuleReferences
     {
         /// <summary>
         /// The message handler

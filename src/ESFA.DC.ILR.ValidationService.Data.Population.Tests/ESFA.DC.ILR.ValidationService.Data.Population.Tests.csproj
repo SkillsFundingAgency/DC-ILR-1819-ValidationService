@@ -227,9 +227,7 @@
     <None Include="ESFA.DC.ILR.ValidationService.Data.Population.Tests.ruleset">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ESFA.DC.ILR.ValidationService.Data.Population\ESFA.DC.ILR.ValidationService.Data.Population.csproj">

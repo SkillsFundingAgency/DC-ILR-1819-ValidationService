@@ -95,11 +95,13 @@
         public const string SEC = "SEC";
         public const string SPECFEE = "SPECFEE";
         public const string StdCode = "StdCode";
+        public const string SOC2000 = "SOC2000";
         public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
         public const string UCASPERID = "UCASPERID";
         public const string WithdrawReason = "WithdrawReason";
         public const string WorkPlaceEmpId = "WorkPlaceEmpId";
+        public const string WorkPlaceEndDate = "WorkPlaceEndDate";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";
         public const string WorkPlaceMode = "WorkPlaceMode";
     }

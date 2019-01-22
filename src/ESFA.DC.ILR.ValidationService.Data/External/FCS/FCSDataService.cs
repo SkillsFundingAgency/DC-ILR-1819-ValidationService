@@ -16,29 +16,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         IFCSDataService
     {
         /// <summary>
-        /// The employment statuses
-        /// </summary>
-        private readonly IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> _employmentStatuses;
-
-        /// <summary>
-        /// The local authorities
-        /// </summary>
-        private readonly IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> _localAuthorities;
-
-        /// <summary>
-        /// The enterprise partnerships
-        /// </summary>
-        private readonly IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> _enterprisePartnerships;
-
-        /// <summary>
         /// The contract allocations
         /// </summary>
-        private readonly IReadOnlyCollection<IFcsContractAllocation> _contractAllocations;
-
-        /// <summary>
-        /// The Sector Subject Area Levels
-        /// </summary>
-        private readonly IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> _sectorSubjectAreaLevels;
+        private readonly IReadOnlyDictionary<string, IFcsContractAllocation> _contractAllocations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FCSDataService"/> class.
@@ -46,11 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <param name="externalDataCache">The external data cache.</param>
         public FCSDataService(IExternalDataCache externalDataCache)
         {
-            _employmentStatuses = externalDataCache.ESFEligibilityRuleEmploymentStatuses.AsSafeReadOnlyList();
-            _localAuthorities = externalDataCache.ESFEligibilityRuleLocalAuthorities.AsSafeReadOnlyList();
-            _enterprisePartnerships = externalDataCache.ESFEligibilityRuleEnterprisePartnerships.AsSafeReadOnlyList();
-            _contractAllocations = externalDataCache.FCSContractAllocations.AsSafeReadOnlyList();
-            _sectorSubjectAreaLevels = externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels;
+            _contractAllocations = externalDataCache.FCSContractAllocations.ToCaseInsensitiveDictionary();
         }
 
         /// <summary>
@@ -60,8 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>true if it does</returns>
         public bool ConRefNumberExists(string conRefNumber)
         {
-            return _contractAllocations
-                .Any(ca => ca.ContractAllocationNumber.ComparesWith(conRefNumber));
+            return _contractAllocations.ContainsKey(conRefNumber);
         }
 
         /// <summary>
@@ -73,8 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         {
             var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList().ToCaseInsensitiveHashSet();
 
-            return _contractAllocations
-               .Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
+            return _contractAllocations.Values.Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
         }
 
         /// <summary>
@@ -84,9 +58,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>
         /// the eligibility rule employment status (if found)
         /// </returns>
-        public IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatusFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference)
         {
-            return GetEligibilityRuleItemFor(contractReference, _employmentStatuses);
+            var contractAllocation = GetContractAllocationFor(contractReference);
+
+            return contractAllocation?.EsfEligibilityRule?.EmploymentStatuses ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleEmploymentStatus>();
         }
 
         /// <summary>
@@ -96,9 +72,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>
         /// an eligibility rule local authority (if found)
         /// </returns>
-        public IEsfEligibilityRuleLocalAuthority GetEligibilityRuleLocalAuthorityFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference)
         {
-            return GetEligibilityRuleItemFor(contractReference, _localAuthorities);
+            var contractAllocation = GetContractAllocationFor(contractReference);
+
+            return contractAllocation?.EsfEligibilityRule?.LocalAuthorities ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalAuthority>();
         }
 
         /// <summary>
@@ -108,73 +86,35 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>
         /// an eligibility rule enterprise partnership (if found)
         /// </returns>
-        public IEsfEligibilityRuleLocalEnterprisePartnership GetEligibilityRuleEnterprisePartnershipFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference)
         {
-            return GetEligibilityRuleItemFor(contractReference, _enterprisePartnerships);
+            var contractAllocation = GetContractAllocationFor(contractReference);
+
+            return contractAllocation?.EsfEligibilityRule?.LocalEnterprisePartnerships ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalEnterprisePartnership>();
         }
 
         /// <summary>
         /// Gets the contract allocation for.
         /// </summary>
-        /// <param name="thisContractReference">this contract reference.</param>
-        /// <returns>
-        /// any contract allocations found
-        /// </returns>
-        public IReadOnlyCollection<IFcsContractAllocation> GetContractAllocationsFor(string thisContractReference) =>
-            _contractAllocations
-                .Where(x => x.ContractAllocationNumber.ComparesWith(thisContractReference))
-                .AsSafeReadOnlyList();
-
-        /// <summary>
-        /// That matches reference to allocation
-        /// 2018-12-05 CME: this routine may require refinement as i'm not convinced
-        /// i'm filtering with all of the correct criteria
-        /// </summary>
-        /// <param name="reference">The reference.</param>
-        /// <param name="allocations">The allocations.</param>
-        /// <returns>
-        ///   <c>true</c> if [that matches] [the specified reference]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool ThatMatches(IEsfEligibilityRuleReferences reference, IReadOnlyCollection<IFcsContractAllocation> allocations) =>
-            allocations.Any(x => ThatMatches(reference, x));
-
-        /// <summary>
-        /// Thats the matches.
-        /// </summary>
-        /// <param name="reference">The reference.</param>
-        /// <param name="allocation">The allocation.</param>
-        /// <returns>
-        ///   <c>true</c> if [that matches] [the specified reference]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool ThatMatches(IEsfEligibilityRuleReferences reference, IFcsContractAllocation allocation) =>
-            reference.TenderSpecReference.ComparesWith(allocation.TenderSpecReference);
-
-        /// <summary>
-        /// Gets the eligibility rule item for.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="contractReference">The contract reference.</param>
-        /// <param name="usingSources">The using sources.</param>
-        /// <returns>
-        /// an eligibility rule item of <typeparamref name="TResult" /> (if found)
-        /// </returns>
-        public TResult GetEligibilityRuleItemFor<TResult>(string contractReference, IReadOnlyCollection<TResult> usingSources)
-            where TResult : class, IEsfEligibilityRuleReferences
+        /// <returns>a contract allocation (if found)</returns>
+        public IFcsContractAllocation GetContractAllocationFor(string contractReference)
         {
-            var allocations = GetContractAllocationsFor(contractReference);
-            return It.Has(allocations)
-                ? usingSources.FirstOrDefault(x => ThatMatches(x, allocations))
-                : default(TResult);
+            if (contractReference == null)
+            {
+                return null;
+            }
+
+            _contractAllocations.TryGetValue(contractReference, out IFcsContractAllocation fcsContractAllocation);
+
+            return fcsContractAllocation;
         }
 
-        public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
+        public IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
         {
-            return _sectorSubjectAreaLevels?
-                .Join(
-                    _contractAllocations?.Where(ca => ca.ContractAllocationNumber.CaseInsensitiveEquals(conRefNumber)).ToList(),
-                    ers => new { ers.TenderSpecReference, ers.LotReference },
-                    ca => new { ca.TenderSpecReference, ca.LotReference },
-                    (ers, ca) => ers).ToList();
+            var contractAllocation = GetContractAllocationFor(conRefNumber);
+
+            return contractAllocation?.EsfEligibilityRule?.SectorSubjectAreaLevels ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleSectorSubjectAreaLevel>();
         }
 
         public bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber)

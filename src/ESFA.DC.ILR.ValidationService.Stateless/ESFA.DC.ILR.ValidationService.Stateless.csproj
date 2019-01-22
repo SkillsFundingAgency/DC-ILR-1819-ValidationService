@@ -398,9 +398,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
     <None Include="Scripts\pre-commit" />
     <None Include="Scripts\Settings.ps1" />
     <None Include="Scripts\setup.bat" />
