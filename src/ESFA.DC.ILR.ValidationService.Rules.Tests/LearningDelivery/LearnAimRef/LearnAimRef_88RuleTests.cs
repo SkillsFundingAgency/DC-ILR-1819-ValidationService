@@ -258,7 +258,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
+            var category = "larsCat";
             var mockValidity = new Mock<ILARSLearningDeliveryValidity>(MockBehavior.Strict);
+            mockValidity
+                .SetupGet(x => x.ValidityCategory)
+                .Returns(category);
             mockValidity
                 .SetupGet(x => x.StartDate)
                 .Returns(DateTime.Parse(startDate));
@@ -283,7 +287,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var sut = new LearnAimRef_88Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object);
 
             // act
-            var result = sut.HasValidLearningAim(mockDelivery.Object);
+            var result = sut.HasValidLearningAim(mockDelivery.Object, category);
 
             // assert
             handler.VerifyAll();

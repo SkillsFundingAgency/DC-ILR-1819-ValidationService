@@ -7,7 +7,6 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 {
@@ -49,24 +48,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
             _check = commonOperations;
         }
 
-        public IReadOnlyCollection<IFcsContractAllocation> GetAllocationsFor(ILearningDelivery thisDelivery)
-        {
-            // This is wrong, should be singular
-            var contractAllocation = _contracts.GetContractAllocationFor(thisDelivery?.ConRefNumber);
-
-            return contractAllocation != null ? new List<IFcsContractAllocation>() { contractAllocation } : Collection.EmptyAndReadOnly<IFcsContractAllocation>();
-        }
+        /// <summary>
+        /// Gets the allocation for.
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>a conttract allocation</returns>
+        public IFcsContractAllocation GetAllocationFor(ILearningDelivery thisDelivery) =>
+            _contracts.GetContractAllocationFor(thisDelivery?.ConRefNumber);
 
         /// <summary>
         /// Determines whether [has qualifying start] [the specified this delivery].
         /// </summary>
         /// <param name="thisDelivery">this delivery.</param>
-        /// <param name="allocations">The allocations.</param>
+        /// <param name="allocation">The allocation.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying start] [the specified this delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasQualifyingStart(ILearningDelivery thisDelivery, IReadOnlyCollection<IFcsContractAllocation> allocations) =>
-            allocations.SafeAny(x => It.Has(x.StartDate) && _check.HasQualifyingStart(thisDelivery, x.StartDate.Value));
+        public bool HasQualifyingStart(ILearningDelivery thisDelivery, IFcsContractAllocation allocation) =>
+            It.Has(allocation)
+            && It.Has(allocation.StartDate)
+            && _check.HasQualifyingStart(thisDelivery, allocation.StartDate.Value);
+
+        public bool HasQualifyingAim(ILearningDelivery thisDelivery) =>
+            It.IsInRange(thisDelivery.LearnAimRef, TypeOfAim.References.ESFLearnerStartandAssessment);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
@@ -76,7 +80,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(ILearningDelivery thisDelivery) =>
-            !HasQualifyingStart(thisDelivery, GetAllocationsFor(thisDelivery));
+            _check.HasQualifyingFunding(thisDelivery, TypeOfFunding.EuropeanSocialFund)
+            && HasQualifyingAim(thisDelivery)
+            && !HasQualifyingStart(thisDelivery, GetAllocationFor(thisDelivery));
 
         /// <summary>
         /// Validates the specified object.

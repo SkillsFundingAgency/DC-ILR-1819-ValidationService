@@ -101,7 +101,10 @@
         public const string UCASPERID = "UCASPERID";
         public const string WithdrawReason = "WithdrawReason";
         public const string WorkPlaceEmpId = "WorkPlaceEmpId";
+        public const string WorkPlaceEndDate = "WorkPlaceEndDate";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";
         public const string WorkPlaceMode = "WorkPlaceMode";
+
+        public const string DerivedData_06 = "DD06";
     }
 }
