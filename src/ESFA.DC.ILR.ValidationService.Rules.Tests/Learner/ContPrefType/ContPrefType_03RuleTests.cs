@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
@@ -153,6 +154,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
             handler
                 .Setup(x => x.Handle("ContPrefType_03", learnRefNumber, null, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
+                .Setup(y => y.BuildErrorMessageParameter("DD06", DateTime.Today.ToString("d", AbstractRule.RequiredCulture)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
                 .Setup(y => y.BuildErrorMessageParameter("ContPrefType", prefType))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
@@ -160,11 +164,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var ddRule06 = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
+            ddRule06
+                .Setup(x => x.Derive(Moq.It.IsAny<IReadOnlyCollection<ILearningDelivery>>()))
+                .Returns(DateTime.Today);
 
             // pass or fail is determined by this call
             var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             provider
-                .Setup(x => x.Contains(LookupTimeRestrictedKey.ContactPreference, candidate))
+                .Setup(x => x.IsCurrent(LookupTimeRestrictedKey.ContactPreference, candidate, DateTime.Today))
                 .Returns(false);
 
             var sut = new ContPrefType_03Rule(handler.Object, ddRule06.Object, provider.Object);
@@ -215,12 +222,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
                 .Returns(preferences.AsSafeReadOnlyList());
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
             var ddRule06 = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
+            ddRule06
+                .Setup(x => x.Derive(Moq.It.IsAny<IReadOnlyCollection<ILearningDelivery>>()))
+                .Returns(DateTime.Today);
 
             // pass or fail is determined by this call
             var provider = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             provider
-                .Setup(x => x.Contains(LookupTimeRestrictedKey.ContactPreference, candidate))
+                .Setup(x => x.IsCurrent(LookupTimeRestrictedKey.ContactPreference, candidate, DateTime.Today))
                 .Returns(true);
 
             var sut = new ContPrefType_03Rule(handler.Object, ddRule06.Object, provider.Object);
