@@ -101,5 +101,7 @@
         public const string WorkPlaceEmpId = "WorkPlaceEmpId";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";
         public const string WorkPlaceMode = "WorkPlaceMode";
+
+        public const string DerivedData_06 = "DD06";
     }
 }
