@@ -22,6 +22,7 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinDate_02 = "AFinDate_02";
         public const string AFinDate_03 = "AFinDate_03";
         public const string AFinDate_04 = "AFinDate_04";
         public const string AFinDate_05 = "AFinDate_05";
@@ -249,6 +250,7 @@
 
         public const string LLDDHealthProb_01 = "LLDDHealthProb_01";
         public const string LLDDHealthProb_06 = "LLDDHealthProb_06";
+        public const string LLDDHealthProb_07 = "LLDDHealthProb_07";
 
         public const string LearnStartDate_03 = "LearnStartDate_03";
         public const string LearnStartDate_05 = "LearnStartDate_05";
@@ -433,6 +435,9 @@
         public const string Sex_01 = "Sex_01";
 
         public const string SEC_01 = "SEC_01";
+        public const string SEC_02 = "SEC_02";
+
+        public const string SPECFEE_01 = "SPECFEE_01";
 
         public const string SOC2000_02 = "SOC2000_02";
 
