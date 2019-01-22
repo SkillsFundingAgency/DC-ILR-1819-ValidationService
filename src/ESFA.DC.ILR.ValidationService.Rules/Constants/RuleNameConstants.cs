@@ -437,6 +437,7 @@
         public const string SEC_02 = "SEC_02";
 
         public const string SPECFEE_01 = "SPECFEE_01";
+        public const string SPECFEE_02 = "SPECFEE_02";
 
         public const string SOC2000_02 = "SOC2000_02";
 

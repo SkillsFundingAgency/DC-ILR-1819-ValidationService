@@ -87,6 +87,8 @@
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
+    <Compile Include="Constants\TypeOfMODESTUD.cs" />
+    <Compile Include="Constants\TypeOfSPECFEE.cs" />
     <Compile Include="Constants\WorkPlaceModeConstants.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
@@ -272,6 +274,7 @@
     <Compile Include="HE\SEC\SEC_02Rule.cs" />
     <Compile Include="HE\SOC2000\SOC2000_02Rule.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_01Rule.cs" />
+    <Compile Include="HE\SPECFEE\SPECFEE_02Rule.cs" />
     <Compile Include="HE\STULOAD\STULOAD_04Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
