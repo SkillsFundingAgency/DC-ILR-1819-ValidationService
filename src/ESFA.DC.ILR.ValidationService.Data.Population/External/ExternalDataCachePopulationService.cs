@@ -61,12 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             externalDataCache.Organisations = await _organisationsDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.CampusIdentifiers = await _campusIdentifierDataRetrievalService.RetrieveAsync(cancellationToken);
 
-            externalDataCache.FCSContracts = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
-            externalDataCache.FCSContractAllocations = await _fcsDataRetrievalService.RetrieveContractAllocationsAsync(cancellationToken);
-            externalDataCache.ESFEligibilityRuleLocalAuthorities = await _fcsDataRetrievalService.RetrieveEligibilityRuleLocalAuthoritiesAsync(cancellationToken);
-            externalDataCache.ESFEligibilityRuleEnterprisePartnerships = await _fcsDataRetrievalService.RetrieveEligibilityRuleEnterprisePartnershipsAsync(cancellationToken);
-            externalDataCache.ESFEligibilityRuleEmploymentStatuses = await _fcsDataRetrievalService.RetrieveEligibilityRuleEmploymentStatusesAsync(cancellationToken);
-            externalDataCache.EsfEligibilityRuleSectorSubjectAreaLevels = await _fcsDataRetrievalService.RetrieveEligibilityRuleSectorSubjectAreaLevelAsync(cancellationToken);
+            externalDataCache.FCSContractAllocations = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
 
             // TODO: FIX ME!!! this is sanjeev's 'test' emp id...
             externalDataCache.ERNs = new List<int> { 154549452 };

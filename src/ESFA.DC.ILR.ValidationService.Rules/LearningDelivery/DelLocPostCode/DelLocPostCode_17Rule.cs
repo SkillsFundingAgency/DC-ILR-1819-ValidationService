@@ -1,4 +1,5 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -48,7 +49,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// <param name="delivery">The delivery.</param>
         /// <returns>the enterprise partnership (if found)</returns>
         public override IEsfEligibilityRuleLocalAuthority GetEligibilityItem(ILearningDelivery delivery) =>
-            FcsData.GetEligibilityRuleLocalAuthorityFor(delivery.ConRefNumber);
+
+            // This is wrong it should return Collection
+            FcsData.GetEligibilityRuleLocalAuthoritiesFor(delivery.ConRefNumber).FirstOrDefault();
 
         /// <summary>
         /// Determines whether [has qualifying eligibility] [the specified postcode].

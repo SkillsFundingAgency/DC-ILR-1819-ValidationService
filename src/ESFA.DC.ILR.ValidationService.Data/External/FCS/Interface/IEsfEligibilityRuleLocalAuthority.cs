@@ -3,11 +3,8 @@
     /// <summary>
     /// the ESF eligibility rule local authority definition
     /// </summary>
-    public interface IEsfEligibilityRuleLocalAuthority :
-        IIdentifiableItem,
-        IEsfEligibilityRuleSibling,
-        IEsfEligibilityRuleReferences,
-        IEsfEligibilityRuleCode<string>
+    public interface IEsfEligibilityRuleLocalAuthority : IEsfEligibilityRuleReferences
     {
+        string Code { get; }
     }
 }

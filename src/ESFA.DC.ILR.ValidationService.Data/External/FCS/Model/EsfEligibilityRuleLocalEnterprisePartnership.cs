@@ -10,18 +10,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
         IEsfEligibilityRuleLocalEnterprisePartnership
     {
         /// <summary>
-        /// Gets or sets the identifier.
-        /// 'add' me...
-        /// </summary>
-        public int ID { get; set; }
-
-        /// <summary>
-        /// Gets or sets the eligibility rule identifier.
-        /// 'add' me...
-        /// </summary>
-        public int EligibilityRuleID { get; set; }
-
-        /// <summary>
         /// Gets or sets the code.
         /// </summary>
         public string Code { get; set; }
@@ -35,11 +23,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
         /// Gets or sets the lot reference.
         /// </summary>
         public string LotReference { get; set; }
-
-        /// <summary>
-        /// Gets the esf eligibility rule.
-        /// i need to be removed once the parent ID is available...
-        /// </summary>
-        // public IEsfEligibilityRule EsfEligibilityRule => throw new NotSupportedException();
     }
 }

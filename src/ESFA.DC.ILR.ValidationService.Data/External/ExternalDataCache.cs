@@ -56,37 +56,12 @@
         public IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; set; }
 
         /// <summary>
-        /// Gets or sets the FCS contracts.
-        /// </summary>
-        public IReadOnlyCollection<IFcsContract> FCSContracts { get; set; }
-
-        /// <summary>
         /// Gets or sets the FCS contract allocations.
         /// </summary>
-        public IReadOnlyCollection<IFcsContractAllocation> FCSContractAllocations { get; set; }
+        public IReadOnlyDictionary<string, IFcsContractAllocation> FCSContractAllocations { get; set; }
 
         /// <summary>
-        /// Gets or sets the esf eligibility rule employment statuses.
-        /// </summary>
-        public IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> ESFEligibilityRuleEmploymentStatuses { get; set; }
-
-        /// <summary>
-        /// Gets or sets the esf eligibility rule local authorities.
-        /// </summary>
-        public IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> ESFEligibilityRuleLocalAuthorities { get; set; }
-
-        /// <summary>
-        /// Gets or sets the ESF eligibility rule enterprise partnerships
-        /// </summary>
-        public IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> ESFEligibilityRuleEnterprisePartnerships { get; set; }
-
-        /// <summary>
-        /// Gets or sets the esf eligibility rule sector subject area levels.
-        /// </summary>
-        public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> EsfEligibilityRuleSectorSubjectAreaLevels { get; set; }
-
-        /// <summary>
-        /// Gets or sets the CampusIdentifiers of UKPRN
+        /// Gets or Sets Campus Identifiers.
         /// </summary>
         public IReadOnlyCollection<ICampusIdentifier> CampusIdentifiers { get; set; }
     }
