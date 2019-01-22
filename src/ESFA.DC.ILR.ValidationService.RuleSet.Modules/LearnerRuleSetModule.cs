@@ -500,6 +500,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R105Rule),
                 typeof(R106Rule),
                 typeof(R110Rule),
+                typeof(R111Rule),
                 typeof(R112Rule),
                 typeof(R113Rule),
                 typeof(R114Rule),
