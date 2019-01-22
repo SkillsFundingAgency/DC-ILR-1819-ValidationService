@@ -13,8 +13,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R116Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly int _fundModel = TypeOfFunding.ApprenticeshipsFrom1May2017;
-        private readonly int _aimType = TypeOfAim.ProgrammeAim;
         private readonly HashSet<int> _aFinCodes3 = new HashSet<int>()
         {
             ApprenticeshipFinancialRecord.PaymentRecordCodes.EmployerPaymentReimbursedByProvider
@@ -50,9 +48,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var groupSums in objectToValidate.LearningDeliveries
                 .Where(
-                d => d.FundModel == _fundModel
-                && d.AimType == _aimType
-                && _progTypes.Contains(d.ProgTypeNullable)
+                d => FundModelConditionMet(d.FundModel)
+                && AimTypeConditionMet(d.AimType)
+                && ProgramTypeConditionMet(d.ProgTypeNullable)
                 && d.AppFinRecords != null)
                 .GroupBy(d => new
                 {
@@ -63,20 +61,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 .Select(d => new
                 {
                     aFinCode1And2Sum = GetSumsForAFinCode(d, _aFinCodes1And2),
-                    aFinCode3Sum = GetSumsForAFinCode(d, _aFinCodes3),
-                    aimSeqNumber = d.FirstOrDefault().AimSeqNumber
+                    aFinCode3Sum = GetSumsForAFinCode(d, _aFinCodes3)
                 }))
             {
-                if (IsAFinCodeSumNegative(groupSums.aFinCode1And2Sum, groupSums.aFinCode3Sum))
+                if (IsAFinCodeSumsDifferenceNegative(groupSums.aFinCode1And2Sum, groupSums.aFinCode3Sum))
                 {
                     HandleValidationError(
-                        learnRefNumber: objectToValidate.LearnRefNumber,
-                        aimSequenceNumber: groupSums.aimSeqNumber);
+                        learnRefNumber: objectToValidate.LearnRefNumber);
                 }
             }
         }
 
-        public bool IsAFinCodeSumNegative(int aFinCode1And2Sum, int aFinCode3Sum)
+        public bool FundModelConditionMet(int fundModel) => fundModel == TypeOfFunding.ApprenticeshipsFrom1May2017;
+
+        public bool AimTypeConditionMet(int aimType) => aimType == TypeOfAim.ProgrammeAim;
+
+        public bool ProgramTypeConditionMet(int? progType) => _progTypes.Contains(progType);
+
+        public bool IsAFinCodeSumsDifferenceNegative(int aFinCode1And2Sum, int aFinCode3Sum)
         {
             return (aFinCode1And2Sum - aFinCode3Sum) < 0;
         }
@@ -84,8 +86,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         public int GetSumsForAFinCode(IEnumerable<ILearningDelivery> learningDeliveries, HashSet<int> aFinCodes)
         {
             return learningDeliveries.SelectMany(a => a.AppFinRecords)
-                    .Where(f => f.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord)
-                        && aFinCodes.Contains(f.AFinCode)).Sum(f => f.AFinAmount);
+                    .Where(f => f != null
+                    && f.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord)
+                    && aFinCodes.Contains(f.AFinCode)).Sum(f => f.AFinAmount);
         }
     }
 }
