@@ -485,6 +485,7 @@
         public const string WorkPlaceEmpId_04 = "WorkPlaceEmpId_04";
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
+        public const string WorkPlaceEndDate_01 = "WorkPlaceEndDate_01";
         public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
 
         public const string WorkPlaceMode_01 = "WorkPlaceMode_01";
