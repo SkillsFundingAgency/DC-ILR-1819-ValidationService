@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 EffectiveFrom = av.EffectiveFrom,
                                 EffectiveTo = av.EffectiveTo,
                             }).ToList(),
-                        FrameworkAims = ld.LARS_FrameworkAims
+                        FrameworkAims = _lars.LARS_FrameworkAims.Where(fa => fa.LearnAimRef == ld.LearnAimRef)
                             .Select(fa => new FrameworkAim()
                             {
                                 LearnAimRef = fa.LearnAimRef,
