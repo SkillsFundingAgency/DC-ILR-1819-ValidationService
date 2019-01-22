@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
@@ -71,8 +69,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return false;
             }
 
-            return previousEmploymentStatusMonitorings.Where(p => p != null).Select(p => new { type = p.ESMType.ToLowerInvariant(), code = p.ESMCode })
-                .Except(employmentStatusMonitorings.Where(e => e != null).Select(e => new { type = e.ESMType.ToLowerInvariant(), code = e.ESMCode })).Count() == 0;
+            return !previousEmploymentStatusMonitorings.Where(p => p != null).Select(p => new { type = p.ESMType.ToLowerInvariant(), code = p.ESMCode })
+                .Except(employmentStatusMonitorings.Where(e => e != null).Select(e => new { type = e.ESMType.ToLowerInvariant(), code = e.ESMCode })).Any();
         }
 
         public bool LearnerEmploymentStatusConditionMet(
