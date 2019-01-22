@@ -587,6 +587,7 @@
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_03Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_05Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_01Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceMode\WorkPlaceMode_01Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_02Rule.cs" />
