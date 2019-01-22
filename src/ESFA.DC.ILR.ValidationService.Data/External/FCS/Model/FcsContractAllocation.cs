@@ -1,5 +1,6 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
 {
@@ -7,19 +8,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
     /// the FCS Contract Allocation implementation
     /// </summary>
     /// <seealso cref="IFcsContractAllocation" />
-    public class FcsContractAllocation :
-        IFcsContractAllocation
+    public class FcsContractAllocation : IFcsContractAllocation
     {
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        public int ID { get; set; }
-
-        /// <summary>
-        /// Gets or sets the contract identifier.
-        /// </summary>
-        public int ContractID { get; set; }
-
         /// <summary>
         /// Gets or sets the contract allocation number.
         /// </summary>
@@ -36,63 +26,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
         public string LotReference { get; set; }
 
         /// <summary>
-        /// Gets or sets the funding stream code.
-        /// </summary>
-        public string FundingStreamCode { get; set; }
-
-        /// <summary>
         /// Gets or sets the funding stream period code.
         /// </summary>
         public string FundingStreamPeriodCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the period.
-        /// </summary>
-        public string Period { get; set; }
-
-        /// <summary>
-        /// Gets or sets the period type code.
-        /// </summary>
-        public string PeriodTypeCode { get; set; }
-
-        /// <summary>
-        /// Gets or sets the start date.
+        /// Gets or sets the Start Date
         /// </summary>
         public DateTime? StartDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the end date.
-        /// </summary>
-        public DateTime? EndDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the stop new starts from date.
-        /// </summary>
-        public DateTime? StopNewStartsFromDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the termination date.
-        /// </summary>
-        public DateTime? TerminationDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets the delivery UKPRN.
-        /// </summary>
-        public int DeliveryUKPRN { get; set; }
-
-        /// <summary>
-        /// Gets or sets the delivery organisation.
-        /// </summary>
-        public string DeliveryOrganisation { get; set; }
-
-        /// <summary>
-        /// Gets or sets the learning rate premium factor.
-        /// </summary>
-        public decimal? LearningRatePremiumFactor { get; set; }
-
-        /// <summary>
-        /// Gets or sets the UOP code.
-        /// </summary>
-        public string UoPCode { get; set; }
+        public IEsfEligibilityRule EsfEligibilityRule { get; set; }
     }
 }

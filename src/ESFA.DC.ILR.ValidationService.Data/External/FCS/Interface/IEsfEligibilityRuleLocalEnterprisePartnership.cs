@@ -3,11 +3,8 @@
     /// <summary>
     /// the ESF eligibility rule enterprise partnership
     /// </summary>
-    public interface IEsfEligibilityRuleLocalEnterprisePartnership :
-        IIdentifiableItem,
-        IEsfEligibilityRuleSibling,
-        IEsfEligibilityRuleReferences,
-        IEsfEligibilityRuleCode<string>
+    public interface IEsfEligibilityRuleLocalEnterprisePartnership : IEsfEligibilityRuleReferences
     {
+        string Code { get; }
     }
 }

@@ -22,6 +22,7 @@
 
         public const string Addline1_03 = "Addline1_03";
 
+        public const string AFinDate_02 = "AFinDate_02";
         public const string AFinDate_03 = "AFinDate_03";
         public const string AFinDate_04 = "AFinDate_04";
         public const string AFinDate_05 = "AFinDate_05";
@@ -124,6 +125,7 @@
         public const string EmpStat_02 = "EmpStat_02";
         public const string EmpStat_08 = "EmpStat_08";
         public const string EmpStat_12 = "EmpStat_12";
+        public const string EmpStat_20 = "EmpStat_20";
 
         public const string EngGrade_01 = "EngGrade_01";
         public const string EngGrade_02 = "EngGrade_02";
@@ -222,6 +224,7 @@
         public const string LearnDelFAMType_53 = "LearnDelFAMType_53";
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_56 = "LearnDelFAMType_56";
+        public const string LearnDelFAMType_57 = "LearnDelFAMType_57";
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
         public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -252,6 +255,7 @@
 
         public const string LLDDHealthProb_01 = "LLDDHealthProb_01";
         public const string LLDDHealthProb_06 = "LLDDHealthProb_06";
+        public const string LLDDHealthProb_07 = "LLDDHealthProb_07";
 
         public const string LearnStartDate_03 = "LearnStartDate_03";
         public const string LearnStartDate_05 = "LearnStartDate_05";
@@ -436,8 +440,13 @@
         public const string Sex_01 = "Sex_01";
 
         public const string SEC_01 = "SEC_01";
+        public const string SEC_02 = "SEC_02";
+
+        public const string SPECFEE_01 = "SPECFEE_01";
+        public const string SPECFEE_02 = "SPECFEE_02";
 
         public const string SOC2000_02 = "SOC2000_02";
+        public const string SOC2000_03 = "SOC2000_03";
 
         public const string STULOAD_04 = "STULOAD_04";
 
@@ -478,6 +487,7 @@
         public const string WorkPlaceEmpId_04 = "WorkPlaceEmpId_04";
         public const string WorkPlaceEmpId_05 = "WorkPlaceEmpId_05";
 
+        public const string WorkPlaceEndDate_01 = "WorkPlaceEndDate_01";
         public const string WorkPlaceEndDate_02 = "WorkPlaceEndDate_02";
 
         public const string WorkPlaceMode_01 = "WorkPlaceMode_01";

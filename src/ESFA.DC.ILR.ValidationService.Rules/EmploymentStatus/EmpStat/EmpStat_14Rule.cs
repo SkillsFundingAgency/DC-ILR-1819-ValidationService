@@ -108,7 +108,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <param name="delivery">The delivery.</param>
         /// <returns>the eligible employment status for the allocated contract</returns>
         public IEsfEligibilityRuleEmploymentStatus GetEligibleEmploymentStatus(ILearningDelivery delivery) =>
-            _fcsData.GetEligibilityRuleEmploymentStatusFor(delivery?.ConRefNumber);
+
+            // This is wrong, it should return collection
+            _fcsData.GetEligibilityRuleEmploymentStatusesFor(delivery?.ConRefNumber)?.FirstOrDefault();
 
         /// <summary>
         /// Gets the closest employment.

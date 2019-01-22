@@ -2688,6 +2688,16 @@ localised additions are:
               description="Male" />
     </Sex>
     <SOC2000>
+      <option code="0"
+              description="Not stated" />
+      <option code="1"
+              description="Information refused" />
+      <option code="7"
+              description="Retired" />
+      <option code="8"
+              description="Unemployed" />
+      <option code="9"
+              description="Not known" />
       <option code="1111"
               description="Senior officials in national government" />
       <option code="1112"

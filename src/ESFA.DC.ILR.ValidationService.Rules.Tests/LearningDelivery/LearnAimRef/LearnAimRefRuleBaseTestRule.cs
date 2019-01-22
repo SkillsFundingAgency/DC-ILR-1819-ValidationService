@@ -58,13 +58,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// Passes the (rule) conditions.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
-        /// <param name="learner">The learner.</param>
+        /// <param name="branch">The branch.</param>
         /// <returns>
         /// true if it does...
         /// </returns>
-        public override bool PassesConditions(ILearningDelivery delivery, ILearner learner)
+        public override bool PassesConditions(ILearningDelivery delivery, BranchResult branch)
         {
-            return _isSetToPass;
+            return branch.Passed && _isSetToPass;
         }
     }
 }

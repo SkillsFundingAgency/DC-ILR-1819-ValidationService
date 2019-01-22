@@ -6,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
+using FluentAssertions;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -128,8 +129,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetContractAllocationsFor(null))
-                .Returns((IReadOnlyCollection<IFcsContractAllocation>)null);
+                .Setup(x => x.GetContractAllocationFor(null))
+                .Returns((IFcsContractAllocation)null);
 
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
@@ -139,7 +140,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var result = sut.GetAllocationsFor(null);
 
             // assert
-            Assert.Null(result);
+            result.Should().BeEmpty();
 
             handler.VerifyAll();
             fcsData.VerifyAll();
@@ -279,8 +280,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetContractAllocationsFor(contractRef))
-                .Returns(allocations.AsSafeReadOnlyList());
+                .Setup(x => x.GetContractAllocationFor(contractRef))
+                .Returns(allocation.Object);
 
             // pass or fail is based on the return of this function
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
@@ -331,9 +332,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 .SetupGet(x => x.StartDate)
                 .Returns(testDate);
 
-            var allocations = Collection.Empty<IFcsContractAllocation>();
-            allocations.Add(allocation.Object);
-
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(delivery.Object);
             var safeDeliveries = deliveries.AsSafeReadOnlyList();
@@ -349,8 +347,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetContractAllocationsFor(contractRef))
-                .Returns(allocations.AsSafeReadOnlyList());
+                .Setup(x => x.GetContractAllocationFor(contractRef))
+                .Returns(allocation.Object);
 
             // pass or fail is based on the return of this function
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);

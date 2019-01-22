@@ -63,13 +63,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// Determines whether [has valid learning aim] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="branchCategory">The branch category.</param>
         /// <returns>
         ///   <c>true</c> if [has valid learning aim] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasValidLearningAim(ILearningDelivery delivery)
+        public bool HasValidLearningAim(ILearningDelivery delivery, string branchCategory)
         {
             var lastYearEnd = GetClosingDateOfLastAcademicYear(delivery);
             var validity = LarsData.GetValiditiesFor(delivery.LearnAimRef)
+                .Where(x => x.ValidityCategory.ComparesWith(branchCategory))
                 .OrderByDescending(x => x.StartDate)
                 .FirstOrDefault();
 
@@ -91,11 +93,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// Passes the (rule) conditions.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
-        /// <param name="learner">The learner.</param>
+        /// <param name="branch">The branch result.</param>
         /// <returns>
         /// true if it does...
         /// </returns>
-        public override bool PassesConditions(ILearningDelivery delivery, ILearner learner)
+        public override bool PassesConditions(ILearningDelivery delivery, BranchResult branch)
         {
             /*
             Where the learning aim validity criteria has been met in Table 1,
@@ -111,7 +113,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             otherwise   return error
             */
 
-            return HasValidLearningAim(delivery);
+            return branch.Passed && HasValidLearningAim(delivery, branch.Category);
         }
     }
 }

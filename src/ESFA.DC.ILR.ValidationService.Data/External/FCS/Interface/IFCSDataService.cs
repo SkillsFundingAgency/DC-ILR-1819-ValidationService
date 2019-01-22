@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// </summary>
         /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>a contract allocation detail</returns>
-        IReadOnlyCollection<IFcsContractAllocation> GetContractAllocationsFor(string thisContractReference);
+        IFcsContractAllocation GetContractAllocationFor(string thisContractReference);
 
         /// <summary>
         /// Gets the eligibility rule employment status for.
@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// the eligibility rule employment status (if found)
         /// </returns>
-        IEsfEligibilityRuleEmploymentStatus GetEligibilityRuleEmploymentStatusFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference);
 
         /// <summary>
         /// Gets the eligibility rule local authority for.
@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// an eligibility rule local authority (if found)
         /// </returns>
-        IEsfEligibilityRuleLocalAuthority GetEligibilityRuleLocalAuthorityFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference);
 
         /// <summary>
         /// Gets the eligibility rule enterprise partnership for.
@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// an eligibility rule enterprise partnership (if found)
         /// </returns>
-        IEsfEligibilityRuleLocalEnterprisePartnership GetEligibilityRuleEnterprisePartnershipFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference);
 
         /// <summary>
         /// Gets the eligibility sector subject area levels for.
@@ -62,7 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// esf eligibility rule sector subject area levels
         /// </returns>
-        IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
+        IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
 
         bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber);
 

@@ -49,8 +49,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
             _check = commonOperations;
         }
 
-        public IReadOnlyCollection<IFcsContractAllocation> GetAllocationsFor(ILearningDelivery thisDelivery) =>
-            _contracts.GetContractAllocationsFor(thisDelivery?.ConRefNumber);
+        public IReadOnlyCollection<IFcsContractAllocation> GetAllocationsFor(ILearningDelivery thisDelivery)
+        {
+            // This is wrong, should be singular
+            var contractAllocation = _contracts.GetContractAllocationFor(thisDelivery?.ConRefNumber);
+
+            return contractAllocation != null ? new List<IFcsContractAllocation>() { contractAllocation } : Collection.EmptyAndReadOnly<IFcsContractAllocation>();
+        }
 
         /// <summary>
         /// Determines whether [has qualifying start] [the specified this delivery].

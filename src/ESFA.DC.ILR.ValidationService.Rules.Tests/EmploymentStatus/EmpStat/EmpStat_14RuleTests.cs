@@ -235,8 +235,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEmploymentStatusFor(null))
-                .Returns((IEsfEligibilityRuleEmploymentStatus)null);
+                .Setup(x => x.GetEligibilityRuleEmploymentStatusesFor(null))
+                .Returns((IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus>)null);
 
             var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
 
@@ -426,15 +426,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Setup(x => x.GetLatestLearningStartForESFContract(Moq.It.IsAny<ILearningDelivery>(), safeDeliveries))
                 .ReturnsInOrder(contractCandidates);
 
-            var eligibubble = new Mock<IEsfEligibilityRuleEmploymentStatus>();
-            eligibubble
+            var employmentStatusMock = new Mock<IEsfEligibilityRuleEmploymentStatus>();
+            employmentStatusMock
                 .SetupGet(x => x.Code)
                 .Returns(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable);
 
+            var employmentStatuses = new List<IEsfEligibilityRuleEmploymentStatus>()
+            {
+                employmentStatusMock.Object
+            };
+
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEmploymentStatusFor(conRefNumber))
-                .Returns(eligibubble.Object);
+                .Setup(x => x.GetEligibilityRuleEmploymentStatusesFor(conRefNumber))
+                .Returns(employmentStatuses);
 
             var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
 
@@ -524,15 +529,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Setup(x => x.GetLatestLearningStartForESFContract(Moq.It.IsAny<ILearningDelivery>(), safeDeliveries))
                 .ReturnsInOrder(contractCandidates);
 
-            var eligibubble = new Mock<IEsfEligibilityRuleEmploymentStatus>();
-            eligibubble
+            var employmentStatusMock = new Mock<IEsfEligibilityRuleEmploymentStatus>();
+            employmentStatusMock
                 .SetupGet(x => x.Code)
                 .Returns(TypeOfEmploymentStatus.InPaidEmployment);
 
+            var employmentStatuses = new List<IEsfEligibilityRuleEmploymentStatus>();
+
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetEligibilityRuleEmploymentStatusFor(conRefNumber))
-                .Returns(eligibubble.Object);
+                .Setup(x => x.GetEligibilityRuleEmploymentStatusesFor(conRefNumber))
+                .Returns(employmentStatuses);
 
             var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
 
