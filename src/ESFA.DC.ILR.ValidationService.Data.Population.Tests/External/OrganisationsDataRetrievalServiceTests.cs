@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ESFA.DC.Data.Organisatons.Model;
-using ESFA.DC.Data.Organisatons.Model.Interface;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.External;
+using ESFA.DC.ReferenceData.Organisations.Model;
+using ESFA.DC.ReferenceData.Organisations.Model.Interface;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -410,40 +410,40 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 }
             };
 
-            var organisationsMock = new Mock<IOrganisations>();
+            var organisationsMock = new Mock<IOrganisationsContext>();
             var messageCacheMock = new Mock<ICache<IMessage>>();
 
             IEnumerable<MasterOrganisation> masterOrgList = new List<MasterOrganisation>
             {
                 new MasterOrganisation
                 {
-                    UKPRN = 1,
-                    Org_Details = new Org_Details
+                    Ukprn = 1,
+                    OrgDetail = new OrgDetail
                     {
-                        UKPRN = 1,
+                        Ukprn = 1,
                         LegalOrgType = "LegalType1"
                     },
-                   Org_PartnerUKPRN = new List<Org_PartnerUKPRN>
+                   OrgPartnerUkprns = new List<OrgPartnerUkprn>
                    {
-                       new Org_PartnerUKPRN
+                       new OrgPartnerUkprn
                        {
-                           UKPRN = 1,
+                           Ukprn = 1,
                            NameLegal = "NameLegal1"
                        }
                    }
                 },
                 new MasterOrganisation
                 {
-                    UKPRN = 2,
-                    Org_Details = new Org_Details
+                    Ukprn = 2,
+                    OrgDetail = new OrgDetail
                     {
-                        UKPRN = 2,
+                        Ukprn = 2,
                         LegalOrgType = "LegalType2"
                     }
                 },
             };
 
-            var masterOrgMock = masterOrgList.AsMockDbSet();
+            var masterOrgMock = masterOrgList.AsEFCoreMockDbSet();
 
             organisationsMock.Setup(o => o.MasterOrganisations).Returns(masterOrgMock);
 
@@ -500,44 +500,44 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 }
             };
 
-            var organisationsMock = new Mock<IOrganisations>();
+            var organisationsMock = new Mock<IOrganisationsContext>();
             var messageCacheMock = new Mock<ICache<IMessage>>();
 
             IEnumerable<MasterOrganisation> masterOrgList = new List<MasterOrganisation>
             {
                 new MasterOrganisation
                 {
-                    UKPRN = 1,
-                    Org_Details = new Org_Details
+                    Ukprn = 1,
+                    OrgDetail = new OrgDetail
                     {
-                        UKPRN = 1,
+                        Ukprn = 1,
                         LegalOrgType = "LegalType1"
                     },
-                    Org_PartnerUKPRN = new List<Org_PartnerUKPRN>
+                    OrgPartnerUkprns = new List<OrgPartnerUkprn>
                     {
-                        new Org_PartnerUKPRN
+                        new OrgPartnerUkprn
                         {
-                            UKPRN = 1,
+                            Ukprn = 1,
                             NameLegal = "NameLegal1"
                         }
                     }
                 },
                 new MasterOrganisation
                 {
-                    UKPRN = 2,
-                    Org_Details = new Org_Details
+                    Ukprn = 2,
+                    OrgDetail = new OrgDetail
                     {
-                        UKPRN = 2,
+                        Ukprn = 2,
                         LegalOrgType = "LegalType2"
                     }
                 },
                  new MasterOrganisation
                 {
-                    UKPRN = 3
+                    Ukprn = 3
                 },
             };
 
-            var masterOrgMock = IEnumerableExtensions.AsMockDbSet(masterOrgList);
+            var masterOrgMock = IEnumerableExtensions.AsEFCoreMockDbSet(masterOrgList);
 
             organisationsMock.Setup(o => o.MasterOrganisations).Returns(masterOrgMock);
 
@@ -561,7 +561,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             organisations.Where(k => k.Key == 3).Select(v => v.Value.PartnerUKPRN).Single().Should().BeFalse();
         }
 
-        private OrganisationsDataRetrievalService NewService(IOrganisations organisations = null, ICache<IMessage> messageCache = null)
+        private OrganisationsDataRetrievalService NewService(IOrganisationsContext organisations = null, ICache<IMessage> messageCache = null)
         {
             return new OrganisationsDataRetrievalService(organisations, messageCache);
         }

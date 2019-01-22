@@ -208,6 +208,25 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
+        /// For any item that matches the condition do the action.
+        /// </summary>
+        /// <typeparam name="T">of type</typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="matchCondition">match condition.</param>
+        /// <param name="doAction">do action.</param>
+        public static void ForAny<T>(this IEnumerable<T> list, Func<T, bool> matchCondition, Action<T> doAction)
+        {
+            var safeList = list.SafeReadOnlyList();
+            safeList.ForEach(x =>
+            {
+                if (matchCondition(x))
+                {
+                    doAction(x);
+                }
+            });
+        }
+
+        /// <summary>
         /// Safe list, the private implementation, null coalescing
         /// </summary>
         /// <typeparam name="T">of type</typeparam>

@@ -312,6 +312,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
         }
 
         // TODO: this should happen in the rule
+        public bool BasicSkillsTypeMatchForLearnAimRef(IEnumerable<int> basicSkillsTypes, string learnAimRef)
+        {
+            if (basicSkillsTypes == null || string.IsNullOrEmpty(learnAimRef))
+            {
+                return false;
+            }
+
+            var values = GetAnnualValuesFor(learnAimRef);
+            return values.Any(a =>
+                a.BasicSkillsType.HasValue && basicSkillsTypes.Contains((int)a.BasicSkillsType));
+        }
+
+        // TODO: this should happen in the rule
         public bool BasicSkillsMatchForLearnAimRefAndStartDate(IEnumerable<int> basicSkillsType, string learnAimRef, DateTime learnStartDate)
         {
             var values = GetAnnualValuesFor(learnAimRef);

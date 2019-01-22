@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             {
                 if (ConditionMet(objectToValidate.DateOfBirthNullable, learningDelivery))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.DateOfBirthNullable, learningDelivery.FundModel));
                     return;
                 }
             }
@@ -58,11 +58,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             return _learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "ASL", _famCodes);
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime? dateOfBirth, int fundModel)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth)
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)
             };
         }
     }

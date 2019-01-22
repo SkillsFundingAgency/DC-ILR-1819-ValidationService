@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.ProvSpecDelMonOcc
         private readonly HashSet<string> validProvSpecDelMonOccurValues = new HashSet<string> { "A", "B", "C", "D" };
 
         public ProvSpecDelMonOccur_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.ProvSpecDelMonOccur_01Rule)
+            : base(validationErrorHandler, RuleNameConstants.ProvSpecDelMonOccur_01)
         {
         }
 

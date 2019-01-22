@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 {
     public class R104RuleTests : AbstractRuleTests<R104Rule>
     {
-        private readonly string _famTypeACT = LearningDeliveryFAMTypeConstants.ACT;
+        private readonly string _famTypeACT = Monitoring.Delivery.Types.ApprenticeshipContract;
 
         [Fact]
         public void RuleName()
@@ -24,305 +24,214 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void ACTCountConditionMet_True()
+        public void DoesNotHaveMultipleACTFams_True()
         {
-            var learningDeliveryFams = new List<TestLearningDeliveryFAM>
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
                 new TestLearningDeliveryFAM
                 {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
                     LearnDelFAMType = "ACT"
                 }
             };
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFams, _famTypeACT)).Returns(2);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs, _famTypeACT)).Returns(1);
 
-            NewRule(learningeliveryFAMQueryServiceMock.Object).ACTCountConditionMet(learningDeliveryFams).Should().BeTrue();
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).DoesNotHaveMultipleACTFams(learningDeliveryFAMs).Should().BeTrue();
         }
 
         [Fact]
-        public void ACTCountConditionMet_False()
+        public void DoesNotHaveMultipleACTFams_True_Null()
         {
-            var learningDeliveryFams = new List<TestLearningDeliveryFAM>
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(null, _famTypeACT)).Returns(0);
+
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).DoesNotHaveMultipleACTFams(null).Should().BeTrue();
+        }
+
+        [Fact]
+        public void DoesNotHaveMultipleACTFams_False()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
                 new TestLearningDeliveryFAM
                 {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
+                    LearnDelFAMType = "ACT"
                 },
                 new TestLearningDeliveryFAM
                 {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
                     LearnDelFAMType = "ACT"
                 }
             };
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFams, _famTypeACT)).Returns(1);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs, _famTypeACT)).Returns(2);
 
-            NewRule(learningeliveryFAMQueryServiceMock.Object).ACTCountConditionMet(learningDeliveryFams).Should().BeFalse();
+            NewRule(learningDeliveryFAMQueryServiceMock.Object).DoesNotHaveMultipleACTFams(learningDeliveryFAMs).Should().BeFalse();
         }
 
         [Fact]
-        public void ACTCountConditionMet_False_NullFAMS()
+        public void LearningDeliveryFamForOverlappingACTTypes_ReturnsEntity()
         {
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(null, _famTypeACT)).Returns(null);
-
-            NewRule(learningeliveryFAMQueryServiceMock.Object).ACTCountConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void ACTDateConditionMet_ReturnsFAM()
-        {
-            var learningDeliveryFams = new List<TestLearningDeliveryFAM>
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                    LearnDelFAMType = "ACT"
-                }
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
             };
 
-            NewRule().ACTDateConditionMet(learningDeliveryFams).Should().Be(learningDeliveryFams[1]);
-        }
-
-        [Fact]
-        public void ACTDateConditionMet_ReturnsFAM_Multiple()
-        {
-            var learningDeliveryFams = new List<TestLearningDeliveryFAM>
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 30),
-                    LearnDelFAMType = "ACT"
-                }
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 1)
             };
 
-            NewRule().ACTDateConditionMet(learningDeliveryFams).Should().Be(learningDeliveryFams[1]);
-        }
-
-        [Fact]
-        public void ACTDateConditionMet_ReturnsNull_NoFAMS()
-        {
-            NewRule().ACTDateConditionMet(null).Should().BeNull();
-        }
-
-        [Fact]
-        public void ACTDateConditionMet_ReturnsNull_ZeroACTTypes()
-        {
-            var learningDeliveryFams = new List<TestLearningDeliveryFAM>
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMType = "RES"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                    LearnDelFAMType = "RES"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                    LearnDelFAMType = "RES"
-                }
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo
             };
 
-            NewRule().ACTDateConditionMet(learningDeliveryFams).Should().BeNull();
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo });
         }
 
         [Fact]
-        public void ACTDateConditionMet_ReturnsNull_FamDateToNull()
+        public void LearningDeliveryFamForOverlappingACTTypes_ReturnsDateMultiple()
         {
-            var learningDeliveryFams = new List<TestLearningDeliveryFAM>
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                    LearnDelFAMType = "ACT"
-                }
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
             };
 
-            NewRule().ACTDateConditionMet(learningDeliveryFams).Should().BeNull();
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+            };
+
+            var learningDeliveryFamThree = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
+            };
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo,
+               learningDeliveryFamThree
+            };
+
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamThree });
         }
 
         [Fact]
-        public void ACTDateConditionMet_ReturnsNull_FAMDatesCorrect()
+        public void LearningDeliveryFamForOverlappingACTTypes_ReturnsDate_NoEndDate()
         {
-            var learningDeliveryFams = new List<TestLearningDeliveryFAM>
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 11),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                    LearnDelFAMType = "ACT"
-                }
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1)
             };
 
-            NewRule().ACTDateConditionMet(learningDeliveryFams).Should().BeNull();
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1)
+            };
+
+            var learningDeliveryFamThree = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 3),
+            };
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo,
+               learningDeliveryFamThree
+            };
+
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo, learningDeliveryFamThree });
         }
 
         [Fact]
-        public void ACTDateConditionMet_ReturnsNull_SingleFAM()
+        public void LearningDeliveryFamForOverlappingACTTypes_ReturnsNull_NoDeliveries()
         {
-            var learningDeliveryFams = new List<TestLearningDeliveryFAM>
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(null).Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public void LearningDeliveryFamForOverlappingACTTypes_ReturnsNull_EmptyCollection()
+        {
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(new List<TestLearningDeliveryFAM>()).Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public void LearningDeliveryFamForOverlappingACTTypes_ReturnsNull_NoOverlap()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
             {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMType = "ACT"
-                }
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
             };
 
-            NewRule().ACTDateConditionMet(learningDeliveryFams).Should().BeNull();
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+            };
+
+            var learningDeliveryFamThree = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "ACT",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 3),
+            };
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo,
+               learningDeliveryFamThree
+            };
+
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).Should().BeNullOrEmpty();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var learner = new TestLearner()
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
-                LearnRefNumber = "00100309",
-                LearningDeliveries = new TestLearningDelivery[]
+                new TestLearningDeliveryFAM
                 {
-                    new TestLearningDelivery()
-                    {
-                        AimSeqNumber = 1,
-                        LearnActEndDateNullable = new DateTime(2018, 10, 1),
-                        LearnPlanEndDate = new DateTime(2018, 10, 1),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                                LearnDelFAMType = "LSF"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                                LearnDelFAMType = "ACT"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 10),
-                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                                LearnDelFAMType = "ACT"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                                LearnDelFAMType = "ACT"
-                            }
-                        }
-                    }
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
                 }
             };
 
-            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
-
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(3);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(learningeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
-        }
-
-        [Fact]
-        public void Validate_Error_MultipleDeliveries()
-        {
             var learner = new TestLearner()
             {
                 LearnRefNumber = "00100309",
@@ -331,100 +240,146 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         AimSeqNumber = 1,
-                        LearnActEndDateNullable = new DateTime(2018, 10, 1),
-                        LearnPlanEndDate = new DateTime(2018, 10, 1),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                                LearnDelFAMType = "LSF"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                                LearnDelFAMType = "ACT"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 10),
-                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                                LearnDelFAMType = "ACT"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                                LearnDelFAMType = "ACT"
-                            }
-                        }
+                        LearningDeliveryFAMs = learningDeliveryFAMs
                     },
                     new TestLearningDelivery()
                     {
                         AimSeqNumber = 2,
-                        LearnActEndDateNullable = new DateTime(2018, 10, 1),
-                        LearnPlanEndDate = new DateTime(2018, 10, 1),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
-                        {
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                                LearnDelFAMType = "LSF"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                                LearnDelFAMType = "ACT"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 11),
-                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                                LearnDelFAMType = "ACT"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                                LearnDelFAMType = "ACT"
-                            }
-                        }
+                        AimType = 5,
+                        LearnStartDate = new DateTime(2018, 9, 1)
                     }
                 }
             };
 
-            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(3);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsForType(learningDeliveryFAMs, _famTypeACT)).Returns(learningDeliveryFAMs);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs, _famTypeACT)).Returns(3);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(learningeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Fact]
-        public void Validate_NoError_NullLearningDeliveries()
+        public void Validate_Error_MultipleDelivieries()
         {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
+                }
+            };
+
             var learner = new TestLearner()
             {
                 LearnRefNumber = "00100309",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                   new TestLearningDelivery()
+                   {
+                       AimSeqNumber = 1,
+                       LearningDeliveryFAMs = learningDeliveryFAMs
+                   },
+                   new TestLearningDelivery()
+                   {
+                      AimSeqNumber = 2,
+                      LearningDeliveryFAMs = learningDeliveryFAMs
+                   },
+                }
             };
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(null, _famTypeACT)).Returns(0);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsForType(learningDeliveryFAMs, _famTypeACT)).Returns(learningDeliveryFAMs);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs, _famTypeACT)).Returns(3);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(learningeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Fact]
-        public void Validate_NoError_LearnDelDateFromNull()
+        public void Validate_Error_NoFAMDateTo()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1)
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1)
+                },
+                new TestLearningDeliveryFAM
+                {
+                    LearnDelFAMType = "ACT",
+                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2)
+                }
+            };
+
+            var learner = new TestLearner()
+            {
+                LearnRefNumber = "00100309",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 1,
+                        LearningDeliveryFAMs = learningDeliveryFAMs
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 2,
+                        AimType = 5,
+                        LearnStartDate = new DateTime(2018, 9, 1)
+                    }
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsForType(learningDeliveryFAMs, _famTypeACT)).Returns(learningDeliveryFAMs);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs, _famTypeACT)).Returns(3);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_NoDeliveries()
+        {
+            var learner = new TestLearner();
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_NoACTFams()
         {
             var learner = new TestLearner()
             {
@@ -434,22 +389,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     new TestLearningDelivery()
                     {
                         AimSeqNumber = 1,
-                        LearnActEndDateNullable = new DateTime(2018, 10, 1),
-                        LearnPlanEndDate = new DateTime(2018, 10, 1),
-                        LearningDeliveryFAMs = new TestLearningDeliveryFAM[]
+                    },
+                    new TestLearningDelivery()
+                    {
+                    }
+                }
+            };
+
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(It.IsAny<IReadOnlyCollection<TestLearningDeliveryFAM>>(), _famTypeACT)).Returns(0);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_SingleCoreAims()
+        {
+            var learner = new TestLearner()
+            {
+                LearnRefNumber = "00100309",
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 1,
+                        AimType = 5,
+                        LearnStartDate = new DateTime(2018, 9, 1),
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
                         {
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMType = "LSF"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMType = "ACT"
-                            },
-                            new TestLearningDeliveryFAM
-                            {
-                                LearnDelFAMType = "ACT"
-                            },
                             new TestLearningDeliveryFAM
                             {
                                 LearnDelFAMType = "ACT"
@@ -459,121 +430,64 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(3);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(It.IsAny<IReadOnlyCollection<TestLearningDeliveryFAM>>(), _famTypeACT)).Returns(1);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(learningeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Fact]
-        public void Validate_NoError_ACTCount()
+        public void Validate_NoError_NoOverlap()
         {
-            var learningDeliveryFams = new TestLearningDeliveryFAM[]
-            {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                    LearnDelFAMType = "ACT"
-                }
-            };
-
             var learner = new TestLearner()
             {
                 LearnRefNumber = "00100309",
-                LearningDeliveries = new TestLearningDelivery[]
+                LearningDeliveries = new List<TestLearningDelivery>
                 {
-                    new TestLearningDelivery()
+                    new TestLearningDelivery
                     {
-                        AimSeqNumber = 1,
-                        LearnActEndDateNullable = new DateTime(2018, 10, 1),
-                        LearnPlanEndDate = new DateTime(2018, 10, 1),
-                        LearningDeliveryFAMs = learningDeliveryFams
+                        LearningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+                        {
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "ACT",
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "ACT",
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+                            },
+                            new TestLearningDeliveryFAM
+                            {
+                                LearnDelFAMType = "ACT",
+                                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 3),
+                            }
+                        }
                     }
                 }
             };
 
-            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
+            var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(1);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(It.IsAny<IReadOnlyCollection<TestLearningDeliveryFAM>>(), _famTypeACT)).Returns(3);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(learningeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
-        }
-
-        [Fact]
-        public void Validate_NoError_ACTDates()
-        {
-            var learningDeliveryFams = new TestLearningDeliveryFAM[]
-            {
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
-                    LearnDelFAMType = "LSF"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 10),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 9, 11),
-                    LearnDelFAMDateToNullable = new DateTime(2018, 9, 30),
-                    LearnDelFAMType = "ACT"
-                },
-                new TestLearningDeliveryFAM
-                {
-                    LearnDelFAMDateFromNullable = new DateTime(2018, 10, 1),
-                    LearnDelFAMType = "ACT"
-                }
-            };
-
-            var learner = new TestLearner()
-            {
-                LearnRefNumber = "00100309",
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        AimSeqNumber = 1,
-                        LearnActEndDateNullable = new DateTime(2018, 10, 1),
-                        LearnPlanEndDate = new DateTime(2018, 10, 1),
-                        LearningDeliveryFAMs = learningDeliveryFams
-                    }
-                }
-            };
-
-            var ldFams = learner.LearningDeliveries.Select(ld => ld.LearningDeliveryFAMs).First();
-
-            var learningeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
-
-            learningeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(ldFams, _famTypeACT)).Returns(3);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(learningeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+                NewRule(learningDeliveryFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Fact]
         public void BuildErrorMessageParameters()
         {
+            var famType = Monitoring.Delivery.Types.ApprenticeshipContract;
             var learnPlanEndDate = new DateTime(2018, 8, 1);
             var learnActEndDate = new DateTime(2018, 8, 1);
             var learnDelFamDateFrom = new DateTime(2018, 8, 1);
@@ -583,11 +497,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnPlanEndDate", "01/08/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnActEndDate", "01/08/2018")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMType", _famTypeACT)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMType", "ACT")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMDateFrom", "01/08/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("LearnDelFAMDateTo", "01/08/2018")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(learnPlanEndDate, learnActEndDate, _famTypeACT, learnDelFamDateFrom, learnDelFamDateTo);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(learnPlanEndDate, learnActEndDate, famType, learnDelFamDateFrom, learnDelFamDateTo);
 
             validationErrorHandlerMock.Verify();
         }

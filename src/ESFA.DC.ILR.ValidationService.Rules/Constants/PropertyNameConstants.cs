@@ -24,8 +24,10 @@
         public const string ContPrefCode = "ContPrefCode";
         public const string ContPrefType = "ContPrefType";
         public const string DateEmpStatApp = "DateEmpStatApp";
+        public const string DD19 = "DD19";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string DOMICILE = "DOMICILE";
+        public const string ELQ = "ELQ";
         public const string EmpId = "EmpId";
         public const string Ethnicity = "Ethnicity";
         public const string EmpOutcome = "EmpOutcome";
@@ -36,6 +38,7 @@
         public const string ESMCode = "ESMCode";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
+        public const string FUNDCOMP = "FUNDCOMP";
         public const string FUNDLEV = "FUNDLEV";
         public const string FworkCode = "FworkCode";
         public const string GivenNames = "GivenNames";
@@ -73,6 +76,8 @@
         public const string OutULN = "OutULN";
         public const string PartnerUKPRN = "PartnerUKPRN";
         public const string PCFLDCS = "PCFLDCS";
+        public const string PCSLDCS = "PCFLDCS";
+        public const string PCTLDCS = "PCFLDCS";
         public const string PlanEEPHours = "PlanEEPHours";
         public const string PlanLearnHours = "PlanLearnHours";
         public const string ProvSpecDelMonOccur = "ProvSpecDelMonOccur";
@@ -88,10 +93,16 @@
         public const string ProvSpecLearnMonOccur = "ProvSpecLearnMonOccur";
         public const string QUALENT3 = "QUALENT3";
         public const string Sex = "Sex";
+        public const string SEC = "SEC";
+        public const string SPECFEE = "SPECFEE";
         public const string StdCode = "StdCode";
+        public const string SOC2000 = "SOC2000";
+        public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
+        public const string UCASPERID = "UCASPERID";
         public const string WithdrawReason = "WithdrawReason";
         public const string WorkPlaceEmpId = "WorkPlaceEmpId";
+        public const string WorkPlaceEndDate = "WorkPlaceEndDate";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";
         public const string WorkPlaceMode = "WorkPlaceMode";
     }
