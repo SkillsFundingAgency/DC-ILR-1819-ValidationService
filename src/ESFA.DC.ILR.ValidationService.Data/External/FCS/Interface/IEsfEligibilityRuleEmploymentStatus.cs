@@ -3,11 +3,8 @@
     /// <summary>
     /// the ESF Eligibility Rule Employment Status definition
     /// </summary>
-    public interface IEsfEligibilityRuleEmploymentStatus :
-        IIdentifiableItem,
-        IEsfEligibilityRuleSibling,
-        IEsfEligibilityRuleReferences,
-        IEsfEligibilityRuleCode<int>
+    public interface IEsfEligibilityRuleEmploymentStatus : IEsfEligibilityRuleReferences
     {
+        int Code { get; }
     }
 }

@@ -4,8 +4,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
 {
     public class EsfEligibilityRuleSectorSubjectAreaLevel : IEsfEligibilityRuleSectorSubjectAreaLevel
     {
-        public int Id { get; set; }
-
         public string TenderSpecReference { get; set; }
 
         public string LotReference { get; set; }

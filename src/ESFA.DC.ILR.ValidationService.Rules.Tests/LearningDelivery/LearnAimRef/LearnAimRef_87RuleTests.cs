@@ -164,6 +164,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData("ZUXAH09C", true)]
         [InlineData("ZUXAH15A", true)]
         [InlineData("ZUXAH15B", true)]
+        [InlineData("Z9OPE15B", true)]
+        [InlineData("Z9OPE14A", true)]
+        [InlineData("z9ope15B", true)]
+        [InlineData("z9ope14A", true)]
+        [InlineData("x9ope15B", false)]
+        [InlineData("x9ope14A", false)]
         [InlineData(TypeOfAim.References.IndustryPlacement, false)]
         [InlineData(TypeOfAim.References.SupportedInternship16To19, false)]
         [InlineData(TypeOfAim.References.WorkExperience, false)]
@@ -238,6 +244,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData("ZUXAH09C")]
         [InlineData("ZUXAH15A")]
         [InlineData("ZUXAH15B")]
+        [InlineData("Z9OPE15B")]
+        [InlineData("Z9OPE14A")]
+        [InlineData("z9ope15B")]
+        [InlineData("z9ope14A")]
         public void InvalidItemRaisesValidationMessage(string candidate)
         {
             // arrange
@@ -292,6 +302,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         [Theory]
+        [InlineData("x9ope15B")]
+        [InlineData("x9ope14A")]
         [InlineData(TypeOfAim.References.IndustryPlacement)]
         [InlineData(TypeOfAim.References.SupportedInternship16To19)]
         [InlineData(TypeOfAim.References.WorkExperience)]

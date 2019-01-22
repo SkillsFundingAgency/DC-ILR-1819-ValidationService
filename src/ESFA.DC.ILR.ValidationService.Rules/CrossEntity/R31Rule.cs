@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
 
             var groups = objectToValidate.LearningDeliveries
-                .GroupBy(ld => new { ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable });
+                .GroupBy(ld => new { ld.AimSeqNumber, ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable });
 
             foreach (var group in groups)
             {
@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                     var delivery = group.First(d => d.AimType == ProgramAimType && d.LearnActEndDateNullable == null);
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
-                        null,
+                        group.Key.AimSeqNumber,
                         BuildErrorMessageParameters(delivery));
                 }
             }

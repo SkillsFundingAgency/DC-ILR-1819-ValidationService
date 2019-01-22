@@ -114,7 +114,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
             var parameters = Collection.Empty<IErrorMessageParameter>();
             parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
 
-            _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
+            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
     }
 }

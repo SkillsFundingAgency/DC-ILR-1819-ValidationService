@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV;
+using ESFA.DC.ILR.ValidationService.Rules.HE.TYPEYR;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDLEV
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
 {
     public class TYPEYR_01RuleTests : AbstractRuleTests<TYPEYR_01Rule>
     {
