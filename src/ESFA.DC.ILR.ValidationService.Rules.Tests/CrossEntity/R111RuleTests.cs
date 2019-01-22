@@ -121,8 +121,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule().LearnerEmploymentStatusConditionMet(testLearnerEmploymentStatus).Should().BeTrue();
         }
 
-        [Fact]
-        public void LearnerEmploymentDuringLearningDeliveryConditionMet_False()
+        [Theory]
+        [InlineData("ACT")]
+        [InlineData("act")]
+        public void LearnerEmploymentDuringLearningDeliveryConditionMet_False(string famType)
         {
             var testLearnerEmploymentStatus = new TestLearnerEmploymentStatus[]
                 {
@@ -137,7 +139,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = "ACT",
+                        LearnDelFAMType = famType,
                         LearnDelFAMCode = "1",
                         LearnDelFAMDateFromNullable = new DateTime(2018, 09, 01),
                         LearnDelFAMDateToNullable = new DateTime(2018, 11, 01)
@@ -163,8 +165,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             learnDelFAMDateTo.Should().BeNull();
         }
 
-        [Fact]
-        public void LearnerEmploymentDuringLearningDeliveryConditionMet_False_LearnerNullCheck()
+        [Theory]
+        [InlineData("ACT")]
+        [InlineData("act")]
+        public void LearnerEmploymentDuringLearningDeliveryConditionMet_False_LearnerNullCheck(string famType)
         {
             TestLearnerEmploymentStatus[] testLearnerEmploymentStatus = null;
 
@@ -172,7 +176,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = "ACT",
+                        LearnDelFAMType = famType,
                         LearnDelFAMCode = "1",
                         LearnDelFAMDateFromNullable = new DateTime(2018, 09, 01),
                         LearnDelFAMDateToNullable = new DateTime(2018, 11, 01)
@@ -232,9 +236,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(11, "2018-11-01")]
-        [InlineData(12, null)]
-        public void LearnerEmploymentDuringLearningDeliveryConditionMet_True(int empStatExpected, string dateTo)
+        [InlineData(11, "2018-11-01", "ACT")]
+        [InlineData(12, null, "ACT")]
+        [InlineData(11, "2018-11-01", "act")]
+        [InlineData(12, null, "act")]
+        public void LearnerEmploymentDuringLearningDeliveryConditionMet_True(int empStatExpected, string dateTo, string famType)
         {
             DateTime dateEmpStatAppExpected = new DateTime(2018, 10, 01);
             DateTime? learnDelFAMDateFromExpected = new DateTime(2018, 09, 01);
@@ -253,7 +259,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = "ACT",
+                        LearnDelFAMType = famType,
                         LearnDelFAMCode = "1",
                         LearnDelFAMDateFromNullable = learnDelFAMDateFromExpected,
                         LearnDelFAMDateToNullable = learnDelFAMDateToExpected

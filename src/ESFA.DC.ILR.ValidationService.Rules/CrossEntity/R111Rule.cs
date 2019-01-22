@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -92,8 +93,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                                       where _employmentStatuses.Contains(emp.EmpStat)
                                         && emp.DateEmpStatApp >= del.LearnDelFAMDateFromNullable
                                         && (!del.LearnDelFAMDateToNullable.HasValue || emp.DateEmpStatApp <= del.LearnDelFAMDateToNullable)
-                                        && del.LearnDelFAMType == LearningDeliveryFAMTypeConstants.ACT
-                                        && del.LearnDelFAMCode == LearningDeliveryFAMCodeConstants.ACT_ContractEmployer
+                                        && del.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.ACT)
+                                        && del.LearnDelFAMCode.CaseInsensitiveEquals(LearningDeliveryFAMCodeConstants.ACT_ContractEmployer)
                                       select new
                                       {
                                           emp.DateEmpStatApp,
@@ -110,10 +111,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return true;
             }
 
-            empStartDateApp = null;
-            empStat = null;
-            learnDelFAMDateFrom = null;
-            learnDelFAMDateTo = null;
             return false;
         }
 
