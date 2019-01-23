@@ -74,6 +74,7 @@
       <HintPath>..\packages\Moq.4.8.2\lib\net45\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -224,6 +225,7 @@
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_01RuleTests.cs" />
     <Compile Include="HE\FinancialSupport\FINTYPE\FINTYPE_02RuleTests.cs" />
     <Compile Include="HE\FUNDCOMP\FUNDCOMP_01RuleTests.cs" />
+    <Compile Include="HE\FUNDLEV\FUNDLEV_02RuleTests.cs" />
     <Compile Include="HE\FUNDLEV\FUNDLEV_03RuleTests.cs" />
     <Compile Include="HE\FUNDLEV\FUNDLEV_01RuleTests.cs" />
     <Compile Include="HE\GROSSFEE\GROSSFEE_01RuleTests.cs" />
@@ -393,6 +395,7 @@
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_84RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_79RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_04RuleTests.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_72RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_57RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_59RuleTests.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_73RuleTests.cs" />
@@ -447,6 +450,7 @@
     <Compile Include="LearningDelivery\OutGrade\OutGrade_05RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_01RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_06RuleTests.cs" />
+    <Compile Include="LearningDelivery\OutGrade\OutGrade_07RuleTests.cs" />
     <Compile Include="LearningDelivery\ProvSpecDelMonOccur\ProvSpecDelMonOccur_01RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09RuleTests.cs" />

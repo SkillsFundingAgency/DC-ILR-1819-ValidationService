@@ -108,5 +108,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         bool IsCurrent(LookupTimeRestrictedKey lookupKey, string candidate, DateTime referenceDate);
 
         bool IsCurrent(LookupComplexKey lookupKey, string key, string value, DateTime date);
+
+        bool ContainsValueForKey(LookupItemKey lookupKey, string keyCandidate, string valueCandidate);
     }
 }
