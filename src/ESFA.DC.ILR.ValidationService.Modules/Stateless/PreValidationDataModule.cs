@@ -3,8 +3,6 @@ using ESFA.DC.Data.ILR.ValidationErrors.Model;
 using ESFA.DC.Data.ILR.ValidationErrors.Model.Interfaces;
 using ESFA.DC.Data.LARS.Model;
 using ESFA.DC.Data.LARS.Model.Interfaces;
-using ESFA.DC.Data.Organisatons.Model;
-using ESFA.DC.Data.Organisatons.Model.Interface;
 using ESFA.DC.Data.Postcodes.Model;
 using ESFA.DC.Data.Postcodes.Model.Interfaces;
 using ESFA.DC.Data.ULN.Model;
@@ -16,7 +14,10 @@ using ESFA.DC.ILR.ValidationService.Data.Population.Configuration.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 using ESFA.DC.ReferenceData.FCS.Model;
 using ESFA.DC.ReferenceData.FCS.Model.Interface;
+using ESFA.DC.ReferenceData.Organisations.Model;
+using ESFA.DC.ReferenceData.Organisations.Model.Interface;
 using ESFA.DC.ServiceFabric.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
 {
@@ -37,7 +38,14 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
             builder.Register(c => new LARS(c.Resolve<IReferenceDataOptions>().LARSConnectionString)).As<ILARS>().InstancePerLifetimeScope();
             builder.Register(c => new ULN(c.Resolve<IReferenceDataOptions>().ULNConnectionstring)).As<IULN>().InstancePerLifetimeScope();
             builder.Register(c => new Postcodes(c.Resolve<IReferenceDataOptions>().PostcodesConnectionString)).As<IPostcodes>().InstancePerLifetimeScope();
-            builder.Register(c => new Organisations(c.Resolve<IReferenceDataOptions>().OrganisationsConnectionString)).As<IOrganisations>().InstancePerLifetimeScope();
+            builder.Register(c =>
+            {
+                DbContextOptions<OrganisationsContext> options = new DbContextOptionsBuilder<OrganisationsContext>()
+            .UseSqlServer(c.Resolve<IReferenceDataOptions>().OrganisationsConnectionString).Options;
+
+                return new OrganisationsContext(options);
+            }).As<IOrganisationsContext>().InstancePerLifetimeScope();
+
             builder.Register(c => new FcsContext(c.Resolve<IReferenceDataOptions>().FCSConnectionString)).As<IFcsContext>().InstancePerLifetimeScope();
             builder.Register(c => new ValidationErrors(c.Resolve<IReferenceDataOptions>().ValidationErrorsConnectionString)).As<IValidationErrors>();
 

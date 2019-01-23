@@ -76,6 +76,7 @@
     <Compile Include="Constants\LearnerFAMTypeConstants.cs" />
     <Compile Include="Constants\LearningDeliveryFAMCodeConstants.cs" />
     <Compile Include="Constants\LegalOrgTypeConstants.cs" />
+    <Compile Include="Constants\LLDDHealthProblemConstants.cs" />
     <Compile Include="Constants\Monitoring.cs" />
     <Compile Include="Constants\OutcomeConstants.cs" />
     <Compile Include="Constants\OutTypeConstants.cs" />
@@ -86,6 +87,8 @@
     <Compile Include="Constants\TypeOfEmploymentStatus.cs" />
     <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
+    <Compile Include="Constants\TypeOfMODESTUD.cs" />
+    <Compile Include="Constants\TypeOfSPECFEE.cs" />
     <Compile Include="Constants\WorkPlaceModeConstants.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
@@ -97,6 +100,7 @@
     <Compile Include="CrossEntity\R51Rule.cs" />
     <Compile Include="CrossEntity\R49Rule.cs" />
     <Compile Include="CrossEntity\R101Rule.cs" />
+    <Compile Include="CrossEntity\R111Rule.cs" />
     <Compile Include="CrossEntity\R58Rule.cs" />
     <Compile Include="CrossEntity\R100Rule.cs" />
     <Compile Include="CrossEntity\R110Rule.cs" />
@@ -121,6 +125,7 @@
     <Compile Include="CrossEntity\R89Rule.cs" />
     <Compile Include="CrossEntity\R92Rule.cs" />
     <Compile Include="CrossEntity\R90Rule.cs" />
+    <Compile Include="CrossEntity\R97Rule.cs" />
     <Compile Include="CrossEntity\R99Rule.cs" />
     <Compile Include="CrossEntity\R59Rule.cs" />
     <Compile Include="CrossEntity\R67Rule.cs" />
@@ -200,6 +205,7 @@
     <Compile Include="EmploymentStatus\EmpId\EmpId_02Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_10Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_20Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_15Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_11Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_14Rule.cs" />
@@ -249,6 +255,7 @@
     <Compile Include="HE\LearningDeliveryHE\LearningDeliveryHE_08Rule.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_01Rule.cs" />
     <Compile Include="HE\MODESTUD\MODESTUD_03Rule.cs" />
+    <Compile Include="HE\MSTUFEE\MSTUFEE_01Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_05Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_04Rule.cs" />
     <Compile Include="HE\MSTUFEE\MSTUFEE_03Rule.cs" />
@@ -268,7 +275,11 @@
     <Compile Include="HE\QUALENT3\QUALENT3_01Rule.cs" />
     <Compile Include="HE\QUALENT3\QUALENT3_03Rule.cs" />
     <Compile Include="HE\SEC\SEC_01Rule.cs" />
+    <Compile Include="HE\SEC\SEC_02Rule.cs" />
     <Compile Include="HE\SOC2000\SOC2000_02Rule.cs" />
+    <Compile Include="HE\SPECFEE\SPECFEE_01Rule.cs" />
+    <Compile Include="HE\SOC2000\SOC2000_03Rule.cs" />
+    <Compile Include="HE\SPECFEE\SPECFEE_02Rule.cs" />
     <Compile Include="HE\STULOAD\STULOAD_04Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
@@ -279,19 +290,20 @@
     <Compile Include="Learner\Accom\Accom_01Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\ALSCost\ALSCost_02Rule.cs" />
+    <Compile Include="Learner\CampId\CampId_01Rule.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_01Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
+    <Compile Include="Learner\ContPrefType\ContPrefType_03Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_05Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_06Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_07Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_28Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_43Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_40Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_30Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_27Rule.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_03Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_04Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_05Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_06Rule.cs" />
@@ -304,7 +316,6 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_26Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_25Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_24Rule.cs" />
-    <Compile Include="Learner\DateOfBirth\DateOfBirth_29Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_36Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_37Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_38Rule.cs" />
@@ -342,6 +353,7 @@
     <Compile Include="Learner\LLDDCat\LLDDCat_02Rule.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_01Rule.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_06Rule.cs" />
+    <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_07Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_01Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_03Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_04Rule.cs" />
@@ -372,6 +384,7 @@
     <Compile Include="Learner\Sex\Sex_01Rule.cs" />
     <Compile Include="LearningDelivery\AchDate\AchDate_08Rule.cs" />
     <Compile Include="LearningDelivery\AddHours\AddHours_03Rule.cs" />
+    <Compile Include="LearningDelivery\AFinDate\AFinDate_02Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_07Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_06Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_05Rule.cs" />
@@ -400,6 +413,8 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_31Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_38Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_36Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_57Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_59Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_73Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_46Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_50Rule.cs" />
@@ -586,6 +601,7 @@
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_03Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_05Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_01Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEndDate\WorkPlaceEndDate_02Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceMode\WorkPlaceMode_01Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceStartDate\WorkPlaceStartDate_02Rule.cs" />
@@ -647,6 +663,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="ESFA.DC.ILR.ValidationService.Rules.ruleset">
       <SubType>Designer</SubType>
     </None>
@@ -657,6 +674,5 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.2\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

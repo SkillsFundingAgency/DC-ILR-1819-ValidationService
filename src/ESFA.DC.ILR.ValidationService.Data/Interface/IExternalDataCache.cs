@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
@@ -52,33 +53,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; }
 
         /// <summary>
-        /// Gets the FCS contracts.
-        /// </summary>
-        IReadOnlyCollection<IFcsContract> FCSContracts { get; }
-
-        /// <summary>
         /// Gets the FCS contract allocations.
         /// </summary>
-        IReadOnlyCollection<IFcsContractAllocation> FCSContractAllocations { get; }
+        IReadOnlyDictionary<string, IFcsContractAllocation> FCSContractAllocations { get; }
 
-        /// <summary>
-        /// Gets the ESF eligibility rule employment statuses.
-        /// </summary>
-        IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> ESFEligibilityRuleEmploymentStatuses { get; }
-
-        /// <summary>
-        /// Gets the esf eligibility rule local authorities.
-        /// </summary>
-        IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> ESFEligibilityRuleLocalAuthorities { get; }
-
-        /// <summary>
-        /// Gets the ESF eligibility rule enterprise partnerships
-        /// </summary>
-        IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> ESFEligibilityRuleEnterprisePartnerships { get; }
-
-        /// <summary>
-        /// Gets the ESF eligibility rule subject area level codes.
-        /// </summary>
-        IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> EsfEligibilityRuleSectorSubjectAreaLevels { get; }
+        IReadOnlyCollection<ICampusIdentifier> CampusIdentifiers { get; set; }
     }
 }

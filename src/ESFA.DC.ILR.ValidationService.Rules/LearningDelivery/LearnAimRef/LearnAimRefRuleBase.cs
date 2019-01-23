@@ -18,6 +18,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// </summary>
         public const string MessagePropertyName = "LearnAimRef";
 
+        private readonly ICollection<Func<ILearningDelivery, ILearner, BranchResult>> _branchActions;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LearnAimRefRuleBase" /> class.
         /// </summary>
@@ -44,6 +46,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             LarsData = larsData;
             DerivedData07 = derivedData07;
             DerivedData11 = derivedData11;
+
+            _branchActions = new List<Func<ILearningDelivery, ILearner, BranchResult>>
+            {
+                IsValidAdultSkills,
+                IsValidApprenticeship,
+                IsValidUnemployed,
+                IsValid16To19EFA,
+                IsValidCommunityLearning,
+                IsValidOLASS,
+                IsValidAdvancedLearnerLoan,
+                IsValidAny,
+                IsValidESF
+            };
         }
 
         /// <summary>
@@ -251,31 +266,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// Determines whether [is valid adult skills (category)] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="learner">The learner.</param>
         /// <returns>
         ///   <c>true</c> if [is valid adult skills (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidAdultSkills(ILearningDelivery delivery) =>
-            HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.AdultSkills)
-            && !IsRestart(delivery)
-            && !InApprenticeship(delivery)
-            && !IsLearnerInCustody(delivery);
+        public BranchResult IsValidAdultSkills(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.AdultSkills)
+                    && !IsRestart(delivery)
+                    && !InApprenticeship(delivery)
+                    && !IsLearnerInCustody(delivery),
+                TypeOfLARSValidity.AdultSkills);
 
         /// <summary>
         /// Determines whether [is valid apprenticeship (category)] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="learner">The learner.</param>
         /// <returns>
         ///   <c>true</c> if [is valid apprenticeship (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidApprenticeship(ILearningDelivery delivery) =>
-            HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills, TypeOfFunding.ApprenticeshipsFrom1May2017)
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.Apprenticeships)
-            && !IsRestart(delivery)
-            && !InStandardApprenticeship(delivery)
-            && InApprenticeship(delivery)
-            && IsComponentOfAProgram(delivery)
-            && IsViableStart(delivery, ApprenticeshipMinimumStart, DateTime.Today);
+        public BranchResult IsValidApprenticeship(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills, TypeOfFunding.ApprenticeshipsFrom1May2017)
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.Apprenticeships)
+                    && !IsRestart(delivery)
+                    && !InStandardApprenticeship(delivery)
+                    && InApprenticeship(delivery)
+                    && IsComponentOfAProgram(delivery)
+                    && IsViableStart(delivery, ApprenticeshipMinimumStart, DateTime.Today),
+                TypeOfLARSValidity.Apprenticeships);
 
         /// <summary>
         /// Determines whether [is valid unemployed (category)] [the specified delivery].
@@ -285,116 +306,143 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <returns>
         ///   <c>true</c> if [is valid unemployed (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidUnemployed(ILearningDelivery delivery, ILearner learner) =>
-            HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.Unemployed)
-            && !IsRestart(delivery)
-            && !IsLearnerInCustody(delivery)
-            && !InApprenticeship(delivery)
-            && IsViableStart(delivery, DateTime.MinValue, UnemployedMaximumStart)
-            && InReceiptOfBenefitsAtStart(delivery, learner.LearnerEmploymentStatuses);
+        public BranchResult IsValidUnemployed(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.Unemployed)
+                    && !IsRestart(delivery)
+                    && !IsLearnerInCustody(delivery)
+                    && !InApprenticeship(delivery)
+                    && IsViableStart(delivery, DateTime.MinValue, UnemployedMaximumStart)
+                    && InReceiptOfBenefitsAtStart(delivery, learner.LearnerEmploymentStatuses),
+                TypeOfLARSValidity.Unemployed);
 
         /// <summary>
         /// Determines whether [is valid 16 to 19 efa (category)] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="learner">The learner.</param>
         /// <returns>
         ///   <c>true</c> if [is valid 16 to 19 efa (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValid16To19EFA(ILearningDelivery delivery) =>
-            HasQualifyingFunding(delivery, TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfFunding.Other16To19)
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.EFA16To19)
-            && !IsRestart(delivery);
+        public BranchResult IsValid16To19EFA(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                HasQualifyingFunding(delivery, TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfFunding.Other16To19)
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.EFA16To19)
+                    && !IsRestart(delivery),
+                TypeOfLARSValidity.EFA16To19);
 
         /// <summary>
         /// Determines whether [is valid community learning (category)] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="learner">The learner.</param>
         /// <returns>
         ///   <c>true</c> if [is valid community learning (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidCommunityLearning(ILearningDelivery delivery) =>
-            HasQualifyingFunding(delivery, TypeOfFunding.CommunityLearning)
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.CommunityLearning)
-            && !IsRestart(delivery);
+        public BranchResult IsValidCommunityLearning(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                HasQualifyingFunding(delivery, TypeOfFunding.CommunityLearning)
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.CommunityLearning)
+                    && !IsRestart(delivery),
+                TypeOfLARSValidity.CommunityLearning);
 
         /// <summary>
         /// Determines whether [is valid olass (category)] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="learner">The learner.</param>
         /// <returns>
         ///   <c>true</c> if [is valid olass (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidOLASS(ILearningDelivery delivery) =>
-            HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.OLASSAdult)
-            && !IsRestart(delivery)
-            && IsLearnerInCustody(delivery);
+        public BranchResult IsValidOLASS(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.OLASSAdult)
+                    && !IsRestart(delivery)
+                    && IsLearnerInCustody(delivery),
+                TypeOfLARSValidity.OLASSAdult);
 
         /// <summary>
         /// Determines whether [is valid advanced learner loan (category)] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="learner">The learner.</param>
         /// <returns>
         ///   <c>true</c> if [is valid advanced learner loan] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidAdvancedLearnerLoan(ILearningDelivery delivery) =>
-            HasQualifyingFunding(delivery, TypeOfFunding.NotFundedByESFA)
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.AdvancedLearnerLoan)
-            && !IsRestart(delivery)
-            && IsAdvancedLearnerLoan(delivery);
+        public BranchResult IsValidAdvancedLearnerLoan(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                HasQualifyingFunding(delivery, TypeOfFunding.NotFundedByESFA)
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.AdvancedLearnerLoan)
+                    && !IsRestart(delivery)
+                    && IsAdvancedLearnerLoan(delivery),
+                TypeOfLARSValidity.AdvancedLearnerLoan);
 
         /// <summary>
         /// Determines whether [is valid any (category)] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="learner">The learner.</param>
         /// <returns>
         ///   <c>true</c> if [is valid any (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidAny(ILearningDelivery delivery) =>
-            (HasQualifyingFunding(delivery, TypeOfFunding.NotFundedByESFA, TypeOfFunding.OtherAdult)
-                || (HasQualifyingFunding(delivery, TypeOfFunding.ApprenticeshipsFrom1May2017)
-                    && InStandardApprenticeship(delivery)))
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.Any)
-            && !IsRestart(delivery)
-            && !IsAdvancedLearnerLoan(delivery);
+        public BranchResult IsValidAny(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                (HasQualifyingFunding(delivery, TypeOfFunding.NotFundedByESFA, TypeOfFunding.OtherAdult)
+                        || (HasQualifyingFunding(delivery, TypeOfFunding.ApprenticeshipsFrom1May2017)
+                            && InStandardApprenticeship(delivery)))
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.Any)
+                    && !IsRestart(delivery)
+                    && !IsAdvancedLearnerLoan(delivery),
+                TypeOfLARSValidity.Any);
 
         /// <summary>
         /// Determines whether [is valid esf (category)] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="learner">The learner.</param>
         /// <returns>
         ///   <c>true</c> if [is valid esf (category)] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidESF(ILearningDelivery delivery) =>
-            HasQualifyingFunding(delivery, TypeOfFunding.EuropeanSocialFund)
-            && HasQualifyingCategory(delivery, TypeOfLARSValidity.EuropeanSocialFund)
-            && !IsRestart(delivery);
+        public BranchResult IsValidESF(ILearningDelivery delivery, ILearner learner) =>
+            BranchResult.Create(
+                HasQualifyingFunding(delivery, TypeOfFunding.EuropeanSocialFund)
+                    && HasQualifyingCategory(delivery, TypeOfLARSValidity.EuropeanSocialFund)
+                    && !IsRestart(delivery),
+                TypeOfLARSValidity.EuropeanSocialFund);
 
         /// <summary>
         /// Passes category restrictions.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <param name="learner">The learner.</param>
-        /// <returns>true if it does...</returns>
-        public bool PassesCategoryRestrictions(ILearningDelivery delivery, ILearner learner) =>
-            IsValidAdultSkills(delivery)
-            || IsValidApprenticeship(delivery)
-            || IsValidUnemployed(delivery, learner)
-            || IsValid16To19EFA(delivery)
-            || IsValidCommunityLearning(delivery)
-            || IsValidOLASS(delivery)
-            || IsValidAdvancedLearnerLoan(delivery)
-            || IsValidAny(delivery)
-            || IsValidESF(delivery);
+        /// <returns>
+        /// true if it does...
+        /// </returns>
+        public BranchResult GetBranchingResult(ILearningDelivery delivery, ILearner learner)
+        {
+            foreach (var doAction in _branchActions)
+            {
+                var result = doAction(delivery, learner);
+                if (result.Passed)
+                {
+                    return result;
+                }
+            }
+
+            return BranchResult.Create(false, string.Empty);
+        }
 
         /// <summary>
         /// Passes the (rule) conditions.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
-        /// <param name="learner">The learner.</param>
-        /// <returns>true if it does...</returns>
-        public abstract bool PassesConditions(ILearningDelivery delivery, ILearner learner);
+        /// <param name="branchCategory">The branch category.</param>
+        /// <returns>
+        /// true if it does...
+        /// </returns>
+        public abstract bool PassesConditions(ILearningDelivery delivery, BranchResult branchCategory);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
@@ -405,7 +453,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(ILearningDelivery delivery, ILearner learner) =>
-            PassesCategoryRestrictions(delivery, learner) && !PassesConditions(delivery, learner);
+            !PassesConditions(delivery, GetBranchingResult(delivery, learner));
 
         /// <summary>
         /// Validates the specified object.
@@ -419,8 +467,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(x => IsNotValid(x, objectToValidate))
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+                .ForAny(x => IsNotValid(x, objectToValidate), x => RaiseValidationMessage(learnRefNumber, x));
         }
 
         /// <summary>
@@ -434,6 +481,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             parameters.Add(MessageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery.LearnAimRef));
 
             MessageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        }
+
+        public class BranchResult
+        {
+            public BranchResult(bool result, string category)
+            {
+                Passed = result;
+                Category = category;
+            }
+
+            public bool Passed { get; }
+
+            public string Category { get; }
+
+            public static BranchResult Create(bool result, string category)
+                => new BranchResult(result, category);
         }
     }
 }

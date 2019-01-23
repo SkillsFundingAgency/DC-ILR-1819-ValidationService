@@ -19,11 +19,13 @@
         public const string AimSeqNumber = "AimSeqNumber";
         public const string AimType = "AimType";
         public const string ALSCost = "ALSCost";
+        public const string CampId = "CampId";
         public const string CompStatus = "CompStatus";
         public const string ConRefNumber = "ConRefNumber";
         public const string ContPrefCode = "ContPrefCode";
         public const string ContPrefType = "ContPrefType";
         public const string DateEmpStatApp = "DateEmpStatApp";
+        public const string DD19 = "DD19";
         public const string DelLocPostCode = "DelLocPostCode";
         public const string DOMICILE = "DOMICILE";
         public const string ELQ = "ELQ";
@@ -34,6 +36,7 @@
         public const string EngGrade = "EngGrade";
         public const string EPAOrgID = "EPAOrgID";
         public const string ESMType = "ESMType";
+        public const string ESMCode = "ESMCode";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
         public const string FUNDCOMP = "FUNDCOMP";
@@ -94,12 +97,16 @@
         public const string SEC = "SEC";
         public const string SPECFEE = "SPECFEE";
         public const string StdCode = "StdCode";
+        public const string SOC2000 = "SOC2000";
         public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
         public const string UCASPERID = "UCASPERID";
         public const string WithdrawReason = "WithdrawReason";
         public const string WorkPlaceEmpId = "WorkPlaceEmpId";
+        public const string WorkPlaceEndDate = "WorkPlaceEndDate";
         public const string WorkPlaceStartDate = "WorkPlaceStartDate";
         public const string WorkPlaceMode = "WorkPlaceMode";
+
+        public const string DerivedData_06 = "DD06";
     }
 }

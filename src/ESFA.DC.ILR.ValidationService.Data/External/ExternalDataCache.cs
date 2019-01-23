@@ -1,14 +1,15 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
-using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
-using System.Collections.Generic;
-
-namespace ESFA.DC.ILR.ValidationService.Data.External
+﻿namespace ESFA.DC.ILR.ValidationService.Data.External
 {
+    using System.Collections.Generic;
+    using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+    using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
+    using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
+    using ESFA.DC.ILR.ValidationService.Data.Interface;
+
     /// <summary>
     /// The external data cache implementation,
     /// model to be reflected within the validation actor.
@@ -55,33 +56,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External
         public IReadOnlyDictionary<string, ValidationError> ValidationErrors { get; set; }
 
         /// <summary>
-        /// Gets or sets the FCS contracts.
-        /// </summary>
-        public IReadOnlyCollection<IFcsContract> FCSContracts { get; set; }
-
-        /// <summary>
         /// Gets or sets the FCS contract allocations.
         /// </summary>
-        public IReadOnlyCollection<IFcsContractAllocation> FCSContractAllocations { get; set; }
+        public IReadOnlyDictionary<string, IFcsContractAllocation> FCSContractAllocations { get; set; }
 
         /// <summary>
-        /// Gets or sets the esf eligibility rule employment statuses.
+        /// Gets or Sets Campus Identifiers.
         /// </summary>
-        public IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> ESFEligibilityRuleEmploymentStatuses { get; set; }
-
-        /// <summary>
-        /// Gets or sets the esf eligibility rule local authorities.
-        /// </summary>
-        public IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> ESFEligibilityRuleLocalAuthorities { get; set; }
-
-        /// <summary>
-        /// Gets or sets the ESF eligibility rule enterprise partnerships
-        /// </summary>
-        public IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> ESFEligibilityRuleEnterprisePartnerships { get; set; }
-
-        /// <summary>
-        /// Gets or sets the esf eligibility rule sector subject area levels.
-        /// </summary>
-        public IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> EsfEligibilityRuleSectorSubjectAreaLevels { get; set; }
+        public IReadOnlyCollection<ICampusIdentifier> CampusIdentifiers { get; set; }
     }
 }
