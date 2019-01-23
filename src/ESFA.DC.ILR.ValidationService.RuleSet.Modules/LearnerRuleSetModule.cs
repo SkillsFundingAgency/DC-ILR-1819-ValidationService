@@ -424,6 +424,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(OutGrade_04Rule),
                 typeof(OutGrade_05Rule),
                 typeof(OutGrade_06Rule),
+                typeof(OutGrade_07Rule),
                 typeof(PartnerUKPRN_01Rule),
                 typeof(PartnerUKPRN_02Rule),
                 typeof(PartnerUKPRN_03Rule),
