@@ -98,6 +98,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                     .OfType<LookupComplexKey>()
                     .ToList()
                     .ForEach(x => AddLookups(x, lookups, cache));
+                Enum.GetValues(typeof(LookupItemKey))
+                    .OfType<LookupItemKey>()
+                    .ToList()
+                    .ForEach(x => AddLookups(x, lookups, cache));
             }
         }
 
@@ -147,6 +151,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             addToCache.CodedComplexLookups.Add(forThisKey, lookups);
         }
 
+        public void AddLookups(LookupItemKey forThisKey, XElement usingSource, InternalDataCache addToCache)
+        {
+            var lookups = BuildItemLookupEnumerable(usingSource, $"{forThisKey}");
+
+            addToCache.ItemLookups.Add(forThisKey, lookups);
+        }
+
         /// <summary>
         /// Adds lookups.
         /// </summary>
@@ -194,10 +205,21 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                 .Select(c => (T)Convert.ChangeType(c.Value, typeof(T)));
         }
 
+        private IDictionary<string, IReadOnlyCollection<string>> BuildItemLookupEnumerable(XElement lookups, string type)
+        {
+            return lookups
+                .Descendants(type)
+                .Descendants("option")
+                .ToDictionary(
+                    n => GetAttributeValue(n.Attribute("code")),
+                    v => v.Descendants("item")
+                        .Select(i => GetAttributeValue(i.Attribute("value")))
+                        .AsSafeReadOnlyList());
+        }
+
         /// <summary>
         /// Builds the complex lookup enumerable.
         /// </summary>
-        /// <typeparam name="T">the domain type for the lookup list</typeparam>
         /// <param name="lookups">The lookups.</param>
         /// <param name="type">The type.</param>
         /// <returns>a list of simple lookups</returns>

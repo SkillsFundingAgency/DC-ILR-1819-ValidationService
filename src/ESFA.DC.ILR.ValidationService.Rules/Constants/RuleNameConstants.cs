@@ -317,6 +317,7 @@
         public const string OutGrade_04 = "OutGrade_04";
         public const string OutGrade_05 = "OutGrade_05";
         public const string OutGrade_06 = "OutGrade_06";
+        public const string OutGrade_07 = "OutGrade_07";
 
         public const string OutStartDate_01 = "OutStartDate_01";
         public const string OutStartDate_02 = "OutStartDate_02";

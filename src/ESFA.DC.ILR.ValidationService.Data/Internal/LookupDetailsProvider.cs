@@ -1,7 +1,8 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data
 {
@@ -147,6 +148,13 @@ namespace ESFA.DC.ILR.ValidationService.Data
             return InternalCache.CodedDictionaryLookups[lookupKey]
                     .Where(k => k.Key == keyCandidate)
                     .Select(v => v.Value.Contains(valueCandidate)).FirstOrDefault();
+        }
+
+        public bool ContainsValueForKey(LookupItemKey lookupKey, string keyCandidate, string valueCandidate)
+        {
+            return InternalCache.ItemLookups[lookupKey]
+                .Where(k => k.Key.CaseInsensitiveEquals(keyCandidate))
+                .Select(v => v.Value.Any(val => val.CaseInsensitiveEquals(valueCandidate))).FirstOrDefault();
         }
 
         public bool ContainsValueForKey(LookupComplexKey lookupKey, string keyCandidate, string valueCandidate)
