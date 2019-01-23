@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, famType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, famType ?? string.Empty),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnFAMCode, famCode)
             };
         }
