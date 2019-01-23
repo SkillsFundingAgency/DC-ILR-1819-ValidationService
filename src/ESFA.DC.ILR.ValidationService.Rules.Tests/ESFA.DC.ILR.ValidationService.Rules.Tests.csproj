@@ -257,6 +257,7 @@
     <Compile Include="HE\SEC\SEC_01RuleTests.cs" />
     <Compile Include="HE\SEC\SEC_02RuleTests.cs" />
     <Compile Include="HE\SOC2000\SOC2000RuleTests.cs" />
+    <Compile Include="HE\SOC2000\SOC2000_04RuleTests.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_01RuleTests.cs" />
     <Compile Include="HE\SOC2000\SOC2000_03RuleTests.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_02RuleTests.cs" />

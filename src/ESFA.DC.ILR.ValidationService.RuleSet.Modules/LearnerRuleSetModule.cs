@@ -519,6 +519,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(SPECFEE_02Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SOC2000_03Rule),
+                typeof(SOC2000_04Rule),
                 typeof(SWSupAimId_01Rule),
                 typeof(StdCode_01Rule),
                 typeof(StdCode_02Rule),
