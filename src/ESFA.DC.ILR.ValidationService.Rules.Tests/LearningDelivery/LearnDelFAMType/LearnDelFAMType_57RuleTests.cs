@@ -559,9 +559,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                     validationErrorHandlerMock.Object,
                     larsDataServiceMock.Object,
                     fileDataService: fileDataServiceMock.Object,
-                    organisationDataService:organisationDataService.Object,
+                    organisationDataService: organisationDataService.Object,
                     famQueryService: famqueryServiceMock.Object,
-                    dd07:ddo07Mock.Object,
+                    dd07: ddo07Mock.Object,
                     dd12: dd12Mock.Object,
                     dd21: dd21Mock.Object).Validate(learner);
             }

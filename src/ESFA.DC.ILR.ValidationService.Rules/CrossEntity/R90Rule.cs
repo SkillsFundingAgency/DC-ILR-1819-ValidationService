@@ -16,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
     public class R90Rule : AbstractRule, IRule<ILearner>
     {
         private readonly ILARSDataService _larsDataService;
-        private readonly IEnumerable<int> EnglishOrMathsBasicSkillsTypes = new HashSet<int>(TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills);
+        private readonly IEnumerable<int> englishOrMathsBasicSkillsTypes = new HashSet<int>(TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills);
 
         public R90Rule(IValidationErrorHandler validationErrorHandler, ILARSDataService larsDataService)
             : base(validationErrorHandler, RuleNameConstants.R90)
@@ -62,7 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public bool Excluded(string learnAimRef)
         {
-            return _larsDataService.BasicSkillsTypeMatchForLearnAimRef(EnglishOrMathsBasicSkillsTypes, learnAimRef);
+            return _larsDataService.BasicSkillsTypeMatchForLearnAimRef(englishOrMathsBasicSkillsTypes, learnAimRef);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(ILearningDelivery learningDelivery)

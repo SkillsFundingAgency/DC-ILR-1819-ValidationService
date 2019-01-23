@@ -11,8 +11,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class LearnerDPQueryService : ILearnerDPQueryService
     {
-        //private readonly ILearnerDPProviderService _providerService;
-
         private readonly ICache<IMessage> _messageCache;
 
         public LearnerDPQueryService(ICache<IMessage> messageCache)
