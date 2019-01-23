@@ -17,16 +17,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV
         private readonly int[] _validFundLevCodes = { 10, 11, 99 };
         private readonly string[] _validLearnAimRefTypes = { "0394", "1406", "1407", "1408", "9000", "9002", "9107", "E007", "9112", "9111", "9110", "9113" };
 
-    public FUNDLEV_02Rule(
-            ILARSDataService larsDataService,
-            IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler, RuleNameConstants.FUNDLEV_02)
+        public FUNDLEV_02Rule(
+                ILARSDataService larsDataService,
+                IValidationErrorHandler validationErrorHandler)
+                : base(validationErrorHandler, RuleNameConstants.FUNDLEV_02)
         {
             _larsDataService = larsDataService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate?.LearningDeliveries == null)
+            {
+                return;
+            }
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 if (ConditionMet(
