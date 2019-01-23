@@ -183,7 +183,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
         [Fact]
         public void Validate_NullLearningDeliveryHE_NoError()
         {
-            var typeYr = 1;
             var learner = new TestLearner()
             {
                 LearningDeliveries = new List<TestLearningDelivery>()
@@ -204,7 +203,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
         [Fact]
         public void Validate_NullLearningDelivery_NoError()
         {
-            var typeYr = 1;
             var learner = new TestLearner()
             {
                 LearningDeliveries = null

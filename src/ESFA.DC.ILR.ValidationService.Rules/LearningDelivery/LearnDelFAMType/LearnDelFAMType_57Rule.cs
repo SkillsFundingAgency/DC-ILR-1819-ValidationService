@@ -19,9 +19,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private const int MinAge = 24;
 
         private const int TradeUnionAimsCategoryRef = 19;
-        private readonly DateTime MinimumStartDate = new DateTime(2016, 08, 01);
+        private readonly DateTime minimumStartDate = new DateTime(2016, 08, 01);
 
-        private readonly List<string> FamCodesForExclusion = new List<string>()
+        private readonly List<string> famCodesForExclusion = new List<string>()
         {
             LearningDeliveryFAMCodeConstants.LDM_OLASS,
             LearningDeliveryFAMCodeConstants.LDM_RoTL,
@@ -29,8 +29,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             LearningDeliveryFAMCodeConstants.LDM_Military
         };
 
-        private readonly HashSet<string> NvqLevelsList = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
-        private readonly HashSet<int> BasicSkillTypes = new HashSet<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
+        private readonly HashSet<string> n = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
+        private readonly HashSet<int> basicSkillTypes = new HashSet<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
 
         private readonly ILARSDataService _larsDataService;
         private readonly IDerivedData_07Rule _dd07;
@@ -99,7 +99,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public bool StartDateConditionMet(DateTime learnStartDate)
         {
-            return learnStartDate < MinimumStartDate;
+            return learnStartDate < minimumStartDate;
         }
 
         public bool FundModelConditionMet(int fundModel)
@@ -132,7 +132,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         {
             var nvqLevel = _larsDataService.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef);
 
-            if (NvqLevelsList.Contains(nvqLevel))
+            if (n.Contains(nvqLevel))
             {
                 return true;
             }
@@ -161,7 +161,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             if (_famQueryService.HasAnyLearningDeliveryFAMCodesForType(
                 learningDelivery.LearningDeliveryFAMs,
                 LearningDeliveryFAMTypeConstants.LDM,
-                FamCodesForExclusion))
+                famCodesForExclusion))
             {
                 return true;
             }
@@ -182,7 +182,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             }
 
             if (_larsDataService.BasicSkillsMatchForLearnAimRefAndStartDate(
-                BasicSkillTypes,
+                basicSkillTypes,
                 learningDelivery.LearnAimRef,
                 learningDelivery.LearnStartDate))
             {

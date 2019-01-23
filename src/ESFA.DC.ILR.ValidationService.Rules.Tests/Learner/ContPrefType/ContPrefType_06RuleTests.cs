@@ -77,7 +77,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         [Fact]
         public void ValidateNoError()
         {
-            var RUI = ContactPreference.Types.RestrictedUserInteraction;
             var PMC = ContactPreference.Types.PreferredMethodOfContact;
 
             var learner = new TestLearner
@@ -97,9 +96,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ContPrefType
         [Fact]
         public void ValidateNoErrorNullContactPreferences()
         {
-            var RUI = ContactPreference.Types.RestrictedUserInteraction;
-            var PMC = ContactPreference.Types.PreferredMethodOfContact;
-
             var learner = new TestLearner();
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())

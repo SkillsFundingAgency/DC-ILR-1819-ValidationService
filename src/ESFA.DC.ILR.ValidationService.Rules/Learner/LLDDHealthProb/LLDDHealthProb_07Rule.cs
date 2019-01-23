@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
     {
         private const int MaxNumberOfHours = 10;
         private const int MaxRuleAge = 25;
-        private readonly int ApplicableLLDDCode = LLDDHealthProblemConstants.LearningDifficulty;
+        private readonly int applicableLLDDCode = LLDDHealthProblemConstants.LearningDifficulty;
 
         private readonly int[] _applicableFundModels = { TypeOfFunding.NotFundedByESFA, TypeOfFunding.CommunityLearning };
 
@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
             }
 
             if ((learner.PlanLearnHoursNullable ?? -1) <= MaxNumberOfHours ||
-                learner.LLDDHealthProb != ApplicableLLDDCode ||
+                learner.LLDDHealthProb != applicableLLDDCode ||
                 (learner.LLDDAndHealthProblems?.Any() ?? false))
             {
                 return;
