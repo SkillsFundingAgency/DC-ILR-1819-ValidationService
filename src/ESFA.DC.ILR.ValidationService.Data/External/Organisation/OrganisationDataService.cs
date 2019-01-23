@@ -42,5 +42,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.Organisation
         {
            return _referenceDataCache.CampusIdentifiers.Any(ci => ci.CampusIdentifer.CaseInsensitiveEquals(campId));
         }
+
+        public bool CampIdMatchForUkprn(string campId, long ukprn)
+        {
+            return _referenceDataCache.CampusIdentifiers.Any(ci => ci.CampusIdentifer.CaseInsensitiveEquals(campId) && ci.MasterUKPRN.Equals(ukprn));
+        }
     }
 }

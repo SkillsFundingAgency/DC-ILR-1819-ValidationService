@@ -155,6 +155,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AimType_07Rule),
                 typeof(ALSCost_02Rule),
                 typeof(CampId_01Rule),
+                typeof(CampId_02Rule),
                 typeof(CompStatus_01Rule),
                 typeof(CompStatus_02Rule),
                 typeof(CompStatus_03Rule),

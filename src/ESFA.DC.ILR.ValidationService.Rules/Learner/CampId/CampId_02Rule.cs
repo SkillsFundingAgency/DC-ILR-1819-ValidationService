@@ -11,11 +11,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.CampId
     public class CampId_02Rule : AbstractRule, IRule<ILearner>
     {
         private readonly IOrganisationDataService _organisationDataService;
+        private readonly IFileDataCache _fileDataCache;
 
-        public CampId_02Rule(IOrganisationDataService organisationDataService, IValidationErrorHandler validationErrorHandler)
+        public CampId_02Rule(IOrganisationDataService organisationDataService, IValidationErrorHandler validationErrorHandler, IFileDataCache fileDataCache)
             : base(validationErrorHandler, RuleNameConstants.CampId_02)
         {
             _organisationDataService = organisationDataService;
+            _fileDataCache = fileDataCache;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -27,23 +29,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.CampId
 
             if (!string.IsNullOrEmpty(objectToValidate.CampId))
             {
-                if (ConditionMet(objectToValidate.CampId))
+                if (ConditionMet(objectToValidate.CampId, _fileDataCache.UKPRN))
                 {
-                    HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.CampId));
+                    HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.CampId, _fileDataCache.UKPRN));
                 }
             }
         }
 
-        public bool ConditionMet(string campId)
+        public bool ConditionMet(string campId, long ukprn)
         {
-            return true;
+            return !_organisationDataService.CampIdMatchForUkprn(campId, ukprn);
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string campId)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string campId, long ukprn)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.CampId, campId)
+                BuildErrorMessageParameter(PropertyNameConstants.CampId, campId),
+                BuildErrorMessageParameter(PropertyNameConstants.UKPRN, ukprn)
             };
         }
     }
