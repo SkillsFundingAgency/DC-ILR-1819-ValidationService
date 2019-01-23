@@ -1,25 +1,19 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS
 {
     public class PCTLDCS_01Rule :
+        AbstractRule,
         IRule<ILearner>
     {
-        /// <summary>
-        /// The (rule) name
-        /// </summary>
-        public const string Name = "PCTLDCS_01";
-
-        /// <summary>
-        /// the message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
         /// <summary>
         /// the lars data (service)
         /// </summary>
@@ -40,6 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
             IProvideRuleCommonOperations commonChecks)
+            : base(validationErrorHandler, RuleNameConstants.PCTLDCS_01)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -48,7 +43,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS
             It.IsNull(commonChecks)
                 .AsGuard<ArgumentNullException>(nameof(commonChecks));
 
-            _messageHandler = validationErrorHandler;
             _larsData = larsData;
             _check = commonChecks;
         }
@@ -57,11 +51,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS
         /// Gets the first viable date.
         /// </summary>
         public static DateTime FirstViableDate => new DateTime(2009, 08, 01);
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
 
         /// <summary>
         /// Determines whether [has known LDCS code] [the specified delivery].
@@ -78,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS
         /// <returns>
         ///   <c>true</c> if [has qualifying PCTLDCS] [the specified delivery he]; otherwise, <c>false</c>.</returns>
         public bool HasQualifyingPCTLDCS(ILearningDeliveryHE deliveryHE) =>
-            It.Has(deliveryHE.PCTLDCSNullable);
+            It.Has(deliveryHE?.PCTLDCSNullable);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
@@ -115,12 +104,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS
         /// <param name="thisDelivery">this delivery.</param>
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.LearnAimRef), thisDelivery.LearnAimRef));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.LearnStartDate), thisDelivery.LearnStartDate));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.FundModel), thisDelivery.FundModel));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery));
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        /// <summary>
+        /// Builds the message parameters for.
+        /// </summary>
+        /// <param name="thisDelivery">The this delivery.</param>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnAimRef, thisDelivery.LearnAimRef),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, thisDelivery.FundModel)
+            };
         }
     }
 }
