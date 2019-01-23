@@ -397,5 +397,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             return It.Has(learningDelivery)
                 && learnAimRefTypes.ToCaseInsensitiveHashSet().Contains(learningDelivery.LearnAimRefType);
         }
+
+        public decimal? GetCoreGovContributionCapForStandard(int standardCode, DateTime startDate)
+        {
+            var standard = _externalDataCache.Standards.FirstOrDefault(x => x.StandardCode == standardCode);
+
+            if (standard?.StandardsFunding != null)
+            {
+                return standard.StandardsFunding.FirstOrDefault(sf => sf.EffectiveFrom >= startDate &&
+                                                               (!sf.EffectiveTo.HasValue ||
+                                                                sf.EffectiveTo <= startDate))?.CoreGovContributionCap;
+            }
+
+            return null;
+        }
     }
 }

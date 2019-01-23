@@ -130,5 +130,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
             DateTime origLearnStartDate,
             string learnAimRef,
             IEnumerable<string> categoriesHashSet);
+
+        decimal? GetCoreGovContributionCapForStandard(int standardCode, DateTime startDate);
     }
 }

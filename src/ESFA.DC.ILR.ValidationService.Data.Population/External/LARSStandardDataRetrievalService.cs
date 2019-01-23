@@ -1,13 +1,14 @@
-﻿using ESFA.DC.Data.LARS.Model.Interfaces;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.Data.LARS.Model.Interfaces;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 {
@@ -36,7 +37,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     StandardSectorCode = s.StandardSectorCode,
                     NotionalEndLevel = s.NotionalEndLevel,
                     EffectiveFrom = s.EffectiveFrom,
-                    EffectiveTo = s.EffectiveTo
+                    EffectiveTo = s.EffectiveTo,
+                    StandardsFunding = s.LARS_StandardFunding.Select(x => new LARSStandardFunding()
+                    {
+                        CoreGovContributionCap = x.CoreGovContributionCap,
+                        EffectiveFrom = x.EffectiveFrom,
+                        EffectiveTo = x.EffectiveTo
+                    })
                 })
                 .Where(s => uniqueSTDCodes.Contains(s.StandardCode))
                 .ToListAsync(cancellationToken);
