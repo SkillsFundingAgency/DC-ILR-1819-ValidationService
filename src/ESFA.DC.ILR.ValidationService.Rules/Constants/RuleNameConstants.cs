@@ -50,6 +50,8 @@
         public const string AimType_05 = "AimType_05";
         public const string AimType_07 = "AimType_07";
 
+        public const string CampId_01 = "CampId_01";
+
         public const string CompStatus_01 = "CompStatus_01";
         public const string CompStatus_02 = "CompStatus_02";
         public const string CompStatus_03 = "CompStatus_03";
@@ -225,6 +227,7 @@
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_56 = "LearnDelFAMType_56";
         public const string LearnDelFAMType_57 = "LearnDelFAMType_57";
+        public const string LearnDelFAMType_59 = "LearnDelFAMType_59";
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
         public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -399,6 +402,7 @@
         public const string R47 = "R47";
         public const string R49 = "R49";
         public const string R50 = "R50";
+        public const string R51 = "R51";
         public const string R52 = "R52";
         public const string R56 = "R56";
         public const string R58 = "R58";
@@ -419,6 +423,7 @@
         public const string R91 = "R91";
         public const string R92 = "R92";
         public const string R96 = "R96";
+        public const string R97 = "R97";
         public const string R99 = "R99";
         public const string R100 = "R100";
         public const string R101 = "R101";
@@ -428,6 +433,7 @@
         public const string R106 = "R106";
         public const string R108 = "R108";
         public const string R110 = "R110";
+        public const string R111 = "R111";
         public const string R112 = "R112";
         public const string R113 = "R113";
         public const string R114 = "R114";
@@ -444,6 +450,7 @@
         public const string SEC_02 = "SEC_02";
 
         public const string SPECFEE_01 = "SPECFEE_01";
+        public const string SPECFEE_02 = "SPECFEE_02";
 
         public const string SOC2000_02 = "SOC2000_02";
         public const string SOC2000_03 = "SOC2000_03";

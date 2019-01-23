@@ -34,6 +34,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.UCASAPPID;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.Accom;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.AddLine1;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ALSCost;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.CampId;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade;
@@ -153,6 +154,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AimType_05Rule),
                 typeof(AimType_07Rule),
                 typeof(ALSCost_02Rule),
+                typeof(CampId_01Rule),
                 typeof(CompStatus_01Rule),
                 typeof(CompStatus_02Rule),
                 typeof(CompStatus_03Rule),
@@ -163,6 +165,8 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(ConRefNumber_03Rule),
                 typeof(ContPrefType_01Rule),
                 typeof(ContPrefType_02Rule),
+                typeof(ContPrefType_03Rule),
+                typeof(ContPrefType_04Rule),
                 typeof(ContPrefType_05Rule),
                 typeof(ContPrefType_06Rule),
                 typeof(ContPrefType_07Rule),
@@ -338,6 +342,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LearnDelFAMType_54Rule),
                 typeof(LearnDelFAMType_56Rule),
                 typeof(LearnDelFAMType_57Rule),
+                typeof(LearnDelFAMType_59Rule),
                 typeof(LearnDelFAMType_60Rule),
                 typeof(LearnDelFAMType_61Rule),
                 typeof(LearnDelFAMType_62Rule),
@@ -475,6 +480,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R47Rule),
                 typeof(R49Rule),
                 typeof(R50Rule),
+                typeof(R51Rule),
                 typeof(R52Rule),
                 typeof(R56Rule),
                 typeof(R58Rule),
@@ -492,6 +498,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R91Rule),
                 typeof(R92Rule),
                 typeof(R96Rule),
+                typeof(R97Rule),
                 typeof(R99Rule),
                 typeof(R100Rule),
                 typeof(R101Rule),
@@ -500,6 +507,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R105Rule),
                 typeof(R106Rule),
                 typeof(R110Rule),
+                typeof(R111Rule),
                 typeof(R112Rule),
                 typeof(R113Rule),
                 typeof(R114Rule),
@@ -511,6 +519,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(SEC_01Rule),
                 typeof(SEC_02Rule),
                 typeof(SPECFEE_01Rule),
+                typeof(SPECFEE_02Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SOC2000_03Rule),
                 typeof(SWSupAimId_01Rule),
