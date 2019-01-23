@@ -1,13 +1,12 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
-using ESFA.DC.ILR.ValidationService.Utility;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 {
@@ -50,28 +49,42 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
             return !Excluded(learningDeliveryFams)
                 && ProgTypeConditionMet(progType)
                 && AimTypeConditionMet(aimType)
-                && It.Has(stdCode)
+                && StandardCodeExists(stdCode)
                 && LARSConditionMet(stdCode.Value, learnStartDate);
         }
 
         public bool ProgTypeConditionMet(int? progType)
         {
-            return progType == 25;
+            return progType == TypeOfLearningProgramme.ApprenticeshipStandard;
         }
 
         public bool AimTypeConditionMet(int aimType)
         {
-            return aimType == 1;
+            return aimType == TypeOfAim.ProgrammeAim;
+        }
+
+        public bool StandardCodeExists(int? stdCode)
+        {
+            return stdCode.HasValue;
         }
 
         public bool LARSConditionMet(int stdCode, DateTime learnStartDate)
         {
-            return _larsDataService.LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate);
+            var larsStandards = _larsDataService.GetStandardValiditiesFor(stdCode);
+
+            if (larsStandards.Any())
+            {
+                return larsStandards.First().EndDate.HasValue
+                    ? learnStartDate > larsStandards.First().EndDate.Value
+                    : false;
+            }
+
+            return false;
         }
 
         public bool Excluded(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams)
         {
-            return _learningDeliveryFamQueryService.HasLearningDeliveryFAMType(learningDeliveryFams, "RES");
+            return _learningDeliveryFamQueryService.HasLearningDeliveryFAMType(learningDeliveryFams, Monitoring.Delivery.Types.Restart);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate)
