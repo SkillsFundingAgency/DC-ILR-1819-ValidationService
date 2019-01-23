@@ -63,7 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType
         /// <returns>
         ///   <c>true</c> if [is not valid] [the specified preference]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsNotValid(IEnumerable<IContactPreference> preferences) =>
+        public bool IsNotValid(IReadOnlyCollection<IContactPreference> preferences) =>
             preferences.Any(HasPreGDPRMerchandisingCodes)
                 && preferences.Any(HasPostGDPRMerchandisingCodes);
 
