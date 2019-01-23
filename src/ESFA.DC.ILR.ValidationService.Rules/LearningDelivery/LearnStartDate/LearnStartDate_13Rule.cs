@@ -74,8 +74,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
 
             if (larsStandards.Any())
             {
-                return larsStandards.FirstOrDefault().EndDate.HasValue
-                    ? learnStartDate > larsStandards.FirstOrDefault().EndDate.Value
+                return larsStandards.First().EndDate.HasValue
+                    ? learnStartDate > larsStandards.First().EndDate.Value
                     : false;
             }
 
