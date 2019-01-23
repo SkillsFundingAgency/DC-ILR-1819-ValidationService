@@ -516,6 +516,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R116Rule),
                 typeof(R117Rule),
                 typeof(R118Rule),
+                typeof(R119Rule),
                 typeof(Sex_01Rule),
                 typeof(SEC_01Rule),
                 typeof(SEC_02Rule),
