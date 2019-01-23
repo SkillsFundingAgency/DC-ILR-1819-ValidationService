@@ -67,11 +67,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             aFinCode = null;
             aFinDate = null;
-            return false;
-            //return appFinRecords.Where(
-            //    f => f != null
-            //    && f.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice)
-            //    && f.AFinCode = ApprenticeshipFinancialRecord)
+
+            return appFinRecords
+                .Where(
+                    f => f != null
+                    && f.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice)
+                    && f.AFinCode > 0
+                    && f.AFinDate < learnStartDate)
+                .Select(f => new { aFinCode = f.AFinCode, aFinDate = f.AFinDate })
+                .Any();
         }
 
         public bool LearnStartDateConditionMet(DateTime learnStartDate) => learnStartDate >= _februaryFirst2019;
