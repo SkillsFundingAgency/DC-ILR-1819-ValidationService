@@ -48,6 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupSimpleKey.ProgType, 8)]
         [InlineData(LookupSimpleKey.SEC, 9)]
         [InlineData(LookupSimpleKey.SOC2000, 358)]
+        [InlineData(LookupSimpleKey.SOC2010, 374)]
         [InlineData(LookupSimpleKey.SpecFee, 7)]
         [InlineData(LookupSimpleKey.TypeYr, 5)]
         [InlineData(LookupSimpleKey.WithdrawReason, 15)]

@@ -24,6 +24,7 @@
         PriorAttain,
         SEC,
         SOC2000,
+        SOC2010,
         SpecFee,
         TypeYr,
         WithdrawReason,
