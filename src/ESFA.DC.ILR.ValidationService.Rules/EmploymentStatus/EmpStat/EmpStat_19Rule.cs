@@ -6,7 +6,6 @@ using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 {
@@ -43,6 +42,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         public static DateTime NewCodeMonitoringThresholdDate => new DateTime(2018, 08, 01);
 
         /// <summary>
+        /// Gets the employment status on.
+        /// </summary>
+        /// <param name="thisDate">this date.</param>
+        /// <param name="usingEmployments">using employments.</param>
+        /// <returns>the latest employment status candidate</returns>
+        public ILearnerEmploymentStatus GetEmploymentStatusOn(DateTime thisDate, IReadOnlyCollection<ILearnerEmploymentStatus> usingEmployments) =>
+            _check.GetEmploymentStatusOn(thisDate, usingEmployments);
+
+        /// <summary>
         /// Determines whether [has a qualifying monitor status] [the specified monitor].
         /// </summary>
         /// <param name="monitor">The monitor.</param>
@@ -50,59 +58,35 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [has a qualifying monitor status] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasADisqualifyingMonitorStatus(IEmploymentStatusMonitoring monitor) =>
-            It.IsInRange(
+            It.IsOutOfRange(
                 $"{monitor.ESMType}{monitor.ESMCode}",
                 Monitoring.EmploymentStatus.EmployedFor0To10HourPW,
                 Monitoring.EmploymentStatus.EmployedFor11To20HoursPW);
 
         /// <summary>
-        /// Checks the employment monitors.
+        /// Checks the employment status.
         /// </summary>
-        /// <param name="employment">The employment.</param>
-        /// <param name="matchCondition">The match condition.</param>
-        /// <returns>true if the match condition is met</returns>
-        public bool CheckEmploymentMonitors(ILearnerEmploymentStatus employment, Func<IEmploymentStatusMonitoring, bool> matchCondition) =>
-            employment.EmploymentStatusMonitorings.SafeAny(matchCondition);
+        /// <param name="thisEmployment">this employment.</param>
+        /// <param name="doThisAction">do this action.</param>
+        public void CheckEmploymentStatus(ILearnerEmploymentStatus thisEmployment, Action<IEmploymentStatusMonitoring> doThisAction)
+        {
+            if (It.IsInRange(thisEmployment?.EmpStat, TypeOfEmploymentStatus.InPaidEmployment))
+            {
+                thisEmployment?.EmploymentStatusMonitorings.ForAny(HasADisqualifyingMonitorStatus, doThisAction);
+            }
+        }
 
         /// <summary>
-        /// Determines whether [is not valid] [the specified employment].
-        /// </summary>
-        /// <param name="employment">The employment.</param>
-        /// <returns>
-        ///   <c>true</c> if [is not valid] [the specified employment]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsNotValid(ILearnerEmploymentStatus employment) =>
-            !CheckEmploymentMonitors(employment, HasADisqualifyingMonitorStatus);
-
-        /// <summary>
-        /// Determines whether [does not have a qualifying employment status] [using the specified employments].
-        /// </summary>
-        /// <param name="usingEmployments">using employments.</param>
-        /// <param name="matchingDelivery">matching delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [has a qualifying employment status] [using the specified employments]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool DoesNotHaveAQualifyingEmploymentStatus(
-            IReadOnlyCollection<ILearnerEmploymentStatus> usingEmployments,
-            ILearningDelivery matchingDelivery) =>
-                It.IsEmpty(usingEmployments)
-                || usingEmployments
-                    .SafeWhere(x => x.DateEmpStatApp <= matchingDelivery.LearnStartDate)
-                    .Any(IsNotValid);
-
-        /// <summary>
-        /// Determines whether [is not valid] [the specified delivery].
+        /// Determines whether [is restriction match] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
-        /// <param name="usingEmployments">The using employments.</param>
         /// <returns>
-        ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [is restriction match] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsNotValid(ILearningDelivery delivery, IReadOnlyCollection<ILearnerEmploymentStatus> usingEmployments) =>
+        public bool IsRestrictionMatch(ILearningDelivery delivery) =>
             _check.IsTraineeship(delivery)
                 && _check.InAProgramme(delivery)
-                && _check.HasQualifyingStart(delivery, NewCodeMonitoringThresholdDate)
-                && DoesNotHaveAQualifyingEmploymentStatus(usingEmployments, delivery);
+                && _check.HasQualifyingStart(delivery, NewCodeMonitoringThresholdDate);
 
         /// <summary>
         /// Validates the specified object.
@@ -117,8 +101,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
             var employments = objectToValidate.LearnerEmploymentStatuses.AsSafeReadOnlyList();
 
             objectToValidate.LearningDeliveries
-                .Where(x => IsNotValid(x, employments))
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+                .SafeWhere(IsRestrictionMatch)
+                .ForEach(x => CheckEmploymentStatus(GetEmploymentStatusOn(x.LearnStartDate, employments), y => RaiseValidationMessage(learnRefNumber, x, y)));
         }
 
         /// <summary>
@@ -126,26 +110,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
         /// <param name="thisDelivery">The this delivery.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
+        /// <param name="thisMonitor">The this monitor.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery, IEmploymentStatusMonitoring thisMonitor)
         {
-            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisMonitor));
         }
 
         /// <summary>
         /// Builds the error message parameters.
         /// </summary>
-        /// <param name="thisDelivery">The this delivery.</param>
+        /// <param name="thisMonitor">The this monitor.</param>
         /// <returns>
         /// returns a list of message parameters
         /// </returns>
-        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery)
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(IEmploymentStatusMonitoring thisMonitor)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.AimType, thisDelivery.AimType),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate),
-                BuildErrorMessageParameter(PropertyNameConstants.ProgType, thisDelivery.ProgTypeNullable),
-                BuildErrorMessageParameter(PropertyNameConstants.StdCode, thisDelivery.StdCodeNullable)
+                BuildErrorMessageParameter(PropertyNameConstants.ESMType, thisMonitor.ESMType),
+                BuildErrorMessageParameter(PropertyNameConstants.ESMCode, thisMonitor.ESMCode)
             };
         }
     }
