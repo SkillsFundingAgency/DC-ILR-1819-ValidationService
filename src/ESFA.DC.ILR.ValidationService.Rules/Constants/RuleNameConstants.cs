@@ -50,6 +50,8 @@
         public const string AimType_05 = "AimType_05";
         public const string AimType_07 = "AimType_07";
 
+        public const string CampId_01 = "CampId_01";
+
         public const string CompStatus_01 = "CompStatus_01";
         public const string CompStatus_02 = "CompStatus_02";
         public const string CompStatus_03 = "CompStatus_03";
@@ -225,6 +227,7 @@
         public const string LearnDelFAMType_54 = "LearnDelFAMType_54";
         public const string LearnDelFAMType_56 = "LearnDelFAMType_56";
         public const string LearnDelFAMType_57 = "LearnDelFAMType_57";
+        public const string LearnDelFAMType_59 = "LearnDelFAMType_59";
         public const string LearnDelFAMType_60 = "LearnDelFAMType_60";
         public const string LearnDelFAMType_61 = "LearnDelFAMType_61";
         public const string LearnDelFAMType_64 = "LearnDelFAMType_64";
@@ -419,6 +422,7 @@
         public const string R91 = "R91";
         public const string R92 = "R92";
         public const string R96 = "R96";
+        public const string R97 = "R97";
         public const string R99 = "R99";
         public const string R100 = "R100";
         public const string R101 = "R101";

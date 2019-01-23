@@ -19,6 +19,7 @@
         public const string AimSeqNumber = "AimSeqNumber";
         public const string AimType = "AimType";
         public const string ALSCost = "ALSCost";
+        public const string CampId = "CampId";
         public const string CompStatus = "CompStatus";
         public const string ConRefNumber = "ConRefNumber";
         public const string ContPrefCode = "ContPrefCode";
@@ -35,6 +36,7 @@
         public const string EngGrade = "EngGrade";
         public const string EPAOrgID = "EPAOrgID";
         public const string ESMType = "ESMType";
+        public const string ESMCode = "ESMCode";
         public const string FamilyName = "FamilyName";
         public const string FundModel = "FundModel";
         public const string FUNDCOMP = "FUNDCOMP";

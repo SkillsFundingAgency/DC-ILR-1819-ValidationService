@@ -124,6 +124,7 @@
     <Compile Include="CrossEntity\R89Rule.cs" />
     <Compile Include="CrossEntity\R92Rule.cs" />
     <Compile Include="CrossEntity\R90Rule.cs" />
+    <Compile Include="CrossEntity\R97Rule.cs" />
     <Compile Include="CrossEntity\R99Rule.cs" />
     <Compile Include="CrossEntity\R59Rule.cs" />
     <Compile Include="CrossEntity\R67Rule.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="Learner\Accom\Accom_01Rule.cs" />
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\ALSCost\ALSCost_02Rule.cs" />
+    <Compile Include="Learner\CampId\CampId_01Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_04Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_01Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
@@ -412,6 +414,7 @@
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_38Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_36Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_57Rule.cs" />
+    <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_59Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_73Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_46Rule.cs" />
     <Compile Include="LearningDelivery\LearnDelFAMType\LearnDelFAMType_50Rule.cs" />
