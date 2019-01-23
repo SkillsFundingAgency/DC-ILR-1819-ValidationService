@@ -5,6 +5,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType
 {
@@ -63,8 +64,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType
         ///   <c>true</c> if [is not valid] [the specified preference]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(IEnumerable<IContactPreference> preferences) =>
-            preferences.SafeAny(HasPreGDPRMerchandisingCodes)
-                && preferences.SafeAny(HasPostGDPRMerchandisingCodes);
+            preferences.Any(HasPreGDPRMerchandisingCodes)
+                && preferences.Any(HasPostGDPRMerchandisingCodes);
 
         /// <summary>
         /// Validates this learner.
@@ -77,7 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType
 
             var learnRefNumber = thisLearner.LearnRefNumber;
 
-            if (IsNotValid(thisLearner.ContactPreferences))
+            if (IsNotValid(thisLearner.ContactPreferences.AsSafeReadOnlyList()))
             {
                 RaiseValidationMessage(learnRefNumber);
             }
