@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.HE.PCTLDCS;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
@@ -85,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCTLDCS
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(PCTLDCS_01Rule.Name, result);
+            Assert.Equal(RuleNameConstants.PCTLDCS_01, result);
         }
 
         /// <summary>
@@ -190,6 +191,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCTLDCS
         }
 
         /// <summary>
+        /// Has qualifying PCTLDCS with null learner HE meets expectation
+        /// </summary>
+        [Fact]
+        public void HasQualifyingPCTLDCSWithNullLearnerHEMeetsExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.HasQualifyingPCTLDCS(null);
+
+            // assert
+            Assert.False(result);
+        }
+
+        /// <summary>
         /// Has qualifying PCTLDCS with value meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -256,15 +273,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.PCTLDCS
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle("PCTLDCS_01", learnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+                .Setup(x => x.Handle(RuleNameConstants.PCTLDCS_01, learnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter("LearnAimRef", learnAimRef))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
-                .Setup(x => x.BuildErrorMessageParameter("LearnStartDate", testDate))
+                .Setup(x => x.BuildErrorMessageParameter("LearnStartDate", testDate.ToString("d", AbstractRule.RequiredCulture)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
-                .Setup(x => x.BuildErrorMessageParameter("FundModel", TypeOfFunding.AdultSkills))
+                .Setup(x => x.BuildErrorMessageParameter("FundModel", 35)) // TypeOfFunding.AdultSkills
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
