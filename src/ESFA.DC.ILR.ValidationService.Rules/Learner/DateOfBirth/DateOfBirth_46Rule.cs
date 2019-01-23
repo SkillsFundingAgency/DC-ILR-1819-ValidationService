@@ -42,8 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                         objectToValidate.DateOfBirthNullable,
                         learningDelivery.LearningDeliveryFAMs))
                     {
-                        HandleValidationError
-                            (
+                        HandleValidationError(
                             objectToValidate.LearnRefNumber,
                             learningDelivery.AimSeqNumber,
                             BuildErrorMessageParameters(

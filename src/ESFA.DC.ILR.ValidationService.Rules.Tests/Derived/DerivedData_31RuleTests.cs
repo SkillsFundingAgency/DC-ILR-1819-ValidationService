@@ -50,7 +50,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         [Fact]
         public void IsAdultSkilsFundedEnglishOrMathsAim_False()
         {
-            var fundModel = 36;
             var learnAimRef = "LearnAimRef";
             var learnStartDate = new DateTime(2017, 1, 1);
 
