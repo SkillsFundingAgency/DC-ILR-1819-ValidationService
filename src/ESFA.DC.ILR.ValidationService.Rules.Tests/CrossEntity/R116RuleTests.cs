@@ -44,12 +44,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             NewRule().AimTypeConditionMet(1).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(38)]
-        [InlineData(null)]
-        public void ProgramTypeConditionMet_False(int? progType)
+        [Fact]
+        public void ProgramTypeConditionMet_False()
         {
-            NewRule().ProgramTypeConditionMet(progType).Should().BeFalse();
+            NewRule().ProgramTypeConditionMet(38).Should().BeFalse();
         }
 
         [Theory]
@@ -59,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [InlineData(21)]
         [InlineData(22)]
         [InlineData(23)]
-        public void ProgramTypeConditionMet_True(int? progType)
+        public void ProgramTypeConditionMet_True(int progType)
         {
             NewRule().ProgramTypeConditionMet(progType).Should().BeTrue();
         }

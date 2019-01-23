@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             ApprenticeshipFinancialRecord.PaymentRecordCodes.AssessmentPayment
         };
 
-        private readonly HashSet<int?> _progTypes = new HashSet<int?>()
+        private readonly HashSet<int> _progTypes = new HashSet<int>()
         {
             TypeOfLearningProgramme.AdvancedLevelApprenticeship,
             TypeOfLearningProgramme.IntermediateLevelApprenticeship,
@@ -49,15 +49,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             foreach (var groupSums in objectToValidate.LearningDeliveries
                 .Where(
                 d => FundModelConditionMet(d.FundModel)
-                && AimTypeConditionMet(d.AimType)
-                && ProgramTypeConditionMet(d.ProgTypeNullable)
-                && d.AppFinRecords != null)
+                    && AimTypeConditionMet(d.AimType)
+                    && (d.ProgTypeNullable.HasValue && ProgramTypeConditionMet(d.ProgTypeNullable.Value))
+                    && d.AppFinRecords != null)
                 .GroupBy(d => new
                 {
                     progType = d.ProgTypeNullable,
                     fWorkCode = d.FworkCodeNullable,
                     pWayCode = d.PwayCodeNullable
-                }).ToList()
+                })
                 .Select(d => new
                 {
                     aFinCode1And2Sum = GetSumsForAFinCode(d, _aFinCodes1And2),
@@ -76,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public bool AimTypeConditionMet(int aimType) => aimType == TypeOfAim.ProgrammeAim;
 
-        public bool ProgramTypeConditionMet(int? progType) => _progTypes.Contains(progType);
+        public bool ProgramTypeConditionMet(int progType) => _progTypes.Contains(progType);
 
         public bool IsAFinCodeSumsDifferenceNegative(int aFinCode1And2Sum, int aFinCode3Sum)
         {
@@ -85,10 +85,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public int GetSumsForAFinCode(IEnumerable<ILearningDelivery> learningDeliveries, HashSet<int> aFinCodes)
         {
-            return learningDeliveries.SelectMany(a => a.AppFinRecords)
-                    .Where(f => f != null
+            return learningDeliveries
+                .SelectMany(a => a.AppFinRecords)
+                .Where(f => f != null
                     && f.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord)
-                    && aFinCodes.Contains(f.AFinCode)).Sum(f => f.AFinAmount);
+                    && aFinCodes.Contains(f.AFinCode))
+                .Sum(f => f.AFinAmount);
         }
     }
 }
