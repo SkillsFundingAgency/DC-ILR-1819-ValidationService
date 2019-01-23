@@ -122,9 +122,25 @@
         public const string EmpOutcome_02 = "EmpOutcome_02";
         public const string EmpOutcome_03 = "EmpOutcome_03";
 
+        public const string EmpStat_01 = "EmpStat_01";
         public const string EmpStat_02 = "EmpStat_02";
+        public const string EmpStat_03 = "EmpStat_03";
+        public const string EmpStat_04 = "EmpStat_04";
+        public const string EmpStat_05 = "EmpStat_05";
+        public const string EmpStat_06 = "EmpStat_06";
+        public const string EmpStat_07 = "EmpStat_07";
         public const string EmpStat_08 = "EmpStat_08";
+        public const string EmpStat_09 = "EmpStat_09";
+        public const string EmpStat_10 = "EmpStat_10";
+        public const string EmpStat_11 = "EmpStat_11";
         public const string EmpStat_12 = "EmpStat_12";
+        public const string EmpStat_13 = "EmpStat_13";
+        public const string EmpStat_14 = "EmpStat_14";
+        public const string EmpStat_15 = "EmpStat_15";
+        public const string EmpStat_16 = "EmpStat_16";
+        public const string EmpStat_17 = "EmpStat_17";
+        public const string EmpStat_18 = "EmpStat_18";
+        public const string EmpStat_19 = "EmpStat_19";
         public const string EmpStat_20 = "EmpStat_20";
 
         public const string EngGrade_01 = "EngGrade_01";
