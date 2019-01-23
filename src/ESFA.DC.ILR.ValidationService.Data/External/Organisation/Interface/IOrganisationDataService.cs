@@ -9,5 +9,7 @@
         bool IsPartnerUkprn(long ukprn);
 
         string GetLegalOrgTypeForUkprn(long ukprn);
+
+        bool CampIdExists(string campId);
     }
 }
