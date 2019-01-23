@@ -438,6 +438,7 @@
         public const string R113 = "R113";
         public const string R114 = "R114";
         public const string R115 = "R115";
+        public const string R116 = "R116";
         public const string R117 = "R117";
         public const string R118 = "R118";
 
