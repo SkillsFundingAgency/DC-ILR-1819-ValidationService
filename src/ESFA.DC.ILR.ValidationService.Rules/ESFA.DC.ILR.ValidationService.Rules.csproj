@@ -206,6 +206,7 @@
     <Compile Include="EmploymentStatus\EmpId\EmpId_02Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_01Rule.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_10Rule.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_19Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_20Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_15Rule.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_11Rule.cs" />

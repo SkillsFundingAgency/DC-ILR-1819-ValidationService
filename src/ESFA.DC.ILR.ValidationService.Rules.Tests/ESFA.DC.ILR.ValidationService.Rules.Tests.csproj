@@ -191,6 +191,7 @@
     <Compile Include="EmploymentStatus\EmpId\EmpId_13RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_01RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpId\EmpId_10RuleTests.cs" />
+    <Compile Include="EmploymentStatus\EmpStat\EmpStat_19RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_20RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_18RuleTests.cs" />
     <Compile Include="EmploymentStatus\EmpStat\EmpStat_15RuleTests.cs" />
