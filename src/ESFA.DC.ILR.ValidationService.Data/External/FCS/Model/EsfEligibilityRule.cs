@@ -13,6 +13,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
 
         public bool? Benefits { get; set; }
 
+        public int? MinAge { get; set; }
+
+        public int? MaxAge { get; set; }
+
         public string MinPriorAttainment { get; set; }
 
         public string MaxPriorAttainment { get; set; }

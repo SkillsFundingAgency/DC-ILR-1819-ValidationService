@@ -19,21 +19,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private const int MinAge = 19;
         private const int MaxAge = 23;
         private const int TradeUnionAimsCategoryRef = 19;
-        private readonly DateTime MinimumStartDate = new DateTime(2016, 08, 01);
+        private readonly DateTime minimumStartDate = new DateTime(2016, 08, 01);
 
-        private readonly HashSet<int> PriorAttainList1 = new HashSet<int>() { 2, 3, 4, 5, 10, 11, 12, 13, 97, 98 };
-        private readonly HashSet<int> PriorAttainList2 = new HashSet<int>() { 3, 4, 5, 10, 11, 12, 13, 97, 98 };
+        private readonly HashSet<int> priorAttainList1 = new HashSet<int>() { 2, 3, 4, 5, 10, 11, 12, 13, 97, 98 };
+        private readonly HashSet<int> priorAttainList2 = new HashSet<int>() { 3, 4, 5, 10, 11, 12, 13, 97, 98 };
 
-        private readonly List<string> FamCodesForExclusion = new List<string>()
+        private readonly List<string> famCodesForExclusion = new List<string>()
         {
             LearningDeliveryFAMCodeConstants.LDM_OLASS,
             LearningDeliveryFAMCodeConstants.LDM_RoTL,
             LearningDeliveryFAMCodeConstants.LDM_SteelRedundancy
         };
 
-        private readonly HashSet<string> NvqLevelsList1 = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
-        private readonly HashSet<string> NvqLevelsList2 = new HashSet<string>(new List<string>() { "3", "4" }).ToCaseInsensitiveHashSet();
-        private readonly HashSet<int> BasicSkillTypes = new HashSet<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
+        private readonly HashSet<string> nvqLevelsList1 = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
+        private readonly HashSet<string> nvqLevelsList2 = new HashSet<string>(new List<string>() { "3", "4" }).ToCaseInsensitiveHashSet();
 
         private readonly ILARSDataService _larsDataService;
         private readonly IDerivedData_07Rule _dd07;
@@ -102,7 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public bool StartDateConditionMet(DateTime learnStartDate)
         {
-            return learnStartDate < MinimumStartDate;
+            return learnStartDate < minimumStartDate;
         }
 
         public bool FundModelConditionMet(int fundModel)
@@ -138,16 +137,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 return false;
             }
 
-            if (!PriorAttainList1.Contains(priorAttain.Value) &&
-                !PriorAttainList2.Contains(priorAttain.Value))
+            if (!priorAttainList1.Contains(priorAttain.Value) &&
+                !priorAttainList2.Contains(priorAttain.Value))
             {
                 return false;
             }
 
             var nvqLevel = _larsDataService.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef);
 
-            if ((PriorAttainList1.Contains(priorAttain.Value) && NvqLevelsList1.Contains(nvqLevel)) ||
-                (PriorAttainList2.Contains(priorAttain.Value) && NvqLevelsList2.Contains(nvqLevel)))
+            if ((priorAttainList1.Contains(priorAttain.Value) && nvqLevelsList1.Contains(nvqLevel)) ||
+                (priorAttainList2.Contains(priorAttain.Value) && nvqLevelsList2.Contains(nvqLevel)))
             {
                 return true;
             }
@@ -176,7 +175,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             if (_famQueryService.HasAnyLearningDeliveryFAMCodesForType(
                 learningDelivery.LearningDeliveryFAMs,
                 LearningDeliveryFAMTypeConstants.LDM,
-                FamCodesForExclusion))
+                famCodesForExclusion))
             {
                 return true;
             }
@@ -197,7 +196,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             }
 
             if (_larsDataService.BasicSkillsMatchForLearnAimRefAndStartDate(
-                BasicSkillTypes,
+                TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills,
                 learningDelivery.LearnAimRef,
                 learningDelivery.LearnStartDate))
             {

@@ -6,7 +6,6 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
-using FluentAssertions;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -137,10 +136,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var sut = new LearnStartDate_16Rule(handler.Object, fcsData.Object, commonOps.Object);
 
             // act
-            var result = sut.GetAllocationsFor(null);
+            var result = sut.GetAllocationFor(null);
 
             // assert
-            result.Should().BeEmpty();
+            Assert.Null(result);
 
             handler.VerifyAll();
             fcsData.VerifyAll();
@@ -175,9 +174,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
                 .SetupGet(x => x.StartDate)
                 .Returns(testDate);
 
-            var allocations = Collection.Empty<IFcsContractAllocation>();
-            allocations.Add(allocation.Object);
-
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
@@ -188,7 +184,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var sut = new LearnStartDate_16Rule(handler.Object, fcsData.Object, commonOps.Object);
 
             // act
-            var result = sut.HasQualifyingStart(delivery.Object, allocations.AsSafeReadOnlyList());
+            var result = sut.HasQualifyingStart(delivery.Object, allocation.Object);
 
             // assert
             Assert.Equal(expectation, result);
@@ -245,6 +241,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var delivery = new Mock<ILearningDelivery>();
             delivery
+                .SetupGet(x => x.FundModel)
+                .Returns(70); // TypeOfFunding.EuropeanSocialFund
+            delivery
+                .SetupGet(x => x.LearnAimRef)
+                .Returns("ZESF0001"); // TypeOfAim.References.ESFLearnerStartandAssessment
+            delivery
+                .SetupGet(x => x.ConRefNumber)
+                .Returns(contractRef);
+            delivery
                 .SetupGet(x => x.ConRefNumber)
                 .Returns(contractRef);
             delivery
@@ -286,6 +291,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             // pass or fail is based on the return of this function
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             commonOps
+                .Setup(x => x.HasQualifyingFunding(delivery.Object, 70)) // TypeOfFunding.EuropeanSocialFund
+                .Returns(true);
+            commonOps
                 .Setup(x => x.HasQualifyingStart(delivery.Object, testDate, null))
                 .Returns(false);
 
@@ -321,6 +329,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var delivery = new Mock<ILearningDelivery>();
             delivery
+                .SetupGet(x => x.LearnAimRef)
+                .Returns("ZESF0001"); // TypeOfAim.References.ESFLearnerStartandAssessment
+            delivery
                 .SetupGet(x => x.ConRefNumber)
                 .Returns(contractRef);
             delivery
@@ -352,6 +363,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             // pass or fail is based on the return of this function
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.HasQualifyingFunding(delivery.Object, 70)) // TypeOfFunding.EuropeanSocialFund
+                .Returns(true);
+            commonOps
+                .Setup(x => x.HasQualifyingStart(delivery.Object, testDate, null))
+                .Returns(true);
             commonOps
                 .Setup(x => x.HasQualifyingStart(delivery.Object, testDate, null))
                 .Returns(true);

@@ -133,12 +133,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return It.IsInRange($"{monitor.LearnDelFAMType}{monitor.LearnDelFAMCode}", Monitoring.Delivery.FullyFundedLearningAim);
         }
 
-        public bool IsEntitledLevel2Nvq(ILearningDelivery delivery)
+        public bool IsLevel2Nvq(ILearningDelivery delivery)
         {
             var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
-            return IsV2NotionalLevel2(larsDelivery)
-                && larsDelivery.Categories.SafeAny(IsLegallyEntitled);
+            return IsV2NotionalLevel2(larsDelivery);
+        }
+
+        public bool IsEntitled(ILearningDelivery delivery)
+        {
+            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
+
+            return larsDelivery.Categories.SafeAny(IsLegallyEntitled);
         }
 
         public bool IsV2NotionalLevel2(ILARSLearningDelivery delivery)
@@ -212,7 +218,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 .SafeWhere(x => IsViableStart(x)
                                 && IsAdultFunding(x)
                                 && IsTargetAgeGroup(learner, x)
-                                && !IsEntitledLevel2Nvq(x)
+                                && IsLevel2Nvq(x)
+                                && IsEntitled(x)
                                 && x.LearningDeliveryFAMs != null))
             {
                 foreach (var learningDeliveryFam in learningDelivery.LearningDeliveryFAMs)

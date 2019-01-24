@@ -25,6 +25,22 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         {
             var learnAimRefs = UniqueLearnAimRefsFromMessage(_messageCache.Item).ToCaseInsensitiveHashSet();
 
+            var larsFrameworkAims =
+                _lars.LARS_FrameworkAims
+                .Where(fa => learnAimRefs.Contains(fa.LearnAimRef))
+                .Select(fa => new FrameworkAim()
+                {
+                    LearnAimRef = fa.LearnAimRef,
+                    FrameworkComponentType = fa.FrameworkComponentType,
+                    FworkCode = fa.FworkCode,
+                    ProgType = fa.ProgType,
+                    PwayCode = fa.PwayCode,
+                    EffectiveFrom = fa.EffectiveFrom,
+                    EffectiveTo = fa.EffectiveTo
+                })
+                 .GroupBy(fa => fa.LearnAimRef)
+                 .ToCaseInsensitiveDictionary(k => k.Key, v => v.ToList());
+
             return await _lars
                 .LARS_LearningDelivery
                 .Where(ld => learnAimRefs.Contains(ld.LearnAimRef))
@@ -57,17 +73,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 EffectiveFrom = av.EffectiveFrom,
                                 EffectiveTo = av.EffectiveTo,
                             }).ToList(),
-                        FrameworkAims = ld.LARS_FrameworkAims
-                            .Select(fa => new FrameworkAim()
-                            {
-                                LearnAimRef = fa.LearnAimRef,
-                                FrameworkComponentType = fa.FrameworkComponentType,
-                                FworkCode = fa.FworkCode,
-                                ProgType = fa.ProgType,
-                                PwayCode = fa.PwayCode,
-                                EffectiveFrom = fa.EffectiveFrom,
-                                EffectiveTo = fa.EffectiveTo
-                            }).ToList(),
+
+                        // FrameworkAims Assigned outside of Linq - VSTS #65278
+                        FrameworkAims = GetFrameworkAims(ld.LearnAimRef, larsFrameworkAims),
                         Categories = ld.LARS_LearningDeliveryCategory
                             .Select(ldc => new LearningDeliveryCategory()
                             {
@@ -86,6 +94,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 LastNewStartDate = ldc.LastNewStartDate
                             }).ToList(),
                     }, cancellationToken);
+        }
+
+        private IReadOnlyCollection<FrameworkAim> GetFrameworkAims(string learnAimRef, Dictionary<string, List<FrameworkAim>> frameworkAimsDictionary)
+        {
+            frameworkAimsDictionary.TryGetValue(learnAimRef, out var frameworkAims);
+
+            return frameworkAims as IReadOnlyCollection<FrameworkAim>;
         }
     }
 }

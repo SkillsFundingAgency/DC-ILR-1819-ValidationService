@@ -180,7 +180,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         public static void ForEach<T>(this ICollection<T> collection, Action<T> action)
         {
             It.IsNull(action)
-                .AsGuard<ArgumentNullException>();
+                .AsGuard<ArgumentNullException>(nameof(action));
 
             var items = collection.AsSafeList();
             foreach (var item in items)
@@ -198,7 +198,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
         {
             It.IsNull(action)
-                .AsGuard<ArgumentNullException>();
+                .AsGuard<ArgumentNullException>(nameof(action));
 
             var items = collection.SafeReadOnlyList();
             foreach (var item in items)
@@ -216,6 +216,11 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <param name="doAction">do action.</param>
         public static void ForAny<T>(this IEnumerable<T> list, Func<T, bool> matchCondition, Action<T> doAction)
         {
+            It.IsNull(matchCondition)
+                .AsGuard<ArgumentNullException>(nameof(matchCondition));
+            It.IsNull(doAction)
+                .AsGuard<ArgumentNullException>(nameof(doAction));
+
             var safeList = list.SafeReadOnlyList();
             safeList.ForEach(x =>
             {
