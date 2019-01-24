@@ -304,6 +304,7 @@
     <Compile Include="Learner\ContPrefType\ContPrefType_07Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_44Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_43Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_40Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32Rule.cs" />
