@@ -454,6 +454,8 @@
         public const string SOC2000_02 = "SOC2000_02";
         public const string SOC2000_03 = "SOC2000_03";
 
+        public const string SSN_02 = "SSN_02";
+
         public const string STULOAD_04 = "STULOAD_04";
 
         public const string TTACCOM_04 = "TTACCOM_04";

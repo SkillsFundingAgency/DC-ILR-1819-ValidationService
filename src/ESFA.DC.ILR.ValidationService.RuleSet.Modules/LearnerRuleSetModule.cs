@@ -27,6 +27,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SEC;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SPECFEE;
+using ESFA.DC.ILR.ValidationService.Rules.HE.SSN;
 using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TYPEYR;
@@ -519,6 +520,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(SEC_02Rule),
                 typeof(SPECFEE_01Rule),
                 typeof(SPECFEE_02Rule),
+                typeof(SSN_02Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SOC2000_03Rule),
                 typeof(SWSupAimId_01Rule),
