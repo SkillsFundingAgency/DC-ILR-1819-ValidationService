@@ -31,7 +31,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                         && ((learningDelivery.AppFinRecords?.Count ?? 0) > 0))
                 {
                     foreach (var appFinRecord in
-                        AppFinRecodsConditionMet(
+                        AppFinRecordsConditionMet(
                             learningDelivery.AppFinRecords,
                             learningDelivery.LearnStartDate))
                     {
@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
         }
 
-        public IEnumerable<IAppFinRecord> AppFinRecodsConditionMet(
+        public IEnumerable<IAppFinRecord> AppFinRecordsConditionMet(
             IReadOnlyCollection<IAppFinRecord> appFinRecords,
             DateTime learnStartDate)
         {

@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     null
                 };
 
-            NewRule().AppFinRecodsConditionMet(appFinRecords, learnStartDate).Should().BeNullOrEmpty();
+            NewRule().AppFinRecordsConditionMet(appFinRecords, learnStartDate).Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     testAppFinRecord2
                 };
 
-            NewRule().AppFinRecodsConditionMet(appFinRecords, learnStartDate).Should().BeEquivalentTo(appFinRecordsExpected);
+            NewRule().AppFinRecordsConditionMet(appFinRecords, learnStartDate).Should().BeEquivalentTo(appFinRecordsExpected);
         }
 
         [Fact]
