@@ -73,5 +73,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber);
 
         bool IsSectorSubjectAreaTiersMatchingSubjectAreaCode(string conRefNumber, decimal? sectorSubjectAreaTier1, decimal? sectorSubjectAreaTier2);
+
+        string GetMinPriorAttainment(string conRefNumber);
+
+        string GetMaxPriorAttainment(string conRefNumber);
     }
 }

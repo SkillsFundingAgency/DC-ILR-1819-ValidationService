@@ -106,6 +106,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                                 LotReference = l.LotReference,
                                 TenderSpecReference = l.TenderSpecReference
                             }).ToList(),
+                        MinPriorAttainment = r.MinPriorAttainment,
+                        MaxPriorAttainment = r.MaxPriorAttainment
                     }).ToListAsync(cancellationToken);
 
             foreach (var contractAllocation in contractAllocations)

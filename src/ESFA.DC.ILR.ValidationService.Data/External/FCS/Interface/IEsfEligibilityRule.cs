@@ -13,6 +13,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
 
         bool? Benefits { get; }
 
+        string MinPriorAttainment { get; }
+
+        string MaxPriorAttainment { get; }
+
         IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }
 
         IEnumerable<IEsfEligibilityRuleLocalAuthority> LocalAuthorities { get; }
