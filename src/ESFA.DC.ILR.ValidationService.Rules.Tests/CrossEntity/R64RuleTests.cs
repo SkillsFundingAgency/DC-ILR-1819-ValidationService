@@ -90,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 .Setup(ldsm => ldsm.FrameWorkComponentTypeExistsInFrameworkAims(It.IsAny<string>(), It.IsAny<HashSet<int?>>()))
                 .Returns(false);
 
-            NewRule(larsDataService:larsDataServiceMock.Object).LarsComponentTypeConditionMet("XYZ").Should().BeFalse();
+            NewRule(larsDataService: larsDataServiceMock.Object).LarsComponentTypeConditionMet("XYZ").Should().BeFalse();
         }
 
         [Fact]

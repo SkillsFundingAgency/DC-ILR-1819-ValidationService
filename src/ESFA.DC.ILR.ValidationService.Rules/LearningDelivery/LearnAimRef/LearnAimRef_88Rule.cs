@@ -52,12 +52,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// Determines whether [has valid learning aim] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
+        /// <param name="branchCategory">The branch category.</param>
         /// <returns>
         ///   <c>true</c> if [has valid learning aim] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasValidLearningAim(ILearningDelivery delivery)
+        public bool HasValidLearningAim(ILearningDelivery delivery, string branchCategory)
         {
-            var validities = LarsData.GetValiditiesFor(delivery.LearnAimRef);
+            var validities = LarsData.GetValiditiesFor(delivery.LearnAimRef)
+                .Where(x => x.ValidityCategory.ComparesWith(branchCategory));
 
             return validities
                 .SafeAny(x => HasValidStartRange(x, delivery));
@@ -78,13 +80,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// Passes the (rule) conditions.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
-        /// <param name="learner">The learner.</param>
+        /// <param name="branch">The branch result.</param>
         /// <returns>
         /// true if it does...
         /// </returns>
-        public override bool PassesConditions(ILearningDelivery delivery, ILearner learner)
+        public override bool PassesConditions(ILearningDelivery delivery, BranchResult branch)
         {
-            return HasValidLearningAim(delivery);
+            return branch.Passed && HasValidLearningAim(delivery, branch.Category);
         }
     }
 }

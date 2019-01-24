@@ -221,6 +221,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDLEV
         }
 
         [Fact]
+        public void Validate_WithNoLearningDeliveries_Returns_NoError()
+        {
+            var learner = new TestLearner();
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
         public void BuildErrorMessageParameters()
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();

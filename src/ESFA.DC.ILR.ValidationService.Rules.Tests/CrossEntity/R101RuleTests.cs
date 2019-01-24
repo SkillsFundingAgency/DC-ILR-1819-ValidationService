@@ -170,6 +170,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
+        public void LearningDeliveryFamForOverlappingACTTypes_ReturnsNull_EmptyCollection()
+        {
+            NewRule().LearningDeliveryFamForOverlappingACTTypes(new List<TestLearningDeliveryFAM>()).Should().BeNullOrEmpty();
+        }
+
+        [Fact]
         public void LearningDeliveryFamForOverlappingACTTypes_ReturnsNull_NoOverlap()
         {
             var learningDeliveryFamOne = new TestLearningDeliveryFAM

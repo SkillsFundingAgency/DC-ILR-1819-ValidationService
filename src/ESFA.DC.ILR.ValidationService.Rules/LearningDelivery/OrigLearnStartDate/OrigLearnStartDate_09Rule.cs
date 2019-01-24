@@ -13,7 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
     public class OrigLearnStartDate_09Rule : AbstractRule, IRule<ILearner>
     {
         private const int FundModel36 = 36;
-        private readonly DateTime StartDateConditionDateTime = new DateTime(2017, 5, 1);
+        private readonly DateTime startDateConditionDateTime = new DateTime(2017, 5, 1);
 
         public OrigLearnStartDate_09Rule(
             IValidationErrorHandler validationErrorHandler)
@@ -50,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OrigLearnStartDat
 
         public bool OrigLearnStartDateConditionMet(DateTime? origLearnStartDate)
         {
-            return origLearnStartDate.HasValue && origLearnStartDate < StartDateConditionDateTime;
+            return origLearnStartDate.HasValue && origLearnStartDate < startDateConditionDateTime;
         }
 
         public bool FundModelConditionMet(int fundModel)

@@ -112,10 +112,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var sut = NewRule();
 
             // act
-            var result = sut.GetName();
+            var result = sut.RuleName;
 
             // assert
-            Assert.Equal("DelLocPostCode_18", result);
+            Assert.Equal(RuleNameConstants.DelLocPostCode_18, result);
         }
 
         /// <summary>
@@ -301,12 +301,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .SetupGet(x => x.ConRefNumber)
                 .Returns(candidate);
 
+            var expectation = new[] { new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>().Object };
+
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
                 .Setup(x => x.GetEligibilityRuleEnterprisePartnershipsFor(candidate))
-                .Returns(new List<IEsfEligibilityRuleLocalEnterprisePartnership>() { new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>().Object });
+                .Returns(expectation);
 
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
@@ -314,7 +316,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var sut = new DelLocPostCode_18Rule(handler.Object, common.Object, fcsData.Object, postcodes.Object, ddRule22.Object);
 
             // act
-            var result = sut.GetEligibilityItem(delivery.Object);
+            var result = sut.GetEligibilityItemsFor(delivery.Object);
 
             // assert
             handler.VerifyAll();
@@ -323,7 +325,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             postcodes.VerifyAll();
             ddRule22.VerifyAll();
 
-            Assert.IsAssignableFrom<IEsfEligibilityRuleLocalEnterprisePartnership>(result);
+            Assert.IsAssignableFrom<IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership>>(result);
+            Assert.Equal(expectation, result);
         }
 
         /// <summary>
@@ -378,7 +381,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var sut = NewRule();
 
             // act
-            var result = sut.HasQualifyingEligibility(null, new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>().Object);
+            var result = sut.HasQualifyingEligibility(null, Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalEnterprisePartnership>());
 
             // assert
             Assert.False(result);
@@ -431,7 +434,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Returns(elCode);
 
             // act
-            var result = sut.HasQualifyingEligibility(postcode.Object, authority.Object);
+            var result = sut.HasQualifyingEligibility(postcode.Object, new[] { authority.Object });
 
             // assert
             Assert.Equal(expectation, result);
@@ -499,12 +502,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             const string delLocPC = "testPostcode";
             const string conRefNum = "tt_1234";
             const string learnAimRef = "shonkyRefCode";
+            const int testFunding = 70; // TypeOfFunding.EuropeanSocialFund
 
             var learnStart = DateTime.Parse(startDate);
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.FundModel)
-                .Returns(TypeOfFunding.EuropeanSocialFund);
+                .Returns(testFunding);
             mockDelivery
                 .SetupGet(x => x.LearnAimRef)
                 .Returns(learnAimRef);
@@ -541,14 +545,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .SetupGet(x => x.Code)
                 .Returns(partnership);
 
-            var localEnterprisePartnerships = new List<IEsfEligibilityRuleLocalEnterprisePartnership>()
+            var localEnterprisePartnerships = new List<IEsfEligibilityRuleLocalEnterprisePartnership>
             {
                 localEnterprisePartnership.Object
             };
 
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
-            var safedeliveries = deliveries.AsSafeReadOnlyList();
+            var deliveries = new List<ILearningDelivery> { mockDelivery.Object };
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -556,16 +558,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Returns(learnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
-                .Returns(safedeliveries);
+                .Returns(deliveries);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle("DelLocPostCode_18", learnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+                .Setup(x => x.Handle(RuleNameConstants.DelLocPostCode_18, learnRefNumber, null, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter("LearnAimRef", learnAimRef))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
-                .Setup(x => x.BuildErrorMessageParameter("FundModel", TypeOfFunding.EuropeanSocialFund))
+                .Setup(x => x.BuildErrorMessageParameter("FundModel", testFunding))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
                 .Setup(x => x.BuildErrorMessageParameter("DelLocPostCode", delLocPC))
@@ -579,7 +581,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DelLocPostCode_18Rule.FirstViableDate, null))
                 .Returns(true);
             common
-                .Setup(x => x.HasQualifyingFunding(mockDelivery.Object, TypeOfFunding.EuropeanSocialFund))
+                .Setup(x => x.HasQualifyingFunding(mockDelivery.Object, testFunding))
                 .Returns(true);
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
@@ -594,7 +596,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             ddRule22
-                .Setup(x => x.GetLatestLearningStartForESFContract(mockDelivery.Object, safedeliveries))
+                .Setup(x => x.GetLatestLearningStartForESFContract(mockDelivery.Object, deliveries))
                 .Returns(learnStart);
 
             var sut = new DelLocPostCode_18Rule(handler.Object, common.Object, fcsData.Object, postcodes.Object, ddRule22.Object);
@@ -633,12 +635,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             const string delLocPC = "testPostcode";
             const string conRefNum = "tt_1234";
             const string learnAimRef = "shonkyRefCode";
+            const int testFunding = 70; // TypeOfFunding.EuropeanSocialFund
 
             var learnStart = DateTime.Parse(startDate);
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.FundModel)
-                .Returns(TypeOfFunding.EuropeanSocialFund);
+                .Returns(testFunding);
             mockDelivery
                 .SetupGet(x => x.LearnAimRef)
                 .Returns(learnAimRef);
@@ -680,9 +683,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 localEnterprisePartnership.Object
             };
 
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
-            var safedeliveries = deliveries.AsSafeReadOnlyList();
+            var deliveries = new List<ILearningDelivery> { mockDelivery.Object };
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -690,7 +691,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Returns(learnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
-                .Returns(safedeliveries);
+                .Returns(deliveries);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
@@ -699,7 +700,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DelLocPostCode_18Rule.FirstViableDate, null))
                 .Returns(true);
             common
-                .Setup(x => x.HasQualifyingFunding(mockDelivery.Object, TypeOfFunding.EuropeanSocialFund))
+                .Setup(x => x.HasQualifyingFunding(mockDelivery.Object, testFunding))
                 .Returns(true);
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
@@ -714,7 +715,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             ddRule22
-                .Setup(x => x.GetLatestLearningStartForESFContract(mockDelivery.Object, safedeliveries))
+                .Setup(x => x.GetLatestLearningStartForESFContract(mockDelivery.Object, deliveries))
                 .Returns(learnStart);
 
             var sut = new DelLocPostCode_18Rule(handler.Object, common.Object, fcsData.Object, postcodes.Object, ddRule22.Object);

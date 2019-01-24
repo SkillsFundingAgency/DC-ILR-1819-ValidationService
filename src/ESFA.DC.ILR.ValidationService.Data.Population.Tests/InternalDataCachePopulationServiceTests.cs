@@ -48,6 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(LookupSimpleKey.ProgType, 8)]
         [InlineData(LookupSimpleKey.SEC, 9)]
         [InlineData(LookupSimpleKey.SOC2000, 358)]
+        [InlineData(LookupSimpleKey.SOC2010, 374)]
         [InlineData(LookupSimpleKey.SpecFee, 7)]
         [InlineData(LookupSimpleKey.TypeYr, 5)]
         [InlineData(LookupSimpleKey.WithdrawReason, 15)]
@@ -156,6 +157,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
 
             Assert.True(internalDataCache.CodedComplexLookups.ContainsKey(thisKey));
             Assert.Equal(expectedCount, internalDataCache.CodedComplexLookups[thisKey].Count);
+        }
+
+        [Theory]
+        [InlineData(LookupItemKey.OutGradeLearningAimType, 11)]
+        public async Task ItemLookupsArePresentAndMatchExpectedCount(LookupItemKey thisKey, int expectedCount)
+        {
+            // arrange
+            var internalDataCache = new InternalDataCache();
+
+            // act
+            await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
+
+            Assert.True(internalDataCache.ItemLookups.ContainsKey(thisKey));
+            Assert.Equal(expectedCount, internalDataCache.ItemLookups[thisKey].Count);
         }
 
         private InternalDataCachePopulationService NewService(IInternalDataCache internalDataCache = null)

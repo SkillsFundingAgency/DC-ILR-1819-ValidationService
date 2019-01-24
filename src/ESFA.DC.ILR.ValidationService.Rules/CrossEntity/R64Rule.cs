@@ -18,8 +18,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private const int ExcludedProgType = 25;
         private const int ValidCompStatus = 2;
         private readonly ILARSDataService _larsDataService;
-        private readonly HashSet<int> ValidFundModels = new HashSet<int>() { 35, 36 };
-        private readonly HashSet<int?> ValidComponentTypes = new HashSet<int?>() { 1, 3 };
+        private readonly HashSet<int> validFundModels = new HashSet<int>() { 35, 36 };
+        private readonly HashSet<int?> validComponentTypes = new HashSet<int?>() { 1, 3 };
 
         public R64Rule(
             ILARSDataService larsDataService,
@@ -73,7 +73,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public bool FundModelsConditionMet(int fundModel)
         {
-            return ValidFundModels.Contains(fundModel);
+            return validFundModels.Contains(fundModel);
         }
 
         public bool AimTypeConditionMet(int aimType)
@@ -83,7 +83,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public bool LarsComponentTypeConditionMet(string learnAimRef)
         {
-            return _larsDataService.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, ValidComponentTypes);
+            return _larsDataService.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, validComponentTypes);
         }
 
         public bool ExcludeConditionMet(int? progType)
