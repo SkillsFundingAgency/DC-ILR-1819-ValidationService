@@ -277,6 +277,7 @@
     <Compile Include="Learner\ContPrefType\ContPrefType_07RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_41RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_30RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_27RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_04RuleTests.cs" />
