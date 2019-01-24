@@ -1,9 +1,11 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
@@ -24,9 +26,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             // arrange
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpStat_14Rule(null, ddRule22.Object, fcsData.Object));
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_14Rule(null, ddRule22.Object, fcsData.Object, commonOps.Object));
         }
 
         /// <summary>
@@ -38,9 +41,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpStat_14Rule(handler.Object, null, fcsData.Object));
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_14Rule(handler.Object, null, fcsData.Object, commonOps.Object));
         }
 
         [Fact]
@@ -49,9 +53,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpStat_14Rule(handler.Object, ddRule22.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_14Rule(handler.Object, ddRule22.Object, null, commonOps.Object));
+        }
+
+        [Fact]
+        public void NewRuleWithNullCommonOperationsThrows()
+        {
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object, null));
         }
 
         /// <summary>
@@ -83,7 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(EmpStat_14Rule.Name, result);
+            Assert.Equal(RuleNameConstants.EmpStat_14, result);
         }
 
         /// <summary>
@@ -149,8 +166,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Setup(x => x.GetLatestLearningStartForESFContract(Moq.It.IsAny<ILearningDelivery>(), safeDeliveries))
                 .ReturnsInOrder(latestContractCandidates);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
+            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object, commonOps.Object);
 
             // act
             var result = sut.GetLatestContractCompletionDate(safeDeliveries);
@@ -210,11 +228,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
+            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object, commonOps.Object);
 
             // act
-            var result = sut.GetQualifyingdAim(safeDeliveries, testDate);
+            var result = sut.GetQualifyingdAimOn(testDate, safeDeliveries);
 
             // assert
             handler.VerifyAll();
@@ -237,58 +256,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             fcsData
                 .Setup(x => x.GetEligibilityRuleEmploymentStatusesFor(null))
                 .Returns((IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus>)null);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
+            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object, commonOps.Object);
 
             // act
-            var result = sut.GetEligibleEmploymentStatus(null);
+            var result = sut.GetEligibilityRulesFor(null);
 
             // assert
             handler.VerifyAll();
             ddRule22.VerifyAll();
             fcsData.VerifyAll();
 
-            Assert.Null(result);
-        }
-
-        [Theory]
-        [InlineData("2018-09-11", "2014-08-01", "2018-09-11", "2016-02-11", "2017-06-09")]
-        [InlineData("2017-12-31", "2015-12-31", "2017-12-30", "2014-12-31", "2017-10-16")]
-        [InlineData("2018-07-01", "2018-06-30", "2014-05-11", "2014-07-12")]
-        [InlineData("2016-11-17", "2016-11-17")]
-        public void GetClosestEmploymentMeetsExpectation(string candidate, params string[] d22Dates)
-        {
-            // arrange
-            var testDate = DateTime.Parse(candidate);
-
-            var statusCandidates = Collection.Empty<DateTime>();
-            d22Dates.ForEach(x => statusCandidates.Add(DateTime.Parse(x)));
-            var expectedDate = statusCandidates.Max();
-
-            var employmentCandidates = Collection.Empty<ILearnerEmploymentStatus>();
-            statusCandidates
-                .ForEach(x =>
-                {
-                    var mockItem = new Mock<ILearnerEmploymentStatus>();
-                    mockItem.SetupGet(y => y.DateEmpStatApp).Returns(x);
-                    employmentCandidates.Add(mockItem.Object);
-                });
-
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
-            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
-
-            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
-
-            // act
-            var result = sut.GetClosestEmployment(employmentCandidates.AsSafeReadOnlyList(), testDate);
-
-            // assert
-            handler.VerifyAll();
-            ddRule22.VerifyAll();
-            fcsData.VerifyAll();
-
-            Assert.Equal(expectedDate, result.DateEmpStatApp);
+            Assert.Empty(result);
+            Assert.IsAssignableFrom<IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus>>(result);
         }
 
         /// <summary>
@@ -298,13 +279,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         /// <param name="eligibility">The eligibility.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.InPaidEmployment, true)]
-        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, false)]
-        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable, false)]
-        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotKnownProvided, false)]
-        [InlineData(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable, false)]
-        [InlineData(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, TypeOfEmploymentStatus.NotKnownProvided, false)]
-        [InlineData(TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable, TypeOfEmploymentStatus.NotKnownProvided, false)]
+        [InlineData(10, 10, true)] // TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.InPaidEmployment
+        [InlineData(10, 12, false)] // TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable
+        [InlineData(10, 11, false)] // TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable
+        [InlineData(10, 98, false)] // TypeOfEmploymentStatus.InPaidEmployment, TypeOfEmploymentStatus.NotKnownProvided
+        [InlineData(12, 11, false)] // TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable
+        [InlineData(12, 98, false)] // TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, TypeOfEmploymentStatus.NotKnownProvided
+        [InlineData(11, 98, false)] // TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable, TypeOfEmploymentStatus.NotKnownProvided
         public void HasAQualifyingEmploymentStatusMeetsExpectation(int status, int eligibility, bool expectation)
         {
             // arrange
@@ -321,7 +302,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Returns(eligibility);
 
             // act
-            var result = sut.HasAQualifyingEmploymentStatus(mockStatus.Object, mockEligibility.Object);
+            var result = sut.HasAQualifyingEmploymentStatus(mockEligibility.Object, mockStatus.Object);
 
             // assert
             Assert.Equal(expectation, result);
@@ -386,6 +367,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var statii = Collection.Empty<ILearnerEmploymentStatus>();
             statii.Add(mockStatus.Object);
+            var safeStatii = statii.AsSafeReadOnlyList();
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -396,29 +378,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Returns(safeDeliveries);
             mockLearner
                 .SetupGet(x => x.LearnerEmploymentStatuses)
-                .Returns(statii.AsSafeReadOnlyList());
+                .Returns(safeStatii);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == EmpStat_14Rule.Name),
-                    Moq.It.Is<string>(y => y == LearnRefNumber),
-                    0,
-                    Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+                .Setup(x => x.Handle(RuleNameConstants.EmpStat_14, LearnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == EmpStat_14Rule.MessagePropertyName),
-                    TypeOfEmploymentStatus.InPaidEmployment))
+                .Setup(x => x.BuildErrorMessageParameter("EmpStat", 12)) // TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == PropertyNameConstants.ConRefNumber),
-                    conRefNumber))
+                .Setup(x => x.BuildErrorMessageParameter("ConRefNumber", conRefNumber))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == PropertyNameConstants.LearnStartDate),
-                    testDate))
+                .Setup(x => x.BuildErrorMessageParameter("LearnStartDate", testDate.ToString("d", AbstractRule.RequiredCulture)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
@@ -429,7 +401,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var employmentStatusMock = new Mock<IEsfEligibilityRuleEmploymentStatus>();
             employmentStatusMock
                 .SetupGet(x => x.Code)
-                .Returns(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable);
+                .Returns(12); // TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable
 
             var employmentStatuses = new List<IEsfEligibilityRuleEmploymentStatus>()
             {
@@ -441,7 +413,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Setup(x => x.GetEligibilityRuleEmploymentStatusesFor(conRefNumber))
                 .Returns(employmentStatuses);
 
-            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.GetEmploymentStatusOn(testDate, safeStatii))
+                .Returns(mockStatus.Object);
+
+            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object, commonOps.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -540,8 +517,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             fcsData
                 .Setup(x => x.GetEligibilityRuleEmploymentStatusesFor(conRefNumber))
                 .Returns(employmentStatuses);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
+            var sut = new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object, commonOps.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -569,8 +547,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            return new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object);
+            return new EmpStat_14Rule(handler.Object, ddRule22.Object, fcsData.Object, commonOps.Object);
         }
     }
 }
