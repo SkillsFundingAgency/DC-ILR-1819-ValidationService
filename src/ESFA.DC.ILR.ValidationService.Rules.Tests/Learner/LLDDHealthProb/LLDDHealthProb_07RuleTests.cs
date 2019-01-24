@@ -5,9 +5,9 @@ using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb;
+using ESFA.DC.ILR.ValidationService.Rules.Query;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Mocks;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -55,8 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
         public void ValidatePasses_AgeExceptionApplies()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
-            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
-            dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(26);
+            var dateTimeService = new DateTimeQueryService();
 
             var derivedDataMock = new Mock<IDerivedData_06Rule>();
             derivedDataMock.Setup(m => m.Derive(It.IsAny<IEnumerable<ILearningDelivery>>()))
@@ -64,7 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
 
             var testLearner = new TestLearner
             {
-                DateOfBirthNullable = new DateTime(1978, 9, 1),
+                DateOfBirthNullable = new DateTime(1993, 9, 1),
                 PlanLearnHoursNullable = 11,
                 LLDDHealthProb = 1,
                 LLDDAndHealthProblems = null,
@@ -78,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, derivedDataMock.Object, dateTimeServiceMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, derivedDataMock.Object, dateTimeService).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
