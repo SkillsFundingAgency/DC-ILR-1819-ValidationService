@@ -21,29 +21,35 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             _learningDeliveryAppFinRecordQueryService = learningDeliveryAppFinRecordQueryService;
         }
 
-        public bool IsTotalNegotiatedPriceMoreThanCapForStandards(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        public bool IsTotalNegotiatedPriceMoreThanCapForStandardLearningDeliveries(IReadOnlyCollection<ILearningDelivery> standardLearningDeliveries)
+        {
+            return IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, null);
+        }
+
+        public bool IsTotalNegotiatedPriceMoreThanCapForStandard(IReadOnlyCollection<ILearningDelivery> learningDeliveries, int? standardCode)
         {
             if (learningDeliveries == null)
             {
                 return false;
             }
 
-            var filteredLearningDeliveries = learningDeliveries.Where(x => x.StdCodeNullable.HasValue &&
-                                                                          x.AimType == TypeOfAim.ProgrammeAim &&
-                                                              x.ProgTypeNullable == TypeOfFunding
-                                                                  .Age16To19ExcludingApprenticeships &&
-                                                              x.FundModel == TypeOfFunding.OtherAdult)
-                .ToList();
+            var filteredLearningDeliveries = learningDeliveries.Where(
+                    x => x.StdCodeNullable.HasValue &&
+                    (!standardCode.HasValue || (x.StdCodeNullable.Value == standardCode)) &&
+                    x.AimType == TypeOfAim.ProgrammeAim &&
+                    x.ProgTypeNullable == TypeOfFunding.Age16To19ExcludingApprenticeships &&
+                    x.FundModel == TypeOfFunding.OtherAdult)
+                    .ToList();
 
             if (filteredLearningDeliveries.Any())
             {
                 var standardAfinTotals = GetAFinTotalValues(filteredLearningDeliveries);
 
-                foreach (var standardCode in standardAfinTotals.Keys)
+                foreach (var standardCodeKey in standardAfinTotals.Keys)
                 {
-                    var applicableDate = GetApplicableDateForCapChecking(filteredLearningDeliveries, standardCode);
+                    var applicableDate = GetApplicableDateForCapChecking(filteredLearningDeliveries, standardCodeKey);
 
-                    if (IsAFilTotalMoreThanCapValue(standardCode, standardAfinTotals[standardCode], applicableDate))
+                    if (IsAFilTotalMoreThanCapValue(standardCodeKey, standardAfinTotals[standardCodeKey], applicableDate))
                     {
                         return true;
                     }
