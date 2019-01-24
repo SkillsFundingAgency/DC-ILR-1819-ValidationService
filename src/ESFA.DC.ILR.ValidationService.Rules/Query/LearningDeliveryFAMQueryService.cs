@@ -60,6 +60,50 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             return learningDeliveryFams?.Where(fam => HasFamType(fam, famType) && famCodes.Contains(fam.LearnDelFAMCode));
         }
 
+        public IEnumerable<ILearningDeliveryFAM> GetOverLappingLearningDeliveryFAMsForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType)
+        {
+            var overlappinLearningDeliveryFAMs = new List<ILearningDeliveryFAM>();
+
+            var ldFamsByType = learningDeliveryFams?.Where(fam => HasFamType(fam, famType)) ?? new List<ILearningDeliveryFAM>();
+
+            if (ldFamsByType.Count() >= 2 && !ldFamsByType.All(ldf => ldf.LearnDelFAMDateFromNullable == null))
+            {
+                var ldFAMs = ldFamsByType.OrderBy(ld => ld.LearnDelFAMDateFromNullable).ToArray();
+
+                var ldFAMsCount = ldFAMs.Length;
+
+                var i = 1;
+
+                while (i < ldFAMsCount)
+                {
+                    if (ldFAMs[i - 1].LearnDelFAMDateToNullable == null)
+                    {
+                        overlappinLearningDeliveryFAMs.Add(ldFAMs[i]);
+                        i++;
+
+                        continue;
+                    }
+
+                    var errorConditionMet =
+                        ldFAMs[i].LearnDelFAMDateFromNullable == null
+                        ? false
+                        : ldFAMs[i - 1].LearnDelFAMDateToNullable >= ldFAMs[i].LearnDelFAMDateFromNullable;
+
+                    if (errorConditionMet)
+                    {
+                        overlappinLearningDeliveryFAMs.Add(ldFAMs[i]);
+                        i++;
+
+                        continue;
+                    }
+
+                    i++;
+                }
+            }
+
+            return overlappinLearningDeliveryFAMs;
+        }
+
         public bool HasFamType(ILearningDeliveryFAM learningDeliveryFam, string famType)
         {
             return learningDeliveryFam.LearnDelFAMType.CaseInsensitiveEquals(famType);

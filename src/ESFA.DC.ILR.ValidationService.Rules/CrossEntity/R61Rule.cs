@@ -1,73 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R61Rule : AbstractRule, IRule<ILearner>
     {
-        public R61Rule(IValidationErrorHandler validationErrorHandler)
+        private readonly string _famTypeLSF = Monitoring.Delivery.Types.LearningSupportFunding;
+
+        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
+
+        public R61Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R61)
         {
+            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate?.LearningDeliveries == null)
+            if (objectToValidate.LearningDeliveries == null)
             {
                 return;
             }
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                var latestRecord = GetLatestLSFFam(learningDelivery.LearningDeliveryFAMs);
+                var overlappingLearningDeliveryFAMs =
+                    _learningDeliveryFAMQueryService
+                    .GetOverLappingLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeLSF).ToList() ?? new List<ILearningDeliveryFAM>();
 
-                if (ConditionMet(learningDelivery.LearningDeliveryFAMs, latestRecord))
+                if (overlappingLearningDeliveryFAMs.Any())
                 {
-                    HandleValidationError(
+                    foreach (var learningDeliveryFAM in overlappingLearningDeliveryFAMs)
+                    {
+                        HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         learningDelivery.AimSeqNumber,
-                        BuildErrorMessageParameters(latestRecord));
+                        errorMessageParameters: BuildErrorMessageParameters(
+                            _famTypeLSF,
+                            learningDeliveryFAM.LearnDelFAMDateFromNullable,
+                            learningDeliveryFAM.LearnDelFAMDateToNullable));
+                    }
                 }
             }
         }
 
-        public bool ConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, ILearningDeliveryFAM learningDeliveryFam)
-        {
-            if (learningDeliveryFam == null)
-            {
-                return false;
-            }
-
-            return learningDeliveryFams.Any(x =>
-                    x.LearnDelFAMDateToNullable.HasValue &&
-                    learningDeliveryFam.LearnDelFAMDateFromNullable < x.LearnDelFAMDateToNullable.Value);
-        }
-
-        public ILearningDeliveryFAM GetLatestLSFFam(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams)
-        {
-            var latestLSFRecord = learningDeliveryFams?
-                .Where(x => x.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.LSF) && x.LearnDelFAMDateFromNullable.HasValue)
-                .OrderByDescending(x => x.LearnDelFAMDateFromNullable)
-                .FirstOrDefault();
-
-            return latestLSFRecord;
-        }
-
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(ILearningDeliveryFAM learningDeliveryFam)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string famType, DateTime? learnDelFamDateFrom, DateTime? learnDelFamDateTo)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learningDeliveryFam.LearnDelFAMType),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateFrom, learningDeliveryFam.LearnDelFAMDateFromNullable),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateTo, learningDeliveryFam.LearnDelFAMDateToNullable)
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, famType),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateFrom, learnDelFamDateFrom),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMDateTo, learnDelFamDateTo)
             };
         }
     }
