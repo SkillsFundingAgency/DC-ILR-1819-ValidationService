@@ -118,7 +118,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber, new FcsContractAllocation
+                {
+                    conRefNumber, new FcsContractAllocation
                     {
                         ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9972", LotReference = "01",
                         EsfEligibilityRule = new EsfEligibilityRule()
@@ -142,7 +143,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void GetSectorSubjectAreaLevelsForContract_NullCheck()
         {
             string conRefNumber = "ESF0002";
-            IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel> esfEligibilityRuleSectorSubjectAreaLevels = null;
 
             var allocations = new Dictionary<string, IFcsContractAllocation>()
             {
@@ -202,7 +202,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber, new FcsContractAllocation
+                {
+                    conRefNumber, new FcsContractAllocation
                     {
                         ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
                         EsfEligibilityRule = new EsfEligibilityRule()
@@ -253,14 +254,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber, new FcsContractAllocation
                 {
-                    ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9972", LotReference = "01",
-                    EsfEligibilityRule = new EsfEligibilityRule()
+                    conRefNumber, new FcsContractAllocation
                     {
-                        SectorSubjectAreaLevels = sectorSubjectAreaLevels
+                        ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9972", LotReference = "01",
+                        EsfEligibilityRule = new EsfEligibilityRule()
+                        {
+                            SectorSubjectAreaLevels = sectorSubjectAreaLevels
+                        }
                     }
-                } },
+                },
                 { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
@@ -289,7 +292,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber, new FcsContractAllocation
+                {
+                    conRefNumber, new FcsContractAllocation
                     {
                         ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
                         EsfEligibilityRule = new EsfEligibilityRule()
@@ -340,14 +344,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber, new FcsContractAllocation
                 {
-                    ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
-                    EsfEligibilityRule = new EsfEligibilityRule()
+                    conRefNumber, new FcsContractAllocation
                     {
-                        SectorSubjectAreaLevels = sectorSubjectAreaLevels
+                        ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
+                        EsfEligibilityRule = new EsfEligibilityRule()
+                        {
+                            SectorSubjectAreaLevels = sectorSubjectAreaLevels
+                        }
                     }
-                } },
+                },
                 { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
@@ -383,7 +389,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber, new FcsContractAllocation
+                {
+                    conRefNumber, new FcsContractAllocation
                     {
                         ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
                         EsfEligibilityRule = new EsfEligibilityRule()
@@ -439,7 +446,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber,
+                {
+                    conRefNumber,
                     new FcsContractAllocation
                     {
                         ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
@@ -484,7 +492,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber, new FcsContractAllocation
+                {
+                    conRefNumber, new FcsContractAllocation
                     {
                         ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
                         EsfEligibilityRule = new EsfEligibilityRule()
@@ -538,14 +547,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var allocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { conRefNumber, new FcsContractAllocation
                 {
-                    ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
-                    EsfEligibilityRule = new EsfEligibilityRule()
+                    conRefNumber, new FcsContractAllocation
                     {
-                        SectorSubjectAreaLevels = sectorSubjectAreaLevels
+                        ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
+                        EsfEligibilityRule = new EsfEligibilityRule()
+                        {
+                            SectorSubjectAreaLevels = sectorSubjectAreaLevels
+                        }
                     }
-                } },
+                },
                 { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 
@@ -589,7 +600,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var contractAllocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { "ESF0007", new FcsContractAllocation
+                {
+                    "ESF0007", new FcsContractAllocation
                     {
                         ContractAllocationNumber = "ESF0007", TenderSpecReference = "tt_9972", LotReference = "01",
                         EsfEligibilityRule = new EsfEligibilityRule()
@@ -598,7 +610,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                         }
                     }
                 },
-                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
+                {
+                    "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" }
+                }
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
@@ -645,14 +659,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var contractAllocations = new Dictionary<string, IFcsContractAllocation>
             {
-                { "ESF0007", new FcsContractAllocation
                 {
-                    ContractAllocationNumber = "ESF0007", TenderSpecReference = "tt_9972", LotReference = "01",
-                    EsfEligibilityRule = new EsfEligibilityRule()
+                    "ESF0007", new FcsContractAllocation
                     {
-                        SectorSubjectAreaLevels = sectorSubjectAreaLevels
+                        ContractAllocationNumber = "ESF0007", TenderSpecReference = "tt_9972", LotReference = "01",
+                        EsfEligibilityRule = new EsfEligibilityRule()
+                        {
+                            SectorSubjectAreaLevels = sectorSubjectAreaLevels
+                        }
                     }
-                } },
+                },
                 { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
             };
 

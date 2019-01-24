@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
@@ -55,5 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// Gets the FCS contract allocations.
         /// </summary>
         IReadOnlyDictionary<string, IFcsContractAllocation> FCSContractAllocations { get; }
+
+        IReadOnlyCollection<ICampusIdentifier> CampusIdentifiers { get; set; }
     }
 }

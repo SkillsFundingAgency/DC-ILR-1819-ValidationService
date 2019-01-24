@@ -1,20 +1,21 @@
-﻿using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
 {
     /// <summary>
     /// the delivery location postcode rule 18 implementation
     /// </summary>
-    /// <seealso cref="DelLocPostCode.DelLocPostCode_EligibilityRuleBase{IEsfEligibilityRuleLocalEnterprisePartnership}" />
+    /// <seealso cref="DelLocPostCode.DelLocPostCode_EligibilityRule{IEsfEligibilityRuleLocalEnterprisePartnership}" />
     public class DelLocPostCode_18Rule :
-        DelLocPostCode_EligibilityRuleBase<IEsfEligibilityRuleLocalEnterprisePartnership>
+        DelLocPostCode_EligibilityRule<IEsfEligibilityRuleLocalEnterprisePartnership>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DelLocPostCode_18Rule" /> class.
@@ -30,44 +31,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
             IFCSDataService fcsData,
             IPostcodesDataService postcodesData,
             IDerivedData_22Rule derivedData22)
-            : base(
-                validationErrorHandler,
-                commonChecks,
-                fcsData,
-                postcodesData,
-                derivedData22)
+            : base(validationErrorHandler, commonChecks, fcsData, postcodesData, derivedData22, RuleNameConstants.DelLocPostCode_18)
         {
         }
 
         /// <summary>
-        /// Gets the name of the rule.
+        /// Gets the eligibility items for...
         /// </summary>
-        /// <returns>
-        /// the name of the rule
-        /// </returns>
-        public override string GetName() => "DelLocPostCode_18";
-
-        /// <summary>
-        /// Gets the eligibility item.
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
+        /// <param name="delivery">This delivery.</param>
         /// <returns>the enterprise partnership (if found)</returns>
-        public override IEsfEligibilityRuleLocalEnterprisePartnership GetEligibilityItem(ILearningDelivery delivery) =>
-
-            // This is wrong, it should return collection
-            FcsData.GetEligibilityRuleEnterprisePartnershipsFor(delivery.ConRefNumber)?.FirstOrDefault();
+        public override IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityItemsFor(ILearningDelivery delivery) =>
+            FcsData.GetEligibilityRuleEnterprisePartnershipsFor(delivery?.ConRefNumber).AsSafeReadOnlyList();
 
         /// <summary>
         /// Determines whether [has qualifying eligibility] [the specified postcode].
         /// </summary>
         /// <param name="postcode">The postcode.</param>
-        /// <param name="eligibility">The eligibility.</param>
+        /// <param name="eligibilities">The eligibilities.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying eligibility] [the specified postcode]; otherwise, <c>false</c>.
         /// </returns>
-        public override bool HasQualifyingEligibility(IONSPostcode postcode, IEsfEligibilityRuleLocalEnterprisePartnership eligibility) =>
+        public override bool HasQualifyingEligibility(IONSPostcode postcode, IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> eligibilities) =>
             It.Has(postcode)
-                && It.Has(eligibility)
-                && eligibility.Code.ComparesWith(postcode.Lep1, postcode.Lep2);
+            && eligibilities.SafeAny(x => x.Code.ComparesWith(postcode.Lep1, postcode.Lep2));
     }
 }

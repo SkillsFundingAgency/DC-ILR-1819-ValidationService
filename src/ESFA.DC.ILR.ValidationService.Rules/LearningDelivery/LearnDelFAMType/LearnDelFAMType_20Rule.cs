@@ -11,7 +11,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
     public class LearnDelFAMType_20Rule : AbstractRule, IRule<ILearner>
     {
         private const int MaxOccurences = 3;
-        private readonly string _famCode = "118";
 
         public LearnDelFAMType_20Rule(
             IValidationErrorHandler validationErrorHandler)
