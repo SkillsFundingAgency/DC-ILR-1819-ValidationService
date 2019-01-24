@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
@@ -39,10 +34,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [InlineData("TNP", 0, "2018-07-01", "2018-08-01")]
         [InlineData("TNP", 1, "2018-07-01", "2018-08-01")]
         [InlineData("TNP", 0, "2018-07-01", "2018-06-01")]
-        public void AppFinRecodConditionMet_False(string aFinType, int aFinCode, string learnStartDateString, string aFinDateString)
+        public void AppFinRecodConditionMet_NoMatch(string aFinType, int aFinCode, string learnStartDateString, string aFinDateString)
         {
-            int? aFinCodeOut;
-            DateTime? aFinDateOut;
             DateTime learnStartDate = DateTime.Parse(learnStartDateString);
             var appFinRecords = new TestAppFinRecord[]
                 {
@@ -55,85 +48,40 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     null
                 };
 
-            NewRule().AppFinRecodConditionMet(appFinRecords, learnStartDate, out aFinCodeOut, out aFinDateOut).Should().BeFalse();
-            aFinCodeOut.Should().BeNull();
-            aFinDateOut.Should().BeNull();
+            NewRule().AppFinRecodsConditionMet(appFinRecords, learnStartDate).Should().BeNullOrEmpty();
         }
 
         [Fact]
-        public void AppFinRecodConditionMet_True()
+        public void AppFinRecodConditionMet_Matched()
         {
-            int? aFinCodeOut;
-            DateTime? aFinDateOut;
-            int aFinCodeExpected = 1;
-            DateTime aFinDateExpected = new DateTime(2018, 07, 01);
             DateTime learnStartDate = new DateTime(2018, 11, 01);
+            TestAppFinRecord testAppFinRecord1 = new TestAppFinRecord()
+            {
+                AFinType = "TNP",
+                AFinCode = 1,
+                AFinDate = new DateTime(2018, 07, 01)
+            };
+            TestAppFinRecord testAppFinRecord2 = new TestAppFinRecord()
+            {
+                AFinType = "TNP",
+                AFinCode = 2,
+                AFinDate = new DateTime(2017, 01, 01)
+            };
+
+            var appFinRecordsExpected = new TestAppFinRecord[]
+                {
+                    testAppFinRecord1,
+                    testAppFinRecord2
+                };
+
             var appFinRecords = new TestAppFinRecord[]
                 {
-                    new TestAppFinRecord()
-                    {
-                         AFinType = "TNP",
-                         AFinCode = aFinCodeExpected,
-                         AFinDate = aFinDateExpected
-                    },
+                    testAppFinRecord1,
                     null,
-                    new TestAppFinRecord()
-                    {
-                         AFinType = "TNP",
-                         AFinCode = 2,
-                         AFinDate = new DateTime(2017, 01, 01)
-                    },
+                    testAppFinRecord2
                 };
 
-            NewRule().AppFinRecodConditionMet(appFinRecords, learnStartDate, out aFinCodeOut, out aFinDateOut).Should().BeTrue();
-            aFinCodeOut.Should().Be(aFinCodeExpected);
-            aFinDateOut.Should().Be(aFinDateExpected);
-        }
-
-        [Fact]
-        public void ConditionMet_False()
-        {
-            int? aFinCodeOut;
-            DateTime? aFinDateOut;
-            DateTime learnStartDate = new DateTime(2018, 12, 31);
-            var appFinRecords = new TestAppFinRecord[]
-                {
-                    new TestAppFinRecord()
-                    {
-                         AFinType = "PMR",
-                         AFinCode = 0,
-                         AFinDate = new DateTime(2019, 01, 01)
-                    },
-                    null
-                };
-
-            NewRule().ConditionMet(learnStartDate, appFinRecords, out aFinCodeOut, out aFinDateOut).Should().BeFalse();
-            aFinCodeOut.Should().BeNull();
-            aFinDateOut.Should().BeNull();
-        }
-
-        [Fact]
-        public void ConditionMet_True()
-        {
-            int? aFinCodeOut;
-            int aFinCodeExpected = 1;
-            DateTime? aFinDateOut;
-            DateTime aFinDateExpected = new DateTime(2019, 02, 01);
-            DateTime learnStartDate = new DateTime(2019, 02, 28);
-            var appFinRecords = new TestAppFinRecord[]
-                {
-                    new TestAppFinRecord()
-                    {
-                         AFinType = "TNP",
-                         AFinCode = aFinCodeExpected,
-                         AFinDate = aFinDateExpected
-                    },
-                    null
-                };
-
-            NewRule().ConditionMet(learnStartDate, appFinRecords, out aFinCodeOut, out aFinDateOut).Should().BeTrue();
-            aFinCodeOut.Should().Be(aFinCodeExpected);
-            aFinDateOut.Should().Be(aFinDateExpected);
+            NewRule().AppFinRecodsConditionMet(appFinRecords, learnStartDate).Should().BeEquivalentTo(appFinRecordsExpected);
         }
 
         [Fact]
@@ -155,7 +103,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                                  AFinCode = 2,
                                  AFinDate = new DateTime(2019, 02, 01)
                             },
-                            null
+                            null,
+                            new TestAppFinRecord()
+                            {
+                                 AFinType = "TNP",
+                                 AFinCode = 3,
+                                 AFinDate = new DateTime(2019, 02, 21)
+                            }
+                        }
+                    },
+                    new TestLearningDelivery()
+                    {
+                         LearnAimRef = "1A1234",
+                        LearnStartDate = new DateTime(2019, 02, 01),
+                        AppFinRecords = new TestAppFinRecord[]
+                        {
+                            new TestAppFinRecord()
+                            {
+                                 AFinType = "TNP",
+                                 AFinCode = 5,
+                                 AFinDate = new DateTime(2019, 01, 31)
+                            }
                         }
                     }
                 }
@@ -188,9 +156,61 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             },
                             null
                         }
+                    },
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "2A1234",
+                        LearnStartDate = new DateTime(2019, 02, 02),
+                        AppFinRecords = new TestAppFinRecord[]
+                        {
+                            new TestAppFinRecord()
+                            {
+                                 AFinType = "PMR",
+                                 AFinCode = 0,
+                                 AFinDate = new DateTime(2019, 02, 01)
+                            },
+                            null
+                        }
+                    },
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "3B456789",
+                        LearnStartDate = new DateTime(2019, 02, 25),
+                        FundModel = 10
+                    },
+                    new TestLearningDelivery()
+                    {
+                        LearnAimRef = "2B456789",
+                        FundModel = 10,
+                        AppFinRecords = null
                     }
                 }
             };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_LearningDeliveryNullCheck()
+        {
+            var testLearner = new TestLearner()
+            {
+                LearningDeliveries = null
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_NullCheck()
+        {
+            TestLearner testLearner = null;
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

@@ -27,63 +27,37 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(
-                    learningDelivery.LearnStartDate,
-                    learningDelivery.AppFinRecords,
-                    out int? aFinCode,
-                    out DateTime? aFinDate))
+                if (LearnStartDateConditionMet(learningDelivery.LearnStartDate)
+                        && ((learningDelivery.AppFinRecords?.Count ?? 0) > 0))
                 {
-                    HandleValidationError(
-                        objectToValidate.LearnRefNumber,
-                        learningDelivery.AimSeqNumber,
-                        BuildErrorMessageParameters(
-                            learningDelivery.LearnStartDate,
-                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
-                            aFinCode,
-                            aFinDate));
+                    foreach (var appFinRecord in
+                        AppFinRecodsConditionMet(
+                            learningDelivery.AppFinRecords,
+                            learningDelivery.LearnStartDate))
+                    {
+                        HandleValidationError(
+                            objectToValidate.LearnRefNumber,
+                            learningDelivery.AimSeqNumber,
+                            BuildErrorMessageParameters(
+                                learningDelivery.LearnStartDate,
+                                appFinRecord.AFinType,
+                                appFinRecord.AFinCode,
+                                appFinRecord.AFinDate));
+                    }
                 }
             }
         }
 
-        public bool ConditionMet(
-            DateTime learnStartDate,
+        public IEnumerable<IAppFinRecord> AppFinRecodsConditionMet(
             IReadOnlyCollection<IAppFinRecord> appFinRecords,
-            out int? aFinCode,
-            out DateTime? aFinDate)
+            DateTime learnStartDate)
         {
-            aFinCode = null;
-            aFinDate = null;
-
-            return LearnStartDateConditionMet(learnStartDate)
-                && (appFinRecords?.Count != 0
-                    && AppFinRecodConditionMet(appFinRecords, learnStartDate, out aFinCode, out aFinDate));
-        }
-
-        public bool AppFinRecodConditionMet(
-            IReadOnlyCollection<IAppFinRecord> appFinRecords,
-            DateTime learnStartDate,
-            out int? aFinCode,
-            out DateTime? aFinDate)
-        {
-            aFinCode = null;
-            aFinDate = null;
-
-            var appFinFound = appFinRecords
+            return appFinRecords
                 .Where(
                     f => f != null
                     && f.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice)
                     && f.AFinCode > 0
-                    && f.AFinDate < learnStartDate)
-                .FirstOrDefault();
-
-            if (appFinFound != null)
-            {
-                aFinCode = appFinFound.AFinCode;
-                aFinDate = appFinFound.AFinDate;
-                return true;
-            }
-
-            return false;
+                    && f.AFinDate < learnStartDate);
         }
 
         public bool LearnStartDateConditionMet(DateTime learnStartDate) => learnStartDate >= _februaryFirst2019;
