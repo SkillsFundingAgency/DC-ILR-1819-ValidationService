@@ -672,10 +672,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 .Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth.Value.ToString("d", requiredCulture)))
                 .Verifiable();
 
+            var mockCat = new Mock<ILARSLearningCategory>();
+            mockCat
+                .SetupGet(x => x.CategoryRef)
+                .Returns(TypeOfLARSCategory.LegalEntitlementLevel2);
+
+            var larsCats = Collection.Empty<ILARSLearningCategory>();
+            larsCats.Add(mockCat.Object);
+
             var mock = new Mock<ILARSLearningDelivery>();
             mock
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(LARSNotionalNVQLevelV2.Level2);
+            mock
+                .SetupGet(x => x.Categories)
+                .Returns(larsCats.AsSafeReadOnlyList());
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
@@ -739,7 +750,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockLearner = new Mock<ILearner>();
             mockLearner
                 .SetupGet(x => x.PriorAttainNullable)
-                .Returns(TypeOfPriorAttainment.FullLevel2);
+                .Returns(TypeOfPriorAttainment.FullLevel3);
             mockLearner
                 .SetupGet(x => x.LearnRefNumber)
                 .Returns(LearnRefNumber);
@@ -763,7 +774,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockLARSDel = new Mock<ILARSLearningDelivery>();
             mockLARSDel
                 .SetupGet(x => x.NotionalNVQLevelv2)
-                .Returns(LARSNotionalNVQLevelV2.Level2);
+                .Returns(LARSNotionalNVQLevelV2.Level3);
             mockLARSDel
                 .SetupGet(x => x.Categories)
                 .Returns(larsCats.AsSafeReadOnlyList());

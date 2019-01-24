@@ -29,6 +29,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         /// </summary>
         private Dictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> _limitedLifeLookups;
 
+        private Dictionary<LookupItemKey, IDictionary<string, IReadOnlyCollection<string>>> _itemLookups;
+
         public IAcademicYear AcademicYear { get; set; }
 
         /// <summary>
@@ -64,6 +66,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
             {
                 return _codedDictionaryLookups
                   ?? (_codedDictionaryLookups = new Dictionary<LookupCodedKeyDictionary, IDictionary<string, IReadOnlyCollection<string>>>());
+            }
+        }
+
+        public IDictionary<LookupItemKey, IDictionary<string, IReadOnlyCollection<string>>> ItemLookups
+        {
+            get
+            {
+                return _itemLookups
+                       ?? (_itemLookups = new Dictionary<LookupItemKey, IDictionary<string, IReadOnlyCollection<string>>>());
             }
         }
 

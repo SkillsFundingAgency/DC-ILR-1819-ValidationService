@@ -29,7 +29,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDCOMP
             NewRule(providerDetailsMock.Object).ConditionMet(fundComp).Should().BeTrue();
         }
 
-        [Fact] public void ConditionMet_False()
+        [Fact]
+        public void ConditionMet_False()
         {
             var fundComp = 1;
             var providerDetailsMock = new Mock<IProvideLookupDetails>();

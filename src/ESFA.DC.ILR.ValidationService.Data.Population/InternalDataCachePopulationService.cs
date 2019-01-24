@@ -1,16 +1,17 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal;
-using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model;
-using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
-using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
-using ESFA.DC.ILR.ValidationService.Utility;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Model;
+using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
+using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Population
 {
@@ -98,6 +99,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                     .OfType<LookupComplexKey>()
                     .ToList()
                     .ForEach(x => AddLookups(x, lookups, cache));
+                Enum.GetValues(typeof(LookupItemKey))
+                    .OfType<LookupItemKey>()
+                    .ToList()
+                    .ForEach(x => AddLookups(x, lookups, cache));
             }
         }
 
@@ -109,7 +114,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="addToCache">add to cache.</param>
         public void AddLookups(LookupSimpleKey forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildSimpleLookupEnumerable<int>(usingSource, $"{forThisKey}");
+            var lookups = BuildSimpleLookupEnumerable<int>(usingSource, forThisKey.ToString());
 
             addToCache.SimpleLookups.Add(forThisKey, lookups.ToList());
         }
@@ -122,7 +127,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="addToCache">add to cache.</param>
         public void AddLookups(LookupCodedKey forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildSimpleLookupEnumerable<string>(usingSource, $"{forThisKey}");
+            var lookups = BuildSimpleLookupEnumerable<string>(usingSource, forThisKey.ToString());
 
             addToCache.CodedLookups.Add(forThisKey, lookups.ToList());
         }
@@ -135,16 +140,23 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="addToCache">add to cache.</param>
         public void AddLookups(LookupCodedKeyDictionary forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildComplexLookupEnumerable(usingSource, $"{forThisKey}");
+            var lookups = BuildComplexLookupEnumerable(usingSource, forThisKey.ToString());
 
             addToCache.CodedDictionaryLookups.Add(forThisKey, lookups);
         }
 
         public void AddLookups(LookupComplexKey forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildComplexLookupWithValidityPeriods(usingSource, $"{forThisKey}");
+            var lookups = BuildComplexLookupWithValidityPeriods(usingSource, forThisKey.ToString());
 
             addToCache.CodedComplexLookups.Add(forThisKey, lookups);
+        }
+
+        public void AddLookups(LookupItemKey forThisKey, XElement usingSource, InternalDataCache addToCache)
+        {
+            var lookups = BuildItemLookupEnumerable(usingSource, forThisKey.ToString());
+
+            addToCache.ItemLookups.Add(forThisKey, lookups);
         }
 
         /// <summary>
@@ -155,7 +167,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="addToCache">add to cache.</param>
         public void AddLookups(LookupTimeRestrictedKey forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildLookupWithValidityPeriods(usingSource, $"{forThisKey}");
+            var lookups = BuildLookupWithValidityPeriods(usingSource, forThisKey.ToString());
 
             addToCache.LimitedLifeLookups.Add(forThisKey, lookups);
         }
@@ -194,10 +206,21 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                 .Select(c => (T)Convert.ChangeType(c.Value, typeof(T)));
         }
 
+        private IDictionary<string, IReadOnlyCollection<string>> BuildItemLookupEnumerable(XElement lookups, string type)
+        {
+            return lookups
+                .Descendants(type)
+                .Descendants("option")
+                .ToCaseInsensitiveDictionary(
+                    n => GetAttributeValue(n.Attribute("code")),
+                    v => v.Descendants("item")
+                        .Select(i => GetAttributeValue(i.Attribute("value")))
+                        .AsSafeReadOnlyList());
+        }
+
         /// <summary>
         /// Builds the complex lookup enumerable.
         /// </summary>
-        /// <typeparam name="T">the domain type for the lookup list</typeparam>
         /// <param name="lookups">The lookups.</param>
         /// <param name="type">The type.</param>
         /// <returns>a list of simple lookups</returns>
@@ -206,7 +229,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             return lookups
                 .Descendants(type)
                 .Elements()
-                .ToDictionary(
+                .ToCaseInsensitiveDictionary(
                     n => $"{n.Name}",
                     v => v.Descendants("option")
                         .Select(d => GetAttributeValue(d.Attribute("code")))
@@ -219,11 +242,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             return lookups
                 .Descendants(type)
                 .Elements()
-                .ToDictionary(
+                .ToCaseInsensitiveDictionary(
                     k => k.Attribute("code")?.Value,
                     v => lookups.Descendants(v.Attribute("code")?.Value)
                             .Elements()
-                            .ToDictionary(
+                            .ToCaseInsensitiveDictionary(
                                 c => c.Attribute("code")?.Value,
                                 vp => new ValidityPeriods(
                                     DateTime.Parse(GetAttributeValue(vp.Attribute("validFrom")) ?? $"{DateTime.MinValue}"),
@@ -242,7 +265,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
             return lookups
                  .Descendants(type)
                  .Descendants("option")
-                 .ToDictionary(c => c.Attribute("code").Value, v => new ValidityPeriods(
+                 .ToCaseInsensitiveDictionary(c => c.Attribute("code").Value, v => new ValidityPeriods(
                      validFrom: DateTime.Parse(GetAttributeValue(v.Attribute("validFrom")) ?? $"{DateTime.MinValue}"),
                      validTo: DateTime.Parse(GetAttributeValue(v.Attribute("validTo")) ?? $"{DateTime.MaxValue}")));
         }

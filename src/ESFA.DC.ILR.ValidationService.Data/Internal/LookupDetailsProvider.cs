@@ -1,7 +1,9 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
 
 namespace ESFA.DC.ILR.ValidationService.Data
 {
@@ -103,7 +105,7 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool Contains(LookupTimeRestrictedKey lookupKey, int candidate)
         {
-            return Contains(lookupKey, $"{candidate}");
+            return Contains(lookupKey, candidate.ToString());
         }
 
         /// <summary>
@@ -130,7 +132,7 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool ContainsValueForKey(LookupCodedKeyDictionary lookupKey, string keyCandidate, int valueCandidate)
         {
-            return ContainsValueForKey(lookupKey, keyCandidate, $"{valueCandidate}");
+            return ContainsValueForKey(lookupKey, keyCandidate, valueCandidate.ToString());
         }
 
         /// <summary>
@@ -144,17 +146,21 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool ContainsValueForKey(LookupCodedKeyDictionary lookupKey, string keyCandidate, string valueCandidate)
         {
-            return InternalCache.CodedDictionaryLookups[lookupKey]
-                    .Where(k => k.Key == keyCandidate)
-                    .Select(v => v.Value.Contains(valueCandidate)).FirstOrDefault();
+            return InternalCache.CodedDictionaryLookups[lookupKey].TryGetValue(keyCandidate, out IReadOnlyCollection<string> value)
+                   && value.Any(x => x.CaseInsensitiveEquals(valueCandidate));
+        }
+
+        public bool ContainsValueForKey(LookupItemKey lookupKey, string keyCandidate, string valueCandidate)
+        {
+            return InternalCache.ItemLookups[lookupKey].TryGetValue(keyCandidate, out IReadOnlyCollection<string> value)
+                && value.Any(x => x.CaseInsensitiveEquals(valueCandidate));
         }
 
         public bool ContainsValueForKey(LookupComplexKey lookupKey, string keyCandidate, string valueCandidate)
         {
-            return InternalCache.CodedComplexLookups[lookupKey]
-                .Where(k => k.Key == keyCandidate)
-                .SelectMany(x => x.Value)
-                .Any(x => x.Key == valueCandidate);
+            return
+                InternalCache.CodedComplexLookups[lookupKey].TryGetValue(keyCandidate, out var value)
+                    && value.ContainsKey(valueCandidate);
         }
 
         /// <summary>
@@ -168,7 +174,7 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool IsCurrent(LookupTimeRestrictedKey lookupKey, int candidate, DateTime referenceDate)
         {
-            return IsCurrent(lookupKey, $"{candidate}", referenceDate);
+            return IsCurrent(lookupKey, candidate.ToString(), referenceDate);
         }
 
         /// <summary>
@@ -183,17 +189,14 @@ namespace ESFA.DC.ILR.ValidationService.Data
         public bool IsCurrent(LookupTimeRestrictedKey lookupKey, string candidate, DateTime referenceDate)
         {
             return Contains(lookupKey, candidate)
-                && InternalCache.LimitedLifeLookups[lookupKey]
-                    .Where(x => x.Key == candidate)
-                    .Any(y => IsBetween(y.Value.ValidFrom, y.Value.ValidTo, referenceDate));
+                && InternalCache.LimitedLifeLookups[lookupKey].TryGetValue(candidate, out var value)
+                && IsBetween(value.ValidFrom, value.ValidTo, referenceDate);
         }
 
         public bool IsCurrent(LookupComplexKey lookupKey, string key, string value, DateTime date)
         {
             return ContainsValueForKey(lookupKey, key, value) &&
-                   InternalCache.CodedComplexLookups[lookupKey]
-                       .Where(x => x.Key == key)
-                       .SelectMany(x => x.Value).Where(x => x.Key == value)
+                   InternalCache.CodedComplexLookups[lookupKey][key]
                        .Any(y => IsBetween(y.Value.ValidFrom, y.Value.ValidTo, date));
         }
     }

@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate;
@@ -50,29 +51,72 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         }
 
         [Fact]
+        public void StandardCodeExists_True()
+        {
+            NewRule().StandardCodeExists(1).Should().BeTrue();
+        }
+
+        [Fact]
+        public void StandardCodeExists_False()
+        {
+            NewRule().StandardCodeExists(null).Should().BeFalse();
+        }
+
+        [Fact]
         public void LARSConditionMet_True()
         {
             int stdCode = 1;
-            var learnStartDate = new DateTime(2018, 01, 01);
+            var learnStartDate = new DateTime(2018, 10, 01);
+
+            var larsStandard = new List<LARSStandardValidity>
+            {
+                new LARSStandardValidity
+                {
+                    StandardCode = stdCode,
+                    EndDate = new DateTime(2018, 08, 01)
+                }
+            }
+            .As<IReadOnlyCollection<ILARSStandardValidity>>();
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock
-                .Setup(ldsm => ldsm.LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate))
-                .Returns(true);
+            larsDataServiceMock.Setup(ldsm => ldsm.GetStandardValiditiesFor(stdCode)).Returns(larsStandard);
 
             NewRule(larsDataServiceMock.Object).LARSConditionMet(stdCode, learnStartDate).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(0)]
-        public void LARSConditionMet_False(int stdCode)
+        [Fact]
+        public void LARSConditionMet_False_NoMatchingStandard()
         {
-            var learnStartDate = new DateTime(2018, 01, 01);
+            int stdCode = 1;
+            var learnStartDate = new DateTime(2018, 10, 01);
+
+            var larsStandard = new List<LARSStandardValidity>()
+            .As<IReadOnlyCollection<ILARSStandardValidity>>();
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock
-                .Setup(ldsm => ldsm.LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate))
-                .Returns(false);
+            larsDataServiceMock.Setup(ldsm => ldsm.GetStandardValiditiesFor(1)).Returns(larsStandard);
+
+            NewRule(larsDataServiceMock.Object).LARSConditionMet(stdCode, learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LARSConditionMet_False_EndDateCorrect()
+        {
+            int stdCode = 1;
+            var learnStartDate = new DateTime(2018, 8, 01);
+
+            var larsStandard = new List<LARSStandardValidity>
+            {
+                new LARSStandardValidity
+                {
+                    StandardCode = stdCode,
+                    EndDate = new DateTime(2018, 9, 01)
+                }
+            }
+            .As<IReadOnlyCollection<ILARSStandardValidity>>();
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+            larsDataServiceMock.Setup(ldsm => ldsm.GetStandardValiditiesFor(stdCode)).Returns(larsStandard);
 
             NewRule(larsDataServiceMock.Object).LARSConditionMet(stdCode, learnStartDate).Should().BeFalse();
         }
@@ -111,13 +155,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var progType = 25;
             var aimType = 1;
             var stdCode = 1;
-            var learnStartDate = new DateTime(2018, 01, 01);
+            var learnStartDate = new DateTime(2018, 10, 01);
             var learningDeliveryFams = It.IsAny<IEnumerable<ILearningDeliveryFAM>>();
 
+            var larsStandard = new List<LARSStandardValidity>
+            {
+                new LARSStandardValidity
+                {
+                    StandardCode = stdCode,
+                    EndDate = new DateTime(2018, 08, 01)
+                }
+            }
+           .As<IReadOnlyCollection<ILARSStandardValidity>>();
+
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock
-                .Setup(ldsm => ldsm.LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate))
-                .Returns(true);
+            larsDataServiceMock.Setup(ldsm => ldsm.GetStandardValiditiesFor(stdCode)).Returns(larsStandard);
 
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             learningDeliveryFamQueryServiceMock
@@ -189,10 +241,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             var learnStartDate = new DateTime(2018, 01, 01);
             var learningDeliveryFams = It.IsAny<IEnumerable<ILearningDeliveryFAM>>();
 
+            var larsStandard = new List<LARSStandardValidity>().As<IReadOnlyCollection<ILARSStandardValidity>>();
+
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock
-                .Setup(ldsm => ldsm.LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate))
-                .Returns(false);
+            larsDataServiceMock.Setup(ldsm => ldsm.GetStandardValiditiesFor(stdCode)).Returns(larsStandard);
 
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             learningDeliveryFamQueryServiceMock
@@ -234,7 +286,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         public void Validate_Error()
         {
             var stdCode = 1;
-            var learnStartDate = new DateTime(2018, 01, 01);
+            var learnStartDate = new DateTime(2018, 10, 01);
             var learner = new TestLearner()
             {
                 LearningDeliveries = new List<TestLearningDelivery>()
@@ -255,10 +307,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var learningDeliveryFams = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
 
+            var larsStandard = new List<LARSStandardValidity>
+            {
+                new LARSStandardValidity
+                {
+                    StandardCode = stdCode,
+                    EndDate = new DateTime(2018, 08, 01)
+                }
+            }
+           .As<IReadOnlyCollection<ILARSStandardValidity>>();
+
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock
-                .Setup(ldsm => ldsm.LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate))
-                .Returns(true);
+            larsDataServiceMock.Setup(ldsm => ldsm.GetStandardValiditiesFor(stdCode)).Returns(larsStandard);
 
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             learningDeliveryFamQueryServiceMock
@@ -299,10 +359,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
 
             var learningDeliveryFams = learner.LearningDeliveries.SelectMany(ld => ld.LearningDeliveryFAMs);
 
+            var larsStandard = new List<LARSStandardValidity>
+            {
+                new LARSStandardValidity
+                {
+                    StandardCode = stdCode,
+                    EndDate = new DateTime(2018, 08, 01)
+                }
+            }
+           .As<IReadOnlyCollection<ILARSStandardValidity>>();
+
             var larsDataServiceMock = new Mock<ILARSDataService>();
-            larsDataServiceMock
-                .Setup(ldsm => ldsm.LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate))
-                .Returns(true);
+            larsDataServiceMock.Setup(ldsm => ldsm.GetStandardValiditiesFor(stdCode)).Returns(larsStandard);
 
             var learningDeliveryFamQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
             learningDeliveryFamQueryServiceMock

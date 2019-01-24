@@ -71,6 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
             }
         }
 
+        [Fact]
         public void Validate_NoError()
         {
             var learner = new TestLearner
@@ -100,7 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
             learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(It.IsAny<IEnumerable<ILearnerFAM>>(), LearnerFAMTypeConstants.SEN, 1)).Returns(true);
             learnerFAMsQueryServiceMock.Setup(dd => dd.HasLearnerFAMCodeForType(It.IsAny<IEnumerable<ILearnerFAM>>(), LearnerFAMTypeConstants.EHC, 1)).Returns(false);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(learnerFAMsQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }

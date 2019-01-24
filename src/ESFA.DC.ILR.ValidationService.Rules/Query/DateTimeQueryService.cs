@@ -5,8 +5,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class DateTimeQueryService : IDateTimeQueryService
     {
-        private const double DaysInYear = 365.242199;
-
         public int YearsBetween(DateTime start, DateTime end)
         {
             var years = end.Year - start.Year;
@@ -26,9 +24,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             return (end - start).TotalDays;
         }
 
+        [Obsolete("Please use YearsBetween instead")]
         public int AgeAtGivenDate(DateTime dateOfBirth, DateTime givenDate)
         {
-            return Convert.ToInt32(Math.Floor((givenDate - dateOfBirth).TotalDays / DaysInYear));
+            return YearsBetween(dateOfBirth, givenDate);
         }
     }
 }
