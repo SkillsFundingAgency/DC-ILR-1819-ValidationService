@@ -33,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var dd23Rule = new Mock<IDerivedData_23Rule>();
             dd23Rule
-                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<IEnumerable<ILearningDelivery>>()))
+                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<string>()))
                 .Returns(20);
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
@@ -103,7 +103,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var dd23Rule = new Mock<IDerivedData_23Rule>();
             dd23Rule
-                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<IEnumerable<ILearningDelivery>>()))
+                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<string>()))
                 .Returns(20);
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
@@ -158,7 +158,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var dd23Rule = new Mock<IDerivedData_23Rule>();
             dd23Rule
-                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<IEnumerable<ILearningDelivery>>()))
+                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<string>()))
                 .Returns(30);
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
