@@ -1,8 +1,10 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
@@ -11,23 +13,9 @@ using System.Linq;
 namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 {
     public class EmpStat_14Rule :
+        AbstractRule,
         IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = PropertyNameConstants.EmpStat;
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "EmpStat_14";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
         /// <summary>
         /// The derived data 22 (rule)
         /// </summary>
@@ -38,16 +26,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// </summary>
         private readonly IFCSDataService _fcsData;
 
+        private readonly IProvideRuleCommonOperations _check;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EmpStat_14Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="derivedData22">The derived data 22 rule.</param>
         /// <param name="fcsData">The year data.</param>
+        /// <param name="commonOperations">The common operations.</param>
         public EmpStat_14Rule(
             IValidationErrorHandler validationErrorHandler,
             IDerivedData_22Rule derivedData22,
-            IFCSDataService fcsData)
+            IFCSDataService fcsData,
+            IProvideRuleCommonOperations commonOperations)
+            : base(validationErrorHandler, RuleNameConstants.EmpStat_14)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -55,16 +48,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
                 .AsGuard<ArgumentNullException>(nameof(derivedData22));
             It.IsNull(fcsData)
                 .AsGuard<ArgumentNullException>(nameof(fcsData));
+            It.IsNull(commonOperations)
+                .AsGuard<ArgumentNullException>(nameof(commonOperations));
 
-            _messageHandler = validationErrorHandler;
             _derivedData22 = derivedData22;
             _fcsData = fcsData;
+            _check = commonOperations;
         }
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
 
         /// <summary>
         /// Gets the contract completion date.
@@ -89,15 +79,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         }
 
         /// <summary>
-        /// Gets the qualifyingd aim.
+        /// Gets the qualifying aim on this date using sources.
         /// the incoming set is guaranteed not to be null
         /// </summary>
+        /// <param name="thisDate">this date.</param>
         /// <param name="usingSources">using sources.</param>
-        /// <param name="onThisDate">on this date.</param>
-        /// <returns>the qualifying aim on this date</returns>
-        public ILearningDelivery GetQualifyingdAim(IReadOnlyCollection<ILearningDelivery> usingSources, DateTime? onThisDate) =>
+        /// <returns>
+        /// the qualifying aim on this date
+        /// </returns>
+        public ILearningDelivery GetQualifyingdAimOn(DateTime? thisDate, IReadOnlyCollection<ILearningDelivery> usingSources) =>
             usingSources
-                .FirstOrDefault(x => x.LearnStartDate == onThisDate
+                .FirstOrDefault(x => x.LearnStartDate == thisDate
                     && x.FundModel == TypeOfFunding.EuropeanSocialFund
                     && x.LearnAimRef == TypeOfAim.References.ESFLearnerStartandAssessment
                     && x.CompStatus == CompletionState.HasCompleted);
@@ -107,35 +99,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>the eligible employment status for the allocated contract</returns>
-        public IEsfEligibilityRuleEmploymentStatus GetEligibleEmploymentStatus(ILearningDelivery delivery) =>
-
-            // This is wrong, it should return collection
-            _fcsData.GetEligibilityRuleEmploymentStatusesFor(delivery?.ConRefNumber)?.FirstOrDefault();
-
-        /// <summary>
-        /// Gets the closest employment.
-        /// the incoming set is guaranteed not to be null
-        /// </summary>
-        /// <param name="usingSources">The using sources.</param>
-        /// <param name="toThisDate">To this date.</param>
-        /// <returns>the closest employment record to this date (if there is one)</returns>
-        public ILearnerEmploymentStatus GetClosestEmployment(IReadOnlyCollection<ILearnerEmploymentStatus> usingSources, DateTime? toThisDate) =>
-            usingSources
-                .Where(x => x.DateEmpStatApp <= toThisDate)
-                .OrderByDescending(x => x.DateEmpStatApp)
-                .FirstOrDefault();
+        public IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRulesFor(ILearningDelivery delivery) =>
+            _fcsData.GetEligibilityRuleEmploymentStatusesFor(delivery?.ConRefNumber).AsSafeReadOnlyList();
 
         /// <summary>
         /// Determines whether [has a qualifying employment status] [the specified employment].
         /// at the point of calling, neither the employment or the eligibility can be null
         /// </summary>
-        /// <param name="thisEmployment">this employment.</param>
         /// <param name="eligibility">The eligibility (status).</param>
+        /// <param name="thisEmployment">this employment.</param>
         /// <returns>
         ///   <c>true</c> if [has a qualifying employment status] [the specified this employment]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasAQualifyingEmploymentStatus(ILearnerEmploymentStatus thisEmployment, IEsfEligibilityRuleEmploymentStatus eligibility) =>
-            thisEmployment.EmpStat == eligibility.Code;
+        public bool HasAQualifyingEmploymentStatus(IEsfEligibilityRuleEmploymentStatus eligibility, ILearnerEmploymentStatus thisEmployment) =>
+            eligibility.Code == thisEmployment.EmpStat;
+
+        public bool IsNotValid(IEsfEligibilityRuleEmploymentStatus eligibility, ILearnerEmploymentStatus employment) =>
+            !HasAQualifyingEmploymentStatus(eligibility, employment);
 
         /// <summary>
         /// Validates the specified object.
@@ -149,28 +129,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             var fromDeliveries = objectToValidate.LearningDeliveries.AsSafeReadOnlyList();
-            var fromEmployments = objectToValidate.LearnerEmploymentStatuses.AsSafeReadOnlyList();
-
             var qualifyingDate = GetLatestContractCompletionDate(fromDeliveries);
-            var qualifyingAim = GetQualifyingdAim(fromDeliveries, qualifyingDate);
-            var eligibleStatus = GetEligibleEmploymentStatus(qualifyingAim);
+            var qualifyingAim = GetQualifyingdAimOn(qualifyingDate, fromDeliveries);
+            var eligibilities = GetEligibilityRulesFor(qualifyingAim);
 
-            if (It.IsNull(eligibleStatus))
+            if (It.IsEmpty(eligibilities))
             {
                 return;
             }
 
-            var employment = GetClosestEmployment(fromEmployments, qualifyingDate);
+            var fromEmployments = objectToValidate.LearnerEmploymentStatuses.AsSafeReadOnlyList();
+            var employment = _check.GetEmploymentStatusOn(qualifyingDate, fromEmployments);
 
             if (It.IsNull(employment))
             {
                 return;
             }
 
-            if (!HasAQualifyingEmploymentStatus(employment, eligibleStatus))
-            {
-                RaiseValidationMessage(learnRefNumber, qualifyingAim, employment);
-            }
+            eligibilities
+                .ForAny(x => IsNotValid(x, employment), x => RaiseValidationMessage(learnRefNumber, qualifyingAim, x));
         }
 
         /// <summary>
@@ -178,15 +155,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
         /// <param name="thisDelivery">this delivery.</param>
-        /// <param name="thisEmployment">this employment.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery, ILearnerEmploymentStatus thisEmployment)
+        /// <param name="thisEligibility">this eligibility.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery, IEsfEligibilityRuleEmploymentStatus thisEligibility)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisEmployment.EmpStat));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.ConRefNumber, thisDelivery.ConRefNumber));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery, thisEligibility));
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        /// <summary>
+        /// Builds the message parameters for.
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <param name="thisEligibility">this eligibility.</param>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery, IEsfEligibilityRuleEmploymentStatus thisEligibility)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.EmpStat, thisEligibility.Code),
+                BuildErrorMessageParameter(PropertyNameConstants.ConRefNumber, thisDelivery.ConRefNumber),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate)
+            };
         }
     }
 }

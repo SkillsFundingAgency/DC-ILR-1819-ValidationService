@@ -51,6 +51,7 @@
         public const string AimType_07 = "AimType_07";
 
         public const string CampId_01 = "CampId_01";
+        public const string CampId_02 = "CampId_02";
 
         public const string CompStatus_01 = "CompStatus_01";
         public const string CompStatus_02 = "CompStatus_02";
@@ -111,6 +112,8 @@
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
         public const string DelLocPostCode_16 = "DelLocPostCode_16";
+        public const string DelLocPostCode_17 = "DelLocPostCode_17";
+        public const string DelLocPostCode_18 = "DelLocPostCode_18";
 
         public const string Ethnicity_01 = "Ethnicity_01";
 
@@ -159,8 +162,10 @@
         public const string FamilyName_02 = "FamilyName_02";
         public const string FamilyName_04 = "FamilyName_04";
 
-        public const string FUNDLEV_01 = "FUNDLEV_01";
         public const string FUNDCOMP_01 = "FUNDCOMP_01";
+
+        public const string FUNDLEV_01 = "FUNDLEV_01";
+        public const string FUNDLEV_02 = "FUNDLEV_02";
         public const string FUNDLEV_03 = "FUNDLEV_03";
 
         public const string FundModel_01 = "FundModel_01";
@@ -253,6 +258,7 @@
         public const string LearnDelFAMType_69 = "LearnDelFAMType_69";
         public const string LearnDelFAMType_70 = "LearnDelFAMType_70";
         public const string LearnDelFAMType_71 = "LearnDelFAMType_71";
+        public const string LearnDelFAMType_72 = "LearnDelFAMType_72";
         public const string LearnDelFAMType_73 = "LearnDelFAMType_73";
 
         public const string LearningDeliveryHE_02 = "LearningDeliveryHE_02";
@@ -337,6 +343,7 @@
         public const string OutGrade_04 = "OutGrade_04";
         public const string OutGrade_05 = "OutGrade_05";
         public const string OutGrade_06 = "OutGrade_06";
+        public const string OutGrade_07 = "OutGrade_07";
 
         public const string OutStartDate_01 = "OutStartDate_01";
         public const string OutStartDate_02 = "OutStartDate_02";
