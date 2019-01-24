@@ -67,7 +67,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             var learnDelFAMs =
                 learningDeliveryFams?
                 .Where(fam => HasFamType(fam, famType))
-                .OrderBy(ld => ld.LearnDelFAMDateFromNullable ?? DateTime.MaxValue).ToArray() ?? new ILearningDeliveryFAM[] { };
+                .OrderBy(ld => ld.LearnDelFAMDateFromNullable ?? DateTime.MaxValue)
+                .ToArray() ?? new ILearningDeliveryFAM[] { };
 
             var arraySize = learnDelFAMs.Length;
 
