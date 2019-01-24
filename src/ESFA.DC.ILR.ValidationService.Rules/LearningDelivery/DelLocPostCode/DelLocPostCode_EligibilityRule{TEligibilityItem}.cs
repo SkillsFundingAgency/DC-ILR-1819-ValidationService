@@ -107,7 +107,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>the enterprise partnership (if found)</returns>
-        public abstract IReadOnlyCollection<TEligibilityItem> GetEligibilityItem(ILearningDelivery delivery);
+        public abstract IReadOnlyCollection<TEligibilityItem> GetEligibilityItemsFor(ILearningDelivery delivery);
 
         /// <summary>
         /// Gets the ons postcode.
@@ -150,7 +150,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         public bool IsNotValid(ILearningDelivery delivery) =>
             _check.HasQualifyingStart(delivery, FirstViableDate)
                 && _check.HasQualifyingFunding(delivery, TypeOfFunding.EuropeanSocialFund)
-                && HasQualifyingEligibility(GetONSPostcode(delivery), GetEligibilityItem(delivery))
+                && HasQualifyingEligibility(GetONSPostcode(delivery), GetEligibilityItemsFor(delivery))
                 && !InQualifyingPeriod(delivery, GetONSPostcode(delivery));
 
         /// <summary>

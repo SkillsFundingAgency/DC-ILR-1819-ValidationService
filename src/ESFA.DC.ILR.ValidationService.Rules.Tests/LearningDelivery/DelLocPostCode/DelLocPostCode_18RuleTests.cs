@@ -301,12 +301,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .SetupGet(x => x.ConRefNumber)
                 .Returns(candidate);
 
+            var expectation = new[] { new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>().Object };
+
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
                 .Setup(x => x.GetEligibilityRuleEnterprisePartnershipsFor(candidate))
-                .Returns(new[] { new Mock<IEsfEligibilityRuleLocalEnterprisePartnership>().Object });
+                .Returns(expectation);
 
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
@@ -314,7 +316,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var sut = new DelLocPostCode_18Rule(handler.Object, common.Object, fcsData.Object, postcodes.Object, ddRule22.Object);
 
             // act
-            var result = sut.GetEligibilityItem(delivery.Object);
+            var result = sut.GetEligibilityItemsFor(delivery.Object);
 
             // assert
             handler.VerifyAll();
@@ -324,6 +326,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             ddRule22.VerifyAll();
 
             Assert.IsAssignableFrom<IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership>>(result);
+            Assert.Equal(expectation, result);
         }
 
         /// <summary>

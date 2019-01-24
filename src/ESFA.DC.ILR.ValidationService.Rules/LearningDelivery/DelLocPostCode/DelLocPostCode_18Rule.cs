@@ -36,11 +36,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         }
 
         /// <summary>
-        /// Gets the eligibility item.
+        /// Gets the eligibility items for...
         /// </summary>
-        /// <param name="delivery">The delivery.</param>
+        /// <param name="delivery">This delivery.</param>
         /// <returns>the enterprise partnership (if found)</returns>
-        public override IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityItem(ILearningDelivery delivery) =>
+        public override IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityItemsFor(ILearningDelivery delivery) =>
             FcsData.GetEligibilityRuleEnterprisePartnershipsFor(delivery?.ConRefNumber).AsSafeReadOnlyList();
 
         /// <summary>
