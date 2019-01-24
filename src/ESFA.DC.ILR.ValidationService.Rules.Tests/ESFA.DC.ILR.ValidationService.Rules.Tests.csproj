@@ -170,6 +170,7 @@
     <Compile Include="Derived\DerivedData_07RuleTests.cs" />
     <Compile Include="Derived\DerivedData_12RuleTests.cs" />
     <Compile Include="Derived\DerivedData_31RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_17RuleTests.cs" />
     <Compile Include="Derived\DerivedData_32RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_02RuleTests.cs" />

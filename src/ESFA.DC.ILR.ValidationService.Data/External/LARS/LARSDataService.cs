@@ -400,13 +400,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
         public decimal? GetCoreGovContributionCapForStandard(int standardCode, DateTime startDate)
         {
-            var standard = _externalDataCache.Standards.FirstOrDefault(x => x.StandardCode == standardCode);
+            var standard = _externalDataCache.Standards?.FirstOrDefault(x => x.StandardCode == standardCode);
 
             if (standard?.StandardsFunding != null)
             {
-                return standard.StandardsFunding.FirstOrDefault(sf => sf.EffectiveFrom >= startDate &&
+                return standard.StandardsFunding.FirstOrDefault(sf => startDate >= sf.EffectiveFrom &&
                                                                (!sf.EffectiveTo.HasValue ||
-                                                                sf.EffectiveTo <= startDate))?.CoreGovContributionCap;
+                                                                startDate <= sf.EffectiveTo))?.CoreGovContributionCap;
             }
 
             return null;

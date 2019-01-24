@@ -6,17 +6,19 @@ using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 {
-    public class DerivedData_17Rule //: IDerivedData_17Rule
+    public class DerivedData_17Rule : IDerivedData_17Rule
     {
-        private readonly IEnumerable<int> _englishOrMathsBasicSkillsTypes = new HashSet<int>(TypeOfLARSBasicSkill.AsEnglishAndMathsBasicSkills);
         private readonly ILARSDataService _larsDataService;
+        private readonly ILearningDeliveryAppFinRecordQueryService _learningDeliveryAppFinRecordQueryService;
 
-        public DerivedData_17Rule(ILARSDataService larsDataService)
+        public DerivedData_17Rule(ILARSDataService larsDataService, ILearningDeliveryAppFinRecordQueryService learningDeliveryAppFinRecordQueryService)
         {
             _larsDataService = larsDataService;
+            _learningDeliveryAppFinRecordQueryService = learningDeliveryAppFinRecordQueryService;
         }
 
         public bool IsTotalNegotiatedPriceMoreThanCapForStandards(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
@@ -33,68 +35,89 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                                                               x.FundModel == TypeOfFunding.OtherAdult)
                 .ToList();
 
-            var standardAfinTotals = GetAFinTotalValues(filteredLearningDeliveries);
-
-            foreach (var standardCode in standardAfinTotals.Keys)
+            if (filteredLearningDeliveries.Any())
             {
-                var earliestStartDate = filteredLearningDeliveries.Where(x => x.StdCodeNullable == standardCode)
-                    .OrderBy(x => x.LearnStartDate).FirstOrDefault()?.LearnStartDate;
+                var standardAfinTotals = GetAFinTotalValues(filteredLearningDeliveries);
 
-                if (IsCapMoreThanTotalStandardsValue(standardCode, standardAfinTotals[standardCode], earliestStartDate))
+                foreach (var standardCode in standardAfinTotals.Keys)
                 {
-                    return true;
-                }
+                    var applicableDate = GetApplicableDateForCapChecking(filteredLearningDeliveries, standardCode);
 
-                var earliestOrigStartDate = filteredLearningDeliveries.Where(x => x.StdCodeNullable == standardCode && x.OrigLearnStartDateNullable.HasValue)
-                    .OrderBy(x => x.OrigLearnStartDateNullable).FirstOrDefault()?.OrigLearnStartDateNullable;
-
-                if (IsCapMoreThanTotalStandardsValue(standardCode, standardAfinTotals[standardCode], earliestOrigStartDate))
-                {
-                    return true;
+                    if (IsAFilTotalMoreThanCapValue(standardCode, standardAfinTotals[standardCode], applicableDate))
+                    {
+                        return true;
+                    }
                 }
             }
 
             return false;
         }
 
-        public Dictionary<int, int> GetAFinTotalValues(List<ILearningDelivery> list)
+        public DateTime? GetApplicableDateForCapChecking(List<ILearningDelivery> learningDeliveries, int standardCode)
+        {
+            var earliestStartDate = learningDeliveries.Where(x => x.StdCodeNullable == standardCode)
+                .OrderBy(x => x.LearnStartDate).FirstOrDefault()?.LearnStartDate;
+
+            var earliestOrigStartDate = learningDeliveries
+                .Where(x => x.StdCodeNullable == standardCode && x.OrigLearnStartDateNullable.HasValue)
+                .OrderBy(x => x.OrigLearnStartDateNullable).FirstOrDefault()?.OrigLearnStartDateNullable;
+
+            var applicableDate = earliestOrigStartDate.HasValue && earliestStartDate > earliestOrigStartDate.Value
+                ? earliestOrigStartDate.Value
+                : earliestStartDate;
+
+            return applicableDate;
+        }
+
+        public Dictionary<int, int> GetAFinTotalValues(List<ILearningDelivery> learningDeliveries)
         {
             var standardAfinTotals = new Dictionary<int, int>();
 
-            foreach (var learningDelivery in list)
+            if (learningDeliveries != null)
             {
-                if (learningDelivery.AppFinRecords != null)
+                foreach (var learningDelivery in learningDeliveries)
                 {
-                    var aFinCode1Value = GetLatestAppFinRecord(learningDelivery.AppFinRecords, 1);
-                    var aFinCode2Value = GetLatestAppFinRecord(learningDelivery.AppFinRecords, 2);
+                    if (learningDelivery.AppFinRecords != null)
+                    {
+                        var aFinCode1Value = _learningDeliveryAppFinRecordQueryService.GetLatestAppFinRecord(
+                            learningDelivery.AppFinRecords,
+                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
+                            1)?.AFinAmount;
 
-                    standardAfinTotals[learningDelivery.StdCodeNullable.Value] = +(aFinCode1Value + aFinCode2Value);
+                        var aFinCode2Value = _learningDeliveryAppFinRecordQueryService.GetLatestAppFinRecord(
+                            learningDelivery.AppFinRecords,
+                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
+                            2)?.AFinAmount;
+
+                        var total = aFinCode1Value.GetValueOrDefault() + aFinCode2Value.GetValueOrDefault();
+
+                        if (standardAfinTotals.ContainsKey(learningDelivery.StdCodeNullable.Value))
+                        {
+                            standardAfinTotals[learningDelivery.StdCodeNullable.Value] += total;
+                        }
+                        else
+                        {
+                            standardAfinTotals[learningDelivery.StdCodeNullable.Value] = total;
+                        }
+                    }
                 }
             }
 
             return standardAfinTotals;
         }
 
-        public int GetLatestAppFinRecord(IReadOnlyCollection<IAppFinRecord> appFinRecords, int appFinCode)
-        {
-            return appFinRecords.Where(x =>
-                    x.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice) &&
-                    x.AFinCode == appFinCode)
-                .OrderByDescending(x => x.AFinDate)
-                .Select(x => x.AFinAmount)
-                .FirstOrDefault();
-        }
-
-        public bool IsCapMoreThanTotalStandardsValue(int standardCode, int totalStandardsValue, DateTime? startDate)
+        public bool IsAFilTotalMoreThanCapValue(int standardCode, int totalStandardsValue, DateTime? startDate)
         {
             if (startDate != null)
             {
-                var fundingCap =
-                    _larsDataService.GetCoreGovContributionCapForStandard(
-                        standardCode,
-                        startDate.Value);
+                var fundingCap = _larsDataService.GetCoreGovContributionCapForStandard(standardCode, startDate.Value);
 
-                if (((2 / 3) * totalStandardsValue) > fundingCap)
+                if (!fundingCap.HasValue)
+                {
+                    return false;
+                }
+
+                if (((2m / 3m) * totalStandardsValue) > fundingCap)
                 {
                     return true;
                 }
