@@ -62,46 +62,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 
         public IEnumerable<ILearningDeliveryFAM> GetOverLappingLearningDeliveryFAMsForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType)
         {
-            var overlappinLearningDeliveryFAMs = new List<ILearningDeliveryFAM>();
+            var overlappingLearningDeliveryFAMs = new List<ILearningDeliveryFAM>();
 
             var ldFamsByType = learningDeliveryFams?.Where(fam => HasFamType(fam, famType)) ?? new List<ILearningDeliveryFAM>();
 
             if (ldFamsByType.Count() >= 2 && !ldFamsByType.All(ldf => ldf.LearnDelFAMDateFromNullable == null))
             {
-                var ldFAMs = ldFamsByType.OrderBy(ld => ld.LearnDelFAMDateFromNullable).ToArray();
+                var ldFAMs = ldFamsByType.OrderBy(ld => ld.LearnDelFAMDateFromNullable ?? DateTime.MaxValue).ToArray();
 
-                var ldFAMsCount = ldFAMs.Length;
-
-                var i = 1;
-
-                while (i < ldFAMsCount)
+                for (var i = 0; i < ldFAMs.Length - 1; i++)
                 {
-                    if (ldFAMs[i - 1].LearnDelFAMDateToNullable == null)
+                    if (IsOverlappingLearningDeliveryFAM(ldFAMs[i], ldFAMs[i + 1]))
                     {
-                        overlappinLearningDeliveryFAMs.Add(ldFAMs[i]);
-                        i++;
-
-                        continue;
+                        overlappingLearningDeliveryFAMs.Add(ldFAMs[i + 1]);
                     }
-
-                    var errorConditionMet =
-                        ldFAMs[i].LearnDelFAMDateFromNullable == null
-                        ? false
-                        : ldFAMs[i - 1].LearnDelFAMDateToNullable >= ldFAMs[i].LearnDelFAMDateFromNullable;
-
-                    if (errorConditionMet)
-                    {
-                        overlappinLearningDeliveryFAMs.Add(ldFAMs[i]);
-                        i++;
-
-                        continue;
-                    }
-
-                    i++;
                 }
             }
 
-            return overlappinLearningDeliveryFAMs;
+            return overlappingLearningDeliveryFAMs;
+        }
+
+        // Fam One and Two should be sequential based on LearnDelFAMDateFrom
+        public bool IsOverlappingLearningDeliveryFAM(ILearningDeliveryFAM learningDeliveryFAMOne, ILearningDeliveryFAM learningDeliveryFAMDateTwo)
+        {
+            return
+                 learningDeliveryFAMOne.LearnDelFAMDateToNullable == null ? true
+                 : learningDeliveryFAMDateTwo.LearnDelFAMDateFromNullable == null ? false
+                 : learningDeliveryFAMOne.LearnDelFAMDateToNullable >= learningDeliveryFAMDateTwo.LearnDelFAMDateFromNullable;
         }
 
         public bool HasFamType(ILearningDeliveryFAM learningDeliveryFam, string famType)

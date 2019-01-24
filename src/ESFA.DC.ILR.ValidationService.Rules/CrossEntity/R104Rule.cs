@@ -32,22 +32,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 var overlappingLearningDeliveryFAMs =
                     _learningDeliveryFAMQueryService
-                    .GetOverLappingLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT).ToList() ?? new List<ILearningDeliveryFAM>();
+                    .GetOverLappingLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT);
 
-                if (overlappingLearningDeliveryFAMs.Any())
+                foreach (var learningDeliveryFAM in overlappingLearningDeliveryFAMs)
                 {
-                    foreach (var learningDeliveryFAM in overlappingLearningDeliveryFAMs)
-                    {
-                        HandleValidationError(
-                        objectToValidate.LearnRefNumber,
-                        learningDelivery.AimSeqNumber,
-                        errorMessageParameters: BuildErrorMessageParameters(
-                            learningDelivery.LearnPlanEndDate,
-                            learningDelivery.LearnActEndDateNullable,
-                            _famTypeACT,
-                            learningDeliveryFAM.LearnDelFAMDateFromNullable,
-                            learningDeliveryFAM.LearnDelFAMDateToNullable));
-                    }
+                    HandleValidationError(
+                    objectToValidate.LearnRefNumber,
+                    learningDelivery.AimSeqNumber,
+                    errorMessageParameters: BuildErrorMessageParameters(
+                        learningDelivery.LearnPlanEndDate,
+                        learningDelivery.LearnActEndDateNullable,
+                        _famTypeACT,
+                        learningDeliveryFAM.LearnDelFAMDateFromNullable,
+                        learningDeliveryFAM.LearnDelFAMDateToNullable));
                 }
             }
         }

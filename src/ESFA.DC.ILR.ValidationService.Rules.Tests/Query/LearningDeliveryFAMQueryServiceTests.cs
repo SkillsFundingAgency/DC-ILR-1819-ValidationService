@@ -404,6 +404,84 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
+        public void IsOverlappingLearningDeliveryFAM_False_NoOverlap()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+            };
+
+            NewService().IsOverlappingLearningDeliveryFAM(learningDeliveryFamOne, learningDeliveryFamTwo).Should().BeFalse();
+        }
+
+        [Fact]
+        public void IsOverlappingLearningDeliveryFAM_False_NoDateFrom()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+            };
+
+            NewService().IsOverlappingLearningDeliveryFAM(learningDeliveryFamOne, learningDeliveryFamTwo).Should().BeFalse();
+        }
+
+        [Fact]
+        public void IsOverlappingLearningDeliveryFAM_True_NoDateTo()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1)
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+            };
+
+            NewService().IsOverlappingLearningDeliveryFAM(learningDeliveryFamOne, learningDeliveryFamTwo).Should().BeTrue();
+        }
+
+        [Fact]
+        public void IsOverlappingLearningDeliveryFAM_True_DatesOverlap()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 1)
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+            };
+
+            NewService().IsOverlappingLearningDeliveryFAM(learningDeliveryFamOne, learningDeliveryFamTwo).Should().BeTrue();
+        }
+
+        [Fact]
         public void HasFamType_True()
         {
             var learningDeliveryFam = new TestLearningDeliveryFAM()
