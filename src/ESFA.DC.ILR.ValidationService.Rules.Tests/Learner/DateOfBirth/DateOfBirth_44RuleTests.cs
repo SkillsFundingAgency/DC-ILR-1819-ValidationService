@@ -4,12 +4,10 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Mocks;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -38,37 +36,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<IEnumerable<ILearningDelivery>>()))
                 .Returns(20);
 
-            var externalCacheMock = new Mock<IExternalDataCache>();
+            var fcsDataServiceMock = new Mock<IFCSDataService>();
             if (contractIsAlsoNull)
             {
-                externalCacheMock
-                    .Setup(m => m.FCSContractAllocations)
-                    .Returns((IReadOnlyDictionary<string, IFcsContractAllocation>)null);
+                fcsDataServiceMock
+                    .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                    .Returns((IFcsContractAllocation)null);
             }
             else
             {
-                externalCacheMock
-                    .Setup(m => m.FCSContractAllocations)
-                    .Returns(new Dictionary<string, IFcsContractAllocation>
+                fcsDataServiceMock
+                    .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                    .Returns(new FcsContractAllocation
                     {
-                        {
-                            testConRefNum,
-                            new FcsContractAllocation
-                            {
-                                EsfEligibilityRule = null
-                            }
-                        },
-                        {
-                            "9999999",
-                            new FcsContractAllocation
-                            {
-                                EsfEligibilityRule = new EsfEligibilityRule
-                                {
-                                    MinAge = 18,
-                                    MaxAge = 25
-                                }
-                            }
-                        }
+                        EsfEligibilityRule = null
                     });
             }
 
@@ -85,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, dd23Rule.Object, externalCacheMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, dd23Rule.Object, fcsDataServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
@@ -125,21 +106,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<IEnumerable<ILearningDelivery>>()))
                 .Returns(20);
 
-            var externalCacheMock = new Mock<IExternalDataCache>();
-            externalCacheMock
-                .Setup(m => m.FCSContractAllocations)
-                .Returns(new Dictionary<string, IFcsContractAllocation>
+            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
                 {
+                    EsfEligibilityRule = new EsfEligibilityRule
                     {
-                        testConRefNum,
-                        new FcsContractAllocation
-                        {
-                            EsfEligibilityRule = new EsfEligibilityRule
-                            {
-                                MinAge = 18,
-                                MaxAge = 25
-                            }
-                        }
+                        MinAge = 18,
+                        MaxAge = 25
                     }
                 });
 
@@ -156,7 +131,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, dd23Rule.Object, externalCacheMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, dd23Rule.Object, fcsDataServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
@@ -186,23 +161,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<IEnumerable<ILearningDelivery>>()))
                 .Returns(30);
 
-            var externalCacheMock = new Mock<IExternalDataCache>();
-            externalCacheMock
-                .Setup(m => m.FCSContractAllocations)
-                .Returns(new Dictionary<string, IFcsContractAllocation>
-                {
-                    {
-                        testConRefNum,
-                        new FcsContractAllocation
+            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
                         {
                             EsfEligibilityRule = new EsfEligibilityRule
                             {
                                 MinAge = 18,
                                 MaxAge = 25
                             }
-                        }
-                    }
-                });
+                        });
 
             var testLearner = new TestLearner
             {
@@ -217,23 +186,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, dd23Rule.Object, externalCacheMock.Object).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, dd23Rule.Object, fcsDataServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock, 1);
         }
 
         private DateOfBirth_44Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
             IDerivedData_23Rule derivedDataRule23 = null,
-            IExternalDataCache externalDataCache = null)
+            IFCSDataService fcsDataService = null)
         {
-            return new DateOfBirth_44Rule(externalDataCache, derivedDataRule23, validationErrorHandler);
-        }
-
-        private void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)
-        {
-            errorHandlerMock.Verify(
-                m => m.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()),
-                Times.Exactly(times));
+            return new DateOfBirth_44Rule(fcsDataService, derivedDataRule23, validationErrorHandler);
         }
     }
 }

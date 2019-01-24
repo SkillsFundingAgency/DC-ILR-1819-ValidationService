@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -10,16 +10,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
 {
     public class DateOfBirth_44Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IExternalDataCache _externalDataCache;
+        private readonly IFCSDataService _fcsDataService;
         private readonly IDerivedData_23Rule _derivedDataRule23;
 
         public DateOfBirth_44Rule(
-            IExternalDataCache externalDataCache,
+            IFCSDataService fcsDataService,
             IDerivedData_23Rule derivedDataRule23,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_44)
         {
-            _externalDataCache = externalDataCache;
+            _fcsDataService = fcsDataService;
             _derivedDataRule23 = derivedDataRule23;
         }
 
@@ -41,19 +41,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                     continue;
                 }
 
-                if (_externalDataCache.FCSContractAllocations == null)
-                {
-                    continue;
-                }
+                var contract = _fcsDataService.GetContractAllocationFor(learningDelivery.ConRefNumber);
 
-                if (!_externalDataCache.FCSContractAllocations.TryGetValue(learningDelivery.ConRefNumber, out var fcsContract)
-                    || fcsContract?.EsfEligibilityRule == null)
+                if (contract?.EsfEligibilityRule == null)
                 {
                     continue;
                 }
 
                 int age = _derivedDataRule23.GetLearnersAgeAtStartOfESFContract(learner, learner.LearningDeliveries);
-                if (age < (fcsContract.EsfEligibilityRule.MinAge ?? int.MaxValue) || age > (fcsContract.EsfEligibilityRule.MaxAge ?? int.MinValue))
+                if (age < (contract.EsfEligibilityRule.MinAge ?? int.MaxValue) || age > (contract.EsfEligibilityRule.MaxAge ?? int.MinValue))
                 {
                     RaiseValidationMessage(learner, learningDelivery);
                 }

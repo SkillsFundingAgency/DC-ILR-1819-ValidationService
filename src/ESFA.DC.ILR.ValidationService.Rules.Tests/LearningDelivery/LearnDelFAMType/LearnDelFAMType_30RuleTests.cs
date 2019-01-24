@@ -137,12 +137,5 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         {
             return new LearnDelFAMType_30Rule(validationErrorHandler);
         }
-
-        private void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)
-        {
-            errorHandlerMock.Verify(
-                m => m.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()),
-                Times.Exactly(times));
-        }
     }
 }
