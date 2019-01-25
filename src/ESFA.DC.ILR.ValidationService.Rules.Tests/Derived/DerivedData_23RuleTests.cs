@@ -38,7 +38,36 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 LearningDeliveries = null
             };
 
-            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, learner.LearningDeliveries);
+            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, null);
+
+            Assert.Equal(default(int), result);
+        }
+
+        [Fact]
+        public void GetLearnersAgeAtStartOfESFContract_ReturnsDefaultIntForIrrelevantConRefNumber()
+        {
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(20);
+
+            var rule = NewRule(dateTimeServiceMock.Object);
+
+            var testConRefNumber = "123456";
+            var learner = new TestLearner
+            {
+                DateOfBirthNullable = new DateTime(1999, 9, 1),
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        ConRefNumber = testConRefNumber,
+                        LearnStartDate = new DateTime(2017, 9, 1),
+                        LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
+                        CompStatus = CompletionState.HasCompleted
+                    }
+                }
+            };
+
+            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, "99999");
 
             Assert.Equal(default(int), result);
         }
@@ -50,6 +79,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(20);
 
             var rule = NewRule(dateTimeServiceMock.Object);
+            var testConRefNumber = "123456";
             var learner = new TestLearner
             {
                 DateOfBirthNullable = null,
@@ -57,6 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 {
                     new TestLearningDelivery
                     {
+                        ConRefNumber = testConRefNumber,
                         LearnStartDate = new DateTime(2017, 9, 1),
                         LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
                         CompStatus = CompletionState.HasCompleted
@@ -64,7 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, learner.LearningDeliveries);
+            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, testConRefNumber);
 
             Assert.Equal(default(int), result);
         }
@@ -76,6 +107,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(20);
 
             var rule = NewRule(dateTimeServiceMock.Object);
+
+            var testConRefNumber = "123456";
             var learner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1999, 9, 1),
@@ -83,6 +116,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 {
                     new TestLearningDelivery
                     {
+                        ConRefNumber = testConRefNumber,
                         LearnStartDate = new DateTime(2017, 9, 1),
                         LearnAimRef = TypeOfAim.References.WorkExperience,
                         CompStatus = CompletionState.HasCompleted
@@ -90,7 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, learner.LearningDeliveries);
+            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, testConRefNumber);
 
             Assert.Equal(default(int), result);
         }
@@ -102,6 +136,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(20);
 
             var rule = NewRule(dateTimeServiceMock.Object);
+
+            var testConRefNumber = "123456";
             var learner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1999, 9, 1),
@@ -109,6 +145,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 {
                     new TestLearningDelivery
                     {
+                        ConRefNumber = testConRefNumber,
                         LearnStartDate = new DateTime(2017, 9, 1),
                         LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
                         CompStatus = CompletionState.IsOngoing
@@ -116,7 +153,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, learner.LearningDeliveries);
+            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, testConRefNumber);
 
             Assert.Equal(default(int), result);
         }
@@ -129,6 +166,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(mockAge);
 
             var rule = NewRule(dateTimeServiceMock.Object);
+
+            var testConRefNumber = "123456";
             var learner = new TestLearner
             {
                 DateOfBirthNullable = new DateTime(1999, 9, 1),
@@ -136,6 +175,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 {
                     new TestLearningDelivery
                     {
+                        ConRefNumber = testConRefNumber,
                         LearnStartDate = new DateTime(2017, 9, 1),
                         LearnAimRef = TypeOfAim.References.ESFLearnerStartandAssessment,
                         CompStatus = CompletionState.HasCompleted
@@ -143,7 +183,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 }
             };
 
-            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, learner.LearningDeliveries);
+            var result = rule.GetLearnersAgeAtStartOfESFContract(learner, testConRefNumber);
 
             Assert.Equal(mockAge, result);
         }

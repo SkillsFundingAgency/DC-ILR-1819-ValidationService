@@ -21,6 +21,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         }
 
         [Fact]
+        public void LearnerHEConditionMet_True_NullTTACCOM()
+        {
+            NewRule().LearnerHEConditionMet(new TestLearnerHE()).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnerHEConditionMet_True_NullEntity()
+        {
+            NewRule().LearnerHEConditionMet(null).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnerHEConditionMet_False()
+        {
+            TestLearnerHE learningDeliveryHE = new TestLearnerHE()
+            {
+                TTACCOMNullable = 1
+            };
+
+            NewRule().LearnerHEConditionMet(learningDeliveryHE).Should().BeFalse();
+        }
+
+        [Fact]
         public void LearningDeliveryHEConditionMet_False()
         {
             TestLearningDeliveryHE learningDeliveryHE = new TestLearningDeliveryHE()
@@ -112,6 +135,30 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             var learner = new TestLearner()
             {
                 LearnerHEEntity = new TestLearnerHE() { TTACCOMNullable = null },
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        LearnStartDate = new DateTime(2013, 08, 1),
+                        LearningDeliveryHEEntity = new TestLearningDeliveryHE() { MODESTUD = 1 }
+                    }
+                }
+            };
+
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
+
+            dd06Mock.Setup(dd => dd.Derive(learner.LearningDeliveries)).Returns(new DateTime(2013, 08, 01));
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(dd06Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_Errors_NoLearnerHE()
+        {
+            var learner = new TestLearner()
+            {
                 LearningDeliveries = new List<TestLearningDelivery>()
                 {
                     new TestLearningDelivery()

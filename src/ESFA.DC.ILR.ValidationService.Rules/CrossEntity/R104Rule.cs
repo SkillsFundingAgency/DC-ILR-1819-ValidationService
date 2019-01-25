@@ -30,79 +30,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                var learningDeliveryFAMs = _learningDeliveryFAMQueryService
-                    .GetLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT).ToList() ?? new List<ILearningDeliveryFAM>();
+                var overlappingLearningDeliveryFAMs =
+                    _learningDeliveryFAMQueryService
+                    .GetOverLappingLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT);
 
-                if (DoesNotHaveMultipleACTFams(learningDeliveryFAMs))
+                foreach (var learningDeliveryFAM in overlappingLearningDeliveryFAMs)
                 {
-                    return;
-                }
-
-                var invalidLearningDeliveryFAMs = LearningDeliveryFamForOverlappingACTTypes(learningDeliveryFAMs).ToList();
-
-                if (invalidLearningDeliveryFAMs.Any())
-                {
-                    foreach (var learningDeliveryFAM in invalidLearningDeliveryFAMs)
-                    {
-                        HandleValidationError(
-                        objectToValidate.LearnRefNumber,
-                        learningDelivery.AimSeqNumber,
-                        errorMessageParameters: BuildErrorMessageParameters(
-                            learningDelivery.LearnPlanEndDate,
-                            learningDelivery.LearnActEndDateNullable,
-                            _famTypeACT,
-                            learningDeliveryFAM.LearnDelFAMDateFromNullable,
-                            learningDeliveryFAM.LearnDelFAMDateToNullable));
-                    }
+                    HandleValidationError(
+                    objectToValidate.LearnRefNumber,
+                    learningDelivery.AimSeqNumber,
+                    errorMessageParameters: BuildErrorMessageParameters(
+                        learningDelivery.LearnPlanEndDate,
+                        learningDelivery.LearnActEndDateNullable,
+                        _famTypeACT,
+                        learningDeliveryFAM.LearnDelFAMDateFromNullable,
+                        learningDeliveryFAM.LearnDelFAMDateToNullable));
                 }
             }
-        }
-
-        public bool DoesNotHaveMultipleACTFams(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
-        {
-            return _learningDeliveryFAMQueryService.GetLearningDeliveryFAMsCountByFAMType(learningDeliveryFAMs, _famTypeACT) < 2;
-        }
-
-        public IEnumerable<ILearningDeliveryFAM> LearningDeliveryFamForOverlappingACTTypes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
-        {
-            var invalidLearningDeliveryFAMs = new List<ILearningDeliveryFAM>();
-
-            if (learningDeliveryFAMs != null)
-            {
-                var ldFAMs = learningDeliveryFAMs.OrderBy(ld => ld.LearnDelFAMDateFromNullable).ToArray();
-
-                var ldFAMsCount = ldFAMs.Length;
-
-                var i = 1;
-
-                while (i < ldFAMsCount)
-                {
-                    if (ldFAMs[i - 1].LearnDelFAMDateToNullable == null)
-                    {
-                        invalidLearningDeliveryFAMs.Add(ldFAMs[i]);
-                        i++;
-
-                        continue;
-                    }
-
-                    var errorConditionMet =
-                        ldFAMs[i].LearnDelFAMDateFromNullable == null
-                        ? false
-                        : ldFAMs[i - 1].LearnDelFAMDateToNullable >= ldFAMs[i].LearnDelFAMDateFromNullable;
-
-                    if (errorConditionMet)
-                    {
-                        invalidLearningDeliveryFAMs.Add(ldFAMs[i]);
-                        i++;
-
-                        continue;
-                    }
-
-                    i++;
-                }
-            }
-
-            return invalidLearningDeliveryFAMs;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnPlanEndDate, DateTime? learnActEndDate, string famType, DateTime? learnDelFamDateFrom, DateTime? learnDelFamDateTo)
