@@ -75,7 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     {
                         LotReference = r.LotReference,
                         TenderSpecReference = r.TenderSpecReference,
-                        Benefits = r.Benefits,
+                        Benefits = r.Benefits ?? false,
                         EmploymentStatuses = r.EsfEligibilityRuleEmploymentStatuses
                             .Select(s => new EsfEligibilityRuleEmploymentStatus()
                             {

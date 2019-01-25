@@ -8,28 +8,25 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
     public interface IFCSDataService
     {
         /// <summary>
-        /// Contract reference number exists.
-        /// </summary>
-        /// <param name="conRefNumber">The con reference number.</param>
-        /// <returns>true if it does</returns>
-        bool ConRefNumberExists(string conRefNumber);
-
-        /// <summary>
-        /// Fundings the relationship FCT exists.
-        /// </summary>
-        /// <param name="fundingStreamPeriodCodes">The funding stream period codes.</param>
-        /// <returns>true if it does</returns>
-        bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes);
-
-        /// <summary>
-        /// Gets the allocation for.
+        /// Gets the allocation for (this contract reference).
         /// </summary>
         /// <param name="thisContractReference">this contract reference.</param>
-        /// <returns>a contract allocation detail</returns>
+        /// <returns>
+        /// a contract allocation (if found)
+        /// </returns>
         IFcsContractAllocation GetContractAllocationFor(string thisContractReference);
 
         /// <summary>
-        /// Gets the eligibility rule employment status for.
+        /// Gets the eligibility rule for (this contract reference).
+        /// </summary>
+        /// <param name="thisContractReference">The this contract reference.</param>
+        /// <returns>
+        /// an eligibility rule (if found)
+        /// </returns>
+        IEsfEligibilityRule GetEligibilityRuleFor(string thisContractReference);
+
+        /// <summary>
+        /// Gets the eligibility rule employment statuses for.
         /// </summary>
         /// <param name="contractReference">The contract reference.</param>
         /// <returns>
@@ -38,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference);
 
         /// <summary>
-        /// Gets the eligibility rule local authority for.
+        /// Gets the eligibility rule local authorities for.
         /// </summary>
         /// <param name="contractReference">The contract reference.</param>
         /// <returns>
@@ -47,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference);
 
         /// <summary>
-        /// Gets the eligibility rule enterprise partnership for.
+        /// Gets the eligibility rule enterprise partnerships for.
         /// </summary>
         /// <param name="contractReference">The contract reference.</param>
         /// <returns>
@@ -63,6 +60,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// esf eligibility rule sector subject area levels
         /// </returns>
         IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
+
+        /// <summary>
+        /// Contract reference number exists.
+        /// </summary>
+        /// <param name="conRefNumber">The con reference number.</param>
+        /// <returns>true if it does</returns>
+        bool ConRefNumberExists(string conRefNumber);
+
+        /// <summary>
+        /// Fundings the relationship FCT exists.
+        /// </summary>
+        /// <param name="fundingStreamPeriodCodes">The funding stream period codes.</param>
+        /// <returns>true if it does</returns>
+        bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes);
 
         bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber);
 

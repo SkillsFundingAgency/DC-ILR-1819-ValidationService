@@ -1,7 +1,5 @@
-﻿using System;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using System.Collections.Generic;
-using System.Text;
-using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
 {
@@ -11,7 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
 
         public string LotReference { get; set; }
 
-        public bool? Benefits { get; set; }
+        public bool Benefits { get; set; }
 
         public IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; set; }
 

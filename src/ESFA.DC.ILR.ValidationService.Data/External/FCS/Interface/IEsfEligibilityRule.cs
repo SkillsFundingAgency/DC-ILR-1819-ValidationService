@@ -11,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
 
         string LotReference { get; }
 
-        bool? Benefits { get; }
+        bool Benefits { get; }
 
         IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }
 
