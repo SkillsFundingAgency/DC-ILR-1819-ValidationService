@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -20,17 +19,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
         public int GetLearnersAgeAtStartOfESFContract(
             ILearner learner,
-            IEnumerable<ILearningDelivery> learningDeliveries)
+            string conRefNumber)
         {
             if (learner?.DateOfBirthNullable == null)
             {
                 return default(int);
             }
 
-            var delivery = learningDeliveries
+            var delivery = learner.LearningDeliveries
                     ?.OrderByDescending(x => x.LearnStartDate)
                     .FirstOrDefault(ld => ld.LearnAimRef.CaseInsensitiveEquals(TypeOfAim.References.ESFLearnerStartandAssessment)
-                             && ld.CompStatus == CompletionState.HasCompleted);
+                             && ld.CompStatus == CompletionState.HasCompleted
+                             && ld.ConRefNumber.CaseInsensitiveEquals(conRefNumber));
 
             if (delivery == null)
             {

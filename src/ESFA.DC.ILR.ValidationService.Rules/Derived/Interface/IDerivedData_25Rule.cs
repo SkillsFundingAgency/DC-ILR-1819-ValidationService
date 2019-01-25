@@ -2,9 +2,9 @@
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived.Interface
 {
-    public interface IDerivedData_23Rule
+    public interface IDerivedData_25Rule
     {
-        int GetLearnersAgeAtStartOfESFContract(
+        int? GetLengthOfUnemployment(
             ILearner learner,
             string conRefNumber);
     }
