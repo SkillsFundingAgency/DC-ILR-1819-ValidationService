@@ -17,6 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
             builder.RegisterType<DerivedData_12Rule>().As<IDerivedData_12Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_14Rule>().As<IDerivedData_14Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_15Rule>().As<IDerivedData_15Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_17Rule>().As<IDerivedData_17Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_18Rule>().As<IDerivedData_18Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_19Rule>().As<IDerivedData_19Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_21Rule>().As<IDerivedData_21Rule>().InstancePerLifetimeScope();
