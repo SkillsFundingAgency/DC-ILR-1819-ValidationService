@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             {
                 var standardAfinTotal = _learningDeliveryAppFinRecordQueryService.GetTotalTNPPriceForLatestAppFinRecordsForLearning(filteredLearningDeliveries);
 
-                var applicableDate = GetApplicableDateForCapChecking(filteredLearningDeliveries, standardCode);
+                var applicableDate = GetApplicableDateForCapChecking(filteredLearningDeliveries);
 
                 return IsAFilTotalMoreThanCapValue(standardCode, standardAfinTotal, applicableDate);
             }
@@ -48,20 +48,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             return false;
         }
 
-        public DateTime? GetApplicableDateForCapChecking(List<ILearningDelivery> learningDeliveries, int standardCode)
+        public DateTime? GetApplicableDateForCapChecking(List<ILearningDelivery> learningDeliveries)
         {
-            var earliestStartDate = learningDeliveries.Where(x => x.StdCodeNullable == standardCode)
-                .OrderBy(x => x.LearnStartDate).FirstOrDefault()?.LearnStartDate;
+            var earliestStartDate = learningDeliveries.Select(x => new
+                {
+                    ApplicabaleDate = x.OrigLearnStartDateNullable.HasValue && x.OrigLearnStartDateNullable.Value < x.LearnStartDate
+                        ? x.OrigLearnStartDateNullable.Value
+                        : x.LearnStartDate
+                })
+                .OrderBy(x => x.ApplicabaleDate).FirstOrDefault();
 
-            var earliestOrigStartDate = learningDeliveries
-                .Where(x => x.StdCodeNullable == standardCode && x.OrigLearnStartDateNullable.HasValue)
-                .OrderBy(x => x.OrigLearnStartDateNullable).FirstOrDefault()?.OrigLearnStartDateNullable;
-
-            var applicableDate = earliestOrigStartDate.HasValue && earliestStartDate > earliestOrigStartDate.Value
-                ? earliestOrigStartDate.Value
-                : earliestStartDate;
-
-            return applicableDate;
+            return earliestStartDate?.ApplicabaleDate;
         }
 
         public bool IsAFilTotalMoreThanCapValue(int standardCode, int totalStandardsValue, DateTime? startDate)

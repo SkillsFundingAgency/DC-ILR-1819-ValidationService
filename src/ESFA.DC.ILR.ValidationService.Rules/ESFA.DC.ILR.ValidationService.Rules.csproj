@@ -123,6 +123,7 @@
     <Compile Include="CrossEntity\R29Rule.cs" />
     <Compile Include="CrossEntity\R62Rule.cs" />
     <Compile Include="CrossEntity\R61Rule.cs" />
+    <Compile Include="CrossEntity\R73Rule.cs" />
     <Compile Include="CrossEntity\R89Rule.cs" />
     <Compile Include="CrossEntity\R72Rule.cs" />
     <Compile Include="CrossEntity\R92Rule.cs" />
