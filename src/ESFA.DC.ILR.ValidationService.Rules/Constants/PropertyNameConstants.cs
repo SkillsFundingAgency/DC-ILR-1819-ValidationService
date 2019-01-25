@@ -96,6 +96,7 @@
         public const string Sex = "Sex";
         public const string SEC = "SEC";
         public const string SPECFEE = "SPECFEE";
+        public const string SSN = "SSN";
         public const string StdCode = "StdCode";
         public const string SOC2000 = "SOC2000";
         public const string TYPEYR = "TYPEYR";

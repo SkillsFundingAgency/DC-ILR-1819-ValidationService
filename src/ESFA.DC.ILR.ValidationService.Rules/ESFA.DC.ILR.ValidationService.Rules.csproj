@@ -286,6 +286,7 @@
     <Compile Include="HE\SPECFEE\SPECFEE_01Rule.cs" />
     <Compile Include="HE\SOC2000\SOC2000_03Rule.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_02Rule.cs" />
+    <Compile Include="HE\SSN\SSN_02Rule.cs" />
     <Compile Include="HE\STULOAD\STULOAD_04Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
