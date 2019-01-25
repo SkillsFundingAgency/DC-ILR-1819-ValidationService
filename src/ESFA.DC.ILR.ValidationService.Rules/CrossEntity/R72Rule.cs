@@ -46,32 +46,50 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                     x.ProgTypeNullable == TypeOfFunding.Age16To19ExcludingApprenticeships &&
                     x.FundModel == TypeOfFunding.OtherAdult).ToList();
 
-            var standardPMRTotalValues = filteredLearningDeliveries.GroupBy(
-                x => new
-                {
-                    x.StdCodeNullable.Value,
-                    TotalAFin1And2 = x.AppFinRecords?.Where(
-                        fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
-                               AFinCodes1And2.Contains(fin.AFinCode)).Sum(s => s.AFinAmount),
-                    TotalAFin3 = x.AppFinRecords?.Where(
-                        fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
-                               fin.AFinCode == AFinCode3).Sum(s => s.AFinAmount)
-                }).Select(x => new
-                {
-                    StandardCode = x.Key.Value,
-                    TotalPMRValue = x.Key.TotalAFin1And2 - x.Key.TotalAFin3
-                });
-
-            foreach (var standardPMR in standardPMRTotalValues)
+            if (!filteredLearningDeliveries.Any())
             {
-                if (ConditionMet(standardPMR.StandardCode, standardPMR.TotalPMRValue, filteredLearningDeliveries))
+                return;
+            }
+
+            var standardPMRTotalValues = GetPMRTotalsDictionary(filteredLearningDeliveries);
+
+            foreach (var standardCode in standardPMRTotalValues.Keys)
+            {
+                if (ConditionMet(standardCode, standardPMRTotalValues[standardCode], filteredLearningDeliveries))
                 {
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         null,
-                        BuildErrorMessageParameters(objectToValidate.LearnRefNumber, standardPMR.StandardCode));
+                        BuildErrorMessageParameters(objectToValidate.LearnRefNumber, standardCode));
                 }
             }
+        }
+
+        public Dictionary<int, int> GetPMRTotalsDictionary(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        {
+            var dict = new Dictionary<int, int>();
+
+            foreach (var learningDelivery in learningDeliveries)
+            {
+                var totalAFin1And2 = learningDelivery.AppFinRecords?.Where(
+                                fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
+                               AFinCodes1And2.Contains(fin.AFinCode)).Sum(s => s.AFinAmount);
+
+                var totalAFin3 = learningDelivery.AppFinRecords?.Where(
+                    fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
+                           fin.AFinCode == AFinCode3).Sum(s => s.AFinAmount);
+
+                if (dict.ContainsKey(learningDelivery.StdCodeNullable.Value))
+                {
+                    dict[learningDelivery.StdCodeNullable.Value] += totalAFin1And2.GetValueOrDefault() - totalAFin3.GetValueOrDefault();
+                }
+                else
+                {
+                    dict[learningDelivery.StdCodeNullable.Value] = totalAFin1And2.GetValueOrDefault() - totalAFin3.GetValueOrDefault();
+                }
+            }
+
+            return dict;
         }
 
         public bool ConditionMet(int standardCode, int? totalPMRValue, IReadOnlyCollection<ILearningDelivery> learningDeliveries)
