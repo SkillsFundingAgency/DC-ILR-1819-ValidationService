@@ -16,31 +16,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SSN
         private const int _startingWeightFactor = 13;
         private const int _checkSumConstant = 23;
 
-        private static readonly Dictionary<int, string> ValidLetters = new Dictionary<int, string>
+        private readonly Dictionary<int, string> _validLetters;
+        private readonly Dictionary<string, int> _validLettersInverse;
+        private readonly List<Tuple<int, string>> _validLettersList = new List<Tuple<int, string>>
         {
-            [0] = "A",
-            [1] = "B",
-            [2] = "C",
-            [3] = "D",
-            [4] = "E",
-            [5] = "F",
-            [6] = "G",
-            [7] = "H",
-            [8] = "J",
-            [9] = "K",
-            [10] = "L",
-            [11] = "M",
-            [12] = "N",
-            [13] = "P",
-            [14] = "R",
-            [15] = "S",
-            [16] = "T",
-            [17] = "U",
-            [18] = "V",
-            [19] = "W",
-            [20] = "X",
-            [21] = "Y",
-            [22] = "Z"
+            Tuple.Create(0, "A"),
+            Tuple.Create(1, "B"),
+            Tuple.Create(2, "C"),
+            Tuple.Create(3, "D"),
+            Tuple.Create(4, "E"),
+            Tuple.Create(5, "F"),
+            Tuple.Create(6, "G"),
+            Tuple.Create(7, "H"),
+            Tuple.Create(8, "J"),
+            Tuple.Create(9, "K"),
+            Tuple.Create(10, "L"),
+            Tuple.Create(11, "M"),
+            Tuple.Create(12, "N"),
+            Tuple.Create(13, "P"),
+            Tuple.Create(14, "R"),
+            Tuple.Create(15, "S"),
+            Tuple.Create(16, "T"),
+            Tuple.Create(17, "U"),
+            Tuple.Create(18, "V"),
+            Tuple.Create(19, "W"),
+            Tuple.Create(20, "X"),
+            Tuple.Create(21, "Y"),
+            Tuple.Create(22, "Z")
         };
 
         private readonly Regex _regex = new Regex(_regexString, RegexOptions.Compiled);
@@ -48,6 +50,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SSN
         public SSN_02Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.SSN_02)
         {
+            _validLetters = _validLettersList.ToDictionary(x => x.Item1, x => x.Item2);
+            _validLettersInverse = _validLettersList.ToDictionary(x => x.Item2, x => x.Item1);
         }
 
         public void Validate(ILearner objectToValidate)
@@ -130,12 +134,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SSN
 
         public string GetLetter(int value)
         {
-            return ValidLetters.ContainsKey(value) ? ValidLetters[value] : null;
+            return _validLetters.ContainsKey(value) ? _validLetters[value] : null;
         }
 
         public int GetLetterValue(string letter)
         {
-            return ValidLetters.FirstOrDefault(x => x.Value == letter).Key;
+            return _validLettersInverse[letter];
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string ssn)
