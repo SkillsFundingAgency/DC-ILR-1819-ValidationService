@@ -64,7 +64,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// </returns>
         public override bool PassesConditions(ILearningDelivery delivery, BranchResult branch)
         {
-            return branch.Passed && _isSetToPass;
+            return branch.OutOfScope || _isSetToPass;
         }
     }
 }
