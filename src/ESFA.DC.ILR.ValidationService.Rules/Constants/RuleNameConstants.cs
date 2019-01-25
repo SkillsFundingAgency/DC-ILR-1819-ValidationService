@@ -298,6 +298,7 @@
         public const string LearnPlanEndDate_03 = "LearnPlanEndDate_03";
 
         public const string MathGrade_01 = "MathGrade_01";
+        public const string MathGrade_02 = "MathGrade_02";
         public const string MathGrade_03 = "MathGrade_03";
         public const string MathGrade_04 = "MathGrade_04";
 

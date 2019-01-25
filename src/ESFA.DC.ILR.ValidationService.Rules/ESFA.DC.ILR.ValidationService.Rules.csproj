@@ -362,6 +362,7 @@
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_01Rule.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_06Rule.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_07Rule.cs" />
+    <Compile Include="Learner\MathGrade\MathGrade_02Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_01Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_03Rule.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_04Rule.cs" />
