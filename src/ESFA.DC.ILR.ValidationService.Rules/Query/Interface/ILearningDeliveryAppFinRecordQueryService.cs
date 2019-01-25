@@ -12,5 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool HasAnyLearningDeliveryAFinCodes(IEnumerable<IAppFinRecord> appFinRecords, IEnumerable<int> aFinCodes);
 
         IAppFinRecord GetLatestAppFinRecord(IReadOnlyCollection<IAppFinRecord> appFinRecords, string appFinType, int appFinCode);
+
+        int GetTotalTNPPriceForLatestAppFinRecordsForLearning(List<ILearningDelivery> learningDeliveries);
     }
 }

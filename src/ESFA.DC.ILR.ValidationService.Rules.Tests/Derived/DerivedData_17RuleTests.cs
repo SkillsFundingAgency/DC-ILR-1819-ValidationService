@@ -65,80 +65,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         }
 
         [Fact]
-        public void GetAFinTotalValues_NUll_LearningDeliveries()
-        {
-            NewRule().GetAFinTotalValues(null).Should().BeEmpty();
-        }
-
-        [Fact]
-        public void GetAFinTotalValues_Success()
-        {
-            var appFinRecord1 = new TestAppFinRecord
-            {
-                AFinCode = 1,
-                AFinType = "TNP",
-                AFinAmount = 5
-            };
-
-            var appFinRecord2 = new TestAppFinRecord
-            {
-                AFinCode = 2,
-                AFinType = "TNP",
-                AFinAmount = 10
-            };
-
-            var learningDeliveries = new List<ILearningDelivery>()
-            {
-                new TestLearningDelivery()
-                {
-                    StdCodeNullable = 1,
-                    AppFinRecords = new List<IAppFinRecord>()
-                    {
-                        appFinRecord1,
-                        appFinRecord2
-                    }
-                },
-                new TestLearningDelivery()
-                {
-                    StdCodeNullable = 1,
-                    AppFinRecords = new List<IAppFinRecord>()
-                    {
-                        appFinRecord1,
-                        appFinRecord2
-                    }
-                },
-                new TestLearningDelivery()
-                {
-                    StdCodeNullable = 3,
-                    AppFinRecords = new List<IAppFinRecord>()
-                    {
-                        appFinRecord2
-                    }
-                },
-                new TestLearningDelivery()
-                {
-                    StdCodeNullable = 4
-                }
-            };
-
-            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-            learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(x => x.GetLatestAppFinRecord(It.IsAny<List<IAppFinRecord>>(), "TNP", 1)).Returns(appFinRecord1);
-
-            learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(x => x.GetLatestAppFinRecord(It.IsAny<List<IAppFinRecord>>(), "TNP", 2)).Returns(appFinRecord2);
-
-            var result = NewRule(null, learningDeliveryAppFinRecordQueryServiceMock.Object)
-                .GetAFinTotalValues(learningDeliveries);
-
-            result.Should().NotBeEmpty();
-            result.Keys.Count.Should().Be(2);
-            result.ContainsKey(4).Should().BeFalse();
-            result[1].Should().Be(30);
-            result[3].Should().Be(15);
-        }
-
-        [Fact]
         public void GetApplicableDateForCapChecking_Success_NoOrigStartDate()
         {
             var learningDeliveries = new List<ILearningDelivery>()
@@ -203,15 +129,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         [Fact]
         public void IsTotalNegotiatedPriceMoreThanCapForStandards_False_NullLearningDeliveries()
         {
-            NewRule().IsTotalNegotiatedPriceMoreThanCapForStandards(null).Should().BeFalse();
+            NewRule().IsTotalNegotiatedPriceMoreThanCapForStandard(null, 1).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(null, 25, 81, 1)]
-        [InlineData(1, 100, 81, 1)]
-        [InlineData(1, 25, 100, 1)]
-        [InlineData(1, 25, 81, 3)]
-        public void IsTotalNegotiatedPriceMoreThanCapForStandards_False_NoApplicableLearningDeliveries(int? standardCode, int? progType, int fundModel, int aimType)
+        [InlineData(9999, 25, 81, 1)]
+        [InlineData(20, 100, 81, 1)]
+        [InlineData(20, 25, 100, 1)]
+        [InlineData(20, 25, 81, 3)]
+        public void IsTotalNegotiatedPriceMoreThanCapForStandards_False_NoApplicableLearningDeliveries(int standardCode, int? progType, int fundModel, int aimType)
         {
             var learningDeliveries = new List<ILearningDelivery>()
             {
@@ -223,14 +149,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 },
                 new TestLearningDelivery()
                 {
-                    StdCodeNullable = standardCode,
+                    StdCodeNullable = 20,
                     AimType = aimType,
                     ProgTypeNullable = progType,
                     FundModel = fundModel
                 },
             };
 
-            NewRule().IsTotalNegotiatedPriceMoreThanCapForStandards(learningDeliveries).Should().BeFalse();
+            NewRule().IsTotalNegotiatedPriceMoreThanCapForStandard(learningDeliveries, standardCode).Should().BeFalse();
         }
 
         [Fact]
@@ -240,14 +166,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             {
                 AFinCode = 1,
                 AFinType = "TNP",
-                AFinAmount = 15
+                AFinAmount = 15,
+                AFinDate = new DateTime(2017, 01, 01)
             };
 
             var appFinRecord2 = new TestAppFinRecord
             {
                 AFinCode = 2,
                 AFinType = "TNP",
-                AFinAmount = 10
+                AFinAmount = 10,
+                AFinDate = new DateTime(2017, 01, 01)
             };
 
             var learningDeliveries = new List<ILearningDelivery>()
@@ -292,17 +220,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(x => x.GetLatestAppFinRecord(It.IsAny<List<IAppFinRecord>>(), "TNP", 1)).Returns(appFinRecord1);
-
-            learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(x => x.GetLatestAppFinRecord(It.IsAny<List<IAppFinRecord>>(), "TNP", 2)).Returns(appFinRecord2);
+                .Setup(x => x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(It.IsAny<List<ILearningDelivery>>())).Returns(50);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock
-                .Setup(x => x.GetCoreGovContributionCapForStandard(1, It.IsAny<DateTime>())).Returns(33.00m);
+                .Setup(x => x.GetCoreGovContributionCapForStandard(1, It.IsAny<DateTime>())).Returns(1);
 
-            var result = NewRule(larsDataServiceMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object)
-                .IsTotalNegotiatedPriceMoreThanCapForStandards(learningDeliveries).Should().BeTrue();
+            NewRule(larsDataServiceMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object)
+                .IsTotalNegotiatedPriceMoreThanCapForStandard(learningDeliveries, 1).Should().BeTrue();
+
+            NewRule(larsDataServiceMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object)
+                .IsTotalNegotiatedPriceMoreThanCapForStandard(learningDeliveries, 50).Should().BeFalse();
         }
 
         [Fact]
@@ -340,17 +268,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(x => x.GetLatestAppFinRecord(It.IsAny<List<IAppFinRecord>>(), "TNP", 1)).Returns(appFinRecord1);
-
-            learningDeliveryAppFinRecordQueryServiceMock
-                .Setup(x => x.GetLatestAppFinRecord(It.IsAny<List<IAppFinRecord>>(), "TNP", 2)).Returns(appFinRecord2);
+                .Setup(x => x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(learningDeliveries)).Returns(25);
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock
                 .Setup(x => x.GetCoreGovContributionCapForStandard(2, DateTime.MinValue)).Returns(33.3333m);
 
-            var result = NewRule(larsDataServiceMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object)
-                .IsTotalNegotiatedPriceMoreThanCapForStandards(learningDeliveries).Should().BeFalse();
+            NewRule(larsDataServiceMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object)
+                .IsTotalNegotiatedPriceMoreThanCapForStandard(learningDeliveries, 1).Should().BeFalse();
         }
 
         private DerivedData_17Rule NewRule(

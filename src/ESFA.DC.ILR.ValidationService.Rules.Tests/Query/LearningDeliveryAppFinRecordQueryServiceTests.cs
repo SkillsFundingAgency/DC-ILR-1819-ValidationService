@@ -207,6 +207,71 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
+        public void GetAFinTotalValues_NUll_LearningDeliveries()
+        {
+            NewService().GetTotalTNPPriceForLatestAppFinRecordsForLearning(null).Should().Be(0);
+        }
+
+        [Fact]
+        public void GetAFinTotalValues_Success()
+        {
+            var learningDeliveries = new List<ILearningDelivery>()
+            {
+                new TestLearningDelivery()
+                {
+                    StdCodeNullable = 1,
+                    AppFinRecords = new List<IAppFinRecord>()
+                    {
+                        new TestAppFinRecord
+                        {
+                            AFinCode = 1,
+                            AFinType = "TNP",
+                            AFinAmount = 5,
+                            AFinDate = new DateTime(2017, 10, 12)
+                        },
+                        new TestAppFinRecord
+                        {
+                            AFinCode = 1,
+                            AFinType = "tnp",
+                            AFinAmount = 10,
+                            AFinDate = new DateTime(2017, 10, 11)
+                        },
+                        new TestAppFinRecord
+                        {
+                            AFinCode = 2,
+                            AFinType = "tnp",
+                            AFinAmount = 20,
+                            AFinDate = new DateTime(2016, 10, 14)
+                        }
+                    }
+                },
+                new TestLearningDelivery()
+                {
+                    StdCodeNullable = 1,
+                    AppFinRecords = new List<IAppFinRecord>()
+                    {
+                        new TestAppFinRecord
+                        {
+                            AFinCode = 2,
+                            AFinType = "TNP",
+                            AFinAmount = 5,
+                            AFinDate = new DateTime(2017, 10, 10)
+                        },
+                        new TestAppFinRecord
+                        {
+                            AFinCode = 2,
+                            AFinType = "tnp",
+                            AFinAmount = 10,
+                            AFinDate = new DateTime(2017, 10, 12)
+                        },
+                    }
+                }
+            };
+
+            NewService().GetTotalTNPPriceForLatestAppFinRecordsForLearning(learningDeliveries).Should().Be(35);
+        }
+
+        [Fact]
         public void GetLatestAppFinRecord_Null_AppFinRecords()
         {
             NewService().GetLatestAppFinRecord(null, "xyz", 1).Should().BeNull();

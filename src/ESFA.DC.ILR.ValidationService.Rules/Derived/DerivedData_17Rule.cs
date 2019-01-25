@@ -21,12 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             _learningDeliveryAppFinRecordQueryService = learningDeliveryAppFinRecordQueryService;
         }
 
-        public bool IsTotalNegotiatedPriceMoreThanCapForStandardLearningDeliveries(IReadOnlyCollection<ILearningDelivery> standardLearningDeliveries)
-        {
-            return IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, null);
-        }
-
-        public bool IsTotalNegotiatedPriceMoreThanCapForStandard(IReadOnlyCollection<ILearningDelivery> learningDeliveries, int? standardCode)
+        public bool IsTotalNegotiatedPriceMoreThanCapForStandard(IReadOnlyCollection<ILearningDelivery> learningDeliveries, int standardCode)
         {
             if (learningDeliveries == null)
             {
@@ -35,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
             var filteredLearningDeliveries = learningDeliveries.Where(
                     x => x.StdCodeNullable.HasValue &&
-                    (!standardCode.HasValue || (x.StdCodeNullable.Value == standardCode)) &&
+                    x.StdCodeNullable.Value == standardCode &&
                     x.AimType == TypeOfAim.ProgrammeAim &&
                     x.ProgTypeNullable == TypeOfFunding.Age16To19ExcludingApprenticeships &&
                     x.FundModel == TypeOfFunding.OtherAdult)
@@ -43,17 +38,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
             if (filteredLearningDeliveries.Any())
             {
-                var standardAfinTotals = GetAFinTotalValues(filteredLearningDeliveries);
+                var standardAfinTotal = _learningDeliveryAppFinRecordQueryService.GetTotalTNPPriceForLatestAppFinRecordsForLearning(filteredLearningDeliveries);
 
-                foreach (var standardCodeKey in standardAfinTotals.Keys)
-                {
-                    var applicableDate = GetApplicableDateForCapChecking(filteredLearningDeliveries, standardCodeKey);
+                var applicableDate = GetApplicableDateForCapChecking(filteredLearningDeliveries, standardCode);
 
-                    if (IsAFilTotalMoreThanCapValue(standardCodeKey, standardAfinTotals[standardCodeKey], applicableDate))
-                    {
-                        return true;
-                    }
-                }
+                return IsAFilTotalMoreThanCapValue(standardCode, standardAfinTotal, applicableDate);
             }
 
             return false;
@@ -73,43 +62,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                 : earliestStartDate;
 
             return applicableDate;
-        }
-
-        public Dictionary<int, int> GetAFinTotalValues(List<ILearningDelivery> learningDeliveries)
-        {
-            var standardAfinTotals = new Dictionary<int, int>();
-
-            if (learningDeliveries != null)
-            {
-                foreach (var learningDelivery in learningDeliveries)
-                {
-                    if (learningDelivery.AppFinRecords != null)
-                    {
-                        var aFinCode1Value = _learningDeliveryAppFinRecordQueryService.GetLatestAppFinRecord(
-                            learningDelivery.AppFinRecords,
-                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
-                            1)?.AFinAmount;
-
-                        var aFinCode2Value = _learningDeliveryAppFinRecordQueryService.GetLatestAppFinRecord(
-                            learningDelivery.AppFinRecords,
-                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
-                            2)?.AFinAmount;
-
-                        var total = aFinCode1Value.GetValueOrDefault() + aFinCode2Value.GetValueOrDefault();
-
-                        if (standardAfinTotals.ContainsKey(learningDelivery.StdCodeNullable.Value))
-                        {
-                            standardAfinTotals[learningDelivery.StdCodeNullable.Value] += total;
-                        }
-                        else
-                        {
-                            standardAfinTotals[learningDelivery.StdCodeNullable.Value] = total;
-                        }
-                    }
-                }
-            }
-
-            return standardAfinTotals;
         }
 
         public bool IsAFilTotalMoreThanCapValue(int standardCode, int totalStandardsValue, DateTime? startDate)

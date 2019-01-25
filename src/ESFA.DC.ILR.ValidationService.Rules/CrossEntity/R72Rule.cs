@@ -57,57 +57,40 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                         fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
                                fin.AFinCode == AFinCode3).Sum(s => s.AFinAmount)
                 }).Select(x => new
-            {
-                StandardCode = x.Key.Value,
-                TotalAFinValue = x.Key.TotalAFin1And2 - x.Key.TotalAFin3
-            });
+                {
+                    StandardCode = x.Key.Value,
+                    TotalPMRValue = x.Key.TotalAFin1And2 - x.Key.TotalAFin3
+                });
 
             foreach (var standardPMR in standardPMRTotalValues)
             {
-                var standardLearningDeliveries =
-                    filteredLearningDeliveries.Where(x => x.StdCodeNullable == standardPMR.StandardCode).ToList();
-
-                if (!_dd17.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, standardPMR.StandardCode))
+                if (ConditionMet(standardPMR.StandardCode, standardPMR.TotalPMRValue, filteredLearningDeliveries))
                 {
-                    var standardTNPTotal = GetTNPTotalValue(standardLearningDeliveries);
-
-                    if (standardPMR.TotalAFinValue > ((1m / 3m) * standardTNPTotal))
-                    {
-                        HandleValidationError(
-                            objectToValidate.LearnRefNumber,
-                            null,
-                            BuildErrorMessageParameters(objectToValidate.LearnRefNumber, standardPMR.StandardCode));
-                    }
+                    HandleValidationError(
+                        objectToValidate.LearnRefNumber,
+                        null,
+                        BuildErrorMessageParameters(objectToValidate.LearnRefNumber, standardPMR.StandardCode));
                 }
             }
         }
 
-        public int GetTNPTotalValue(IEnumerable<ILearningDelivery> learningDeliveries)
+        public bool ConditionMet(int standardCode, int? totalPMRValue, IReadOnlyCollection<ILearningDelivery> learningDeliveries)
         {
-            var total = 0;
-
-            if (learningDeliveries != null)
+            if (!totalPMRValue.HasValue)
             {
-                foreach (var learningDelivery in learningDeliveries)
-                {
-                    if (learningDelivery.AppFinRecords != null)
-                    {
-                        var aFinCode1Value = _learningDeliveryAppFinRecordQueryService.GetLatestAppFinRecord(
-                            learningDelivery.AppFinRecords,
-                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
-                            1)?.AFinAmount;
-
-                        var aFinCode2Value = _learningDeliveryAppFinRecordQueryService.GetLatestAppFinRecord(
-                            learningDelivery.AppFinRecords,
-                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
-                            2)?.AFinAmount;
-
-                        total += aFinCode1Value.GetValueOrDefault() + aFinCode2Value.GetValueOrDefault();
-                    }
-                }
+                return false;
             }
 
-            return total;
+            var standardLearningDeliveries = learningDeliveries.Where(x => x.StdCodeNullable == standardCode).ToList();
+
+            if (!_dd17.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, standardCode))
+            {
+                var standardTNPTotal = _learningDeliveryAppFinRecordQueryService.GetTotalTNPPriceForLatestAppFinRecordsForLearning(standardLearningDeliveries);
+
+                return totalPMRValue > ((1m / 3m) * standardTNPTotal);
+            }
+
+            return false;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnRefNumber, int standardCode)

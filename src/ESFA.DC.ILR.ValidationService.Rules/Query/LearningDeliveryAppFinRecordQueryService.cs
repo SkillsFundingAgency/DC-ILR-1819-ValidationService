@@ -9,6 +9,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class LearningDeliveryAppFinRecordQueryService : ILearningDeliveryAppFinRecordQueryService
     {
+        private readonly int AppFinCode1 = 1;
+        private readonly int AppFinCode2 = 2;
+
         public bool HasAnyLearningDeliveryAFinCodesForType(IEnumerable<IAppFinRecord> appFinRecords, string aFinType, IEnumerable<int> aFinCodes)
         {
             if (appFinRecords == null || aFinCodes == null)
@@ -48,6 +51,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
                     x.AFinType.CaseInsensitiveEquals(appFinType))
                 .OrderByDescending(x => x.AFinDate)
                 .FirstOrDefault();
+        }
+
+        public int GetTotalTNPPriceForLatestAppFinRecordsForLearning(List<ILearningDelivery> learningDeliveries)
+        {
+            var total = 0;
+
+            if (learningDeliveries != null)
+            {
+                foreach (var learningDelivery in learningDeliveries)
+                {
+                    if (learningDelivery.AppFinRecords != null)
+                    {
+                        var aFinCode1Value = GetLatestAppFinRecord(
+                            learningDelivery.AppFinRecords,
+                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
+                            AppFinCode1)?.AFinAmount;
+
+                        var aFinCode2Value = GetLatestAppFinRecord(
+                            learningDelivery.AppFinRecords,
+                            ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice,
+                            AppFinCode2)?.AFinAmount;
+
+                        total += aFinCode1Value.GetValueOrDefault() + aFinCode2Value.GetValueOrDefault();
+                    }
+                }
+            }
+
+            return total;
         }
     }
 }
