@@ -16,31 +16,57 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SSN
         private const int _startingWeightFactor = 13;
         private const int _checkSumConstant = 23;
 
-        private static readonly Dictionary<int, string> ValidLetters = new Dictionary<int, string>
+        private static readonly Dictionary<string, int> ValidLettersForPositions1To4 = new Dictionary<string, int>
         {
-            [0] = "A",
-            [1] = "B",
-            [2] = "C",
-            [3] = "D",
-            [4] = "E",
-            [5] = "F",
-            [6] = "G",
-            [7] = "H",
-            [8] = "J",
-            [9] = "K",
-            [10] = "L",
-            [11] = "M",
-            [12] = "N",
-            [13] = "P",
-            [14] = "R",
-            [15] = "S",
-            [16] = "T",
-            [17] = "U",
-            [18] = "V",
-            [19] = "W",
-            [20] = "X",
-            [21] = "Y",
-            [22] = "Z"
+            ["A"] = 0,
+            ["B"] = 1,
+            ["C"] = 2,
+            ["D"] = 3,
+            ["E"] = 4,
+            ["F"] = 5,
+            ["G"] = 6,
+            ["H"] = 7,
+            ["J"] = 8,
+            ["K"] = 9,
+            ["L"] = 10,
+            ["M"] = 11,
+            ["N"] = 12,
+            ["P"] = 13,
+            ["R"] = 14,
+            ["S"] = 15,
+            ["T"] = 16,
+            ["U"] = 17,
+            ["V"] = 18,
+            ["W"] = 19,
+            ["X"] = 20,
+            ["Y"] = 21
+        };
+
+        private static readonly Dictionary<int, string> ValidLettersForLastPosition = new Dictionary<int, string>
+        {
+            [1] = "A",
+            [2] = "B",
+            [3] = "C",
+            [4] = "D",
+            [5] = "E",
+            [6] = "F",
+            [7] = "G",
+            [8] = "H",
+            [9] = "J",
+            [10] = "K",
+            [11] = "L",
+            [12] = "M",
+            [13] = "N",
+            [14] = "P",
+            [15] = "R",
+            [16] = "S",
+            [17] = "T",
+            [18] = "U",
+            [19] = "V",
+            [20] = "W",
+            [21] = "X",
+            [22] = "Y",
+            [23] = "Z"
         };
 
         private readonly Regex _regex = new Regex(_regexString, RegexOptions.Compiled);
@@ -123,19 +149,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SSN
 
             var remainder = calculatedValues % _checkSumConstant;
 
-            var checkSumValue = _checkSumConstant - remainder - 1; // -1 as the last position value set starts at '1' and contains an extra letter 'Z'
+            var checkSumValue = _checkSumConstant - remainder;
 
             return checkSumValue;
         }
 
         public string GetLetter(int value)
         {
-            return ValidLetters.ContainsKey(value) ? ValidLetters[value] : null;
+            return ValidLettersForLastPosition.ContainsKey(value) ? ValidLettersForLastPosition[value] : null;
         }
 
         public int GetLetterValue(string letter)
         {
-            return ValidLetters.FirstOrDefault(x => x.Value == letter).Key;
+            return ValidLettersForPositions1To4[letter];
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string ssn)

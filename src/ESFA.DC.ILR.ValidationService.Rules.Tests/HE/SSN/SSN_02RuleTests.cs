@@ -295,7 +295,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SSN
         public void GetCalculatedCheckSumValue_Match()
         {
             var ssn = "WADM46891352A";
-            var expectedCheckSumValue = 0;
+            var expectedCheckSumValue = 1;
 
             var actualCheckSumValue = NewRule().GetCalculatedCheckSumValue(ssn);
 
@@ -314,29 +314,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SSN
         }
 
         [Theory]
-        [InlineData(0, "A")]
-        [InlineData(1, "B")]
-        [InlineData(2, "C")]
-        [InlineData(3, "D")]
-        [InlineData(4, "E")]
-        [InlineData(5, "F")]
-        [InlineData(6, "G")]
-        [InlineData(7, "H")]
-        [InlineData(8, "J")]
-        [InlineData(9, "K")]
-        [InlineData(10, "L")]
-        [InlineData(11, "M")]
-        [InlineData(12, "N")]
-        [InlineData(13, "P")]
-        [InlineData(14, "R")]
-        [InlineData(15, "S")]
-        [InlineData(16, "T")]
-        [InlineData(17, "U")]
-        [InlineData(18, "V")]
-        [InlineData(19, "W")]
-        [InlineData(20, "X")]
-        [InlineData(21, "Y")]
-        [InlineData(22, "Z")]
+        [InlineData(1, "A")]
+        [InlineData(2, "B")]
+        [InlineData(3, "C")]
+        [InlineData(4, "D")]
+        [InlineData(5, "E")]
+        [InlineData(6, "F")]
+        [InlineData(7, "G")]
+        [InlineData(8, "H")]
+        [InlineData(9, "J")]
+        [InlineData(10, "K")]
+        [InlineData(11, "L")]
+        [InlineData(12, "M")]
+        [InlineData(13, "N")]
+        [InlineData(14, "P")]
+        [InlineData(15, "R")]
+        [InlineData(16, "S")]
+        [InlineData(17, "T")]
+        [InlineData(18, "U")]
+        [InlineData(19, "V")]
+        [InlineData(20, "W")]
+        [InlineData(21, "X")]
+        [InlineData(22, "Y")]
+        [InlineData(23, "Z")]
         public void GetLetter_Match(int input, string expectedLetter)
         {
             var result = NewRule().GetLetter(input);
@@ -345,7 +345,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SSN
         }
 
         [Theory]
-        [InlineData(23)]
+        [InlineData(24)]
         [InlineData(100)]
         public void GetLetter_NoMatch(int input)
         {
@@ -377,7 +377,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SSN
         [InlineData(19, "W")]
         [InlineData(20, "X")]
         [InlineData(21, "Y")]
-        [InlineData(22, "Z")]
         public void GetLetterValue_Match(int expectedValue, string letter)
         {
             var result = NewRule().GetLetterValue(letter);
