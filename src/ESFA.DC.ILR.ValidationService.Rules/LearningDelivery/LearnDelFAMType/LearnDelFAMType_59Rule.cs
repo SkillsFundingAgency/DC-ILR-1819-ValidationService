@@ -18,18 +18,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
     {
         private const int MinAge = 19;
         private const int MaxAge = 23;
-        private readonly DateTime MinimumStartDate = new DateTime(2016, 07, 31);
-        private readonly DateTime MaximumStartDate = new DateTime(2017, 08, 01);
+        private readonly DateTime minimumStartDate = new DateTime(2016, 07, 31);
+        private readonly DateTime maximumStartDate = new DateTime(2017, 08, 01);
 
-        private readonly HashSet<int> PriorAttainList = new HashSet<int>() { 2, 3, 4, 5, 10, 11, 12, 13, 97, 98 };
-        private readonly List<string> FamCodesForExclusion = new List<string>()
+        private readonly HashSet<int> priorAttainList = new HashSet<int>() { 2, 3, 4, 5, 10, 11, 12, 13, 97, 98 };
+        private readonly List<string> famCodesForExclusion = new List<string>()
         {
             LearningDeliveryFAMCodeConstants.LDM_OLASS,
             LearningDeliveryFAMCodeConstants.LDM_RoTL,
             LearningDeliveryFAMCodeConstants.LDM_SteelRedundancy
         };
 
-        private readonly HashSet<string> NvqLevelsList = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
+        private readonly HashSet<string> nvqLevelsList = new HashSet<string>(new List<string>() { "E", "1", "2" }).ToCaseInsensitiveHashSet();
 
         private readonly ILARSDataService _larsDataService;
         private readonly IDerivedData_07Rule _dd07;
@@ -100,7 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public bool StartDateConditionMet(DateTime learnStartDate)
         {
-            return learnStartDate > MinimumStartDate && learnStartDate < MaximumStartDate;
+            return learnStartDate > minimumStartDate && learnStartDate < maximumStartDate;
         }
 
         public bool FundModelConditionMet(int fundModel)
@@ -136,13 +136,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 return false;
             }
 
-            return PriorAttainList.Contains(priorAttain.Value);
+            return priorAttainList.Contains(priorAttain.Value);
         }
 
         public bool NvQLevelConditionMet(string learnAimRef)
         {
             var nvqLevel = _larsDataService.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef);
-            return NvqLevelsList.Contains(nvqLevel);
+            return nvqLevelsList.Contains(nvqLevel);
         }
 
         public bool IsProviderExcluded()
@@ -166,7 +166,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             if (_famQueryService.HasAnyLearningDeliveryFAMCodesForType(
                 learningDelivery.LearningDeliveryFAMs,
                 LearningDeliveryFAMTypeConstants.LDM,
-                FamCodesForExclusion))
+                famCodesForExclusion))
             {
                 return true;
             }

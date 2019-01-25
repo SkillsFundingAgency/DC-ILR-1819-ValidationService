@@ -12,7 +12,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     public class DerivedData_12Rule : IDerivedData_12Rule
     {
         private const int ValidEmploymentStatusCodeForLDM = 4;
-        private readonly HashSet<int> ValidEmploymentStatusCodes = new HashSet<int>() { 1, 2 };
+        private readonly HashSet<int> validEmploymentStatusCodes = new HashSet<int>() { 1, 2 };
 
         private readonly ILearnerEmploymentStatusMonitoringQueryService _learnerEmploymentStatusMonitoringQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                 .HasAnyEmploymentStatusMonitoringTypeAndCodesForEmploymentStatus(
                     latest,
                     Monitoring.EmploymentStatus.Types.BenefitStatusIndicator,
-                    ValidEmploymentStatusCodes))
+                    validEmploymentStatusCodes))
             {
                 return true;
             }

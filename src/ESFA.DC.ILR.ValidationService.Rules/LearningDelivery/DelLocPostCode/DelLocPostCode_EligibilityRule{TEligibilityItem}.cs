@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
@@ -12,15 +13,11 @@ using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
 {
-    public abstract class DelLocPostCode_EligibilityRuleBase<TEligibilityItem> :
+    public abstract class DelLocPostCode_EligibilityRule<TEligibilityItem> :
+        AbstractRule,
         IRule<ILearner>
         where TEligibilityItem : class, IEsfEligibilityRuleReferences
     {
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
         /// <summary>
         /// The common rule (operations provider)
         /// </summary>
@@ -37,19 +34,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         private readonly IDerivedData_22Rule _derivedData22;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelLocPostCode_EligibilityRuleBase{TEligibilityItem}"/> class.
+        /// Initializes a new instance of the <see cref="DelLocPostCode_EligibilityRule{TEligibilityItem}" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="commonChecks">The common checks.</param>
         /// <param name="fcsData">The FCS data.</param>
         /// <param name="postcodesData">The postcodes data.</param>
         /// <param name="derivedData22">The derived data22.</param>
-        public DelLocPostCode_EligibilityRuleBase(
+        /// <param name="ruleName">Name of the rule.</param>
+        public DelLocPostCode_EligibilityRule(
             IValidationErrorHandler validationErrorHandler,
             IProvideRuleCommonOperations commonChecks,
             IFCSDataService fcsData,
             IPostcodesDataService postcodesData,
-            IDerivedData_22Rule derivedData22)
+            IDerivedData_22Rule derivedData22,
+            string ruleName)
+            : base(validationErrorHandler, ruleName)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
@@ -62,7 +62,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
             It.IsNull(derivedData22)
                 .AsGuard<ArgumentNullException>(nameof(derivedData22));
 
-            _messageHandler = validationErrorHandler;
             _check = commonChecks;
             FcsData = fcsData;
             _postcodesData = postcodesData;
@@ -75,20 +74,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         public static DateTime FirstViableDate => new DateTime(2017, 08, 01);
 
         /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => GetName();
-
-        /// <summary>
         /// Gets the FCS data (service)
         /// </summary>
         protected IFCSDataService FcsData { get; }
-
-        /// <summary>
-        /// Gets the (rule) name.
-        /// </summary>
-        /// <returns>the name of the rule</returns>
-        public abstract string GetName();
 
         /// <summary>
         /// Gets the contract completion date.
@@ -119,7 +107,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>the enterprise partnership (if found)</returns>
-        public abstract TEligibilityItem GetEligibilityItem(ILearningDelivery delivery);
+        public abstract IReadOnlyCollection<TEligibilityItem> GetEligibilityItemsFor(ILearningDelivery delivery);
 
         /// <summary>
         /// Gets the ons postcode.
@@ -133,11 +121,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// Determines whether [has qualifying eligibility] [the specified postcode].
         /// </summary>
         /// <param name="postcode">The postcode.</param>
-        /// <param name="eligibility">The eligibility.</param>
+        /// <param name="eligibilities">The eligibilities.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying eligibility] [the specified postcode]; otherwise, <c>false</c>.
         /// </returns>
-        public abstract bool HasQualifyingEligibility(IONSPostcode postcode, TEligibilityItem eligibility);
+        public abstract bool HasQualifyingEligibility(IONSPostcode postcode, IReadOnlyCollection<TEligibilityItem> eligibilities);
 
         /// <summary>
         /// Determines whether [in qualifying period] [the specified delivery].
@@ -162,7 +150,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         public bool IsNotValid(ILearningDelivery delivery) =>
             _check.HasQualifyingStart(delivery, FirstViableDate)
                 && _check.HasQualifyingFunding(delivery, TypeOfFunding.EuropeanSocialFund)
-                && HasQualifyingEligibility(GetONSPostcode(delivery), GetEligibilityItem(delivery))
+                && HasQualifyingEligibility(GetONSPostcode(delivery), GetEligibilityItemsFor(delivery))
                 && !InQualifyingPeriod(delivery, GetONSPostcode(delivery));
 
         /// <summary>
@@ -191,13 +179,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
                 return;
             }
 
-            var deliveries = objectToValidate.LearningDeliveries
+            objectToValidate.LearningDeliveries
                 .SafeWhere(x => MatchesStart(x, contractStart.Value))
-                .AsSafeReadOnlyList();
-
-            deliveries
-                .Where(IsNotValid)
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+                .ForAny(IsNotValid, x => RaiseValidationMessage(learnRefNumber, x));
         }
 
         /// <summary>
@@ -207,13 +191,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// <param name="thisDelivery">this delivery.</param>
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.LearnAimRef), thisDelivery.LearnAimRef));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.FundModel), thisDelivery.FundModel));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.DelLocPostCode), thisDelivery.DelLocPostCode));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(nameof(thisDelivery.ConRefNumber), thisDelivery.ConRefNumber));
+            HandleValidationError(learnRefNumber, null, BuildMessageParametersFor(thisDelivery));
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        /// <summary>
+        /// Builds the message parameters for..
+        /// </summary>
+        /// <param name="thisDelivery">The this delivery.</param>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnAimRef, thisDelivery.LearnAimRef),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, thisDelivery.FundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.DelLocPostCode, thisDelivery.DelLocPostCode),
+                BuildErrorMessageParameter(PropertyNameConstants.ConRefNumber, thisDelivery.ConRefNumber)
+            };
         }
     }
 }

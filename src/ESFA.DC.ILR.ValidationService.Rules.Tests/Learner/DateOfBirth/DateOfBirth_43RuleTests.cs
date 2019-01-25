@@ -27,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var derivedData23Mock = new Mock<IDerivedData_23Rule>();
             derivedData23Mock
-                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<TestLearner>(), It.IsAny<List<TestLearningDelivery>>()))
+                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<TestLearner>(), It.IsAny<string>()))
                 .Returns(14);
 
             var testLearner = new TestLearner
@@ -52,7 +52,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var derivedData23Mock = new Mock<IDerivedData_23Rule>();
             derivedData23Mock
-                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<TestLearner>(), It.IsAny<List<TestLearningDelivery>>()))
+                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<TestLearner>(), It.IsAny<string>()))
                 .Returns(15);
 
             var testLearner = new TestLearner
@@ -88,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var derivedData23Mock = new Mock<IDerivedData_23Rule>();
             derivedData23Mock
-                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<TestLearner>(), It.IsAny<List<TestLearningDelivery>>()))
+                .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<TestLearner>(), It.IsAny<string>()))
                 .Returns(14);
 
             var testLearner = new TestLearner
@@ -115,13 +115,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             IDerivedData_23Rule derivedData23 = null)
         {
             return new DateOfBirth_43Rule(derivedData23, validationErrorHandler);
-        }
-
-        private void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)
-        {
-            errorHandlerMock.Verify(
-                m => m.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()),
-                Times.Exactly(times));
         }
     }
 }

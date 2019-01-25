@@ -952,7 +952,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void BasicSkillsTypeMatchForLearnAimRef_PartialMatch_True()
         {
             var learnAimRef = "LearnAimRef";
-            var basicSkills = 1;
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {

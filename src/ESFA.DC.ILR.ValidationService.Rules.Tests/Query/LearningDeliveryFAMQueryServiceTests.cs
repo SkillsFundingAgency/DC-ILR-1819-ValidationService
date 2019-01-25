@@ -221,6 +221,203 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
+        public void GetOverLappingLearningDeliveryFAMsForType_NullCheck()
+        {
+            NewService().GetOverLappingLearningDeliveryFAMsForType(null, "LSF").Should().BeEquivalentTo(new List<ILearningDeliveryFAM>());
+        }
+
+        [Fact]
+        public void GetOverLappingLearningDeliveryFAMsForType_NullCheck_FamTypeMisMatch()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "ACT", LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1) },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "SOF" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "ALB" }
+            };
+
+            NewService().GetOverLappingLearningDeliveryFAMsForType(learningDeliveryFAMs, "LSF").Should().BeEquivalentTo(new List<ILearningDeliveryFAM>());
+        }
+
+        [Fact]
+        public void GetOverLappingLearningDeliveryFAMsForType_NullCheck_CountLessThanTwo()
+        {
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>()
+            {
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "LSF", LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1) },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "SOF" },
+                new TestLearningDeliveryFAM() { LearnDelFAMType = "ALB" }
+            };
+
+            NewService().GetOverLappingLearningDeliveryFAMsForType(learningDeliveryFAMs, "LSF").Should().BeEquivalentTo(new List<ILearningDeliveryFAM>());
+        }
+
+        [Fact]
+        public void GetOverLappingLearningDeliveryFAMsForType_ReturnsEntity()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 1)
+            };
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo
+            };
+
+            NewService().GetOverLappingLearningDeliveryFAMsForType(learningDeliveryFAMs, "LSF").Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo });
+        }
+
+        [Fact]
+        public void GetOverLappingLearningDeliveryFAMsForType_ReturnsEntity_Multiple()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+            };
+
+            var learningDeliveryFamThree = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 2),
+            };
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo,
+               learningDeliveryFamThree
+            };
+
+            NewService().GetOverLappingLearningDeliveryFAMsForType(learningDeliveryFAMs, "LSF").Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamThree });
+        }
+
+        [Fact]
+        public void GetOverLappingLearningDeliveryFAMsForType_ReturnsEntities_NoEndDates()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1)
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1)
+            };
+
+            var learningDeliveryFamThree = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 3),
+            };
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo,
+               learningDeliveryFamThree
+            };
+
+            NewService().GetOverLappingLearningDeliveryFAMsForType(learningDeliveryFAMs, "LSF").Should().BeEquivalentTo(new List<TestLearningDeliveryFAM> { learningDeliveryFamTwo, learningDeliveryFamThree });
+        }
+
+        [Fact]
+        public void GetOverLappingLearningDeliveryFAMsForType_ReturnsEntities_NoFromDates()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF"
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF"
+            };
+
+            var learningDeliveryFamThree = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF"
+            };
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo,
+               learningDeliveryFamThree
+            };
+
+            NewService().GetOverLappingLearningDeliveryFAMsForType(learningDeliveryFAMs, "LSF").Should().BeEquivalentTo(new List<TestLearningDeliveryFAM>());
+        }
+
+        [Fact]
+        public void GetOverLappingLearningDeliveryFAMsForType_ReturnsEmptyCollection_NoOverlaps()
+        {
+            var learningDeliveryFamOne = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 8, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 8, 31)
+            };
+
+            var learningDeliveryFamTwo = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 1),
+                LearnDelFAMDateToNullable = new DateTime(2018, 9, 2)
+            };
+
+            var learningDeliveryFamThree = new TestLearningDeliveryFAM
+            {
+                LearnDelFAMType = "LSF",
+                LearnDelFAMDateFromNullable = new DateTime(2018, 9, 3),
+            };
+
+            var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
+            {
+               learningDeliveryFamOne,
+               learningDeliveryFamTwo,
+               learningDeliveryFamThree
+            };
+
+            NewService().GetOverLappingLearningDeliveryFAMsForType(learningDeliveryFAMs, "LSF").Should().BeNullOrEmpty();
+        }
+
+        [Theory]
+        [InlineData("2018-08-01", "2018-09-01", false)]
+        [InlineData("2018-08-01", null, false)]
+        [InlineData(null, "2018-09-01", true)]
+        [InlineData("2018-08-01", "2018-08-01", true)]
+        [InlineData("2018-08-01", "2018-07-01", true)]
+        public void IsOverlappingLearningDeliveryFAM_False_NoOverlaps(string dateTo, string dateFrom, bool expectation)
+        {
+            DateTime? to = dateTo == null ? (DateTime?)null : DateTime.Parse(dateTo);
+            DateTime? from = dateFrom == null ? (DateTime?)null : DateTime.Parse(dateFrom);
+
+            NewService().IsOverlappingLearnDelFAMDates(to, from).Should().Be(expectation);
+        }
+
+        [Fact]
         public void HasFamType_True()
         {
             var learningDeliveryFam = new TestLearningDeliveryFAM()

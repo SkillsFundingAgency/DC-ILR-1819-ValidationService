@@ -58,6 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             }
         }
 
+        [Fact]
         public void Validate_Pass_ClosedNonFundedAims()
         {
             var testLearner = new TestLearner()
@@ -96,6 +97,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             }
         }
 
+        [Fact]
         public void Validate_Pass_SameComponentAimFundModel()
         {
             var testLearner = new TestLearner()
@@ -134,6 +136,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             }
         }
 
+        [Fact]
         public void Validate_Fail_One_LearningDelivery()
         {
             var testLearner = new TestLearner()

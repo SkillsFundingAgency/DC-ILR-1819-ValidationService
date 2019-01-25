@@ -36,5 +36,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract
                 CallBase = true
             };
         }
+
+        protected void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)
+        {
+            errorHandlerMock.Verify(
+                m => m.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()),
+                Times.Exactly(times));
+        }
     }
 }

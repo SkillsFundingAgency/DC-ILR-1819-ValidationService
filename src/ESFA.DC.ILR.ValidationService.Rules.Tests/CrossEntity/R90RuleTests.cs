@@ -173,7 +173,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock.Setup(x => x.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<List<int>>(), It.IsAny<string>()))
                 .Returns(true);
-            NewRule(larsDataService:larsDataServiceMock.Object).ConditionMet(mainAim, learningDeliveries).Should().BeFalse();
+            NewRule(larsDataService: larsDataServiceMock.Object).ConditionMet(mainAim, learningDeliveries).Should().BeFalse();
         }
 
         [Fact]
@@ -213,7 +213,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             larsDataServiceMock.Setup(x => x.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), It.IsAny<string>()))
                 .Returns(true);
 
-            NewRule(larsDataService:larsDataServiceMock.Object).Excluded("learnRef1").Should().BeTrue();
+            NewRule(larsDataService: larsDataServiceMock.Object).Excluded("learnRef1").Should().BeTrue();
         }
 
         [Fact]

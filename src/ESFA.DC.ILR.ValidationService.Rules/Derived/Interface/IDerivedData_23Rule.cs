@@ -1,5 +1,4 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
-using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived.Interface
 {
@@ -7,6 +6,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived.Interface
     {
         int GetLearnersAgeAtStartOfESFContract(
             ILearner learner,
-            IEnumerable<ILearningDelivery> learningDeliveries);
+            string conRefNumber);
     }
 }

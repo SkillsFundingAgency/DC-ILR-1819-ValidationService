@@ -32,5 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         {
             get;
         }
+
+        IDictionary<LookupItemKey, IDictionary<string, IReadOnlyCollection<string>>> ItemLookups { get; }
     }
 }
