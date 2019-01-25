@@ -398,7 +398,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
                 && learnAimRefTypes.ToCaseInsensitiveHashSet().Contains(learningDelivery.LearnAimRefType);
         }
 
-        public decimal? GetCoreGovContributionCapForStandard(int standardCode, DateTime startDate)
+        public ILARSStandardFunding GetStandardFundingForCodeOnDate(int standardCode, DateTime startDate)
         {
             var standard = _externalDataCache.Standards?.FirstOrDefault(x => x.StandardCode == standardCode);
 
@@ -406,7 +406,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             {
                 return standard.StandardsFunding.FirstOrDefault(sf => startDate >= sf.EffectiveFrom &&
                                                                (!sf.EffectiveTo.HasValue ||
-                                                                startDate <= sf.EffectiveTo))?.CoreGovContributionCap;
+                                                                startDate <= sf.EffectiveTo));
             }
 
             return null;

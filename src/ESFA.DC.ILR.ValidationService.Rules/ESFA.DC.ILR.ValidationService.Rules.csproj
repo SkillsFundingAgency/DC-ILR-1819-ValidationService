@@ -88,7 +88,9 @@
     <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
     <Compile Include="Constants\TypeOfMODESTUD.cs" />
+    <Compile Include="Constants\TypeOfPMRAFin.cs" />
     <Compile Include="Constants\TypeOfSPECFEE.cs" />
+    <Compile Include="Constants\TypeOfTNPAFin.cs" />
     <Compile Include="Constants\WorkPlaceModeConstants.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />

@@ -13,6 +13,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
 
         IAppFinRecord GetLatestAppFinRecord(IReadOnlyCollection<IAppFinRecord> appFinRecords, string appFinType, int appFinCode);
 
-        int GetTotalTNPPriceForLatestAppFinRecordsForLearning(List<ILearningDelivery> learningDeliveries);
+        int GetTotalTNPPriceForLatestAppFinRecordsForLearning(IEnumerable<ILearningDelivery> learningDeliveries);
     }
 }

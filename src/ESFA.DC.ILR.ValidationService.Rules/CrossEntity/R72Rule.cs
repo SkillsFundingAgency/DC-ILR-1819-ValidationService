@@ -20,8 +20,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
     {
         private readonly ILearningDeliveryAppFinRecordQueryService _learningDeliveryAppFinRecordQueryService;
         private readonly IDerivedData_17Rule _dd17;
-        private readonly HashSet<int> AFinCodes1And2 = new HashSet<int>() { 1, 2 };
-        private readonly int AFinCode3 = 3;
+        private readonly HashSet<int> TrainingAndAssementAFinCodes = new HashSet<int>() { TypeOfPMRAFin.TrainingPayment, TypeOfPMRAFin.AssessmentPayment };
 
         public R72Rule(
             IValidationErrorHandler validationErrorHandler,
@@ -73,11 +72,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 var totalAFin1And2 = learningDelivery.AppFinRecords?.Where(
                                 fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
-                               AFinCodes1And2.Contains(fin.AFinCode)).Sum(s => s.AFinAmount);
+                               TrainingAndAssementAFinCodes.Contains(fin.AFinCode)).Sum(s => s.AFinAmount);
 
                 var totalAFin3 = learningDelivery.AppFinRecords?.Where(
                     fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
-                           fin.AFinCode == AFinCode3).Sum(s => s.AFinAmount);
+                           fin.AFinCode == TypeOfPMRAFin.EmployerPaymentReimbursedByProvider).Sum(s => s.AFinAmount);
 
                 if (dict.ContainsKey(learningDelivery.StdCodeNullable.Value))
                 {
