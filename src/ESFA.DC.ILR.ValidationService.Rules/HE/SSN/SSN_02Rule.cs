@@ -16,16 +16,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SSN
         private const int _startingWeightFactor = 13;
         private const int _checkSumConstant = 23;
 
+        private static readonly Dictionary<int, string> ValidLetters = new Dictionary<int, string>
+        {
+            [0] = "A",
+            [1] = "B",
+            [2] = "C",
+            [3] = "D",
+            [4] = "E",
+            [5] = "F",
+            [6] = "G",
+            [7] = "H",
+            [8] = "J",
+            [9] = "K",
+            [10] = "L",
+            [11] = "M",
+            [12] = "N",
+            [13] = "P",
+            [14] = "R",
+            [15] = "S",
+            [16] = "T",
+            [17] = "U",
+            [18] = "V",
+            [19] = "W",
+            [20] = "X",
+            [21] = "Y",
+            [22] = "Z"
+        };
+
         private readonly Regex _regex = new Regex(_regexString, RegexOptions.Compiled);
 
         public SSN_02Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.SSN_02)
         {
-        }
-
-        public enum ValidLetters
-        {
-            A, B, C, D, E, F, G, H, J, K, L, M, N, P, R, S, T, U, V, W, X, Y, Z
         }
 
         public void Validate(ILearner objectToValidate)
@@ -76,8 +98,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SSN
             /* Check sum algorithm break down can be found here:
                https://www.hesa.ac.uk/collection/c18051/a/ssn */
 
-            char[] ssn1To4 = ssn.Substring(0, 4).ToCharArray();
-            int[] ssn5To12 = ssn.Substring(4, 8).Select(c => Convert.ToInt32(c.ToString())).ToArray();
+            var ssn1To4 = ssn.Substring(0, 4);
+            var ssn5To12 = ssn.Substring(4, 8).Select(c => Convert.ToInt32(c.ToString()));
 
             var calculatedValues = _startingCalculatedValue;
             var weightingFactor = _startingWeightFactor;
@@ -108,17 +130,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SSN
 
         public string GetLetter(int value)
         {
-            if (Enum.IsDefined(typeof(ValidLetters), value))
-            {
-                return Enum.Parse(typeof(ValidLetters), value.ToString()).ToString();
-            }
-
-            return null;
+            return ValidLetters.ContainsKey(value) ? ValidLetters[value] : null;
         }
 
         public int GetLetterValue(string letter)
         {
-            return (int)Enum.Parse(typeof(ValidLetters), letter);
+            return ValidLetters.FirstOrDefault(x => x.Value == letter).Key;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string ssn)
