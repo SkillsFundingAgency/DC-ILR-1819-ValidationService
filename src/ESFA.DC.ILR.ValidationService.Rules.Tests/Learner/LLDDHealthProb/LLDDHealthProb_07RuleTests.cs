@@ -5,7 +5,6 @@ using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb;
-using ESFA.DC.ILR.ValidationService.Rules.Query;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
@@ -55,7 +54,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
         public void ValidatePasses_AgeExceptionApplies()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
-            var dateTimeService = new DateTimeQueryService();
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(26);
 
             var derivedDataMock = new Mock<IDerivedData_06Rule>();
             derivedDataMock.Setup(m => m.Derive(It.IsAny<IEnumerable<ILearningDelivery>>()))
@@ -77,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDHealthProb
                 }
             };
 
-            NewRule(validationErrorHandlerMock.Object, derivedDataMock.Object, dateTimeService).Validate(testLearner);
+            NewRule(validationErrorHandlerMock.Object, derivedDataMock.Object, dateTimeServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
