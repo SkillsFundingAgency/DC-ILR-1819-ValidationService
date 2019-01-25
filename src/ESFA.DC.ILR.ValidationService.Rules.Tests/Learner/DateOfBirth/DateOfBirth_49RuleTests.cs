@@ -215,6 +215,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Fact]
+        public void Validate_DateOfBirthNull_NoError()
+        {
+            var learner = new TestLearner
+            {
+                DateOfBirthNullable = null,
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object)
+                    .Validate(learner);
+            }
+        }
+
+        [Fact]
         public void Validate_Error()
         {
             var ldmCodes = new List<string> { "034", "347", "339" };
