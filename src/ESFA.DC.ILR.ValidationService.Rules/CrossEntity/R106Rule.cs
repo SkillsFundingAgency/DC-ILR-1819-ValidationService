@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
@@ -14,32 +14,42 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private readonly DateTime _augFirst2016 = new DateTime(2016, 8, 1);
         private readonly string _famTypeLSF = LearningDeliveryFAMTypeConstants.LSF;
 
-        public R106Rule(IValidationErrorHandler validationErrorHandler)
+        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
+
+        public R106Rule(ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R106)
         {
+            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            var learningDeliveryFAMs = objectToValidate.LearningDeliveries
-                .Where(l => l.LearningDeliveryFAMs != null)
-                .SelectMany(ld => ld.LearningDeliveryFAMs);
-            if (ConditionMet(learningDeliveryFAMs))
+            var learningDeliveryFAMs = GetApplicableLearningDeliveryFAMs(objectToValidate);
+
+            var overlappingLearningDeliveryFAMs = _learningDeliveryFAMQueryService.GetOverLappingLearningDeliveryFAMsForType(learningDeliveryFAMs, _famTypeLSF);
+
+            if (overlappingLearningDeliveryFAMs.Any())
             {
-                HandleValidationError(objectToValidate.LearnRefNumber);
+                HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(_famTypeLSF));
             }
         }
 
-        public bool ConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public IEnumerable<ILearningDeliveryFAM> GetApplicableLearningDeliveryFAMs(ILearner objectToValidate)
         {
-            if (learningDeliveryFAMs != null)
-            {
-                return learningDeliveryFAMs.Where(ld => ld.LearnDelFAMDateFromNullable >= _augFirst2016).Any()
-                        ? learningDeliveryFAMs.Where(ld => ld.LearnDelFAMType == _famTypeLSF).Count() > 1
-                        : false;
-            }
+            return
+                objectToValidate
+                .LearningDeliveries?
+                .Where(l => l.LearningDeliveryFAMs != null)
+                .SelectMany(ld => ld.LearningDeliveryFAMs)
+                .Where(ldf => ldf.LearnDelFAMDateFromNullable >= _augFirst2016).ToList() ?? new List<ILearningDeliveryFAM>();
+        }
 
-            return false;
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string famType)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, famType)
+            };
         }
     }
 }

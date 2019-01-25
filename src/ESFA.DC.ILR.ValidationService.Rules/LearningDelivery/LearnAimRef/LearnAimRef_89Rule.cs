@@ -113,7 +113,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             otherwise   return error
             */
 
-            return branch.Passed && HasValidLearningAim(delivery, branch.Category);
+            return branch.OutOfScope || HasValidLearningAim(delivery, branch.Category);
         }
     }
 }

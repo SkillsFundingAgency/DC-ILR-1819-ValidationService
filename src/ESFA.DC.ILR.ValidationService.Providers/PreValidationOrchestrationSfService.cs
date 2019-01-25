@@ -185,7 +185,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            _logger.LogDebug($"Validation will create {learnerMessageShards.Count()} actors");
+            _logger.LogDebug($"Validation will create {learnerMessageShards?.Count() ?? 0} actors");
             _logger.LogDebug($"DP Validation will create {learnerDPMessageShards?.Count() ?? 0} actors");
 
             string internalDataCacheAsString =
@@ -200,28 +200,31 @@ namespace ESFA.DC.ILR.ValidationService.Providers
             string taskListAsString = _jsonSerializationService.Serialize(validationContext.Tasks);
             _logger.LogDebug($"taskListAsString {taskListAsString.Length}");
 
-            foreach (IMessage messageShard in learnerMessageShards)
+            if (learnerMessageShards != null)
             {
-                _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
-
-                // create actors for each Shard.
-                IValidationActor actor = GetValidationActor();
-                learnerValidationActors.Add(actor);
-
-                // TODO:get reference data per each shard and send it to Actors
-                string ilrMessageAsString = _jsonSerializationService.Serialize(messageShard);
-
-                ValidationActorModel validationActorModel = new ValidationActorModel
+                foreach (IMessage messageShard in learnerMessageShards)
                 {
-                    JobId = validationContext.JobId,
-                    Message = ilrMessageAsString,
-                    InternalDataCache = internalDataCacheAsString,
-                    ExternalDataCache = externalDataCacheAsString,
-                    FileDataCache = fileDataCacheAsString,
-                    TaskList = taskListAsString
-                };
+                    _logger.LogDebug($"Validation Shard has {messageShard.Learners.Count} learners");
 
-                actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
+                    // create actors for each Shard.
+                    IValidationActor actor = GetValidationActor();
+                    learnerValidationActors.Add(actor);
+
+                    // TODO:get reference data per each shard and send it to Actors
+                    string ilrMessageAsString = _jsonSerializationService.Serialize(messageShard);
+
+                    ValidationActorModel validationActorModel = new ValidationActorModel
+                    {
+                        JobId = validationContext.JobId,
+                        Message = ilrMessageAsString,
+                        InternalDataCache = internalDataCacheAsString,
+                        ExternalDataCache = externalDataCacheAsString,
+                        FileDataCache = fileDataCacheAsString,
+                        TaskList = taskListAsString
+                    };
+
+                    actorTasks.Add(actor.Validate(validationActorModel, cancellationToken));
+                }
             }
 
             if (learnerDPMessageShards != null)

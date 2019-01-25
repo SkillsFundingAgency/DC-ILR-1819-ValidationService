@@ -159,6 +159,7 @@
     <Compile Include="Derived\DerivedData_05RuleTests.cs" />
     <Compile Include="Derived\DerivedData_14RuleTests.cs" />
     <Compile Include="Derived\DerivedData_18RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_25RuleTests.cs" />
     <Compile Include="Derived\DerivedData_23RuleTests.cs" />
     <Compile Include="Derived\DerivedData_22RuleTests.cs" />
     <Compile Include="Derived\DerivedData_26RuleTests.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="HE\SPECFEE\SPECFEE_01RuleTests.cs" />
     <Compile Include="HE\SOC2000\SOC2000_03RuleTests.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_02RuleTests.cs" />
+    <Compile Include="HE\SSN\SSN_02RuleTests.cs" />
     <Compile Include="HE\STULOAD_04\STULOAD_04RuleTests.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02RuleTests.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01RuleTests.cs" />

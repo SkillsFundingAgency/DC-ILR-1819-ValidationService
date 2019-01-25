@@ -42,13 +42,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
 
         public bool LearnerHEConditionMet(ILearnerHE learnerHE)
         {
-            return learnerHE != null && !learnerHE.TTACCOMNullable.HasValue;
+            return learnerHE == null
+                || (learnerHE != null && !learnerHE.TTACCOMNullable.HasValue);
         }
 
         public bool LearningDeliveryHEConditionMet(ILearningDeliveryHE learningDeliveryHE)
         {
             return learningDeliveryHE != null
-                && learningDeliveryHE.MODESTUD == 1;
+                && learningDeliveryHE.MODESTUD == TypeOfMODESTUD.FullTimeAndSandwich;
         }
 
         public bool LearnStartDateConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)

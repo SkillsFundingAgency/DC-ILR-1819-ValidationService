@@ -491,12 +491,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
                 Category = category;
             }
 
-            public bool Passed { get; }
+            /// <summary>
+            /// Gets a value indicating whether [out of scope].
+            /// </summary>
+            public bool OutOfScope => !Passed && It.IsEmpty(Category);
 
+            /// <summary>
+            /// Gets the category.
+            /// </summary>
             public string Category { get; }
 
-            public static BranchResult Create(bool result, string category)
-                => new BranchResult(result, category);
+            /// <summary>
+            /// Gets a value indicating whether this <see cref="BranchResult"/> is passed.
+            /// </summary>
+            internal bool Passed { get; }
+
+            /// <summary>
+            /// Creates the specified result.
+            /// </summary>
+            /// <param name="filterResult">if set to <c>true</c> [filter result].</param>
+            /// <param name="category">The category.</param>
+            /// <returns>a new branch result</returns>
+            public static BranchResult Create(bool filterResult, string category)
+                => new BranchResult(filterResult, category);
         }
     }
 }
