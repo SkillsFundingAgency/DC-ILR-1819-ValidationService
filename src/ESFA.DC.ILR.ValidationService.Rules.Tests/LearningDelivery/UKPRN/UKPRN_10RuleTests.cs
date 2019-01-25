@@ -7,7 +7,6 @@ using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -28,34 +27,35 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             NewRule().RuleName.Should().Be("UKPRN_10");
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("2018-08-01")]
-        public void LearnActEndDateConditionMet_True(string learnActEndDateString)
+        [Fact]
+        public void LearnActEndDateConditionMet_True()
         {
-            DateTime? learnActEndDate = learnActEndDateString != null ? DateTime.Parse(learnActEndDateString) : (DateTime?)null;
+            DateTime? learnActEndDate = new DateTime(2018, 8, 1);
 
             DateTime academicYear = new DateTime(2018, 8, 1);
 
             var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
 
-            if (learnActEndDate != null)
-            {
-                academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-            }
+            academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
 
             NewRule(academicYearQueryService: academicYearQueryServiceMock.Object).LearnActEndDateConditionMet(learnActEndDate, academicYear).Should().BeTrue();
         }
 
-        [Fact]
-        public void LearnActEndDateConditionMet_False()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("2018-05-01")]
+        public void LearnActEndDateConditionMet_False(string learnActEndDateString)
         {
-            DateTime? learnActEndDate = new DateTime(2018, 5, 1);
+            DateTime? learnActEndDate = learnActEndDateString != null ? DateTime.Parse(learnActEndDateString) : (DateTime?)null;
             DateTime academicYear = new DateTime(2018, 8, 1);
 
             var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
-
-            academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(true);
+            if (learnActEndDate != null)
+            {
+                academicYearQueryServiceMock
+                    .Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear))
+                    .Returns(true);
+            }
 
             NewRule(academicYearQueryService: academicYearQueryServiceMock.Object).LearnActEndDateConditionMet(learnActEndDate, academicYear).Should().BeFalse();
         }
@@ -127,7 +127,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         [Fact]
         public void FCTFundingConditionMet_True()
         {
-            IEnumerable<string> fundingStreamPeriodCodes = new HashSet<string>() { "ABC" };
+            IEnumerable<string> fundingStreamPeriodCodes = new HashSet<string> { "ABC" };
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
 
