@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -94,8 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.Outcome
         {
             var matchingDpOutcome = new TestLearnerDestinationAndProgression
             {
-                LearnRefNumber = "123456",
-                DPOutcomes = null
+                LearnRefNumber = "123456"
             };
 
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
@@ -103,8 +103,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.Outcome
             var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
 
             learnerDPQueryServiceMock
-                .Setup(m => m.GetDestinationAndProgressionForLearner(It.IsAny<string>()))
-                .Returns(matchingDpOutcome);
+                .Setup(m => m.GetDestinationAndProgressionForLearner("123456").DPOutcomes.Any())
+                .Returns(false);
 
             NewRule(learnerDpQueryService: learnerDPQueryServiceMock.Object, validationErrorHandler: validationErrorHandlerMock.Object).DpOutcomeConditionMet("123456").Should().BeTrue();
         }

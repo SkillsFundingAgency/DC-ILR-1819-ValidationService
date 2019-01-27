@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.Outcome
 
         public bool DpOutcomeConditionMet(string learnRefNum)
         {
-            return !_learnerDpQueryService.GetDestinationAndProgressionForLearner(learnRefNum).DPOutcomes.Any();
+            return !_learnerDpQueryService.GetDestinationAndProgressionForLearner(learnRefNum)?.DPOutcomes?.Any() ?? false;
         }
 
         private IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnRefNumber, ILearningDelivery learningDelivery)
