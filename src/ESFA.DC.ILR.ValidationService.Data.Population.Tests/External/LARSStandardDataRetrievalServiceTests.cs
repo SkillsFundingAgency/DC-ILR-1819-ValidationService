@@ -233,7 +233,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                     StandardSectorCode = "2",
                     NotionalEndLevel = "3",
                     EffectiveFrom = new DateTime(2018, 01, 01),
-                    EffectiveTo = new DateTime(2019, 01, 01)
+                    EffectiveTo = new DateTime(2019, 01, 01),
                 },
                 new LARS_Standard()
                 {
@@ -261,6 +261,106 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             result.Select(r => r.StandardCode).Should().Contain(1);
             result.Select(r => r.StandardCode).Should().Contain(2);
             result.Select(r => r.StandardCode).Should().Contain(3);
+        }
+
+        [Fact]
+        public async Task Retrieve_StandardFunding()
+        {
+            var message = new TestMessage()
+            {
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner()
+                    {
+                        LearningDeliveries = new List<TestLearningDelivery>()
+                        {
+                            new TestLearningDelivery()
+                            {
+                                StdCodeNullable = 1
+                            },
+                            new TestLearningDelivery()
+                            {
+                                StdCodeNullable = 2
+                            },
+                        }
+                    },
+                    new TestLearner()
+                    {
+                        LearningDeliveries = new List<TestLearningDelivery>()
+                        {
+                            new TestLearningDelivery()
+                            {
+                                StdCodeNullable = 1
+                            },
+                            new TestLearningDelivery()
+                            {
+                                StdCodeNullable = 2
+                            },
+                        }
+                    }
+                }
+            };
+
+            var larsMock = new Mock<ILARS>();
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            var larsStandardList = new List<LARS_Standard>()
+            {
+                new LARS_Standard()
+                {
+                    StandardCode = 1,
+                    StandardSectorCode = "2",
+                    LARS_StandardFunding = new List<LARS_StandardFunding>()
+                    {
+                        new LARS_StandardFunding()
+                        {
+                            CoreGovContributionCap = null,
+                            EffectiveTo = null,
+                            EffectiveFrom = new DateTime(2017, 10, 10)
+                        },
+                        new LARS_StandardFunding()
+                        {
+                            CoreGovContributionCap = null,
+                            EffectiveTo = new DateTime(2018, 10, 10),
+                            EffectiveFrom = new DateTime(2017, 10, 10)
+                        }
+                    }
+                },
+                new LARS_Standard()
+                {
+                    StandardCode = 2,
+                    StandardSectorCode = "2",
+                    LARS_StandardFunding = new List<LARS_StandardFunding>()
+                    {
+                        new LARS_StandardFunding()
+                        {
+                            CoreGovContributionCap = 100.23m,
+                            EffectiveTo = new DateTime(2019, 10, 10),
+                            EffectiveFrom = new DateTime(2017, 10, 10)
+                        }
+                    }
+                },
+            };
+
+            var larsStandardsMock = larsStandardList.AsMockDbSet();
+
+            larsMock.Setup(lm => lm.LARS_Standard).Returns(larsStandardsMock);
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+
+            var result = await NewService(larsMock.Object, messageCacheMock.Object).RetrieveAsync(CancellationToken.None);
+
+            result.Should().HaveCount(2);
+
+            var fundingCaps = result.FirstOrDefault(r => r.StandardCode == 1)?.StandardsFunding;
+            fundingCaps.Should().NotBeEmpty();
+            fundingCaps.Count().Should().Be(2);
+
+            fundingCaps = result.FirstOrDefault(r => r.StandardCode == 2)?.StandardsFunding;
+            fundingCaps.Count().Should().Be(1);
+            fundingCaps.SingleOrDefault().EffectiveTo.Should().Be(new DateTime(2019, 10, 10));
+            fundingCaps.SingleOrDefault().EffectiveFrom.Should().Be(new DateTime(2017, 10, 10));
+            fundingCaps.SingleOrDefault().CoreGovContributionCap.Should().Be(100.23m);
         }
 
         private LARSStandardDataRetrievalService NewService(ILARS lars = null, ICache<IMessage> messageCache = null)

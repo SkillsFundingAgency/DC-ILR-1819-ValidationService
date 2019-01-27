@@ -11,6 +11,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
 
         string LotReference { get; }
 
+        int? MinAge { get; }
+
+        int? MaxAge { get; }
+
         bool Benefits { get; }
 
         IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }

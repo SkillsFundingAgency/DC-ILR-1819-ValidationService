@@ -88,7 +88,9 @@
     <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
     <Compile Include="Constants\TypeOfMODESTUD.cs" />
+    <Compile Include="Constants\TypeOfPMRAFin.cs" />
     <Compile Include="Constants\TypeOfSPECFEE.cs" />
+    <Compile Include="Constants\TypeOfTNPAFin.cs" />
     <Compile Include="Constants\WorkPlaceModeConstants.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="CrossEntity\R62Rule.cs" />
     <Compile Include="CrossEntity\R61Rule.cs" />
     <Compile Include="CrossEntity\R89Rule.cs" />
+    <Compile Include="CrossEntity\R72Rule.cs" />
     <Compile Include="CrossEntity\R92Rule.cs" />
     <Compile Include="CrossEntity\R90Rule.cs" />
     <Compile Include="CrossEntity\R97Rule.cs" />
@@ -155,6 +158,7 @@
     <Compile Include="Derived\DerivedData_15Rule.cs" />
     <Compile Include="Derived\DerivedData_18Rule.cs" />
     <Compile Include="Derived\DerivedData_22Rule.cs" />
+    <Compile Include="Derived\DerivedData_25Rule.cs" />
     <Compile Include="Derived\DerivedData_23Rule.cs" />
     <Compile Include="Derived\DerivedData_24Rule.cs" />
     <Compile Include="Derived\DerivedData_26Rule.cs" />
@@ -166,15 +170,18 @@
     <Compile Include="Derived\DerivedData_04Rule.cs" />
     <Compile Include="Derived\DerivedData_06Rule.cs" />
     <Compile Include="Derived\DerivedData_07Rule.cs" />
+    <Compile Include="Derived\DerivedData_17Rule.cs" />
     <Compile Include="Derived\DerivedData_31Rule.cs" />
     <Compile Include="Derived\DerivedData_12Rule.cs" />
     <Compile Include="Derived\DerivedData_32Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_17Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_19Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_12Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_14Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_05Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_15Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_18Rule.cs" />
+    <Compile Include="Derived\Interface\IDerivedData_25Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_23Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_26Rule.cs" />
     <Compile Include="Derived\Interface\IDerivedData_27Rule.cs" />
@@ -285,6 +292,7 @@
     <Compile Include="HE\SPECFEE\SPECFEE_01Rule.cs" />
     <Compile Include="HE\SOC2000\SOC2000_03Rule.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_02Rule.cs" />
+    <Compile Include="HE\SSN\SSN_02Rule.cs" />
     <Compile Include="HE\STULOAD\STULOAD_04Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02Rule.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01Rule.cs" />
@@ -296,6 +304,7 @@
     <Compile Include="Learner\AddLine1\AddLine1_03Rule.cs" />
     <Compile Include="Learner\ALSCost\ALSCost_02Rule.cs" />
     <Compile Include="Learner\CampId\CampId_01Rule.cs" />
+    <Compile Include="Learner\CampId\CampId_02Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_04Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_01Rule.cs" />
     <Compile Include="Learner\ContPrefType\ContPrefType_02Rule.cs" />
@@ -305,6 +314,8 @@
     <Compile Include="Learner\ContPrefType\ContPrefType_07Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_01Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_02Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_44Rule.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_41Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_43Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_40Rule.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_32Rule.cs" />
@@ -399,7 +410,7 @@
     <Compile Include="LearningDelivery\AFinDate\AFinDate_08Rule.cs" />
     <Compile Include="LearningDelivery\AFinDate\AFinDate_12Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
-    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRuleBase{TEligibilityItem}.cs" />
+    <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRule{TEligibilityItem}.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18Rule.cs" />
     <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71Rule.cs" />

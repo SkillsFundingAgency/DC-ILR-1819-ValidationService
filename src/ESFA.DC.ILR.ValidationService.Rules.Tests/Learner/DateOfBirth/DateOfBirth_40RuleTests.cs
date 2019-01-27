@@ -358,12 +358,5 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         {
             return new DateOfBirth_40Rule(dateTimeQueryService, validationErrorHandler);
         }
-
-        private void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)
-        {
-            errorHandlerMock.Verify(
-                m => m.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()),
-                Times.Exactly(times));
-        }
     }
 }

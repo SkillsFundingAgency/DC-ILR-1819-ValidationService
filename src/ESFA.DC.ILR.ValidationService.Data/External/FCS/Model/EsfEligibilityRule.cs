@@ -11,6 +11,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
 
         public bool Benefits { get; set; }
 
+        public int? MinAge { get; set; }
+
+        public int? MaxAge { get; set; }
+
         public IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; set; }
 
         public IEnumerable<IEsfEligibilityRuleLocalAuthority> LocalAuthorities { get; set; }

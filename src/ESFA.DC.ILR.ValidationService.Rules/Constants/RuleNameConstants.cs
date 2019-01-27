@@ -51,6 +51,7 @@
         public const string AimType_07 = "AimType_07";
 
         public const string CampId_01 = "CampId_01";
+        public const string CampId_02 = "CampId_02";
 
         public const string CompStatus_01 = "CompStatus_01";
         public const string CompStatus_02 = "CompStatus_02";
@@ -97,7 +98,9 @@
         public const string DateOfBirth_38 = "DateOfBirth_38";
         public const string DateOfBirth_39 = "DateOfBirth_39";
         public const string DateOfBirth_40 = "DateOfBirth_40";
+        public const string DateOfBirth_41 = "DateOfBirth_41";
         public const string DateOfBirth_43 = "DateOfBirth_43";
+        public const string DateOfBirth_44 = "DateOfBirth_44";
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
@@ -111,6 +114,8 @@
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
         public const string DelLocPostCode_16 = "DelLocPostCode_16";
+        public const string DelLocPostCode_17 = "DelLocPostCode_17";
+        public const string DelLocPostCode_18 = "DelLocPostCode_18";
 
         public const string Ethnicity_01 = "Ethnicity_01";
 
@@ -448,6 +453,7 @@
         public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
+        public const string R72 = "R72";
         public const string R75 = "R75";
         public const string R85 = "R85";
         public const string R89 = "R89";
@@ -487,6 +493,8 @@
         public const string SOC2000_02 = "SOC2000_02";
         public const string SOC2000_03 = "SOC2000_03";
         public const string SOC2000_04 = "SOC2000_04";
+
+        public const string SSN_02 = "SSN_02";
 
         public const string STULOAD_04 = "STULOAD_04";
 

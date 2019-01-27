@@ -60,6 +60,43 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             return learningDeliveryFams?.Where(fam => HasFamType(fam, famType) && famCodes.Contains(fam.LearnDelFAMCode));
         }
 
+        public IEnumerable<ILearningDeliveryFAM> GetOverLappingLearningDeliveryFAMsForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType)
+        {
+            var overlappingLearningDeliveryFAMs = new List<ILearningDeliveryFAM>();
+
+            var learnDelFAMs =
+                learningDeliveryFams?
+                .Where(fam => HasFamType(fam, famType))
+                .OrderBy(ld => ld.LearnDelFAMDateFromNullable ?? DateTime.MaxValue)
+                .ToArray() ?? new ILearningDeliveryFAM[] { };
+
+            var arraySize = learnDelFAMs.Length;
+
+            if (arraySize >= 2 && !learnDelFAMs.All(ldf => ldf.LearnDelFAMDateFromNullable == null))
+            {
+                for (var i = 0; i < arraySize - 1; i++)
+                {
+                    var learnDelFAMSource = learnDelFAMs[i];
+                    var learnDelFAMToCompare = learnDelFAMs[i + 1];
+
+                    if (IsOverlappingLearnDelFAMDates(learnDelFAMSource.LearnDelFAMDateToNullable, learnDelFAMToCompare.LearnDelFAMDateFromNullable))
+                    {
+                        overlappingLearningDeliveryFAMs.Add(learnDelFAMToCompare);
+                    }
+                }
+            }
+
+            return overlappingLearningDeliveryFAMs;
+        }
+
+        public bool IsOverlappingLearnDelFAMDates(DateTime? dateTo, DateTime? dateFrom)
+        {
+            return
+                 dateTo == null ? true
+                 : dateFrom == null ? false
+                 : dateTo >= dateFrom;
+        }
+
         public bool HasFamType(ILearningDeliveryFAM learningDeliveryFam, string famType)
         {
             return learningDeliveryFam.LearnDelFAMType.CaseInsensitiveEquals(famType);

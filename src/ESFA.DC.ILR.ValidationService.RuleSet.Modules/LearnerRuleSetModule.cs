@@ -27,6 +27,7 @@ using ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SEC;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000;
 using ESFA.DC.ILR.ValidationService.Rules.HE.SPECFEE;
+using ESFA.DC.ILR.ValidationService.Rules.HE.SSN;
 using ESFA.DC.ILR.ValidationService.Rules.HE.STULOAD;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM;
 using ESFA.DC.ILR.ValidationService.Rules.HE.TYPEYR;
@@ -155,6 +156,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(AimType_07Rule),
                 typeof(ALSCost_02Rule),
                 typeof(CampId_01Rule),
+                typeof(CampId_02Rule),
                 typeof(CompStatus_01Rule),
                 typeof(CompStatus_02Rule),
                 typeof(CompStatus_03Rule),
@@ -196,7 +198,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_38Rule),
                 typeof(DateOfBirth_39Rule),
                 typeof(DateOfBirth_40Rule),
+                typeof(DateOfBirth_41Rule),
                 typeof(DateOfBirth_43Rule),
+                typeof(DateOfBirth_44Rule),
                 typeof(DateOfBirth_46Rule),
                 typeof(DateOfBirth_47Rule),
                 typeof(DateOfBirth_48Rule),
@@ -497,6 +501,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(R67Rule),
                 typeof(R68Rule),
                 typeof(R70Rule),
+                typeof(R72Rule),
                 typeof(R75Rule),
                 typeof(R89Rule),
                 typeof(R90Rule),
@@ -525,6 +530,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(SEC_02Rule),
                 typeof(SPECFEE_01Rule),
                 typeof(SPECFEE_02Rule),
+                typeof(SSN_02Rule),
                 typeof(SOC2000_02Rule),
                 typeof(SOC2000_03Rule),
                 typeof(SOC2000_04Rule),

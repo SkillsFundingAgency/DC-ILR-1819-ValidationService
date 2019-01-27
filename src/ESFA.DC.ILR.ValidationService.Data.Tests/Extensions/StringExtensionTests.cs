@@ -36,5 +36,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Extensions
 
             lhs.CaseInsensitiveEquals(null).Should().BeFalse();
         }
+
+        [Fact]
+        public void CaseInsensitiveEquals_Null_Null_True()
+        {
+            string lhs = null;
+            string rhs = null;
+
+            lhs.CaseInsensitiveEquals(rhs).Should().BeTrue();
+        }
     }
 }
