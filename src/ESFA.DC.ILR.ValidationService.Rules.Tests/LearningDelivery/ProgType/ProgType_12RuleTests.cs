@@ -289,6 +289,456 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         }
 
         [Fact]
+        public void ConditionMet_False_FundModelConditionMet_False()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 81;
+            int progType = 2;
+            int fworkCode = 445;
+            int pwayCode = 1;
+            int aimType = 3;
+            DateTime dd04Date = new DateTime(2015, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(false);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(false);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_ProgTypConditionMet_False()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 35;
+            int progType = 0;
+            int fworkCode = 445;
+            int pwayCode = 1;
+            int aimType = 3;
+            DateTime dd04Date = new DateTime(2015, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(false);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(false);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_FworkCodeConditionMet_False()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 35;
+            int progType = 2;
+            int? fworkCode = null;
+            int pwayCode = 1;
+            int aimType = 3;
+            DateTime dd04Date = new DateTime(2015, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(false);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(false);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_PwayCodeConditionMet_False()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 35;
+            int progType = 2;
+            int fworkCode = 445;
+            int? pwayCode = null;
+            int aimType = 3;
+            DateTime dd04Date = new DateTime(2015, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(false);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(false);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_AimTypeConditionMet_False()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 35;
+            int progType = 2;
+            int fworkCode = 445;
+            int pwayCode = 1;
+            int aimType = 0;
+            DateTime dd04Date = new DateTime(2015, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(false);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(false);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_IsExcluded()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 35;
+            int progType = 2;
+            int fworkCode = 445;
+            int pwayCode = 1;
+            int aimType = 3;
+            DateTime dd04Date = new DateTime(2015, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(false);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(true);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(false);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_DD04ConditionMet_False()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 35;
+            int progType = 2;
+            int fworkCode = 445;
+            int pwayCode = 1;
+            int aimType = 3;
+            DateTime dd04Date = new DateTime(2013, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(false);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(false);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_LearningDeliveryFamConditionMet_False()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 35;
+            int progType = 2;
+            int fworkCode = 445;
+            int pwayCode = 1;
+            int aimType = 3;
+            DateTime dd04Date = new DateTime(2015, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(true);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(false);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_BasicSkillsConditionMet_False()
+        {
+            string learnAimRef = "ZESF98765";
+            int fundModel = 35;
+            int progType = 2;
+            int fworkCode = 445;
+            int pwayCode = 1;
+            int aimType = 3;
+            DateTime dd04Date = new DateTime(2015, 09, 01);
+            HashSet<int?> frameWorkComponentTypes = new HashSet<int?>() { 1, 2, 3 };
+
+            var learningDelivery = new TestLearningDelivery()
+            {
+                LearnAimRef = learnAimRef,
+                FundModel = fundModel,
+                AimType = aimType,
+                ProgTypeNullable = progType,
+                FworkCodeNullable = fworkCode,
+                PwayCodeNullable = pwayCode,
+                LearningDeliveryFAMs = new List<ILearningDeliveryFAM>()
+                {
+                    new TestLearningDeliveryFAM()
+                    {
+                        LearnDelFAMType = "RES"
+                    }
+                }
+            };
+
+            var famQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
+            famQueryServiceMock.Setup(x =>
+                    x.HasLearningDeliveryFAMType(learningDelivery.LearningDeliveryFAMs, "RES"))
+                .Returns(false);
+
+            var larsMock = new Mock<ILARSDataService>();
+            larsMock.Setup(e => e.FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)).Returns(false);
+            larsMock.Setup(e => e.BasicSkillsTypeMatchForLearnAimRef(It.IsAny<IEnumerable<int>>(), learnAimRef)).Returns(true);
+
+            NewRule(larsDataService: larsMock.Object, learningDeliveryFamQueryService: famQueryServiceMock.Object)
+                .ConditionMet(
+                    learningDelivery.LearnAimRef,
+                    learningDelivery.FundModel,
+                    dd04Date,
+                    learningDelivery.AimType,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.FworkCodeNullable,
+                    learningDelivery.PwayCodeNullable,
+                    learningDelivery.LearningDeliveryFAMs).Should().BeFalse();
+        }
+
+        [Fact]
         public void Validate_Error()
         {
             string learnAimRef = "ZESF98765";
