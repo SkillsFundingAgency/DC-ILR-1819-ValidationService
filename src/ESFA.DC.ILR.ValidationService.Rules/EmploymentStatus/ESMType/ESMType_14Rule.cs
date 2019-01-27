@@ -1,7 +1,9 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
@@ -19,115 +21,131 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         private readonly IProvideRuleCommonOperations _check;
 
         /// <summary>
+        /// The fcs data (service)
+        /// </summary>
+        private readonly IFCSDataService _fcsData;
+
+        /// <summary>
+        /// derived data rule 22
+        /// </summary>
+        private readonly IDerivedData_26Rule _ddrule26;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ESMType_14Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
+        /// <param name="ddrule26">derived data rule 26.</param>
+        /// <param name="fcsData">The lars data.</param>
         /// <param name="commonOperations">The common operations provider.</param>
         public ESMType_14Rule(
             IValidationErrorHandler validationErrorHandler,
+            IDerivedData_26Rule ddrule26,
+            IFCSDataService fcsData,
             IProvideRuleCommonOperations commonOperations)
             : base(validationErrorHandler, RuleNameConstants.ESMType_14)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            It.IsNull(ddrule26)
+                .AsGuard<ArgumentNullException>(nameof(ddrule26));
+            It.IsNull(fcsData)
+                .AsGuard<ArgumentNullException>(nameof(fcsData));
             It.IsNull(commonOperations)
                 .AsGuard<ArgumentNullException>(nameof(commonOperations));
 
+            _ddrule26 = ddrule26;
+            _fcsData = fcsData;
             _check = commonOperations;
         }
 
         /// <summary>
-        /// Gets the first viable date.
+        /// Gets the eligibility rule for (this delivery).
         /// </summary>
-        public static DateTime FirstViableDate => new DateTime(2013, 08, 01);
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>an eligibility rule</returns>
+        public IEsfEligibilityRule GetEligibilityRuleFor(ILearningDelivery thisDelivery) =>
+            _fcsData.GetEligibilityRuleFor(thisDelivery.ConRefNumber);
 
         /// <summary>
-        /// Determines whether [is qualifying employment] [the specified employment status].
+        /// Gets the derived rule benefits indicator for (this learner and this delivery).
         /// </summary>
-        /// <param name="employmentStatus">The employment status.</param>
+        /// <param name="thisLearner">this learner.</param>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>the value of the benefits indicator</returns>
+        public bool GetDerivedRuleBenefitsIndicatorFor(ILearner thisLearner, ILearningDelivery thisDelivery) =>
+            _ddrule26.LearnerOnBenefitsAtStartOfCompletedZESF0001AimForContract(thisLearner, thisDelivery.ConRefNumber);
+
+        /// <summary>
+        /// Determines whether [has matching benefits indicator] [the specified eligibility].
+        /// </summary>
+        /// <param name="eligibility">The eligibility.</param>
+        /// <param name="derivedRuleResult">if set to <c>true</c> [derived rule result].</param>
         /// <returns>
-        ///   <c>true</c> if [is qualifying employment] [the specified employment status]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [has matching benefits indicator] [the specified eligibility]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsQualifyingEmployment(ILearnerEmploymentStatus employmentStatus) =>
-            It.IsInRange(
-                employmentStatus.EmpStat,
-                TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable,
-                TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable);
+        public bool HasMatchingBenefitsIndicator(IEsfEligibilityRule eligibility, bool derivedRuleResult) =>
+            eligibility.Benefits == derivedRuleResult;
 
         /// <summary>
-        /// Determines whether [has disqualifying indicator] [the specified monitor].
+        /// Determines whether [has matching benefits indicator] [this delivery].
         /// </summary>
-        /// <param name="monitor">The monitor.</param>
+        /// <param name="thisDelivery">The this delivery.</param>
+        /// <param name="derivedRuleAction">The derived rule action.</param>
         /// <returns>
-        ///   <c>true</c> if [has qualifying indicator] [the specified monitor]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [has matching benefits indicator] [this delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasDisqualifyingIndicator(IEmploymentStatusMonitoring monitor) =>
-            It.IsInRange(
-                monitor.ESMType,
-                Monitoring.EmploymentStatus.Types.SelfEmploymentIndicator,
-                Monitoring.EmploymentStatus.Types.EmploymentIntensityIndicator);
+        public bool HasMatchingBenefitsIndicator(ILearningDelivery thisDelivery, Func<bool> derivedRuleAction) =>
+            HasMatchingBenefitsIndicator(GetEligibilityRuleFor(thisDelivery), derivedRuleAction());
 
         /// <summary>
-        /// Determines whether [has disqualifying indicator] [the specified employment status].
+        /// Determines whether [is not valid] [this delivery].
         /// </summary>
-        /// <param name="employmentStatus">The employment status.</param>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <param name="derivedRuleAction">The derived rule action.</param>
         /// <returns>
-        ///   <c>true</c> if [has qualifying indicator] [the specified employment status]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [is not valid] [this delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasDisqualifyingIndicator(ILearnerEmploymentStatus employmentStatus) =>
-            employmentStatus.EmploymentStatusMonitorings.SafeAny(HasDisqualifyingIndicator);
+        public bool IsNotValid(ILearningDelivery thisDelivery, Func<bool> derivedRuleAction) =>
+            _check.HasQualifyingFunding(thisDelivery, TypeOfFunding.EuropeanSocialFund)
+                && !HasMatchingBenefitsIndicator(thisDelivery, derivedRuleAction);
 
         /// <summary>
-        /// Determines whether [is not valid] [the specified employment status].
+        /// Validates this learner.
         /// </summary>
-        /// <param name="employmentStatus">The employment status.</param>
-        /// <returns>
-        ///   <c>true</c> if [is not valid] [the specified employment status]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsNotValid(ILearnerEmploymentStatus employmentStatus) =>
-            _check.HasQualifyingStart(employmentStatus, FirstViableDate)
-                && IsQualifyingEmployment(employmentStatus)
-                && HasDisqualifyingIndicator(employmentStatus);
-
-        /// <summary>
-        /// Validates the specified object.
-        /// </summary>
-        /// <param name="objectToValidate">The object to validate.</param>
-        public void Validate(ILearner objectToValidate)
+        /// <param name="thisLearner">this learner.</param>
+        public void Validate(ILearner thisLearner)
         {
-            It.IsNull(objectToValidate)
-                .AsGuard<ArgumentNullException>(nameof(objectToValidate));
+            It.IsNull(thisLearner)
+                .AsGuard<ArgumentNullException>(nameof(thisLearner));
 
-            var learnRefNumber = objectToValidate.LearnRefNumber;
+            var learnRefNumber = thisLearner.LearnRefNumber;
 
-            objectToValidate.LearnerEmploymentStatuses
-                .ForAny(IsNotValid, x => RaiseValidationMessage(learnRefNumber, x));
+            thisLearner.LearningDeliveries
+                .ForAny(x => IsNotValid(x, () => GetDerivedRuleBenefitsIndicatorFor(thisLearner, x)), x => RaiseValidationMessage(learnRefNumber, x));
         }
 
         /// <summary>
         /// Raises the validation message.
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
-        /// <param name="thisEmployment">The this employment.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearnerEmploymentStatus thisEmployment)
+        /// <param name="thisDelivery">this delivery.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            HandleValidationError(learnRefNumber, null, BuildMessageParametersFor(thisEmployment));
+            HandleValidationError(learnRefNumber, null, BuildMessageParametersFor(thisDelivery));
         }
 
         /// <summary>
         /// Builds the message parameters for.
         /// </summary>
-        /// <param name="thisEmployment">this employment.</param>
+        /// <param name="thisDelivery">this delivery.</param>
         /// <returns>
         /// returns a list of message parameters
         /// </returns>
-        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearnerEmploymentStatus thisEmployment, IEmploymentStatusMonitoring thisMonitor)
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.ESMType, thisMonitor.ESMType),
-                BuildErrorMessageParameter(PropertyNameConstants.DateEmpStatApp, thisEmployment.DateEmpStatApp),
-                BuildErrorMessageParameter(PropertyNameConstants.EmpStat, thisEmployment.EmpStat)
+                BuildErrorMessageParameter(PropertyNameConstants.ConRefNumber, thisDelivery.ConRefNumber)
             };
         }
     }
