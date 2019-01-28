@@ -33,7 +33,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinDate
             {
                 if (learningDelivery.AppFinRecords == null)
                 {
-                    return;
+                    continue;
                 }
 
                 var latestLearnedPlannedEndDate = _dd19.Derive(objectToValidate.LearningDeliveries, learningDelivery);
