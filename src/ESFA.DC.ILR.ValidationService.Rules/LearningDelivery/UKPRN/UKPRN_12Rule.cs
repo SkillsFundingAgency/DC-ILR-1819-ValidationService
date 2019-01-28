@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
@@ -51,29 +50,42 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate?.LearningDeliveries == null)
+            {
+                return;
+            }
+
             var ukprn = _fileDataService.UKPRN();
             var academicYearStart = _academicYearDataService.Start();
 
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => d.LearningDeliveryFAMs != null))
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.LearnStartDate, academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.LearningDeliveryFAMs))
+                if (ConditionMet(
+                    learningDelivery.LearnStartDate,
+                    academicYearStart,
+                    learningDelivery.LearnActEndDateNullable,
+                    learningDelivery.LearningDeliveryFAMs))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, ukprn, _learnDelFamType, "357"));
                 }
             }
         }
 
-        public bool ConditionMet(DateTime learnStartDate, DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        public bool ConditionMet(
+            DateTime learnStartDate,
+            DateTime academicYearStart,
+            DateTime? learnActEndDate,
+            IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return LearnActEndDateConditionMet(learnActEndDate, academicYearStart)
+            return (learnActEndDate == null || LearnActEndDateConditionMet(learnActEndDate.Value, academicYearStart))
+                && (learningDeliveryFAMs != null && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs))
                 && LearnStartDateConditionMet(learnStartDate)
-                && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)
                 && FCTFundingConditionMet();
         }
 
-        public virtual bool LearnActEndDateConditionMet(DateTime? learnActEndDate, DateTime academicYearStart)
+        public virtual bool LearnActEndDateConditionMet(DateTime learnActEndDate, DateTime academicYearStart)
         {
-            return learnActEndDate == null ? true : !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYearStart);
+            return !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate, academicYearStart);
         }
 
         public virtual bool LearnStartDateConditionMet(DateTime learnStartDate)
@@ -91,7 +103,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
             return !_fcsDataService.FundingRelationshipFCTExists(_fundingStreamPeriodCodes);
         }
 
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, int ukprn, string learningDelFAMType, string learningDelFAMCode)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(
+            DateTime learnStartDate,
+            int ukprn,
+            string learningDelFAMType,
+            string learningDelFAMCode)
         {
             return new[]
             {
