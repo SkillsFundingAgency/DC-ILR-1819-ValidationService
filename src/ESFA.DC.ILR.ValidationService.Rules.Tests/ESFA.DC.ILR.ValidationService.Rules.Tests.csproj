@@ -320,6 +320,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_49RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_51RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_50RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_52RuleTests.cs" />
