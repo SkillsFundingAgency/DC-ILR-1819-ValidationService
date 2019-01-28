@@ -158,6 +158,17 @@
 
         public const string EPAOrgID_03 = "EPAOrgID_03";
 
+        public const string ESMType_01 = "ESMType_01";
+        public const string ESMType_02 = "ESMType_02";
+        public const string ESMType_05 = "ESMType_05";
+        public const string ESMType_07 = "ESMType_07";
+        public const string ESMType_08 = "ESMType_08";
+        public const string ESMType_09 = "ESMType_09";
+        public const string ESMType_10 = "ESMType_10";
+        public const string ESMType_11 = "ESMType_11";
+        public const string ESMType_12 = "ESMType_12";
+        public const string ESMType_13 = "ESMType_13";
+        public const string ESMType_14 = "ESMType_14";
         public const string ESMType_15 = "ESMType_15";
 
         public const string FamilyName_01 = "FamilyName_01";

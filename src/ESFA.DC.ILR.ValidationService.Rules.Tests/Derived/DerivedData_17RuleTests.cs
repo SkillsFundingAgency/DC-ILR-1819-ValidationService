@@ -23,7 +23,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         {
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock
-                .Setup(x => x.GetCoreGovContributionCapForStandard(2, DateTime.MinValue)).Returns(33.333m);
+                .Setup(x => x.GetStandardFundingForCodeOnDate(2, DateTime.MinValue)).Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 33.33m
+                });
 
             NewRule(larsDataServiceMock.Object).IsAFilTotalMoreThanCapValue(2, 51, DateTime.MinValue).Should().BeTrue();
         }
@@ -33,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         {
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock
-                .Setup(x => x.GetCoreGovContributionCapForStandard(It.IsAny<int>(), DateTime.MinValue)).Returns((decimal?)null);
+                .Setup(x => x.GetStandardFundingForCodeOnDate(It.IsAny<int>(), DateTime.MinValue)).Returns((ILARSStandardFunding)null);
 
             NewRule(larsDataServiceMock.Object).IsAFilTotalMoreThanCapValue(It.IsAny<int>(), It.IsAny<int>(), DateTime.MinValue).Should().BeFalse();
         }
@@ -49,8 +52,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         {
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock
-                .Setup(x => x.GetCoreGovContributionCapForStandard(2, DateTime.MinValue)).Returns(33.333m);
-
+                .Setup(x => x.GetStandardFundingForCodeOnDate(2, DateTime.MinValue)).Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 33.33m
+                });
             NewRule(larsDataServiceMock.Object).IsAFilTotalMoreThanCapValue(2, 49, DateTime.MinValue).Should().BeFalse();
         }
 
@@ -59,7 +64,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         {
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock
-                .Setup(x => x.GetCoreGovContributionCapForStandard(2, DateTime.MinValue)).Returns(33.333m);
+                .Setup(x => x.GetStandardFundingForCodeOnDate(2, DateTime.MinValue)).Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 33.33m
+                });
 
             NewRule(larsDataServiceMock.Object).IsAFilTotalMoreThanCapValue(2, 51, DateTime.MinValue).Should().BeTrue();
         }
@@ -221,7 +229,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock
-                .Setup(x => x.GetCoreGovContributionCapForStandard(1, It.IsAny<DateTime>())).Returns(1);
+                .Setup(x => x.GetStandardFundingForCodeOnDate(1, It.IsAny<DateTime>())).Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 1m
+                });
 
             NewRule(larsDataServiceMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object)
                 .IsTotalNegotiatedPriceMoreThanCapForStandard(learningDeliveries, 1).Should().BeTrue();
@@ -269,7 +280,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var larsDataServiceMock = new Mock<ILARSDataService>();
             larsDataServiceMock
-                .Setup(x => x.GetCoreGovContributionCapForStandard(2, DateTime.MinValue)).Returns(33.3333m);
+                .Setup(x => x.GetStandardFundingForCodeOnDate(2, DateTime.MinValue)).Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 33.33m
+                });
 
             NewRule(larsDataServiceMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object)
                 .IsTotalNegotiatedPriceMoreThanCapForStandard(learningDeliveries, 1).Should().BeFalse();

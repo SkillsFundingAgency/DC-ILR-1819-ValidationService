@@ -6,7 +6,7 @@
 
         public const string AEBC1819 = "AEBC1819";
 
-        public const string AEBTO_LS1819 = "AEBTO-LS1819";
+        public const string AEB_LS1819 = "AEB-LS1819";
 
         public const string AEB_TOL1819 = "AEB-TOL1819";
 

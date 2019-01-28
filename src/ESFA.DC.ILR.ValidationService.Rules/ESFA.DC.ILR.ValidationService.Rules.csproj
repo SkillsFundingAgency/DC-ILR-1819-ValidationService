@@ -88,7 +88,9 @@
     <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
     <Compile Include="Constants\TypeOfMODESTUD.cs" />
+    <Compile Include="Constants\TypeOfPMRAFin.cs" />
     <Compile Include="Constants\TypeOfSPECFEE.cs" />
+    <Compile Include="Constants\TypeOfTNPAFin.cs" />
     <Compile Include="Constants\WorkPlaceModeConstants.cs" />
     <Compile Include="Constants\TypeOfLARSBasicSkill.cs" />
     <Compile Include="Constants\TypeOfLARSCategory.cs" />
@@ -238,6 +240,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_02Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_12Rule.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_14Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15Rule.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Constants\LearningDeliveryFAMTypeConstants.cs" />

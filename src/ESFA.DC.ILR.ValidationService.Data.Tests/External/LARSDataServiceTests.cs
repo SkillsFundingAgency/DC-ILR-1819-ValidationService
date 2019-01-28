@@ -1972,7 +1972,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
 
-            NewService(externalDataCacheMock.Object).GetCoreGovContributionCapForStandard(standardCode, It.IsAny<DateTime>())
+            NewService(externalDataCacheMock.Object).GetStandardFundingForCodeOnDate(standardCode, It.IsAny<DateTime>())
                 .Should().BeNull();
         }
 
@@ -2011,7 +2011,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
 
-            NewService(externalDataCacheMock.Object).GetCoreGovContributionCapForStandard(2, DateTime.Parse(learnStartDate))
+            NewService(externalDataCacheMock.Object).GetStandardFundingForCodeOnDate(2, DateTime.Parse(learnStartDate)).CoreGovContributionCap
                 .Should().Be(10);
         }
 
@@ -2048,7 +2048,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
 
-            NewService(externalDataCacheMock.Object).GetCoreGovContributionCapForStandard(2, DateTime.Parse(learnStartDate))
+            NewService(externalDataCacheMock.Object).GetStandardFundingForCodeOnDate(2, DateTime.Parse(learnStartDate))
                 .Should().Be(null);
         }
 

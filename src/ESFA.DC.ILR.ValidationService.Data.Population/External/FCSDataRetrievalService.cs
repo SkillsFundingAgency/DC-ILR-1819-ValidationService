@@ -77,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                         TenderSpecReference = r.TenderSpecReference,
                         MinAge = r.MinAge,
                         MaxAge = r.MaxAge,
-                        Benefits = r.Benefits,
+                        Benefits = r.Benefits ?? false,
                         EmploymentStatuses = r.EsfEligibilityRuleEmploymentStatuses
                             .Select(s => new EsfEligibilityRuleEmploymentStatus()
                             {

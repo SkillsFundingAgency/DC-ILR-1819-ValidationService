@@ -21,7 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             _learningDeliveryAppFinRecordQueryService = learningDeliveryAppFinRecordQueryService;
         }
 
-        public bool IsTotalNegotiatedPriceMoreThanCapForStandard(IReadOnlyCollection<ILearningDelivery> learningDeliveries, int standardCode)
+        public bool IsTotalNegotiatedPriceMoreThanCapForStandard(IEnumerable<ILearningDelivery> learningDeliveries, int standardCode)
         {
             if (learningDeliveries == null)
             {
@@ -65,7 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         {
             if (startDate != null)
             {
-                var fundingCap = _larsDataService.GetCoreGovContributionCapForStandard(standardCode, startDate.Value);
+                var fundingCap = _larsDataService.GetStandardFundingForCodeOnDate(standardCode, startDate.Value)?.CoreGovContributionCap;
 
                 if (!fundingCap.HasValue)
                 {
