@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
@@ -18,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("R72");
+            NewRule().RuleName.Should().Be("R73");
         }
 
         [Fact]
@@ -67,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             learningDeliveries.AddRange(standardLearningDeliveries);
 
             var dd17Mock = new Mock<IDerivedData_17Rule>();
-            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, 1)).Returns(false);
+            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, 1)).Returns(true);
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock.Setup(x =>
@@ -490,12 +491,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             result[100].Should().Be(0);
         }
 
-        private R72Rule NewRule(
+        private R73Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
             ILearningDeliveryAppFinRecordQueryService learningDeliveryAppFinRecordQueryService = null,
-            IDerivedData_17Rule dd17 = null)
+            IDerivedData_17Rule dd17 = null,
+            ILARSDataService larsDataService = null)
         {
-            return new R72Rule(validationErrorHandler, learningDeliveryAppFinRecordQueryService, dd17);
+            return new R73Rule(validationErrorHandler, learningDeliveryAppFinRecordQueryService, larsDataService, dd17);
         }
     }
 }
