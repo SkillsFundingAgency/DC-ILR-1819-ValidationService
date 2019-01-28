@@ -548,7 +548,6 @@
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01Rule.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_02Rule.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_03Rule.cs" />
-    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_02Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_01Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_03Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_04Rule.cs" />

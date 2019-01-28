@@ -32,6 +32,7 @@
     <Parameter Name="ValidationErrorsConnectionString" Value="" />
     <Parameter Name="OrganisationsConnectionString" Value="" />
     <Parameter Name="FCSConnectionString" Value="" />
+    <Parameter Name="EPAConnectionString" Value="" />
   </Section>
 
   <Section  Name="AzureRedisSection">

@@ -7,8 +7,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Model
     /// the EPA organisation class
     /// </summary>
     /// <seealso cref="IEPAOrganisation" />
-    public class EPAOrganisation :
-        IEPAOrganisation
+    public class EPAOrganisations :
+        IEPAOrganisations
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -28,6 +28,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Model
         /// <summary>
         /// Gets or sets the effective to (date).
         /// </summary>
-        public DateTime EffectiveTo { get; set; }
+        public DateTime? EffectiveTo { get; set; }
     }
 }

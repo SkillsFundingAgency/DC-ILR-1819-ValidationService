@@ -15,6 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             IULNDataRetrievalService ulnDataRetrievalService = null,
             IPostcodesDataRetrievalService postcodesDataRetrievalService = null,
             IOrganisationsDataRetrievalService organisationsDataRetrievalService = null,
+            IEPAOrganisationsDataRetrievalService epaOrganisationsDataRetrievalService = null,
             ICampusIdentifierDataRetrievalService campusIdentifierDataRetrievalService = null,
             IFCSDataRetrievalService fcsDataRetrievalService = null)
         {
@@ -27,6 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                 ulnDataRetrievalService,
                 postcodesDataRetrievalService,
                 organisationsDataRetrievalService,
+                epaOrganisationsDataRetrievalService,
                 campusIdentifierDataRetrievalService,
                 fcsDataRetrievalService);
         }

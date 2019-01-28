@@ -1,15 +1,15 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Data.External
-{
-    using System.Collections.Generic;
-    using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
-    using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
-    using ESFA.DC.ILR.ValidationService.Data.Interface;
+﻿using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 
+namespace ESFA.DC.ILR.ValidationService.Data.External
+{
     /// <summary>
     /// The external data cache implementation,
     /// model to be reflected within the validation actor.
@@ -44,7 +44,7 @@
         /// <summary>
         /// Gets or sets the epa organisations.
         /// </summary>
-        public IReadOnlyCollection<IEPAOrganisation> EPAOrganisations { get; set; }
+        public IReadOnlyDictionary<string, List<EPAOrganisations>> EPAOrganisations { get; set; }
 
         public IReadOnlyCollection<string> Postcodes { get; set; }
 
