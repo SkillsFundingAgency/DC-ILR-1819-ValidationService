@@ -30,6 +30,88 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         }
 
         /// <summary>
+        /// Gets the contract allocation for.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>a contract allocation (if found)</returns>
+        public IFcsContractAllocation GetContractAllocationFor(string contractReference)
+        {
+            if (contractReference == null)
+            {
+                return null;
+            }
+
+            _contractAllocations.TryGetValue(contractReference, out IFcsContractAllocation fcsContractAllocation);
+
+            return fcsContractAllocation;
+        }
+
+        /// <summary>
+        /// Gets the eligibility rule for.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>an eligibility rule (if found)</returns>
+        public IEsfEligibilityRule GetEligibilityRuleFor(string contractReference)
+        {
+            var contractAllocation = GetContractAllocationFor(contractReference);
+
+            return contractAllocation?.EsfEligibilityRule;
+        }
+
+        /// <summary>
+        /// Gets the eligibility rule employment status.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>
+        /// the eligibility rule employment status (if found)
+        /// </returns>
+        public IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference)
+        {
+            var eligibility = GetEligibilityRuleFor(contractReference);
+
+            return eligibility?.EmploymentStatuses
+                ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleEmploymentStatus>();
+        }
+
+        /// <summary>
+        /// Gets the eligibility rule local authority.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>
+        /// an eligibility rule local authority (if found)
+        /// </returns>
+        public IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference)
+        {
+            var eligibility = GetEligibilityRuleFor(contractReference);
+
+            return eligibility?.LocalAuthorities
+                ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalAuthority>();
+        }
+
+        /// <summary>
+        /// Gets the eligibility rule enterprise partnership.
+        /// </summary>
+        /// <param name="contractReference">The contract reference.</param>
+        /// <returns>
+        /// an eligibility rule enterprise partnership (if found)
+        /// </returns>
+        public IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference)
+        {
+            var eligibility = GetEligibilityRuleFor(contractReference);
+
+            return eligibility?.LocalEnterprisePartnerships
+                ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalEnterprisePartnership>();
+        }
+
+        public IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
+        {
+            var eligibility = GetEligibilityRuleFor(conRefNumber);
+
+            return eligibility?.SectorSubjectAreaLevels
+                ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleSectorSubjectAreaLevel>();
+        }
+
+        /// <summary>
         /// Contract reference number exists.
         /// </summary>
         /// <param name="conRefNumber">The con reference number.</param>
@@ -49,72 +131,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
             var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList().ToCaseInsensitiveHashSet();
 
             return _contractAllocations.Values.Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
-        }
-
-        /// <summary>
-        /// Gets the eligibility rule employment status.
-        /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
-        /// <returns>
-        /// the eligibility rule employment status (if found)
-        /// </returns>
-        public IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference)
-        {
-            var contractAllocation = GetContractAllocationFor(contractReference);
-
-            return contractAllocation?.EsfEligibilityRule?.EmploymentStatuses ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleEmploymentStatus>();
-        }
-
-        /// <summary>
-        /// Gets the eligibility rule local authority.
-        /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
-        /// <returns>
-        /// an eligibility rule local authority (if found)
-        /// </returns>
-        public IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference)
-        {
-            var contractAllocation = GetContractAllocationFor(contractReference);
-
-            return contractAllocation?.EsfEligibilityRule?.LocalAuthorities ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalAuthority>();
-        }
-
-        /// <summary>
-        /// Gets the eligibility rule enterprise partnership.
-        /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
-        /// <returns>
-        /// an eligibility rule enterprise partnership (if found)
-        /// </returns>
-        public IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference)
-        {
-            var contractAllocation = GetContractAllocationFor(contractReference);
-
-            return contractAllocation?.EsfEligibilityRule?.LocalEnterprisePartnerships ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalEnterprisePartnership>();
-        }
-
-        /// <summary>
-        /// Gets the contract allocation for.
-        /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
-        /// <returns>a contract allocation (if found)</returns>
-        public IFcsContractAllocation GetContractAllocationFor(string contractReference)
-        {
-            if (contractReference == null)
-            {
-                return null;
-            }
-
-            _contractAllocations.TryGetValue(contractReference, out IFcsContractAllocation fcsContractAllocation);
-
-            return fcsContractAllocation;
-        }
-
-        public IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
-        {
-            var contractAllocation = GetContractAllocationFor(conRefNumber);
-
-            return contractAllocation?.EsfEligibilityRule?.SectorSubjectAreaLevels ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleSectorSubjectAreaLevel>();
         }
 
         public bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber)
