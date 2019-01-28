@@ -23,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly IOrganisationDataService _organisationDataService;
         private readonly IFileDataService _fileDataService;
 
-        private readonly string[] _notionalNvqLevels =
+        private readonly HashSet<string> _notionalNvqLevels = new HashSet<string>
         {
             LARSNotionalNVQLevelV2.Level3,
             LARSNotionalNVQLevelV2.Level4,
@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
             LARSNotionalNVQLevelV2.HigherLevel
         };
 
-        private readonly string[] _learningDeliveryFamCodes =
+        private readonly HashSet<string> _learningDeliveryFamCodes = new HashSet<string>
         {
             LearningDeliveryFAMCodeConstants.LDM_OLASS,
             LearningDeliveryFAMCodeConstants.LDM_SteelRedundancy,
