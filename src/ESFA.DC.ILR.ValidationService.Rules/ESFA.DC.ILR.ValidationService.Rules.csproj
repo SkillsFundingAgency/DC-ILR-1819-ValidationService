@@ -478,6 +478,7 @@
     <Compile Include="LearningDelivery\Outcome\Outcome_01Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_07Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_08Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_01Rule.cs" />
