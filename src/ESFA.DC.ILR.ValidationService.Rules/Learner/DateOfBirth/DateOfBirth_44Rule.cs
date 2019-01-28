@@ -48,8 +48,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                     continue;
                 }
 
-                int age = _derivedDataRule23.GetLearnersAgeAtStartOfESFContract(learner, learningDelivery.ConRefNumber);
-                if (age < (contract.EsfEligibilityRule.MinAge ?? int.MaxValue) || age > (contract.EsfEligibilityRule.MaxAge ?? int.MinValue))
+                int? age = _derivedDataRule23.GetLearnersAgeAtStartOfESFContract(learner, learningDelivery.ConRefNumber);
+                if (age == null)
+                {
+                    continue;
+                }
+
+                if (age.Value < (contract.EsfEligibilityRule.MinAge ?? int.MaxValue) || age.Value > (contract.EsfEligibilityRule.MaxAge ?? int.MinValue))
                 {
                     RaiseValidationMessage(learner, learningDelivery);
                 }
