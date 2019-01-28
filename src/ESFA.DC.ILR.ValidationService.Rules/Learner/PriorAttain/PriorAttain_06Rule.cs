@@ -84,10 +84,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
         {
             var contractAllocation = _fcsDataService.GetContractAllocationFor(conRefNumber);
 
-            var minPriorAttainment = !string.IsNullOrWhiteSpace(contractAllocation?.EsfEligibilityRule?.MinPriorAttainment) ?
-                                        _eligibilityRulePriorAttainValuesMapping[contractAllocation?.EsfEligibilityRule?.MinPriorAttainment] : 0;
-            var maxPriorAttainment = !string.IsNullOrWhiteSpace(contractAllocation?.EsfEligibilityRule?.MaxPriorAttainment) ?
-                                        _eligibilityRulePriorAttainValuesMapping[contractAllocation?.EsfEligibilityRule?.MaxPriorAttainment] : 0;
+            var minPriorAttainment = GetEligibilityRulePriorAttainmentMappedValue(contractAllocation?.EsfEligibilityRule?.MinPriorAttainment);
+            var maxPriorAttainment = GetEligibilityRulePriorAttainmentMappedValue(contractAllocation?.EsfEligibilityRule?.MaxPriorAttainment);
 
             if ((minPriorAttainment == 0 && maxPriorAttainment == 0) || !priorAttain.HasValue)
             {
@@ -110,6 +108,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
                 BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
                 BuildErrorMessageParameter(PropertyNameConstants.ConRefNumber, conRefNumber)
             };
+        }
+
+        private int GetEligibilityRulePriorAttainmentMappedValue(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return 0;
+            }
+
+            return !_eligibilityRulePriorAttainValuesMapping.TryGetValue(key, out var returnValue) ? 0 : returnValue;
         }
     }
 }
