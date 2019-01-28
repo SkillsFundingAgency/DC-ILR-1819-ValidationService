@@ -214,8 +214,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData(TypeOfPriorAttainment.Level5AndAboveExpired20130731)]
         [InlineData(TypeOfPriorAttainment.Level6)]
         [InlineData(TypeOfPriorAttainment.Level7AndAbove)]
+        [InlineData(TypeOfPriorAttainment.OtherLevelNotKnown)]
         [InlineData(TypeOfPriorAttainment.NotKnown)]
-        [InlineData(TypeOfPriorAttainment.NotQualified)]
         public void InvalidItemRaisesValidationMessage(int candidate)
         {
             // arrange
@@ -312,8 +312,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData(TypeOfPriorAttainment.Level5AndAboveExpired20130731)]
         [InlineData(TypeOfPriorAttainment.Level6)]
         [InlineData(TypeOfPriorAttainment.Level7AndAbove)]
+        [InlineData(TypeOfPriorAttainment.OtherLevelNotKnown)]
         [InlineData(TypeOfPriorAttainment.NotKnown)]
-        [InlineData(TypeOfPriorAttainment.NotQualified)]
         public void ValidItemDoesNotRaiseValidationMessage(int candidate)
         {
             // arrange
