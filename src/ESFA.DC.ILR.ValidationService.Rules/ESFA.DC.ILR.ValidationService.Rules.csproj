@@ -241,6 +241,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_02Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_12Rule.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_13Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_14Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15Rule.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
