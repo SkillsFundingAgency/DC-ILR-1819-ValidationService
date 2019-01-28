@@ -17,13 +17,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             _dateTimeQueryService = dateTimeQueryService;
         }
 
-        public int GetLearnersAgeAtStartOfESFContract(
+        public int? GetLearnersAgeAtStartOfESFContract(
             ILearner learner,
             string conRefNumber)
         {
             if (learner?.DateOfBirthNullable == null)
             {
-                return default(int);
+                return null;
             }
 
             var delivery = learner.LearningDeliveries
@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
             if (delivery == null)
             {
-                return default(int);
+                return null;
             }
 
             return _dateTimeQueryService.AgeAtGivenDate(
