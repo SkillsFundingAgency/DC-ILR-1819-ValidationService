@@ -1,4 +1,4 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <summary>
         /// Gets the epa organisations.
         /// </summary>
-        IReadOnlyCollection<IEPAOrganisation> EPAOrganisations { get; }
+        IReadOnlyDictionary<string, List<EPAOrganisations>> EPAOrganisations { get; }
 
         IReadOnlyCollection<string> Postcodes { get; }
 
