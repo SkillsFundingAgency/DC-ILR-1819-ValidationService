@@ -418,6 +418,8 @@
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
+        public const string ProgType_12 = "ProgType_12";
+
         public const string ProvSpecDelMonOccur_01 = "ProvSpecDelMonOccur_01";
 
         public const string PwayCode_02 = "PwayCode_02";
