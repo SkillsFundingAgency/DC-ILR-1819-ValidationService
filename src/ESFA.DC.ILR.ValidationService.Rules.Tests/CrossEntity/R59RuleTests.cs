@@ -83,11 +83,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestLearner()
                     {
-                        ULN = 899999
+                        ULN = 899999,
+                        LearnRefNumber = "test1",
                     },
                     new TestLearner()
                     {
-                        ULN = 899999
+                        ULN = 899999,
+                        LearnRefNumber = "test2",
                     },
                     new TestLearner()
                     {
@@ -103,7 +105,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object).Validate(testMessage);
-                validationErrorHandlerMock.Verify(h => h.Handle(RuleNameConstants.R59, It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()), Times.Once);
+                validationErrorHandlerMock.Verify(h => h.Handle(RuleNameConstants.R59, "test1", null, It.IsAny<IEnumerable<IErrorMessageParameter>>()), Times.Once);
+                validationErrorHandlerMock.Verify(h => h.Handle(RuleNameConstants.R59, "test2", null, It.IsAny<IEnumerable<IErrorMessageParameter>>()), Times.Once);
             }
         }
 
