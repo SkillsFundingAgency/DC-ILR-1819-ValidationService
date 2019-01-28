@@ -114,7 +114,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                     return false;
                 }
 
-                var fundingCap = _larsDataService.GetCoreGovContributionCapForStandard(standardCode, applicableDateForCap.Value);
+                var fundingCap = _larsDataService.GetStandardFundingForCodeOnDate(standardCode, applicableDateForCap.Value)?.CoreGovContributionCap;
                 return totalPMRValue > (standardTNPTotal - fundingCap);
             }
 
