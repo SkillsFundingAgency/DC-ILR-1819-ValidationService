@@ -181,17 +181,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
                 .Any(s => (s.SectorSubjectAreaCode.HasValue && sectorSubjectAreaTier1.HasValue && s.SectorSubjectAreaCode == sectorSubjectAreaTier1)
                     && (s.SectorSubjectAreaCode.HasValue && sectorSubjectAreaTier2.HasValue && s.SectorSubjectAreaCode == sectorSubjectAreaTier2)) ?? false;
         }
-
-        public string GetMinPriorAttainment(string conRefNumber)
-        {
-            var contractAllocation = GetContractAllocationFor(conRefNumber);
-            return contractAllocation?.EsfEligibilityRule?.MinPriorAttainment;
-        }
-
-        public string GetMaxPriorAttainment(string conRefNumber)
-        {
-            var contractAllocation = GetContractAllocationFor(conRefNumber);
-            return contractAllocation?.EsfEligibilityRule?.MaxPriorAttainment;
-        }
     }
 }

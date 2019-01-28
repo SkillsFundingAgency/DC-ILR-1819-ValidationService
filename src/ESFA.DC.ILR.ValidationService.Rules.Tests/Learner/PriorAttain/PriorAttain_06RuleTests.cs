@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -76,7 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -97,7 +97,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -117,7 +117,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -148,7 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -183,7 +183,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -218,7 +218,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -253,7 +253,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
@@ -288,7 +288,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
-                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
                 .Returns(new FcsContractAllocation
                 {
                     EsfEligibilityRule = new EsfEligibilityRule()
