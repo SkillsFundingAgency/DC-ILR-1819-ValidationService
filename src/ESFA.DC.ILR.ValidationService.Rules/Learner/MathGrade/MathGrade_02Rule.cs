@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -37,11 +32,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade
             {
                 HandleValidationError(
                     learnRefNumber: objectToValidate.LearnRefNumber,
-                    errorMessageParameters: BuildErrorMessageParameters(objectToValidate.EngGrade));
+                    errorMessageParameters: BuildErrorMessageParameters(objectToValidate.MathGrade));
             }
         }
 
-        public bool MathGradeConditionMet(string mathGrade) => !_lookupProviderDetails.Contains(LookupCodedKey.MathGrade, mathGrade);
+        public bool MathGradeConditionMet(string mathGrade) => !_lookupProviderDetails.Contains(LookupCodedKey.GCSEGrade, mathGrade);
 
         public bool MathGradeSuppliedAndNotNone(string mathGrade) => !string.IsNullOrEmpty(mathGrade)
                 && !mathGrade.CaseInsensitiveEquals(Grades.NONE);

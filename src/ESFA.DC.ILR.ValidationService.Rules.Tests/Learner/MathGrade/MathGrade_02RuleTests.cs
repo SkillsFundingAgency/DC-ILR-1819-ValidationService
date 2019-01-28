@@ -8,58 +8,58 @@ using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade;
+using ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
 {
-    public class EngGrade_02RuleTests : AbstractRuleTests<EngGrade_02Rule>
+    public class MathGrade_02RuleTests : AbstractRuleTests<MathGrade_02Rule>
     {
         [Fact]
         public void RuleName()
         {
-            NewRule().RuleName.Should().Be("EngGrade_02");
+            NewRule().RuleName.Should().Be("MathGrade_02");
         }
 
         [Fact]
         public void BuildErrorMessageParameters()
         {
-            string engGrade = Grades.AstarA;
+            string mathGrade = Grades.AstarA;
 
             var validaionErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validaionErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.EngGrade, engGrade)).Verifiable();
+            validaionErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.MathGrade, mathGrade)).Verifiable();
 
-            NewRule(validationErrorHandler: validaionErrorHandlerMock.Object).BuildErrorMessageParameters(engGrade);
+            NewRule(validationErrorHandler: validaionErrorHandlerMock.Object).BuildErrorMessageParameters(mathGrade);
 
             validaionErrorHandlerMock.Verify();
         }
 
         [Fact]
-        public void EngGradeConditionMet_False()
+        public void MathGradeConditionMet_False()
         {
-            string engGrade = "ABC";
+            string mathGrade = "ABC";
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, engGrade)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, mathGrade)).Returns(true);
 
-            NewRule(provideLookupDetails: provideLookupDetails.Object).EngGradeConditionMet(engGrade).Should().BeFalse();
+            NewRule(provideLookupDetails: provideLookupDetails.Object).MathGradeConditionMet(mathGrade).Should().BeFalse();
         }
 
         [Theory]
         [InlineData(Grades.AstarA)]
         [InlineData("a*a*")]
-        public void EngGradeConditionMet_True(string engGrade)
+        public void EngGradeConditionMet_True(string mathGrade)
         {
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, engGrade)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, mathGrade)).Returns(false);
 
-            NewRule(provideLookupDetails: provideLookupDetails.Object).EngGradeConditionMet(engGrade).Should().BeTrue();
+            NewRule(provideLookupDetails: provideLookupDetails.Object).MathGradeConditionMet(mathGrade).Should().BeTrue();
         }
 
         [Theory]
@@ -67,32 +67,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
         [InlineData(null)]
         [InlineData(Grades.NONE)]
         [InlineData("none")]
-        public void EngGradeSuppliedAndNotNone_False(string engGrade)
+        public void MathGradeSuppliedAndNotNone_False(string mathGrade)
         {
-            NewRule().EngGradeSuppliedAndNotNone(engGrade).Should().BeFalse();
+            NewRule().MathGradeSuppliedAndNotNone(mathGrade).Should().BeFalse();
         }
 
         [Theory]
         [InlineData("a*a")]
         [InlineData(Grades.AstarAstar)]
-        public void EngGradeSuppliedAndNotNone_True(string engGrade)
+        public void EngGradeSuppliedAndNotNone_True(string mathGrade)
         {
-            NewRule().EngGradeSuppliedAndNotNone(engGrade).Should().BeTrue();
+            NewRule().MathGradeSuppliedAndNotNone(mathGrade).Should().BeTrue();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            string engGrade = "QQ";
+            string mathGrade = "QQ";
             var testLearner = new TestLearner()
             {
                 LearnRefNumber = "AB12345",
-                EngGrade = engGrade,
+                MathGrade = mathGrade,
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, engGrade)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, mathGrade)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -108,17 +108,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
         [InlineData("")]
         [InlineData(Grades.AB)]
         [InlineData("ab")]
-        public void Validate_NoError(string engGrade)
+        public void Validate_NoError(string mathGrade)
         {
             var testLearner = new TestLearner()
             {
                 LearnRefNumber = "AB12345",
-                EngGrade = engGrade,
+                MathGrade = mathGrade
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, engGrade)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, mathGrade)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -175,11 +175,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
             }
         }
 
-        public EngGrade_02Rule NewRule(
+        public MathGrade_02Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
             IProvideLookupDetails provideLookupDetails = null)
         {
-            return new EngGrade_02Rule(
+            return new MathGrade_02Rule(
                 validationErrorHandler: validationErrorHandler,
                 provideLookupDetails: provideLookupDetails);
         }
