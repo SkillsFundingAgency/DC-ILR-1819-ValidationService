@@ -117,17 +117,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public DateTime GetApplicableDateForCapChecking(List<ILearningDelivery> learningDeliveries)
         {
-            var earliestStartDate = learningDeliveries.Select(x => new
-                {
-                    ApplicabaleDate = x.OrigLearnStartDateNullable.HasValue && x.OrigLearnStartDateNullable.Value < x.LearnStartDate
+            var earliestStartDate = learningDeliveries.Select(x =>
+                    x.OrigLearnStartDateNullable.HasValue && x.OrigLearnStartDateNullable.Value < x.LearnStartDate
                         ? x.OrigLearnStartDateNullable.Value
-                        : x.LearnStartDate
-                })
-                .OrderBy(x => x.ApplicabaleDate)
-                .FirstOrDefault()?
-                .ApplicabaleDate;
+                        : x.LearnStartDate)
+                .OrderBy(x => x)
+                .FirstOrDefault();
 
-            return earliestStartDate ?? DateTime.MaxValue;
+            return earliestStartDate;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnRefNumber, int standardCode)

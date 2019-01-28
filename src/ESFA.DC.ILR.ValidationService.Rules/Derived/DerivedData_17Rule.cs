@@ -50,15 +50,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
         public DateTime? GetApplicableDateForCapChecking(List<ILearningDelivery> learningDeliveries)
         {
-            var earliestStartDate = learningDeliveries.Select(x => new
-                {
-                    ApplicabaleDate = x.OrigLearnStartDateNullable.HasValue && x.OrigLearnStartDateNullable.Value < x.LearnStartDate
+            var earliestStartDate = learningDeliveries.Select(x =>
+                    x.OrigLearnStartDateNullable.HasValue && x.OrigLearnStartDateNullable.Value < x.LearnStartDate
                         ? x.OrigLearnStartDateNullable.Value
-                        : x.LearnStartDate
-                })
-                .OrderBy(x => x.ApplicabaleDate).FirstOrDefault();
+                        : x.LearnStartDate).OrderBy(x => x).FirstOrDefault();
 
-            return earliestStartDate?.ApplicabaleDate;
+            return earliestStartDate;
         }
 
         public bool IsAFilTotalMoreThanCapValue(int standardCode, int totalStandardsValue, DateTime? startDate)
