@@ -16,11 +16,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null)
-            {
-                return;
-            }
-
             if (ConditionMet(objectToValidate.LLDDHealthProb, objectToValidate.LLDDAndHealthProblems))
             {
                 HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.LLDDHealthProb));
@@ -29,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
 
         public bool ConditionMet(int lldHealthProblem, IReadOnlyCollection<ILLDDAndHealthProblem> llddAndHealthProblems)
         {
-            return lldHealthProblem == 2 &&
+            return lldHealthProblem == LLDDHealthProblemConstants.NoLearningDifficulty &&
                    (llddAndHealthProblems != null && llddAndHealthProblems.Any());
         }
 
