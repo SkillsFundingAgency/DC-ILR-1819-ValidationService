@@ -27,24 +27,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             NewRule().RuleName.Should().Be("UKPRN_10");
         }
 
-        [Fact]
-        public void LearnActEndDateConditionMet_True()
-        {
-            DateTime? learnActEndDate = new DateTime(2018, 8, 1);
-
-            DateTime academicYear = new DateTime(2018, 8, 1);
-
-            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
-
-            academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
-
-            NewRule(academicYearQueryService: academicYearQueryServiceMock.Object).LearnActEndDateConditionMet(learnActEndDate, academicYear).Should().BeTrue();
-        }
-
         [Theory]
         [InlineData(null)]
-        [InlineData("2018-05-01")]
-        public void LearnActEndDateConditionMet_False(string learnActEndDateString)
+        [InlineData("2018-08-01")]
+        public void LearnActEndDateConditionMet_True(string learnActEndDateString)
         {
             DateTime? learnActEndDate = learnActEndDateString != null ? DateTime.Parse(learnActEndDateString) : (DateTime?)null;
             DateTime academicYear = new DateTime(2018, 8, 1);
@@ -52,12 +38,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
             if (learnActEndDate != null)
             {
-                academicYearQueryServiceMock
-                    .Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear))
-                    .Returns(true);
+                academicYearQueryServiceMock.Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear)).Returns(false);
             }
 
-            NewRule(academicYearQueryService: academicYearQueryServiceMock.Object).LearnActEndDateConditionMet(learnActEndDate, academicYear).Should().BeFalse();
+            NewRule(academicYearQueryService: academicYearQueryServiceMock.Object)
+                .LearnActEndDateConditionMet(learnActEndDate, academicYear).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnActEndDateConditionMet_False()
+        {
+            DateTime? learnActEndDate = new DateTime(2018, 5, 1);
+            DateTime academicYear = new DateTime(2018, 8, 1);
+
+            var academicYearQueryServiceMock = new Mock<IAcademicYearQueryService>();
+            academicYearQueryServiceMock
+                .Setup(qs => qs.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYear))
+                .Returns(true);
+
+            NewRule(academicYearQueryService: academicYearQueryServiceMock.Object)
+                .LearnActEndDateConditionMet(learnActEndDate, academicYear).Should().BeFalse();
         }
 
         [Fact]
