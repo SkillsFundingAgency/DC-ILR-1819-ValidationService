@@ -218,6 +218,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_13RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_14RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_12RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15RuleTests.cs" />
