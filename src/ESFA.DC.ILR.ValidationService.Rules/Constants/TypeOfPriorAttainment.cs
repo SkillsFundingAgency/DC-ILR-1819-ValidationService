@@ -70,7 +70,7 @@
         /// <summary>
         /// not qualified
         /// </summary>
-        public const int NotQualified = 99;
+        public const int NoQualifications = 99;
 
         /// <summary>
         /// As higher level achievements
