@@ -21,8 +21,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>
         {
             FundingStreamPeriodCodeConstants.AEBC1819,
-            FundingStreamPeriodCodeConstants.AEBTO_LS1819,
-            FundingStreamPeriodCodeConstants.AEBTO_TOL1819
+            FundingStreamPeriodCodeConstants.AEB_LS1819,
+            FundingStreamPeriodCodeConstants.AEB_TOL1819
         }.ToCaseInsensitiveHashSet();
 
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate.LearningDeliveries == null)
+            if (objectToValidate?.LearningDeliveries == null)
             {
                 return;
             }
@@ -73,9 +73,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         public bool ConditionMet(int fundModel, int? progType, DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
             return FundModelConditionMet(fundModel)
-                && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)
-                && DD07ConditionMet(progType)
-                && LearnActEndDateConditionMet(learnActEndDate, academicYearStart)
+                && (learningDeliveryFAMs != null && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs))
+                && (progType.HasValue && DD07ConditionMet(progType.Value))
+                && (!learnActEndDate.HasValue || LearnActEndDateConditionMet(learnActEndDate.Value, academicYearStart))
                 && FCTFundingConditionMet();
         }
 
@@ -91,14 +91,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
                 || _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, _ldm357));
         }
 
-        public virtual bool DD07ConditionMet(int? progType)
+        public virtual bool DD07ConditionMet(int progType)
         {
             return !_dd07.IsApprenticeship(progType);
         }
 
-        public virtual bool LearnActEndDateConditionMet(DateTime? learnActEndDate, DateTime academicYearStart)
+        public virtual bool LearnActEndDateConditionMet(DateTime learnActEndDate, DateTime academicYearStart)
         {
-            return learnActEndDate == null ? true : !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYearStart);
+            return !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate, academicYearStart);
         }
 
         public virtual bool FCTFundingConditionMet()

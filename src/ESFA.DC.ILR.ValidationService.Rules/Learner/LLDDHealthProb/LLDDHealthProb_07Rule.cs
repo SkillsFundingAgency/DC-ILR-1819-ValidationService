@@ -58,17 +58,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
                 return;
             }
 
-            foreach (var learningDelivery in learningDeliveries)
-            {
-                if (learningDelivery.FundModel == TypeOfFunding.NotFundedByESFA &&
-                    (learningDelivery.LearningDeliveryFAMs
+            if (!learner.LearningDeliveries.Any(ld =>
+                    ld.FundModel == TypeOfFunding.NotFundedByESFA &&
+                    (ld.LearningDeliveryFAMs
                         ?.Any(ldf => !ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.SOF) ||
-                                    !ldf.LearnDelFAMCode.CaseInsensitiveEquals(LearningDeliveryFAMCodeConstants.SOF_LA)) ?? false))
-                {
-                    return;
-                }
-
-                RaiseValidationMessage(learner, learningDelivery);
+                                    !ldf.LearnDelFAMCode.CaseInsensitiveEquals(LearningDeliveryFAMCodeConstants.SOF_LA)) ?? false)))
+            {
+                RaiseValidationMessage(learner);
             }
         }
 
@@ -79,17 +75,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDHealthProb
             return _dateTimeQueryService.AgeAtGivenDate(dateOfBirth ?? DateTime.MaxValue, startDate) >= MaxRuleAge;
         }
 
-        private void RaiseValidationMessage(ILearner learner, ILearningDelivery learningDelivery)
+        private void RaiseValidationMessage(ILearner learner)
         {
             var parameters = new List<IErrorMessageParameter>
             {
                 BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, learner.DateOfBirthNullable),
-                BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, learner.PlanLearnHoursNullable),
-                BuildErrorMessageParameter(PropertyNameConstants.LLDDHealthProb, learner.LLDDHealthProb),
-                BuildErrorMessageParameter(PropertyNameConstants.FundModel, learningDelivery.FundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.LLDDHealthProb, learner.LLDDHealthProb)
             };
 
-            HandleValidationError(learner.LearnRefNumber, learningDelivery.AimSeqNumber, parameters);
+            HandleValidationError(learner.LearnRefNumber, null, parameters);
         }
     }
 }

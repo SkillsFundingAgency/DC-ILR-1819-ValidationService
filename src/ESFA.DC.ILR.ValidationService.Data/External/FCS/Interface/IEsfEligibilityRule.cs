@@ -15,7 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
 
         int? MaxAge { get; }
 
-        bool? Benefits { get; }
+        bool Benefits { get; }
 
         string MinPriorAttainment { get; }
 
