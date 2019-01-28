@@ -18,6 +18,7 @@
     <Parameter Name="PostcodesConnectionString" DefaultValue="metadata=res://*/Postcodes.csdl|res://*/Postcodes.ssdl|res://*/Postcodes.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.Postcodes.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
     <Parameter Name="ULNConnectionstring" DefaultValue="metadata=res://*/ULN.csdl|res://*/ULN.ssdl|res://*/ULN.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.ULN.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
     <Parameter Name="FCSConnectionString" DefaultValue="" />
+    <Parameter Name="EPAConnectionString" DefaultValue="" />
     <Parameter Name="LargeEmployersConnectionString" DefaultValue="" />
     <Parameter Name="ValidationErrorsConnectionString" DefaultValue="" />
     <Parameter Name="RedisCacheConnectionString" DefaultValue="" />
@@ -93,6 +94,7 @@
             <Parameter Name="ValidationErrorsConnectionString" Value="[ValidationErrorsConnectionString]" />
             <Parameter Name="OrganisationsConnectionString" Value="[OrganisationsConnectionString]" />
             <Parameter Name="FCSConnectionString" Value="[FCSConnectionString]" />
+            <Parameter Name="EPAConnectionString" Value="[EPAConnectionString]" />
           </Section>
         </Settings>
       </ConfigOverride>
