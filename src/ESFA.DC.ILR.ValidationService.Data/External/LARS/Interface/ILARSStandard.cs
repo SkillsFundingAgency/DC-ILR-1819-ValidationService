@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
+﻿using System.Collections.Generic;
+
+namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
     /// <summary>
     /// lars standard
@@ -20,6 +22,8 @@
         /// Gets the notional end level.
         /// </summary>
         string NotionalEndLevel { get; }
+
+        IEnumerable<ILARSStandardFunding> StandardsFunding { get; }
 
         /// <summary>
         /// Gets the effective from date.

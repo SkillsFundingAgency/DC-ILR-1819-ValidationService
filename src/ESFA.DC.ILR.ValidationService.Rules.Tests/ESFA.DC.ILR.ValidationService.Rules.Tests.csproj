@@ -105,12 +105,15 @@
   <ItemGroup>
     <Compile Include="Abstract\AbstractRuleTests.cs" />
     <Compile Include="CrossEntity\R06RuleTests.cs" />
+    <Compile Include="CrossEntity\R119RuleTests.cs" />
     <Compile Include="CrossEntity\R49RuleTests.cs" />
     <Compile Include="CrossEntity\R101RuleTests.cs" />
     <Compile Include="CrossEntity\R51RuleTests.cs" />
     <Compile Include="CrossEntity\R111RuleTests.cs" />
     <Compile Include="CrossEntity\R116RuleTests.cs" />
     <Compile Include="CrossEntity\R58RuleTests.cs" />
+    <Compile Include="CrossEntity\R73RuleTests.cs" />
+    <Compile Include="CrossEntity\R72RuleTests.cs" />
     <Compile Include="CrossEntity\R89RuleTests.cs" />
     <Compile Include="CrossEntity\R92RuleTests.cs" />
     <Compile Include="CrossEntity\R110RuleTests.cs" />
@@ -159,6 +162,7 @@
     <Compile Include="Derived\DerivedData_05RuleTests.cs" />
     <Compile Include="Derived\DerivedData_14RuleTests.cs" />
     <Compile Include="Derived\DerivedData_18RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_25RuleTests.cs" />
     <Compile Include="Derived\DerivedData_23RuleTests.cs" />
     <Compile Include="Derived\DerivedData_22RuleTests.cs" />
     <Compile Include="Derived\DerivedData_26RuleTests.cs" />
@@ -172,6 +176,7 @@
     <Compile Include="Derived\DerivedData_07RuleTests.cs" />
     <Compile Include="Derived\DerivedData_12RuleTests.cs" />
     <Compile Include="Derived\DerivedData_31RuleTests.cs" />
+    <Compile Include="Derived\DerivedData_17RuleTests.cs" />
     <Compile Include="Derived\DerivedData_32RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_01RuleTests.cs" />
     <Compile Include="DestinationAndProgression\OutCollDate\OutCollDate_02RuleTests.cs" />
@@ -215,6 +220,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_08RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_02RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01RuleTests.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_14RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_12RuleTests.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15RuleTests.cs" />
     <Compile Include="Extensions\LongExtensionTests.cs" />
@@ -266,6 +272,7 @@
     <Compile Include="HE\SPECFEE\SPECFEE_01RuleTests.cs" />
     <Compile Include="HE\SOC2000\SOC2000_03RuleTests.cs" />
     <Compile Include="HE\SPECFEE\SPECFEE_02RuleTests.cs" />
+    <Compile Include="HE\SSN\SSN_02RuleTests.cs" />
     <Compile Include="HE\STULOAD_04\STULOAD_04RuleTests.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_02RuleTests.cs" />
     <Compile Include="HE\TTACCOM\TTACCOM_01RuleTests.cs" />
@@ -315,6 +322,7 @@
     <Compile Include="Learner\DateOfBirth\DateOfBirth_35RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_20RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_48RuleTests.cs" />
+    <Compile Include="Learner\DateOfBirth\DateOfBirth_49RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_51RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_50RuleTests.cs" />
     <Compile Include="Learner\DateOfBirth\DateOfBirth_52RuleTests.cs" />
@@ -343,6 +351,7 @@
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule01Tests.cs" />
     <Compile Include="Learner\LLDDCat\LLDDCat_Rule02Tests.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_01RuleTests.cs" />
+    <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_04RuleTests.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_06RuleTests.cs" />
     <Compile Include="Learner\LLDDHealthProb\LLDDHealthProb_07RuleTests.cs" />
     <Compile Include="Learner\MathGrade\MathGrade_01RuleTests.cs" />
@@ -454,6 +463,7 @@
     <Compile Include="LearningDelivery\OutGrade\OutGrade_01RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_06RuleTests.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_07RuleTests.cs" />
+    <Compile Include="LearningDelivery\ProgType\ProgType_12RuleTests.cs" />
     <Compile Include="LearningDelivery\ProvSpecDelMonOccur\ProvSpecDelMonOccur_01RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_05RuleTests.cs" />
     <Compile Include="LearningDelivery\UKPRN\UKPRN_09RuleTests.cs" />

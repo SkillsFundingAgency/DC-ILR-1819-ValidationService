@@ -104,6 +104,7 @@
         public const string DateOfBirth_46 = "DateOfBirth_46";
         public const string DateOfBirth_47 = "DateOfBirth_47";
         public const string DateOfBirth_48 = "DateOfBirth_48";
+        public const string DateOfBirth_49 = "DateOfBirth_49";
         public const string DateOfBirth_50 = "DateOfBirth_50";
         public const string DateOfBirth_51 = "DateOfBirth_51";
         public const string DateOfBirth_52 = "DateOfBirth_52";
@@ -158,6 +159,17 @@
 
         public const string EPAOrgID_03 = "EPAOrgID_03";
 
+        public const string ESMType_01 = "ESMType_01";
+        public const string ESMType_02 = "ESMType_02";
+        public const string ESMType_05 = "ESMType_05";
+        public const string ESMType_07 = "ESMType_07";
+        public const string ESMType_08 = "ESMType_08";
+        public const string ESMType_09 = "ESMType_09";
+        public const string ESMType_10 = "ESMType_10";
+        public const string ESMType_11 = "ESMType_11";
+        public const string ESMType_12 = "ESMType_12";
+        public const string ESMType_13 = "ESMType_13";
+        public const string ESMType_14 = "ESMType_14";
         public const string ESMType_15 = "ESMType_15";
 
         public const string FamilyName_01 = "FamilyName_01";
@@ -281,6 +293,7 @@
         public const string LLDDCat_02 = "LLDDCat_02";
 
         public const string LLDDHealthProb_01 = "LLDDHealthProb_01";
+        public const string LLDDHealthProb_04 = "LLDDHealthProb_04";
         public const string LLDDHealthProb_06 = "LLDDHealthProb_06";
         public const string LLDDHealthProb_07 = "LLDDHealthProb_07";
 
@@ -407,6 +420,8 @@
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";
 
+        public const string ProgType_12 = "ProgType_12";
+
         public const string ProvSpecDelMonOccur_01 = "ProvSpecDelMonOccur_01";
 
         public const string PwayCode_02 = "PwayCode_02";
@@ -443,6 +458,8 @@
         public const string R69 = "R69";
         public const string R70 = "R70";
         public const string R71 = "R71";
+        public const string R72 = "R72";
+        public const string R73 = "R73";
         public const string R75 = "R75";
         public const string R85 = "R85";
         public const string R89 = "R89";
@@ -468,6 +485,7 @@
         public const string R116 = "R116";
         public const string R117 = "R117";
         public const string R118 = "R118";
+        public const string R119 = "R119";
 
         public const string Schema = "Schema";
 
@@ -482,6 +500,8 @@
         public const string SOC2000_02 = "SOC2000_02";
         public const string SOC2000_03 = "SOC2000_03";
         public const string SOC2000_04 = "SOC2000_04";
+
+        public const string SSN_02 = "SSN_02";
 
         public const string STULOAD_04 = "STULOAD_04";
 
