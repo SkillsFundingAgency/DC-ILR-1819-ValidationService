@@ -13,15 +13,33 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
     {
         private readonly IFCSDataService _fcsDataService;
 
-        private static readonly Dictionary<string, string> _priorAttainLevelsMapping = new Dictionary<string, string>
+        private static readonly Dictionary<string, int> _eligibilityRulePriorAttainValuesMapping = new Dictionary<string, int>
         {
-            { "99", "1" },
-            { "9", "2" },
-            { "7", "3" },
-            { "1", "4" },
-            { "2", "5" },
-            { "3", "6" },
-            { "H", "7" }
+            { "99", 1 },
+            { "9", 2 },
+            { "7", 3 },
+            { "1", 4 },
+            { "2", 5 },
+            { "3", 6 },
+            { "H", 7 }
+        };
+
+        private static readonly Dictionary<int, int> _learnerPriorAttainValuesMapping = new Dictionary<int, int>
+        {
+            { 98, 0 },
+            { 97, 0 },
+            { 99, 1 },
+            { 9, 2 },
+            { 7, 3 },
+            { 1, 4 },
+            { 2, 5 },
+            { 3, 6 },
+            { 4, 7 },
+            { 5, 8 },
+            { 10, 9 },
+            { 11, 10 },
+            { 12, 11 },
+            { 13, 12 },
         };
 
         public PriorAttain_06Rule(
@@ -64,21 +82,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
 
         public bool PriorAttainConditionMet(int? priorAttain, string conRefNumber)
         {
-            var minPriorAttainment = _fcsDataService.GetMinPriorAttainment(conRefNumber);
-            var maxPriorAttainment = _fcsDataService.GetMaxPriorAttainment(conRefNumber);
+            var contractAllocation = _fcsDataService.GetContractAllocationFor(conRefNumber);
 
-            if (string.IsNullOrEmpty(minPriorAttainment) && string.IsNullOrEmpty(maxPriorAttainment))
+            var minPriorAttainment = !string.IsNullOrWhiteSpace(contractAllocation?.EsfEligibilityRule?.MinPriorAttainment) ?
+                                        _eligibilityRulePriorAttainValuesMapping[contractAllocation?.EsfEligibilityRule?.MinPriorAttainment] : 0;
+            var maxPriorAttainment = !string.IsNullOrWhiteSpace(contractAllocation?.EsfEligibilityRule?.MaxPriorAttainment) ?
+                                        _eligibilityRulePriorAttainValuesMapping[contractAllocation?.EsfEligibilityRule?.MaxPriorAttainment] : 0;
+
+            if ((minPriorAttainment == 0 && maxPriorAttainment == 0) || !priorAttain.HasValue)
             {
                 return false;
             }
 
-            var mappedPriorAttainValue = _priorAttainLevelsMapping.FirstOrDefault(x => x.Key == priorAttain.ToString()).Value;
-
-            // todo: create an extension to convert string to int??
-            if (Convert.ToInt16(mappedPriorAttainValue) < Convert.ToInt16(minPriorAttainment) ||
-                Convert.ToInt16(mappedPriorAttainValue) > Convert.ToInt16(maxPriorAttainment))
+            if (_learnerPriorAttainValuesMapping.TryGetValue(priorAttain.Value, out var learnerPriorAttainValue))
             {
-                return true;
+                return learnerPriorAttainValue < minPriorAttainment || learnerPriorAttainValue > maxPriorAttainment;
             }
 
             return false;

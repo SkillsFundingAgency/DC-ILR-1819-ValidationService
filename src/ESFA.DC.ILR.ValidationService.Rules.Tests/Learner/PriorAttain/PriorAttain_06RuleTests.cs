@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
@@ -29,25 +30,43 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
         }
 
         [Fact]
-        public void PriorAttainConditionMet_True()
+        public void PriorAttainConditionMet_False()
         {
             int priorAttain = 2;
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-            fcsDataServiceMock.Setup(f => f.GetMinPriorAttainment(conRefNumber)).Returns("1");
-            fcsDataServiceMock.Setup(f => f.GetMaxPriorAttainment(conRefNumber)).Returns("3");
-            NewRule(fcsDataService: fcsDataServiceMock.Object).PriorAttainConditionMet(priorAttain, conRefNumber).Should().BeTrue();
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "3"
+                    }
+                });
+
+            NewRule(fcsDataService: fcsDataServiceMock.Object).PriorAttainConditionMet(priorAttain, conRefNumber).Should().BeFalse();
         }
 
         [Fact]
-        public void PriorAttainConditionMet_False()
+        public void PriorAttainConditionMet_True()
         {
             int priorAttain = 9;
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-            fcsDataServiceMock.Setup(f => f.GetMinPriorAttainment(conRefNumber)).Returns("1");
-            fcsDataServiceMock.Setup(f => f.GetMaxPriorAttainment(conRefNumber)).Returns("3");
-            NewRule(fcsDataService: fcsDataServiceMock.Object).PriorAttainConditionMet(priorAttain, conRefNumber).Should().BeFalse();
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "3"
+                    }
+                });
+
+            NewRule(fcsDataService: fcsDataServiceMock.Object).PriorAttainConditionMet(priorAttain, conRefNumber).Should().BeTrue();
         }
 
         [Fact]
@@ -56,37 +75,97 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             int priorAttain = 2;
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-            fcsDataServiceMock.Setup(f => f.GetMinPriorAttainment(conRefNumber)).Returns(string.Empty);
-            fcsDataServiceMock.Setup(f => f.GetMaxPriorAttainment(conRefNumber)).Returns(string.Empty);
-            NewRule(fcsDataService: fcsDataServiceMock.Object).PriorAttainConditionMet(priorAttain, conRefNumber).Should().BeFalse();
-        }
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = null,
+                        MaxPriorAttainment = null
+                    }
+                });
 
-        [Fact]
-        public void ConditionMet_True()
-        {
-            int fundModel = TypeOfFunding.EuropeanSocialFund;
-            int priorAttain = 2;
-            string conRefNumber = "ZESF00098";
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-            fcsDataServiceMock.Setup(f => f.GetMinPriorAttainment(conRefNumber)).Returns("1");
-            fcsDataServiceMock.Setup(f => f.GetMaxPriorAttainment(conRefNumber)).Returns("3");
-            NewRule(fcsDataService: fcsDataServiceMock.Object).ConditionMet(priorAttain, fundModel, conRefNumber).Should().BeTrue();
+            NewRule(fcsDataService: fcsDataServiceMock.Object).PriorAttainConditionMet(priorAttain, conRefNumber).Should().BeFalse();
         }
 
         [Fact]
         public void ConditionMet_False()
         {
             int fundModel = TypeOfFunding.EuropeanSocialFund;
-            int priorAttain = 9;
+            int priorAttain = 2;
             string conRefNumber = "ZESF00098";
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-            fcsDataServiceMock.Setup(f => f.GetMinPriorAttainment(conRefNumber)).Returns("1");
-            fcsDataServiceMock.Setup(f => f.GetMaxPriorAttainment(conRefNumber)).Returns("3");
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "3"
+                    }
+                });
             NewRule(fcsDataService: fcsDataServiceMock.Object).ConditionMet(priorAttain, fundModel, conRefNumber).Should().BeFalse();
         }
 
         [Fact]
-        public void ValidateError()
+        public void ConditionMet_True()
+        {
+            int fundModel = TypeOfFunding.EuropeanSocialFund;
+            int priorAttain = 9;
+            string conRefNumber = "ZESF00098";
+            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "3"
+                    }
+                });
+            NewRule(fcsDataService: fcsDataServiceMock.Object).ConditionMet(priorAttain, fundModel, conRefNumber).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Validate_Error()
+        {
+            var conRefNumber = "ZESF00098";
+            var learner = new TestLearner()
+            {
+                PriorAttainNullable = 4,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = TypeOfFunding.EuropeanSocialFund,
+                        ConRefNumber = conRefNumber
+                    }
+                }
+            };
+
+            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "3"
+                    }
+                });
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object, fcsDataServiceMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError()
         {
             var conRefNumber = "ZESF00098";
             var learner = new TestLearner()
@@ -103,17 +182,60 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             };
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-            fcsDataServiceMock.Setup(f => f.GetMinPriorAttainment(conRefNumber)).Returns("1");
-            fcsDataServiceMock.Setup(f => f.GetMaxPriorAttainment(conRefNumber)).Returns("3");
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "H"
+                    }
+                });
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(validationErrorHandlerMock.Object, fcsDataServiceMock.Object).Validate(learner);
             }
         }
 
         [Fact]
-        public void ValidateNoError()
+        public void Validate_OtherFundingModel_NoError()
+        {
+            var conRefNumber = "ZESF00098";
+            var learner = new TestLearner()
+            {
+                PriorAttainNullable = 3,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 0,
+                        ConRefNumber = conRefNumber
+                    }
+                }
+            };
+
+            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "H"
+                    }
+                });
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object, fcsDataServiceMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NullLearnerPriorAttainValue_NoError()
         {
             var conRefNumber = "ZESF00098";
             var learner = new TestLearner()
@@ -130,8 +252,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             };
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-            fcsDataServiceMock.Setup(f => f.GetMinPriorAttainment(conRefNumber)).Returns("1");
-            fcsDataServiceMock.Setup(f => f.GetMaxPriorAttainment(conRefNumber)).Returns("3");
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "3"
+                    }
+                });
+
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(validationErrorHandlerMock.Object, fcsDataServiceMock.Object).Validate(learner);
@@ -156,8 +287,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             };
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
-            fcsDataServiceMock.Setup(f => f.GetMinPriorAttainment(conRefNumber)).Returns("1");
-            fcsDataServiceMock.Setup(f => f.GetMaxPriorAttainment(conRefNumber)).Returns("3");
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(It.IsAny<string>()))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = "1",
+                        MaxPriorAttainment = "3"
+                    }
+                });
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(validationErrorHandlerMock.Object, fcsDataServiceMock.Object).Validate(learner);
