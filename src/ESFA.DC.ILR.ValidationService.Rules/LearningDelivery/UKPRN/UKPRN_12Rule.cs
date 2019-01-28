@@ -14,6 +14,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
     public class UKPRN_12Rule : AbstractRule, IRule<ILearner>
     {
         private readonly string _learnDelFamType = LearningDeliveryFAMTypeConstants.LDM;
+        private readonly string _learnDelFAMCode = LearningDeliveryFAMCodeConstants.LDM_ProcuredAdultEducationBudget;
         private readonly HashSet<string> _fundingStreamPeriodCodes = new HashSet<string>
         {
             FundingStreamPeriodCodeConstants.AEB_TOL1819
@@ -66,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
                     learningDelivery.LearnActEndDateNullable,
                     learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, ukprn, _learnDelFamType, "357"));
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, ukprn, _learnDelFamType, _learnDelFAMCode));
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 
         public virtual bool LearningDeliveryFAMsConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, _learnDelFamType, "357");
+            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, _learnDelFamType, _learnDelFAMCode);
         }
 
         public virtual bool FCTFundingConditionMet()
