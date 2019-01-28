@@ -15,6 +15,16 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
 
         public int? MaxAge { get; set; }
 
+        /// <summary>
+        /// Gets or sets the minimum length of unemployment.
+        /// </summary>
+        public int? MinLengthOfUnemployment { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum length of unemployment.
+        /// </summary>
+        public int? MaxLengthOfUnemployment { get; set; }
+
         public string MinPriorAttainment { get; set; }
 
         public string MaxPriorAttainment { get; set; }

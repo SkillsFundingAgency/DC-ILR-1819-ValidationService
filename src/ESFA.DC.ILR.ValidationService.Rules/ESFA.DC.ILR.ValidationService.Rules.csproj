@@ -126,6 +126,7 @@
     <Compile Include="CrossEntity\R29Rule.cs" />
     <Compile Include="CrossEntity\R62Rule.cs" />
     <Compile Include="CrossEntity\R61Rule.cs" />
+    <Compile Include="CrossEntity\R73Rule.cs" />
     <Compile Include="CrossEntity\R89Rule.cs" />
     <Compile Include="CrossEntity\R72Rule.cs" />
     <Compile Include="CrossEntity\R92Rule.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_02Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_12Rule.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_13Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_14Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15Rule.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
@@ -478,6 +480,7 @@
     <Compile Include="LearningDelivery\Outcome\Outcome_01Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_07Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_08Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_01Rule.cs" />
