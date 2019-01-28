@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -48,7 +46,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.Outcome
 
         public bool DpOutcomeConditionMet(string learnRefNum)
         {
-            return !_learnerDpQueryService.GetDestinationAndProgressionForLearner(learnRefNum)?.DPOutcomes?.Any() ?? false;
+            var outcomes = _learnerDpQueryService.GetDestinationAndProgressionForLearner(learnRefNum)?.DPOutcomes;
+
+            return !(outcomes != null && outcomes.Any());
         }
 
         private IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnRefNumber, ILearningDelivery learningDelivery)

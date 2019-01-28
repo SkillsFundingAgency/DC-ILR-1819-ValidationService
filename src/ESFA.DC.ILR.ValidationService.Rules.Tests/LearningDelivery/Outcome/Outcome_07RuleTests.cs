@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.Outcome;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Mocks;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -103,8 +101,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.Outcome
             var learnerDPQueryServiceMock = new Mock<ILearnerDPQueryService>();
 
             learnerDPQueryServiceMock
-                .Setup(m => m.GetDestinationAndProgressionForLearner("123456").DPOutcomes.Any())
-                .Returns(false);
+                .Setup(m => m.GetDestinationAndProgressionForLearner("123456"))
+                .Returns(matchingDpOutcome);
 
             NewRule(learnerDpQueryService: learnerDPQueryServiceMock.Object, validationErrorHandler: validationErrorHandlerMock.Object).DpOutcomeConditionMet("123456").Should().BeTrue();
         }
@@ -112,13 +110,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.Outcome
         private Outcome_07Rule NewRule(IValidationErrorHandler validationErrorHandler = null, ILearnerDPQueryService learnerDpQueryService = null)
         {
             return new Outcome_07Rule(learnerDpQueryService, validationErrorHandler);
-        }
-
-        private void VerifyErrorHandlerMock(ValidationErrorHandlerMock errorHandlerMock, int times = 0)
-        {
-            errorHandlerMock.Verify(
-                m => m.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()),
-                Times.Exactly(times));
         }
     }
 }
