@@ -490,6 +490,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             result[100].Should().Be(0);
         }
 
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnRefNumber, "Test1")).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.AimType, 1)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.ProgType, 25)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.StdCode, 3)).Verifiable();
+
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters("Test1", 3);
+            validationErrorHandlerMock.Verify();
+        }
+
         private R72Rule NewRule(
             IValidationErrorHandler validationErrorHandler = null,
             ILearningDeliveryAppFinRecordQueryService learningDeliveryAppFinRecordQueryService = null,

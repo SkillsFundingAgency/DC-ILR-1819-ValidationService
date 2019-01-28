@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
@@ -14,7 +15,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 {
-    public class R73RuleTests : AbstractRuleTests<R72Rule>
+    public class R73RuleTests : AbstractRuleTests<R73Rule>
     {
         [Fact]
         public void RuleName()
@@ -39,6 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery()
                 {
                     StdCodeNullable = 1,
+                    LearnStartDate = new DateTime(2017, 10, 10),
                     AppFinRecords = new List<IAppFinRecord>()
                     {
                         new TestAppFinRecord()
@@ -61,7 +63,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             {
                 new TestLearningDelivery()
                 {
-                    StdCodeNullable = 20
+                    StdCodeNullable = 20,
+                    LearnStartDate = new DateTime(2017, 10, 10)
                 }
             };
 
@@ -74,7 +77,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             learningDeliveryAppFinRecordQueryServiceMock.Setup(x =>
                 x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(standardLearningDeliveries)).Returns(10);
 
-            NewRule(null, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object).ConditionMet(1, 20, learningDeliveries).Should().BeTrue();
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+            larsDataServiceMock.Setup(x => x.GetStandardFundingForCodeOnDate(1, new DateTime(2017, 10, 10)))
+                .Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 4.5m
+                });
+
+            NewRule(null, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object, larsDataServiceMock.Object)
+                .ConditionMet(1, 20, learningDeliveries).Should().BeTrue();
         }
 
         [Fact]
@@ -84,7 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void ConditionMet_False_DD17True()
+        public void ConditionMet_False_DD17False()
         {
             var standardLearningDeliveries = new List<ILearningDelivery>()
             {
@@ -113,14 +124,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             };
 
             var dd17Mock = new Mock<IDerivedData_17Rule>();
-            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, 1)).Returns(true);
+            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, 1)).Returns(false);
 
-            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
-            learningDeliveryAppFinRecordQueryServiceMock.Setup(x =>
-                x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(standardLearningDeliveries)).Returns(10);
-
-            NewRule(null, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object).ConditionMet(1, 20, standardLearningDeliveries).Should().BeFalse();
-            learningDeliveryAppFinRecordQueryServiceMock.Verify(x => x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(It.IsAny<List<ILearningDelivery>>()), Times.Never);
+            NewRule(null, null, dd17Mock.Object).ConditionMet(1, 20, standardLearningDeliveries).Should().BeFalse();
+            dd17Mock.Verify(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, 1), Times.Once);
         }
 
         [Fact]
@@ -134,6 +141,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     ProgTypeNullable = 25,
                     FundModel = 81,
                     AimType = 1,
+                    LearnStartDate = new DateTime(2017, 10, 10),
                     AppFinRecords = new List<IAppFinRecord>()
                     {
                         new TestAppFinRecord()
@@ -175,13 +183,121 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             learningDeliveries.AddRange(standardLearningDeliveries);
 
             var dd17Mock = new Mock<IDerivedData_17Rule>();
-            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, 1)).Returns(false);
+            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, 1)).Returns(true);
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock.Setup(x =>
                 x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(standardLearningDeliveries)).Returns(15);
 
-            NewRule(null, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object).ConditionMet(1, 4, standardLearningDeliveries).Should().BeFalse();
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+            larsDataServiceMock.Setup(x => x.GetStandardFundingForCodeOnDate(1, new DateTime(2017, 10, 10)))
+                .Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 4.5m
+                });
+
+            NewRule(null, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object, larsDataServiceMock.Object)
+                .ConditionMet(1, 10, standardLearningDeliveries).Should().BeFalse();
+        }
+
+        [Fact]
+        public void ConditionMet_False_NullFundingCap()
+        {
+            var standardLearningDeliveries = new List<ILearningDelivery>()
+            {
+                new TestLearningDelivery()
+                {
+                    StdCodeNullable = 1,
+                    ProgTypeNullable = 25,
+                    FundModel = 81,
+                    AimType = 1,
+                    LearnStartDate = new DateTime(2017, 10, 10),
+                    AppFinRecords = new List<IAppFinRecord>()
+                    {
+                        new TestAppFinRecord()
+                        {
+                            AFinCode = 1,
+                            AFinType = "TNP",
+                            AFinAmount = 10,
+                        },
+                        new TestAppFinRecord()
+                        {
+                            AFinCode = 2,
+                            AFinType = "TNP",
+                            AFinAmount = 5,
+                        }
+                    }
+                }
+            };
+
+            var dd17Mock = new Mock<IDerivedData_17Rule>();
+            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(standardLearningDeliveries, 1)).Returns(true);
+
+            var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
+            learningDeliveryAppFinRecordQueryServiceMock.Setup(x =>
+                x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(standardLearningDeliveries)).Returns(15);
+
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+            larsDataServiceMock.Setup(x => x.GetStandardFundingForCodeOnDate(1, new DateTime(2017, 10, 10)))
+                .Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = null
+                });
+
+            NewRule(null, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object, larsDataServiceMock.Object)
+                .ConditionMet(1, int.MaxValue, standardLearningDeliveries).Should().BeFalse();
+
+            larsDataServiceMock.Verify(x => x.GetStandardFundingForCodeOnDate(1, new DateTime(2017, 10, 10)), Times.Once);
+        }
+
+        [Fact]
+        public void GetApplicableDateForCapChecking_Success_EarlierStartDate()
+        {
+            var standardLearningDeliveries = new List<ILearningDelivery>()
+            {
+                new TestLearningDelivery()
+                {
+                    LearnStartDate = new DateTime(2017, 10, 11),
+                    OrigLearnStartDateNullable = new DateTime(2017, 10, 20),
+                },
+                new TestLearningDelivery()
+                {
+                    LearnStartDate = new DateTime(2017, 10, 10),
+                    OrigLearnStartDateNullable = null
+                },
+                new TestLearningDelivery()
+                {
+                    LearnStartDate = new DateTime(2017, 10, 12),
+                    OrigLearnStartDateNullable = new DateTime(2017, 10, 11),
+                }
+            };
+
+            NewRule().GetApplicableDateForCapChecking(standardLearningDeliveries).Should().Be(new DateTime(2017, 10, 10));
+        }
+
+        [Fact]
+        public void GetApplicableDateForCapChecking_Success_EarlierOrigStartDate()
+        {
+            var standardLearningDeliveries = new List<ILearningDelivery>()
+            {
+                new TestLearningDelivery()
+                {
+                    LearnStartDate = new DateTime(2017, 10, 11),
+                    OrigLearnStartDateNullable = null
+                },
+                new TestLearningDelivery()
+                {
+                    LearnStartDate = new DateTime(2017, 10, 10),
+                    OrigLearnStartDateNullable = new DateTime(2017, 10, 09),
+                },
+                new TestLearningDelivery()
+                {
+                    LearnStartDate = new DateTime(2017, 10, 12),
+                    OrigLearnStartDateNullable = new DateTime(2017, 10, 10),
+                }
+            };
+
+            NewRule().GetApplicableDateForCapChecking(standardLearningDeliveries).Should().Be(new DateTime(2017, 10, 09));
         }
 
         [Theory]
@@ -236,6 +352,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     ProgTypeNullable = 25,
                     FundModel = 81,
                     AimType = 1,
+                    LearnStartDate = new DateTime(2017, 10, 12),
                     AppFinRecords = new List<IAppFinRecord>()
                     {
                         new TestAppFinRecord()
@@ -265,6 +382,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     ProgTypeNullable = 25,
                     FundModel = 81,
                     AimType = 1,
+                    LearnStartDate = new DateTime(2017, 10, 10),
                     AppFinRecords = new List<IAppFinRecord>()
                     {
                         new TestAppFinRecord()
@@ -312,15 +430,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             };
 
             var dd17Mock = new Mock<IDerivedData_17Rule>();
-            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(It.IsAny<List<ILearningDelivery>>(), 1)).Returns(false);
+            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(It.IsAny<List<ILearningDelivery>>(), 1)).Returns(true);
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock.Setup(x =>
                 x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(It.IsAny<List<ILearningDelivery>>())).Returns(16);
 
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+            larsDataServiceMock.Setup(x => x.GetStandardFundingForCodeOnDate(1, new DateTime(2017, 10, 10)))
+                .Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 10m
+                });
+
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(validationErrorHandlerMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object).Validate(learner);
+                NewRule(validationErrorHandlerMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object, larsDataServiceMock.Object).Validate(learner);
             }
         }
 
@@ -335,6 +460,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     ProgTypeNullable = 25,
                     FundModel = 81,
                     AimType = 1,
+                    LearnStartDate = new DateTime(2017, 10, 11),
                     AppFinRecords = new List<IAppFinRecord>()
                     {
                         new TestAppFinRecord()
@@ -364,6 +490,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     ProgTypeNullable = 25,
                     FundModel = 81,
                     AimType = 1,
+                    LearnStartDate = new DateTime(2017, 10, 10),
                     AppFinRecords = new List<IAppFinRecord>()
                     {
                         new TestAppFinRecord()
@@ -387,6 +514,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     ProgTypeNullable = 25,
                     FundModel = 81,
                     AimType = 1,
+                    LearnStartDate = new DateTime(2017, 10, 12),
                     AppFinRecords = new List<IAppFinRecord>()
                     {
                         new TestAppFinRecord()
@@ -407,21 +535,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var learner = new TestLearner()
             {
+                LearnRefNumber = "test",
                 LearningDeliveries = standardLearningDeliveries
             };
 
             var dd17Mock = new Mock<IDerivedData_17Rule>();
-            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(It.IsAny<List<ILearningDelivery>>(), 1)).Returns(false);
+            dd17Mock.Setup(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(It.IsAny<List<ILearningDelivery>>(), 1)).Returns(true);
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock.Setup(x =>
                 x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(It.IsAny<List<ILearningDelivery>>())).Returns(15);
 
+            var larsDataServiceMock = new Mock<ILARSDataService>();
+            larsDataServiceMock.Setup(x => x.GetStandardFundingForCodeOnDate(1, It.IsAny<DateTime>()))
+                .Returns(new LARSStandardFunding()
+                {
+                    CoreGovContributionCap = 10.5m
+                });
+
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(validationErrorHandlerMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object).Validate(learner);
+                NewRule(validationErrorHandlerMock.Object, learningDeliveryAppFinRecordQueryServiceMock.Object, dd17Mock.Object, larsDataServiceMock.Object)
+                    .Validate(learner);
                 dd17Mock.Verify(x => x.IsTotalNegotiatedPriceMoreThanCapForStandard(It.IsAny<IReadOnlyCollection<ILearningDelivery>>(), It.IsAny<int>()), Times.AtLeastOnce);
                 learningDeliveryAppFinRecordQueryServiceMock.Verify(x => x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(It.IsAny<List<ILearningDelivery>>()), Times.AtLeastOnce);
+                larsDataServiceMock.Verify(x => x.GetStandardFundingForCodeOnDate(1, new DateTime(2017, 10, 10)), Times.AtLeastOnce());
             }
         }
 
@@ -489,6 +627,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             result.Should().NotBeEmpty();
             result[1].Should().Be(25);
             result[100].Should().Be(0);
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnRefNumber, "Test1")).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.AimType, 1)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.ProgType, 25)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.StdCode, 3)).Verifiable();
+
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters("Test1", 3);
+            validationErrorHandlerMock.Verify();
         }
 
         private R73Rule NewRule(

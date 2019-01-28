@@ -21,15 +21,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         private readonly ILearningDeliveryAppFinRecordQueryService _learningDeliveryAppFinRecordQueryService;
         private readonly ILARSDataService _larsDataService;
         private readonly IDerivedData_17Rule _dd17;
-        private readonly HashSet<int> AFinCodes1And2 = new HashSet<int>() { 1, 2 };
-        private readonly int AFinCode3 = 3;
+        private readonly HashSet<int> TrainingAndAssementAFinCodes = new HashSet<int>() { TypeOfPMRAFin.TrainingPayment, TypeOfPMRAFin.AssessmentPayment };
 
         public R73Rule(
             IValidationErrorHandler validationErrorHandler,
             ILearningDeliveryAppFinRecordQueryService learningDeliveryAppFinRecordQueryService,
             ILARSDataService larsDataService,
             IDerivedData_17Rule dd17)
-            : base(validationErrorHandler, RuleNameConstants.R72)
+            : base(validationErrorHandler, RuleNameConstants.R73)
         {
             _learningDeliveryAppFinRecordQueryService = learningDeliveryAppFinRecordQueryService;
             _larsDataService = larsDataService;
@@ -76,11 +75,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 var totalAFin1And2 = learningDelivery.AppFinRecords?.Where(
                                 fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
-                               AFinCodes1And2.Contains(fin.AFinCode)).Sum(s => s.AFinAmount);
+                               TrainingAndAssementAFinCodes.Contains(fin.AFinCode)).Sum(s => s.AFinAmount);
 
                 var totalAFin3 = learningDelivery.AppFinRecords?.Where(
                     fin => fin.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.PaymentRecord) &&
-                           fin.AFinCode == AFinCode3).Sum(s => s.AFinAmount);
+                           fin.AFinCode == TypeOfPMRAFin.EmployerPaymentReimbursedByProvider).Sum(s => s.AFinAmount);
 
                 if (dict.ContainsKey(learningDelivery.StdCodeNullable.Value))
                 {
@@ -109,19 +108,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 var standardTNPTotal = _learningDeliveryAppFinRecordQueryService.GetTotalTNPPriceForLatestAppFinRecordsForLearning(standardLearningDeliveries);
                 var applicableDateForCap = GetApplicableDateForCapChecking(standardLearningDeliveries);
 
-                if (applicableDateForCap == null)
-                {
-                    return false;
-                }
-
-                var fundingCap = _larsDataService.GetStandardFundingForCodeOnDate(standardCode, applicableDateForCap.Value)?.CoreGovContributionCap;
-                return totalPMRValue > (standardTNPTotal - fundingCap);
+                var fundingCap = _larsDataService.GetStandardFundingForCodeOnDate(standardCode, applicableDateForCap)?.CoreGovContributionCap;
+                return fundingCap.HasValue && totalPMRValue > (standardTNPTotal - fundingCap);
             }
 
             return false;
         }
 
-        public DateTime? GetApplicableDateForCapChecking(List<ILearningDelivery> learningDeliveries)
+        public DateTime GetApplicableDateForCapChecking(List<ILearningDelivery> learningDeliveries)
         {
             var earliestStartDate = learningDeliveries.Select(x => new
                 {
@@ -133,7 +127,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 .FirstOrDefault()?
                 .ApplicabaleDate;
 
-            return earliestStartDate;
+            return earliestStartDate ?? DateTime.MaxValue;
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnRefNumber, int standardCode)
