@@ -30,10 +30,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData("PMR", 0, "2018-07-01", "2018-08-01")]
-        [InlineData("TNP", 0, "2018-07-01", "2018-08-01")]
+        [InlineData("PMR", 2, "2018-07-01", "2018-08-01")]
         [InlineData("TNP", 1, "2018-07-01", "2018-08-01")]
-        [InlineData("TNP", 0, "2018-07-01", "2018-06-01")]
         public void AppFinRecodConditionMet_NoMatch(string aFinType, int aFinCode, string learnStartDateString, string aFinDateString)
         {
             DateTime learnStartDate = DateTime.Parse(learnStartDateString);
@@ -151,7 +149,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             new TestAppFinRecord()
                             {
                                  AFinType = "PMR",
-                                 AFinCode = 0,
+                                 AFinCode = 1,
                                  AFinDate = new DateTime(2019, 02, 01)
                             },
                             null
@@ -166,7 +164,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             new TestAppFinRecord()
                             {
                                  AFinType = "PMR",
-                                 AFinCode = 0,
+                                 AFinCode = 2,
                                  AFinDate = new DateTime(2019, 02, 01)
                             },
                             null

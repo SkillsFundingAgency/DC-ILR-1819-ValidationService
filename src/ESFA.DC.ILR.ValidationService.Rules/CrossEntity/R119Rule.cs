@@ -56,7 +56,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 .Where(
                     f => f != null
                     && f.AFinType.CaseInsensitiveEquals(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice)
-                    && f.AFinCode > 0
                     && f.AFinDate < learnStartDate);
         }
 
