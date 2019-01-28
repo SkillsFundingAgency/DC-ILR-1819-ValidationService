@@ -394,6 +394,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(LLDDCat_01Rule),
                 typeof(LLDDCat_02Rule),
                 typeof(LLDDHealthProb_01Rule),
+                typeof(LLDDHealthProb_04Rule),
                 typeof(LLDDHealthProb_06Rule),
                 typeof(LLDDHealthProb_07Rule),
                 typeof(MathGrade_01Rule),
