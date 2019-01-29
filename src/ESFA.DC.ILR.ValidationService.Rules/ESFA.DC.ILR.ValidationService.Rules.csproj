@@ -418,6 +418,7 @@
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_17Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRule{TEligibilityItem}.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18Rule.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_01Rule.cs" />
     <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_01Rule.cs" />
