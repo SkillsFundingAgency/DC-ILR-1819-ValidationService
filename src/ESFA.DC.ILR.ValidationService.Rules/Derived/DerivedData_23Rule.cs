@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             }
 
             return _dateTimeQueryService.AgeAtGivenDate(
-                new DateTime(1999, 9, 1),
+                learner.DateOfBirthNullable.Value,
                 delivery.LearnStartDate);
         }
     }
