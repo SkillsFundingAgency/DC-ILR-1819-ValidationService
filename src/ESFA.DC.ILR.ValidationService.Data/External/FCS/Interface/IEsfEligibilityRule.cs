@@ -30,6 +30,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// </summary>
         int? MaxLengthOfUnemployment { get; }
 
+        string MinPriorAttainment { get; set; }
+
+        string MaxPriorAttainment { get; set; }
+
         IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }
 
         IEnumerable<IEsfEligibilityRuleLocalAuthority> LocalAuthorities { get; }
