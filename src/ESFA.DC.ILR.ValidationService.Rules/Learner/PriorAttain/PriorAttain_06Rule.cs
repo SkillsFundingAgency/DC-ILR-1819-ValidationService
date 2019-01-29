@@ -87,7 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
             var minPriorAttainment = GetEligibilityRulePriorAttainmentMappedValue(contractAllocation?.EsfEligibilityRule?.MinPriorAttainment);
             var maxPriorAttainment = GetEligibilityRulePriorAttainmentMappedValue(contractAllocation?.EsfEligibilityRule?.MaxPriorAttainment);
 
-            if ((minPriorAttainment == 0 && maxPriorAttainment == 0) || !priorAttain.HasValue)
+            if ((minPriorAttainment == null && maxPriorAttainment == null) || !priorAttain.HasValue)
             {
                 return false;
             }
@@ -110,14 +110,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
             };
         }
 
-        private int GetEligibilityRulePriorAttainmentMappedValue(string key)
+        private int? GetEligibilityRulePriorAttainmentMappedValue(string key)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if (string.IsNullOrWhiteSpace(key) || !_eligibilityRulePriorAttainValuesMapping.ContainsKey(key))
             {
-                return 0;
+                return null;
             }
 
-            return !_eligibilityRulePriorAttainValuesMapping.TryGetValue(key, out var returnValue) ? 0 : returnValue;
+            return _eligibilityRulePriorAttainValuesMapping.ContainsKey(key) ? _eligibilityRulePriorAttainValuesMapping[key] : (int?)null;
         }
     }
 }

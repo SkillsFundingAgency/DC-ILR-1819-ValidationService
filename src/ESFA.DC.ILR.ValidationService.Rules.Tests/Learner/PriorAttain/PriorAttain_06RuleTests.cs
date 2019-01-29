@@ -49,6 +49,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
             NewRule(fcsDataService: fcsDataServiceMock.Object).PriorAttainConditionMet(priorAttain, conRefNumber).Should().BeFalse();
         }
 
+        [Theory]
+        [InlineData(2, "1", "3", false)]
+        [InlineData(2, null, null, false)]
+        [InlineData(2, "99", "3", false)]
+        [InlineData(2, "3", null, true)]
+        [InlineData(2, "99", null, false)]
+        [InlineData(2, null, "99", true)]
+        [InlineData(2, null, "3", false)]
+        public void PriorAttain_VariousMinMaxLevels_ConditionMeetsExpectation(int learnerPriorAttain, string minPriorAttain, string maxPriorAttain, bool expectation)
+        {
+            string conRefNumber = "ZESF00098";
+            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            fcsDataServiceMock
+                .Setup(m => m.GetContractAllocationFor(conRefNumber))
+                .Returns(new FcsContractAllocation
+                {
+                    EsfEligibilityRule = new EsfEligibilityRule()
+                    {
+                        MinPriorAttainment = minPriorAttain,
+                        MaxPriorAttainment = maxPriorAttain
+                    }
+                });
+
+            NewRule(fcsDataService: fcsDataServiceMock.Object).PriorAttainConditionMet(learnerPriorAttain, conRefNumber).Should().Be(expectation);
+        }
+
         [Fact]
         public void PriorAttainConditionMet_True()
         {
