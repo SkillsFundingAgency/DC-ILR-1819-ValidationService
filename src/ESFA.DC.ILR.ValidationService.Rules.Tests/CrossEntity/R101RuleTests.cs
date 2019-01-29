@@ -399,6 +399,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
             learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsCountByFAMType(It.IsAny<IReadOnlyCollection<TestLearningDeliveryFAM>>(), _famTypeACT)).Returns(0);
+            learningDeliveryFAMQueryServiceMock.Setup(qs => qs.GetLearningDeliveryFAMsForType(null, _famTypeACT)).Returns(new List<TestLearningDeliveryFAM>());
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

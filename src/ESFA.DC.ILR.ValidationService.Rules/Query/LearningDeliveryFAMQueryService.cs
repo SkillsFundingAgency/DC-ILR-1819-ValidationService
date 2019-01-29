@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
 
         public IEnumerable<ILearningDeliveryFAM> GetLearningDeliveryFAMsForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType)
         {
-            return learningDeliveryFams?.Where(fam => HasFamType(fam, famType));
+            return learningDeliveryFams?.Where(fam => HasFamType(fam, famType)) ?? new List<ILearningDeliveryFAM>();
         }
 
         public IEnumerable<ILearningDeliveryFAM> GetLearningDeliveryFAMsForTypeAndCode(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType, string famCode)
