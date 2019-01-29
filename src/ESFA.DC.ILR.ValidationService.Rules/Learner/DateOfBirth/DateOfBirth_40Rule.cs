@@ -77,15 +77,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                 }
 
                 if (!learningDelivery.OutcomeNullable.HasValue
-                    || learningDelivery.OutcomeNullable.Value != 1)
+                    || learningDelivery.OutcomeNullable.Value != OutcomeConstants.Achieved)
                 {
                     continue;
                 }
 
                 if (!learningDelivery.LearnActEndDateNullable.HasValue
-                    || _dateTimeQueryService.MonthsBetween(
+                    || _dateTimeQueryService.YearsBetween(
                         learningDelivery.LearnStartDate,
-                        learningDelivery.LearnActEndDateNullable.Value) >= 12)
+                        learningDelivery.LearnActEndDateNullable.Value) >= 1)
                 {
                     continue;
                 }

@@ -300,8 +300,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Returns(20);
             dateTimeServiceMock
-                .Setup(m => m.MonthsBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .Returns(13);
+                .Setup(m => m.YearsBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(1);
 
             TestLearningDeliveryFAM[] learningDeliveryFAMs = null;
             var testLearner = new TestLearner
@@ -403,8 +403,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 .Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .Returns(20);
             dateTimeServiceMock
-                .Setup(m => m.MonthsBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .Returns(11);
+                .Setup(m => m.YearsBetween(It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .Returns(0);
 
             NewRule(
                 validationErrorHandler: validationErrorHandlerMock.Object,
