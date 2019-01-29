@@ -430,6 +430,83 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
+        public void Validate_NoError_PartiallyMatchedEmploymentStatus()
+        {
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "1A05678",
+                LearnerEmploymentStatuses = new TestLearnerEmploymentStatus[]
+                {
+                    new TestLearnerEmploymentStatus()
+                    {
+                        DateEmpStatApp = new DateTime(2016, 09, 13),
+                        AgreeId = "123A01",
+                        EmpIdNullable = 11768,
+                        EmpStat = 10,
+                        EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                        {
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "LOE",
+                                ESMCode = 2
+                            },
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "ISB",
+                                ESMCode = 4
+                            },
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "LHR",
+                                ESMCode = 6
+                            },
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "MTI2",
+                                ESMCode = 8
+                            }
+                        }
+                    },
+                    new TestLearnerEmploymentStatus()
+                    {
+                        DateEmpStatApp = new DateTime(2018, 09, 13),
+                        AgreeId = "123A01",
+                        EmpIdNullable = 11768,
+                        EmpStat = 10,
+                        EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                        {
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "LOE",
+                                ESMCode = 2
+                            },
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "ISB",
+                                ESMCode = 5
+                            },
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "SEM",
+                                ESMCode = 7
+                            },
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "MTI",
+                                ESMCode = 8
+                            }
+                        }
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
         public void BuildErrorMessageParameters()
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();

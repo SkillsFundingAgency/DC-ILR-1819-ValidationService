@@ -69,8 +69,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return false;
             }
 
-            return !previousEmploymentStatusMonitorings.Where(p => p != null).Select(p => new { type = p.ESMType.ToLowerInvariant(), code = p.ESMCode })
-                .Except(employmentStatusMonitorings.Where(e => e != null).Select(e => new { type = e.ESMType.ToLowerInvariant(), code = e.ESMCode })).Any();
+            var currentEmploymentStatuses = employmentStatusMonitorings.Where(p => p != null).Select(p => new { type = p.ESMType.ToLowerInvariant(), code = p.ESMCode });
+            var previousEmploymentStatuses = previousEmploymentStatusMonitorings.Where(p => p != null).Select(p => new { type = p.ESMType.ToLowerInvariant(), code = p.ESMCode });
+
+            return !(currentEmploymentStatuses.Except(previousEmploymentStatuses).Any()
+                || previousEmploymentStatuses.Except(currentEmploymentStatuses).Any());
         }
 
         public bool LearnerEmploymentStatusConditionMet(
