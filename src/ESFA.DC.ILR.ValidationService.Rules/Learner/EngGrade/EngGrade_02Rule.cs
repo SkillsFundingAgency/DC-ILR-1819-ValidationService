@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.EngGrade
             }
         }
 
-        public bool EngGradeConditionMet(string engGrade) => !_lookupProviderDetails.Contains(LookupCodedKey.EngGrade, engGrade);
+        public bool EngGradeConditionMet(string engGrade) => !_lookupProviderDetails.Contains(LookupCodedKey.GCSEGrade, engGrade);
 
         public bool EngGradeSuppliedAndNotNone(string engGrade) => !string.IsNullOrEmpty(engGrade)
                 && !engGrade.CaseInsensitiveEquals(Grades.NONE);
