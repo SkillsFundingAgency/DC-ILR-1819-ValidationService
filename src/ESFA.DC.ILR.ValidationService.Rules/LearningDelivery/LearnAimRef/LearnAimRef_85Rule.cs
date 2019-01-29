@@ -140,7 +140,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
                 TypeOfPriorAttainment.Level6,
                 TypeOfPriorAttainment.Level7AndAbove,
                 TypeOfPriorAttainment.NotKnown,
-                TypeOfPriorAttainment.NotQualified);
+                TypeOfPriorAttainment.OtherLevelNotKnown);
 
         /// <summary>
         /// Validates the specified object.

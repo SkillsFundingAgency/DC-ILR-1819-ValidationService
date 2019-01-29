@@ -86,23 +86,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                 {
                     StdCodeNullable = 1,
                     LearnStartDate = new DateTime(2018, 10, 10)
-                },
-                new TestLearningDelivery()
-                {
-                    StdCodeNullable = 2,
-                    LearnStartDate = new DateTime(2019, 10, 10)
-                },
+                }
             };
 
             var rule = NewRule();
-            rule.GetApplicableDateForCapChecking(learningDeliveries, 1).Should().Be(new DateTime(2017, 10, 10));
-            rule.GetApplicableDateForCapChecking(learningDeliveries, 2).Should().Be(new DateTime(2019, 10, 10));
+            rule.GetApplicableDateForCapChecking(learningDeliveries).Should().Be(new DateTime(2017, 10, 10));
         }
 
         [Fact]
         public void GetApplicableDateForCapChecking_Success_EarlierOrigStartDate()
         {
-            var learningDeliveries = new List<ILearningDelivery>()
+            var learningDeliveriesSet1 = new List<ILearningDelivery>()
             {
                 new TestLearningDelivery()
                 {
@@ -115,6 +109,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                     StdCodeNullable = 1,
                     LearnStartDate = new DateTime(2018, 10, 10)
                 },
+            };
+            var learningDeliveriesSet2 = new List<ILearningDelivery>()
+            {
                 new TestLearningDelivery()
                 {
                     StdCodeNullable = 2,
@@ -130,8 +127,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
             };
 
             var rule = NewRule();
-            rule.GetApplicableDateForCapChecking(learningDeliveries, 1).Should().Be(new DateTime(2015, 10, 10));
-            rule.GetApplicableDateForCapChecking(learningDeliveries, 2).Should().Be(new DateTime(2016, 10, 10));
+            rule.GetApplicableDateForCapChecking(learningDeliveriesSet1).Should().Be(new DateTime(2015, 10, 10));
+            rule.GetApplicableDateForCapChecking(learningDeliveriesSet2).Should().Be(new DateTime(2016, 10, 10));
         }
 
         [Fact]

@@ -22,7 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var result = rule.GetLearnersAgeAtStartOfESFContract(learner, null);
 
-            Assert.Equal(default(int), result);
+            Assert.Null(result);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var result = rule.GetLearnersAgeAtStartOfESFContract(learner, null);
 
-            Assert.Equal(default(int), result);
+            Assert.Null(result);
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var result = rule.GetLearnersAgeAtStartOfESFContract(learner, "99999");
 
-            Assert.Equal(default(int), result);
+            Assert.Null(result);
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var result = rule.GetLearnersAgeAtStartOfESFContract(learner, testConRefNumber);
 
-            Assert.Equal(default(int), result);
+            Assert.Null(result);
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var result = rule.GetLearnersAgeAtStartOfESFContract(learner, testConRefNumber);
 
-            Assert.Equal(default(int), result);
+            Assert.Null(result);
         }
 
         [Fact]
@@ -155,7 +155,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
 
             var result = rule.GetLearnersAgeAtStartOfESFContract(learner, testConRefNumber);
 
-            Assert.Equal(default(int), result);
+            Assert.Null(result);
         }
 
         [Fact]

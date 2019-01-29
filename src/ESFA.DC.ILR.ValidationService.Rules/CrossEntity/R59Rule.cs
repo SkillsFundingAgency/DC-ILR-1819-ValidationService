@@ -9,6 +9,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Message.UKPRN;
+using ESFA.DC.ILR.ValidationService.Utility;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
@@ -34,7 +35,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
             foreach (var uln in duplicateUlns)
             {
-                HandleValidationError(string.Empty, null, BuildErrorMessageParameters(objectToValidate.LearningProviderEntity?.UKPRN, uln));
+                objectToValidate.Learners.Where(x => x.ULN == uln)
+                    .ForEach(learner =>
+                        HandleValidationError(
+                            learner.LearnRefNumber,
+                            null,
+                            BuildErrorMessageParameters(objectToValidate.LearningProviderEntity?.UKPRN, uln)));
             }
         }
 

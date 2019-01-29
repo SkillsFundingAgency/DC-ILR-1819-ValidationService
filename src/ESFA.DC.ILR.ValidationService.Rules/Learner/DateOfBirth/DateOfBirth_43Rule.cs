@@ -32,7 +32,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                 return;
             }
 
-            if (_derivedData23.GetLearnersAgeAtStartOfESFContract(learner, learningDelivery.ConRefNumber) < MinAge)
+            var age = _derivedData23.GetLearnersAgeAtStartOfESFContract(learner, learningDelivery.ConRefNumber);
+            if (age != null && age < MinAge)
             {
                 RaiseValidationMessage(learner, learningDelivery);
             }

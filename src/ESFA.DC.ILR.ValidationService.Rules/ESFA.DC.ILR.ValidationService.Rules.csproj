@@ -126,6 +126,7 @@
     <Compile Include="CrossEntity\R29Rule.cs" />
     <Compile Include="CrossEntity\R62Rule.cs" />
     <Compile Include="CrossEntity\R61Rule.cs" />
+    <Compile Include="CrossEntity\R73Rule.cs" />
     <Compile Include="CrossEntity\R89Rule.cs" />
     <Compile Include="CrossEntity\R72Rule.cs" />
     <Compile Include="CrossEntity\R92Rule.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="EmploymentStatus\ESMType\ESMType_02Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_01Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_12Rule.cs" />
+    <Compile Include="EmploymentStatus\ESMType\ESMType_13Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_14Rule.cs" />
     <Compile Include="EmploymentStatus\ESMType\ESMType_15Rule.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
@@ -399,6 +401,7 @@
     <Compile Include="Learner\PriorAttain\PriorAttain_02Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_03Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_04Rule.cs" />
+    <Compile Include="Learner\PriorAttain\PriorAttain_06Rule.cs" />
     <Compile Include="Learner\PriorAttain\PriorAttain_07Rule.cs" />
     <Compile Include="Learner\ProvSpecLearnMonOccur\ProvSpecLearnMonOccur_01Rule.cs" />
     <Compile Include="Learner\Sex\Sex_01Rule.cs" />
@@ -416,6 +419,7 @@
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_EligibilityRule{TEligibilityItem}.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_18Rule.cs" />
     <Compile Include="LearningDelivery\DelLocPostCode\DelLocPostCode_14Rule.cs" />
+    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_01Rule.cs" />
     <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_03Rule.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_01Rule.cs" />
@@ -478,6 +482,7 @@
     <Compile Include="LearningDelivery\Outcome\Outcome_01Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_04Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_05Rule.cs" />
+    <Compile Include="LearningDelivery\Outcome\Outcome_07Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_08Rule.cs" />
     <Compile Include="LearningDelivery\Outcome\Outcome_09Rule.cs" />
     <Compile Include="LearningDelivery\OutGrade\OutGrade_01Rule.cs" />
@@ -546,7 +551,6 @@
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_01Rule.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_02Rule.cs" />
     <Compile Include="LearningDelivery\EmpOutcome\EmpOutcome_03Rule.cs" />
-    <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_02Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_01Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_03Rule.cs" />
     <Compile Include="LearningDelivery\FundModel\FundModel_04Rule.cs" />
