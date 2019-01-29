@@ -94,8 +94,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
-        [Fact]
-        public void ValidatePasses_AgeInRange()
+        [Theory]
+        [InlineData(20)]
+        [InlineData(null)]
+        public void ValidatePasses_AgeInRangeOrNull(int? age)
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -104,7 +106,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var dd23Rule = new Mock<IDerivedData_23Rule>();
             dd23Rule
                 .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<string>()))
-                .Returns(20);
+                .Returns(age);
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock

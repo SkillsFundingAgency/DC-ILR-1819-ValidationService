@@ -157,6 +157,7 @@
 
         public const string Entity_1 = "Entity_1";
 
+        public const string EPAOrgID_01 = "EPAOrgID_01";
         public const string EPAOrgID_03 = "EPAOrgID_03";
 
         public const string ESMType_01 = "ESMType_01";
@@ -349,6 +350,7 @@
         public const string Outcome_01 = "Outcome_01";
         public const string Outcome_04 = "Outcome_04";
         public const string Outcome_05 = "Outcome_05";
+        public const string Outcome_07 = "Outcome_07";
         public const string Outcome_08 = "Outcome_08";
         public const string Outcome_09 = "Outcome_09";
 
@@ -416,6 +418,7 @@
         public const string PriorAttain_02 = "PriorAttain_02";
         public const string PriorAttain_03 = "PriorAttain_03";
         public const string PriorAttain_04 = "PriorAttain_04";
+        public const string PriorAttain_06 = "PriorAttain_06";
         public const string PriorAttain_07 = "PriorAttain_07";
 
         public const string PriorLearnFundAdj_01 = "PriorLearnFundAdj_01";

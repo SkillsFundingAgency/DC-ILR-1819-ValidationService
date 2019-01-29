@@ -15,7 +15,24 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
 
         int? MaxAge { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="IEsfEligibilityRule"/> has benefits support.
+        /// </summary>
         bool Benefits { get; }
+
+        /// <summary>
+        /// Gets the minimum length of unemployment.
+        /// </summary>
+        int? MinLengthOfUnemployment { get; }
+
+        /// <summary>
+        /// Gets the maximum length of unemployment.
+        /// </summary>
+        int? MaxLengthOfUnemployment { get; }
+
+        string MinPriorAttainment { get; set; }
+
+        string MaxPriorAttainment { get; set; }
 
         IEnumerable<IEsfEligibilityRuleEmploymentStatus> EmploymentStatuses { get; }
 
