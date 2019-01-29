@@ -152,27 +152,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [InlineData("EII6", false)] // Monitoring.EmploymentStatus.EmployedFor11To20HoursPW
         [InlineData("EII7", true)] // Monitoring.EmploymentStatus.EmployedFor21To30HoursPW
         [InlineData("EII8", true)] // Monitoring.EmploymentStatus.EmployedFor31PlusHoursPW
-        [InlineData("LOE1", true)] // Monitoring.EmploymentStatus.EmployedForUpTo3M
-        [InlineData("LOE2", true)] // Monitoring.EmploymentStatus.EmployedFor4To6M
-        [InlineData("LOE3", true)] // Monitoring.EmploymentStatus.EmployedFor7To12M
-        [InlineData("LOE4", true)] // Monitoring.EmploymentStatus.EmployedForMoreThan12M
-        [InlineData("PEI1", true)] // Monitoring.EmploymentStatus.InFulltimeEducationOrTrainingPriorToEnrolment
-        [InlineData("BSI3", true)] // Monitoring.EmploymentStatus.InReceiptOfAnotherStateBenefit
-        [InlineData("BSI2", true)] // Monitoring.EmploymentStatus.InReceiptOfEmploymentAndSupportAllowance
-        [InlineData("BSI1", true)] // Monitoring.EmploymentStatus.InReceiptOfJobSeekersAllowance
-        [InlineData("BSI4", true)] // Monitoring.EmploymentStatus.InReceiptOfUniversalCredit
-        [InlineData("SEI1", true)] // Monitoring.EmploymentStatus.SelfEmployed
-        [InlineData("SEM1", true)] // Monitoring.EmploymentStatus.SmallEmployer
-        [InlineData("LOU1", true)] // Monitoring.EmploymentStatus.UnemployedForLessThan6M
-        [InlineData("LOU2", true)] // Monitoring.EmploymentStatus.UnemployedFor6To11M
-        [InlineData("LOU3", true)] // Monitoring.EmploymentStatus.UnemployedFor12To23M
-        [InlineData("LOU4", true)] // Monitoring.EmploymentStatus.UnemployedFor24To35M
-        [InlineData("LOU5", true)] // Monitoring.EmploymentStatus.UnemployedFor36MPlus
+        [InlineData("LOE1", false)] // Monitoring.EmploymentStatus.EmployedForUpTo3M
+        [InlineData("LOE2", false)] // Monitoring.EmploymentStatus.EmployedFor4To6M
+        [InlineData("LOE3", false)] // Monitoring.EmploymentStatus.EmployedFor7To12M
+        [InlineData("LOE4", false)] // Monitoring.EmploymentStatus.EmployedForMoreThan12M
+        [InlineData("PEI1", false)] // Monitoring.EmploymentStatus.InFulltimeEducationOrTrainingPriorToEnrolment
+        [InlineData("BSI3", false)] // Monitoring.EmploymentStatus.InReceiptOfAnotherStateBenefit
+        [InlineData("BSI2", false)] // Monitoring.EmploymentStatus.InReceiptOfEmploymentAndSupportAllowance
+        [InlineData("BSI1", false)] // Monitoring.EmploymentStatus.InReceiptOfJobSeekersAllowance
+        [InlineData("BSI4", false)] // Monitoring.EmploymentStatus.InReceiptOfUniversalCredit
+        [InlineData("SEI1", false)] // Monitoring.EmploymentStatus.SelfEmployed
+        [InlineData("SEM1", false)] // Monitoring.EmploymentStatus.SmallEmployer
+        [InlineData("LOU1", false)] // Monitoring.EmploymentStatus.UnemployedForLessThan6M
+        [InlineData("LOU2", false)] // Monitoring.EmploymentStatus.UnemployedFor6To11M
+        [InlineData("LOU3", false)] // Monitoring.EmploymentStatus.UnemployedFor12To23M
+        [InlineData("LOU4", false)] // Monitoring.EmploymentStatus.UnemployedFor24To35M
+        [InlineData("LOU5", false)] // Monitoring.EmploymentStatus.UnemployedFor36MPlus
         public void HasADisqualifyingMonitorStatusMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
-            var mockItem = new Mock<IEmploymentStatusMonitoring>(MockBehavior.Strict);
+            var mockItem = new Mock<IEmploymentStatusMonitoring>();
             mockItem
                 .SetupGet(y => y.ESMType)
                 .Returns(candidate.Substring(0, 3));
@@ -185,7 +185,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             // assert
             Assert.Equal(expectation, result);
-            mockItem.VerifyAll();
         }
 
         [Fact]
@@ -216,22 +215,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [InlineData("EII4")] // Monitoring.EmploymentStatus.EmployedFor20HoursOrMorePW
         [InlineData("EII7")] // Monitoring.EmploymentStatus.EmployedFor21To30HoursPW
         [InlineData("EII8")] // Monitoring.EmploymentStatus.EmployedFor31PlusHoursPW
-        [InlineData("LOE1")] // Monitoring.EmploymentStatus.EmployedForUpTo3M
-        [InlineData("LOE2")] // Monitoring.EmploymentStatus.EmployedFor4To6M
-        [InlineData("LOE3")] // Monitoring.EmploymentStatus.EmployedFor7To12M
-        [InlineData("LOE4")] // Monitoring.EmploymentStatus.EmployedForMoreThan12M
-        [InlineData("PEI1")] // Monitoring.EmploymentStatus.InFulltimeEducationOrTrainingPriorToEnrolment
-        [InlineData("BSI3")] // Monitoring.EmploymentStatus.InReceiptOfAnotherStateBenefit
-        [InlineData("BSI2")] // Monitoring.EmploymentStatus.InReceiptOfEmploymentAndSupportAllowance
-        [InlineData("BSI1")] // Monitoring.EmploymentStatus.InReceiptOfJobSeekersAllowance
-        [InlineData("BSI4")] // Monitoring.EmploymentStatus.InReceiptOfUniversalCredit
-        [InlineData("SEI1")] // Monitoring.EmploymentStatus.SelfEmployed
-        [InlineData("SEM1")] // Monitoring.EmploymentStatus.SmallEmployer
-        [InlineData("LOU1")] // Monitoring.EmploymentStatus.UnemployedForLessThan6M
-        [InlineData("LOU2")] // Monitoring.EmploymentStatus.UnemployedFor6To11M
-        [InlineData("LOU3")] // Monitoring.EmploymentStatus.UnemployedFor12To23M
-        [InlineData("LOU4")] // Monitoring.EmploymentStatus.UnemployedFor24To35M
-        [InlineData("LOU5")] // Monitoring.EmploymentStatus.UnemployedFor36MPlus
         public void InvalidItemRaisesValidationMessage(string candidate)
         {
             // arrange
@@ -323,6 +306,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [Theory]
         [InlineData("EII5")] // Monitoring.EmploymentStatus.EmployedFor0To10HourPW
         [InlineData("EII6")] // Monitoring.EmploymentStatus.EmployedFor11To20HoursPW
+        [InlineData("LOE1")] // Monitoring.EmploymentStatus.EmployedForUpTo3M
+        [InlineData("LOE2")] // Monitoring.EmploymentStatus.EmployedFor4To6M
+        [InlineData("LOE3")] // Monitoring.EmploymentStatus.EmployedFor7To12M
+        [InlineData("LOE4")] // Monitoring.EmploymentStatus.EmployedForMoreThan12M
+        [InlineData("PEI1")] // Monitoring.EmploymentStatus.InFulltimeEducationOrTrainingPriorToEnrolment
+        [InlineData("BSI3")] // Monitoring.EmploymentStatus.InReceiptOfAnotherStateBenefit
+        [InlineData("BSI2")] // Monitoring.EmploymentStatus.InReceiptOfEmploymentAndSupportAllowance
+        [InlineData("BSI1")] // Monitoring.EmploymentStatus.InReceiptOfJobSeekersAllowance
+        [InlineData("BSI4")] // Monitoring.EmploymentStatus.InReceiptOfUniversalCredit
+        [InlineData("SEI1")] // Monitoring.EmploymentStatus.SelfEmployed
+        [InlineData("SEM1")] // Monitoring.EmploymentStatus.SmallEmployer
+        [InlineData("LOU1")] // Monitoring.EmploymentStatus.UnemployedForLessThan6M
+        [InlineData("LOU2")] // Monitoring.EmploymentStatus.UnemployedFor6To11M
+        [InlineData("LOU3")] // Monitoring.EmploymentStatus.UnemployedFor12To23M
+        [InlineData("LOU4")] // Monitoring.EmploymentStatus.UnemployedFor24To35M
+        [InlineData("LOU5")] // Monitoring.EmploymentStatus.UnemployedFor36MPlus
         public void ValidItemDoesNotRaiseValidationMessage(string candidate)
         {
             // arrange
