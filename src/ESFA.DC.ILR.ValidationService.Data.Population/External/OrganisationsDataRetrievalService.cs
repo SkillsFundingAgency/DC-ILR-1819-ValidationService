@@ -33,16 +33,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                 {
                     var ukprns = UniqueUKPRNsFromMessage(_messageCache.Item).ToList();
 
-                    return _organisations
+                  return _organisations
                         .MasterOrganisations
-                        .Where(o => ukprns.Contains(o.Ukprn))
+                        .Include(mo => mo.OrgDetail)
+                        .Include(mo => mo.OrgPartnerUkprns)
+                        .Where(mo => ukprns.Contains(mo.Ukprn))
                         .ToDictionary(
                             o => o.Ukprn,
                             o => new Organisation
                             {
                                 UKPRN = o.OrgDetail?.Ukprn,
                                 LegalOrgType = o.OrgDetail?.LegalOrgType,
-                                PartnerUKPRN = o.OrgPartnerUkprns.Any(op => op.Ukprn == o.Ukprn)
+                                PartnerUKPRN = o.OrgPartnerUkprns?.Any(op => op.Ukprn == o.Ukprn)
                             });
                 }, cancellationToken);
         }
