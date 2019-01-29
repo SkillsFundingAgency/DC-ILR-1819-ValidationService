@@ -114,6 +114,8 @@
 
         public const string DelLocPostCode_03 = "DelLocPostCode_03";
         public const string DelLocPostCode_11 = "DelLocPostCode_11";
+        public const string DelLocPostCode_14 = "DelLocPostCode_14";
+
         public const string DelLocPostCode_16 = "DelLocPostCode_16";
         public const string DelLocPostCode_17 = "DelLocPostCode_17";
         public const string DelLocPostCode_18 = "DelLocPostCode_18";

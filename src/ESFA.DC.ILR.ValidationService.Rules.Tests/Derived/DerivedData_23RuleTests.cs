@@ -161,12 +161,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         [Fact]
         public void GetLearnersAgeAtStartOfESFContract_ReturnsCorrectAge()
         {
-            var mockAge = 20;
-            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
-            dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(mockAge);
-
-            var rule = NewRule(dateTimeServiceMock.Object);
-
             var testConRefNumber = "123456";
             var learner = new TestLearner
             {
@@ -182,6 +176,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                     }
                 }
             };
+
+            var mockAge = 20;
+            var dateTimeServiceMock = new Mock<IDateTimeQueryService>();
+            dateTimeServiceMock.Setup(m => m.AgeAtGivenDate(learner.DateOfBirthNullable.Value, It.IsAny<DateTime>())).Returns(mockAge);
+
+            var rule = NewRule(dateTimeServiceMock.Object);
 
             var result = rule.GetLearnersAgeAtStartOfESFContract(learner, testConRefNumber);
 
