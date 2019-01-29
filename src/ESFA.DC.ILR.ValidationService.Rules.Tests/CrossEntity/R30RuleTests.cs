@@ -69,11 +69,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
-        public void ValidationFails()
+        public void ValidationFails_WithCorrectAimSequenceNumber()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
             var testLearner = new TestLearner
             {
+                LearnRefNumber = "ABC1234",
                 LearningDeliveries = new List<ILearningDelivery>
                 {
                     new TestLearningDelivery
@@ -81,27 +82,46 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AimType = 3,
                         ProgTypeNullable = 1,
                         FworkCodeNullable = 1,
-                        PwayCodeNullable = 1
+                        PwayCodeNullable = 1,
+                        AimSeqNumber = 1
                     },
                     new TestLearningDelivery
                     {
                         AimType = 2,
                         ProgTypeNullable = 1,
                         FworkCodeNullable = 1,
-                        PwayCodeNullable = 1
+                        PwayCodeNullable = 1,
+                        AimSeqNumber = 2
+                    },
+                    new TestLearningDelivery
+                    {
+                        AimType = 4,
+                        ProgTypeNullable = 1,
+                        FworkCodeNullable = 1,
+                        PwayCodeNullable = 1,
+                        AimSeqNumber = 3
                     },
                     new TestLearningDelivery
                     {
                         AimType = 1,
                         ProgTypeNullable = 2,
                         FworkCodeNullable = 1,
-                        PwayCodeNullable = 1
+                        PwayCodeNullable = 1,
+                        AimSeqNumber = 4
+                    },
+                    new TestLearningDelivery
+                    {
+                        AimType = 1,
+                        ProgTypeNullable = 2,
+                        FworkCodeNullable = 1,
+                        PwayCodeNullable = 1,
+                        AimSeqNumber = 5
                     }
                 }
             };
 
             NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
-            validationErrorHandlerMock.Verify(h => h.Handle(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long?>(), It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            validationErrorHandlerMock.Verify(h => h.Handle("R30", "ABC1234", 1, It.IsAny<IEnumerable<IErrorMessageParameter>>()));
         }
 
         [Fact]
