@@ -249,6 +249,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         }
 
         /// <summary>
+        /// Has matching benefits indicator with null eligibility meets expectation
+        /// </summary>
+        /// <param name="derivedResult">if set to <c>true</c> [derived result].</param>
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void HasMatchingBenefitsIndicatorWithNullEligibilityMeetsExpectation(bool derivedResult)
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.HasMatchingBenefitsIndicator(null, derivedResult);
+
+            // assert
+            Assert.False(result);
+        }
+
+        /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
         /// <param name="contractRef">The contract reference.</param>
