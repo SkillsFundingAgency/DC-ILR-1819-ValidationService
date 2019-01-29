@@ -93,7 +93,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                             EffectiveFrom = p.EffectiveFrom,
                             EffectiveTo = p.EffectiveTo,
                             LocalAuthority = p.LocalAuthority,
-                            Termination = GetDateFromYearMonthString(p.Termination)
+                            Termination = GetEndOfMonthDateFromYearMonthString(p.Termination)
                         })
                         .AsSafeReadOnlyList();
                 }, cancellationToken);
@@ -152,14 +152,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                    ?? new List<string>();
         }
 
-        private DateTime? GetDateFromYearMonthString(string yearMonth)
+        private DateTime? GetEndOfMonthDateFromYearMonthString(string yearMonth)
         {
             if (string.IsNullOrEmpty(yearMonth.Trim()))
             {
                 return null;
             }
 
-            if (yearMonth.Length < 6)
+            if (yearMonth.Length != 6)
             {
                 return null;
             }

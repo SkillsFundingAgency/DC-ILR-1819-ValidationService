@@ -74,10 +74,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void ValidationPasses_NoLocalAuthorityCode(bool returnNullObject)
+        [Fact]
+        public void ValidationPasses_NoLocalAuthority()
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -99,29 +97,50 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             };
 
             var fcsServiceMock = new Mock<IFCSDataService>();
-
-            if (returnNullObject)
-            {
-                fcsServiceMock
+            fcsServiceMock
                     .Setup(m => m.GetEligibilityRuleLocalAuthoritiesFor(conRefNum))
                     .Returns((IEnumerable<IEsfEligibilityRuleLocalAuthority>)null);
-            }
-            else
+
+            NewRule(validationErrorHandlerMock.Object, fcsServiceMock.Object).Validate(testLearner);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
+        }
+
+        [Fact]
+        public void ValidationPasses_AuthorityCodeMissing()
+        {
+            var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
+
+            var startDate = new DateTime(2017, 7, 30);
+            var conRefNum = "12345";
+            var testLearner = new TestLearner
             {
-                fcsServiceMock
-                    .Setup(m => m.GetEligibilityRuleLocalAuthoritiesFor(conRefNum))
-                    .Returns(new List<EsfEligibilityRuleLocalAuthority>
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
                     {
-                        new EsfEligibilityRuleLocalAuthority
-                        {
-                            Code = null
-                        },
-                        new EsfEligibilityRuleLocalAuthority
-                        {
-                            Code = string.Empty
-                        }
-                    });
-            }
+                        LearnStartDate = startDate,
+                        FundModel = 70,
+                        LearnAimRef = "foo",
+                        DelLocPostCode = "foo",
+                        ConRefNumber = conRefNum
+                    }
+                }
+            };
+
+            var fcsServiceMock = new Mock<IFCSDataService>();
+            fcsServiceMock
+                .Setup(m => m.GetEligibilityRuleLocalAuthoritiesFor(conRefNum))
+                .Returns(new List<EsfEligibilityRuleLocalAuthority>
+                {
+                    new EsfEligibilityRuleLocalAuthority
+                    {
+                        Code = null
+                    },
+                    new EsfEligibilityRuleLocalAuthority
+                    {
+                        Code = string.Empty
+                    }
+                });
 
             NewRule(validationErrorHandlerMock.Object, fcsServiceMock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock);
