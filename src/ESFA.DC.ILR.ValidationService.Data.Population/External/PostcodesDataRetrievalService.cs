@@ -87,6 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
                     return _postcodes.ONS_Postcodes
                         .Where(p => uniquePostcodes.Contains(p.Postcode))
+                        .AsEnumerable()
                         .Select(p => new ONSPostcode
                         {
                             Postcode = p.Postcode,
