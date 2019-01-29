@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -38,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
             }
 
             return _dateTimeQueryService.AgeAtGivenDate(
-                learner.DateOfBirthNullable.Value,
+                new DateTime(1999, 9, 1),
                 delivery.LearnStartDate);
         }
     }

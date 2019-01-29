@@ -213,6 +213,7 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules
                 typeof(DateOfBirth_55Rule),
                 typeof(DelLocPostCode_03Rule),
                 typeof(DelLocPostCode_11Rule),
+                typeof(DelLocPostCode_14Rule),
                 typeof(DelLocPostCode_16Rule),
                 typeof(DelLocPostCode_17Rule),
                 typeof(DelLocPostCode_18Rule),

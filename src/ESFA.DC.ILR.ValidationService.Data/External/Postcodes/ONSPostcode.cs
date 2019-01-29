@@ -15,15 +15,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.Postcodes
         /// </summary>
         public string Postcode { get; set; }
 
-        /// <summary>
-        /// Gets or sets the introduction.
-        /// </summary>
-        public string Introduction { get; set; }
-
-        /// <summary>
-        /// Gets or sets the termination <= this should be a date...
-        /// </summary>
-        public string Termination { get; set; }
+        public DateTime? Termination { get; set; }
 
         /// <summary>
         /// Gets or sets the local authority.

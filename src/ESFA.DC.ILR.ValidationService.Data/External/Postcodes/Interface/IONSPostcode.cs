@@ -9,15 +9,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface
         /// </summary>
         string Postcode { get; }
 
-        /// <summary>
-        /// Gets the introduction.
-        /// </summary>
-        string Introduction { get; }
-
-        /// <summary>
-        /// Gets the termination <= this should be a date...
-        /// </summary>
-        string Termination { get; }
+        DateTime? Termination { get; }
 
         /// <summary>
         /// Gets the local authority.
