@@ -22,13 +22,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly int[] _fundModels = { TypeOfFunding.AdultSkills, TypeOfFunding.OtherAdult };
 
         private readonly IDateTimeQueryService _dateTimeQueryService;
+        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public DateOfBirth_40Rule(
             IDateTimeQueryService dateTimeQueryService,
+            ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_40)
         {
             _dateTimeQueryService = dateTimeQueryService;
+            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         /// <summary>
@@ -37,7 +40,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         /// <param name="learner">The object to validate.</param>
         public void Validate(ILearner learner)
         {
-            if (learner?.LearningDeliveries == null)
+           if (learner?.LearningDeliveries == null
+                || !learner.DateOfBirthNullable.HasValue)
             {
                 return;
             }
@@ -50,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                 }
 
                 var age = _dateTimeQueryService.AgeAtGivenDate(
-                    learner.DateOfBirthNullable ?? DateTime.MinValue,
+                    learner.DateOfBirthNullable.Value,
                     learningDelivery.LearnStartDate);
 
                 if (age < MinAge)
@@ -65,16 +69,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                     continue;
                 }
 
-                if (learningDelivery.LearningDeliveryFAMs
-                        ?.Any(ldf => ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.RES)) ?? false)
+                if (_learningDeliveryFAMQueryService.HasLearningDeliveryFAMType(
+                        learningDelivery.LearningDeliveryFAMs,
+                        LearningDeliveryFAMTypeConstants.RES))
                 {
                     continue;
                 }
 
-                if (learningDelivery.LearnStartDate.AddMonths(MinimumContractMonths) > (learningDelivery.LearnActEndDateNullable ?? DateTime.MaxValue))
+                if (!learningDelivery.OutcomeNullable.HasValue
+                    || learningDelivery.OutcomeNullable.Value != OutcomeConstants.Achieved)
                 {
-                    RaiseValidationMessage(learner, learningDelivery);
+                    continue;
                 }
+
+                if (!learningDelivery.LearnActEndDateNullable.HasValue
+                    || _dateTimeQueryService.YearsBetween(
+                        learningDelivery.LearnStartDate,
+                        learningDelivery.LearnActEndDateNullable.Value) >= 1)
+                {
+                    continue;
+                }
+
+                 RaiseValidationMessage(learner, learningDelivery);
             }
         }
 
