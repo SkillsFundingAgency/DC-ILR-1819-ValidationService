@@ -9,9 +9,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R31Rule : AbstractRule, IRule<ILearner>
     {
-        private const int ComponentAimType = 3;
-        private const int ProgramAimType = 1;
-
         public R31Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R31)
         {
@@ -25,16 +22,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
 
             var groups = objectToValidate.LearningDeliveries
-                .GroupBy(ld => new { ld.AimSeqNumber, ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable });
+                .GroupBy(ld => new { ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable });
 
             foreach (var group in groups)
             {
-                if (group.Any(d => d.AimType == ProgramAimType && d.LearnActEndDateNullable == null) && group.All(d => d.AimType != ComponentAimType))
+                if (group.Any(d => d.AimType == TypeOfAim.ProgrammeAim && d.LearnActEndDateNullable == null) && group.All(d => d.AimType != TypeOfAim.ComponentAimInAProgramme))
                 {
-                    var delivery = group.First(d => d.AimType == ProgramAimType && d.LearnActEndDateNullable == null);
+                    var delivery = group.First(d => d.AimType == TypeOfAim.ProgrammeAim && d.LearnActEndDateNullable == null);
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
-                        group.Key.AimSeqNumber,
+                        delivery.AimSeqNumber,
                         BuildErrorMessageParameters(delivery));
                 }
             }
@@ -44,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.AimType, ProgramAimType),
+                BuildErrorMessageParameter(PropertyNameConstants.AimType, TypeOfAim.ProgrammeAim),
                 BuildErrorMessageParameter(PropertyNameConstants.ProgType, delivery.ProgTypeNullable.ToString()),
                 BuildErrorMessageParameter(PropertyNameConstants.FworkCode, delivery.FworkCodeNullable.ToString()),
                 BuildErrorMessageParameter(PropertyNameConstants.PwayCode, delivery.PwayCodeNullable.ToString()),

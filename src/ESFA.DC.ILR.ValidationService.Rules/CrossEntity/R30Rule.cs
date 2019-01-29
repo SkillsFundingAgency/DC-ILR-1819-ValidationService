@@ -9,10 +9,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R30Rule : AbstractRule, IRule<ILearner>
     {
-        private const int ExcludedProgType = 25;
-        private const int ComponentAimType = 3;
-        private const int ProgramAimType = 1;
-
         public R30Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R30)
         {
@@ -26,16 +22,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             }
 
             var groups = objectToValidate.LearningDeliveries
-                .GroupBy(ld => new { ld.AimSeqNumber, ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable })
-                .Where(grp => grp.Key.ProgTypeNullable != ExcludedProgType);
+                .GroupBy(ld => new { ld.ProgTypeNullable, ld.FworkCodeNullable, ld.PwayCodeNullable })
+                .Where(grp => grp.Key.ProgTypeNullable != TypeOfLearningProgramme.ApprenticeshipStandard);
 
             foreach (var group in groups)
             {
-                if (group.Any(d => d.AimType == ComponentAimType) && group.All(d => d.AimType != ProgramAimType))
+                if (group.Any(d => d.AimType == TypeOfAim.ComponentAimInAProgramme) && group.All(d => d.AimType != TypeOfAim.ProgrammeAim))
                 {
+                    var aimSequenceNumber = group.First(x => x.AimType == TypeOfAim.ComponentAimInAProgramme).AimSeqNumber;
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
-                        group.Key.AimSeqNumber,
+                        aimSequenceNumber,
                         BuildErrorMessageParameters(group.Key.ProgTypeNullable, group.Key.FworkCodeNullable, group.Key.PwayCodeNullable));
                 }
             }
