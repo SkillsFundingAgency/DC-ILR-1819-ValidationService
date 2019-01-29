@@ -58,7 +58,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [has a qualifying monitor status] [the specified monitor]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasADisqualifyingMonitorStatus(IEmploymentStatusMonitoring monitor) =>
-            It.IsOutOfRange(
+            monitor.ESMType.ComparesWith(Monitoring.EmploymentStatus.Types.EmploymentIntensityIndicator)
+            && It.IsOutOfRange(
                 $"{monitor.ESMType}{monitor.ESMCode}",
                 Monitoring.EmploymentStatus.EmployedFor0To10HourPW,
                 Monitoring.EmploymentStatus.EmployedFor11To20HoursPW);
@@ -70,9 +71,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <param name="doThisAction">do this action.</param>
         public void CheckEmploymentStatus(ILearnerEmploymentStatus thisEmployment, Action<IEmploymentStatusMonitoring> doThisAction)
         {
-            if (It.IsInRange(thisEmployment?.EmpStat, TypeOfEmploymentStatus.InPaidEmployment))
+            if (It.Has(thisEmployment) && It.IsInRange(thisEmployment.EmpStat, TypeOfEmploymentStatus.InPaidEmployment))
             {
-                thisEmployment?.EmploymentStatusMonitorings.ForAny(HasADisqualifyingMonitorStatus, doThisAction);
+                thisEmployment.EmploymentStatusMonitorings.ForAny(HasADisqualifyingMonitorStatus, doThisAction);
             }
         }
 
