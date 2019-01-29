@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -27,26 +21,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
         [Fact]
         public void BuildErrorMessageParameters()
         {
-            string mathGrade = Grades.AstarA;
-
+            var mathGrade = Grades.AstarA;
             var validaionErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
             validaionErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.MathGrade, mathGrade)).Verifiable();
-
             NewRule(validationErrorHandler: validaionErrorHandlerMock.Object).BuildErrorMessageParameters(mathGrade);
-
             validaionErrorHandlerMock.Verify();
         }
 
         [Fact]
         public void MathGradeConditionMet_False()
         {
-            string mathGrade = "ABC";
-
+            string mathGrade = "A";
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-
             provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, mathGrade)).Returns(true);
-
             NewRule(provideLookupDetails: provideLookupDetails.Object).MathGradeConditionMet(mathGrade).Should().BeFalse();
         }
 
@@ -56,9 +43,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
         public void EngGradeConditionMet_True(string mathGrade)
         {
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-
             provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, mathGrade)).Returns(false);
-
             NewRule(provideLookupDetails: provideLookupDetails.Object).MathGradeConditionMet(mathGrade).Should().BeTrue();
         }
 
@@ -91,15 +76,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-
             provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, mathGrade)).Returns(false);
-
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(
-                    validationErrorHandler: validationErrorHandlerMock.Object,
-                    provideLookupDetails: provideLookupDetails.Object)
-                    .Validate(testLearner);
+                NewRule(validationErrorHandlerMock.Object, provideLookupDetails.Object).Validate(testLearner);
             }
         }
 
@@ -117,15 +97,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-
             provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, mathGrade)).Returns(true);
-
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(
-                    validationErrorHandler: validationErrorHandlerMock.Object,
-                    provideLookupDetails: provideLookupDetails.Object)
-                    .Validate(testLearner);
+                NewRule(validationErrorHandlerMock.Object, provideLookupDetails.Object).Validate(testLearner);
             }
         }
 
@@ -135,7 +110,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
             var testLearner = new TestLearner()
             {
                 LearnRefNumber = "AB12345",
-                LearningDeliveries = new TestLearningDelivery[]
+                LearningDeliveries = new[]
                 {
                     new TestLearningDelivery()
                     {
@@ -145,15 +120,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-
             provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, Grades.AstarA)).Returns(true);
-
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(
-                    validationErrorHandler: validationErrorHandlerMock.Object,
-                    provideLookupDetails: provideLookupDetails.Object)
-                    .Validate(testLearner);
+                NewRule(validationErrorHandlerMock.Object, provideLookupDetails.Object).Validate(testLearner);
             }
         }
 
@@ -161,17 +131,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
         public void Validate_NoError_NullCheck()
         {
             TestLearner testLearner = null;
-
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-
             provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, Grades.AstarA)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(
-                    validationErrorHandler: validationErrorHandlerMock.Object,
-                    provideLookupDetails: provideLookupDetails.Object)
-                    .Validate(testLearner);
+                NewRule(validationErrorHandlerMock.Object, provideLookupDetails.Object).Validate(testLearner);
             }
         }
 
@@ -179,9 +144,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.MathGrade
             IValidationErrorHandler validationErrorHandler = null,
             IProvideLookupDetails provideLookupDetails = null)
         {
-            return new MathGrade_02Rule(
-                validationErrorHandler: validationErrorHandler,
-                provideLookupDetails: provideLookupDetails);
+            return new MathGrade_02Rule(validationErrorHandler, provideLookupDetails);
         }
     }
 }

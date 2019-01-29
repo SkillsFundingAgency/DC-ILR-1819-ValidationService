@@ -22,8 +22,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null
-                || !MathGradeSuppliedAndNotNone(objectToValidate?.MathGrade))
+            if (objectToValidate == null || !MathGradeSuppliedAndNotNone(objectToValidate?.MathGrade))
             {
                 return;
             }
