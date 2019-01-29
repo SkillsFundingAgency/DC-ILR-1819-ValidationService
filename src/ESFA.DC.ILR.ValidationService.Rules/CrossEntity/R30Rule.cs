@@ -29,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 if (group.Any(d => d.AimType == TypeOfAim.ComponentAimInAProgramme) && group.All(d => d.AimType != TypeOfAim.ProgrammeAim))
                 {
-                    var aimSequenceNumber = group.FirstOrDefault(x => x.AimType == 3)?.AimSeqNumber;
+                    var aimSequenceNumber = group.First(x => x.AimType == TypeOfAim.ComponentAimInAProgramme).AimSeqNumber;
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         aimSequenceNumber,
