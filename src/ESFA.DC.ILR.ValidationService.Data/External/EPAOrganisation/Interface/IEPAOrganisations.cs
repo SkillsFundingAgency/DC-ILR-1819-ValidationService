@@ -2,10 +2,7 @@
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface
 {
-    /// <summary>
-    /// the EPA organisation details contract
-    /// </summary>
-    public interface IEPAOrganisation
+    public interface IEPAOrganisations
     {
         /// <summary>
         /// Gets the identifier.
@@ -25,6 +22,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.EPAOrganisation.Interface
         /// <summary>
         /// Gets the effective to (date).
         /// </summary>
-        DateTime EffectiveTo { get; }
+        DateTime? EffectiveTo { get; }
     }
 }

@@ -102,7 +102,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                 externalDataCache = new ExternalDataCache
                 {
                     LearningDeliveries = externalDataCacheGet.LearningDeliveries.ToCaseInsensitiveDictionary(),
-                    EPAOrganisations = externalDataCacheGet.EPAOrganisations,
+                    EPAOrganisations = externalDataCacheGet.EPAOrganisations.ToCaseInsensitiveDictionary(),
                     ERNs = externalDataCacheGet.ERNs,
                     FCSContractAllocations = externalDataCacheGet.FCSContractAllocations,
                     Frameworks = externalDataCacheGet.Frameworks,

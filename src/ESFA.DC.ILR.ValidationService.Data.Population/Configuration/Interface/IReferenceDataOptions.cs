@@ -12,6 +12,8 @@
 
         string FCSConnectionString { get; }
 
+        string EPAConnectionString { get; }
+
         string ValidationErrorsConnectionString { get; }
     }
 }
