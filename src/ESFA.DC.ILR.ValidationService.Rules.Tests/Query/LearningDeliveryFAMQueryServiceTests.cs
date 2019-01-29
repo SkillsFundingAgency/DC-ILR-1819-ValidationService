@@ -515,7 +515,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [Fact]
         public void LearningDeliveryFAMsForType_Null()
         {
-            NewService().GetLearningDeliveryFAMsForType(null, "anything").Should().BeNull();
+            NewService().GetLearningDeliveryFAMsForType(null, "anything").Should().BeNullOrEmpty();
         }
 
         private LearningDeliveryFAMQueryService NewService()

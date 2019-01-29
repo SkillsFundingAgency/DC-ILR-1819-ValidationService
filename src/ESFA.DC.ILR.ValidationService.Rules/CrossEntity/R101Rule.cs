@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 var learningDeliveryFAMs = _learningDeliveryFAMQueryService
-                  .GetLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT).ToList() ?? new List<ILearningDeliveryFAM>();
+                  .GetLearningDeliveryFAMsForType(learningDelivery.LearningDeliveryFAMs, _famTypeACT).ToList();
 
                 if (DoesNotHaveMultipleACTFams(learningDeliveryFAMs))
                 {
