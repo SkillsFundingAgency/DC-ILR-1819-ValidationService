@@ -108,9 +108,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType
         ///   <c>true</c> if [has disqualifying lou indicator] [the specified eligibility]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasDisqualifyingLOUIndicator(IEsfEligibilityRule eligibility, int? derivedRuleResult) =>
-            It.Has(derivedRuleResult)
+            It.Has(eligibility)
+            && It.Has(derivedRuleResult)
             && (HasDisqualifyingMinLOUIndicator(eligibility, derivedRuleResult.Value)
-            || HasDisqualifyingMaxLOUIndicator(eligibility, derivedRuleResult.Value));
+                || HasDisqualifyingMaxLOUIndicator(eligibility, derivedRuleResult.Value));
 
         /// <summary>
         /// Determines whether [has disqualifying lou indicator] [the specified this delivery].
