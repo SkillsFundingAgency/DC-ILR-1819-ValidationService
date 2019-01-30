@@ -4563,84 +4563,140 @@ localised additions are:
     <LearnerFAM>
       <DLA>
         <option code="1"
-                description="Learner is funded by HEFCE and is in receipt of disabled students allowance" />
+                description="Learner is funded by HEFCE and is in receipt of disabled students allowance"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </DLA>
       <ECF>
         <option code="1"
-                description="Learner is exempt from GCSE English condition of funding due to a learning difficulty" />
+                description="Learner is exempt from GCSE English condition of funding due to a learning difficulty"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="2"
-                description="Learner is exempt from GCSE English condition of funding as they hold an equivalent overseas qualification" />
+                description="Learner is exempt from GCSE English condition of funding as they hold an equivalent overseas qualification"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="3"
-                description="Learner has met the GCSE English condition of funding as they hold an approved equivalent UK qualification" />
+                description="Learner has met the GCSE English condition of funding as they hold an approved equivalent UK qualification"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="4"
-                description="Learner has met the GCSE English condition of funding by undertaking/completing a valid English GCSE or equivalent qualification at another institution through collaboration with the home institution" />
+                description="Learner has met the GCSE English condition of funding by undertaking/completing a valid English GCSE or equivalent qualification at another institution through collaboration with the home institution"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </ECF>
       <EDF>
         <option code="1"
-                description="Learner has not achieved a maths GCSE (at grade A*-C/9-4) by the end of year 11" />
+                description="Learner has not achieved a maths GCSE (at grade A*-C/9-4) by the end of year 11"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="2"
-                description="Learner has not achieved an English GCSE (at grade A*-C/9-4) by the end of year 11" />
+                description="Learner has not achieved an English GCSE (at grade A*-C/9-4) by the end of year 11"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </EDF>
       <EHC>
         <option code="1"
-                description="Learner has an Education Health Care plan " />
+                description="Learner has an Education Health Care plan "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </EHC>
       <FME>
         <option code="1"
-                description="14-15 year old learner is eligible for free meals " />
+                description="14-15 year old learner is eligible for free meals "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="2"
-                description="16-19 year old learner is eligible for and in receipt of free meals " />
+                description="16-19 year old learner is eligible for and in receipt of free meals "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </FME>
       <HNS>
         <option code="1"
-                description="Learner is a high needs student in receipt of element 3 ‘top-up’ funding from the local authority" />
+                description="Learner is a high needs student in receipt of element 3 ‘top-up’ funding from the local authority"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </HNS>
       <!--<LDA>
         <option code="1" description="Learner has a Section 139A Learning Difficulty Assessment " />
       </LDA>-->
       <LSR>
         <option code="36"
-                description="Care to Learn " />
+                description="Care to Learn "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="55"
-                description="16-19 Bursary Fund – learner is a member of a vulnerable group " />
+                description="16-19 Bursary Fund – learner is a member of a vulnerable group "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="56"
-                description="16-19 Bursary Fund - learner has been awarded a discretionary bursary " />
+                description="16-19 Bursary Fund - learner has been awarded a discretionary bursary "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="57"
-                description="Residential support " />
+                description="Residential support "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="58"
-                description="19+ Hardship (Adult Skills or Advanced Learner Loan funded learners only)" />
+                description="19+ Hardship (Adult Skills or Advanced Learner Loan funded learners only)"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="59"
-                description="20+ Childcare (Adult Skills or Advanced Learner Loan funded learners only)" />
+                description="20+ Childcare (Adult Skills or Advanced Learner Loan funded learners only)"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="60"
-                description="19+ Residential Access Fund (Adult Skills or Advanced Learner Loan funded learners only)" />
+                description="19+ Residential Access Fund (Adult Skills or Advanced Learner Loan funded learners only)"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="61"
-                description="ESF funded learner receiving childcare support" />
+                description="ESF funded learner receiving childcare support"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </LSR>
       <MCF>
         <option code="1"
-                description="Learner is exempt from GCSE maths condition of funding due to a learning difficulty" />
+                description="Learner is exempt from GCSE maths condition of funding due to a learning difficulty"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="2"
-                description="Learner is exempt from GCSE maths condition of funding as they hold an equivalent overseas qualification" />
+                description="Learner is exempt from GCSE maths condition of funding as they hold an equivalent overseas qualification"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="3"
-                description="Learner has met the GCSE maths condition of funding as they hold an approved equivalent UK qualification" />
+                description="Learner has met the GCSE maths condition of funding as they hold an approved equivalent UK qualification"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="4"
-                description="Learner has met the GCSE maths condition of funding by undertaking/completing a valid maths GCSE or equivalent qualification at another institution through collaboration with the home institution" />
+                description="Learner has met the GCSE maths condition of funding by undertaking/completing a valid maths GCSE or equivalent qualification at another institution through collaboration with the home institution"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </MCF>
       <NLM>
         <option code="17"
-                description="Learner migrated as part of provider merger " />
+                description="Learner migrated as part of provider merger "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="18"
-                description="Learner moved as a result of Minimum Contract Level " />
+                description="Learner moved as a result of Minimum Contract Level "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </NLM>
       <PPE>
         <option code="1"
-                description="Learner is eligible for Service Child premium " />
+                description="Learner is eligible for Service Child premium "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
         <option code="2"
-                description="Learner is eligible for Adopted from Care premium " />
+                description="Learner is eligible for Adopted from Care premium "
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </PPE>
       <SEN>
         <option code="1"
-                description="Special educational needs" />
+                description="Special educational needs"
+                validFrom="1900-01-01"
+                validTo="2099-12-31" />
       </SEN>
     </LearnerFAM>
     <LearningDeliveryFAM>

@@ -2,6 +2,7 @@
 {
     public enum LookupComplexKey
     {
-        LearnDelFAMType
+        LearnDelFAMType,
+        LearnFAMType
     }
 }

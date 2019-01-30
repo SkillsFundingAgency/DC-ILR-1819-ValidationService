@@ -363,6 +363,7 @@
     <Compile Include="Learner\GivenNames\GivenNames_02Rule.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_04Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_01Rule.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_03Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_11Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_10Rule.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_09Rule.cs" />
