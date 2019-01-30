@@ -155,12 +155,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         private DateTime? GetEndOfMonthDateFromYearMonthString(string yearMonth)
         {
-            if (string.IsNullOrEmpty(yearMonth.Trim()))
-            {
-                return null;
-            }
-
-            if (yearMonth.Length != 6)
+            if (yearMonth == null || string.IsNullOrEmpty(yearMonth.Trim()) || yearMonth.Length != 6)
             {
                 return null;
             }
