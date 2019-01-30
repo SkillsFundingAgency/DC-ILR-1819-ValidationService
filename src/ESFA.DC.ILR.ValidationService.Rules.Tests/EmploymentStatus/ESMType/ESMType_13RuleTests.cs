@@ -258,6 +258,46 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
         }
 
         /// <summary>
+        /// Has disqualifying lou indicator with null derived result returns false
+        /// </summary>
+        [Fact]
+        public void HasDisqualifyingLOUIndicatorWithNullDerivedResultReturnsFalse()
+        {
+            // arrange
+            var mockItem = new Mock<IEsfEligibilityRule>();
+            mockItem
+                .SetupGet(x => x.MinLengthOfUnemployment)
+                .Returns(3);
+            mockItem
+                .SetupGet(x => x.MaxLengthOfUnemployment)
+                .Returns(4);
+
+            var sut = NewRule();
+
+            // act
+            var result = sut.HasDisqualifyingLOUIndicator(mockItem.Object, null);
+
+            // assert
+            Assert.False(result);
+        }
+
+        /// <summary>
+        /// Has disqualifying lou indicator with null eligibility returns false
+        /// </summary>
+        [Fact]
+        public void HasDisqualifyingLOUIndicatorWithNullEligibilityReturnsFalse()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.HasDisqualifyingLOUIndicator(null, 5);
+
+            // assert
+            Assert.False(result);
+        }
+
+        /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
         /// <param name="contractRef">The contract reference.</param>
