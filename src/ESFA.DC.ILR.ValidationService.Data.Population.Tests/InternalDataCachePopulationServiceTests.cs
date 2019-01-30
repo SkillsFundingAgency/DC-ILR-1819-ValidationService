@@ -147,6 +147,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
 
         [Theory]
         [InlineData(LookupComplexKey.LearnDelFAMType, 16)]
+        [InlineData(LookupComplexKey.LearnFAMType, 11)]
         public async Task ComplexLookupsArePresentAndMatchExpectedCount(LookupComplexKey thisKey, int expectedCount)
         {
             // arrange
