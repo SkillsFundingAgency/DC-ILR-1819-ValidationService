@@ -32,7 +32,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         }
 
         /// <summary>
-        /// New rule with null lars data throws.
+        /// New rule with null file data throws.
         /// </summary>
         [Fact]
         public void NewRuleWithNullFileDataThrows()
@@ -48,7 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         }
 
         /// <summary>
-        /// New rule with null derived data rule 18 throws.
+        /// New rule with null academic data throws.
         /// </summary>
         [Fact]
         public void NewRuleWithNullAcademicDataThrows()
@@ -63,6 +63,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             Assert.Throws<ArgumentNullException>(() => new UKPRN_08Rule(handler.Object, fileData.Object, null, commonOps.Object, fcsData.Object));
         }
 
+        /// <summary>
+        /// New rule with null common operations throws.
+        /// </summary>
         [Fact]
         public void NewRuleWithNullCommonOperationsThrows()
         {
@@ -76,6 +79,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             Assert.Throws<ArgumentNullException>(() => new UKPRN_08Rule(handler.Object, fileData.Object, academicData.Object, null, fcsData.Object));
         }
 
+        /// <summary>
+        /// New rule with null FCS data throws.
+        /// </summary>
         [Fact]
         public void NewRuleWithNullFCSDataThrows()
         {
@@ -276,6 +282,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             Assert.Equal(expectation, result);
         }
 
+        /// <summary>
+        /// Has qualifying funding stream meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
         [InlineData("AEBC1819", false)] // FundingStreamPeriodCodeConstants.AEBC1819
         [InlineData("AEBTO-TOL1819", false)] // FundingStreamPeriodCodeConstants.AEBTO_TOL1819
@@ -439,6 +450,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         /// Valid item does not raise validation message.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
+        /// <param name="providerID">The provider identifier.</param>
+        /// <param name="deliveryID">The delivery identifier.</param>
         [Theory]
         [InlineData("ALLB1819", 1, 1)] // FundingStreamPeriodCodeConstants.ALLB1819
         [InlineData("ALLBC1819", 1, 1)] // FundingStreamPeriodCodeConstants.ALLBC1819
