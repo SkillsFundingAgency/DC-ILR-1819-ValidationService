@@ -118,7 +118,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>true if it does</returns>
         public bool ConRefNumberExists(string conRefNumber)
         {
-            return _contractAllocations.ContainsKey(conRefNumber);
+            return !string.IsNullOrEmpty(conRefNumber) && _contractAllocations.ContainsKey(conRefNumber);
         }
 
         /// <summary>
