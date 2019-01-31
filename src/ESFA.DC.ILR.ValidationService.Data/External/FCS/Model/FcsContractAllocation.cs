@@ -36,5 +36,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Model
         public DateTime? StartDate { get; set; }
 
         public IEsfEligibilityRule EsfEligibilityRule { get; set; }
+
+        /// <summary>
+        /// Gets or sets the delivery ukprn.
+        /// </summary>
+        public int DeliveryUKPRN { get; set; }
     }
 }

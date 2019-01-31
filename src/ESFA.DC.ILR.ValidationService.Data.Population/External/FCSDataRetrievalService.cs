@@ -57,7 +57,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                     FundingStreamPeriodCode = ca.FundingStreamPeriodCode,
                     LotReference = ca.LotReference,
                     TenderSpecReference = ca.TenderSpecReference,
-                    StartDate = ca.StartDate
+                    StartDate = ca.StartDate,
+                    DeliveryUKPRN = (int)ca.DeliveryUKPRN // <= this cannot be null
                 })
                 .ToListAsync(cancellationToken);
 
