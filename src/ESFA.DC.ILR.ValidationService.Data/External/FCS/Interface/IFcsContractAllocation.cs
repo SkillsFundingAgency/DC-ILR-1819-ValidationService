@@ -34,6 +34,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         DateTime? StartDate { get; }
 
         /// <summary>
+        /// Gets the delivery ukprn.
+        /// </summary>
+        int DeliveryUKPRN { get; }
+
+        /// <summary>
         ///  Gets Esf Eligibility Rule
         /// </summary>
         IEsfEligibilityRule EsfEligibilityRule { get; }

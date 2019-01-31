@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
@@ -9,83 +6,201 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
+using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
 {
     public class UKPRN_08Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly string _learnDelFamType = LearningDeliveryFAMTypeConstants.ALB;
-        private readonly HashSet<string> _fundingStreamPeriodCodes = new HashSet<string> { FundingStreamPeriodCodeConstants.ALLB1819, FundingStreamPeriodCodeConstants.ALLBC1819 };
-
+        /// <summary>
+        /// The file data service
+        /// </summary>
         private readonly IFileDataService _fileDataService;
-        private readonly IAcademicYearDataService _academicYearDataService;
-        private readonly IAcademicYearQueryService _academicYearQueryService;
-        private readonly IFCSDataService _fcsDataService;
-        private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
+        /// <summary>
+        /// The academic year data service
+        /// </summary>
+        private readonly IAcademicYearDataService _academicYearDataService;
+
+        /// <summary>
+        /// The checker (common operations provider)
+        /// </summary>
+        private readonly IProvideRuleCommonOperations _check;
+
+        /// <summary>
+        /// The FCS data service
+        /// </summary>
+        private readonly IFCSDataService _fcsDataService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UKPRN_08Rule"/> class.
+        /// </summary>
+        /// <param name="validationErrorHandler">The validation error handler.</param>
+        /// <param name="fileDataService">The file data service.</param>
+        /// <param name="academicYearDataService">The academic year data service.</param>
+        /// <param name="commonOperations">The common operations.</param>
+        /// <param name="fcsDataService">The FCS data service.</param>
         public UKPRN_08Rule(
+            IValidationErrorHandler validationErrorHandler,
             IFileDataService fileDataService,
             IAcademicYearDataService academicYearDataService,
-            IAcademicYearQueryService academicYearQueryService,
-            IFCSDataService fcsDataService,
-            ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
-            IValidationErrorHandler validationErrorHandler)
+            IProvideRuleCommonOperations commonOperations,
+            IFCSDataService fcsDataService)
             : base(validationErrorHandler, RuleNameConstants.UKPRN_08)
         {
+            // this check should be in the base class
+            It.IsNull(validationErrorHandler)
+                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+
+            It.IsNull(fileDataService)
+                .AsGuard<ArgumentNullException>(nameof(fileDataService));
+            It.IsNull(academicYearDataService)
+                .AsGuard<ArgumentNullException>(nameof(academicYearDataService));
+            It.IsNull(commonOperations)
+                .AsGuard<ArgumentNullException>(nameof(commonOperations));
+            It.IsNull(fcsDataService)
+                .AsGuard<ArgumentNullException>(nameof(fcsDataService));
+
             _fileDataService = fileDataService;
             _academicYearDataService = academicYearDataService;
-            _academicYearQueryService = academicYearQueryService;
+            _check = commonOperations;
             _fcsDataService = fcsDataService;
-            _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
-        public UKPRN_08Rule()
-           : base(null, null)
+        /// <summary>
+        /// Determines whether this delivery is excluded.
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if this delivery is excluded; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsExcluded(ILearningDelivery thisDelivery) =>
+            IsNotPartOfThisYear(thisDelivery);
+
+        /// <summary>
+        /// Determines whether [is not part of this year] [this delivery].
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is not part of this year] [this delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsNotPartOfThisYear(ILearningDelivery thisDelivery) =>
+            It.Has(thisDelivery?.LearnActEndDateNullable)
+                && thisDelivery.LearnActEndDateNullable < _academicYearDataService.GetAcademicYearOfLearningDate(_academicYearDataService.Today, AcademicYearDates.Commencement);
+
+        /// <summary>
+        /// Determines whether [is loans bursory] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is loans bursory] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsLoansBursary(ILearningDeliveryFAM monitor) =>
+            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding);
+
+        /// <summary>
+        /// Determines whether [is loans bursory] [this delivery].
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is loans bursory] [this delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsLoansBursary(ILearningDelivery thisDelivery) =>
+            _check.CheckDeliveryFAMs(thisDelivery, IsLoansBursary);
+
+        /// <summary>
+        /// Determines whether [has qualifying provider identifier] [the specified allocation].
+        /// </summary>
+        /// <param name="allocation">The allocation.</param>
+        /// <param name="providerID">The provider identifier.</param>
+        /// <returns>
+        ///   <c>true</c> if [has qualifying provider identifier] [the specified allocation]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasQualifyingProviderID(IFcsContractAllocation allocation, int providerID) =>
+            allocation.DeliveryUKPRN == providerID;
+
+        /// <summary>
+        /// Determines whether [has qualifying funding stream] [the specified allocation].
+        /// </summary>
+        /// <param name="allocation">The allocation.</param>
+        /// <returns>
+        ///   <c>true</c> if [has qualifying funding stream] [the specified allocation]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasQualifyingFundingStream(IFcsContractAllocation allocation) =>
+            It.IsInRange(
+                allocation.FundingStreamPeriodCode,
+                FundingStreamPeriodCodeConstants.ALLB1819,
+                FundingStreamPeriodCodeConstants.ALLBC1819);
+
+        /// <summary>
+        /// Determines whether [has funding relationship] [this delivery].
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [has funding relationship] [this delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasFundingRelationship(ILearningDelivery thisDelivery)
         {
+            var allocation = _fcsDataService.GetContractAllocationFor(thisDelivery?.ConRefNumber);
+
+            return It.Has(allocation)
+                && HasQualifyingProviderID(allocation, _fileDataService.UKPRN())
+                && HasQualifyingFundingStream(allocation);
         }
 
-        public void Validate(ILearner objectToValidate)
+        /// <summary>
+        /// Determines whether [is not valid] [this delivery].
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is not valid] [this delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsNotValid(ILearningDelivery thisDelivery)
         {
-            var ukprn = _fileDataService.UKPRN();
-            var academicYearStart = _academicYearDataService.Start();
-
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => d.LearningDeliveryFAMs != null))
-            {
-                if (ConditionMet(academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.LearningDeliveryFAMs))
-                {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(ukprn, LearningDeliveryFAMTypeConstants.ALB));
-                }
-            }
+            return !IsExcluded(thisDelivery)
+                && IsLoansBursary(thisDelivery)
+                && !HasFundingRelationship(thisDelivery);
         }
 
-        public bool ConditionMet(DateTime academicYearStart, DateTime? learnActEndDate, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+        /// <summary>
+        /// Validates this learner.
+        /// </summary>
+        /// <param name="thisLearner">this learner.</param>
+        public void Validate(ILearner thisLearner)
         {
-            return LearnActEndDateConditionMet(learnActEndDate, academicYearStart)
-                && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)
-                && FCTFundingConditionMet();
+            It.IsNull(thisLearner)
+                .AsGuard<ArgumentNullException>(nameof(thisLearner));
+
+            var learnRefNumber = thisLearner.LearnRefNumber;
+
+            thisLearner.LearningDeliveries
+                .ForAny(IsNotValid, x => RaiseValidationMessage(learnRefNumber, x));
         }
 
-        public virtual bool LearnActEndDateConditionMet(DateTime? learnActEndDate, DateTime academicYearStart)
+        /// <summary>
+        /// Raises the validation message.
+        /// </summary>
+        /// <param name="learnRefNumber">The learn reference number.</param>
+        /// <param name="thisDelivery">this delivery.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            return learnActEndDate == null ? true : !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYearStart);
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParameters());
         }
 
-        public virtual bool LearningDeliveryFAMsConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
-        {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMType(learningDeliveryFAMs, _learnDelFamType);
-        }
-
-        public virtual bool FCTFundingConditionMet()
-        {
-            return !_fcsDataService.FundingRelationshipFCTExists(_fundingStreamPeriodCodes);
-        }
-
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int ukprn, string learningDelFAMType)
+        /// <summary>
+        /// Builds the message parameters.
+        /// </summary>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParameters()
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.UKPRN, ukprn),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, learningDelFAMType)
+                BuildErrorMessageParameter(PropertyNameConstants.UKPRN, _fileDataService.UKPRN()),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding)
             };
         }
     }
