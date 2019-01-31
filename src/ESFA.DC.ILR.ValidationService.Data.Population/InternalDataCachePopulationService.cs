@@ -243,7 +243,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                 .Descendants(type)
                 .Elements()
                 .ToCaseInsensitiveDictionary(
-                    n => $"{n.Name}",
+                    n => n.Name.ToString(),
                     v => v.Descendants("option")
                             .ToCaseInsensitiveDictionary(
                                 c => c.Attribute("code")?.Value,

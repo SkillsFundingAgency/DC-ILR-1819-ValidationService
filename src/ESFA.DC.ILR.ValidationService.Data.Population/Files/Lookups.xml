@@ -4922,7 +4922,7 @@ localised additions are:
         <option code="345" 
                 description="Sheffield City Region Skills Bank (Growth Deal)"
                 validFrom="1900-01-01"
-                validTo="2019-07-31" />
+                validTo="2021-03-31" />
         <option code="346" 
                 description="Armed forces leavers"
                 validFrom="1900-01-01"
@@ -4993,6 +4993,10 @@ localised additions are:
                 validTo="2099-12-31" />
         <option code="363"
                 description="Learners in receipt of low wages"
+                validFrom="1900-01-01"
+                validTo="2019-07-31" />
+        <option code="364"
+                description="LDM - 364"
                 validFrom="1900-01-01"
                 validTo="2019-07-31" />
       </LDM>
