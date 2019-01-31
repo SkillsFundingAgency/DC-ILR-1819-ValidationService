@@ -243,9 +243,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
                 .Descendants(type)
                 .Elements()
                 .ToCaseInsensitiveDictionary(
-                    k => k.Attribute("code")?.Value,
-                    v => lookups.Descendants(v.Attribute("code")?.Value)
-                            .Elements()
+                    n => n.Name.ToString(),
+                    v => v.Descendants("option")
                             .ToCaseInsensitiveDictionary(
                                 c => c.Attribute("code")?.Value,
                                 vp => new ValidityPeriods(

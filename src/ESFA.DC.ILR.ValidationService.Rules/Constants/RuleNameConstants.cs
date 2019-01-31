@@ -286,6 +286,7 @@
         public const string LearningDeliveryHE_08 = "LearningDeliveryHE_08";
 
         public const string LearnFAMType_01 = "LearnFAMType_01";
+        public const string LearnFAMType_03 = "LearnFAMType_03";
         public const string LearnFAMType_09 = "LearnFAMType_09";
         public const string LearnFAMType_10 = "LearnFAMType_10";
         public const string LearnFAMType_11 = "LearnFAMType_11";

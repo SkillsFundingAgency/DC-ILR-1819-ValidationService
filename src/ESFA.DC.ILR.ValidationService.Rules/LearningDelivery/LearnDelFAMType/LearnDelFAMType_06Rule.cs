@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private bool IsValid(ILearningDelivery learningDelivery, ILearningDeliveryFAM monitor)
         {
             return _lookupDetails.IsCurrent(
-                LookupComplexKey.LearnDelFAMType,
+                LookupComplexKey.LearningDeliveryFAM,
                 monitor.LearnDelFAMType,
                 monitor.LearnDelFAMCode,
                 learningDelivery.LearnStartDate);

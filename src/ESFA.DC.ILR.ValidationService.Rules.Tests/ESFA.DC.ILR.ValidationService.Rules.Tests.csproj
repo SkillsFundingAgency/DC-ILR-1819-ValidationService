@@ -343,6 +343,7 @@
     <Compile Include="Learner\GivenNames\GivenNames_02RuleTests.cs" />
     <Compile Include="Learner\GivenNames\GivenNames_04RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_01RuleTests.cs" />
+    <Compile Include="Learner\LearnFAMType\LearnFAMType_03RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_11RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_14RuleTests.cs" />
     <Compile Include="Learner\LearnFAMType\LearnFAMType_15RuleTests.cs" />
