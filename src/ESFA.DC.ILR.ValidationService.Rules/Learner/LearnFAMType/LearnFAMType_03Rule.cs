@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
         public bool ConditionMet(ILearnerFAM learnerFam, DateTime dd06Date)
         {
                 return !_lookupDetails.IsCurrent(
-                LookupComplexKey.LearnFAMType,
+                LookupComplexKey.LearnerFAM,
                 learnerFam.LearnFAMType,
                 learnerFam.LearnFAMCode.ToString(),
                 dd06Date);

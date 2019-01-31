@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
             var lookupProviderMock = new Mock<IProvideLookupDetails>();
             lookupProviderMock.Setup(m =>
-                    m.IsCurrent(LookupComplexKey.LearnDelFAMType, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
+                    m.IsCurrent(LookupComplexKey.LearningDeliveryFAM, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
                 .Returns(true);
 
             var testLearner = new TestLearner
@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
             var lookupProviderMock = new Mock<IProvideLookupDetails>();
             lookupProviderMock.Setup(m =>
-                    m.IsCurrent(LookupComplexKey.LearnDelFAMType, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
+                    m.IsCurrent(LookupComplexKey.LearningDeliveryFAM, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
                 .Returns(true);
 
             var testLearner = new TestLearner
@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
             var lookupProviderMock = new Mock<IProvideLookupDetails>();
             lookupProviderMock.Setup(m =>
-                    m.IsCurrent(LookupComplexKey.LearnDelFAMType, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
+                    m.IsCurrent(LookupComplexKey.LearningDeliveryFAM, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
                 .Returns(true);
 
             var testLearner = new TestLearner
@@ -95,7 +95,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
             var lookupProviderMock = new Mock<IProvideLookupDetails>();
             lookupProviderMock.Setup(m =>
-                    m.IsCurrent(LookupComplexKey.LearnDelFAMType, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
+                    m.IsCurrent(LookupComplexKey.LearningDeliveryFAM, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>()))
                 .Returns(false);
 
             var testLearner = new TestLearner
