@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
 
 namespace ESFA.DC.ILR.ValidationService.Data
 {
@@ -14,8 +13,8 @@ namespace ESFA.DC.ILR.ValidationService.Data
     public sealed class LookupDetailsProvider :
         IProvideLookupDetails
     {
+        private readonly ICreateInternalDataCache _cacheFactory;
         private IInternalDataCache _internalCache;
-        private ICreateInternalDataCache _cacheFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LookupDetailsProvider " /> class.
@@ -82,7 +81,8 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool Contains(LookupCodedKey lookupKey, string candidate)
         {
-            return InternalCache.CodedLookups[lookupKey].Contains(candidate, StringComparer.OrdinalIgnoreCase);
+            return !string.IsNullOrEmpty(candidate) &&
+                   InternalCache.CodedLookups[lookupKey].Contains(candidate, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -118,7 +118,8 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool Contains(LookupTimeRestrictedKey lookupKey, string candidate)
         {
-            return InternalCache.LimitedLifeLookups[lookupKey].ContainsKey(candidate);
+            return !string.IsNullOrEmpty(candidate)
+                   && InternalCache.LimitedLifeLookups[lookupKey].ContainsKey(candidate);
         }
 
         /// <summary>
@@ -146,19 +147,21 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool ContainsValueForKey(LookupCodedKeyDictionary lookupKey, string keyCandidate, string valueCandidate)
         {
-            return InternalCache.CodedDictionaryLookups[lookupKey].TryGetValue(keyCandidate, out IReadOnlyCollection<string> value)
+            return !string.IsNullOrEmpty(keyCandidate) &&
+                   InternalCache.CodedDictionaryLookups[lookupKey].TryGetValue(keyCandidate, out IReadOnlyCollection<string> value)
                    && value.Any(x => x.CaseInsensitiveEquals(valueCandidate));
         }
 
         public bool ContainsValueForKey(LookupItemKey lookupKey, string keyCandidate, string valueCandidate)
         {
-            return InternalCache.ItemLookups[lookupKey].TryGetValue(keyCandidate, out IReadOnlyCollection<string> value)
-                && value.Any(x => x.CaseInsensitiveEquals(valueCandidate));
+            return !string.IsNullOrEmpty(keyCandidate) &&
+                   InternalCache.ItemLookups[lookupKey].TryGetValue(keyCandidate, out IReadOnlyCollection<string> value)
+                   && value.Any(x => x.CaseInsensitiveEquals(valueCandidate));
         }
 
         public bool ContainsValueForKey(LookupComplexKey lookupKey, string keyCandidate, string valueCandidate)
         {
-            return
+            return !string.IsNullOrEmpty(keyCandidate) && !string.IsNullOrEmpty(valueCandidate) &&
                 InternalCache.CodedComplexLookups[lookupKey].TryGetValue(keyCandidate, out var value)
                     && value.ContainsKey(valueCandidate);
         }
