@@ -1,29 +1,19 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.EDRS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
 {
-    public class EmpId_01Rule :
-        IRule<ILearner>
+    public class EmpId_01Rule : AbstractRule, IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "EmpId_01";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
         /// <summary>
         /// The employer data reference service
         /// </summary>
-        private readonly IProvideEDRSDataOperations _edrsData;
+        private readonly IEmployersDataService _edrsData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EmpId_01Rule" /> class.
@@ -32,39 +22,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         /// <param name="edrsData">The employer data reference service.</param>
         public EmpId_01Rule(
             IValidationErrorHandler validationErrorHandler,
-            IProvideEDRSDataOperations edrsData)
+            IEmployersDataService edrsData)
+            : base(validationErrorHandler, RuleNameConstants.EmpId_01)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(edrsData)
                 .AsGuard<ArgumentNullException>(nameof(edrsData));
 
-            _messageHandler = validationErrorHandler;
             _edrsData = edrsData;
         }
 
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
-
-        public bool IsNotValid(ILearnerEmploymentStatus employment) =>
-            !_edrsData.IsValid(employment.EmpIdNullable);
+        public bool IsNotValid(int? empId) =>
+            empId.HasValue
+            && empId != ValidationConstants.TemporaryEmployerId
+            && !_edrsData.IsValid(empId);
 
         /// <summary>
         /// Validates the specified object.
         /// </summary>
-        /// <param name="objectToValidate">The object to validate.</param>
-        public void Validate(ILearner objectToValidate)
+        /// <param name="learner">The object to validate.</param>
+        public void Validate(ILearner learner)
         {
-            It.IsNull(objectToValidate)
-                .AsGuard<ArgumentNullException>(nameof(objectToValidate));
-
-            var learnRefNumber = objectToValidate.LearnRefNumber;
-
-            objectToValidate.LearnerEmploymentStatuses
-                .SafeWhere(IsNotValid)
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+            if (learner.LearnerEmploymentStatuses != null)
+            {
+                foreach (var learnerEmploymentStatus in learner.LearnerEmploymentStatuses)
+                {
+                    if (IsNotValid(learnerEmploymentStatus.EmpIdNullable))
+                    {
+                        RaiseValidationMessage(learner.LearnRefNumber, learnerEmploymentStatus);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -72,12 +61,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         /// </summary>
         /// <param name="learnRefNumber">The learner reference number.</param>
         /// <param name="thisEmployment">this employment.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearnerEmploymentStatus thisEmployment)
+        private void RaiseValidationMessage(string learnRefNumber, ILearnerEmploymentStatus thisEmployment)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.EmpId, thisEmployment.EmpIdNullable));
 
-            _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
+            parameters.Add(BuildErrorMessageParameter(PropertyNameConstants.EmpId, thisEmployment.EmpIdNullable));
+
+            HandleValidationError(learnRefNumber, null, parameters);
         }
     }
 }

@@ -15,9 +15,12 @@
     <Parameter Name="ULNConnectionstring" Value="__ULNConnectionstring__" />
     <Parameter Name="FCSConnectionString" Value="__FCSDbConnectionString__" />
     <Parameter Name="EPAConnectionString" Value="__EpaDbConnectionStringRO__" />
+    <Parameter Name="EmployersConnectionString" Value="__EmployersDbConnectionStringRO__" />
     <Parameter Name="RedisCacheConnectionString" Value="__RedisCacheConnectionString__" />
     <Parameter Name="LargeEmployersConnectionString" Value="__LargeEmployerDbConnectionString__ " />
     <Parameter Name="ValidationErrorsConnectionString" Value="__ValidationErrorsConnectionString__" />
     <Parameter Name="ProcessingServicePlacementConstraints" Value="__ProcessingServicePlacementConstraints__" />
+    <Parameter Name="ServiceReleaseVersion" Value="__ServiceReleaseVersion__" />
+    <Parameter Name="ServiceReleaseDateTime" Value="__ServiceReleaseDateTime__" />
   </Parameters>
 </Application>

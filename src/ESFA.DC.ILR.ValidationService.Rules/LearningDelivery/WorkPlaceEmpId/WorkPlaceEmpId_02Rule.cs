@@ -46,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceEmpId
                 return false; // null rule is handled as part of WorkPlaceEmpId_01 rule.
             }
 
-            return workPlaceEmpId != ValidationConstants.TemporaryWorkPlaceEmpId && !HasValidChecksum(workPlaceEmpId.Value);
+            return workPlaceEmpId != ValidationConstants.TemporaryEmployerId && !HasValidChecksum(workPlaceEmpId.Value);
         }
 
         public bool HasValidChecksum(int workPlaceEmpId)

@@ -16,6 +16,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Configuration
 
         public string EPAConnectionString { get; set; }
 
+        public string EmployersConnectionString { get; set; }
+
         public string ValidationErrorsConnectionString { get; set; }
     }
 }

@@ -33,6 +33,7 @@
     <Parameter Name="OrganisationsConnectionString" Value="" />
     <Parameter Name="FCSConnectionString" Value="" />
     <Parameter Name="EPAConnectionString" Value="" />
+    <Parameter Name="EmployersConnectionString" Value=""/>
   </Section>
 
   <Section  Name="AzureRedisSection">
@@ -50,5 +51,10 @@
     <Parameter Name="CertificateProtectionLevel" Value="" />
     <Parameter Name="CertificateRemoteCommonNames" Value="" />
   </Section>
-  
+
+  <Section Name="VersionSection">
+    <Parameter Name="ServiceReleaseVersion" Value="" />
+    <Parameter Name="ServiceReleaseDateTime" Value="" />
+  </Section>
+
 </Settings>

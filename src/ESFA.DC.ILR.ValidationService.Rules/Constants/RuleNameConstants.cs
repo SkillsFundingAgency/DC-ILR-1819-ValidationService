@@ -125,6 +125,8 @@
         public const string ELQ_01 = "ELQ_01";
         public const string ELQ_02 = "ELQ_02";
 
+        public const string EmpId_01 = "EmpId_01";
+        public const string EmpId_02 = "EmpId_02";
         public const string EmpId_10 = "EmpId_10";
         public const string EmpId_13 = "EmpId_13";
 

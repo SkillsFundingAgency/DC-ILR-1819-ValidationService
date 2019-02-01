@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Modules
             builder.RegisterType<PostcodesDataService>().As<IPostcodesDataService>();
             builder.RegisterType<ValidationErrorsDataService>().As<IValidationErrorsDataService>();
             builder.RegisterType<FCSDataService>().As<IFCSDataService>().InstancePerLifetimeScope();
-            builder.RegisterType<EDRSDataOperationsProvider>().As<IProvideEDRSDataOperations>().InstancePerLifetimeScope();
+            builder.RegisterType<EmployersDataService>().As<IEmployersDataService>().InstancePerLifetimeScope();
 
             builder.RegisterType<AcademicYearDataService>().As<IAcademicYearDataService>().InstancePerLifetimeScope();
             builder.RegisterType<LookupDetailsProvider>().As<IProvideLookupDetails>().InstancePerLifetimeScope();

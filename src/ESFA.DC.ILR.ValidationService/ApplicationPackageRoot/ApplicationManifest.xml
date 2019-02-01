@@ -19,14 +19,17 @@
     <Parameter Name="ULNConnectionstring" DefaultValue="metadata=res://*/ULN.csdl|res://*/ULN.ssdl|res://*/ULN.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.ULN.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
     <Parameter Name="FCSConnectionString" DefaultValue="" />
     <Parameter Name="EPAConnectionString" DefaultValue="" />
+    <Parameter Name="EmployersConnectionString" DefaultValue="" />
     <Parameter Name="LargeEmployersConnectionString" DefaultValue="" />
     <Parameter Name="ValidationErrorsConnectionString" DefaultValue="" />
     <Parameter Name="RedisCacheConnectionString" DefaultValue="" />
     <Parameter Name="ProcessingServicePlacementConstraints" DefaultValue="" />
-    <Parameter Name="OrganisationsConnectionString" DefaultValue="metadata=res://*/Organisations.csdl|res://*/Organisations.ssdl|res://*/Organisations.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=(local);initial catalog=ESFA.DC.Data.Organisations.Database;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
+    <Parameter Name="OrganisationsConnectionString" DefaultValue="" />
     <Parameter Name="ValidationDPActorService_PartitionCount" DefaultValue="10" />
     <Parameter Name="ValidationDPActorService_MinReplicaSetSize" DefaultValue="1" />
     <Parameter Name="ValidationDPActorService_TargetReplicaSetSize" DefaultValue="1" />
+    <Parameter Name="ServiceReleaseVersion" DefaultValue="" />
+    <Parameter Name="ServiceReleaseDateTime" DefaultValue="" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -95,6 +98,11 @@
             <Parameter Name="OrganisationsConnectionString" Value="[OrganisationsConnectionString]" />
             <Parameter Name="FCSConnectionString" Value="[FCSConnectionString]" />
             <Parameter Name="EPAConnectionString" Value="[EPAConnectionString]" />
+            <Parameter Name="EmployersConnectionString" Value="[EmployersConnectionString]" />
+          </Section>
+          <Section Name="VersionSection">
+            <Parameter Name="ServiceReleaseVersion" Value="[ServiceReleaseVersion]" />
+            <Parameter Name="ServiceReleaseDateTime" Value="[ServiceReleaseDateTime]"/>
           </Section>
         </Settings>
       </ConfigOverride>

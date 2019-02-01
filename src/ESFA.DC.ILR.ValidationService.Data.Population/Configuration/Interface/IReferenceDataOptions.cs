@@ -14,6 +14,8 @@
 
         string EPAConnectionString { get; }
 
+        string EmployersConnectionString { get; }
+
         string ValidationErrorsConnectionString { get; }
     }
 }

@@ -1,35 +1,16 @@
-﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.EDRS.Interface;
+﻿using System;
+using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
-using System;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
 {
-    public class EmpId_02Rule :
-        IRule<ILearner>
+    public class EmpId_02Rule : AbstractRule, IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "EmpId_02";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
-        /// <summary>
-        /// The employer data reference service
-        /// </summary>
-        private readonly IProvideEDRSDataOperations _edrsData;
-
-        /// <summary>
-        /// The derived data (rule) 05
-        /// </summary>
         private readonly IDerivedData_05Rule _derivedData05;
 
         /// <summary>
@@ -40,25 +21,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         /// <param name="derivedData05">The derived data (rule) 05.</param>
         public EmpId_02Rule(
             IValidationErrorHandler validationErrorHandler,
-            IProvideEDRSDataOperations edrsData,
             IDerivedData_05Rule derivedData05)
+            : base(validationErrorHandler, RuleNameConstants.EmpId_02)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-            It.IsNull(edrsData)
-                .AsGuard<ArgumentNullException>(nameof(edrsData));
             It.IsNull(derivedData05)
                 .AsGuard<ArgumentNullException>(nameof(derivedData05));
 
-            _messageHandler = validationErrorHandler;
-            _edrsData = edrsData;
             _derivedData05 = derivedData05;
         }
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
 
         /// <summary>
         /// Determines whether [has valid checksum] [the specified employer identifier].
@@ -76,8 +48,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
                 return false;
             }
 
-            var candidate = $"{employerID.AsSafeReadOnlyDigitList().ElementAt(8)}";
-            return candidate.ComparesWith($"{checkSum}");
+            var candidate = employerID.AsSafeReadOnlyDigitList().ElementAt(8).ToString();
+            return candidate.ComparesWith(checkSum.ToString());
         }
 
         /// <summary>
@@ -88,8 +60,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         ///   <c>true</c> if [is not valid] [the specified employment]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(ILearnerEmploymentStatus employment) =>
-            It.Has(employment.EmpIdNullable)
-                && !_edrsData.IsTemporary(employment.EmpIdNullable)
+            employment.EmpIdNullable.HasValue
+                && employment.EmpIdNullable != ValidationConstants.TemporaryEmployerId
                 && !HasValidChecksum(employment.EmpIdNullable.Value);
 
         /// <summary>
@@ -98,14 +70,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         /// <param name="objectToValidate">The object to validate.</param>
         public void Validate(ILearner objectToValidate)
         {
-            It.IsNull(objectToValidate)
-                .AsGuard<ArgumentNullException>(nameof(objectToValidate));
-
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
-            objectToValidate.LearnerEmploymentStatuses
-                .SafeWhere(IsNotValid)
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+            if (objectToValidate.LearnerEmploymentStatuses != null)
+            {
+                foreach (var learnerEmploymentStatus in objectToValidate.LearnerEmploymentStatuses)
+                {
+                    if (IsNotValid(learnerEmploymentStatus))
+                    {
+                        RaiseValidationMessage(learnRefNumber, learnerEmploymentStatus);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -113,12 +89,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         /// </summary>
         /// <param name="learnRefNumber">The learner reference number.</param>
         /// <param name="thisEmployment">this employment.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearnerEmploymentStatus thisEmployment)
+        private void RaiseValidationMessage(string learnRefNumber, ILearnerEmploymentStatus thisEmployment)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.EmpId, thisEmployment.EmpIdNullable));
 
-            _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
+            parameters.Add(BuildErrorMessageParameter(PropertyNameConstants.EmpId, thisEmployment.EmpIdNullable));
+
+            HandleValidationError(learnRefNumber, null, parameters);
         }
     }
 }

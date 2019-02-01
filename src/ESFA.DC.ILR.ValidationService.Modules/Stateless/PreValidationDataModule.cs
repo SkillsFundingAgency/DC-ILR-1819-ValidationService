@@ -12,6 +12,8 @@ using ESFA.DC.ILR.ValidationService.Data.Population;
 using ESFA.DC.ILR.ValidationService.Data.Population.Configuration;
 using ESFA.DC.ILR.ValidationService.Data.Population.Configuration.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ReferenceData.Employers.Model;
+using ESFA.DC.ReferenceData.Employers.Model.Interface;
 using ESFA.DC.ReferenceData.EPA.Model;
 using ESFA.DC.ReferenceData.EPA.Model.Interface;
 using ESFA.DC.ReferenceData.FCS.Model;
@@ -40,17 +42,26 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Stateless
             builder.Register(c => new LARS(c.Resolve<IReferenceDataOptions>().LARSConnectionString)).As<ILARS>().InstancePerLifetimeScope();
             builder.Register(c => new ULN(c.Resolve<IReferenceDataOptions>().ULNConnectionstring)).As<IULN>().InstancePerLifetimeScope();
             builder.Register(c => new Postcodes(c.Resolve<IReferenceDataOptions>().PostcodesConnectionString)).As<IPostcodes>().InstancePerLifetimeScope();
+
             builder.Register(c =>
             {
                 DbContextOptions<OrganisationsContext> options = new DbContextOptionsBuilder<OrganisationsContext>()
-            .UseSqlServer(c.Resolve<IReferenceDataOptions>().OrganisationsConnectionString).Options;
+                    .UseSqlServer(c.Resolve<IReferenceDataOptions>().OrganisationsConnectionString).Options;
 
                 return new OrganisationsContext(options);
             }).As<IOrganisationsContext>().InstancePerLifetimeScope();
 
+            builder.Register(c =>
+            {
+                DbContextOptions<EmployersContext> options = new DbContextOptionsBuilder<EmployersContext>()
+                    .UseSqlServer(c.Resolve<IReferenceDataOptions>().EmployersConnectionString).Options;
+
+                return new EmployersContext(options);
+            }).As<IEmployersContext>().InstancePerLifetimeScope();
+
             builder.Register(c => new FcsContext(c.Resolve<IReferenceDataOptions>().FCSConnectionString)).As<IFcsContext>().InstancePerLifetimeScope();
             builder.Register(c => new EpaContext(c.Resolve<IReferenceDataOptions>().EPAConnectionString)).As<IEpaContext>().InstancePerLifetimeScope();
-            builder.Register(c => new ValidationErrors(c.Resolve<IReferenceDataOptions>().ValidationErrorsConnectionString)).As<IValidationErrors>();
+            builder.Register(c => new ValidationErrors(c.Resolve<IReferenceDataOptions>().ValidationErrorsConnectionString)).As<IValidationErrors>().InstancePerLifetimeScope();
 
             base.Load(builder);
         }

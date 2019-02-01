@@ -21,6 +21,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         private readonly IEPAOrganisationsDataRetrievalService _epaOrganisationsDataRetrievalService;
         private readonly ICampusIdentifierDataRetrievalService _campusIdentifierDataRetrievalService;
         private readonly IFCSDataRetrievalService _fcsDataRetrievalService;
+        private readonly IEmployersDataRetrievalService _employersDataRetrievalService;
 
         public ExternalDataCachePopulationService(
             IExternalDataCache externalDataCache,
@@ -33,7 +34,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             IOrganisationsDataRetrievalService organisationsDataRetrievalService,
             IEPAOrganisationsDataRetrievalService epaOrganisationsDataRetrievalService,
             ICampusIdentifierDataRetrievalService campusIdentifierDataRetrievalService,
-            IFCSDataRetrievalService fcsDataRetrievalService)
+            IFCSDataRetrievalService fcsDataRetrievalService,
+            IEmployersDataRetrievalService employersDataRetrievalService)
         {
             _externalDataCache = externalDataCache;
             _larsStandardDataRetrievalService = larsStandardDataRetrievalService;
@@ -46,6 +48,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             _epaOrganisationsDataRetrievalService = epaOrganisationsDataRetrievalService;
             _campusIdentifierDataRetrievalService = campusIdentifierDataRetrievalService;
             _fcsDataRetrievalService = fcsDataRetrievalService;
+            _employersDataRetrievalService = employersDataRetrievalService;
         }
 
         public async Task PopulateAsync(CancellationToken cancellationToken)
@@ -56,6 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             externalDataCache.StandardValidities = await _larsStandardValidityDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.LearningDeliveries = await _larsLearningDeliveryDataRetrievalService.RetrieveAsync(cancellationToken);
             externalDataCache.Frameworks = await _larsFrameworkDataRetrievalService.RetrieveAsync(cancellationToken);
+
             externalDataCache.ULNs = new HashSet<long>(await _ulnDataRetrievalService.RetrieveAsync(cancellationToken));
 
             externalDataCache.Postcodes = (await _postcodesDataRetrievalService.RetrieveAsync(cancellationToken)).ToCaseInsensitiveHashSet();
@@ -68,8 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
             externalDataCache.FCSContractAllocations = await _fcsDataRetrievalService.RetrieveAsync(cancellationToken);
 
-            // TODO: FIX ME!!! this is sanjeev's 'test' emp id...
-            externalDataCache.ERNs = new List<int> { 154549452 };
+            externalDataCache.ERNs = new HashSet<int>(await _employersDataRetrievalService.RetrieveAsync(cancellationToken));
         }
     }
 }
