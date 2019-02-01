@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -13,7 +9,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
     public class R91Rule : AbstractRule, IRule<ILearner>
     {
         private readonly int _fundModel = TypeOfFunding.EuropeanSocialFund;
-        private HashSet<string> _contractReferencesCompleted = new HashSet<string>();
+        private readonly string _learnAimReference = TypeOfAim.References.ESFLearnerStartandAssessment;
+        private readonly int _completionState = CompletionState.HasCompleted;
 
         public R91Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.R91)
@@ -22,70 +19,51 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null)
+            if (objectToValidate?.LearningDeliveries == null)
             {
                 return;
             }
 
-            bool isFundModelPresent = false;
-            bool isSameContractReferencePresent = false;
-            string conRefNumberESFLearningAim = string.Empty;
-            int compStatusESFLearningAim = CompletionState.HasCompleted;
-            int aimSequenceNumber = 0;
-
+            bool isCompletedLearnAimRefFound = false;
+            bool isFundModelCondition = false;
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 if (FundModelConditionMet(learningDelivery.FundModel))
                 {
-                    isFundModelPresent = true;
-                    conRefNumberESFLearningAim = learningDelivery.ConRefNumber;
-                    compStatusESFLearningAim = learningDelivery.CompStatus;
-                    aimSequenceNumber = learningDelivery.AimSeqNumber;
+                    isFundModelCondition = true;
                     if (LearnAimRefConditionMet(learningDelivery.LearnAimRef)
                         && CompStatusConditionMet(learningDelivery.CompStatus))
                     {
-                        if (ContractReferenceConditionMet(
-                            learningDelivery.ConRefNumber,
-                            _contractReferencesCompleted))
-                        {
-                            isSameContractReferencePresent = true;
-                            break;
-                        }
-
-                        _contractReferencesCompleted.Add(learningDelivery.ConRefNumber);
+                        isCompletedLearnAimRefFound = true;
+                        break;
                     }
                 }
             }
 
-            // if fund model is present but no esf learning aim present
-            // and no same contract reference completed aims
-            if (isFundModelPresent
-                && !isSameContractReferencePresent)
+            if (isFundModelCondition
+                && !isCompletedLearnAimRefFound)
             {
                 HandleValidationError(
-                            learnRefNumber: objectToValidate.LearnRefNumber,
-                            aimSequenceNumber: aimSequenceNumber,
-                            errorMessageParameters: BuildErrorMessageParameters(
-                            _fundModel,
-                            conRefNumberESFLearningAim,
-                            compStatusESFLearningAim));
+                                learnRefNumber: objectToValidate.LearnRefNumber,
+                                errorMessageParameters: BuildErrorMessageParameters(
+                                _fundModel,
+                                _learnAimReference,
+                                _completionState));
             }
         }
 
         public bool FundModelConditionMet(int fundModel) => _fundModel == fundModel;
 
-        public bool LearnAimRefConditionMet(string learnAimRef) => learnAimRef == TypeOfAim.References.ESFLearnerStartandAssessment;
+        public bool LearnAimRefConditionMet(string learnAimRef) => learnAimRef == _learnAimReference;
 
-        public bool CompStatusConditionMet(int compStatus) => compStatus == CompletionState.HasCompleted;
+        public bool CompStatusConditionMet(int compStatus) => compStatus == _completionState;
 
-        public bool ContractReferenceConditionMet(string conRefNumber, HashSet<string> contractReferences) => contractReferences.Contains(conRefNumber);
-
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, string conRefNumber, int compStatus)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, string learnAimRef, int compStatus)
         {
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
-                BuildErrorMessageParameter(PropertyNameConstants.ConRefNumber, conRefNumber),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnAimRef, learnAimRef),
                 BuildErrorMessageParameter(PropertyNameConstants.CompStatus, compStatus)
             };
         }
