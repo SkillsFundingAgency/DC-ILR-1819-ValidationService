@@ -157,22 +157,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         }
 
         /// <summary>
-        /// Is not part of this year with null delivery returns false
-        /// </summary>
-        [Fact]
-        public void IsNotPartOfThisYearWithNullDeliveryReturnsFalse()
-        {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.IsNotPartOfThisYear(null);
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
         /// Is not part of this year meet expectdation
         /// </summary>
         /// <param name="endDate">The end date.</param>
