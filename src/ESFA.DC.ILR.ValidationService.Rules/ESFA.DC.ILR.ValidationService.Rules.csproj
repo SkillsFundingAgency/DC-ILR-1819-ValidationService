@@ -629,6 +629,7 @@
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_03Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_04Rule.cs" />
     <Compile Include="LearningDelivery\WithdrawReason\WithdrawReason_05Rule.cs" />
+    <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_01Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_02Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_03Rule.cs" />
     <Compile Include="LearningDelivery\WorkPlaceEmpId\WorkPlaceEmpId_04Rule.cs" />
