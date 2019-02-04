@@ -16,22 +16,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
 {
     public class FCSDataRetrievalServiceTests
     {
-        [Fact]
-        public void UKPRNFromMessage()
-        {
-            var message = new TestMessage
-            {
-                LearningProviderEntity = new TestLearningProvider
-                {
-                    UKPRN = 12345678
-                }
-            };
-
-            var result = NewService().UKPRNFromMessage(message);
-
-            result.Should().Be(12345678);
-        }
-
         /// <summary>
         /// Retrieve Contract Allocations Async.
         /// </summary>

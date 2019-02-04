@@ -60,73 +60,65 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
             var contractAllocations = await _fcs.ContractAllocations
                 .Where(ca => messageConRefNumbers.Contains(ca.ContractAllocationNumber))
-                .Select(ca => new FcsContractAllocation
-                {
-                    ContractAllocationNumber = ca.ContractAllocationNumber,
-                    FundingStreamPeriodCode = ca.FundingStreamPeriodCode,
-                    LotReference = ca.LotReference,
-                    TenderSpecReference = ca.TenderSpecReference,
-                    StartDate = ca.StartDate,
-                    DeliveryUKPRN = (int)ca.DeliveryUKPRN // <= this cannot be null
-                })
-                .ToListAsync(cancellationToken);
-
-            // No Foreign key Relationship on Model for Eligibility Rules, do two queries and overlay in Memory, only around 300 Rules, not worth filter at this point.
-            var eligibilityRules = await _fcs.EsfEligibilityRules
-                .Select(r => new EsfEligibilityRule
-                {
-                    LotReference = r.LotReference,
-                    TenderSpecReference = r.TenderSpecReference,
-                    MinAge = r.MinAge,
-                    MaxAge = r.MaxAge,
-                    Benefits = r.Benefits ?? false,
-                    MinLengthOfUnemployment = r.MinLengthOfUnemployment,
-                    MaxLengthOfUnemployment = r.MaxLengthOfUnemployment,
-                    EmploymentStatuses = r.EsfEligibilityRuleEmploymentStatuses
-                        .Select(s => new EsfEligibilityRuleEmploymentStatus
+                .Join(
+                    _fcs.EsfEligibilityRules,
+                    ca => new { ca.LotReference, ca.TenderSpecReference },
+                    er => new { er.LotReference, er.TenderSpecReference },
+                    (ca, r) => new FcsContractAllocation
+                    {
+                        ContractAllocationNumber = ca.ContractAllocationNumber,
+                        FundingStreamPeriodCode = ca.FundingStreamPeriodCode,
+                        LotReference = ca.LotReference,
+                        TenderSpecReference = ca.TenderSpecReference,
+                        StartDate = ca.StartDate,
+                        DeliveryUKPRN = (int)ca.DeliveryUKPRN, // <= this cannot be null
+                        EsfEligibilityRule = new EsfEligibilityRule
                         {
-                            Code = s.Code,
-                            LotReference = s.LotReference,
-                            TenderSpecReference = s.TenderSpecReference,
-                        })
-                        .ToList(),
-                    LocalAuthorities = r.EsfEligibilityRuleLocalAuthorities
-                        .Select(a => new EsfEligibilityRuleLocalAuthority
-                        {
-                            Code = a.Code,
-                            LotReference = a.LotReference,
-                            TenderSpecReference = a.TenderSpecReference,
-                        })
-                        .ToList(),
-                    LocalEnterprisePartnerships = r.EsfEligibilityRuleLocalEnterprisePartnerships
-                        .Select(p => new EsfEligibilityRuleLocalEnterprisePartnership
-                        {
-                            Code = p.Code,
-                            LotReference = p.LotReference,
-                            TenderSpecReference = p.TenderSpecReference
-                        })
-                        .ToList(),
-                    SectorSubjectAreaLevels = r.EsfEligibilityRuleSectorSubjectAreaLevel
-                        .Select(l => new EsfEligibilityRuleSectorSubjectAreaLevel
-                        {
-                            MaxLevelCode = l.MaxLevelCode,
-                            MinLevelCode = l.MinLevelCode,
-                            SectorSubjectAreaCode = l.SectorSubjectAreaCode,
-                            LotReference = l.LotReference,
-                            TenderSpecReference = l.TenderSpecReference
-                        })
-                        .ToList(),
-                    MinPriorAttainment = r.MinPriorAttainment,
-                    MaxPriorAttainment = r.MaxPriorAttainment
-                }).ToListAsync(cancellationToken);
-
-            foreach (var contractAllocation in contractAllocations)
-            {
-                contractAllocation.EsfEligibilityRule = eligibilityRules
-                    .SingleOrDefault(
-                        r => r.LotReference.CaseInsensitiveEquals(contractAllocation.LotReference)
-                        && r.TenderSpecReference.CaseInsensitiveEquals(contractAllocation.TenderSpecReference));
-            }
+                            LotReference = r.LotReference,
+                            TenderSpecReference = r.TenderSpecReference,
+                            MinAge = r.MinAge,
+                            MaxAge = r.MaxAge,
+                            Benefits = r.Benefits ?? false,
+                            MinLengthOfUnemployment = r.MinLengthOfUnemployment,
+                            MaxLengthOfUnemployment = r.MaxLengthOfUnemployment,
+                            EmploymentStatuses = r.EsfEligibilityRuleEmploymentStatuses
+                                .Select(s => new EsfEligibilityRuleEmploymentStatus
+                                {
+                                    Code = s.Code,
+                                    LotReference = s.LotReference,
+                                    TenderSpecReference = s.TenderSpecReference,
+                                })
+                                .ToList(),
+                            LocalAuthorities = r.EsfEligibilityRuleLocalAuthorities
+                                .Select(a => new EsfEligibilityRuleLocalAuthority
+                                {
+                                    Code = a.Code,
+                                    LotReference = a.LotReference,
+                                    TenderSpecReference = a.TenderSpecReference,
+                                })
+                                .ToList(),
+                            LocalEnterprisePartnerships = r.EsfEligibilityRuleLocalEnterprisePartnerships
+                                .Select(p => new EsfEligibilityRuleLocalEnterprisePartnership
+                                {
+                                    Code = p.Code,
+                                    LotReference = p.LotReference,
+                                    TenderSpecReference = p.TenderSpecReference
+                                })
+                                .ToList(),
+                            SectorSubjectAreaLevels = r.EsfEligibilityRuleSectorSubjectAreaLevel
+                                .Select(l => new EsfEligibilityRuleSectorSubjectAreaLevel
+                                {
+                                    MaxLevelCode = l.MaxLevelCode,
+                                    MinLevelCode = l.MinLevelCode,
+                                    SectorSubjectAreaCode = l.SectorSubjectAreaCode,
+                                    LotReference = l.LotReference,
+                                    TenderSpecReference = l.TenderSpecReference
+                                })
+                                .ToList(),
+                            MinPriorAttainment = r.MinPriorAttainment,
+                            MaxPriorAttainment = r.MaxPriorAttainment
+                        }
+                    }).ToListAsync(cancellationToken);
 
             return contractAllocations.ToCaseInsensitiveDictionary<IFcsContractAllocation, IFcsContractAllocation>(ca => ca.ContractAllocationNumber, ca => ca);
         }
