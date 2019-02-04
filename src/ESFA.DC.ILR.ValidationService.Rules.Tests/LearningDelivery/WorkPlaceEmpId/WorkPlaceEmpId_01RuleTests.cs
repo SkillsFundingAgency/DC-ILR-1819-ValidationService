@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceEm
         {
             var employersDataServiceMock = new Mock<IEmployersDataService>();
 
-            employersDataServiceMock.Setup(x => x.IsValid(It.IsAny<int>())).Returns(false);
+            employersDataServiceMock.Setup(x => x.IsValid(It.IsAny<int>())).Returns(true);
 
             NewRule(employersDataService: employersDataServiceMock.Object).ConditionMet(999999999).Should().BeFalse();
         }
