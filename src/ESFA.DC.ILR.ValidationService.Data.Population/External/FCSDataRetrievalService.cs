@@ -141,8 +141,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                 .Select(ld => ld.ConRefNumber)
                 .Distinct();
         }
-
-        public int UKPRNFromMessage(IMessage message) =>
-            message.LearningProviderEntity.UKPRN;
     }
 }
