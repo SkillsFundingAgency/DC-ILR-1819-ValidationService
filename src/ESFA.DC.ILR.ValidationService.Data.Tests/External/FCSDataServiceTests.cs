@@ -4,7 +4,6 @@ using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using FluentAssertions;
 using Moq;
-using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -136,7 +135,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
 
             NewService(externalDataCahceMock.Object)
-                .GetSectorSubjectAreaLevelsForContract(conRefNumber).Should().BeSameAs(sectorSubjectAreaLevels);
+                .GetSectorSubjectAreaLevelsFor(conRefNumber).Should().BeSameAs(sectorSubjectAreaLevels);
         }
 
         [Fact]
@@ -155,7 +154,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
 
             NewService(externalDataCacheMock.Object)
-                .GetSectorSubjectAreaLevelsForContract(conRefNumber).Should().BeEmpty();
+                .GetSectorSubjectAreaLevelsFor(conRefNumber).Should().BeEmpty();
         }
 
         [Fact]
@@ -181,7 +180,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
 
             NewService(externalDataCacheMock.Object)
-                .GetSectorSubjectAreaLevelsForContract(conRefNumber).Should().BeEmpty();
+                .GetSectorSubjectAreaLevelsFor(conRefNumber).Should().BeEmpty();
         }
 
         [Fact]
@@ -466,218 +465,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             NewService(externalDataCacheMock.Object)
                 .IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(notionNVQLevel2, conRefNumber).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(null, "2", "3")]
-        [InlineData("2.3", null, null)]
-        [InlineData(null, null, "3")]
-        [InlineData(null, "2", null)]
-        public void IsSubjectAreaAndMinMaxLevelsExistsForContract_False(string sectorSubjecAreaCodeString, string minLevelCode, string maxLevelCode)
-        {
-            string conRefNumber = "ESF0005";
-            decimal? sectorSubjectAreaCode = string.IsNullOrEmpty(sectorSubjecAreaCodeString)
-                ? (decimal?)null : decimal.Parse(sectorSubjecAreaCodeString);
-            var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[]
-            {
-                new EsfEligibilityRuleSectorSubjectAreaLevel()
-                {
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01",
-                    SectorSubjectAreaCode = sectorSubjectAreaCode,
-                    MinLevelCode = minLevelCode,
-                    MaxLevelCode = maxLevelCode
-                }
-            };
-
-            var allocations = new Dictionary<string, IFcsContractAllocation>
-            {
-                {
-                    conRefNumber, new FcsContractAllocation
-                    {
-                        ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
-                        EsfEligibilityRule = new EsfEligibilityRule()
-                        {
-                            SectorSubjectAreaLevels = sectorSubjectAreaLevels
-                        }
-                    }
-                },
-                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
-            };
-
-            var externalDataCacheMock = new Mock<IExternalDataCache>();
-
-            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
-
-            NewService(externalDataCacheMock.Object).IsSubjectAreaAndMinMaxLevelsExistsForContract(conRefNumber).Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsSubjectAreaAndMinMaxLevelsExistsForContract_False_NullCheck()
-        {
-            string conRefNumber = "ZESF22546";
-            var externalDataCacheMock = new Mock<IExternalDataCache>();
-
-            Dictionary<string, IFcsContractAllocation> contractAllocations = null;
-
-            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(contractAllocations);
-
-            NewService(externalDataCacheMock.Object).IsSubjectAreaAndMinMaxLevelsExistsForContract(conRefNumber).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData("2.3", null, "3")]
-        [InlineData("2.3", "2", null)]
-        public void IsSubjectAreaAndMinMaxLevelsExistsForContract_True(string sectorSubjecAreaCodeString, string minLevelCode, string maxLevelCode)
-        {
-            string conRefNumber = "ESF0005";
-            decimal? sectorSubjectAreaCode = string.IsNullOrEmpty(sectorSubjecAreaCodeString)
-                ? (decimal?)null : decimal.Parse(sectorSubjecAreaCodeString);
-            var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[]
-            {
-                new EsfEligibilityRuleSectorSubjectAreaLevel()
-                {
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01",
-                    SectorSubjectAreaCode = sectorSubjectAreaCode,
-                    MinLevelCode = minLevelCode,
-                    MaxLevelCode = maxLevelCode
-                }
-            };
-
-            var allocations = new Dictionary<string, IFcsContractAllocation>
-            {
-                {
-                    conRefNumber, new FcsContractAllocation
-                    {
-                        ContractAllocationNumber = conRefNumber, TenderSpecReference = "tt_9979", LotReference = "01",
-                        EsfEligibilityRule = new EsfEligibilityRule()
-                        {
-                            SectorSubjectAreaLevels = sectorSubjectAreaLevels
-                        }
-                    }
-                },
-                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
-            };
-
-            var externalDataCahceMock = new Mock<IExternalDataCache>();
-
-            externalDataCahceMock.Setup(e => e.FCSContractAllocations).Returns(allocations);
-
-            NewService(externalDataCahceMock.Object).IsSubjectAreaAndMinMaxLevelsExistsForContract(conRefNumber).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData("ESF0005", "2.3", "1.3", "4.3")]
-        [InlineData("ESF0005", "2.3", "2.3", "4.3")]
-        [InlineData("ESF0005", "2.3", "1.3", "2.3")]
-        [InlineData("ESF0007", null, "1.3", "4.3")]
-        [InlineData("ESF0007", "2.3", null, null)]
-        [InlineData("ESF0007", "2.3", null, "2.3")]
-        [InlineData("ESF0007", "2.3", "2.3", null)]
-        public void IsSectorSubjectAreaTiersMatchingSubjectAreaCode_False(
-            string conRefNumber,
-            string sectorSubjectAreaCodeString,
-            string sectorSubjectAreaTier1String,
-            string sectorSubjectAreaTier2String)
-        {
-            decimal? sectorSubjectAreaCode = string.IsNullOrEmpty(sectorSubjectAreaCodeString)
-                ? (decimal?)null : decimal.Parse(sectorSubjectAreaCodeString);
-            decimal? sectorSubjectAreaTier1 = string.IsNullOrEmpty(sectorSubjectAreaTier1String)
-                ? (decimal?)null : decimal.Parse(sectorSubjectAreaTier1String);
-            decimal? sectorSubjectAreaTier2 = string.IsNullOrEmpty(sectorSubjectAreaTier2String)
-                ? (decimal?)null : decimal.Parse(sectorSubjectAreaTier2String);
-
-            var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[]
-            {
-                new EsfEligibilityRuleSectorSubjectAreaLevel()
-                {
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01",
-                    SectorSubjectAreaCode = sectorSubjectAreaCode
-                }
-            };
-
-            var contractAllocations = new Dictionary<string, IFcsContractAllocation>
-            {
-                {
-                    "ESF0007", new FcsContractAllocation
-                    {
-                        ContractAllocationNumber = "ESF0007", TenderSpecReference = "tt_9972", LotReference = "01",
-                        EsfEligibilityRule = new EsfEligibilityRule()
-                        {
-                            SectorSubjectAreaLevels = sectorSubjectAreaLevels
-                        }
-                    }
-                },
-                {
-                    "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" }
-                }
-            };
-
-            var externalDataCacheMock = new Mock<IExternalDataCache>();
-
-            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(contractAllocations);
-
-            NewService(externalDataCacheMock.Object)
-                .IsSectorSubjectAreaTiersMatchingSubjectAreaCode(conRefNumber, sectorSubjectAreaTier1, sectorSubjectAreaTier2).Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsSectorSubjectAreaTiersMatchingSubjectAreaCode_False_NullCheck()
-        {
-            string conRefNumber = "ESF0007";
-            decimal? sectorSubjectAreaTier1 = 2.3M;
-            decimal? sectorSubjectAreaTier2 = 2.3M;
-
-            Dictionary<string, IFcsContractAllocation> contractAllocations = null;
-
-            var externalDataCacheMock = new Mock<IExternalDataCache>();
-
-            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(contractAllocations);
-
-            NewService(externalDataCacheMock.Object).IsSectorSubjectAreaTiersMatchingSubjectAreaCode(conRefNumber, sectorSubjectAreaTier1, sectorSubjectAreaTier2).Should().BeFalse();
-        }
-
-        [Fact]
-        public void IsSectorSubjectAreaTiersMatchingSubjectAreaCode_True()
-        {
-            string conRefNumber = "ESF0007";
-            decimal? sectorSubjectAreaCode = 2.3M;
-            decimal? sectorSubjectAreaTier1 = 2.3M;
-            decimal? sectorSubjectAreaTier2 = 2.3M;
-
-            var sectorSubjectAreaLevels = new IEsfEligibilityRuleSectorSubjectAreaLevel[]
-            {
-                new EsfEligibilityRuleSectorSubjectAreaLevel()
-                {
-                    TenderSpecReference = "tt_9972",
-                    LotReference = "01",
-                    SectorSubjectAreaCode = sectorSubjectAreaCode
-                }
-            };
-
-            var contractAllocations = new Dictionary<string, IFcsContractAllocation>
-            {
-                {
-                    "ESF0007", new FcsContractAllocation
-                    {
-                        ContractAllocationNumber = "ESF0007", TenderSpecReference = "tt_9972", LotReference = "01",
-                        EsfEligibilityRule = new EsfEligibilityRule()
-                        {
-                            SectorSubjectAreaLevels = sectorSubjectAreaLevels
-                        }
-                    }
-                },
-                { "101", new FcsContractAllocation { ContractAllocationNumber = "101", TenderSpecReference = "tt_9978", LotReference = "04" } }
-            };
-
-            var externalDataCacheMock = new Mock<IExternalDataCache>();
-
-            externalDataCacheMock.Setup(e => e.FCSContractAllocations).Returns(contractAllocations);
-
-            NewService(externalDataCacheMock.Object)
-                .IsSectorSubjectAreaTiersMatchingSubjectAreaCode(conRefNumber, sectorSubjectAreaTier1, sectorSubjectAreaTier2).Should().BeTrue();
         }
 
         /// <summary>

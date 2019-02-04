@@ -103,9 +103,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
                 ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalEnterprisePartnership>();
         }
 
-        public IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber)
+        public IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsFor(string contractReference)
         {
-            var eligibility = GetEligibilityRuleFor(conRefNumber);
+            var eligibility = GetEligibilityRuleFor(contractReference);
 
             return eligibility?.SectorSubjectAreaLevels
                 ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleSectorSubjectAreaLevel>();
@@ -133,53 +133,34 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
             return _contractAllocations.Values.Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
         }
 
+        // TODO: should be in the rule Learn Aim Ref 71
         public bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber)
         {
-            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+            return GetSectorSubjectAreaLevelsFor(conRefNumber)?
                 .Any(
                 s => s.SectorSubjectAreaCode.HasValue
                 && (string.IsNullOrEmpty(s.MinLevelCode)
                 && string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
         }
 
+        // TODO: should be in the rule Learn Aim Ref 72
         public bool IsSectorSubjectAreaCodeNullForContract(string conRefNumber)
         {
-            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+            return GetSectorSubjectAreaLevelsFor(conRefNumber)?
                 .Any(
                 s => s.SectorSubjectAreaCode == null
                 && (!string.IsNullOrEmpty(s.MinLevelCode)
                     || !string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
         }
 
-        public bool IsSubjectAreaAndMinMaxLevelsExistsForContract(string conRefNumber)
-        {
-            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
-                .Any(
-                s => s.SectorSubjectAreaCode.HasValue
-                && (!string.IsNullOrEmpty(s.MinLevelCode)
-                    || !string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
-        }
-
+        // TODO: should be in the rule Learn Aim Ref 72
         public bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber)
         {
-            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+            return GetSectorSubjectAreaLevelsFor(conRefNumber)?
                 .Any(s => (!string.IsNullOrEmpty(s.MinLevelCode)
                     && notionalNVQLevel2 < Convert.ToInt32(s.MinLevelCode))
                     || (!string.IsNullOrEmpty(s.MaxLevelCode)
                     && notionalNVQLevel2 > Convert.ToInt32(s.MaxLevelCode))) ?? false;
-        }
-
-        public bool IsSectorSubjectAreaTiersMatchingSubjectAreaCode(string conRefNumber, decimal? sectorSubjectAreaTier1, decimal? sectorSubjectAreaTier2)
-        {
-            if (sectorSubjectAreaTier1 == null
-                && sectorSubjectAreaTier2 == null)
-            {
-                return false;
-            }
-
-            return GetSectorSubjectAreaLevelsForContract(conRefNumber)?
-                .Any(s => (s.SectorSubjectAreaCode.HasValue && sectorSubjectAreaTier1.HasValue && s.SectorSubjectAreaCode == sectorSubjectAreaTier1)
-                    && (s.SectorSubjectAreaCode.HasValue && sectorSubjectAreaTier2.HasValue && s.SectorSubjectAreaCode == sectorSubjectAreaTier2)) ?? false;
         }
     }
 }

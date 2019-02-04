@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>
         /// esf eligibility rule sector subject area levels
         /// </returns>
-        IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsForContract(string conRefNumber);
+        IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsFor(string conRefNumber);
 
         /// <summary>
         /// Contract reference number exists.
@@ -75,14 +75,13 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <returns>true if it does</returns>
         bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes);
 
+        // TODO: should be in the rule Learn Aim Ref 71
         bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber);
 
+        // TODO: should be in the rule Learn Aim Ref 72
         bool IsSectorSubjectAreaCodeNullForContract(string conRefNumber);
 
-        bool IsSubjectAreaAndMinMaxLevelsExistsForContract(string conRefNumber);
-
+        // TODO: should be in the rule Learn Aim Ref 72
         bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber);
-
-        bool IsSectorSubjectAreaTiersMatchingSubjectAreaCode(string conRefNumber, decimal? sectorSubjectAreaTier1, decimal? sectorSubjectAreaTier2);
     }
 }

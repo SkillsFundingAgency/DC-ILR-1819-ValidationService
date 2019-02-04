@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         public bool LARSConditionMet(string conRefNumber, string learnAimRef)
         {
             List<decimal?> sectorSubjectAreaCodes =
-                _fCSDataService.GetSectorSubjectAreaLevelsForContract(conRefNumber)?
+                _fCSDataService.GetSectorSubjectAreaLevelsFor(conRefNumber)?
                 .Where(s => s.SectorSubjectAreaCode.HasValue)
                 .Select(s => s.SectorSubjectAreaCode).ToList();
 
