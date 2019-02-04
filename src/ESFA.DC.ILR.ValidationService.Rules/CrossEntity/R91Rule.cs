@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -54,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 
         public bool FundModelConditionMet(int fundModel) => _fundModel == fundModel;
 
-        public bool LearnAimRefConditionMet(string learnAimRef) => learnAimRef == _learnAimReference;
+        public bool LearnAimRefConditionMet(string learnAimRef) => learnAimRef.CaseInsensitiveEquals(_learnAimReference);
 
         public bool CompStatusConditionMet(int compStatus) => compStatus == _completionState;
 
