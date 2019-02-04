@@ -149,7 +149,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, learner.DateOfBirthNullable)
             };
 
-            HandleValidationError(learningDelivery.LearnAimRef, learningDelivery.AimSeqNumber, parameters);
+            HandleValidationError(learner.LearnRefNumber, learningDelivery.AimSeqNumber, parameters);
         }
     }
 }

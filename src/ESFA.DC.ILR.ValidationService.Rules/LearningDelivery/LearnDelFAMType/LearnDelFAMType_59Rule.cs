@@ -81,7 +81,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                    !IsLearningDeliveryExcluded(learner, learningDelivery))
                 {
                     HandleValidationError(
-                        learningDelivery.LearnAimRef,
+                        learner.LearnRefNumber,
                         learningDelivery.AimSeqNumber,
                         BuildErrorMessageParameters(_fileDataService.UKPRN(), learner, learningDelivery));
                 }
