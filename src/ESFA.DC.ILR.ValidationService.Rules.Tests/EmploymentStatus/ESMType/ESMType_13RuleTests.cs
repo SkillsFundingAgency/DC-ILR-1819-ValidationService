@@ -1,14 +1,19 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType;
+using ESFA.DC.ILR.ValidationService.Rules.Query;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
@@ -452,6 +457,76 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
             var common = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             return new ESMType_13Rule(handler.Object, ddRule25.Object, fcsData.Object, common.Object);
+        }
+
+        [Fact]
+        public void SpecificTest()
+        {
+            const string ConRefNumber = "ESF-2305";
+            const string LearnRefNumber = "0EsmTyp13";
+            var learner = new TestLearner
+            {
+                LearnRefNumber = LearnRefNumber,
+                LearnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
+                {
+                    new TestLearnerEmploymentStatus
+                    {
+                        EmploymentStatusMonitorings = new List<TestEmploymentStatusMonitoring>
+                        {
+                            new TestEmploymentStatusMonitoring
+                            {
+                                ESMCode = 2,
+                                ESMType = "LOU"
+                            }
+                        }
+                    }
+                },
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        ConRefNumber = ConRefNumber,
+                        LearnAimRef = "ZESF0001",
+                        AimType = 4,
+                        AimSeqNumber = 1,
+                        LearnStartDate = new DateTime(2018, 10, 14),
+                        LearnPlanEndDate = new DateTime(2020, 7, 31),
+                        FundModel = 70,
+                        CompStatus = 2
+                    },
+                    new TestLearningDelivery
+                    {
+                        ConRefNumber = ConRefNumber,
+                        LearnAimRef = "60133533",
+                        AimType = 4,
+                        AimSeqNumber = 2,
+                        LearnStartDate = new DateTime(2018, 10, 14),
+                        LearnPlanEndDate = new DateTime(2020, 7, 31),
+                        FundModel = 70,
+                        CompStatus = 1
+                    }
+                }
+            };
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var ddRule25 = new DerivedData_25Rule(new LearnerEmploymentStatusQueryService());
+
+            var fcsData = new Mock<IFCSDataService>();
+            fcsData.Setup(m => m.GetEligibilityRuleFor(ConRefNumber))
+                .Returns(new EsfEligibilityRule
+                {
+                    MinLengthOfUnemployment = 2,
+                    MaxLengthOfUnemployment = 3
+                });
+
+            var dd07 = new Mock<IDerivedData_07Rule>();
+            RuleCommonOperationsProvider common = new RuleCommonOperationsProvider(dd07.Object);
+
+            var sut = new ESMType_13Rule(handler.Object, ddRule25, fcsData.Object, common);
+
+            // act
+            sut.Validate(learner);
         }
     }
 }

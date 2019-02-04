@@ -47,10 +47,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         /// </returns>
         public async Task<IReadOnlyDictionary<string, IFcsContractAllocation>> RetrieveAsync(CancellationToken cancellationToken)
         {
-            var ukprn = UKPRNFromMessage(_messageCache.Item);
+            if (_messageCache?.Item?.LearningProviderEntity == null)
+            {
+                return null;
+            }
+
+            var messageConRefNumbers = ConRefNumbersFromMessage(_messageCache.Item)?.ToList();
+            if (messageConRefNumbers == null || !messageConRefNumbers.Any())
+            {
+                return null;
+            }
 
             var contractAllocations = await _fcs.ContractAllocations
-                .Where(ca => ca.DeliveryUKPRN == ukprn)
+                .Where(ca => messageConRefNumbers.Contains(ca.ContractAllocationNumber))
                 .Select(ca => new FcsContractAllocation
                 {
                     ContractAllocationNumber = ca.ContractAllocationNumber,
@@ -122,122 +131,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             return contractAllocations.ToCaseInsensitiveDictionary<IFcsContractAllocation, IFcsContractAllocation>(ca => ca.ContractAllocationNumber, ca => ca);
         }
 
-        /// <summary>
-        /// Retrieves the eligibility rule employment statuses asynchronously.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>
-        /// a task running the collection builder
-        /// </returns>
-        public async Task<IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus>> RetrieveEligibilityRuleEmploymentStatusesAsync(CancellationToken cancellationToken)
-        {
-            return await _fcs.EsfEligibilityRuleEmploymentStatuses
-                .Select(er => new EsfEligibilityRuleEmploymentStatus
-                {
-                    Code = er.Code,
-                    LotReference = er.LotReference,
-                    TenderSpecReference = er.TenderSpecReference
-                })
-                .ToListAsync(cancellationToken);
-        }
-
-        /// <summary>
-        /// Retrieves the eligibility rule local authorities asynchronously.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>
-        /// a task running the collection builder
-        /// </returns>
-        public async Task<IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority>> RetrieveEligibilityRuleLocalAuthoritiesAsync(CancellationToken cancellationToken)
-        {
-            return await _fcs.EsEligibilityRulefLocalAuthorities
-                .Select(er => new EsfEligibilityRuleLocalAuthority
-                {
-                    Code = er.Code,
-                    LotReference = er.LotReference,
-                    TenderSpecReference = er.TenderSpecReference
-                })
-                .ToListAsync(cancellationToken);
-        }
-
-        /// <summary>
-        /// Retrieves the eligibility rule enterprise partnerships asynchronously.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>
-        /// a task running the collection builder
-        /// </returns>
-        public async Task<IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership>> RetrieveEligibilityRuleEnterprisePartnershipsAsync(CancellationToken cancellationToken)
-        {
-            return await _fcs.EsfEligibilityRuleLocalEnterprisePartnerships
-                .Select(er => new EsfEligibilityRuleLocalEnterprisePartnership
-                {
-                    Code = er.Code,
-                    LotReference = er.LotReference,
-                    TenderSpecReference = er.TenderSpecReference
-                })
-                .ToListAsync(cancellationToken);
-        }
-
-        /// <summary>
-        /// Retrieves the eligibility rule sector subject area level for message specific contracts asynchronously.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>
-        /// a task running the collection builder for eligibility rule sector subject area level
-        /// </returns>
-        public async Task<IReadOnlyCollection<IEsfEligibilityRuleSectorSubjectAreaLevel>> RetrieveEligibilityRuleSectorSubjectAreaLevelAsync(CancellationToken cancellationToken)
-        {
-            if (_messageCache?
-                .Item?
-                .LearningProviderEntity == null)
-            {
-                return null;
-            }
-
-            var ukprn = UKPRNFromMessage(_messageCache.Item);
-            var messageConRefNumbers = ConRefNumbersFromMessage(_messageCache.Item);
-            if (messageConRefNumbers == null || messageConRefNumbers.Count() == 0)
-            {
-                return null;
-            }
-
-            var contractAllocations = _fcs.ContractAllocations?
-               .Where(ca =>
-                   ca.DeliveryUKPRN == ukprn
-                   && messageConRefNumbers.Contains(ca.ContractAllocationNumber))
-               .Select(ca => new { ca.TenderSpecReference, ca.LotReference }).Distinct();
-
-            if (contractAllocations == null || contractAllocations.Count() == 0)
-            {
-                return null;
-            }
-
-            var esfEligibilityRuleSectorSubjectAreaLevel = await _fcs.EsfEligibilityRuleSectorSubjectAreaLevel.ToListAsync(cancellationToken);
-
-            return esfEligibilityRuleSectorSubjectAreaLevel?
-                .Join(
-                    contractAllocations,
-                    ers => new { ers.TenderSpecReference, ers.LotReference },
-                    ca => new { ca.TenderSpecReference, ca.LotReference },
-                    (ers, ca) => new EsfEligibilityRuleSectorSubjectAreaLevel
-                    {
-                        TenderSpecReference = ers.TenderSpecReference,
-                        LotReference = ers.LotReference,
-                        SectorSubjectAreaCode = ers.SectorSubjectAreaCode,
-                        MaxLevelCode = ers.MaxLevelCode,
-                        MinLevelCode = ers.MinLevelCode
-                    }).ToList();
-        }
-
         public IEnumerable<string> ConRefNumbersFromMessage(IMessage message)
         {
-            return message?
-                .Learners?
-                .Where(l => l.LearningDeliveries != null)
+            return message
+                ?.Learners
+                ?.Where(l => l.LearningDeliveries != null)
                 .SelectMany(l => l.LearningDeliveries)
                 .Where(ld => !string.IsNullOrEmpty(ld.ConRefNumber))
-                .Select(ld => ld.ConRefNumber).Distinct().ToCaseInsensitiveHashSet();
+                .Select(ld => ld.ConRefNumber)
+                .Distinct();
         }
 
         public int UKPRNFromMessage(IMessage message) =>
