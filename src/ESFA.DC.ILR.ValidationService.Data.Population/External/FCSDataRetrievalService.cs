@@ -47,6 +47,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
         /// </returns>
         public async Task<IReadOnlyDictionary<string, IFcsContractAllocation>> RetrieveAsync(CancellationToken cancellationToken)
         {
+            if (_messageCache?.Item == null)
+            {
+                return null;
+            }
+
             var messageConRefNumbers = ConRefNumbersFromMessage(_messageCache.Item)?.ToList();
             if (messageConRefNumbers == null || !messageConRefNumbers.Any())
             {
@@ -136,5 +141,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                 .Select(ld => ld.ConRefNumber)
                 .Distinct();
         }
+
+        public int UKPRNFromMessage(IMessage message) =>
+            message.LearningProviderEntity.UKPRN;
     }
 }
