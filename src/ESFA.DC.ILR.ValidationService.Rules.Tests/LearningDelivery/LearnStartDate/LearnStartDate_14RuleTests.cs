@@ -243,7 +243,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         /// <param name="end">The end date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(null, "2018-01-01", null, false)]
+        [InlineData(null, "2018-01-01", null, true)]
         [InlineData("2017-12-31", "2018-01-01", null, false)]
         [InlineData("2018-01-01", "2018-01-01", null, true)]
         [InlineData("2018-12-31", "2018-01-01", null, true)]
@@ -282,7 +282,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
         /// <param name="start">The start.</param>
         /// <param name="end">The end.</param>
         [Theory]
-        [InlineData(null, "2018-01-01", null)]
         [InlineData("2017-12-31", "2018-01-01", null)]
         [InlineData("2018-12-31", "2018-01-01", "2018-12-30")]
         public void InvalidItemRaisesValidationMessage(string candidate, string start, string end)
@@ -295,6 +294,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             delivery
                 .SetupGet(y => y.StdCodeNullable)
                 .Returns(stdCodeForTest);
+            delivery.SetupGet(y => y.AimType).Returns(3);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(delivery.Object);
@@ -376,6 +376,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnStartD
             delivery
                 .SetupGet(y => y.StdCodeNullable)
                 .Returns(stdCodeForTest);
+            delivery.SetupGet(y => y.AimType).Returns(3);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(delivery.Object);
