@@ -95,28 +95,28 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
         /// <summary>
         /// Determines whether [has qualifying period of validity] [the specified candidate].
         /// </summary>
-        /// <param name="candidate">The candidate.</param>
+        /// <param name="aim1StartDate">The candidate.</param>
         /// <param name="periodsOfValidity">The periods of validity.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying period of validity] [the specified candidate]; otherwise, <c>false</c>.
         /// </returns>
-        public bool HasQualifyingPeriodOfValidity(DateTime? candidate, IReadOnlyCollection<ILARSStandardValidity> periodsOfValidity) =>
-            It.Has(candidate)
-                && periodsOfValidity.Any(x => x.IsCurrent(candidate.Value));
+        public bool HasQualifyingPeriodOfValidity(DateTime? aim1StartDate, IReadOnlyCollection<ILARSStandardValidity> periodsOfValidity) =>
+            !It.Has(aim1StartDate) || periodsOfValidity.Any(x => x.IsCurrent(aim1StartDate.Value));
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
-        /// <param name="usingSources">The using sources.</param>
+        /// <param name="deliveries">The using sources.</param>
         /// <returns>
         ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsNotValid(ILearningDelivery delivery, IReadOnlyCollection<ILearningDelivery> usingSources) =>
+        public bool IsNotValid(ILearningDelivery delivery, IReadOnlyCollection<ILearningDelivery> deliveries) =>
             !_check.IsRestart(delivery) // <= a singular exclusion clause
                 && _check.IsStandardApprencticeship(delivery)
+                && delivery.AimType == TypeOfAim.ComponentAimInAProgramme
                 && HasStandardCode(delivery)
-                && !HasQualifyingPeriodOfValidity(GetStartFor(delivery, usingSources), GetPeriodsOfValidityFor(delivery));
+                && !HasQualifyingPeriodOfValidity(GetStartFor(delivery, deliveries), GetPeriodsOfValidityFor(delivery));
 
         /// <summary>
         /// Validates the specified object.
