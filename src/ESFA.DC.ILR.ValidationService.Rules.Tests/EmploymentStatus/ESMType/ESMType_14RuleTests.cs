@@ -1,15 +1,19 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.ESMType;
+using ESFA.DC.ILR.ValidationService.Rules.Query;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
-using System;
-using System.Collections.Generic;
 using Xunit;
+using It = Moq.It;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
 {
@@ -264,7 +268,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.ESMType
             var result = sut.HasMatchingBenefitsIndicator(null, derivedResult);
 
             // assert
-            Assert.False(result);
+            Assert.True(result);
         }
 
         /// <summary>
