@@ -80,15 +80,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
             IsNotPartOfThisYear(thisDelivery);
 
         /// <summary>
+        /// Gets the current academic year commencement date.
+        /// </summary>
+        /// <returns>a date time</returns>
+        public DateTime GetCurrentAcademicYearCommencementDate() =>
+            _academicYearDataService.GetAcademicYearOfLearningDate(_academicYearDataService.Today, AcademicYearDates.Commencement);
+
+        /// <summary>
         /// Determines whether [is not part of this year] [this delivery].
+        /// this delivery cannot be null
         /// </summary>
         /// <param name="thisDelivery">this delivery.</param>
         /// <returns>
         ///   <c>true</c> if [is not part of this year] [this delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotPartOfThisYear(ILearningDelivery thisDelivery) =>
-            It.Has(thisDelivery?.LearnActEndDateNullable)
-                && thisDelivery.LearnActEndDateNullable < _academicYearDataService.GetAcademicYearOfLearningDate(_academicYearDataService.Today, AcademicYearDates.Commencement);
+            It.Has(thisDelivery.LearnActEndDateNullable)
+                && thisDelivery.LearnActEndDateNullable < GetCurrentAcademicYearCommencementDate();
 
         /// <summary>
         /// Determines whether [is loans bursory] [the specified monitor].
@@ -193,7 +201,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         /// Builds the message parameters.
         /// </summary>
         /// <returns>
-        /// returns a list of message parameters
+        /// returns a collection of message parameters
         /// </returns>
         public IEnumerable<IErrorMessageParameter> BuildMessageParameters()
         {
