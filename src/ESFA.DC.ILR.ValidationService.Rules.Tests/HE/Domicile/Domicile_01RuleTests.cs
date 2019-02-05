@@ -209,8 +209,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.DOMICILE
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == DOMICILE_01Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    Moq.It.Is<string>(y => y == "LearnStartDate"),
+                    Moq.It.Is<DateTime>(y => y == mockDelivery.Object.LearnStartDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new DOMICILE_01Rule(handler.Object);

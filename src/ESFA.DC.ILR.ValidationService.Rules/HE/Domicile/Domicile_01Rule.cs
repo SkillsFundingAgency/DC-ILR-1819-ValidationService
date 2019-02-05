@@ -1,7 +1,8 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
-using System;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE
 {
@@ -103,7 +104,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
