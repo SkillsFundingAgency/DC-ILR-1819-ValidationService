@@ -78,6 +78,7 @@
     <Compile Include="Constants\LegalOrgTypeConstants.cs" />
     <Compile Include="Constants\LLDDHealthProblemConstants.cs" />
     <Compile Include="Constants\Monitoring.cs" />
+    <Compile Include="Constants\LARSNotionalNVQLevelV2Helper.cs" />
     <Compile Include="Constants\OutcomeConstants.cs" />
     <Compile Include="Constants\OutTypeConstants.cs" />
     <Compile Include="Constants\PropertyNameConstants.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Constants\TypeOfEthnicity.cs" />
     <Compile Include="Constants\TypeOfLARSLearnAimRef.cs" />
     <Compile Include="Constants\TypeOfMODESTUD.cs" />
+    <Compile Include="Constants\TypeOfNotionalNVQLevelV2.cs" />
     <Compile Include="Constants\TypeOfPMRAFin.cs" />
     <Compile Include="Constants\TypeOfSPECFEE.cs" />
     <Compile Include="Constants\TypeOfTNPAFin.cs" />

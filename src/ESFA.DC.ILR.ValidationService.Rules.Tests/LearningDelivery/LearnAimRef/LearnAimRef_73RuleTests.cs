@@ -136,16 +136,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         /// <summary>
-        /// Invalid notional level meets expectation.
-        /// </summary>
-        [Fact]
-        public void InvalidNotionalLevelMeetsExpectation()
-        {
-            // arrange / act / assert
-            Assert.Equal(int.MinValue, LearnAimRef_73Rule.InvalidNotionalLevel);
-        }
-
-        /// <summary>
         /// Get lars learning delivery for, meets exepctation.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -294,32 +284,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         /// <summary>
-        /// Get notional NVQ level v2 with null lars delivery returns invalid notional level.
-        /// </summary>
-        [Fact]
-        public void GetNotionalNVQLevelV2WithNullLARSDeliveryReturnsInvalidNotionalLevel()
-        {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.GetNotionalNVQLevelV2(null);
-
-            // assert
-            Assert.Equal(LearnAimRef_73Rule.InvalidNotionalLevel, result);
-        }
-
-        /// <summary>
         /// Get notional NVQ level v2 meets expectation.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">The expectation.</param>
         [Theory]
-        [InlineData(null, LearnAimRef_73Rule.InvalidNotionalLevel)] // int.minvalue
-        [InlineData("A", LearnAimRef_73Rule.InvalidNotionalLevel)] // int.minvalue
-        [InlineData("1", 1)]
-        [InlineData("1234567", 1234567)]
-        public void GetNotionalNVQLevelV2MeetsExpectation(string candidate, int expectation)
+        [InlineData(null, TypeOfNotionalNVQLevelV2.OutOfScope)] // int.minvalue
+        [InlineData("A", TypeOfNotionalNVQLevelV2.OutOfScope)] // int.minvalue
+        [InlineData("E", TypeOfNotionalNVQLevelV2.EntryLevel)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.Level1)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.Level2)]
+        [InlineData("3", TypeOfNotionalNVQLevelV2.Level3)]
+        [InlineData("H", TypeOfNotionalNVQLevelV2.HigherLevel)]
+        [InlineData("1.5", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("4", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("5", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("6", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("7", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("8", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("M", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("X", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        public void GetNotionalNVQLevelV2MeetsExpectation(string candidate, TypeOfNotionalNVQLevelV2 expectation)
         {
             // arrange
             var sut = NewRule();
@@ -341,36 +326,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(int.MinValue, true)]
-        [InlineData(int.MaxValue, false)]
-        [InlineData(0, false)]
-        [InlineData(55, false)]
-        public void HasDisqualifyingNotionalLevelMeetsExpectation(int candidate, bool expectation)
+        [InlineData(TypeOfNotionalNVQLevelV2.OutOfScope, true)]
+        [InlineData(TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData(TypeOfNotionalNVQLevelV2.Level1, false)]
+        [InlineData(TypeOfNotionalNVQLevelV2.Level2, false)]
+        [InlineData(TypeOfNotionalNVQLevelV2.Level3, false)]
+        [InlineData(TypeOfNotionalNVQLevelV2.HigherLevel, false)]
+        public void IsOutOfScopeMeetsExpectation(TypeOfNotionalNVQLevelV2 candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
 
             // act
-            var result = sut.HasDisqualifyingNotionalLevel(candidate);
+            var result = sut.IsOutOfScope(candidate);
 
             // assert
             Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
-        /// Has disqualifying minimum level with null subject area level returns false
-        /// </summary>
-        [Fact]
-        public void HasDisqualifyingMinimumLevelWithNullSubjectAreaLevelReturnsFalse()
-        {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.HasDisqualifyingMinimumLevel(null, 1);
-
-            // assert
-            Assert.False(result);
         }
 
         /// <summary>
@@ -380,12 +351,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="notionalLevel">The notional level.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(null, 1, false)]
-        [InlineData("A", 1, false)]
-        [InlineData("1", 1, false)]
-        [InlineData("2", 1, true)]
-        [InlineData("1234568", 1234567, true)]
-        public void HasDisqualifyingMinimumLevelMeetsExpectation(string candidate, int notionalLevel, bool expectation)
+        [InlineData("E", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("A", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.EntryLevel, true)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.EntryLevel, true)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.Level2, false)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.Level2, false)]
+        [InlineData("1234568", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        public void HasDisqualifyingMinimumLevelMeetsExpectation(string candidate, TypeOfNotionalNVQLevelV2 notionalLevel, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -402,34 +375,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         /// <summary>
-        /// Has disqualifying maximum level with null subject area level returns false
-        /// </summary>
-        [Fact]
-        public void HasDisqualifyingMaximumLevelWithNullSubjectAreaLevelReturnsFalse()
-        {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.HasDisqualifyingMaximumLevel(null, 1);
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
         /// Has qualifying maximum level meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="notionalLevel">The notional level.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(null, 1, false)]
-        [InlineData("A", 1, false)]
-        [InlineData("1", 1, false)]
-        [InlineData("1", 2, true)]
-        [InlineData("1234567", 1234568, true)]
-        public void HasQualifyingMaximumLevelMeetsExpectation(string candidate, int notionalLevel, bool expectation)
+        [InlineData("E", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("A", TypeOfNotionalNVQLevelV2.EntryLevel, true)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.Level2, true)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.Level2, false)]
+        [InlineData("1234568", TypeOfNotionalNVQLevelV2.EntryLevel, true)]
+        public void HasDisqualifyingMaximumLevelMeetsExpectation(string candidate, TypeOfNotionalNVQLevelV2 notionalLevel, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -456,26 +415,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             // act
             var result = sut.HasQualifyingSubjectAreaTier1(null, new Mock<ILARSLearningDelivery>().Object);
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
-        /// Has qualifying subject area tier 1 with null lars delivery returns false
-        /// </summary>
-        [Fact]
-        public void HasQualifyingSubjectAreaTier1WithNullLARSDeliveryReturnsFalse()
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
-            mockItem
-                .SetupGet(x => x.SectorSubjectAreaCode)
-                .Returns(decimal.MinValue);
-
-            // act
-            var result = sut.HasQualifyingSubjectAreaTier1(mockItem.Object, null);
 
             // assert
             Assert.False(result);
@@ -528,26 +467,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         }
 
         /// <summary>
-        /// Has qualifying subject area tier 2 with null lars delivery returns false
-        /// </summary>
-        [Fact]
-        public void HasQualifyingSubjectAreaTier2WithNullLARSDeliveryReturnsFalse()
-        {
-            // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
-            mockItem
-                .SetupGet(x => x.SectorSubjectAreaCode)
-                .Returns(decimal.MinValue);
-
-            // act
-            var result = sut.HasQualifyingSubjectAreaTier2(mockItem.Object, null);
-
-            // assert
-            Assert.False(result);
-        }
-
-        /// <summary>
         /// Has qualifying subject area tier 2 meets expectation
         /// </summary>
         /// <param name="areaCode">The area code.</param>
@@ -588,7 +507,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="tier2">The tier2.</param>
         [Theory]
         [InlineData("1", "2", "3", 1.0, 1.0, 1.0)] // fails @ min level
-        [InlineData("4", "2", "3", 1.0, 1.0, 1.0)] // fails @ max level
+        [InlineData("H", "2", "3", 1.0, 1.0, 1.0)] // fails @ max level
         [InlineData("2", "2", "3", 1.1, 1.0, 1.0)] // fails @ tier1 level
         [InlineData("2", "2", "3", 1.2, 1.1, 1.0)] // fails @ tier2 level
         public void InvalidItemRaisesValidationMessage(string notional, string min, string max, decimal area, decimal tier1, decimal tier2)
