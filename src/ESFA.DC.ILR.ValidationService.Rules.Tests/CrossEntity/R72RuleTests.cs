@@ -392,7 +392,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         {
                             AFinCode = 1,
                             AFinType = "TNP",
-                            AFinAmount = 10,
+                            AFinAmount = 5,
                         },
                         new TestAppFinRecord()
                         {
@@ -414,7 +414,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var learningDeliveryAppFinRecordQueryServiceMock = new Mock<ILearningDeliveryAppFinRecordQueryService>();
             learningDeliveryAppFinRecordQueryServiceMock.Setup(x =>
-                x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(It.IsAny<List<ILearningDelivery>>())).Returns(15);
+                x.GetTotalTNPPriceForLatestAppFinRecordsForLearning(It.IsAny<List<ILearningDelivery>>())).Returns(10);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {

@@ -104,7 +104,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             {
                 var standardTNPTotal = _learningDeliveryAppFinRecordQueryService.GetTotalTNPPriceForLatestAppFinRecordsForLearning(standardLearningDeliveries);
 
-                return totalPMRValue > ((1m / 3m) * standardTNPTotal);
+                return totalPMRValue > Math.Round((1m / 3m) * standardTNPTotal);
             }
 
             return false;

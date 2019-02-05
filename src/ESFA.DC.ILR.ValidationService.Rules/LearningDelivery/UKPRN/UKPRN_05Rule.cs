@@ -7,7 +7,6 @@ using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
@@ -17,7 +16,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         private readonly IFCSDataService _fcsDataService;
         private readonly IAcademicYearDataService _academicYearDataService;
         private readonly IAcademicYearQueryService _academicYearQueryService;
-        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { 70 };
+        private readonly int _fundModel = TypeOfFunding.EuropeanSocialFund;
         private readonly IEnumerable<string> _fundingStreamPeriodCodes = new HashSet<string>
         {
             FundingStreamPeriodCodeConstants.ESF1420
@@ -36,38 +35,53 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         }
 
         public UKPRN_05Rule()
-          : base(null, null)
+            : base(null, null)
         {
         }
 
         public void Validate(ILearner objectToValidate)
         {
+            if (objectToValidate?.LearningDeliveries == null)
+            {
+                return;
+            }
+
             var academicYearStart = _academicYearDataService.Start();
 
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(d => _fundModels.Contains(d.FundModel)))
+            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(academicYearStart, learningDelivery.LearnActEndDateNullable, learningDelivery.ConRefNumber))
+                if (ConditionMet(
+                    learningDelivery.FundModel,
+                    academicYearStart,
+                    learningDelivery.LearnActEndDateNullable,
+                    learningDelivery.ConRefNumber))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel, learningDelivery.ConRefNumber));
+                    HandleValidationError(
+                        objectToValidate.LearnRefNumber,
+                        learningDelivery.AimSeqNumber,
+                        BuildErrorMessageParameters(learningDelivery.FundModel, learningDelivery.ConRefNumber));
                 }
             }
         }
 
-        public bool ConditionMet(DateTime academicYearStart, DateTime? learnActEndDate, string conRefNumber)
+        public bool ConditionMet(int fundModel, DateTime academicYearStart, DateTime? learnActEndDate, string conRefNumber)
         {
-            return LearnActEndDateConditionMet(learnActEndDate, academicYearStart)
+            return FundModelConditionMet(fundModel)
+                && (!learnActEndDate.HasValue || LearnActEndDateConditionMet(learnActEndDate.Value, academicYearStart))
                 && FCTFundingConditionMet(conRefNumber);
         }
 
-        public virtual bool LearnActEndDateConditionMet(DateTime? learnActEndDate, DateTime academicYearStart)
+        public virtual bool FundModelConditionMet(int fundModel) => fundModel == _fundModel;
+
+        public virtual bool LearnActEndDateConditionMet(DateTime learnActEndDate, DateTime academicYearStart)
         {
-            return learnActEndDate == null ? true : !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate.Value, academicYearStart);
+            return !_academicYearQueryService.DateIsInPrevAcademicYear(learnActEndDate, academicYearStart);
         }
 
         public virtual bool FCTFundingConditionMet(string conRefNumber)
         {
-            return !(_fcsDataService.FundingRelationshipFCTExists(_fundingStreamPeriodCodes)
-                || _fcsDataService.ConRefNumberExists(conRefNumber));
+            return !_fcsDataService.FundingRelationshipFCTExists(_fundingStreamPeriodCodes)
+                || !_fcsDataService.ConRefNumberExists(conRefNumber);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel, string conRefNumber)

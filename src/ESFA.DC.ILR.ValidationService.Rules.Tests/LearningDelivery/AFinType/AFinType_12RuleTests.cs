@@ -242,8 +242,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
 
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == AFinType_12Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == mockDelivery.Object)))
+                    Moq.It.Is<string>(y => y == "AFinType"),
+                    Moq.It.Is<string>(y => y == "TNP")))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new AFinType_12Rule(mockHandler.Object);
