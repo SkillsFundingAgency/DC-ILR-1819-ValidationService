@@ -166,6 +166,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            var startDate = new DateTime(2018, 9, 1);
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -179,6 +180,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 mockDelivery
                     .SetupGet(y => y.ProgTypeNullable)
                     .Returns(x);
+                mockDelivery
+                    .SetupGet(y => y.LearnStartDate)
+                    .Returns(startDate);
 
                 deliveries.Add(mockDelivery.Object);
             });
@@ -196,8 +200,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
 
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ProgType_03Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    Moq.It.Is<string>(y => y == "ProgType"),
+                    Moq.It.IsAny<int?>()))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == "LearnStartDate"),
+                    Moq.It.Is<DateTime>(y => y == startDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new ProgType_03Rule(mockHandler.Object);
