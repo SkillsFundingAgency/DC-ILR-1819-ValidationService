@@ -1,271 +1,590 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using FluentAssertions;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 {
-    public class LearnAimRef_72RuleTests : AbstractRuleTests<LearnAimRef_72Rule>
+    public class LearnAimRef_72RuleTests
     {
+        /// <summary>
+        /// New rule with null message handler throws.
+        /// </summary>
         [Fact]
-        public void RuleName()
+        public void NewRuleWithNullMessageHandlerThrows()
         {
-            NewRule().RuleName.Should().Be("LearnAimRef_72");
+            // arrange
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_72Rule(null, commonOps.Object, fcsData.Object, larsData.Object));
         }
 
+        /// <summary>
+        /// New rule with null common operations throws.
+        /// </summary>
         [Fact]
-        public void FundModelConditionMet_False()
+        public void NewRuleWithNullCommonOperationsThrows()
         {
-            NewRule().FundModelConditionMet(TypeOfFunding.AdultSkills).Should().BeFalse();
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_72Rule(handler.Object, null, fcsData.Object, larsData.Object));
         }
 
+        /// <summary>
+        /// New rule with null FCS data throws.
+        /// </summary>
         [Fact]
-        public void FundModelConditionMet_True()
+        public void NewRuleWithNullFCSDataThrows()
         {
-            NewRule().FundModelConditionMet(TypeOfFunding.EuropeanSocialFund).Should().BeTrue();
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_72Rule(handler.Object, commonOps.Object, null, larsData.Object));
         }
 
+        /// <summary>
+        /// New rule with null lars data throws.
+        /// </summary>
+        [Fact]
+        public void NewRuleWithNullLARSDataThrows()
+        {
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_72Rule(handler.Object, commonOps.Object, fcsData.Object, null));
+        }
+
+        /// <summary>
+        /// Rule name 1, matches a literal.
+        /// </summary>
+        [Fact]
+        public void RuleName1()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal("LearnAimRef_72", result);
+        }
+
+        /// <summary>
+        /// Rule name 2, matches the constant.
+        /// </summary>
+        [Fact]
+        public void RuleName2()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal(RuleNameConstants.LearnAimRef_72, result);
+        }
+
+        /// <summary>
+        /// Rule name 3 test, account for potential false positives.
+        /// </summary>
+        [Fact]
+        public void RuleName3()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.NotEqual("SomeOtherRuleName_07", result);
+        }
+
+        /// <summary>
+        /// Validate with null learner throws.
+        /// </summary>
+        [Fact]
+        public void ValidateWithNullLearnerThrows()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act/assert
+            Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
+        }
+
+        /// <summary>
+        /// Get lars learning delivery for, meets exepctation.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
         [Theory]
-        [InlineData(ValidationConstants.ZESF0001)]
-        [InlineData("zesf0001")]
-        public void LearnAimRefConditionMet_False(string learnAimRef)
+        [InlineData("testAim_1")]
+        [InlineData("testAim_2")]
+        [InlineData("testAim_3")]
+        public void GetLARSLearningDeliveryForMeetsExepctation(string candidate)
         {
-            NewRule().LearnAimRefConditionMet(learnAimRef).Should().BeFalse();
+            // arrange
+            var mockItem = new Mock<ILearningDelivery>();
+            mockItem
+                .SetupGet(x => x.LearnAimRef)
+                .Returns(candidate);
+
+            var mockReturn = new Mock<ILARSLearningDelivery>();
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
+            larsData
+                .Setup(x => x.GetDeliveryFor(candidate))
+                .Returns(mockReturn.Object);
+
+            var sut = new LearnAimRef_72Rule(handler.Object, commonOps.Object, fcsData.Object, larsData.Object);
+
+            // act
+            var result = sut.GetLARSLearningDeliveryFor(mockItem.Object);
+
+            // assert
+            Assert.Equal(mockReturn.Object, result);
+
+            handler.VerifyAll();
+            commonOps.VerifyAll();
+            fcsData.VerifyAll();
+            larsData.VerifyAll();
         }
 
+        /// <summary>
+        /// Get subject area levels for, meets expectation.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData("testAim_1")]
+        [InlineData("testAim_2")]
+        [InlineData("testAim_3")]
+        public void GetSubjectAreaLevelsForMeetsExpectation(string candidate)
+        {
+            // arrange
+            var mockItem = new Mock<ILearningDelivery>();
+            mockItem
+                .SetupGet(x => x.ConRefNumber)
+                .Returns(candidate);
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            fcsData
+                .Setup(x => x.GetSectorSubjectAreaLevelsFor(candidate))
+                .Returns(new IEsfEligibilityRuleSectorSubjectAreaLevel[] { });
+
+            var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
+
+            var sut = new LearnAimRef_72Rule(handler.Object, commonOps.Object, fcsData.Object, larsData.Object);
+
+            // act
+            var result = sut.GetSubjectAreaLevelsFor(mockItem.Object);
+
+            // assert
+            Assert.Empty(result);
+
+            handler.VerifyAll();
+            commonOps.VerifyAll();
+            fcsData.VerifyAll();
+            larsData.VerifyAll();
+        }
+
+        /// <summary>
+        /// Has disqualifying subject sector with null lars delivery returns false
+        /// </summary>
         [Fact]
-        public void LearnAimRefConditionMet_True()
+        public void HasDisqualifyingSubjectSectorWithNullLARSDeliveryReturnsFalse()
         {
-            NewRule().LearnAimRefConditionMet("ZESF00028").Should().BeTrue();
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.HasDisqualifyingSubjectSector(null, new IEsfEligibilityRuleSectorSubjectAreaLevel[] { });
+
+            // assert
+            Assert.True(result);
         }
 
+        /// <summary>
+        /// Is usable subject area with null subject area returns false
+        /// </summary>
         [Fact]
-        public void FCSConditionMet_False()
+        public void IsUsableSubjectAreaWithNullSubjectAreaReturnsFalse()
         {
-            string conRefNumber = "ZESF00024";
+            // arrange
+            var sut = NewRule();
 
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            // act
+            var result = sut.IsUsableSubjectArea(null);
 
-            fcsDataServiceMock.Setup(s => s.IsSectorSubjectAreaCodeNullForContract(conRefNumber)).Returns(false);
-
-            NewRule(fCSDataService: fcsDataServiceMock.Object).FCSConditionMet(conRefNumber).Should().BeFalse();
+            // assert
+            Assert.False(result);
         }
 
-        [Fact]
-        public void FCSConditionMet_True()
+        /// <summary>
+        /// Is usable subject area meets expectation
+        /// </summary>
+        /// <param name="area">The area.</param>
+        /// <param name="minLevel">The minimum level.</param>
+        /// <param name="maxLevel">The maximum level.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(null, "blahMin", "blahMax", true)]
+        [InlineData(1.0, "blahMin", "blahMax", false)]
+        [InlineData(null, null, null, false)]
+        [InlineData(1.1, null, null, false)]
+        [InlineData(null, "blahMin", null, true)]
+        [InlineData(1.2, "blahMin", null, false)]
+        [InlineData(null, null, "blahMax", true)]
+        [InlineData(1.3, null, "blahMax", false)]
+        public void IsUsableSubjectAreaMeetsExpectation(double? area, string minLevel, string maxLevel, bool expectation)
         {
-            string conRefNumber = "ZESF00025";
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
+            mockItem
+                .SetupGet(x => x.SectorSubjectAreaCode)
+                .Returns((decimal?)area);
+            mockItem
+                .SetupGet(x => x.MinLevelCode)
+                .Returns(minLevel);
+            mockItem
+                .SetupGet(x => x.MaxLevelCode)
+                .Returns(maxLevel);
 
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            // act
+            var result = sut.IsUsableSubjectArea(mockItem.Object);
 
-            fcsDataServiceMock.Setup(s => s.IsSectorSubjectAreaCodeNullForContract(conRefNumber)).Returns(true);
-
-            NewRule(fCSDataService: fcsDataServiceMock.Object).FCSConditionMet(conRefNumber).Should().BeTrue();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
-        [Fact]
-        public void LARSConditionMet_False()
+        /// <summary>
+        /// Get notional NVQ level v2 meets expectation.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">The expectation.</param>
+        [Theory]
+        [InlineData(null, TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("A", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("E", TypeOfNotionalNVQLevelV2.EntryLevel)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.Level1)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.Level2)]
+        [InlineData("3", TypeOfNotionalNVQLevelV2.Level3)]
+        [InlineData("H", TypeOfNotionalNVQLevelV2.HigherLevel)]
+        [InlineData("1.5", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("4", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("5", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("6", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("7", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("8", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("M", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("X", TypeOfNotionalNVQLevelV2.OutOfScope)]
+        public void GetNotionalNVQLevelV2MeetsExpectation(string candidate, TypeOfNotionalNVQLevelV2 expectation)
         {
-            string learnAimRef = "ESF123456";
-            string conRefNumber = "ZESF00005";
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<ILARSLearningDelivery>();
+            mockItem
+                .SetupGet(x => x.NotionalNVQLevelv2)
+                .Returns(candidate);
 
-            var larsDataServiceMock = new Mock<ILARSDataService>();
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            // act
+            var result = sut.GetNotionalNVQLevelV2(mockItem.Object);
 
-            larsDataServiceMock.Setup(l => l.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef)).Returns("2");
-            fcsDataServiceMock.Setup(f => f.IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(2, conRefNumber)).Returns(false);
-
-            NewRule(
-                lARSDataService: larsDataServiceMock.Object,
-                fCSDataService: fcsDataServiceMock.Object)
-                .LARSConditionMet(conRefNumber, learnAimRef).Should().BeFalse();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
-        [Fact]
-        public void LARSConditionMet_True()
+        /// <summary>
+        /// Has disqualifying notional level meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(TypeOfNotionalNVQLevelV2.OutOfScope, true)]
+        [InlineData(TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData(TypeOfNotionalNVQLevelV2.Level1, false)]
+        [InlineData(TypeOfNotionalNVQLevelV2.Level2, false)]
+        [InlineData(TypeOfNotionalNVQLevelV2.Level3, false)]
+        [InlineData(TypeOfNotionalNVQLevelV2.HigherLevel, false)]
+        public void IsOutOfScopeMeetsExpectation(TypeOfNotionalNVQLevelV2 candidate, bool expectation)
         {
-            string learnAimRef = "ESF987654";
-            string conRefNumber = "ZESF00099";
+            // arrange
+            var sut = NewRule();
 
-            var larsDataServiceMock = new Mock<ILARSDataService>();
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
+            // act
+            var result = sut.IsOutOfScope(candidate);
 
-            larsDataServiceMock.Setup(l => l.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef)).Returns("2");
-            fcsDataServiceMock.Setup(f => f.IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(2, conRefNumber)).Returns(true);
-
-            NewRule(
-                lARSDataService: larsDataServiceMock.Object,
-                fCSDataService: fcsDataServiceMock.Object)
-                .LARSConditionMet(conRefNumber, learnAimRef).Should().BeTrue();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
-        [Fact]
-        public void ConditionMet_False()
+        /// <summary>
+        /// Has disqualifying minimum level meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="notionalLevel">The notional level.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("E", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("A", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.EntryLevel, true)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.EntryLevel, true)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.Level2, false)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.Level2, false)]
+        [InlineData("1234568", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        public void HasDisqualifyingMinimumLevelMeetsExpectation(string candidate, TypeOfNotionalNVQLevelV2 notionalLevel, bool expectation)
         {
-            int fundModel = TypeOfFunding.AdultSkills;
-            string conRefNumber = "ZESF00098";
-            string learnAimRef = ValidationConstants.ZESF0001;
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
+            mockItem
+                .SetupGet(x => x.MinLevelCode)
+                .Returns(candidate);
 
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            // act
+            var result = sut.HasDisqualifyingMinimumLevel(mockItem.Object, notionalLevel);
 
-            larsDataServiceMock.Setup(l => l.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef)).Returns("2");
-            fcsDataServiceMock.Setup(f => f.IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(2, conRefNumber)).Returns(false);
-            fcsDataServiceMock.Setup(s => s.IsSectorSubjectAreaCodeNullForContract(conRefNumber)).Returns(false);
-
-            NewRule(
-                fCSDataService: fcsDataServiceMock.Object,
-                lARSDataService: larsDataServiceMock.Object)
-                .ConditionMet(fundModel, conRefNumber, learnAimRef).Should().BeFalse();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
-        [Fact]
-        public void ConditionMet_True()
+        /// <summary>
+        /// Has qualifying maximum level meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="notionalLevel">The notional level.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("E", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("A", TypeOfNotionalNVQLevelV2.EntryLevel, true)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.EntryLevel, false)]
+        [InlineData("1", TypeOfNotionalNVQLevelV2.Level2, true)]
+        [InlineData("2", TypeOfNotionalNVQLevelV2.Level2, false)]
+        [InlineData("1234568", TypeOfNotionalNVQLevelV2.EntryLevel, true)]
+        public void HasDisqualifyingMaximumLevelMeetsExpectation(string candidate, TypeOfNotionalNVQLevelV2 notionalLevel, bool expectation)
         {
-            int fundModel = TypeOfFunding.EuropeanSocialFund;
-            string conRefNumber = "ZESF00099";
-            string learnAimRef = "ESF987654";
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
+            mockItem
+                .SetupGet(x => x.MaxLevelCode)
+                .Returns(candidate);
 
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            // act
+            var result = sut.HasDisqualifyingMaximumLevel(mockItem.Object, notionalLevel);
 
-            larsDataServiceMock.Setup(l => l.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef)).Returns("2");
-            fcsDataServiceMock.Setup(f => f.IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(2, conRefNumber)).Returns(true);
-            fcsDataServiceMock.Setup(s => s.IsSectorSubjectAreaCodeNullForContract(conRefNumber)).Returns(true);
-
-            NewRule(
-                fCSDataService: fcsDataServiceMock.Object,
-                lARSDataService: larsDataServiceMock.Object)
-                .ConditionMet(fundModel, conRefNumber, learnAimRef).Should().BeTrue();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
-        [Fact]
-        public void Validate_Error()
+        /// <summary>
+        /// Invalid item raises validation message.
+        /// </summary>
+        /// <param name="notional">The notional.</param>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        [Theory]
+        [InlineData("1", "2", "3")] // fails @ min level
+        [InlineData("H", "2", "3")] // fails @ max level
+        public void InvalidItemRaisesValidationMessage(string notional, string min, string max)
         {
-            int fundModel = TypeOfFunding.EuropeanSocialFund;
-            string conRefNumber = "ZESF00099";
-            string learnAimRef = "ESF987654";
+            // arrange
+            const string LearnRefNumber = "123456789X";
+            const string AimRefNumber = "shonkyAimRef";
+            const string ContractRefNumber = "shonkyRefNumber";
 
-            var testLearner = new TestLearner()
-            {
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        FundModel = fundModel,
-                        LearnAimRef = learnAimRef,
-                        ConRefNumber = conRefNumber
-                    }
-                }
-            };
+            var delivery = new Mock<ILearningDelivery>();
+            delivery
+                .SetupGet(y => y.FundModel)
+                .Returns(70); // TypeOfFunding.EuropeanSocialFund
+            delivery
+                .SetupGet(y => y.LearnAimRef)
+                .Returns(AimRefNumber);
+            delivery
+                .SetupGet(y => y.ConRefNumber)
+                .Returns(ContractRefNumber);
 
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            var deliveries = new List<ILearningDelivery> { delivery.Object };
 
-            larsDataServiceMock.Setup(l => l.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef)).Returns("2");
-            fcsDataServiceMock.Setup(f => f.IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(2, conRefNumber)).Returns(true);
-            fcsDataServiceMock.Setup(s => s.IsSectorSubjectAreaCodeNullForContract(conRefNumber)).Returns(true);
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(
-                    validationErrorHandler: validationErrorHandlerMock.Object,
-                    lARSDataService: larsDataServiceMock.Object,
-                    fCSDataService: fcsDataServiceMock.Object).Validate(testLearner);
-            }
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle(RuleNameConstants.LearnAimRef_72, LearnRefNumber, 0, It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("FundModel", 70)) // TypeOfFunding.EuropeanSocialFund
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("ConRefNumber", ContractRefNumber))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.HasQualifyingFunding(delivery.Object, 70)) // TypeOfFunding.EuropeanSocialFund
+                .Returns(true);
+
+            var eligibilityItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
+            eligibilityItem
+                .SetupGet(x => x.MinLevelCode)
+                .Returns(min);
+            eligibilityItem
+                .SetupGet(x => x.MaxLevelCode)
+                .Returns(max);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            fcsData
+                .Setup(x => x.GetSectorSubjectAreaLevelsFor(ContractRefNumber))
+                .Returns(new IEsfEligibilityRuleSectorSubjectAreaLevel[] { eligibilityItem.Object });
+
+            var larsItem = new Mock<ILARSLearningDelivery>();
+            larsItem
+                .SetupGet(x => x.NotionalNVQLevelv2)
+                .Returns(notional);
+
+            var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
+            larsData
+                .Setup(x => x.GetDeliveryFor(AimRefNumber))
+                .Returns(larsItem.Object);
+
+            var sut = new LearnAimRef_72Rule(handler.Object, commonOps.Object, fcsData.Object, larsData.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            commonOps.VerifyAll();
+            fcsData.VerifyAll();
+            larsData.VerifyAll();
         }
 
-        [Fact]
-        public void Validate_NoError()
+        /// <summary>
+        /// Valid item does not raise validation message.
+        /// </summary>
+        /// <param name="notional">The notional.</param>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        /// <param name="area">The area.</param>
+        [Theory]
+        [InlineData("2", "2", "3", 1.0)]
+        [InlineData("2", "2", "3", null)]
+        [InlineData("3", "2", "3", 1.0)]
+        [InlineData("3", "2", "3", null)]
+        public void ValidItemDoesNotRaiseValidationMessage(string notional, string min, string max, double? area)
         {
-            int fundModel = TypeOfFunding.AdultSkills;
-            string conRefNumber = "ZESF00098";
-            string learnAimRef = ValidationConstants.ZESF0001;
+            // arrange
+            const string LearnRefNumber = "123456789X";
+            const string AimRefNumber = "shonkyAimRef";
+            const string ContractRefNumber = "shonkyRefNumber";
 
-            var testLearner = new TestLearner()
-            {
-                LearningDeliveries = new TestLearningDelivery[]
-                {
-                    new TestLearningDelivery()
-                    {
-                        FundModel = fundModel,
-                        LearnAimRef = learnAimRef,
-                        ConRefNumber = conRefNumber
-                    }
-                }
-            };
+            var delivery = new Mock<ILearningDelivery>();
+            delivery
+                .SetupGet(y => y.FundModel)
+                .Returns(70); // TypeOfFunding.EuropeanSocialFund
+            delivery
+                .SetupGet(y => y.LearnAimRef)
+                .Returns(AimRefNumber);
+            delivery
+                .SetupGet(y => y.ConRefNumber)
+                .Returns(ContractRefNumber);
 
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-            var larsDataServiceMock = new Mock<ILARSDataService>();
+            var deliveries = new List<ILearningDelivery> { delivery.Object };
 
-            larsDataServiceMock.Setup(l => l.GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef)).Returns("2");
-            fcsDataServiceMock.Setup(f => f.IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(2, conRefNumber)).Returns(false);
-            fcsDataServiceMock.Setup(s => s.IsSectorSubjectAreaCodeNullForContract(conRefNumber)).Returns(false);
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries);
 
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(
-                    validationErrorHandler: validationErrorHandlerMock.Object,
-                    lARSDataService: larsDataServiceMock.Object,
-                    fCSDataService: fcsDataServiceMock.Object).Validate(testLearner);
-            }
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.HasQualifyingFunding(delivery.Object, 70)) // TypeOfFunding.EuropeanSocialFund
+                .Returns(true);
+
+            var eligibilityItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
+            eligibilityItem
+                .SetupGet(x => x.SectorSubjectAreaCode)
+                .Returns((decimal?)area);
+            eligibilityItem
+                .SetupGet(x => x.MinLevelCode)
+                .Returns(min);
+            eligibilityItem
+                .SetupGet(x => x.MaxLevelCode)
+                .Returns(max);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            fcsData
+                .Setup(x => x.GetSectorSubjectAreaLevelsFor(ContractRefNumber))
+                .Returns(new IEsfEligibilityRuleSectorSubjectAreaLevel[] { eligibilityItem.Object });
+
+            var larsItem = new Mock<ILARSLearningDelivery>();
+            larsItem
+                .SetupGet(x => x.NotionalNVQLevelv2)
+                .Returns(notional);
+            var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
+            larsData
+                .Setup(x => x.GetDeliveryFor(AimRefNumber))
+                .Returns(larsItem.Object);
+
+            var sut = new LearnAimRef_72Rule(handler.Object, commonOps.Object, fcsData.Object, larsData.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            commonOps.VerifyAll();
+            fcsData.VerifyAll();
+            larsData.VerifyAll();
         }
 
-        [Fact]
-        public void Validate_NoError_NullCheck()
+        /// <summary>
+        /// New rule.
+        /// </summary>
+        /// <returns>a constructed and mocked up validation rule</returns>
+        public LearnAimRef_72Rule NewRule()
         {
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(null);
-            }
-        }
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
+            var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
 
-        [Fact]
-        public void Validate_NoError_LearningDelivery_NullCheck()
-        {
-            var testLearner = new TestLearner()
-            {
-                LearningDeliveries = null
-            };
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
-            }
-        }
-
-        [Fact]
-        public void BuildErrorMessageParameters()
-        {
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.EuropeanSocialFund)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.ConRefNumber, "ESF00012")).Verifiable();
-
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(TypeOfFunding.EuropeanSocialFund, "ESF00012");
-
-            validationErrorHandlerMock.Verify();
-        }
-
-        private LearnAimRef_72Rule NewRule(
-            IValidationErrorHandler validationErrorHandler = null,
-            IFCSDataService fCSDataService = null,
-            ILARSDataService lARSDataService = null)
-        {
-            return new LearnAimRef_72Rule(
-                validationErrorHandler: validationErrorHandler,
-                fCSDataService: fCSDataService,
-                lARSDataService: lARSDataService);
+            return new LearnAimRef_72Rule(handler.Object, commonOps.Object, fcsData.Object, larsData.Object);
         }
     }
 }
