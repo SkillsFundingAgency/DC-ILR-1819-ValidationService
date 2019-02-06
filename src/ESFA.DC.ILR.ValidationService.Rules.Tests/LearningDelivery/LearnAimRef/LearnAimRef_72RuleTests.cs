@@ -258,10 +258,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         [InlineData(1.0, "blahMin", "blahMax", false)]
         [InlineData(null, null, null, false)]
         [InlineData(1.1, null, null, false)]
-        [InlineData(null, "blahMin", null, false)]
-        [InlineData(1.2, "blahMin", null, true)]
-        [InlineData(null, null, "blahMax", false)]
-        [InlineData(1.3, null, "blahMax", true)]
+        [InlineData(null, "blahMin", null, true)]
+        [InlineData(1.2, "blahMin", null, false)]
+        [InlineData(null, null, "blahMax", true)]
+        [InlineData(1.3, null, "blahMax", false)]
         public void IsUsableSubjectAreaMeetsExpectation(double? area, string minLevel, string maxLevel, bool expectation)
         {
             // arrange
@@ -290,8 +290,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">The expectation.</param>
         [Theory]
-        [InlineData(null, TypeOfNotionalNVQLevelV2.OutOfScope)] // int.minvalue
-        [InlineData("A", TypeOfNotionalNVQLevelV2.OutOfScope)] // int.minvalue
+        [InlineData(null, TypeOfNotionalNVQLevelV2.OutOfScope)]
+        [InlineData("A", TypeOfNotionalNVQLevelV2.OutOfScope)]
         [InlineData("E", TypeOfNotionalNVQLevelV2.EntryLevel)]
         [InlineData("1", TypeOfNotionalNVQLevelV2.Level1)]
         [InlineData("2", TypeOfNotionalNVQLevelV2.Level2)]
@@ -411,15 +411,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="notional">The notional.</param>
         /// <param name="min">The minimum.</param>
         /// <param name="max">The maximum.</param>
-        /// <param name="area">The area.</param>
-        /// <param name="tier1">The tier1.</param>
-        /// <param name="tier2">The tier2.</param>
         [Theory]
-        [InlineData("1", "2", "3", 1.0, 1.0, 1.0)] // fails @ min level
-        [InlineData("H", "2", "3", 1.0, 1.0, 1.0)] // fails @ max level
-        [InlineData("2", "2", "3", 1.1, 1.0, 1.0)] // fails @ tier1 level
-        [InlineData("2", "2", "3", 1.2, 1.1, 1.0)] // fails @ tier2 level
-        public void InvalidItemRaisesValidationMessage(string notional, string min, string max, decimal area, decimal tier1, decimal tier2)
+        [InlineData("1", "2", "3")] // fails @ min level
+        [InlineData("H", "2", "3")] // fails @ max level
+        public void InvalidItemRaisesValidationMessage(string notional, string min, string max)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -464,9 +459,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var eligibilityItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
             eligibilityItem
-                .SetupGet(x => x.SectorSubjectAreaCode)
-                .Returns(area);
-            eligibilityItem
                 .SetupGet(x => x.MinLevelCode)
                 .Returns(min);
             eligibilityItem
@@ -481,12 +473,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             larsItem
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(notional);
-            larsItem
-                .SetupGet(x => x.SectorSubjectAreaTier1)
-                .Returns(tier1);
-            larsItem
-                .SetupGet(x => x.SectorSubjectAreaTier2)
-                .Returns(tier2);
+
             var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
             larsData
                 .Setup(x => x.GetDeliveryFor(AimRefNumber))
@@ -511,14 +498,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="min">The minimum.</param>
         /// <param name="max">The maximum.</param>
         /// <param name="area">The area.</param>
-        /// <param name="tier1">The tier1.</param>
-        /// <param name="tier2">The tier2.</param>
         [Theory]
-        [InlineData("2", "2", "3", 1.0, 1.0, 2.0)]
-        [InlineData("2", "2", "3", 2.0, 1.0, 2.0)]
-        [InlineData("3", "2", "3", 1.0, 1.0, 2.0)]
-        [InlineData("3", "2", "3", 2.0, 1.0, 2.0)]
-        public void ValidItemDoesNotRaiseValidationMessage(string notional, string min, string max, decimal area, decimal tier1, decimal tier2)
+        [InlineData("2", "2", "3", 1.0)]
+        [InlineData("2", "2", "3", null)]
+        [InlineData("3", "2", "3", 1.0)]
+        [InlineData("3", "2", "3", null)]
+        public void ValidItemDoesNotRaiseValidationMessage(string notional, string min, string max, double? area)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
@@ -555,7 +540,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var eligibilityItem = new Mock<IEsfEligibilityRuleSectorSubjectAreaLevel>();
             eligibilityItem
                 .SetupGet(x => x.SectorSubjectAreaCode)
-                .Returns(area);
+                .Returns((decimal?)area);
             eligibilityItem
                 .SetupGet(x => x.MinLevelCode)
                 .Returns(min);
@@ -571,12 +556,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             larsItem
                 .SetupGet(x => x.NotionalNVQLevelv2)
                 .Returns(notional);
-            larsItem
-                .SetupGet(x => x.SectorSubjectAreaTier1)
-                .Returns(tier1);
-            larsItem
-                .SetupGet(x => x.SectorSubjectAreaTier2)
-                .Returns(tier2);
             var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
             larsData
                 .Setup(x => x.GetDeliveryFor(AimRefNumber))

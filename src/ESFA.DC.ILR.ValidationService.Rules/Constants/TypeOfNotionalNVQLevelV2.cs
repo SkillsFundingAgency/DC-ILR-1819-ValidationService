@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// (type of) notional nvq level v2 (see the helper class <see cref="LARSNotionalNVQLevelV2Helper"/>)
+    /// these items are positioned in their natural order
     /// </summary>
     public enum TypeOfNotionalNVQLevelV2
     {
