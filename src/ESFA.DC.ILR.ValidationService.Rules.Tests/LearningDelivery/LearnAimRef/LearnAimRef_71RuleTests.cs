@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
@@ -52,26 +46,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             NewRule().LearnAimRefConditionMet("ESF7890").Should().BeTrue();
         }
 
-        [Fact]
-        public void EsfSectorSubjectAreaLevelConditionMet_False()
-        {
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-
-            fcsDataServiceMock.Setup(m => m.IsSectorSubjectAreaCodeExistsForContract("ESF223344")).Returns(false);
-
-            NewRule(fCSDataService: fcsDataServiceMock.Object).EsfSectorSubjectAreaLevelConditionMet("ESF998877").Should().BeFalse();
-        }
-
-        [Fact]
-        public void EsfSectorSubjectAreaLevelConditionMet_True()
-        {
-            var fcsDataServiceMock = new Mock<IFCSDataService>();
-
-            fcsDataServiceMock.Setup(m => m.IsSectorSubjectAreaCodeExistsForContract("ESF0002")).Returns(true);
-
-            NewRule(fCSDataService: fcsDataServiceMock.Object).EsfSectorSubjectAreaLevelConditionMet("ESF0002").Should().BeTrue();
-        }
-
         [Theory]
         [InlineData("12.1", "13.1")]
         [InlineData("12.1", "15.1")]
@@ -111,7 +85,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            fcsDataServiceMock.Setup(m => m.GetSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
+            fcsDataServiceMock.Setup(m => m.GetEligibilityRuleSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
             larsDataServiceMock.Setup(l => l.GetDeliveriesFor(learnAimRef)).Returns(learningDeliveries);
 
             NewRule(
@@ -147,7 +121,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            fcsDataServiceMock.Setup(m => m.GetSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
+            fcsDataServiceMock.Setup(m => m.GetEligibilityRuleSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
             larsDataServiceMock.Setup(l => l.GetDeliveriesFor(learnAimRef)).Returns(learningDeliveries);
 
             NewRule(
@@ -194,8 +168,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            fcsDataServiceMock.Setup(m => m.GetSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
-            fcsDataServiceMock.Setup(m => m.IsSectorSubjectAreaCodeExistsForContract("ESF223344")).Returns(false);
+            fcsDataServiceMock.Setup(m => m.GetEligibilityRuleSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
+            fcsDataServiceMock.Setup(m => m.GetEligibilityRuleSectorSubjectAreaLevelsFor("ESF223344")).Returns(new IEsfEligibilityRuleSectorSubjectAreaLevel[] { });
             larsDataServiceMock.Setup(l => l.GetDeliveriesFor(learnAimRef)).Returns(learningDeliveries);
 
             NewRule(
@@ -231,8 +205,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            fcsDataServiceMock.Setup(m => m.IsSectorSubjectAreaCodeExistsForContract(conRefNumber)).Returns(true);
-            fcsDataServiceMock.Setup(m => m.GetSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
+            fcsDataServiceMock.Setup(m => m.GetEligibilityRuleSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
             larsDataServiceMock.Setup(l => l.GetDeliveriesFor(learnAimRef)).Returns(learningDeliveries);
 
             NewRule(
@@ -282,8 +255,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            fcsDataServiceMock.Setup(m => m.IsSectorSubjectAreaCodeExistsForContract(conRefNumber)).Returns(true);
-            fcsDataServiceMock.Setup(m => m.GetSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
+            fcsDataServiceMock.Setup(m => m.GetEligibilityRuleSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
             larsDataServiceMock.Setup(l => l.GetDeliveriesFor(learnAimRef)).Returns(learningDeliveries);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
@@ -336,8 +308,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             var larsDataServiceMock = new Mock<ILARSDataService>();
 
-            fcsDataServiceMock.Setup(m => m.GetSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
-            fcsDataServiceMock.Setup(m => m.IsSectorSubjectAreaCodeExistsForContract("ESF223344")).Returns(false);
+            fcsDataServiceMock.Setup(m => m.GetEligibilityRuleSectorSubjectAreaLevelsFor(conRefNumber)).Returns(esfEligibilityRuleSectorSubjectAreaLevels);
+            fcsDataServiceMock.Setup(m => m.GetEligibilityRuleSectorSubjectAreaLevelsFor("ESF223344")).Returns(new IEsfEligibilityRuleSectorSubjectAreaLevel[] { });
             larsDataServiceMock.Setup(l => l.GetDeliveriesFor(learnAimRef)).Returns(learningDeliveries);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())

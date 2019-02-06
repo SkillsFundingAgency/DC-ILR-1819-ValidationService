@@ -19,47 +19,47 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <summary>
         /// Gets the eligibility rule for (this contract reference).
         /// </summary>
-        /// <param name="thisContractReference">The this contract reference.</param>
+        /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>
         /// an eligibility rule (if found)
         /// </returns>
         IEsfEligibilityRule GetEligibilityRuleFor(string thisContractReference);
 
         /// <summary>
-        /// Gets the eligibility rule employment statuses for.
+        /// Gets the eligibility rule employment statuses for (this contract reference).
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
+        /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>
-        /// the eligibility rule employment status (if found)
+        /// a collection of employment statuses (if found) or an empty list
         /// </returns>
-        IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string thisContractReference);
 
         /// <summary>
-        /// Gets the eligibility rule local authorities for.
+        /// Gets the eligibility rule local authorities for (this contract reference).
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
+        /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>
-        /// an eligibility rule local authority (if found)
+        /// a collection of local authorities (if found) or an empty list
         /// </returns>
-        IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string thisContractReference);
 
         /// <summary>
-        /// Gets the eligibility rule enterprise partnerships for.
+        /// Gets the eligibility rule enterprise partnerships for (this contract reference).
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
+        /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>
-        /// an eligibility rule enterprise partnership (if found)
+        /// a collection of enterprise partnerships (if found) or an empty list
         /// </returns>
-        IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference);
+        IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string thisContractReference);
 
         /// <summary>
-        /// Gets the eligibility sector subject area levels for.
+        /// Gets the eligibility rule sector subject area levels for (this contract reference).
         /// </summary>
-        /// <param name="conRefNumber">The contract reference number.</param>
+        /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>
-        /// esf eligibility rule sector subject area levels
+        /// a collection of sector subject area levels (if found) or an empty list
         /// </returns>
-        IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsFor(string conRefNumber);
+        IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetEligibilityRuleSectorSubjectAreaLevelsFor(string thisContractReference);
 
         /// <summary>
         /// Contract reference number exists.
@@ -74,14 +74,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         /// <param name="fundingStreamPeriodCodes">The funding stream period codes.</param>
         /// <returns>true if it does</returns>
         bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes);
-
-        // TODO: should be in the rule Learn Aim Ref 71
-        bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber);
-
-        // TODO: should be in the rule Learn Aim Ref 72
-        bool IsSectorSubjectAreaCodeNullForContract(string conRefNumber);
-
-        // TODO: should be in the rule Learn Aim Ref 72
-        bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber);
     }
 }
