@@ -2,7 +2,6 @@
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,82 +29,93 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         }
 
         /// <summary>
-        /// Gets the contract allocation for.
+        /// Gets the allocation for (this contract reference).
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
-        /// <returns>a contract allocation (if found)</returns>
-        public IFcsContractAllocation GetContractAllocationFor(string contractReference)
+        /// <param name="thisContractReference">this contract reference.</param>
+        /// <returns>
+        /// a contract allocation (if found)
+        /// </returns>
+        public IFcsContractAllocation GetContractAllocationFor(string thisContractReference)
         {
-            if (contractReference == null)
+            if (thisContractReference == null)
             {
                 return null;
             }
 
-            _contractAllocations.TryGetValue(contractReference, out IFcsContractAllocation fcsContractAllocation);
+            _contractAllocations.TryGetValue(thisContractReference, out IFcsContractAllocation fcsContractAllocation);
 
             return fcsContractAllocation;
         }
 
         /// <summary>
-        /// Gets the eligibility rule for.
+        /// Gets the eligibility rule for (this contract reference).
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
-        /// <returns>an eligibility rule (if found)</returns>
-        public IEsfEligibilityRule GetEligibilityRuleFor(string contractReference)
+        /// <param name="thisContractReference">this contract reference.</param>
+        /// <returns>
+        /// an eligibility rule (if found)
+        /// </returns>
+        public IEsfEligibilityRule GetEligibilityRuleFor(string thisContractReference)
         {
-            var contractAllocation = GetContractAllocationFor(contractReference);
+            var contractAllocation = GetContractAllocationFor(thisContractReference);
 
             return contractAllocation?.EsfEligibilityRule;
         }
 
         /// <summary>
-        /// Gets the eligibility rule employment status.
+        /// Gets the eligibility rule employment statuses for (this contract reference).
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
+        /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>
-        /// the eligibility rule employment status (if found)
+        /// a collection of employment statuses (if found) or an empty list
         /// </returns>
-        public IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleEmploymentStatus> GetEligibilityRuleEmploymentStatusesFor(string thisContractReference)
         {
-            var eligibility = GetEligibilityRuleFor(contractReference);
+            var eligibility = GetEligibilityRuleFor(thisContractReference);
 
             return eligibility?.EmploymentStatuses
                 ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleEmploymentStatus>();
         }
 
         /// <summary>
-        /// Gets the eligibility rule local authority.
+        /// Gets the eligibility rule local authorities for (this contract reference).
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
+        /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>
-        /// an eligibility rule local authority (if found)
+        /// a collection of local authorities (if found) or an empty list
         /// </returns>
-        public IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleLocalAuthority> GetEligibilityRuleLocalAuthoritiesFor(string thisContractReference)
         {
-            var eligibility = GetEligibilityRuleFor(contractReference);
+            var eligibility = GetEligibilityRuleFor(thisContractReference);
 
             return eligibility?.LocalAuthorities
                 ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalAuthority>();
         }
 
         /// <summary>
-        /// Gets the eligibility rule enterprise partnership.
+        /// Gets the eligibility rule enterprise partnerships for (this contract reference).
         /// </summary>
-        /// <param name="contractReference">The contract reference.</param>
+        /// <param name="thisContractReference">this contract reference.</param>
         /// <returns>
-        /// an eligibility rule enterprise partnership (if found)
+        /// a collection of enterprise partnerships (if found) or an empty list
         /// </returns>
-        public IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string contractReference)
+        public IEnumerable<IEsfEligibilityRuleLocalEnterprisePartnership> GetEligibilityRuleEnterprisePartnershipsFor(string thisContractReference)
         {
-            var eligibility = GetEligibilityRuleFor(contractReference);
+            var eligibility = GetEligibilityRuleFor(thisContractReference);
 
             return eligibility?.LocalEnterprisePartnerships
                 ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalEnterprisePartnership>();
         }
 
-        public IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetSectorSubjectAreaLevelsFor(string contractReference)
+        /// <summary>
+        /// Gets the eligibility rule sector subject area levels for (this contract reference).
+        /// </summary>
+        /// <param name="thisContractReference">this contract reference.</param>
+        /// <returns>
+        /// a collection of sector subject area levels (if found) or an empty list
+        /// </returns>
+        public IEnumerable<IEsfEligibilityRuleSectorSubjectAreaLevel> GetEligibilityRuleSectorSubjectAreaLevelsFor(string thisContractReference)
         {
-            var eligibility = GetEligibilityRuleFor(contractReference);
+            var eligibility = GetEligibilityRuleFor(thisContractReference);
 
             return eligibility?.SectorSubjectAreaLevels
                 ?? Collection.EmptyAndReadOnly<IEsfEligibilityRuleSectorSubjectAreaLevel>();
@@ -128,39 +138,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         /// <returns>true if it does</returns>
         public bool FundingRelationshipFCTExists(IEnumerable<string> fundingStreamPeriodCodes)
         {
-            var fsCodes = fundingStreamPeriodCodes.AsSafeReadOnlyList().ToCaseInsensitiveHashSet();
+            var fsCodes = fundingStreamPeriodCodes.AsSafeDistinctKeySet();
 
             return _contractAllocations.Values.Any(ca => fsCodes.Contains(ca.FundingStreamPeriodCode));
-        }
-
-        // TODO: should be in the rule Learn Aim Ref 71
-        public bool IsSectorSubjectAreaCodeExistsForContract(string conRefNumber)
-        {
-            return GetSectorSubjectAreaLevelsFor(conRefNumber)?
-                .Any(
-                s => s.SectorSubjectAreaCode.HasValue
-                && (string.IsNullOrEmpty(s.MinLevelCode)
-                && string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
-        }
-
-        // TODO: should be in the rule Learn Aim Ref 72
-        public bool IsSectorSubjectAreaCodeNullForContract(string conRefNumber)
-        {
-            return GetSectorSubjectAreaLevelsFor(conRefNumber)?
-                .Any(
-                s => s.SectorSubjectAreaCode == null
-                && (!string.IsNullOrEmpty(s.MinLevelCode)
-                    || !string.IsNullOrEmpty(s.MaxLevelCode))) ?? false;
-        }
-
-        // TODO: should be in the rule Learn Aim Ref 72
-        public bool IsNotionalNVQLevel2BetweenSubjectAreaMinMaxValues(int notionalNVQLevel2, string conRefNumber)
-        {
-            return GetSectorSubjectAreaLevelsFor(conRefNumber)?
-                .Any(s => (!string.IsNullOrEmpty(s.MinLevelCode)
-                    && notionalNVQLevel2 < Convert.ToInt32(s.MinLevelCode))
-                    || (!string.IsNullOrEmpty(s.MaxLevelCode)
-                    && notionalNVQLevel2 > Convert.ToInt32(s.MaxLevelCode))) ?? false;
         }
     }
 }

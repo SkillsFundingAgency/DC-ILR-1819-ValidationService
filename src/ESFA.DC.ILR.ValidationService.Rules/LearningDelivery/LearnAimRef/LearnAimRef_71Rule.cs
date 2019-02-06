@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 {
@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         public bool LARSConditionMet(string conRefNumber, string learnAimRef)
         {
             List<decimal?> sectorSubjectAreaCodes =
-                _fCSDataService.GetSectorSubjectAreaLevelsFor(conRefNumber)?
+                _fCSDataService.GetEligibilityRuleSectorSubjectAreaLevelsFor(conRefNumber)?
                 .Where(s => s.SectorSubjectAreaCode.HasValue)
                 .Select(s => s.SectorSubjectAreaCode).ToList();
 
@@ -67,7 +67,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             return isMatchNotFoundForSectorSubjectAreaTier1 && isMatchNotFoundForSectorSubjectAreaTier2;
         }
 
-        public bool EsfSectorSubjectAreaLevelConditionMet(string conRefNumber) => _fCSDataService.IsSectorSubjectAreaCodeExistsForContract(conRefNumber);
+        public bool EsfSectorSubjectAreaLevelConditionMet(string conRefNumber)
+        {
+            var subjectAreaLevels = _fCSDataService.GetEligibilityRuleSectorSubjectAreaLevelsFor(conRefNumber);
+
+            return subjectAreaLevels.Any(
+                s => s.SectorSubjectAreaCode.HasValue
+                && string.IsNullOrEmpty(s.MinLevelCode)
+                && string.IsNullOrEmpty(s.MaxLevelCode));
+        }
 
         public bool FundModelConditionMet(int fundModel) => fundModel == _fundModel;
 

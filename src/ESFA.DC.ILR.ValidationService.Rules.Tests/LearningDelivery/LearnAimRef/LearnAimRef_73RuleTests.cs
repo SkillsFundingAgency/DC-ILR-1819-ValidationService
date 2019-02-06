@@ -195,7 +195,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetSectorSubjectAreaLevelsFor(candidate))
+                .Setup(x => x.GetEligibilityRuleSectorSubjectAreaLevelsFor(candidate))
                 .Returns(new IEsfEligibilityRuleSectorSubjectAreaLevel[] { });
 
             var larsData = new Mock<ILARSDataService>(MockBehavior.Strict);
@@ -565,7 +565,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(max);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetSectorSubjectAreaLevelsFor(ContractRefNumber))
+                .Setup(x => x.GetEligibilityRuleSectorSubjectAreaLevelsFor(ContractRefNumber))
                 .Returns(new IEsfEligibilityRuleSectorSubjectAreaLevel[] { eligibilityItem.Object });
 
             var larsItem = new Mock<ILARSLearningDelivery>();
@@ -655,7 +655,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(max);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetSectorSubjectAreaLevelsFor(ContractRefNumber))
+                .Setup(x => x.GetEligibilityRuleSectorSubjectAreaLevelsFor(ContractRefNumber))
                 .Returns(new IEsfEligibilityRuleSectorSubjectAreaLevel[] { eligibilityItem.Object });
 
             var larsItem = new Mock<ILARSLearningDelivery>();
