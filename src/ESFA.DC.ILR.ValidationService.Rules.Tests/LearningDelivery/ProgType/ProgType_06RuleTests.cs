@@ -192,8 +192,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
 
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ProgType_06Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    Moq.It.Is<string>(y => y == "FundModel"),
+                    Moq.It.Is<int>(y => y == fundModel)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new ProgType_06Rule(mockHandler.Object);
