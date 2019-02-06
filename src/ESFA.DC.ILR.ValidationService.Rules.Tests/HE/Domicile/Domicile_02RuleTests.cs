@@ -168,8 +168,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.DOMICILE
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            const string domicile = "foo";
 
             var mockHE = new Mock<ILearningDeliveryHE>();
+            mockHE.SetupGet(m => m.DOMICILE).Returns(domicile);
+
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(y => y.LearningDeliveryHEEntity)
@@ -195,8 +198,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.DOMICILE
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == DOMICILE_02Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    Moq.It.Is<string>(y => y == "DOMICILE"),
+                    Moq.It.Is<string>(y => y == domicile)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var service = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
