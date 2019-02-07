@@ -226,8 +226,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == LearnDelFAMType_09Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    Moq.It.Is<string>(y => y == "FundModel"),
+                    Moq.It.Is<int>(y => y == candidate)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == "LearnDelFAMType"),
+                    Moq.It.Is<string>(y => y == LearningDeliveryFAMTypeConstants.SOF)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == "LearnDelFAMCode"),
+                    Moq.It.IsAny<string>()))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new LearnDelFAMType_09Rule(handler.Object);
