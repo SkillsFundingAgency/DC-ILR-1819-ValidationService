@@ -427,6 +427,9 @@
     <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_01Rule.cs" />
     <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_02Rule.cs" />
     <Compile Include="LearningDelivery\EPAOrgID\EPAOrgID_03Rule.cs" />
+    <Compile Include="Query\Interface\IBranchResult.cs" />
+    <Compile Include="Query\Interface\IProvideLearnAimRefRuleActions.cs" />
+    <Compile Include="Query\LearnAimRefRuleActionProvider.cs" />
     <Compile Include="LearningDelivery\LearnAimRef\LearnAimRef_71Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_01Rule.cs" />
     <Compile Include="LearningDelivery\AFinType\AFinType_07Rule.cs" />

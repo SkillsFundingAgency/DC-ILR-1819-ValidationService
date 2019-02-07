@@ -5,6 +5,7 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
@@ -22,61 +23,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_89Rule(null, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_89Rule(null, provider.Object, service.Object, yearData.Object));
         }
 
         /// <summary>
-        /// New rule with null lars service throws.
+        /// New rule with null action provider throws.
         /// </summary>
         [Fact]
-        public void NewRuleWithNullLARSServiceThrows()
-        {
-            // arrange
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
-            var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
-
-            // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_89Rule(handler.Object, null, derivedData07.Object, derivedData11.Object, yearData.Object));
-        }
-
-        /// <summary>
-        /// New rule with null derived data 07 throws.
-        /// </summary>
-        [Fact]
-        public void NewRuleWithNullDerivedData07Throws()
+        public void NewRuleWithNullActionProviderThrows()
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_89Rule(handler.Object, service.Object, null, derivedData11.Object, yearData.Object));
-        }
-
-        /// <summary>
-        /// New rule with null derived data 11 throws.
-        /// </summary>
-        [Fact]
-        public void NewRuleWithNullDerivedData11Throws()
-        {
-            // arrange
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
-
-            // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, null, yearData.Object));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_89Rule(handler.Object, null, service.Object, yearData.Object));
         }
 
         /// <summary>
@@ -87,12 +54,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, null));
         }
 
         /// <summary>
@@ -124,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(sut.GetName(), result);
+            Assert.Equal(RuleNameConstants.LearnAimRef_89, result);
         }
 
         /// <summary>
@@ -174,15 +140,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var testDate = DateTime.Parse(expectation);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
                 .Setup(x => x.GetAcademicYearOfLearningDate(learnStart, AcademicYearDates.PreviousYearEnd))
                 .Returns(testDate);
 
-            var sut = new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object);
+            var sut = new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, yearData.Object);
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
@@ -194,9 +159,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             // assert
             handler.VerifyAll();
+            provider.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
-            derivedData11.VerifyAll();
             yearData.VerifyAll();
 
             Assert.Equal(testDate, result);
@@ -248,28 +212,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 larsValidities.Add(mockValidity.Object);
             });
 
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
                 .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
                 .Returns(DateTime.Parse(previousYearEnd));
 
-            var sut = new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object);
+            var sut = new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, yearData.Object);
 
             // act
             var result = sut.HasValidLearningAim(mockDelivery.Object, category);
 
             // assert
             handler.VerifyAll();
+            provider.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
-            derivedData11.VerifyAll();
             yearData.VerifyAll();
 
             Assert.Equal(expectation, result);
@@ -311,28 +274,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 larsValidities.Add(mockValidity.Object);
             });
 
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
                 .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
                 .Returns(DateTime.Parse(previousYearEnd));
 
-            var sut = new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object);
+            var sut = new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, yearData.Object);
 
             // act
             var result = sut.HasValidLearningAim(mockDelivery.Object, category);
 
             // assert
             handler.VerifyAll();
+            provider.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
-            derivedData11.VerifyAll();
             yearData.VerifyAll();
 
             Assert.Equal(expectation, result);
@@ -391,15 +353,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == LearnAimRef_89Rule.Name),
-                    Moq.It.Is<string>(y => y == learnRefNumber),
-                    0,
-                    Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+                .Setup(x => x.Handle("LearnAimRef_89", learnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == LearnAimRefRuleBase.MessagePropertyName),
-                    learnAimRef))
+                .Setup(x => x.BuildErrorMessageParameter("LearnAimRef", learnAimRef))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
@@ -419,28 +375,120 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 larsValidities.Add(mockValidity.Object);
             });
 
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(false);
+
             var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
                 .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
                 .Returns(DateTime.Parse(previousYearEnd));
 
-            var sut = new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object);
+            var sut = new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, yearData.Object);
 
             // act
             sut.Validate(mockLearner.Object);
 
             // assert
             handler.VerifyAll();
+            commonOps.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
             derivedData11.VerifyAll();
+            yearData.VerifyAll();
+        }
+
+        [Theory]
+        [InlineData("2016-04-18", "2017-07-31", TypeOfFunding.AdultSkills, TypeOfLARSValidity.Unemployed, "2014-04-01", "2012-05-09", "2016-07-15", "2016-04-16")]
+        public void ExtendedInvalidItemRaisesValidationMessage(string candidate, string previousYearEnd, int funding, string category, params string[] startDates)
+        {
+            // arrange
+            const string learnRefNumber = "123456789X";
+            const string learnAimRef = "salddfkjeifdnase";
+            const int meaninglessProgramme = 2;
+
+            var testDate = DateTime.Parse(candidate);
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.LearnAimRef)
+                .Returns(learnAimRef);
+            mockDelivery
+                .SetupGet(y => y.AimType)
+                .Returns(TypeOfAim.ComponentAimInAProgramme);
+            mockDelivery
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(testDate);
+            mockDelivery
+                .SetupGet(y => y.FundModel)
+                .Returns(funding);
+            mockDelivery
+                .SetupGet(x => x.ProgTypeNullable)
+                .Returns(meaninglessProgramme);
+
+            var deliveries = Collection.Empty<ILearningDelivery>();
+            deliveries.Add(mockDelivery.Object);
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(learnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries.AsSafeReadOnlyList());
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle("LearnAimRef_89", learnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("LearnAimRef", learnAimRef))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
+            startDates.ForEach(sd =>
+            {
+                var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
+                mockValidity
+                    .SetupGet(x => x.ValidityCategory)
+                    .Returns(category);
+                mockValidity
+                    .SetupGet(x => x.StartDate)
+                    .Returns(DateTime.Parse(sd));
+                mockValidity
+                    .SetupGet(x => x.EndDate)
+                    .Returns(DateTime.Parse(sd));
+
+                larsValidities.Add(mockValidity.Object);
+            });
+
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+            service
+                .Setup(x => x.GetValiditiesFor(learnAimRef))
+                .Returns(larsValidities.AsSafeReadOnlyList());
+
+            var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
+            yearData
+                .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
+                .Returns(DateTime.Parse(previousYearEnd));
+
+            var sut = new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, yearData.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            provider.VerifyAll();
+            service.VerifyAll();
             yearData.VerifyAll();
         }
 
@@ -514,28 +562,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 larsValidities.Add(mockValidity.Object);
             });
 
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             yearData
                 .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
                 .Returns(DateTime.Parse(previousYearEnd));
 
-            var sut = new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object);
+            var sut = new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, yearData.Object);
 
             // act
             sut.Validate(mockLearner.Object);
 
             // assert
             handler.VerifyAll();
+            provider.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
-            derivedData11.VerifyAll();
             yearData.VerifyAll();
         }
 
@@ -546,12 +593,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         public LearnAimRef_89Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
             var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
 
-            return new LearnAimRef_89Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object, yearData.Object);
+            return new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, yearData.Object);
         }
     }
 }

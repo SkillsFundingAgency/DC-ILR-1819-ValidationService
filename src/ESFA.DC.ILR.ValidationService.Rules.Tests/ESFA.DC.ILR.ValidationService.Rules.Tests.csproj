@@ -633,6 +633,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\AcademicYearQueryServiceTests.cs" />
     <Compile Include="Query\DateTimeQueryServiceTests.cs" />
+    <Compile Include="Query\LearnAimRefRuleActionProviderTests.cs" />
     <Compile Include="Query\LearnerEmploymentStatusQueryServiceTests.cs" />
     <Compile Include="Query\LearnerEmploymentStatusMonitoringQueryServiceTests.cs" />
     <Compile Include="Query\LearnerDPQueryServiceTests.cs" />
