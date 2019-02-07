@@ -177,11 +177,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            var testStartDate = DateTime.Parse(startDate);
 
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse(startDate));
+                .Returns(testStartDate);
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
                 .Returns(TypeOfLearningProgramme.Traineeship);
@@ -209,8 +210,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ProgType_13Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    Moq.It.Is<string>(y => y == "LearnStartDate"),
+                    Moq.It.Is<DateTime>(y => y == testStartDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var service = new Mock<IFileDataService>(MockBehavior.Strict);
