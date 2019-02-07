@@ -6,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
@@ -41,31 +42,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return;
             }
 
-            HashSet<string> allLearnRefs = new HashSet<string>();
-            foreach (ILearner learner in objectToValidate.Learners)
+            var duplicateLearnRefs = objectToValidate.Learners
+                .GroupBy(x => x.LearnRefNumber, StringComparer.InvariantCultureIgnoreCase)
+                .Select(x => new { LearnrefNumber = x.Key, Count = x.Count() });
+
+            foreach (var learnerRef in duplicateLearnRefs)
             {
-                if (string.IsNullOrEmpty(learner.LearnRefNumber))
+                if (learnerRef.Count > 1)
                 {
-                    continue;
-                }
-                else if (allLearnRefs.Contains(learner.LearnRefNumber))
-                {
-                    RaiseValidationMessage(learner.LearnRefNumber);
-                }
-                else
-                {
-                    allLearnRefs.Add(learner.LearnRefNumber);
+                    for (int i = 0; i < learnerRef.Count; i++)
+                    {
+                        _messageHandler.Handle(RuleName, learnerRef.LearnrefNumber);
+                    }
                 }
             }
-        }
-
-        /// <summary>
-        /// Raises the validation message.
-        /// </summary>
-        /// <param name="learnRefNumber">The learn reference number.</param>
-        public void RaiseValidationMessage(string learnRefNumber)
-        {
-            _messageHandler.Handle(RuleName, learnRefNumber, null, null);
         }
     }
 }
