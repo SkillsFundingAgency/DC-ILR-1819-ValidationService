@@ -1,12 +1,11 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System;
+using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.CrossEntity;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
-using System;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
@@ -95,16 +94,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestLearner()
                     {
-                        LearnRefNumber = "123456"
+                        LearnRefNumber = "abc1"
                     },
                     new TestLearner()
                     {
-                        LearnRefNumber = "123456"
-                    }
+                        LearnRefNumber = "AbC1"
+                    },
+                    new TestLearner()
+                    {
+                        LearnRefNumber = "ABC1"
+                    },
+                    new TestLearner()
+                    {
+                        LearnRefNumber = "xyZ"
+                    },
                 }
             };
 
-            NewRule().Validate(testMessage);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(testMessage);
+                validationErrorHandlerMock.Verify(h => h.Handle(RuleNameConstants.R06, "abc1", null, null), Times.Exactly(3));
+                validationErrorHandlerMock.Verify(h => h.Handle(RuleNameConstants.R06, "xyZ", null, null), Times.Never);
+            }
         }
 
         [Fact]
@@ -135,10 +147,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public R06Rule NewRule()
+        public R06Rule NewRule(IValidationErrorHandler errorHandler = null)
         {
-            var handler = BuildValidationErrorHandlerMockForError();
-            return new R06Rule(handler.Object);
+            return new R06Rule(errorHandler ?? BuildValidationErrorHandlerMockForError().Object);
         }
     }
 }
