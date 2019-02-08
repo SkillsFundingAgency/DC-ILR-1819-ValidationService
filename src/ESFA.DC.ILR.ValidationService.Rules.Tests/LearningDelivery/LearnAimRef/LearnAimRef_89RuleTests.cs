@@ -3,7 +3,6 @@ using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
@@ -305,21 +304,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="previousYearEnd">The previous year end.</param>
-        /// <param name="funding">The funding.</param>
         /// <param name="category">The category.</param>
         /// <param name="startDates">The start dates.</param>
         [Theory]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
-        public void InvalidItemRaisesValidationMessage(string candidate, string previousYearEnd, int funding, string category, params string[] startDates)
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.AdultSkills, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.AdvancedLearnerLoan, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.Apprenticeships, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.CommunityLearning, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.EFAConFundEnglish, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.EFAConFundMaths, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.EuropeanSocialFund, "2014-04-01", "2012-05-09", "2016-07-15", "2017-07-31")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.OLASSAdult, "2014-04-01", "2012-05-09", "2016-07-15", "2017-04-16")]
+        [InlineData("2016-04-18", "2017-07-31", TypeOfLARSValidity.Unemployed, "2014-04-01", "2012-05-09", "2016-07-15", "2016-04-16")]
+        public void InvalidItemRaisesValidationMessage(string candidate, string previousYearEnd, string category, params string[] startDates)
         {
             // arrange
             const string learnRefNumber = "123456789X";
@@ -331,14 +330,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(y => y.LearnAimRef)
                 .Returns(learnAimRef);
             mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ComponentAimInAProgramme);
-            mockDelivery
                 .SetupGet(y => y.LearnStartDate)
                 .Returns(testDate);
-            mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(funding);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -358,98 +351,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.BuildErrorMessageParameter("LearnAimRef", learnAimRef))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
-            startDates.ForEach(sd =>
-            {
-                var mockValidity = new Mock<ILARSLearningDeliveryValidity>();
-                mockValidity
-                    .SetupGet(x => x.ValidityCategory)
-                    .Returns(category);
-                mockValidity
-                    .SetupGet(x => x.StartDate)
-                    .Returns(DateTime.Parse(sd));
-                mockValidity
-                    .SetupGet(x => x.EndDate)
-                    .Returns(DateTime.Parse(sd));
-
-                larsValidities.Add(mockValidity.Object);
-            });
-
-            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
-
-            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            service
-                .Setup(x => x.GetValiditiesFor(learnAimRef))
-                .Returns(larsValidities.AsSafeReadOnlyList());
-
-            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
-            commonOps
-                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+            var mockResult = new Mock<IBranchResult>();
+            mockResult
+                .SetupGet(x => x.OutOfScope)
                 .Returns(false);
-
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
-            var yearData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
-            yearData
-                .Setup(x => x.GetAcademicYearOfLearningDate(testDate, AcademicYearDates.PreviousYearEnd))
-                .Returns(DateTime.Parse(previousYearEnd));
-
-            var sut = new LearnAimRef_89Rule(handler.Object, provider.Object, service.Object, yearData.Object);
-
-            // act
-            sut.Validate(mockLearner.Object);
-
-            // assert
-            handler.VerifyAll();
-            commonOps.VerifyAll();
-            service.VerifyAll();
-            derivedData11.VerifyAll();
-            yearData.VerifyAll();
-        }
-
-        [Theory]
-        [InlineData("2016-04-18", "2017-07-31", TypeOfFunding.AdultSkills, TypeOfLARSValidity.Unemployed, "2014-04-01", "2012-05-09", "2016-07-15", "2016-04-16")]
-        public void ExtendedInvalidItemRaisesValidationMessage(string candidate, string previousYearEnd, int funding, string category, params string[] startDates)
-        {
-            // arrange
-            const string learnRefNumber = "123456789X";
-            const string learnAimRef = "salddfkjeifdnase";
-            const int meaninglessProgramme = 2;
-
-            var testDate = DateTime.Parse(candidate);
-            var mockDelivery = new Mock<ILearningDelivery>();
-            mockDelivery
-                .SetupGet(y => y.LearnAimRef)
-                .Returns(learnAimRef);
-            mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ComponentAimInAProgramme);
-            mockDelivery
-                .SetupGet(y => y.LearnStartDate)
-                .Returns(testDate);
-            mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(funding);
-            mockDelivery
-                .SetupGet(x => x.ProgTypeNullable)
-                .Returns(meaninglessProgramme);
-
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
-
-            var mockLearner = new Mock<ILearner>();
-            mockLearner
-                .SetupGet(x => x.LearnRefNumber)
-                .Returns(learnRefNumber);
-            mockLearner
-                .SetupGet(x => x.LearningDeliveries)
-                .Returns(deliveries.AsSafeReadOnlyList());
-
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            handler
-                .Setup(x => x.Handle("LearnAimRef_89", learnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
-            handler
-                .Setup(x => x.BuildErrorMessageParameter("LearnAimRef", learnAimRef))
-                .Returns(new Mock<IErrorMessageParameter>().Object);
+            mockResult
+                .SetupGet(x => x.Category)
+                .Returns(category);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.GetBranchingResultFor(mockDelivery.Object, mockLearner.Object))
+                .Returns(mockResult.Object);
 
             var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             startDates.ForEach(sd =>
@@ -468,8 +380,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 larsValidities.Add(mockValidity.Object);
             });
 
-            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
-
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
@@ -487,7 +397,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
             // assert
             handler.VerifyAll();
-            provider.VerifyAll();
             service.VerifyAll();
             yearData.VerifyAll();
         }
@@ -497,21 +406,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="previousYearEnd">The previous year end.</param>
-        /// <param name="funding">The funding.</param>
         /// <param name="category">The category.</param>
         /// <param name="startDates">The start dates.</param>
         [Theory]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
-        [InlineData("2018-04-01", "2017-07-31", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
-        public void ValidItemDoesNotRaiseValidationMessage(string candidate, string previousYearEnd, int funding, string category, params string[] startDates)
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.AdultSkills, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.AdvancedLearnerLoan, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.Any, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.Apprenticeships, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.CommunityLearning, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.EFA16To19, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.EFAConFundEnglish, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.EuropeanSocialFund, "2014-04-01", "2012-05-09", "2016-07-15", "2017-11-14")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.OLASSAdult, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
+        [InlineData("2018-04-01", "2017-07-31", TypeOfLARSValidity.Unemployed, "2014-04-01", "2012-05-09", "2016-07-15", "2017-08-01")]
+        public void ValidItemDoesNotRaiseValidationMessage(string candidate, string previousYearEnd, string category, params string[] startDates)
         {
             // arrange
             const string learnRefNumber = "123456789X";
@@ -523,17 +431,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(y => y.LearnAimRef)
                 .Returns(learnAimRef);
             mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ComponentAimInAProgramme);
-            mockDelivery
                 .SetupGet(y => y.LearnStartDate)
                 .Returns(testDate);
-            mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(funding);
 
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
+            var deliveries = new ILearningDelivery[] { mockDelivery.Object };
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -541,9 +442,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(learnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
-                .Returns(deliveries.AsSafeReadOnlyList());
+                .Returns(deliveries);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var mockResult = new Mock<IBranchResult>();
+            mockResult
+                .SetupGet(x => x.OutOfScope)
+                .Returns(false);
+            mockResult
+                .SetupGet(x => x.Category)
+                .Returns(category);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.GetBranchingResultFor(mockDelivery.Object, mockLearner.Object))
+                .Returns(mockResult.Object);
 
             var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             startDates.ForEach(sd =>
@@ -561,8 +474,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
 
                 larsValidities.Add(mockValidity.Object);
             });
-
-            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service

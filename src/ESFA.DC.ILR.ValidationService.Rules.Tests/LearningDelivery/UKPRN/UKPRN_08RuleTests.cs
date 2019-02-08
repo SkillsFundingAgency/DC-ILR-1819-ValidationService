@@ -363,7 +363,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             commonOps
-                .Setup(x => x.CheckDeliveryFAMs(delivery.Object, It.IsAny<Func<ILearningDeliveryFAM, bool>>()))
+                .Setup(x => x.IsLoansBursary(delivery.Object))
                 .Returns(true);
 
             var allocation = new Mock<IFcsContractAllocation>();
@@ -445,7 +445,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             commonOps
-                .Setup(x => x.CheckDeliveryFAMs(delivery.Object, It.IsAny<Func<ILearningDeliveryFAM, bool>>()))
+                .Setup(x => x.IsLoansBursary(delivery.Object))
                 .Returns(true);
 
             var allocation = new Mock<IFcsContractAllocation>();

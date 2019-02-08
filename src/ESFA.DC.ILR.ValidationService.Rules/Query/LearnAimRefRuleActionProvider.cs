@@ -166,10 +166,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
                 Check.HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
                     && HasQualifyingCategory(delivery, TypeOfLARSValidity.Unemployed)
                     && !Check.IsRestart(delivery)
-                    && !Check.IsLearnerInCustody(delivery)
                     && !Check.InApprenticeship(delivery)
+                    && !Check.IsLearnerInCustody(delivery)
                     && Check.HasQualifyingStart(delivery, DateTime.MinValue, UnemployedMaximumStart)
-                    && InReceiptOfBenefitsAtStart(delivery, learner.LearnerEmploymentStatuses),
+                    && InReceiptOfBenefitsAtStart(delivery, learner?.LearnerEmploymentStatuses.AsSafeReadOnlyList()),
                 TypeOfLARSValidity.Unemployed);
 
         /// <summary>
@@ -277,6 +277,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         /// </returns>
         public IBranchResult GetBranchingResultFor(ILearningDelivery thisDelivery, ILearner andLearner)
         {
+            It.IsNull(thisDelivery)
+                .AsGuard<ArgumentNullException>(nameof(thisDelivery));
+            It.IsNull(andLearner)
+                .AsGuard<ArgumentNullException>(nameof(andLearner));
+
             foreach (var doActionFor in _branchActions)
             {
                 var branch = doActionFor(thisDelivery, andLearner);
@@ -310,7 +315,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             /// <summary>
             /// Gets a value indicating whether this <see cref="BranchResult"/> is passed.
             /// </summary>
-            internal bool Passed { get; }
+            public bool Passed { get; }
 
             /// <summary>
             /// Creates the specified result.

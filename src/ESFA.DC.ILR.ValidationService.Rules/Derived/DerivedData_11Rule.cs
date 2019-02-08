@@ -1,10 +1,10 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 {
@@ -15,6 +15,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     public class DerivedData_11Rule :
         IDerivedData_11Rule
     {
+        private readonly IProvideRuleCommonOperations _check;
+
+        public DerivedData_11Rule(IProvideRuleCommonOperations commonOps)
+        {
+            It.IsNull(commonOps)
+                .AsGuard<ArgumentNullException>(nameof(commonOps));
+
+            _check = commonOps;
+        }
+
         /// <summary>
         /// Determines whether [is adult skills] [the specified delivery].
         /// </summary>
@@ -29,16 +39,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         /// In receipt of benefits.
         /// </summary>
         /// <param name="learnerEmploymentStatus">The learner employment status.</param>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>true, if on state benefits at start of learning aim</returns>
-        public bool InReceiptOfBenefits(IReadOnlyCollection<ILearnerEmploymentStatus> learnerEmploymentStatus, ILearningDelivery delivery)
+        /// <param name="startDate">The start date.</param>
+        /// <returns>
+        /// true, if on state benefits at start of learning aim
+        /// </returns>
+        public bool InReceiptOfBenefits(IReadOnlyCollection<ILearnerEmploymentStatus> learnerEmploymentStatus, DateTime startDate)
         {
-            var candidate = learnerEmploymentStatus
-                    .Where(x => x.DateEmpStatApp <= delivery.LearnStartDate)
-                    .OrderByDescending(x => x.DateEmpStatApp)
-                    .FirstOrDefault();
+            var candidate = _check.GetEmploymentStatusOn(startDate, learnerEmploymentStatus);
+            var esms = candidate?.EmploymentStatusMonitorings;
 
-            var esms = candidate?.EmploymentStatusMonitorings.AsSafeReadOnlyList();
             return esms.SafeAny(InReceiptOfBenefits);
         }
 
@@ -80,7 +89,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
              */
 
             return IsAdultSkills(delivery)
-                && InReceiptOfBenefits(learnerEmployments, delivery);
+                && InReceiptOfBenefits(learnerEmployments, delivery.LearnStartDate);
         }
     }
 }
