@@ -7,6 +7,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
 {
@@ -46,13 +47,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// <summary>
         /// Determines whether [has qualifying eligibility] [the specified postcode].
         /// </summary>
-        /// <param name="postcode">The postcode.</param>
+        /// <param name="delivery">The latest learnstartdate delivery.</param>
+        /// <param name="postcodes">The postcode.</param>
         /// <param name="eligibilities">The eligibilities.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying eligibility] [the specified postcode]; otherwise, <c>false</c>.
         /// </returns>
-        public override bool HasQualifyingEligibility(IONSPostcode postcode, IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> eligibilities) =>
-            It.Has(postcode)
-            && eligibilities.SafeAny(x => x.Code.ComparesWith(postcode.Lep1, postcode.Lep2));
+        public override bool HasQualifyingEligibility(ILearningDelivery delivery, IReadOnlyCollection<IONSPostcode> postcodes, IReadOnlyCollection<IEsfEligibilityRuleLocalEnterprisePartnership> eligibilities) =>
+            It.Has(postcodes)
+            && It.Has(eligibilities)
+            && It.Has(delivery)
+            && eligibilities.Any(eli => postcodes.Any(pc => (pc.Lep1.ComparesWith(eli.Code) || pc.Lep2.ComparesWith(eli.Code)) && InQualifyingPeriod(delivery, pc)));
     }
 }
