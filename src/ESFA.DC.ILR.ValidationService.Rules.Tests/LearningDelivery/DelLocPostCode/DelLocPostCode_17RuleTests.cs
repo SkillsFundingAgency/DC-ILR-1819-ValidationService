@@ -430,18 +430,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         /// <param name="learnStartDateString">The learn start date.</param>
         /// <param name="elCode">The el authority.</param>
         /// <param name="pcCode">The pc authority.</param>
+        /// <param name="termination">The termination date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData("2018-10-01", "ESF0002", "tt_9972", false)]
-        [InlineData("2019-10-01", "tt_9972", "ESF0002", false)]
-        [InlineData("2018-08-01", "TT_9972", "tt_9972", true)]
-        [InlineData("2018-11-02", "tt_9972", "TT_9972", true)]
-        [InlineData("2018-11-02", "tt_9972", "tt_9972", true)]
-        [InlineData("2018-09-02", "TT_9973", "tt_9972", false)]
-        [InlineData("2018-09-02", "tt_9972", "TT_9973", false)]
-        [InlineData("2018-09-02", "tt_9973", "tt_9972", false)]
-        [InlineData("2018-09-02", "tt_9972", "tt_9973", false)]
-        public void HasQualifyingEligibilityMeetsExpectation(string learnStartDateString, string elCode, string pcCode, bool expectation)
+        [InlineData("2018-10-01", "ESF0002", "tt_9972", "2018-10-02", false)]
+        [InlineData("2019-10-01", "tt_9972", "ESF0002", "2018-10-02", false)]
+        [InlineData("2018-08-01", "TT_9972", "tt_9972", "2018-08-01", true)]
+        [InlineData("2018-11-02", "tt_9972", "TT_9972", "2018-11-02", true)]
+        [InlineData("2018-11-02", "tt_9972", "tt_9972", "2018-11-02", true)]
+        [InlineData("2018-09-02", "TT_9973", "tt_9972", null, false)]
+        [InlineData("2018-09-02", "tt_9972", "TT_9973", null, false)]
+        [InlineData("2018-09-02", "tt_9973", "tt_9972", null, false)]
+        [InlineData("2018-09-02", "tt_9972", "tt_9973", null, false)]
+        public void HasQualifyingEligibilityMeetsExpectation(string learnStartDateString, string elCode, string pcCode, string termination, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -449,7 +450,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             DateTime learnStartDate = DateTime.Parse(learnStartDateString);
             DateTime effectiveFrom = new DateTime(2018, 09, 01);
             DateTime effectiveTo = new DateTime(2018, 11, 01);
-
+            DateTime? terminationDate = string.IsNullOrEmpty(termination) ? (DateTime?)null : DateTime.Parse(termination);
             var postcode = new Mock<IONSPostcode>();
             postcode
                 .SetupGet(x => x.LocalAuthority)
@@ -460,6 +461,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             postcode
                 .SetupGet(x => x.EffectiveTo)
                 .Returns(effectiveTo);
+            postcode
+                .SetupGet(x => x.Termination)
+                .Returns(terminationDate);
             var authority = new Mock<IEsfEligibilityRuleLocalAuthority>();
             authority
                 .SetupGet(x => x.Code)
@@ -528,13 +532,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
+        /// <param name="termination">The termination date.</param>
         /// <param name="startDate">The start date.</param>
         /// <param name="from">From.</param>
         /// <param name="to">To.</param>
         [Theory]
-        [InlineData("2016-04-01", "2016-02-28", "2016-03-10")]
-        [InlineData("2016-01-01", "2016-02-01", null)]
-        public void InvalidItemRaisesValidationMessage(string startDate, string from, string to)
+        [InlineData("2016-04-01", "2016-02-28", "2016-03-10", "2016-04-01")]
+        [InlineData("2016-01-01", "2016-02-01", null, "2016-01-01")]
+        [InlineData("2016-01-01", "2016-02-01", null, null)]
+        public void InvalidItemRaisesValidationMessage(string startDate, string from, string to, string termination)
         {
             // arrange
             const string learnRefNumber = "123456789X";
@@ -545,6 +551,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             const int testFunding = 70; // TypeOfFunding.EuropeanSocialFund
 
             var learnStart = DateTime.Parse(startDate);
+            DateTime? terminationDate = string.IsNullOrEmpty(termination) ? (DateTime?)null : DateTime.Parse(termination);
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.FundModel)
@@ -576,6 +583,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             postcode
                 .SetupGet(x => x.EffectiveTo)
                 .Returns(toDate);
+            postcode
+                .SetupGet(x => x.Termination)
+                .Returns(terminationDate);
 
             var postcodes = new List<IONSPostcode>()
             {
@@ -657,15 +667,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         /// <summary>
         /// Valid item does not raise a validation message.
         /// </summary>
+        /// <param name="termination">The termination date.</param>
         /// <param name="startDate">The start date.</param>
         /// <param name="from">From.</param>
         /// <param name="to">To.</param>
         [Theory]
-        [InlineData("2016-02-28", "2016-02-28", "2016-03-01")]
-        [InlineData("2016-02-28", "2016-02-27", "2016-03-01")]
-        [InlineData("2016-02-28", "2016-02-28", null)]
-        [InlineData("2016-02-28", "2016-02-27", null)]
-        public void ValidItemDoesNotRaiseAValidationMessage(string startDate, string from, string to)
+        [InlineData("2016-02-28", "2016-02-28", "2016-03-01", "2016-03-26")]
+        [InlineData("2016-02-28", "2016-02-27", "2016-03-01", "2016-03-26")]
+        [InlineData("2016-02-28", "2016-02-28", null, "2016-03-26")]
+        [InlineData("2016-02-28", "2016-02-27", null, "2016-03-26")]
+        [InlineData("2016-02-28", "2016-02-28", null, null)]
+        [InlineData("2016-02-28", "2016-02-27", null, null)]
+        public void ValidItemDoesNotRaiseAValidationMessage(string startDate, string from, string to, string termination)
         {
             // arrange
             const string learnRefNumber = "123456789X";
@@ -676,6 +689,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             const int testFunding = 70; // TypeOfFunding.EuropeanSocialFund
 
             var learnStart = DateTime.Parse(startDate);
+            DateTime? terminationDate = string.IsNullOrEmpty(termination) ? (DateTime?)null : DateTime.Parse(termination);
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.FundModel)
@@ -707,6 +721,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             postcode
                 .SetupGet(x => x.EffectiveTo)
                 .Returns(toDate);
+            postcode
+                .SetupGet(x => x.Termination)
+                .Returns(terminationDate);
 
             var postcodes = new List<IONSPostcode>()
             {
