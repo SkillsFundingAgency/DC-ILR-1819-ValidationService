@@ -15,8 +15,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
     public class DerivedData_11Rule :
         IDerivedData_11Rule
     {
+        /// <summary>
+        /// The check (common operations provider)
+        /// </summary>
         private readonly IProvideRuleCommonOperations _check;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DerivedData_11Rule"/> class.
+        /// </summary>
+        /// <param name="commonOps">The common ops.</param>
         public DerivedData_11Rule(IProvideRuleCommonOperations commonOps)
         {
             It.IsNull(commonOps)
