@@ -26,16 +26,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         }
 
         /// <summary>
-        /// Determines whether [is adult skills] [the specified delivery].
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is adult skills] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsAdultSkills(ILearningDelivery delivery) =>
-            delivery.FundModel == TypeOfFunding.AdultSkills;
-
-        /// <summary>
         /// In receipt of benefits.
         /// </summary>
         /// <param name="learnerEmploymentStatus">The learner employment status.</param>
@@ -46,9 +36,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         public bool InReceiptOfBenefits(IReadOnlyCollection<ILearnerEmploymentStatus> learnerEmploymentStatus, DateTime startDate)
         {
             var candidate = _check.GetEmploymentStatusOn(startDate, learnerEmploymentStatus);
-            var esms = candidate?.EmploymentStatusMonitorings;
 
-            return esms.SafeAny(InReceiptOfBenefits);
+            return InReceiptOfBenefits(candidate?.EmploymentStatusMonitorings);
+        }
+
+        /// <summary>
+        /// In receipt of benefits.
+        /// </summary>
+        /// <param name="monitors">The monitors.</param>
+        /// <returns>if any item in the set matches the required criteria</returns>
+        public bool InReceiptOfBenefits(IReadOnlyCollection<IEmploymentStatusMonitoring> monitors)
+        {
+            return monitors.SafeAny(InReceiptOfBenefits);
         }
 
         /// <summary>
@@ -88,7 +87,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                         otherwise set to N
              */
 
-            return IsAdultSkills(delivery)
+            return _check.HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
                 && InReceiptOfBenefits(learnerEmployments, delivery.LearnStartDate);
         }
     }
