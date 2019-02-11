@@ -50,6 +50,82 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         /// <summary>
+        /// Is advanced learner loan meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoan, true)]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.ApprenticeshipContract, false)]
+        [InlineData(Monitoring.Delivery.Types.CommunityLearningProvision, false)]
+        [InlineData(Monitoring.Delivery.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.FamilyEnglishMathsAndLanguage, false)]
+        [InlineData(Monitoring.Delivery.Types.FullOrCoFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.HEMonitoring, false)]
+        [InlineData(Monitoring.Delivery.Types.HouseholdSituation, false)]
+        [InlineData(Monitoring.Delivery.Types.Learning, false)]
+        [InlineData(Monitoring.Delivery.Types.LearningSupportFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.NationalSkillsAcademy, false)]
+        [InlineData(Monitoring.Delivery.Types.PercentageOfOnlineDelivery, false)]
+        [InlineData(Monitoring.Delivery.Types.Restart, false)]
+        [InlineData(Monitoring.Delivery.Types.SourceOfFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.WorkProgrammeParticipation, false)]
+        public void IsAdvancedLearnerLoanMeetsExpectation(string candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewService();
+            var mockDelivery = new Mock<ILearningDeliveryFAM>();
+            mockDelivery
+                .SetupGet(y => y.LearnDelFAMType)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsAdvancedLearnerLoan(mockDelivery.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
+        /// Is loans bursary meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoan, false)]
+        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, true)]
+        [InlineData(Monitoring.Delivery.Types.ApprenticeshipContract, false)]
+        [InlineData(Monitoring.Delivery.Types.CommunityLearningProvision, false)]
+        [InlineData(Monitoring.Delivery.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.FamilyEnglishMathsAndLanguage, false)]
+        [InlineData(Monitoring.Delivery.Types.FullOrCoFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.HEMonitoring, false)]
+        [InlineData(Monitoring.Delivery.Types.HouseholdSituation, false)]
+        [InlineData(Monitoring.Delivery.Types.Learning, false)]
+        [InlineData(Monitoring.Delivery.Types.LearningSupportFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.NationalSkillsAcademy, false)]
+        [InlineData(Monitoring.Delivery.Types.PercentageOfOnlineDelivery, false)]
+        [InlineData(Monitoring.Delivery.Types.Restart, false)]
+        [InlineData(Monitoring.Delivery.Types.SourceOfFunding, false)]
+        [InlineData(Monitoring.Delivery.Types.WorkProgrammeParticipation, false)]
+        public void IsLoansBursaryMeetsExpectation(string candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewService();
+            var mockDelivery = new Mock<ILearningDeliveryFAM>();
+            mockDelivery
+                .SetupGet(y => y.LearnDelFAMType)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsLoansBursary(mockDelivery.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        /// <summary>
         /// Is learner in custody meets expectation
         /// </summary>
         /// <param name="candidate">The candidate.</param>
@@ -209,6 +285,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
 
             // act
             var result = sut.InAProgramme(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        [Theory]
+        [InlineData(TypeOfAim.AimNotPartOfAProgramme, false)]
+        [InlineData(TypeOfAim.ComponentAimInAProgramme, true)]
+        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships, false)]
+        [InlineData(TypeOfAim.ProgrammeAim, false)]
+        public void IsComponentOfAProgramMeetsExpectation(int candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewService();
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.AimType)
+                .Returns(candidate);
+
+            // act
+            var result = sut.IsComponentOfAProgram(mockDelivery.Object);
 
             // assert
             Assert.Equal(expectation, result);

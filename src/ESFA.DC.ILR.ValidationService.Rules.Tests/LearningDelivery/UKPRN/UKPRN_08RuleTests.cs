@@ -204,44 +204,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         }
 
         /// <summary>
-        /// Is loans bursory meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoan, false)]
-        [InlineData(Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding, true)]
-        [InlineData(Monitoring.Delivery.Types.ApprenticeshipContract, false)]
-        [InlineData(Monitoring.Delivery.Types.CommunityLearningProvision, false)]
-        [InlineData(Monitoring.Delivery.Types.EligibilityForEnhancedApprenticeshipFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.FamilyEnglishMathsAndLanguage, false)]
-        [InlineData(Monitoring.Delivery.Types.FullOrCoFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.HEMonitoring, false)]
-        [InlineData(Monitoring.Delivery.Types.HouseholdSituation, false)]
-        [InlineData(Monitoring.Delivery.Types.Learning, false)]
-        [InlineData(Monitoring.Delivery.Types.LearningSupportFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.NationalSkillsAcademy, false)]
-        [InlineData(Monitoring.Delivery.Types.PercentageOfOnlineDelivery, false)]
-        [InlineData(Monitoring.Delivery.Types.Restart, false)]
-        [InlineData(Monitoring.Delivery.Types.SourceOfFunding, false)]
-        [InlineData(Monitoring.Delivery.Types.WorkProgrammeParticipation, false)]
-        public void IsLoansBursaryMeetsExpectation(string candidate, bool expectation)
-        {
-            // arrange
-            var sut = NewRule();
-            var mockDelivery = new Mock<ILearningDeliveryFAM>();
-            mockDelivery
-                .SetupGet(y => y.LearnDelFAMType)
-                .Returns(candidate);
-
-            // act
-            var result = sut.IsLoansBursary(mockDelivery.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-        }
-
-        /// <summary>
         /// Has qualifying provider identifier meets expectation
         /// </summary>
         /// <param name="provider">The provider.</param>
@@ -401,7 +363,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             commonOps
-                .Setup(x => x.CheckDeliveryFAMs(delivery.Object, It.IsAny<Func<ILearningDeliveryFAM, bool>>()))
+                .Setup(x => x.IsLoansBursary(delivery.Object))
                 .Returns(true);
 
             var allocation = new Mock<IFcsContractAllocation>();
@@ -483,7 +445,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
 
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             commonOps
-                .Setup(x => x.CheckDeliveryFAMs(delivery.Object, It.IsAny<Func<ILearningDeliveryFAM, bool>>()))
+                .Setup(x => x.IsLoansBursary(delivery.Object))
                 .Returns(true);
 
             var allocation = new Mock<IFcsContractAllocation>();

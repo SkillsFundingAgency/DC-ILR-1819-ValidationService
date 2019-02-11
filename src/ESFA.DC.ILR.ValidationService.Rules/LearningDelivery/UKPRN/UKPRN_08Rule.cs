@@ -99,26 +99,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
                 && thisDelivery.LearnActEndDateNullable < GetCurrentAcademicYearCommencementDate();
 
         /// <summary>
-        /// Determines whether [is loans bursory] [the specified monitor].
-        /// </summary>
-        /// <param name="monitor">The monitor.</param>
-        /// <returns>
-        ///   <c>true</c> if [is loans bursory] [the specified monitor]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsLoansBursary(ILearningDeliveryFAM monitor) =>
-            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding);
-
-        /// <summary>
-        /// Determines whether [is loans bursory] [this delivery].
-        /// </summary>
-        /// <param name="thisDelivery">this delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is loans bursory] [this delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsLoansBursary(ILearningDelivery thisDelivery) =>
-            _check.CheckDeliveryFAMs(thisDelivery, IsLoansBursary);
-
-        /// <summary>
         /// Determines whether [has qualifying provider identifier] [the specified allocation].
         /// </summary>
         /// <param name="allocation">The allocation.</param>
@@ -168,7 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         public bool IsNotValid(ILearningDelivery thisDelivery)
         {
             return !IsExcluded(thisDelivery)
-                && IsLoansBursary(thisDelivery)
+                && _check.IsLoansBursary(thisDelivery)
                 && !HasFundingRelationship(thisDelivery);
         }
 

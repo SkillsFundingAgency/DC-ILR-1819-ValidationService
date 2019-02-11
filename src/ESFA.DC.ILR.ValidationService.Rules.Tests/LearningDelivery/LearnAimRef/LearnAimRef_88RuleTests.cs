@@ -2,8 +2,8 @@
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
@@ -21,12 +21,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_88Rule(null, service.Object, derivedData07.Object, derivedData11.Object));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_88Rule(null, provider.Object, service.Object));
+        }
+
+        /// <summary>
+        /// New rule with null common operations throws.
+        /// </summary>
+        [Fact]
+        public void NewRuleWithNullCommonOperationsThrows()
+        {
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_88Rule(handler.Object, null, service.Object));
         }
 
         /// <summary>
@@ -37,41 +50,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         {
             // arrange
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_88Rule(handler.Object, null, derivedData07.Object, derivedData11.Object));
-        }
-
-        /// <summary>
-        /// New rule with null derived data 07 throws.
-        /// </summary>
-        [Fact]
-        public void NewRuleWithNullDerivedData07Throws()
-        {
-            // arrange
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
-
-            // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_88Rule(handler.Object, service.Object, null, derivedData11.Object));
-        }
-
-        /// <summary>
-        /// New rule with null derived data 11 throws.
-        /// </summary>
-        [Fact]
-        public void NewRuleWithNullDerivedData11Throws()
-        {
-            // arrange
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-
-            // act / assert
-            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_88Rule(handler.Object, service.Object, derivedData07.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new LearnAimRef_88Rule(handler.Object, provider.Object, null));
         }
 
         /// <summary>
@@ -103,7 +85,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(sut.GetName(), result);
+            Assert.Equal(RuleNameConstants.LearnAimRef_88, result);
         }
 
         /// <summary>
@@ -276,24 +258,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
             var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
             larsValidities.Add(mockValidity.Object);
 
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
-
-            var sut = new LearnAimRef_88Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object);
+            var sut = new LearnAimRef_88Rule(handler.Object, provider.Object, service.Object);
 
             // act
             var result = sut.HasValidLearningAim(mockDelivery.Object, category);
 
             // assert
             handler.VerifyAll();
+            provider.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
-            derivedData11.VerifyAll();
 
             Assert.Equal(expectation, result);
         }
@@ -304,25 +284,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="candidate">The candidate.</param>
         /// <param name="startDate">The start date.</param>
         /// <param name="endDate">The end date.</param>
-        /// <param name="funding">The funding.</param>
         /// <param name="category">The category.</param>
         [Theory]
-        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
-        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
-        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
-        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
-        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
-        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
-        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
-        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
-        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
-        public void InvalidItemRaisesValidationMessage(string candidate, string startDate, string endDate, int funding, string category)
+        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfLARSValidity.EFA16To19)]
+        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfLARSValidity.EFA16To19)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfLARSValidity.EFA16To19)]
+        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfLARSValidity.AdvancedLearnerLoan)]
+        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfLARSValidity.AdvancedLearnerLoan)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfLARSValidity.AdvancedLearnerLoan)]
+        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfLARSValidity.CommunityLearning)]
+        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfLARSValidity.CommunityLearning)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfLARSValidity.CommunityLearning)]
+        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfLARSValidity.Any)]
+        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfLARSValidity.Any)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfLARSValidity.Any)]
+        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfLARSValidity.Apprenticeships)]
+        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfLARSValidity.Apprenticeships)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfLARSValidity.Apprenticeships)]
+        [InlineData("2014-04-01", "2015-05-09", "2016-07-15", TypeOfLARSValidity.Unemployed)]
+        [InlineData("2011-09-01", "2016-07-14", "2016-07-15", TypeOfLARSValidity.Unemployed)]
+        [InlineData("2013-07-16", "2015-05-09", "2015-07-15", TypeOfLARSValidity.Unemployed)]
+        public void InvalidItemRaisesValidationMessage(string candidate, string startDate, string endDate, string category)
         {
             // arrange
             const string learnRefNumber = "123456789X";
@@ -333,17 +315,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(y => y.LearnAimRef)
                 .Returns(learnAimRef);
             mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ComponentAimInAProgramme);
-            mockDelivery
                 .SetupGet(y => y.LearnStartDate)
                 .Returns(DateTime.Parse(candidate));
-            mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(funding);
 
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
+            var deliveries = new ILearningDelivery[] { mockDelivery.Object };
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -351,20 +326,26 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(learnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
-                .Returns(deliveries.AsSafeReadOnlyList());
+                .Returns(deliveries);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == LearnAimRef_88Rule.Name),
-                    Moq.It.Is<string>(y => y == learnRefNumber),
-                    0,
-                    Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+                .Setup(x => x.Handle("LearnAimRef_88", learnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == LearnAimRefRuleBase.MessagePropertyName),
-                    learnAimRef))
+                .Setup(x => x.BuildErrorMessageParameter("LearnAimRef", learnAimRef))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            var mockResult = new Mock<IBranchResult>();
+            mockResult
+                .SetupGet(x => x.OutOfScope)
+                .Returns(false);
+            mockResult
+                .SetupGet(x => x.Category)
+                .Returns(category);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.GetBranchingResultFor(mockDelivery.Object, mockLearner.Object))
+                .Returns(mockResult.Object);
 
             var mockValidity = new Mock<ILARSLearningDeliveryValidity>(MockBehavior.Strict);
             mockValidity
@@ -380,27 +361,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(x => x.LastNewStartDate)
                 .Returns((DateTime?)null);
 
-            var larsValidities = Collection.Empty<ILARSLearningDeliveryValidity>();
-            larsValidities.Add(mockValidity.Object);
+            var larsValidities = new ILARSLearningDeliveryValidity[]
+            {
+                mockValidity.Object
+            };
 
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
             service
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
-                .Returns(larsValidities.AsSafeReadOnlyList());
+                .Returns(larsValidities);
 
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
-
-            var sut = new LearnAimRef_88Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object);
+            var sut = new LearnAimRef_88Rule(handler.Object, provider.Object, service.Object);
 
             // act
             sut.Validate(mockLearner.Object);
 
             // assert
             handler.VerifyAll();
+            provider.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
-            derivedData11.VerifyAll();
         }
 
         /// <summary>
@@ -409,25 +388,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         /// <param name="candidate">The candidate.</param>
         /// <param name="startDate">The start date.</param>
         /// <param name="endDate">The end date.</param>
-        /// <param name="funding">The funding.</param>
         /// <param name="category">The category.</param>
         [Theory]
-        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfFunding.Other16To19, TypeOfLARSValidity.EFA16To19)]
-        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
-        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
-        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfFunding.CommunityLearning, TypeOfLARSValidity.CommunityLearning)]
-        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
-        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
-        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfFunding.NotFundedByESFA, TypeOfLARSValidity.Any)]
-        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
-        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
-        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfFunding.OtherAdult, TypeOfLARSValidity.Any)]
-        public void ValidItemDoesNotRaiseValidationMessage(string candidate, string startDate, string endDate, int funding, string category)
+        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfLARSValidity.EFA16To19)]
+        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfLARSValidity.EFA16To19)]
+        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfLARSValidity.EFA16To19)]
+        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfLARSValidity.AdvancedLearnerLoan)]
+        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfLARSValidity.AdvancedLearnerLoan)]
+        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfLARSValidity.AdvancedLearnerLoan)]
+        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfLARSValidity.CommunityLearning)]
+        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfLARSValidity.CommunityLearning)]
+        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfLARSValidity.CommunityLearning)]
+        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfLARSValidity.Any)]
+        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfLARSValidity.Any)]
+        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfLARSValidity.Any)]
+        [InlineData("2014-04-01", "2012-05-09", "2016-07-15", TypeOfLARSValidity.Unemployed)]
+        [InlineData("2014-04-01", "2012-05-09", "2015-11-10", TypeOfLARSValidity.Unemployed)]
+        [InlineData("2014-04-01", "2012-05-09", "2014-09-07", TypeOfLARSValidity.Unemployed)]
+        public void ValidItemDoesNotRaiseValidationMessage(string candidate, string startDate, string endDate, string category)
         {
             // arrange
             const string learnRefNumber = "123456789X";
@@ -438,17 +416,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .SetupGet(y => y.LearnAimRef)
                 .Returns(learnAimRef);
             mockDelivery
-                .SetupGet(y => y.AimType)
-                .Returns(TypeOfAim.ComponentAimInAProgramme);
-            mockDelivery
                 .SetupGet(y => y.LearnStartDate)
                 .Returns(DateTime.Parse(candidate));
-            mockDelivery
-                .SetupGet(y => y.FundModel)
-                .Returns(funding);
 
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            deliveries.Add(mockDelivery.Object);
+            var deliveries = new ILearningDelivery[] { mockDelivery.Object };
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -456,9 +427,21 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Returns(learnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
-                .Returns(deliveries.AsSafeReadOnlyList());
+                .Returns(deliveries);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var mockResult = new Mock<IBranchResult>();
+            mockResult
+                .SetupGet(x => x.OutOfScope)
+                .Returns(false);
+            mockResult
+                .SetupGet(x => x.Category)
+                .Returns(category);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
+            provider
+                .Setup(x => x.GetBranchingResultFor(mockDelivery.Object, mockLearner.Object))
+                .Returns(mockResult.Object);
 
             var mockValidity = new Mock<ILARSLearningDeliveryValidity>(MockBehavior.Strict);
             mockValidity
@@ -482,19 +465,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
                 .Setup(x => x.GetValiditiesFor(learnAimRef))
                 .Returns(larsValidities.AsSafeReadOnlyList());
 
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
-
-            var sut = new LearnAimRef_88Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object);
+            var sut = new LearnAimRef_88Rule(handler.Object, provider.Object, service.Object);
 
             // act
             sut.Validate(mockLearner.Object);
 
             // assert
             handler.VerifyAll();
+            provider.VerifyAll();
             service.VerifyAll();
-            derivedData07.VerifyAll();
-            derivedData11.VerifyAll();
         }
 
         /// <summary>
@@ -504,11 +483,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnAimRef
         public LearnAimRef_88Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var provider = new Mock<IProvideLearnAimRefRuleActions>(MockBehavior.Strict);
             var service = new Mock<ILARSDataService>(MockBehavior.Strict);
-            var derivedData07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
-            var derivedData11 = new Mock<IDerivedData_11Rule>(MockBehavior.Strict);
 
-            return new LearnAimRef_88Rule(handler.Object, service.Object, derivedData07.Object, derivedData11.Object);
+            return new LearnAimRef_88Rule(handler.Object, provider.Object, service.Object);
         }
     }
 }

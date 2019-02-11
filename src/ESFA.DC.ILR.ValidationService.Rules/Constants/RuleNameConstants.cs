@@ -229,6 +229,13 @@
         public const string LearnAimRef_72 = "LearnAimRef_72";
         public const string LearnAimRef_73 = "LearnAimRef_73";
         public const string LearnAimRef_80 = "LearnAimRef_80";
+        public const string LearnAimRef_81 = "LearnAimRef_81";
+        public const string LearnAimRef_84 = "LearnAimRef_84";
+        public const string LearnAimRef_85 = "LearnAimRef_85";
+        public const string LearnAimRef_86 = "LearnAimRef_86";
+        public const string LearnAimRef_87 = "LearnAimRef_87";
+        public const string LearnAimRef_88 = "LearnAimRef_88";
+        public const string LearnAimRef_89 = "LearnAimRef_89";
 
         public const string LearnDelFAMDateFrom_01 = "LearnDelFAMDateFrom_01";
         public const string LearnDelFAMDateFrom_02 = "LearnDelFAMDateFrom_02";

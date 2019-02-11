@@ -1,10 +1,10 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 {
@@ -16,30 +16,45 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
         IDerivedData_11Rule
     {
         /// <summary>
-        /// Determines whether [is adult skills] [the specified delivery].
+        /// The check (common operations provider)
         /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>
-        ///   <c>true</c> if [is adult skills] [the specified delivery]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsAdultSkills(ILearningDelivery delivery) =>
-            delivery.FundModel == TypeOfFunding.AdultSkills;
+        private readonly IProvideRuleCommonOperations _check;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DerivedData_11Rule"/> class.
+        /// </summary>
+        /// <param name="commonOps">The common ops.</param>
+        public DerivedData_11Rule(IProvideRuleCommonOperations commonOps)
+        {
+            It.IsNull(commonOps)
+                .AsGuard<ArgumentNullException>(nameof(commonOps));
+
+            _check = commonOps;
+        }
 
         /// <summary>
         /// In receipt of benefits.
         /// </summary>
         /// <param name="learnerEmploymentStatus">The learner employment status.</param>
-        /// <param name="delivery">The delivery.</param>
-        /// <returns>true, if on state benefits at start of learning aim</returns>
-        public bool InReceiptOfBenefits(IReadOnlyCollection<ILearnerEmploymentStatus> learnerEmploymentStatus, ILearningDelivery delivery)
+        /// <param name="startDate">The start date.</param>
+        /// <returns>
+        /// true, if on state benefits at start of learning aim
+        /// </returns>
+        public bool InReceiptOfBenefits(IReadOnlyCollection<ILearnerEmploymentStatus> learnerEmploymentStatus, DateTime startDate)
         {
-            var candidate = learnerEmploymentStatus
-                    .Where(x => x.DateEmpStatApp <= delivery.LearnStartDate)
-                    .OrderByDescending(x => x.DateEmpStatApp)
-                    .FirstOrDefault();
+            var candidate = _check.GetEmploymentStatusOn(startDate, learnerEmploymentStatus);
 
-            var esms = candidate?.EmploymentStatusMonitorings.AsSafeReadOnlyList();
-            return esms.SafeAny(InReceiptOfBenefits);
+            return InReceiptOfBenefits(candidate?.EmploymentStatusMonitorings);
+        }
+
+        /// <summary>
+        /// In receipt of benefits.
+        /// </summary>
+        /// <param name="monitors">The monitors.</param>
+        /// <returns>if any item in the set matches the required criteria</returns>
+        public bool InReceiptOfBenefits(IReadOnlyCollection<IEmploymentStatusMonitoring> monitors)
+        {
+            return monitors.SafeAny(InReceiptOfBenefits);
         }
 
         /// <summary>
@@ -79,8 +94,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
                         otherwise set to N
              */
 
-            return IsAdultSkills(delivery)
-                && InReceiptOfBenefits(learnerEmployments, delivery);
+            return _check.HasQualifyingFunding(delivery, TypeOfFunding.AdultSkills)
+                && InReceiptOfBenefits(learnerEmployments, delivery.LearnStartDate);
         }
     }
 }

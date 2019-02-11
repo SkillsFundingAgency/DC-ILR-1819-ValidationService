@@ -27,6 +27,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         bool IsRestart(ILearningDelivery delivery);
 
         /// <summary>
+        /// Determines whether [is advanced learner loan] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is advanced learner loan] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsAdvancedLearnerLoan(ILearningDelivery delivery);
+
+        /// <summary>
+        /// Determines whether [is loans bursary] [this delivery].
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is loans bursary] [this delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsLoansBursary(ILearningDelivery thisDelivery);
+
+        /// <summary>
         /// Determines whether the specified learning delivery is a learner in custody
         /// </summary>
         /// <param name="delivery">The delivery.</param>
@@ -70,6 +88,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         ///   <c>true</c> if [in a programme] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         bool InAProgramme(ILearningDelivery delivery);
+
+        /// <summary>
+        /// Determines whether [is component of a program] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is component of a program] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsComponentOfAProgram(ILearningDelivery delivery);
 
         /// <summary>
         /// Determines whether the specified delivery is traineeship.

@@ -2,7 +2,8 @@
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Linq;
@@ -17,25 +18,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         LearnAimRefRuleBase
     {
         /// <summary>
-        /// The (rule) name
-        /// </summary>
-        public const string Name = "LearnAimRef_89";
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="LearnAimRef_89Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
+        /// <param name="provider">The action result provider.</param>
         /// <param name="larsData">The lars data.</param>
-        /// <param name="derivedData07">The derived data 07 (rule).</param>
-        /// <param name="derivedData11">The derived data 11 (rule).</param>
         /// <param name="yearService">The year service.</param>
         public LearnAimRef_89Rule(
             IValidationErrorHandler validationErrorHandler,
+            IProvideLearnAimRefRuleActions provider,
             ILARSDataService larsData,
-            IDerivedData_07Rule derivedData07,
-            IDerivedData_11Rule derivedData11,
             IAcademicYearDataService yearService)
-                : base(validationErrorHandler, larsData, derivedData07, derivedData11)
+                : base(validationErrorHandler, provider, larsData, RuleNameConstants.LearnAimRef_89)
         {
             It.IsNull(yearService)
                 .AsGuard<ArgumentNullException>(nameof(yearService));
@@ -79,17 +73,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         }
 
         /// <summary>
-        /// Gets the (rule) name.
-        /// </summary>
-        /// <returns>
-        /// the rule name
-        /// </returns>
-        public override string GetName()
-        {
-            return Name;
-        }
-
-        /// <summary>
         /// Passes the (rule) conditions.
         /// </summary>
         /// <param name="delivery">The delivery.</param>
@@ -97,7 +80,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
         /// <returns>
         /// true if it does...
         /// </returns>
-        public override bool PassesConditions(ILearningDelivery delivery, BranchResult branch)
+        public override bool PassesConditions(ILearningDelivery delivery, IBranchResult branch)
         {
             /*
             Where the learning aim validity criteria has been met in Table 1,

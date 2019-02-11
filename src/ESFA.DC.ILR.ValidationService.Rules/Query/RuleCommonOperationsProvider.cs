@@ -64,6 +64,46 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             CheckDeliveryFAMs(delivery, IsRestart);
 
         /// <summary>
+        /// Determines whether [is advanced learner loan] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is advanced learner loan] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsAdvancedLearnerLoan(ILearningDeliveryFAM monitor) =>
+            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.AdvancedLearnerLoan);
+
+        /// <summary>
+        /// Determines whether [is advanced learner loan] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is advanced learner loan] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsAdvancedLearnerLoan(ILearningDelivery delivery) =>
+            CheckDeliveryFAMs(delivery, IsAdvancedLearnerLoan);
+
+        /// <summary>
+        /// Determines whether [is loans bursary] [the specified monitor].
+        /// </summary>
+        /// <param name="monitor">The monitor.</param>
+        /// <returns>
+        ///   <c>true</c> if [is loans bursary] [the specified monitor]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsLoansBursary(ILearningDeliveryFAM monitor) =>
+            It.IsInRange(monitor.LearnDelFAMType, Monitoring.Delivery.Types.AdvancedLearnerLoansBursaryFunding);
+
+        /// <summary>
+        /// Determines whether [is loans bursary] [this delivery].
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is loans bursary] [this delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsLoansBursary(ILearningDelivery thisDelivery) =>
+            CheckDeliveryFAMs(thisDelivery, IsLoansBursary);
+
+        /// <summary>
         /// Determines whether [is learner in custody] [the specified monitor].
         /// </summary>
         /// <param name="monitor">The monitor.</param>
@@ -142,6 +182,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         /// </returns>
         public bool InAProgramme(ILearningDelivery delivery) =>
             It.IsInRange(delivery.AimType, TypeOfAim.ProgrammeAim);
+
+        /// <summary>
+        /// Determines whether [is component of a program] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is component of a program] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsComponentOfAProgram(ILearningDelivery delivery) =>
+            It.IsInRange(delivery.AimType, TypeOfAim.ComponentAimInAProgramme);
 
         /// <summary>
         /// Determines whether the specified delivery is traineeship.
