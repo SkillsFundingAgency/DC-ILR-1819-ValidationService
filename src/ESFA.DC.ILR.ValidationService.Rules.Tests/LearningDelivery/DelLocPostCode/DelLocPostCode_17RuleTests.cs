@@ -352,15 +352,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
             postcodes
-                .Setup(x => x.GetONSPostcode(candidate))
-                .Returns(new Mock<IONSPostcode>().Object);
+                .Setup(x => x.GetONSPostcodes(candidate))
+                .Returns(new[] { new Mock<IONSPostcode>().Object });
 
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
 
             var sut = new DelLocPostCode_17Rule(handler.Object, common.Object, fcsData.Object, postcodes.Object, ddRule22.Object);
 
             // act
-            var result = sut.GetONSPostcode(delivery.Object);
+            var result = sut.GetONSPostcodes(delivery.Object);
 
             // assert
             handler.VerifyAll();
@@ -369,7 +369,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             postcodes.VerifyAll();
             ddRule22.VerifyAll();
 
-            Assert.IsAssignableFrom<IONSPostcode>(result);
+            Assert.IsAssignableFrom<IONSPostcode[]>(result);
         }
 
         /// <summary>
@@ -380,9 +380,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         {
             // arrange
             var sut = NewRule();
+            var delivery = new Mock<ILearningDelivery>();
+            delivery
+                .SetupGet(x => x.LearnStartDate)
+                .Returns(new DateTime(2018, 09, 01));
 
             // act
-            var result = sut.HasQualifyingEligibility(null, Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalAuthority>());
+            var result = sut.HasQualifyingEligibility(delivery.Object, null, Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalAuthority>());
 
             // assert
             Assert.False(result);
@@ -398,7 +402,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var sut = NewRule();
 
             // act
-            var result = sut.HasQualifyingEligibility(new Mock<IONSPostcode>().Object, null);
+            var result = sut.HasQualifyingEligibility(new Mock<ILearningDelivery>().Object, new[] { new Mock<IONSPostcode>().Object }, null);
+
+            // assert
+            Assert.False(result);
+        }
+
+        /// <summary>
+        /// Has qualifying eligibility meets null learningdelivery expectation
+        /// </summary>
+        [Fact]
+        public void HasQualifyingEligibilityMeetsNullLearningDeliveryExpectation()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.HasQualifyingEligibility(null, new[] { new Mock<IONSPostcode>().Object }, Collection.EmptyAndReadOnly<IEsfEligibilityRuleLocalAuthority>());
 
             // assert
             Assert.False(result);
@@ -407,35 +427,53 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         /// <summary>
         /// Has qualifying eligibility meets expectation
         /// </summary>
+        /// <param name="learnStartDateString">The learn start date.</param>
         /// <param name="elCode">The el authority.</param>
         /// <param name="pcCode">The pc authority.</param>
+        /// <param name="termination">The termination date.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData("ESF0002", "tt_9972", false)]
-        [InlineData("tt_9972", "ESF0002", false)]
-        [InlineData("TT_9972", "tt_9972", true)]
-        [InlineData("tt_9972", "TT_9972", true)]
-        [InlineData("tt_9972", "tt_9972", true)]
-        [InlineData("TT_9973", "tt_9972", false)]
-        [InlineData("tt_9972", "TT_9973", false)]
-        [InlineData("tt_9973", "tt_9972", false)]
-        [InlineData("tt_9972", "tt_9973", false)]
-        public void HasQualifyingEligibilityMeetsExpectation(string elCode, string pcCode, bool expectation)
+        [InlineData("2018-10-01", "ESF0002", "tt_9972", "2018-10-02", false)]
+        [InlineData("2019-10-01", "tt_9972", "ESF0002", "2018-10-02", false)]
+        [InlineData("2018-08-01", "TT_9972", "tt_9972", "2018-08-01", true)]
+        [InlineData("2018-11-02", "tt_9972", "TT_9972", "2018-11-02", true)]
+        [InlineData("2018-11-02", "tt_9972", "tt_9972", "2018-11-02", true)]
+        [InlineData("2018-09-02", "TT_9973", "tt_9972", null, false)]
+        [InlineData("2018-09-02", "tt_9972", "TT_9973", null, false)]
+        [InlineData("2018-09-02", "tt_9973", "tt_9972", null, false)]
+        [InlineData("2018-09-02", "tt_9972", "tt_9973", null, false)]
+        public void HasQualifyingEligibilityMeetsExpectation(string learnStartDateString, string elCode, string pcCode, string termination, bool expectation)
         {
             // arrange
             var sut = NewRule();
 
+            DateTime learnStartDate = DateTime.Parse(learnStartDateString);
+            DateTime effectiveFrom = new DateTime(2018, 09, 01);
+            DateTime effectiveTo = new DateTime(2018, 11, 01);
+            DateTime? terminationDate = string.IsNullOrEmpty(termination) ? (DateTime?)null : DateTime.Parse(termination);
             var postcode = new Mock<IONSPostcode>();
             postcode
                 .SetupGet(x => x.LocalAuthority)
                 .Returns(pcCode);
+            postcode
+                .SetupGet(x => x.EffectiveFrom)
+                .Returns(effectiveFrom);
+            postcode
+                .SetupGet(x => x.EffectiveTo)
+                .Returns(effectiveTo);
+            postcode
+                .SetupGet(x => x.Termination)
+                .Returns(terminationDate);
             var authority = new Mock<IEsfEligibilityRuleLocalAuthority>();
             authority
                 .SetupGet(x => x.Code)
                 .Returns(elCode);
 
             // act
-            var result = sut.HasQualifyingEligibility(postcode.Object, new[] { authority.Object });
+            var result = sut.HasQualifyingEligibility(
+                new Mock<ILearningDelivery>().Object,
+                new[] { postcode.Object },
+                new[] { authority.Object });
 
             // assert
             Assert.Equal(expectation, result);
@@ -447,15 +485,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         /// <param name="startDate">The start date.</param>
         /// <param name="from">From.</param>
         /// <param name="to">To.</param>
+        /// <param name="termination">Termination.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData("2016-02-28", "2016-03-01", "2016-03-10", false)]
-        [InlineData("2016-02-28", "2016-03-01", null, false)]
-        [InlineData("2016-02-28", "2016-02-28", "2016-03-01", true)]
-        [InlineData("2016-02-28", "2016-02-27", "2016-03-01", true)]
-        [InlineData("2016-02-28", "2016-02-28", null, true)]
-        [InlineData("2016-02-28", "2016-02-27", null, true)]
-        public void InQualifyingPeriodMeetsExpectation(string startDate, string from, string to, bool expectation)
+        [InlineData("2016-02-28", "2016-03-01", "2016-03-10", "2016-03-10", true)]
+        [InlineData("2016-02-28", "2016-03-01", null, "2016-03-10", true)]
+        [InlineData("2016-02-28", "2016-02-28", "2016-03-01", "2016-03-01", false)]
+        [InlineData("2016-02-28", "2016-02-27", "2016-03-01", "2016-03-01", false)]
+        [InlineData("2016-02-28", "2016-02-28", null, "2016-02-28", true)]
+        [InlineData("2016-02-28", "2016-02-27", null, "2016-02-28", true)]
+        public void InQualifyingPeriodMeetsExpectation(string startDate, string from, string to, string termination, bool expectation)
         {
             // arrange
             var sut = NewRule();
@@ -468,6 +507,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             var toDate = string.IsNullOrWhiteSpace(to)
                 ? (DateTime?)null
                 : DateTime.Parse(to);
+            var terminationDate = string.IsNullOrWhiteSpace(termination)
+                ? (DateTime?)null
+                : DateTime.Parse(termination);
 
             var postcode = new Mock<IONSPostcode>();
             postcode
@@ -476,6 +518,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             postcode
                 .SetupGet(x => x.EffectiveTo)
                 .Returns(toDate);
+            postcode
+                .SetupGet(x => x.Termination)
+                .Returns(terminationDate);
 
             // act
             var result = sut.InQualifyingPeriod(mockDelivery.Object, postcode.Object);
@@ -487,13 +532,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
         /// <summary>
         /// Invalid item raises validation message.
         /// </summary>
+        /// <param name="termination">The termination date.</param>
         /// <param name="startDate">The start date.</param>
         /// <param name="from">From.</param>
         /// <param name="to">To.</param>
         [Theory]
-        [InlineData("2016-02-28", "2016-03-01", "2016-03-10")]
-        [InlineData("2016-02-28", "2016-03-01", null)]
-        public void InvalidItemRaisesValidationMessage(string startDate, string from, string to)
+        [InlineData("2016-04-01", "2016-02-28", "2016-03-10", "2016-04-01")]
+        [InlineData("2016-01-01", "2016-02-01", null, "2016-01-01")]
+        [InlineData("2016-01-01", "2016-02-01", null, null)]
+        public void InvalidItemRaisesValidationMessage(string startDate, string from, string to, string termination)
         {
             // arrange
             const string learnRefNumber = "123456789X";
@@ -504,6 +551,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             const int testFunding = 70; // TypeOfFunding.EuropeanSocialFund
 
             var learnStart = DateTime.Parse(startDate);
+            DateTime? terminationDate = string.IsNullOrEmpty(termination) ? (DateTime?)null : DateTime.Parse(termination);
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.FundModel)
@@ -535,6 +583,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             postcode
                 .SetupGet(x => x.EffectiveTo)
                 .Returns(toDate);
+            postcode
+                .SetupGet(x => x.Termination)
+                .Returns(terminationDate);
+
+            var postcodes = new List<IONSPostcode>()
+            {
+                postcode.Object
+            };
 
             var authority = new Mock<IEsfEligibilityRuleLocalAuthority>();
             authority
@@ -585,17 +641,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Setup(x => x.GetEligibilityRuleLocalAuthoritiesFor(conRefNum))
                 .Returns(authorities);
 
-            var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
-            postcodes
-                .Setup(x => x.GetONSPostcode(delLocPC))
-                .Returns(postcode.Object);
+            var postcodesds = new Mock<IPostcodesDataService>(MockBehavior.Strict);
+            postcodesds
+                .Setup(x => x.GetONSPostcodes(delLocPC))
+                .Returns(postcodes);
 
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             ddRule22
                 .Setup(x => x.GetLatestLearningStartForESFContract(mockDelivery.Object, deliveries))
                 .Returns(learnStart);
 
-            var sut = new DelLocPostCode_17Rule(handler.Object, common.Object, fcsData.Object, postcodes.Object, ddRule22.Object);
+            var sut = new DelLocPostCode_17Rule(handler.Object, common.Object, fcsData.Object, postcodesds.Object, ddRule22.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -604,22 +660,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             handler.VerifyAll();
             common.VerifyAll();
             fcsData.VerifyAll();
-            postcodes.VerifyAll();
+            postcodesds.VerifyAll();
             ddRule22.VerifyAll();
         }
 
         /// <summary>
         /// Valid item does not raise a validation message.
         /// </summary>
+        /// <param name="termination">The termination date.</param>
         /// <param name="startDate">The start date.</param>
         /// <param name="from">From.</param>
         /// <param name="to">To.</param>
         [Theory]
-        [InlineData("2016-02-28", "2016-02-28", "2016-03-01")]
-        [InlineData("2016-02-28", "2016-02-27", "2016-03-01")]
-        [InlineData("2016-02-28", "2016-02-28", null)]
-        [InlineData("2016-02-28", "2016-02-27", null)]
-        public void ValidItemDoesNotRaiseAValidationMessage(string startDate, string from, string to)
+        [InlineData("2016-02-28", "2016-02-28", "2016-03-01", "2016-03-26")]
+        [InlineData("2016-02-28", "2016-02-27", "2016-03-01", "2016-03-26")]
+        [InlineData("2016-02-28", "2016-02-28", null, "2016-03-26")]
+        [InlineData("2016-02-28", "2016-02-27", null, "2016-03-26")]
+        [InlineData("2016-02-28", "2016-02-28", null, null)]
+        [InlineData("2016-02-28", "2016-02-27", null, null)]
+        public void ValidItemDoesNotRaiseAValidationMessage(string startDate, string from, string to, string termination)
         {
             // arrange
             const string learnRefNumber = "123456789X";
@@ -630,6 +689,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             const int testFunding = 70; // TypeOfFunding.EuropeanSocialFund
 
             var learnStart = DateTime.Parse(startDate);
+            DateTime? terminationDate = string.IsNullOrEmpty(termination) ? (DateTime?)null : DateTime.Parse(termination);
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.FundModel)
@@ -661,6 +721,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             postcode
                 .SetupGet(x => x.EffectiveTo)
                 .Returns(toDate);
+            postcode
+                .SetupGet(x => x.Termination)
+                .Returns(terminationDate);
+
+            var postcodes = new List<IONSPostcode>()
+            {
+                postcode.Object
+            };
 
             var authority = new Mock<IEsfEligibilityRuleLocalAuthority>();
             authority
@@ -697,17 +765,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Setup(x => x.GetEligibilityRuleLocalAuthoritiesFor(conRefNum))
                 .Returns(authorities);
 
-            var postcodes = new Mock<IPostcodesDataService>(MockBehavior.Strict);
-            postcodes
-                .Setup(x => x.GetONSPostcode(delLocPC))
-                .Returns(postcode.Object);
+            var postcodesds = new Mock<IPostcodesDataService>(MockBehavior.Strict);
+            postcodesds
+                .Setup(x => x.GetONSPostcodes(delLocPC))
+                .Returns(postcodes);
 
             var ddRule22 = new Mock<IDerivedData_22Rule>(MockBehavior.Strict);
             ddRule22
                 .Setup(x => x.GetLatestLearningStartForESFContract(mockDelivery.Object, deliveries))
                 .Returns(learnStart);
 
-            var sut = new DelLocPostCode_17Rule(handler.Object, common.Object, fcsData.Object, postcodes.Object, ddRule22.Object);
+            var sut = new DelLocPostCode_17Rule(handler.Object, common.Object, fcsData.Object, postcodesds.Object, ddRule22.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -716,7 +784,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
             handler.VerifyAll();
             common.VerifyAll();
             fcsData.VerifyAll();
-            postcodes.VerifyAll();
+            postcodesds.VerifyAll();
             ddRule22.VerifyAll();
         }
 

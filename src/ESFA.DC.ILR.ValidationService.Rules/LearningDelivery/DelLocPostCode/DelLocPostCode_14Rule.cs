@@ -61,18 +61,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
                     continue;
                 }
 
-                var onsPostCode = _postcodeService.GetONSPostcode(learningDelivery.DelLocPostCode);
+                var onsPostCode = _postcodeService.GetONSPostcodes(learningDelivery.DelLocPostCode);
+                if ((onsPostCode?.Count ?? 0) == 0)
+                {
+                    continue;
+                }
 
                 DateTime? latestLearningStart =
                     _derivedData22.GetLatestLearningStartForESFContract(learningDelivery, learner.LearningDeliveries);
+                if (!latestLearningStart.HasValue)
+                {
+                    continue;
+                }
 
-                if (onsPostCode == null ||
-                    latestLearningStart == null ||
-                    localAuthorities.All(la => !la.Code.CaseInsensitiveEquals(onsPostCode.LocalAuthority)) ||
-                    localAuthorities.Any(la => la.Code.CaseInsensitiveEquals(onsPostCode.LocalAuthority)
-                                               && (latestLearningStart < onsPostCode.EffectiveFrom
-                                               || latestLearningStart > onsPostCode.EffectiveTo
-                                               || latestLearningStart >= (onsPostCode.Termination ?? DateTime.MaxValue))))
+                if (localAuthorities
+                    .Join(onsPostCode, eli => eli.Code.ToUpper(), pc => pc.LocalAuthority.ToUpper(), (eli, pc) => pc)?
+                    .Any(p => CheckQualifyingPeriod(latestLearningStart, p)) ?? false)
                 {
                     HandleValidationError(
                         learner.LearnRefNumber,
@@ -81,6 +85,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
                 }
             }
         }
+
+        public bool CheckQualifyingPeriod(DateTime? latestLearningStart, IONSPostcode onsPostCode) =>
+            latestLearningStart < onsPostCode.EffectiveFrom
+            || latestLearningStart > (onsPostCode.EffectiveTo ?? DateTime.MaxValue)
+            || latestLearningStart >= (onsPostCode.Termination ?? DateTime.MaxValue);
 
         private IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(ILearningDelivery learningDelivery)
         {

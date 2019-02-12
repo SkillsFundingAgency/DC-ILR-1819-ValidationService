@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface
+﻿using System.Collections.Generic;
+
+namespace ESFA.DC.ILR.ValidationService.Data.External.Postcodes.Interface
 {
     /// <summary>
     /// the postcodes service definition
@@ -16,7 +18,7 @@
         /// Gets the ons postcode.
         /// </summary>
         /// <param name="fromPostcode">From postcode.</param>
-        /// <returns>an ons postcode (if found)</returns>
-        IONSPostcode GetONSPostcode(string fromPostcode);
+        /// <returns>an ons postcodes (if found)</returns>
+        IReadOnlyCollection<IONSPostcode> GetONSPostcodes(string fromPostcode);
     }
 }

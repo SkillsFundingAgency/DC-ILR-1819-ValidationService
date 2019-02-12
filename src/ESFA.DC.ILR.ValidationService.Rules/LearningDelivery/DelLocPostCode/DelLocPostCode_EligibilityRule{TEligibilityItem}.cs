@@ -114,18 +114,27 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>the ons postcode (if found)</returns>
-        public IONSPostcode GetONSPostcode(ILearningDelivery delivery) =>
-            _postcodesData.GetONSPostcode(delivery.DelLocPostCode);
+        //public IONSPostcode GetONSPostcode(ILearningDelivery delivery) =>
+        //    _postcodesData.GetONSPostcode(delivery.DelLocPostCode);
+
+        /// <summary>
+        /// Gets the ons postcode.
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>the ons postcodes (if found)</returns>
+        public IReadOnlyCollection<IONSPostcode> GetONSPostcodes(ILearningDelivery delivery) =>
+            _postcodesData.GetONSPostcodes(delivery.DelLocPostCode);
 
         /// <summary>
         /// Determines whether [has qualifying eligibility] [the specified postcode].
         /// </summary>
+        /// <param name="delivery">The latest learnstartdate delivery.</param>
         /// <param name="postcode">The postcode.</param>
         /// <param name="eligibilities">The eligibilities.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying eligibility] [the specified postcode]; otherwise, <c>false</c>.
         /// </returns>
-        public abstract bool HasQualifyingEligibility(IONSPostcode postcode, IReadOnlyCollection<TEligibilityItem> eligibilities);
+        public abstract bool HasQualifyingEligibility(ILearningDelivery delivery, IReadOnlyCollection<IONSPostcode> postcode, IReadOnlyCollection<TEligibilityItem> eligibilities);
 
         /// <summary>
         /// Determines whether [in qualifying period] [the specified delivery].
@@ -138,7 +147,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         ///   <c>true</c> if [in qualifying period] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool InQualifyingPeriod(ILearningDelivery delivery, IONSPostcode onsPostcode) =>
-            It.IsBetween(delivery.LearnStartDate, onsPostcode.EffectiveFrom, onsPostcode.EffectiveTo ?? DateTime.MaxValue);
+            delivery.LearnStartDate < onsPostcode.EffectiveFrom
+            || delivery.LearnStartDate > (onsPostcode.EffectiveTo ?? DateTime.MaxValue)
+            || delivery.LearnStartDate >= (onsPostcode.Termination ?? DateTime.MaxValue);
 
         /// <summary>
         /// Determines whether [is not valid] [the specified delivery].
@@ -150,8 +161,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         public bool IsNotValid(ILearningDelivery delivery) =>
             _check.HasQualifyingStart(delivery, FirstViableDate)
                 && _check.HasQualifyingFunding(delivery, TypeOfFunding.EuropeanSocialFund)
-                && HasQualifyingEligibility(GetONSPostcode(delivery), GetEligibilityItemsFor(delivery))
-                && !InQualifyingPeriod(delivery, GetONSPostcode(delivery));
+                && HasQualifyingEligibility(delivery, GetONSPostcodes(delivery), GetEligibilityItemsFor(delivery));
 
         /// <summary>
         /// Matches start.

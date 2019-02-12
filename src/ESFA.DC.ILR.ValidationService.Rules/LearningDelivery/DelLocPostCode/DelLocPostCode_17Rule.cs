@@ -43,13 +43,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.DelLocPostCode
         /// <summary>
         /// Determines whether [has qualifying eligibility] [the specified postcode].
         /// </summary>
-        /// <param name="postcode">The postcode.</param>
+        /// <param name="delivery">The latest learnstartdate delivery.</param>
+        /// <param name="postcodes">The postcodes.</param>
         /// <param name="eligibilities">The eligibilities.</param>
         /// <returns>
         ///   <c>true</c> if [has qualifying eligibility] [the specified postcode]; otherwise, <c>false</c>.
         /// </returns>
-        public override bool HasQualifyingEligibility(IONSPostcode postcode, IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> eligibilities) =>
-            It.Has(postcode)
-                && eligibilities.SafeAny(x => x.Code.ComparesWith(postcode.LocalAuthority));
+        public override bool HasQualifyingEligibility(ILearningDelivery delivery, IReadOnlyCollection<IONSPostcode> postcodes, IReadOnlyCollection<IEsfEligibilityRuleLocalAuthority> eligibilities) =>
+            It.Has(postcodes)
+            && It.Has(eligibilities)
+            && It.Has(delivery)
+            && (eligibilities.Join(postcodes, eli => eli.Code.ToUpper(), pc => pc.LocalAuthority.ToUpper(), (eli, pc) => pc)?.Any(p => InQualifyingPeriod(delivery, p)) ?? false);
     }
 }
