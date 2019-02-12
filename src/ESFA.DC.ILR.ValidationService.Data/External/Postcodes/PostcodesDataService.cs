@@ -44,14 +44,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.Postcodes
         /// Gets the ons postcode.
         /// </summary>
         /// <param name="fromPostcode">From postcode.</param>
-        /// <returns>an ons postcode (if found)</returns>
-        public IONSPostcode GetONSPostcode(string fromPostcode) =>
-            _onsPostcodes.FirstOrDefault(x => x.Postcode.ComparesWith(fromPostcode));
-
-        /// <summary>
-        /// Gets the ons postcode.
-        /// </summary>
-        /// <param name="fromPostcode">From postcode.</param>
         /// <returns>an ons postcodes (if found)</returns>
         public IReadOnlyCollection<IONSPostcode> GetONSPostcodes(string fromPostcode) =>
             _onsPostcodes.Where(x => x.Postcode.ComparesWith(fromPostcode)).ToList();
