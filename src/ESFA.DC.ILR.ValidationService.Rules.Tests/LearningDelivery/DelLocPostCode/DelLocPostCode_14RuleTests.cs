@@ -184,13 +184,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var postcodeServiceMock = new Mock<IPostcodesDataService>();
             postcodeServiceMock
-                .Setup(m => m.GetONSPostcode(delLocPostCode))
-                .Returns(new ONSPostcode
+                .Setup(m => m.GetONSPostcodes(delLocPostCode))
+                .Returns(new ONSPostcode[]
                 {
-                    LocalAuthority = localAuthorityCode,
-                    Termination = null,
-                    EffectiveFrom = startDate.AddMonths(-1),
-                    EffectiveTo = startDate.AddYears(1)
+                    new ONSPostcode()
+                    {
+                        LocalAuthority = localAuthorityCode,
+                        Termination = null,
+                        EffectiveFrom = startDate.AddMonths(-1),
+                        EffectiveTo = startDate.AddYears(1)
+                    }
                 });
 
             var dd22Mock = new Mock<IDerivedData_22Rule>();
@@ -251,8 +254,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var postcodeServiceMock = new Mock<IPostcodesDataService>();
             postcodeServiceMock
-                .Setup(m => m.GetONSPostcode(delLocPostCode))
-                .Returns((IONSPostcode)null);
+                .Setup(m => m.GetONSPostcodes(delLocPostCode))
+                .Returns((IONSPostcode[])null);
 
             var dd22Mock = new Mock<IDerivedData_22Rule>();
             dd22Mock
@@ -260,7 +263,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Returns(startDate);
 
             NewRule(validationErrorHandlerMock.Object, fcsServiceMock.Object, postcodeServiceMock.Object, dd22Mock.Object).Validate(testLearner);
-            VerifyErrorHandlerMock(validationErrorHandlerMock, 1);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
         [Fact]
@@ -301,13 +304,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var postcodeServiceMock = new Mock<IPostcodesDataService>();
             postcodeServiceMock
-                .Setup(m => m.GetONSPostcode(delLocPostCode))
-                .Returns(new ONSPostcode
+                .Setup(m => m.GetONSPostcodes(delLocPostCode))
+                .Returns(new ONSPostcode[]
                 {
-                    LocalAuthority = localAuthorityCode,
-                    Termination = null,
-                    EffectiveFrom = startDate.AddMonths(-1),
-                    EffectiveTo = startDate.AddYears(1)
+                    new ONSPostcode()
+                    {
+                        LocalAuthority = localAuthorityCode,
+                        Termination = null,
+                        EffectiveFrom = startDate.AddMonths(-1),
+                        EffectiveTo = startDate.AddYears(1)
+                    }
                 });
 
             var dd22Mock = new Mock<IDerivedData_22Rule>();
@@ -316,11 +322,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
                 .Returns((DateTime?)null);
 
             NewRule(validationErrorHandlerMock.Object, fcsServiceMock.Object, postcodeServiceMock.Object, dd22Mock.Object).Validate(testLearner);
-            VerifyErrorHandlerMock(validationErrorHandlerMock, 1);
+            VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
         [Theory]
-        [InlineData("456", "2017-07-29", "2018-08-31", "2099-01-01")]
+        [InlineData("123", "2017-07-31", "2018-07-29", "2017-07-30")]
         [InlineData("123", "2017-08-30", "2018-08-31", "2099-01-01")]
         [InlineData("123", "2017-07-29", "2017-07-29", "2099-01-01")]
         [InlineData("123", "2017-07-29", "2018-08-31", "2017-07-29")]
@@ -361,13 +367,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             var postcodeServiceMock = new Mock<IPostcodesDataService>();
             postcodeServiceMock
-                .Setup(m => m.GetONSPostcode(delLocPostCode))
-                .Returns(new ONSPostcode
+                .Setup(m => m.GetONSPostcodes(delLocPostCode))
+                .Returns(new ONSPostcode[]
                 {
-                    LocalAuthority = localAuthority,
-                    Termination = DateTime.Parse(termination),
-                    EffectiveFrom = DateTime.Parse(effectiveFrom),
-                    EffectiveTo = DateTime.Parse(effectiveTo)
+                    new ONSPostcode()
+                    {
+                        LocalAuthority = localAuthority,
+                        Termination = DateTime.Parse(termination),
+                        EffectiveFrom = DateTime.Parse(effectiveFrom),
+                        EffectiveTo = DateTime.Parse(effectiveTo)
+                    }
                 });
 
             var dd22Mock = new Mock<IDerivedData_22Rule>();
@@ -377,6 +386,56 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.DelLocPostC
 
             NewRule(validationErrorHandlerMock.Object, fcsServiceMock.Object, postcodeServiceMock.Object, dd22Mock.Object).Validate(testLearner);
             VerifyErrorHandlerMock(validationErrorHandlerMock, 1);
+        }
+
+        [Theory]
+        [InlineData("2018-09-01", "2018-08-01", "2018-10-01", "2018-10-01")]
+        [InlineData("2018-09-01", "2018-08-01", null, null)]
+        [InlineData("2018-09-01", "2018-08-01", "2018-10-01", null)]
+        [InlineData("2018-09-01", "2018-08-01", null, "2018-10-01")]
+        public void InQualifyingPeriod_False(string startDate, string effectiveFrom, string effectiveTo, string termination)
+        {
+            DateTime learnStartDate = DateTime.Parse(startDate);
+            DateTime effectivefromDate = DateTime.Parse(effectiveFrom);
+            DateTime? effectiveToDate = string.IsNullOrEmpty(effectiveTo) ? (DateTime?)null : DateTime.Parse(effectiveTo);
+            DateTime? terminationDate = string.IsNullOrEmpty(termination) ? (DateTime?)null : DateTime.Parse(termination);
+
+            var onsPostCode = new ONSPostcode()
+            {
+                EffectiveFrom = effectivefromDate,
+                EffectiveTo = effectiveToDate,
+                Termination = terminationDate
+            };
+
+            NewRule().CheckQualifyingPeriod(learnStartDate, onsPostCode).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("2018-09-01", "2018-10-01", "2018-10-01", "2018-10-01")]
+        [InlineData("2018-09-01", "2018-08-01", "2018-08-01", "2018-10-01")]
+        [InlineData("2018-09-01", "2018-08-01", "2018-10-01", "2018-08-01")]
+        [InlineData("2018-09-01", "2018-10-01", "2018-08-01", "2018-08-01")]
+        [InlineData("2018-09-01", "2018-10-01", "2018-08-01", null)]
+        [InlineData("2018-09-01", "2018-08-01", "2018-08-01", null)]
+        [InlineData("2018-09-01", "2018-10-01", null, "2018-08-01")]
+        [InlineData("2018-09-01", "2018-08-01", null, "2018-08-01")]
+        [InlineData("2018-09-01", "2018-10-01", null, "2018-10-01")]
+        [InlineData("2018-09-01", "2018-10-01", null, null)]
+        public void InQualifyingPeriod_True(string startDate, string effectiveFrom, string effectiveTo, string termination)
+        {
+            DateTime learnStartDate = DateTime.Parse(startDate);
+            DateTime effectivefromDate = DateTime.Parse(effectiveFrom);
+            DateTime? effectiveToDate = string.IsNullOrEmpty(effectiveTo) ? (DateTime?)null : DateTime.Parse(effectiveTo);
+            DateTime? terminationDate = string.IsNullOrEmpty(termination) ? (DateTime?)null : DateTime.Parse(termination);
+
+            var onsPostCode = new ONSPostcode()
+            {
+                EffectiveFrom = effectivefromDate,
+                EffectiveTo = effectiveToDate,
+                Termination = terminationDate
+            };
+
+            NewRule().CheckQualifyingPeriod(learnStartDate, onsPostCode).Should().BeTrue();
         }
 
         private DelLocPostCode_14Rule NewRule(
