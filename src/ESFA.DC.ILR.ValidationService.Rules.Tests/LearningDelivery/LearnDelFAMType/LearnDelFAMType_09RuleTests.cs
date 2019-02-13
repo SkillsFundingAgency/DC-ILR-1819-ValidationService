@@ -104,16 +104,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         /// <param name="candidate">The candidate.</param>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
         [Theory]
-        [InlineData(Monitoring.Delivery.OLASSOffendersInCustody, false)]
-        [InlineData(Monitoring.Delivery.FullyFundedLearningAim, false)]
-        [InlineData(Monitoring.Delivery.CoFundedLearningAim, false)]
-        [InlineData(Monitoring.Delivery.InReceiptOfLowWages, false)]
-        [InlineData(Monitoring.Delivery.MandationToSkillsTraining, false)]
-        [InlineData(Monitoring.Delivery.ReleasedOnTemporaryLicence, false)]
-        [InlineData(Monitoring.Delivery.SteelIndustriesRedundancyTraining, false)]
-        [InlineData(Monitoring.Delivery.HigherEducationFundingCouncilEngland, false)]
-        [InlineData(Monitoring.Delivery.ESFA16To19Funding, false)]
-        [InlineData(Monitoring.Delivery.ESFAAdultFunding, true)]
+        [InlineData("LDM034", false)] // Monitoring.Delivery.OLASSOffendersInCustody
+        [InlineData("FFI1", false)] // Monitoring.Delivery.FullyFundedLearningAim
+        [InlineData("FFI2", false)] // Monitoring.Delivery.CoFundedLearningAim
+        [InlineData("LDM363", false)] // Monitoring.Delivery.InReceiptOfLowWages
+        [InlineData("LDM318", false)] // Monitoring.Delivery.MandationToSkillsTraining
+        [InlineData("LDM328", false)] // Monitoring.Delivery.ReleasedOnTemporaryLicence
+        [InlineData("LDM347", false)] // Monitoring.Delivery.SteelIndustriesRedundancyTraining
+        [InlineData("SOF1", false)] // Monitoring.Delivery.HigherEducationFundingCouncilEngland
+        [InlineData("SOF107", false)] // Monitoring.Delivery.ESFA16To19Funding
+        [InlineData("SOF105", true)] // Monitoring.Delivery.ESFAAdultFunding
         public void HasESFAAdultFundingMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
@@ -174,11 +174,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             commonOps
                 .Setup(x => x.HasQualifyingFunding(
                     mockItem.Object,
-                    TypeOfFunding.CommunityLearning,
-                    TypeOfFunding.AdultSkills,
-                    TypeOfFunding.ApprenticeshipsFrom1May2017,
-                    TypeOfFunding.EuropeanSocialFund,
-                    TypeOfFunding.OtherAdult))
+                    10, // TypeOfFunding.CommunityLearning,
+                    35, // TypeOfFunding.AdultSkills
+                    36, // TypeOfFunding.ApprenticeshipsFrom1May2017,
+                    70, // TypeOfFunding.EuropeanSocialFund,
+                    81)) // TypeOfFunding.OtherAdult
                 .Returns(expectation);
 
             var sut = new LearnDelFAMType_09Rule(handler.Object, commonOps.Object);
@@ -242,11 +242,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             commonOps
                 .Setup(x => x.HasQualifyingFunding(
                     mockDelivery.Object,
-                    TypeOfFunding.CommunityLearning,
-                    TypeOfFunding.AdultSkills,
-                    TypeOfFunding.ApprenticeshipsFrom1May2017,
-                    TypeOfFunding.EuropeanSocialFund,
-                    TypeOfFunding.OtherAdult))
+                    10, // TypeOfFunding.CommunityLearning,
+                    35, // TypeOfFunding.AdultSkills
+                    36, // TypeOfFunding.ApprenticeshipsFrom1May2017,
+                    70, // TypeOfFunding.EuropeanSocialFund,
+                    81)) // TypeOfFunding.OtherAdult
                 .Returns(true);
             commonOps
                 .Setup(x => x.CheckDeliveryFAMs(mockDelivery.Object, It.IsAny<Func<ILearningDeliveryFAM, bool>>()))
@@ -303,11 +303,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             commonOps
                 .Setup(x => x.HasQualifyingFunding(
                     mockDelivery.Object,
-                    TypeOfFunding.CommunityLearning,
-                    TypeOfFunding.AdultSkills,
-                    TypeOfFunding.ApprenticeshipsFrom1May2017,
-                    TypeOfFunding.EuropeanSocialFund,
-                    TypeOfFunding.OtherAdult))
+                    10, // TypeOfFunding.CommunityLearning,
+                    35, // TypeOfFunding.AdultSkills
+                    36, // TypeOfFunding.ApprenticeshipsFrom1May2017,
+                    70, // TypeOfFunding.EuropeanSocialFund,
+                    81)) // TypeOfFunding.OtherAdult
                 .Returns(true);
 
             commonOps
