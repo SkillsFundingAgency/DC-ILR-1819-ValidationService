@@ -1,56 +1,45 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
     public class LearnDelFAMType_09Rule :
+        AbstractRule,
         IRule<ILearner>
     {
         /// <summary>
-        /// Gets the name of the message property.
+        /// The faulty fam code
         /// </summary>
-        public const string MessagePropertyName = "LearnDelFAMType";
+        public const string FaultyFAMCode = "105";
 
         /// <summary>
-        /// Gets the name of the rule.
+        /// The check (rule common operations provider)
         /// </summary>
-        public const string Name = "LearnDelFAMType_09";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
+        private readonly IProvideRuleCommonOperations _check;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LearnDelFAMType_09Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
-        public LearnDelFAMType_09Rule(IValidationErrorHandler validationErrorHandler)
+        /// <param name="commonOperations">The common operations.</param>
+        public LearnDelFAMType_09Rule(
+            IValidationErrorHandler validationErrorHandler,
+            IProvideRuleCommonOperations commonOperations)
+            : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_09)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            It.IsNull(commonOperations)
+                .AsGuard<ArgumentNullException>(nameof(commonOperations));
 
-            _messageHandler = validationErrorHandler;
+            _check = commonOperations;
         }
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
-
-        /// <summary>
-        /// Checks the delivery fams.
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <param name="matchCondition">The match condition.</param>
-        /// <returns>true if any of the delivery fams match the condition</returns>
-        public bool CheckDeliveryFAMs(ILearningDelivery delivery, Func<ILearningDeliveryFAM, bool> matchCondition) =>
-            delivery.LearningDeliveryFAMs.SafeAny(matchCondition);
 
         /// <summary>
         /// Determines whether [has esfa adultfunding] [the specified monitor].
@@ -70,23 +59,34 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [has esfa adultfunding] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasESFAAdultFunding(ILearningDelivery delivery) =>
-            CheckDeliveryFAMs(delivery, HasESFAAdultFunding);
+            _check.CheckDeliveryFAMs(delivery, HasESFAAdultFunding);
 
         /// <summary>
-        /// Determines whether [is qualifying funding] [the specified delivery].
+        /// Determines whether [has qualifying funding] [the specified delivery].
         /// </summary>
         /// <param name="delivery">The delivery.</param>
         /// <returns>
-        ///   <c>true</c> if [is qualifying funding] [the specified delivery]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [has qualifying funding] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsQualifyingFundModel(ILearningDelivery delivery) =>
-            It.IsInRange(
-                delivery.FundModel,
+        public bool HasQualifyingFunding(ILearningDelivery delivery) =>
+            _check.HasQualifyingFunding(
+                delivery,
                 TypeOfFunding.CommunityLearning,
                 TypeOfFunding.AdultSkills,
                 TypeOfFunding.ApprenticeshipsFrom1May2017,
                 TypeOfFunding.EuropeanSocialFund,
                 TypeOfFunding.OtherAdult);
+
+        /// <summary>
+        /// Determines whether [is not valid] [the specified delivery].
+        /// </summary>
+        /// <param name="delivery">The delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is not valid] [the specified delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsNotValid(ILearningDelivery delivery) =>
+            HasQualifyingFunding(delivery)
+            && !HasESFAAdultFunding(delivery);
 
         /// <summary>
         /// Validates the specified object.
@@ -100,16 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             objectToValidate.LearningDeliveries
-                .SafeWhere(IsQualifyingFundModel)
-                .ForEach(x =>
-                {
-                    var failedValidation = !HasESFAAdultFunding(x);
-
-                    if (failedValidation)
-                    {
-                        RaiseValidationMessage(learnRefNumber, x);
-                    }
-                });
+                .ForAny(IsNotValid, x => RaiseValidationMessage(learnRefNumber, x));
         }
 
         /// <summary>
@@ -119,16 +110,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <param name="thisDelivery">this delivery.</param>
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            var famCodeForError = thisDelivery.LearningDeliveryFAMs
-                .Where(ldf => ldf.LearnDelFAMType.CaseInsensitiveEquals(LearningDeliveryFAMTypeConstants.SOF))
-                .Select(ldf => ldf.LearnDelFAMCode).FirstOrDefault();
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery));
+        }
 
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.FundModel, thisDelivery.FundModel));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.SOF));
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, famCodeForError));
-
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        /// <summary>
+        /// Builds the message parameters for (this delivery).
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, thisDelivery.FundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, Monitoring.Delivery.Types.SourceOfFunding),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, FaultyFAMCode)
+            };
         }
     }
 }
