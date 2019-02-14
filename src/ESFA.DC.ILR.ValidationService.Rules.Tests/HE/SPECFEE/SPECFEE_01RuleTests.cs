@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SPECFEE
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.SpecFee, specfeeValue)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.SpecFee, specfeeValue)).Returns(false);
 
             NewRule(provideLookupDetails: provideLookupDetailsMockup.Object).ConditionMet(specfeeValue).Should().BeTrue();
         }
@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SPECFEE
         {
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.SpecFee, specfeeValue)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.SpecFee, specfeeValue)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -82,7 +82,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SPECFEE
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.SpecFee, specfeeValue)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.SpecFee, specfeeValue)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -122,7 +122,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SPECFEE
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.SpecFee, specfeeValue)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.SpecFee, specfeeValue)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

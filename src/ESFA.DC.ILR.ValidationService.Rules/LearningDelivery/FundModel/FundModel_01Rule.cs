@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 
         public bool ConditionMet(int fundModel)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.FundModel, fundModel);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)

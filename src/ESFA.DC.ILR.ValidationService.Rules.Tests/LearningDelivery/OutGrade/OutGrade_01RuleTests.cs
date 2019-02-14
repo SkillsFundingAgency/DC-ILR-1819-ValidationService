@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
         public void ConditionMet_True(string outGrade)
         {
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.OutGrade, outGrade)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.OutGrade, outGrade)).Returns(false);
             NewRule(provideLookupDetails: provideLookupDetails.Object).ConditionMet(outGrade).Should().BeTrue();
         }
 
@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
         public void ConditionMet_False(string outGrade)
         {
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.OutGrade, outGrade)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.OutGrade, outGrade)).Returns(true);
             NewRule(provideLookupDetails: provideLookupDetails.Object).ConditionMet(outGrade).Should().BeFalse();
         }
 
@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.OutGrade, outGrade)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.OutGrade, outGrade)).Returns(false);
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(validationErrorHandlerMock.Object, provideLookupDetails.Object).Validate(learner);
@@ -89,7 +89,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.OutGrade, outGrade)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.OutGrade, outGrade)).Returns(true);
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(validationErrorHandlerMock.Object, provideLookupDetails.Object).Validate(learner);

@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var testDate = DateTime.Parse(testCaseDate);
 
             // act
-            var result = sut.IsCurrent(LookupTimeRestrictedKey.TTAccom, candidate, testDate);
+            var result = sut.IsCurrent(TypeOfLimitedLifeLookup.TTAccom, candidate, testDate);
 
             // assert
             Assert.Equal(expectation, result);
@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
         {
             var dateToCheck = DateTime.Parse(dateToCheckString);
 
-            NewService().IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, dateToCheck).Should().Be(expectedResult);
+            NewService().IsCurrent(TypeOfLimitedLifeLookup.QualEnt3, qualent3, dateToCheck).Should().Be(expectedResult);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var sut = NewService();
 
             // act
-            var result = sut.Contains(LookupSimpleKey.FINTYPE, candidate);
+            var result = sut.Contains(TypeOfIntegerCodedLookup.FINTYPE, candidate);
 
             // assert
             Assert.Equal(expectation, result);
@@ -94,7 +94,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var sut = NewService();
 
             // act
-            var result = sut.Contains(LookupCodedKey.AppFinRecord, candidate);
+            var result = sut.Contains(TypeOfStringCodedLookup.AppFinRecord, candidate);
 
             // assert
             Assert.Equal(expectation, result);
@@ -116,7 +116,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var sut = NewService();
 
             // act
-            var result = sut.Contains(LookupTimeRestrictedKey.TTAccom, candidate);
+            var result = sut.Contains(TypeOfLimitedLifeLookup.TTAccom, candidate);
 
             // assert
             Assert.Equal(expectation, result);
@@ -142,7 +142,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
             var sut = NewService();
 
             // act
-            var result = sut.ContainsValueForKey(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, keyCandidate, valueCandidate);
+            var result = sut.Contains(TypeOfStringCodedLookup.ApprenticeshipFinancialRecord, $"{keyCandidate}{valueCandidate}");
 
             // assert
             Assert.Equal(expectation, result);
@@ -161,32 +161,28 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
 
             var tTAccomItems = new Dictionary<string, ValidityPeriods>()
             {
-                ["1"] = new ValidityPeriods(validFrom: DateTime.Parse("2013-06-14"), validTo: DateTime.Parse("2020-06-14")),
-                ["2"] = new ValidityPeriods(validFrom: DateTime.Parse("2009-04-28"), validTo: DateTime.Parse("2020-06-14")),
-                ["4"] = new ValidityPeriods(validFrom: DateTime.Parse("2012-09-06"), validTo: DateTime.Parse("2015-02-28")),
-                ["5"] = new ValidityPeriods(validFrom: DateTime.Parse("2010-11-21"), validTo: DateTime.Parse("2020-06-14")),
-                ["6"] = new ValidityPeriods(validFrom: DateTime.Parse("2018-07-02"), validTo: DateTime.Parse("2020-06-14")),
-                ["9"] = new ValidityPeriods(validFrom: DateTime.Parse("2000-02-01"), validTo: DateTime.Parse("2008-08-26")),
+                ["1"] = new ValidityPeriods(DateTime.Parse("2013-06-14"), DateTime.Parse("2020-06-14")),
+                ["2"] = new ValidityPeriods(DateTime.Parse("2009-04-28"), DateTime.Parse("2020-06-14")),
+                ["4"] = new ValidityPeriods(DateTime.Parse("2012-09-06"), DateTime.Parse("2015-02-28")),
+                ["5"] = new ValidityPeriods(DateTime.Parse("2010-11-21"), DateTime.Parse("2020-06-14")),
+                ["6"] = new ValidityPeriods(DateTime.Parse("2018-07-02"), DateTime.Parse("2020-06-14")),
+                ["9"] = new ValidityPeriods(DateTime.Parse("2000-02-01"), DateTime.Parse("2008-08-26")),
             };
 
             var qualent3s = new Dictionary<string, ValidityPeriods>()
             {
-                ["C20"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.MaxValue),
-                ["P69"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31")),
-                ["P70"] = new ValidityPeriods(validFrom: DateTime.MinValue, validTo: DateTime.Parse("2013-07-31"))
+                ["C20"] = new ValidityPeriods(DateTime.MinValue, DateTime.MaxValue),
+                ["P69"] = new ValidityPeriods(DateTime.MinValue, DateTime.Parse("2013-07-31")),
+                ["P70"] = new ValidityPeriods(DateTime.MinValue, DateTime.Parse("2013-07-31"))
             };
 
-            var apprenticeshipFinancialRecords = new Dictionary<string, IReadOnlyCollection<string>>
-            {
-                ["TNP"] = new List<string> { "1", "2", "3", "4" },
-                ["PMR"] = new List<string> { "1", "2", "3" },
-            };
+            var apprenticeshipFinancialRecords = new string[] { "TNP1", "TNP2", "TNP3", "TNP4", "PMR1", "PMR2", "PMR3" };
 
-            cache.SimpleLookups.Add(LookupSimpleKey.FINTYPE, finTypes);
-            cache.CodedLookups.Add(LookupCodedKey.AppFinRecord, codedTypes);
-            cache.LimitedLifeLookups.Add(LookupTimeRestrictedKey.TTAccom, tTAccomItems);
-            cache.LimitedLifeLookups.Add(LookupTimeRestrictedKey.QualEnt3, qualent3s);
-            cache.CodedDictionaryLookups.Add(LookupCodedKeyDictionary.ApprenticeshipFinancialRecord, apprenticeshipFinancialRecords);
+            cache.SimpleLookups.Add(TypeOfIntegerCodedLookup.FINTYPE, finTypes);
+            cache.CodedLookups.Add(TypeOfStringCodedLookup.AppFinRecord, codedTypes);
+            cache.CodedLookups.Add(TypeOfStringCodedLookup.ApprenticeshipFinancialRecord, apprenticeshipFinancialRecords);
+            cache.LimitedLifeLookups.Add(TypeOfLimitedLifeLookup.TTAccom, tTAccomItems);
+            cache.LimitedLifeLookups.Add(TypeOfLimitedLifeLookup.QualEnt3, qualent3s);
 
             cacheFactory
                 .Setup(c => c.Create())

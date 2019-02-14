@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.MODESTUD
 
         public bool ConditionMet(int modeStud)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.ModeStud, modeStud);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.ModeStud, modeStud);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int modeStud)

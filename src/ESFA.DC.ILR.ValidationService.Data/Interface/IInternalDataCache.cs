@@ -11,28 +11,21 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <summary>
         /// Gets the simple lookups.
         /// </summary>
-        IDictionary<LookupSimpleKey, IReadOnlyCollection<int>> SimpleLookups { get; }
+        IDictionary<TypeOfIntegerCodedLookup, IReadOnlyCollection<int>> SimpleLookups { get; }
 
         /// <summary>
         /// Gets the coded lookups.
         /// </summary>
-        IDictionary<LookupCodedKey, IReadOnlyCollection<string>> CodedLookups { get; }
-
-        /// <summary>
-        /// Gets the coded lookups
-        /// </summary>
-        IDictionary<LookupCodedKeyDictionary, IDictionary<string, IReadOnlyCollection<string>>> CodedDictionaryLookups { get; }
+        IDictionary<TypeOfStringCodedLookup, IReadOnlyCollection<string>> CodedLookups { get; }
 
         /// <summary>
         /// Gets the time restricted lookups.
         /// </summary>
-        IDictionary<LookupTimeRestrictedKey, IDictionary<string, ValidityPeriods>> LimitedLifeLookups { get; }
+        IDictionary<TypeOfLimitedLifeLookup, IDictionary<string, ValidityPeriods>> LimitedLifeLookups { get; }
 
-        IDictionary<LookupComplexKey, IDictionary<string, IDictionary<string, ValidityPeriods>>> CodedComplexLookups
-        {
-            get;
-        }
-
-        IDictionary<LookupItemKey, IDictionary<string, IReadOnlyCollection<string>>> ItemLookups { get; }
+        /// <summary>
+        /// Gets the list item lookups.
+        /// </summary>
+        IDictionary<TypeOfListItemLookup, IDictionary<string, IReadOnlyCollection<string>>> ListItemLookups { get; }
     }
 }

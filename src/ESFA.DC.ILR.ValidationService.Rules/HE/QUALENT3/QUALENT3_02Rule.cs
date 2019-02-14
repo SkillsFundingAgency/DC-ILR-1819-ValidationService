@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3
 
         public bool QUALENT3ValidConditionMet(string qualent3)
         {
-            return !_provideLookupDetails.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3);
+            return !_provideLookupDetails.Contains(TypeOfLimitedLifeLookup.QualEnt3, qualent3);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string qualent3)

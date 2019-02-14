@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
         {
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.PriorAttain, priorAttainValue)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttainValue)).Returns(false);
 
             NewRule(provideLookupDetails: provideLookupDetailsMockup.Object).ConditionMet(priorAttainValue).Should().BeTrue();
         }
@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
         {
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.PriorAttain, priorAttainValue)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttainValue)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -75,7 +75,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.PriorAttain, priorAttain)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttain)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -107,7 +107,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.PriorAttain, priorAttain)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttain)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

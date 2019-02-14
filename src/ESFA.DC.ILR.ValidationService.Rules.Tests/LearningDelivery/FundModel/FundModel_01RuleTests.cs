@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             var fundModelServiceMock = new Mock<IProvideLookupDetails>();
 
-            fundModelServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.FundModel, fundModel)).Returns(false);
+            fundModelServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel)).Returns(false);
 
             NewRule(fundModelServiceMock.Object).ConditionMet(fundModel).Should().BeTrue();
         }
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             var fundModelServiceMock = new Mock<IProvideLookupDetails>();
 
-            fundModelServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.FundModel, fundModel)).Returns(true);
+            fundModelServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel)).Returns(true);
 
             NewRule(fundModelServiceMock.Object).ConditionMet(fundModel).Should().BeFalse();
         }
@@ -60,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             var fundModelServiceMock = new Mock<IProvideLookupDetails>();
 
-            fundModelServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.FundModel, fundModel)).Returns(false);
+            fundModelServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
 
             var fundModelServiceMock = new Mock<IProvideLookupDetails>();
 
-            fundModelServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.FundModel, fundModel)).Returns(true);
+            fundModelServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

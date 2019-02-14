@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.FUNDCOMP
 
         public bool ConditionMet(int fundComp)
         {
-            return !_provideLookupDetails.Contains(LookupTimeRestrictedKey.FundComp, fundComp);
+            return !_provideLookupDetails.Contains(TypeOfLimitedLifeLookup.FundComp, fundComp);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundComp)

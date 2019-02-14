@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SOC2000
         public bool ConditionMet(DateTime learnStartDate, int soc2000)
         {
             return learnStartDate < _firstAugust2014
-                   && !_provideLookupDetails.Contains(LookupSimpleKey.SOC2000, soc2000);
+                   && !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.SOC2000, soc2000);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, int soc2000)

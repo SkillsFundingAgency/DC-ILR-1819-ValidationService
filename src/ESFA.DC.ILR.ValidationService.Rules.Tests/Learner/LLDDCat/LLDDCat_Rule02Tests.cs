@@ -44,8 +44,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
-            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(true);
-            llddCatDataServiceMock.Setup(ds => ds.IsCurrent(LookupTimeRestrictedKey.LLDDCat, llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(false);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.LLDDCat, llddCat)).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.IsCurrent(TypeOfLimitedLifeLookup.LLDDCat, llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(false);
 
             NewRule(dd06Mock.Object, llddCatDataServiceMock.Object).ConditionMet(llddCat, learningDeliveries).Should().BeTrue();
         }
@@ -74,8 +74,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
-            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(true);
-            llddCatDataServiceMock.Setup(ds => ds.IsCurrent(LookupTimeRestrictedKey.LLDDCat, llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.LLDDCat, llddCat)).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.IsCurrent(TypeOfLimitedLifeLookup.LLDDCat, llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(true);
 
             NewRule(dd06Mock.Object, llddCatDataServiceMock.Object).ConditionMet(llddCat, learningDeliveries).Should().BeFalse();
         }
@@ -117,8 +117,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
-            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(true);
-            llddCatDataServiceMock.Setup(ds => ds.IsCurrent(LookupTimeRestrictedKey.LLDDCat, llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(false);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.LLDDCat, llddCat)).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.IsCurrent(TypeOfLimitedLifeLookup.LLDDCat, llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -163,7 +163,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 01, 01));
-            llddCatDataServiceMock.Setup(ds => ds.IsCurrent(LookupTimeRestrictedKey.LLDDCat, llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.IsCurrent(TypeOfLimitedLifeLookup.LLDDCat, llddCat, dd06Mock.Object.Derive(learningDeliveries))).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

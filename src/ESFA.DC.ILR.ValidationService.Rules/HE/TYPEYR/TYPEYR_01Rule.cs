@@ -41,7 +41,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TYPEYR
             }
         }
 
-        public bool ConditionMet(string typeYr) => !_provideLookupDetails.Contains(LookupCodedKey.TypeYr, typeYr);
+        public bool ConditionMet(string typeYr) => !_provideLookupDetails.Contains(TypeOfStringCodedLookup.TypeYr, typeYr);
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int typeYr)
         {

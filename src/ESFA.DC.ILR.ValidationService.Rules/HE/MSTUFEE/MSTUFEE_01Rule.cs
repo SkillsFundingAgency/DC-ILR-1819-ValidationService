@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.MSTUFEE
 
         public bool ConditionMet(int mstufeeValue)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.MSTuFee, mstufeeValue);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.MSTuFee, mstufeeValue);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int mstufeeValue)

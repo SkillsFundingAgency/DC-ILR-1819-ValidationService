@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SEC
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.SEC, secValue)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.SEC, secValue)).Returns(false);
 
             NewRule(provideLookupDetails: provideLookupDetailsMockup.Object).ConditionMet(secValue).Should().BeTrue();
         }
@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SEC
         {
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.SEC, secValue)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.SEC, secValue)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -84,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SEC
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.SEC, secValue)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.SEC, secValue)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -124,7 +124,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SEC
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.SEC, secValue)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.SEC, secValue)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

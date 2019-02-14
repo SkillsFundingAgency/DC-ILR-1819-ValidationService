@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
                 };
 
                 var provideLookupDetails = new Mock<IProvideLookupDetails>();
-                provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.TypeYr, learningDeliveryHe.TYPEYR.ToString())).Returns(true);
+                provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.TypeYr, learningDeliveryHe.TYPEYR.ToString())).Returns(true);
                 NewRule(provideLookupDetails: provideLookupDetails.Object).ConditionMet(learningDeliveryHe.TYPEYR.ToString()).Should().BeFalse();
             }
         }
@@ -44,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.TypeYr, learningDeliveryHe.TYPEYR.ToString())).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.TypeYr, learningDeliveryHe.TYPEYR.ToString())).Returns(false);
             NewRule(provideLookupDetails: provideLookupDetails.Object).ConditionMet(learningDeliveryHe.TYPEYR.ToString()).Should().BeTrue();
         }
 
@@ -67,7 +67,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.TypeYr, typeYr.ToString())).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.TypeYr, typeYr.ToString())).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -105,8 +105,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.TypeYr, typeYr.ToString())).Returns(false);
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.TypeYr, "1")).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.TypeYr, typeYr.ToString())).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.TypeYr, "1")).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -133,7 +133,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.TypeYr, typeYr.ToString())).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.TypeYr, typeYr.ToString())).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -171,8 +171,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TYPEYR
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.TypeYr, typeYr.ToString())).Returns(true);
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.TypeYr, "2")).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.TypeYr, typeYr.ToString())).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.TypeYr, "2")).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

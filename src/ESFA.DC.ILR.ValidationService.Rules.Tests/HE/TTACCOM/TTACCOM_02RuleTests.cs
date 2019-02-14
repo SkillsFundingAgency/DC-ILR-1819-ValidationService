@@ -162,7 +162,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.IsCurrent(LookupTimeRestrictedKey.TTAccom, candidate, testDate))
+                .Setup(x => x.IsCurrent(TypeOfLimitedLifeLookup.TTAccom, candidate, testDate))
                 .Returns(expectation);
 
             var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
@@ -228,7 +228,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
 
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.IsCurrent(LookupTimeRestrictedKey.TTAccom, candidate, testDate))
+                .Setup(x => x.IsCurrent(TypeOfLimitedLifeLookup.TTAccom, candidate, testDate))
                 .Returns(false);
 
             var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
@@ -287,7 +287,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.IsCurrent(LookupTimeRestrictedKey.TTAccom, candidate, testDate))
+                .Setup(x => x.IsCurrent(TypeOfLimitedLifeLookup.TTAccom, candidate, testDate))
                 .Returns(true);
 
             var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);

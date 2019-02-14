@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SEC
 
         public bool ConditionMet(int secValue)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.SEC, secValue);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.SEC, secValue);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int secValue)

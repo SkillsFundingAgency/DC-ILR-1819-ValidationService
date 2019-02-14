@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EmpOutcome
 
             var empOutcomeDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            empOutcomeDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.EmpOutcome, empOutcome)).Returns(false);
+            empOutcomeDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.EmpOutcome, empOutcome)).Returns(false);
 
             NewRule(empOutcomeDataServiceMock.Object).ConditionMet(empOutcome).Should().BeTrue();
         }
@@ -43,7 +43,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EmpOutcome
 
             var empOutcomeDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            empOutcomeDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.EmpOutcome, empOutcome)).Returns(true);
+            empOutcomeDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.EmpOutcome, empOutcome)).Returns(true);
 
             NewRule(empOutcomeDataServiceMock.Object).ConditionMet(empOutcome).Should().BeFalse();
         }
@@ -66,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EmpOutcome
 
             var empOutcomeDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            empOutcomeDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.EmpOutcome, empOutcome)).Returns(false);
+            empOutcomeDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.EmpOutcome, empOutcome)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {

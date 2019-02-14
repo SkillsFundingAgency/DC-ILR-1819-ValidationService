@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.SPECFEE
 
         public bool ConditionMet(int specfeeValue)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.SpecFee, specfeeValue);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.SpecFee, specfeeValue);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int specfeeValue)
