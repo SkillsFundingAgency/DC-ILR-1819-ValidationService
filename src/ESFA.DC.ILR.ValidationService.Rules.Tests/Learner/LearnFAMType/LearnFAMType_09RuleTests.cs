@@ -6,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Mocks;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -115,6 +116,54 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
             {
                 NewRule(learnerFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
             }
+        }
+
+        [Fact]
+        public void Validate_Error_CalledOnceForEachFamType()
+        {
+            var learner = new TestLearner
+            {
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 35
+                    }
+                },
+                LearnerFAMs = new List<TestLearnerFAM>()
+                {
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.HNS },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.HNS },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.EHC },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.EHC },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.EHC },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.DLA },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.DLA },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.SEN },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.SEN },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.MCF },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.MCF },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.ECF },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.ECF },
+                    new TestLearnerFAM { LearnFAMType = LearnerFAMTypeConstants.ECF }
+                }
+            };
+
+            var learnerFAMQueryServiceMock = new Mock<ILearnerFAMQueryService>();
+            learnerFAMQueryServiceMock
+                .Setup(x => x.GetLearnerFAMsCountByFAMType(It.IsAny<IEnumerable<ILearnerFAM>>(), It.IsAny<string>()))
+                .Returns(2);
+
+            var validationErrorHandlerMock = new ValidationErrorHandlerMock(true);
+            NewRule(learnerFAMQueryServiceMock.Object, validationErrorHandlerMock.Object).Validate(learner);
+
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.HNS), Times.Once);
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.EHC), Times.Once);
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.DLA), Times.Once);
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.SEN), Times.Once);
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.MCF), Times.Once);
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.ECF), Times.Once);
+            validationErrorHandlerMock.Verify(dd => dd.BuildErrorMessageParameter(PropertyNameConstants.LearnFAMType, LearnerFAMTypeConstants.FME), Times.Never);
         }
 
         [Fact]
