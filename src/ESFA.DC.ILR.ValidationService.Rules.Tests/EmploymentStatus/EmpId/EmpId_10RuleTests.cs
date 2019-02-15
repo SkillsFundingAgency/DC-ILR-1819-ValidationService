@@ -4,7 +4,6 @@ using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
-using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -229,15 +228,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle("EmpId_10", LearnRefNumber, null, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+                .Setup(x => x.Handle("EmpId_10", LearnRefNumber, 0, It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter("EmpId_10", "(missing)"))
+                .Setup(x => x.BuildErrorMessageParameter("EmpId", "(missing)"))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
                 .Setup(x => x.BuildErrorMessageParameter("EmpStat", TypeOfEmploymentStatus.InPaidEmployment))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
-                .Setup(x => x.BuildErrorMessageParameter("LearnStartDate", testDate))
+                .Setup(x => x.BuildErrorMessageParameter("LearnStartDate", AbstractRule.AsRequiredCultureDate(testDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
