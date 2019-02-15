@@ -62,8 +62,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
             await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
 
             // assert
-            Assert.True(internalDataCache.SimpleLookups.ContainsKey(thisKey));
-            Assert.Equal(expectedCount, internalDataCache.SimpleLookups[thisKey].Count);
+            Assert.True(internalDataCache.IntegerLookups.ContainsKey(thisKey));
+            Assert.Equal(expectedCount, internalDataCache.IntegerLookups[thisKey].Count);
         }
 
         /// <summary>
@@ -93,8 +93,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
             await NewService(internalDataCache).PopulateAsync(CancellationToken.None);
 
             // assert
-            Assert.True(internalDataCache.CodedLookups.ContainsKey(thisKey));
-            Assert.Equal(expectedCount, internalDataCache.CodedLookups[thisKey].Count);
+            Assert.True(internalDataCache.StringLookups.ContainsKey(thisKey));
+            Assert.Equal(expectedCount, internalDataCache.StringLookups[thisKey].Count);
         }
 
         /// <summary>

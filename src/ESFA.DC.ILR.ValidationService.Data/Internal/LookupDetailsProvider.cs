@@ -1,8 +1,7 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.Extensions;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
+﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Data
 {
@@ -48,6 +47,12 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool IsBetween(DateTime fromDate, DateTime toDate, DateTime candidate) => (candidate >= fromDate) && (candidate <= toDate);
 
+        public IReadOnlyCollection<int> Get(TypeOfIntegerCodedLookup lookupKey) =>
+            InternalCache.IntegerLookups[lookupKey];
+
+        public IReadOnlyCollection<string> Get(TypeOfStringCodedLookup lookupKey) =>
+            InternalCache.StringLookups[lookupKey];
+
         /// <summary>
         /// Determines whether [the specified lookup key] [contains] the value.
         /// </summary>
@@ -58,17 +63,7 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool Contains(TypeOfIntegerCodedLookup lookupKey, int candidate)
         {
-            return InternalCache.SimpleLookups[lookupKey].Contains(candidate);
-        }
-
-        /// <summary>
-        /// As a set.
-        /// </summary>
-        /// <param name="lookupKey">The lookup key.</param>
-        /// <returns>the domain of values pertinent to the coded lookup key</returns>
-        public IReadOnlyCollection<int> AsASet(TypeOfIntegerCodedLookup lookupKey)
-        {
-            return InternalCache.SimpleLookups[lookupKey];
+            return InternalCache.IntegerLookups[lookupKey].Contains(candidate);
         }
 
         /// <summary>
@@ -81,18 +76,8 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool Contains(TypeOfStringCodedLookup lookupKey, string candidate)
         {
-            return !string.IsNullOrEmpty(candidate) &&
-                   InternalCache.CodedLookups[lookupKey].Contains(candidate, StringComparer.OrdinalIgnoreCase);
-        }
-
-        /// <summary>
-        /// As a set.
-        /// </summary>
-        /// <param name="lookupKey">The lookup key.</param>
-        /// <returns>the domain of values pertinent to the coded lookup key</returns>
-        public IReadOnlyCollection<string> AsASet(TypeOfStringCodedLookup lookupKey)
-        {
-            return InternalCache.CodedLookups[lookupKey];
+            return It.Has(candidate)
+                && InternalCache.StringLookups[lookupKey].Contains(candidate);
         }
 
         /// <summary>
@@ -105,28 +90,37 @@ namespace ESFA.DC.ILR.ValidationService.Data
         /// </returns>
         public bool Contains(TypeOfLimitedLifeLookup lookupKey, int candidate)
         {
-            return Contains(lookupKey, candidate.ToString());
+            return Contains(lookupKey, $"{candidate}");
         }
 
         /// <summary>
         /// Determines whether [contains] [the specified lookup key].
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>
-        /// <param name="candidate">The candidate.</param>
+        /// <param name="keyCandidate">The candidate.</param>
         /// <returns>
         /// <c>true</c> if [contains] [the specified lookup key]; otherwise, <c>false</c>.
         /// </returns>
-        public bool Contains(TypeOfLimitedLifeLookup lookupKey, string candidate)
+        public bool Contains(TypeOfLimitedLifeLookup lookupKey, string keyCandidate)
         {
-            return !string.IsNullOrEmpty(candidate)
-                && InternalCache.LimitedLifeLookups[lookupKey].ContainsKey(candidate);
+            return It.Has(keyCandidate)
+                && InternalCache.LimitedLifeLookups[lookupKey].ContainsKey(keyCandidate);
         }
 
+        /// <summary>
+        /// Determines whether [contains] [for the specified lookup] [the key and value].
+        /// </summary>
+        /// <param name="lookupKey">The lookup key.</param>
+        /// <param name="keyCandidate">The key candidate.</param>
+        /// <param name="valueCandidate">The value candidate.</param>
+        /// <returns>
+        /// <c>true</c> if [contains] [the specified lookup key]; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(TypeOfListItemLookup lookupKey, string keyCandidate, string valueCandidate)
         {
             return !string.IsNullOrEmpty(keyCandidate)
-                && InternalCache.ListItemLookups[lookupKey].TryGetValue(keyCandidate, out IReadOnlyCollection<string> value)
-                && value.Any(x => x.CaseInsensitiveEquals(valueCandidate));
+                && InternalCache.ListItemLookups[lookupKey].TryGetValue(keyCandidate, out var value)
+                && value.Contains(valueCandidate);
         }
 
         /// <summary>

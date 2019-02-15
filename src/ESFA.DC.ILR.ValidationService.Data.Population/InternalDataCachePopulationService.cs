@@ -48,8 +48,12 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <returns>A task</returns>
         public async Task PopulateAsync(CancellationToken cancellationToken)
         {
-            var internalDataCache = (InternalDataCache)_internalDataCache;
-            Build(internalDataCache);
+            await Task.Run(() =>
+            {
+                // this is redundand and should be removed, maybe next time...
+                var internalDataCache = (InternalDataCache)_internalDataCache;
+                Build(internalDataCache);
+            });
         }
 
         /// <summary>
@@ -119,9 +123,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="addToCache">add to cache.</param>
         public void AddLookups(TypeOfIntegerCodedLookup forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildSimpleLookupEnumerable<int>(usingSource, $"{forThisKey}");
+            var lookups = BuildListLookups<int>(usingSource, $"{forThisKey}");
 
-            addToCache.SimpleLookups.Add(forThisKey, lookups.ToList());
+            addToCache.IntegerLookups.Add(forThisKey, lookups);
         }
 
         /// <summary>
@@ -132,9 +136,9 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="addToCache">add to cache.</param>
         public void AddLookups(TypeOfStringCodedLookup forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildSimpleLookupEnumerable<string>(usingSource, $"{forThisKey}");
+            var lookups = BuildListLookups<string>(usingSource, $"{forThisKey}");
 
-            addToCache.CodedLookups.Add(forThisKey, lookups.ToList());
+            addToCache.StringLookups.Add(forThisKey, lookups);
         }
 
         /// <summary>
@@ -145,7 +149,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="addToCache">add to cache.</param>
         public void AddLookups(TypeOfListItemLookup forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildItemLookupEnumerable(usingSource, $"{forThisKey}");
+            var lookups = BuildStringDictionaryLookups(usingSource, $"{forThisKey}");
 
             addToCache.ListItemLookups.Add(forThisKey, lookups);
         }
@@ -158,7 +162,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <param name="addToCache">add to cache.</param>
         public void AddLookups(TypeOfLimitedLifeLookup forThisKey, XElement usingSource, InternalDataCache addToCache)
         {
-            var lookups = BuildLookupWithValidityPeriods(usingSource, $"{forThisKey}");
+            var lookups = BuildDictionaryLookupsWithValidityPeriods(usingSource, $"{forThisKey}");
 
             addToCache.LimitedLifeLookups.Add(forThisKey, lookups);
         }
@@ -169,26 +173,34 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// <typeparam name="T">the domain type for the lookup list</typeparam>
         /// <param name="lookups">The lookups.</param>
         /// <param name="type">The type.</param>
-        /// <returns>a list of simple lookups</returns>
-        private IEnumerable<T> BuildSimpleLookupEnumerable<T>(XElement lookups, string type)
+        /// <returns>a distinct key set of lookups (case insensitive when necessary)</returns>
+        private IContainThis<T> BuildListLookups<T>(XElement lookups, string type)
         {
             return lookups
                 .Descendants(type)
                 .Descendants("option")
                 .Attributes("code")
-                .Select(c => (T)Convert.ChangeType(c.Value, typeof(T)));
+                .Select(c => (T)Convert.ChangeType(c.Value, typeof(T)))
+                .AsSafeDistinctKeySet();
         }
 
-        private IDictionary<string, IReadOnlyCollection<string>> BuildItemLookupEnumerable(XElement lookups, string type)
+        /// <summary>
+        /// Builds the dictionary lookups.
+        /// </summary>
+        /// <param name="lookups">The lookups.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>a  case insenensitive dictionary of distinct key set lookups (case insensitive when necessary)</returns>
+        private IReadOnlyDictionary<string, IContainThis<string>> BuildStringDictionaryLookups(XElement lookups, string type)
         {
             return lookups
                 .Descendants(type)
                 .Descendants("option")
                 .ToDictionary(
-                    n => GetAttributeValue(n.Attribute("code")),
+                    c => GetAttributeValue(c.Attribute("code")),
                     v => v.Descendants("item")
                         .Select(i => GetAttributeValue(i.Attribute("value")))
-                        .AsSafeReadOnlyList());
+                        .AsSafeDistinctKeySet(),
+                    StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -196,35 +208,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population
         /// </summary>
         /// <param name="lookups">The lookups.</param>
         /// <param name="type">The type.</param>
-        /// <returns>string domain lists of validity periods</returns>
-        private IDictionary<string, ValidityPeriods> BuildLookupWithValidityPeriods(XElement lookups, string type)
+        /// <returns>
+        /// string domain lists of validity periods
+        /// </returns>
+        private IReadOnlyDictionary<string, ValidityPeriods> BuildDictionaryLookupsWithValidityPeriods(XElement lookups, string type)
         {
             return lookups
                  .Descendants(type)
                  .Descendants("option")
                  .ToDictionary(
-                    c => c.Attribute("code").Value,
+                    c => GetAttributeValue(c.Attribute("code")),
                     v => new ValidityPeriods(
                         GetMinimumDate(GetAttributeValue(v.Attribute("validFrom"))),
-                        GetMaximumDate(GetAttributeValue(v.Attribute("validTo")))));
-        }
-
-        /// <summary>
-        /// Builds the lookup with validity periods (using int keys)
-        /// </summary>
-        /// <param name="lookups">The lookups.</param>
-        /// <param name="type">The type.</param>
-        /// <returns>integer domain lists of validity periods</returns>
-        private IDictionary<int, ValidityPeriods> BuildLookupAsIntWithValidityPeriods(XElement lookups, string type)
-        {
-            return lookups
-                 .Descendants(type)
-                 .Descendants("option")
-                 .ToDictionary(
-                    c => int.Parse(c.Attribute("code").Value),
-                    v => new ValidityPeriods(
-                        GetMinimumDate(GetAttributeValue(v.Attribute("validFrom"))),
-                        GetMaximumDate(GetAttributeValue(v.Attribute("validTo")))));
+                        GetMaximumDate(GetAttributeValue(v.Attribute("validTo")))),
+                    StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>

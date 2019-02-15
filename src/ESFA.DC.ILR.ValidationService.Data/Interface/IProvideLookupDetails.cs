@@ -9,6 +9,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
     public interface IProvideLookupDetails
     {
         /// <summary>
+        /// Gets the domain of values for the specified lookup key.
+        /// </summary>
+        /// <param name="lookupKey">The lookup key.</param>
+        /// <returns>the domain of values pertinent to the coded lookup key</returns>
+        IReadOnlyCollection<int> Get(TypeOfIntegerCodedLookup lookupKey);
+
+        /// <summary>
+        /// Gets the domain of values for the specified lookup key.
+        /// </summary>
+        /// <param name="lookupKey">The lookup key.</param>
+        /// <returns>the domain of values pertinent to the coded lookup key</returns>
+        IReadOnlyCollection<string> Get(TypeOfStringCodedLookup lookupKey);
+
+        /// <summary>
         /// Determines whether [the specified lookup key] [contains] the value.
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>
@@ -19,13 +33,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         bool Contains(TypeOfIntegerCodedLookup lookupKey, int candidate);
 
         /// <summary>
-        /// As a set.
-        /// </summary>
-        /// <param name="lookupKey">The lookup key.</param>
-        /// <returns>the domain of values pertinent to the coded lookup key</returns>
-        IReadOnlyCollection<int> AsASet(TypeOfIntegerCodedLookup lookupKey);
-
-        /// <summary>
         /// Determines whether [the specified lookup key] [contains] the value.
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>
@@ -34,13 +41,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         ///   <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
         /// </returns>
         bool Contains(TypeOfStringCodedLookup lookupKey, string candidate);
-
-        /// <summary>
-        /// As a set.
-        /// </summary>
-        /// <param name="lookupKey">The lookup key.</param>
-        /// <returns>the domain of values pertinent to the coded lookup key</returns>
-        IReadOnlyCollection<string> AsASet(TypeOfStringCodedLookup lookupKey);
 
         /// <summary>
         /// Determines whether [the specified lookup key] [contains] the value.

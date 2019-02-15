@@ -2,6 +2,7 @@
 using ESFA.DC.ILR.ValidationService.Data.Internal;
 using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Utility;
 using FluentAssertions;
 using Moq;
 using System;
@@ -156,8 +157,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
         {
             var cacheFactory = new Mock<ICreateInternalDataCache>();
             var cache = new InternalDataCache();
-            var finTypes = new List<int>() { 1, 2, 4, 5, 6, 9, 24, 25, 29, 45 };
-            var codedTypes = new List<string>() { "TNP", "PMR", "AEC", "UI", "OT", "ME", "YOU" };
+            var finTypes = new DistinctKeySet<int> { 1, 2, 4, 5, 6, 9, 24, 25, 29, 45 };
+            var codedTypes = new CaseInsensitiveDistinctKeySet { "TNP", "PMR", "AEC", "UI", "OT", "ME", "YOU" };
 
             var tTAccomItems = new Dictionary<string, ValidityPeriods>()
             {
@@ -176,11 +177,11 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.Internal
                 ["P70"] = new ValidityPeriods(DateTime.MinValue, DateTime.Parse("2013-07-31"))
             };
 
-            var apprenticeshipFinancialRecords = new string[] { "TNP1", "TNP2", "TNP3", "TNP4", "PMR1", "PMR2", "PMR3" };
+            var apprenticeshipFinancialRecords = new CaseInsensitiveDistinctKeySet { "TNP1", "TNP2", "TNP3", "TNP4", "PMR1", "PMR2", "PMR3" };
 
-            cache.SimpleLookups.Add(TypeOfIntegerCodedLookup.FINTYPE, finTypes);
-            cache.CodedLookups.Add(TypeOfStringCodedLookup.AppFinRecord, codedTypes);
-            cache.CodedLookups.Add(TypeOfStringCodedLookup.ApprenticeshipFinancialRecord, apprenticeshipFinancialRecords);
+            cache.IntegerLookups.Add(TypeOfIntegerCodedLookup.FINTYPE, finTypes);
+            cache.StringLookups.Add(TypeOfStringCodedLookup.AppFinRecord, codedTypes);
+            cache.StringLookups.Add(TypeOfStringCodedLookup.ApprenticeshipFinancialRecord, apprenticeshipFinancialRecords);
             cache.LimitedLifeLookups.Add(TypeOfLimitedLifeLookup.TTAccom, tTAccomItems);
             cache.LimitedLifeLookups.Add(TypeOfLimitedLifeLookup.QualEnt3, qualent3s);
 
