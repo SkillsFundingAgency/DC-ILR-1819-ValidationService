@@ -1,81 +1,134 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
+using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
 {
-    public class EmpId_10Rule : AbstractRule, IRule<ILearner>
+    public class EmpId_10Rule :
+        AbstractRule,
+        IRule<ILearner>
     {
-        private const int _empStat = TypeOfEmploymentStatus.InPaidEmployment;
-        private readonly IDerivedData_07Rule _dd07;
+        /// <summary>
+        /// The check (rule common operations provider)
+        /// </summary>
+        private readonly IProvideRuleCommonOperations _check;
 
-        public EmpId_10Rule(IDerivedData_07Rule dd07, IValidationErrorHandler validationErrorHandler)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmpId_10Rule"/> class.
+        /// </summary>
+        /// <param name="validationErrorHandler">The validation error handler.</param>
+        /// <param name="commonOperations">The common operations.</param>
+        public EmpId_10Rule(
+            IValidationErrorHandler validationErrorHandler,
+            IProvideRuleCommonOperations commonOperations)
             : base(validationErrorHandler, RuleNameConstants.EmpId_10)
         {
-            _dd07 = dd07;
+            It.IsNull(validationErrorHandler)
+                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            It.IsNull(commonOperations)
+                .AsGuard<ArgumentNullException>(nameof(commonOperations));
+
+            _check = commonOperations;
         }
 
-        public void Validate(ILearner objectToValidate)
+        /// <summary>
+        /// Validates this learner.
+        /// </summary>
+        /// <param name="thisLearner">this learner.</param>
+        public void Validate(ILearner thisLearner)
         {
-            var employmentStatuses = EmploymentStatusesInPaidEmployment(objectToValidate.LearnerEmploymentStatuses).ToList();
+            It.IsNull(thisLearner)
+                .AsGuard<ArgumentNullException>(nameof(thisLearner));
 
-            if (objectToValidate.LearningDeliveries == null || !employmentStatuses.Any())
-            {
-                return;
-            }
+            var employments = thisLearner.LearnerEmploymentStatuses.AsSafeReadOnlyList();
 
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
-            {
-                if (ConditionMet(learningDelivery.ProgTypeNullable, learningDelivery.AimType, learningDelivery.LearnStartDate, employmentStatuses))
-                {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, errorMessageParameters: BuildErrorMessageParameters(_empStat));
-                }
-            }
+            thisLearner.LearningDeliveries
+                .ForAny(
+                    x => IsNotValid(x, GetEmploymentStatusOn(x.LearnStartDate, employments)),
+                    x => RaiseValidationMessage(thisLearner.LearnRefNumber, x));
         }
 
-        public bool ConditionMet(int? progType, int aimType, DateTime learnStartDate, IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses)
+        /// <summary>
+        /// Determines whether [is not valid] [the specified thisdelivery].
+        /// </summary>
+        /// <param name="thisdelivery">The thisdelivery.</param>
+        /// <param name="thisEmployment">The this employment.</param>
+        /// <returns>
+        ///   <c>true</c> if [is not valid] [the specified thisdelivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsNotValid(ILearningDelivery thisdelivery, ILearnerEmploymentStatus thisEmployment) =>
+            IsPrimaryLearningAim(thisdelivery)
+            && HasQualifyingEmploymentStatus(thisEmployment)
+            && HasDisqualifyingEmployerID(thisEmployment);
+
+        /// <summary>
+        /// Determines whether [is primary learning aim] [this delivery].
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is primary learning aim] [this delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsPrimaryLearningAim(ILearningDelivery thisDelivery) =>
+            _check.InApprenticeship(thisDelivery)
+            && _check.InAProgramme(thisDelivery);
+
+        /// <summary>
+        /// Determines whether [has qualifying employment status] [the specified this employment].
+        /// </summary>
+        /// <param name="thisEmployment">The this employment.</param>
+        /// <returns>
+        ///   <c>true</c> if [has qualifying employment status] [the specified this employment]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasQualifyingEmploymentStatus(ILearnerEmploymentStatus thisEmployment) =>
+            It.Has(thisEmployment)
+                && It.IsInRange(thisEmployment.EmpStat, TypeOfEmploymentStatus.InPaidEmployment);
+
+        /// <summary>
+        /// Determines whether [has disqualifying employer identifier] [the specified this employment].
+        /// </summary>
+        /// <param name="thisEmployment">The this employment.</param>
+        /// <returns>
+        ///   <c>true</c> if [has disqualifying employer identifier] [the specified this employment]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasDisqualifyingEmployerID(ILearnerEmploymentStatus thisEmployment) =>
+            It.IsEmpty(thisEmployment.EmpIdNullable);
+
+        /// <summary>
+        /// Gets the employment status on (this date) (from employments).
+        /// </summary>
+        /// <param name="thisDate">this date.</param>
+        /// <param name="fromEmployments">from employments.</param>
+        /// <returns>the closest learner employmentstatus for the learn start date</returns>
+        public ILearnerEmploymentStatus GetEmploymentStatusOn(DateTime thisDate, IReadOnlyCollection<ILearnerEmploymentStatus> fromEmployments) =>
+            _check.GetEmploymentStatusOn(thisDate, fromEmployments);
+
+        /// <summary>
+        /// Raises the validation message.
+        /// </summary>
+        /// <param name="learnRefNumber">The learn reference number.</param>
+        /// <param name="thisDelivery">this delivery.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            return DD07ConditionMet(progType)
-                && AimTypeConditionMet(aimType)
-                && EmpIdNotExistsOnLearnStartDate(learnStartDate, learnerEmploymentStatuses);
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery));
         }
 
-        public bool DD07ConditionMet(int? progType)
-        {
-            return _dd07.IsApprenticeship(progType);
-        }
-
-        public bool AimTypeConditionMet(int aimType)
-        {
-            return aimType == TypeOfAim.ProgrammeAim;
-        }
-
-        public bool EmpIdNotExistsOnLearnStartDate(DateTime learnStartDate, IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses)
-        {
-            var employmentStatuses = learnerEmploymentStatuses?
-                .Where(l => l.DateEmpStatApp <= learnStartDate).ToList() ?? new List<ILearnerEmploymentStatus>();
-
-            return employmentStatuses.Any()
-                    ? !employmentStatuses.Any(l => l.EmpIdNullable.HasValue)
-                    : false;
-        }
-
-        public IEnumerable<ILearnerEmploymentStatus> EmploymentStatusesInPaidEmployment(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses)
-        {
-            return learnerEmploymentStatuses?.Where(l => l.EmpStat == _empStat) ?? new List<ILearnerEmploymentStatus>();
-        }
-
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int empStat)
+        /// <summary>
+        /// Builds the message parameters for.
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>a collection of message parameters</returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.EmpStat, empStat),
-                BuildErrorMessageParameter(PropertyNameConstants.EmpId, string.Empty)
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate),
+                BuildErrorMessageParameter(PropertyNameConstants.EmpStat, TypeOfEmploymentStatus.InPaidEmployment),
+                BuildErrorMessageParameter(PropertyNameConstants.EmpId, "(missing)")
             };
         }
     }
