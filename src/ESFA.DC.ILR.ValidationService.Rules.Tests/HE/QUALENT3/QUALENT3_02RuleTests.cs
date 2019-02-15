@@ -50,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
 
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
 
-            qualent3DataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3)).Returns(false);
+            qualent3DataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.QualEnt3, qualent3)).Returns(false);
 
             NewRule(qualent3DataServiceMock.Object).QUALENT3ValidConditionMet(qualent3).Should().BeTrue();
         }
@@ -62,7 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
 
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
 
-            qualent3DataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3)).Returns(true);
+            qualent3DataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.QualEnt3, qualent3)).Returns(true);
 
             NewRule(qualent3DataServiceMock.Object).QUALENT3ValidConditionMet(qualent3).Should().BeFalse();
         }
@@ -79,7 +79,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
 
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
 
-            qualent3DataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3)).Returns(false);
+            qualent3DataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.QualEnt3, qualent3)).Returns(false);
 
             NewRule(qualent3DataServiceMock.Object).ConditionMet(learningDeliveryHE).Should().BeTrue();
         }
@@ -96,7 +96,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
 
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
 
-            qualent3DataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3)).Returns(true);
+            qualent3DataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.QualEnt3, qualent3)).Returns(true);
 
             NewRule(qualent3DataServiceMock.Object).ConditionMet(learningDeliveryHE).Should().BeFalse();
         }
@@ -122,7 +122,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
 
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
 
-            qualent3DataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3)).Returns(false);
+            qualent3DataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.QualEnt3, qualent3)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -151,7 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
 
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
 
-            qualent3DataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.QualEnt3, qualent3)).Returns(true);
+            qualent3DataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.QualEnt3, qualent3)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

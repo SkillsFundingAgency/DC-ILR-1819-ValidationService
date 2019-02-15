@@ -27,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Accom
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.Accom, accomValue)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.Accom, accomValue)).Returns(false);
 
             NewRule(provideLookupDetails: provideLookupDetailsMockup.Object).ConditionMet(accomValue).Should().BeTrue();
         }
@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Accom
         {
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.Accom, accomValue)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.Accom, accomValue)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Accom
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.Accom, 10)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.Accom, 10)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -74,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Accom
 
             var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetailsMockup.Setup(p => p.Contains(LookupSimpleKey.Ethnicity, 4)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.Ethnicity, 4)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

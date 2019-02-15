@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -8,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
@@ -28,11 +27,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
         {
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(l => l.ContainsValueForKey(
-                LookupCodedKeyDictionary.LearnerFAM,
-                learnFamType,
-                learnFamCode)).Returns(lookUpResult);
-            var testLearnerFam = new TestLearnerFAM() { LearnFAMType = learnFamType, LearnFAMCode = learnFamCode };
+            lookupsMock
+                .Setup(l => l.Contains(TypeOfLimitedLifeLookup.LearnerFAM, $"{learnFamType}{learnFamCode}"))
+                .Returns(lookUpResult);
+
+            var testLearnerFam = new TestLearnerFAM { LearnFAMType = learnFamType, LearnFAMCode = learnFamCode };
 
             NewRule(lookupsMock.Object).ConditionMet(testLearnerFam).Should().Be(expectation);
         }
@@ -54,10 +53,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(l => l.ContainsValueForKey(
-                LookupCodedKeyDictionary.LearnerFAM,
-                It.IsAny<string>(),
-                It.IsAny<int>())).Returns(false);
+            lookupsMock
+                .Setup(l => l.Contains(TypeOfLimitedLifeLookup.LearnerFAM, It.IsAny<string>()))
+                .Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -82,10 +80,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(l => l.ContainsValueForKey(
-                LookupCodedKeyDictionary.LearnerFAM,
-                It.IsAny<string>(),
-                It.IsAny<int>())).Returns(true);
+            lookupsMock
+                .Setup(l => l.Contains(TypeOfLimitedLifeLookup.LearnerFAM, It.IsAny<string>()))
+                .Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -100,10 +97,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LearnFAMType
 
             var lookupsMock = new Mock<IProvideLookupDetails>();
 
-            lookupsMock.Setup(l => l.ContainsValueForKey(
-                LookupCodedKeyDictionary.LearnerFAM,
-                It.IsAny<string>(),
-                It.IsAny<int>())).Returns(true);
+            lookupsMock
+                .Setup(l => l.Contains(TypeOfLimitedLifeLookup.LearnerFAM, It.IsAny<string>()))
+                .Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

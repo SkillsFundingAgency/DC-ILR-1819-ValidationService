@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
 
         public bool ConditionMet(int priorAttainValue)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.PriorAttain, priorAttainValue);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttainValue);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int priorAttainValue)

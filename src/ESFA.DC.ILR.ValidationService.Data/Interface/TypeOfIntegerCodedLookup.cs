@@ -4,7 +4,7 @@
     /// lookup simple keys
     /// these are NOT time restricted integer based value domains
     /// </summary>
-    public enum LookupSimpleKey
+    public enum TypeOfIntegerCodedLookup
     {
         Accom,
         AimType,

@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
 
         public bool ConditionMet(int compStatus)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.CompStatus, compStatus);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int compStatus)

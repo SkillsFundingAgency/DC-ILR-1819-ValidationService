@@ -109,7 +109,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var lookups = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             lookups
-                .Setup(x => x.Contains(LookupSimpleKey.EmpStat, Moq.It.IsAny<int>()))
+                .Setup(x => x.Contains(TypeOfIntegerCodedLookup.EmpStat, Moq.It.IsAny<int>()))
                 .Returns(!expectation);
 
             var sut = new EmpStat_05Rule(handler.Object, lookups.Object);
@@ -167,7 +167,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var lookups = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             lookups
-                .Setup(x => x.Contains(LookupSimpleKey.EmpStat, EmpStat))
+                .Setup(x => x.Contains(TypeOfIntegerCodedLookup.EmpStat, EmpStat))
                 .Returns(false);
 
             var sut = new EmpStat_05Rule(handler.Object, lookups.Object);
@@ -209,7 +209,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var lookups = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             lookups
-                .Setup(x => x.Contains(LookupSimpleKey.EmpStat, EmpStat))
+                .Setup(x => x.Contains(TypeOfIntegerCodedLookup.EmpStat, EmpStat))
                 .Returns(true);
 
             var sut = new EmpStat_05Rule(handler.Object, lookups.Object);

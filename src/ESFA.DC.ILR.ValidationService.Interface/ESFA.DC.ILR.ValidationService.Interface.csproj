@@ -96,9 +96,12 @@
     <Compile Include="IValidationItemProviderService.cs" />
     <Compile Include="IValidationOutputService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\CaseInsensitiveDistinctKeySet.cs" />
     <Compile Include="Utility\Collection.cs" />
+    <Compile Include="Utility\DistinctKeySet{TItem}.cs" />
     <Compile Include="Utility\Format.cs" />
     <Compile Include="Utility\Guard.cs" />
+    <Compile Include="Utility\IContainThis.cs" />
     <Compile Include="Utility\It.cs" />
   </ItemGroup>
   <ItemGroup>

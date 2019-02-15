@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.EmpOutcome
 
         public bool ConditionMet(int? empOutcome)
         {
-            return empOutcome.HasValue && !_provideLookupDetails.Contains(LookupTimeRestrictedKey.EmpOutcome, empOutcome.Value);
+            return empOutcome.HasValue && !_provideLookupDetails.Contains(TypeOfLimitedLifeLookup.EmpOutcome, empOutcome.Value);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? empOutcome)

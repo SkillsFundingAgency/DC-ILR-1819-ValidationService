@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.Sex
             }
         }
 
-        public bool ConditionMet(string sex) => !_provideLookupDetails.Contains(LookupCodedKey.Sex, sex);
+        public bool ConditionMet(string sex) => !_provideLookupDetails.Contains(TypeOfStringCodedLookup.Sex, sex);
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string sex)
         {

@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
 
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(false);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.LLDDCat, llddCat)).Returns(false);
 
             NewRule(llddCatDataServiceMock.Object).ConditionMet(llddCat).Should().BeTrue();
         }
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
 
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.LLDDCat, llddCat)).Returns(true);
 
             NewRule(llddCatDataServiceMock.Object).ConditionMet(llddCat).Should().BeFalse();
         }
@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
 
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(false);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.LLDDCat, llddCat)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -88,7 +88,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.LLDDCat
 
             var llddCatDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            llddCatDataServiceMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat)).Returns(true);
+            llddCatDataServiceMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.LLDDCat, llddCat)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

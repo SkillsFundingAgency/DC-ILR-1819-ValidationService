@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 
             var aimTypeInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.AimType, aimType)).Returns(false);
+            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.AimType, aimType)).Returns(false);
 
             NewRule(aimTypeInternalDataServiceMock.Object).ConditionMet(aimType).Should().BeTrue();
         }
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 
             var aimTypeInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.AimType, aimType)).Returns(true);
+            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.AimType, aimType)).Returns(true);
 
             NewRule(aimTypeInternalDataServiceMock.Object).ConditionMet(aimType).Should().BeFalse();
         }
@@ -60,7 +60,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 
             var aimTypeInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.AimType, aimType)).Returns(false);
+            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.AimType, aimType)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AimType
 
             var aimTypeInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.AimType, aimType)).Returns(true);
+            aimTypeInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.AimType, aimType)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

@@ -4,7 +4,7 @@
     /// lookup time restricted keys
     /// these are time restricted integer based value domains
     /// </summary>
-    public enum LookupTimeRestrictedKey
+    public enum TypeOfLimitedLifeLookup
     {
         /// <summary>
         /// employment outcome
@@ -14,7 +14,7 @@
         /// <summary>
         /// employment status monitor (typed code)
         /// </summary>
-        ESMTypedCode,
+        EmploymentStatusMonitoring,
 
         /// <summary>
         /// funding completion (code)
@@ -49,6 +49,16 @@
         /// <summary>
         /// contact preference
         /// </summary>
-        ContactPreference
+        ContactPreference,
+
+        /// <summary>
+        /// The learning delivery fam
+        /// </summary>
+        LearningDeliveryFAM,
+
+        /// <summary>
+        /// The learner fam
+        /// </summary>
+        LearnerFAM
     }
 }

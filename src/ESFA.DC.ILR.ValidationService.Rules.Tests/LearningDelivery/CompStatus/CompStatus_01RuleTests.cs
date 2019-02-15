@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
 
             var compStatusInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.CompStatus, compStatus)).Returns(false);
+            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus)).Returns(false);
 
             NewRule(compStatusInternalDataServiceMock.Object).ConditionMet(compStatus).Should().BeTrue();
         }
@@ -37,7 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
 
             var compStatusInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.CompStatus, compStatus)).Returns(true);
+            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus)).Returns(true);
 
             NewRule(compStatusInternalDataServiceMock.Object).ConditionMet(compStatus).Should().BeFalse();
         }
@@ -62,7 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
 
             var compStatusInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.CompStatus, compStatus)).Returns(false);
+            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -90,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
 
             var compStatusInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(LookupSimpleKey.CompStatus, compStatus)).Returns(true);
+            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

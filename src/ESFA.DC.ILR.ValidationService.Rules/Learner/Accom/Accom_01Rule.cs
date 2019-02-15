@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.Accom
 
         public bool ConditionMet(int accomValue)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.Accom, accomValue);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.Accom, accomValue);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int accom)

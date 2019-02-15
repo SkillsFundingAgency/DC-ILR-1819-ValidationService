@@ -26,7 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.ELQ
 
             var providerDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerDetailsMock.Setup(ds => ds.Contains(LookupSimpleKey.ELQ, 1)).Returns(false);
+            providerDetailsMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.ELQ, 1)).Returns(false);
 
             NewRule(providerDetailsMock.Object).ConditionMet(learningDeliveryHe).Should().BeTrue();
         }
@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.ELQ
 
             var providerDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerDetailsMock.Setup(ds => ds.Contains(LookupSimpleKey.ELQ, 1)).Returns(true);
+            providerDetailsMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.ELQ, 1)).Returns(true);
 
             NewRule(providerDetailsMock.Object).ConditionMet(learningDeliveryHe).Should().BeFalse();
         }
@@ -62,7 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.ELQ
 
             var providerDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerDetailsMock.Setup(ds => ds.Contains(LookupSimpleKey.ELQ, 2)).Returns(false);
+            providerDetailsMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.ELQ, 2)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -89,7 +89,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.ELQ
 
             var providerDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerDetailsMock.Setup(ds => ds.Contains(LookupSimpleKey.ELQ, 2)).Returns(true);
+            providerDetailsMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.ELQ, 2)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

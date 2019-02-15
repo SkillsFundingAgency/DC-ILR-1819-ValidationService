@@ -70,8 +70,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade
                     continue;
                 }
 
-                if (!_lookupDetails.ContainsValueForKey(
-                    LookupItemKey.OutGradeLearningAimType,
+                if (!_lookupDetails.Contains(
+                    TypeOfListItemLookup.OutGradeLearningAimType,
                     larsLearningDelivery.LearnAimRefType,
                     learningDelivery.OutGrade))
                 {

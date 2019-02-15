@@ -109,7 +109,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.DOMICILE
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             service
-                .Setup(x => x.Contains(LookupCodedKey.Domicile, Moq.It.IsAny<string>()))
+                .Setup(x => x.Contains(TypeOfStringCodedLookup.Domicile, Moq.It.IsAny<string>()))
                 .Returns(expectation);
 
             var sut = new DOMICILE_02Rule(handler.Object, service.Object);
@@ -204,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.DOMICILE
 
             var service = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             service
-                .Setup(x => x.Contains(LookupCodedKey.Domicile, Moq.It.IsAny<string>()))
+                .Setup(x => x.Contains(TypeOfStringCodedLookup.Domicile, Moq.It.IsAny<string>()))
                 .Returns(false);
 
             var sut = new DOMICILE_02Rule(handler.Object, service.Object);
@@ -246,7 +246,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.DOMICILE
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var service = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             service
-                .Setup(x => x.Contains(LookupCodedKey.Domicile, Moq.It.IsAny<string>()))
+                .Setup(x => x.Contains(TypeOfStringCodedLookup.Domicile, Moq.It.IsAny<string>()))
                 .Returns(true);
 
             var sut = new DOMICILE_02Rule(handler.Object, service.Object);

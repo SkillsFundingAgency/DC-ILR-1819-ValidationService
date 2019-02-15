@@ -4,7 +4,7 @@
     /// lookup coded keys
     /// these are time unlimited code based value domains
     /// </summary>
-    public enum LookupCodedKey
+    public enum TypeOfStringCodedLookup
     {
         AppFinRecord,
         ContPrefType,
@@ -16,6 +16,11 @@
         OutGrade,
         OutType,
         Sex,
-        TypeYr
+        TypeYr,
+
+        /// <summary>
+        /// The apprenticeship financial record
+        /// </summary>
+        ApprenticeshipFinancialRecord,
     }
 }

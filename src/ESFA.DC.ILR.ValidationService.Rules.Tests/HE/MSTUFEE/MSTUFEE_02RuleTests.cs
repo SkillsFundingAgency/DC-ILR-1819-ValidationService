@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.MSTUFEE
 
             var providerLookupDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerLookupDetailsMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.MSTuFee, mstuFee, learnStartDate)).Returns(lookUpValid);
+            providerLookupDetailsMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.MSTuFee, mstuFee, learnStartDate)).Returns(lookUpValid);
 
             NewRule(provideLookupDetails: providerLookupDetailsMock.Object).ConditionMet(learnStartDate, mstuFee).Should().Be(expectation);
         }
@@ -55,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.MSTUFEE
 
             var providerLookupDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerLookupDetailsMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.MSTuFee, 2, new DateTime(2013, 01, 01))).Returns(false);
+            providerLookupDetailsMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.MSTuFee, 2, new DateTime(2013, 01, 01))).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -85,7 +85,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.MSTUFEE
 
             var providerLookupDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerLookupDetailsMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.MSTuFee, 2, new DateTime(2013, 01, 01))).Returns(true);
+            providerLookupDetailsMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.MSTuFee, 2, new DateTime(2013, 01, 01))).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade
             }
         }
 
-        public bool MathGradeConditionMet(string mathGrade) => !_lookupProviderDetails.Contains(LookupCodedKey.GCSEGrade, mathGrade);
+        public bool MathGradeConditionMet(string mathGrade) => !_lookupProviderDetails.Contains(TypeOfStringCodedLookup.GCSEGrade, mathGrade);
 
         public bool MathGradeSuppliedAndNotNone(string mathGrade) => !string.IsNullOrEmpty(mathGrade)
                 && !mathGrade.CaseInsensitiveEquals(Grades.NONE);
