@@ -69,6 +69,58 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
         }
 
         [Fact]
+        public void GetLearnersAgeAtStartOfESFContract_ReturnsNullForNoMonitorings()
+        {
+            var employmentStatuses = new List<TestLearnerEmploymentStatus>
+            {
+                new TestLearnerEmploymentStatus
+                {
+                    EmploymentStatusMonitorings = new List<TestEmploymentStatusMonitoring>
+                    {
+                        new TestEmploymentStatusMonitoring
+                        {
+                            ESMType = "LOU",
+                            ESMCode = 0
+                        }
+                    }
+                }
+            };
+
+            var serviceMock = new Mock<ILearnerEmploymentStatusQueryService>();
+            serviceMock
+                .Setup(m => m.LearnerEmploymentStatusForDate(It.IsAny<IEnumerable<ILearnerEmploymentStatus>>(), It.IsAny<DateTime>()))
+                .Returns(new TestLearnerEmploymentStatus
+                {
+                    EmploymentStatusMonitorings = null
+                });
+
+            var rule = NewRule(serviceMock.Object);
+
+            var testConRefNumber = "123456";
+            var startDate = new DateTime(2017, 9, 1);
+
+            var learner = new TestLearner
+            {
+                LearnerEmploymentStatuses = employmentStatuses,
+                LearningDeliveries = new List<TestLearningDelivery>
+                {
+                    new TestLearningDelivery
+                    {
+                        ConRefNumber = testConRefNumber,
+                        LearnStartDate = startDate,
+                        LearnAimRef = "ZESF0001",
+                        CompStatus = 2
+                    }
+                }
+            };
+
+            var result = rule.GetLengthOfUnemployment(learner, testConRefNumber);
+
+            Assert.Null(result);
+            serviceMock.Verify(m => m.LearnerEmploymentStatusForDate(employmentStatuses, startDate), Times.Once);
+        }
+
+        [Fact]
         public void GetLearnersAgeAtStartOfESFContract_ReturnsNullForNullLearningDeliveries()
         {
             var serviceMock = GetServiceMock();
