@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.Ethnicity
                 return;
             }
 
-            if (!_provideLookupDetails.Contains(LookupSimpleKey.Ethnicity, objectToValidate.Ethnicity))
+            if (!_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.Ethnicity, objectToValidate.Ethnicity))
             {
                 HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.Ethnicity));
             }

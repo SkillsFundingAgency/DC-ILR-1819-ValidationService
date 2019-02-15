@@ -69,7 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
 
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
 
-            qualent3DataServiceMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate)).Returns(true);
+            qualent3DataServiceMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.QualEnt3, qualent3, learnStartDate)).Returns(true);
 
             NewRule(provideLookupDetails: qualent3DataServiceMock.Object).LearningDeliveryHEConditionMet(learnStartDate, qualent3).Should().BeFalse();
         }
@@ -83,7 +83,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
 
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
 
-            qualent3DataServiceMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate)).Returns(false);
+            qualent3DataServiceMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.QualEnt3, qualent3, learnStartDate)).Returns(false);
 
             NewRule(provideLookupDetails: qualent3DataServiceMock.Object).LearningDeliveryHEConditionMet(learnStartDate, qualent3).Should().BeTrue();
         }
@@ -105,7 +105,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            qualent3DataServiceMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate)).Returns(true);
+            qualent3DataServiceMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.QualEnt3, qualent3, learnStartDate)).Returns(true);
             learningDeliveryFAMsQueryServiceMock.Setup(f => f.HasLearningDeliveryFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.RES)).Returns(true);
 
             NewRule(
@@ -131,7 +131,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            qualent3DataServiceMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qualent3, learnStartDate)).Returns(false);
+            qualent3DataServiceMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.QualEnt3, qualent3, learnStartDate)).Returns(false);
             learningDeliveryFAMsQueryServiceMock.Setup(f => f.HasLearningDeliveryFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.RES)).Returns(false);
 
             NewRule(
@@ -170,7 +170,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            qualent3DataServiceMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.QualEnt3, TypeOfQualEnt3.CambridgePreUDiploma31072013, new DateTime(2019, 01, 01))).Returns(true);
+            qualent3DataServiceMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.QualEnt3, TypeOfQualEnt3.CambridgePreUDiploma31072013, new DateTime(2019, 01, 01))).Returns(true);
             learningDeliveryFAMsQueryServiceMock.Setup(f => f.HasLearningDeliveryFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.RES)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
@@ -212,7 +212,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.QUALENT3
             var qualent3DataServiceMock = new Mock<IProvideLookupDetails>();
             var learningDeliveryFAMsQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            qualent3DataServiceMock.Setup(q => q.IsCurrent(LookupTimeRestrictedKey.QualEnt3, TypeOfQualEnt3.CambridgePreUDiploma31072013, new DateTime(2013, 01, 01))).Returns(false);
+            qualent3DataServiceMock.Setup(q => q.IsCurrent(TypeOfLimitedLifeLookup.QualEnt3, TypeOfQualEnt3.CambridgePreUDiploma31072013, new DateTime(2013, 01, 01))).Returns(false);
             learningDeliveryFAMsQueryServiceMock.Setup(f => f.HasLearningDeliveryFAMType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.RES)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())

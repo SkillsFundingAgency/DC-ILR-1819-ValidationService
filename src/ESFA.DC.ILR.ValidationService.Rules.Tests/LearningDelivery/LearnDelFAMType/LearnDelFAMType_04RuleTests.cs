@@ -116,7 +116,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var lookups = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             lookups
-                .Setup(x => x.ContainsValueForKey(LookupCodedKeyDictionary.LearningDeliveryFAM, famType, famCode))
+                .Setup(x => x.Contains(TypeOfLimitedLifeLookup.LearningDeliveryFAM, $"{famType}{famCode}"))
                 .Returns(!expectation);
 
             var sut = new LearnDelFAMType_04Rule(handler.Object, lookups.Object);
@@ -186,7 +186,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var lookups = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             lookups
-                .Setup(x => x.ContainsValueForKey(LookupCodedKeyDictionary.LearningDeliveryFAM, famType, famCode))
+                .Setup(x => x.Contains(TypeOfLimitedLifeLookup.LearningDeliveryFAM, $"{famType}{famCode}"))
                 .Returns(false);
 
             var sut = new LearnDelFAMType_04Rule(handler.Object, lookups.Object);
@@ -245,7 +245,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var lookups = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             lookups
-                .Setup(x => x.ContainsValueForKey(LookupCodedKeyDictionary.LearningDeliveryFAM, famType, famCode))
+                .Setup(x => x.Contains(TypeOfLimitedLifeLookup.LearningDeliveryFAM, $"{famType}{famCode}"))
                 .Returns(true);
 
             var sut = new LearnDelFAMType_04Rule(handler.Object, lookups.Object);

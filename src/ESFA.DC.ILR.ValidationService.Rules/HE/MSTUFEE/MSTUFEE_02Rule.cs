@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.MSTUFEE
 
         public bool ConditionMet(DateTime learnStartDate, int mstuFee)
         {
-            return !_provideLookupDetails.IsCurrent(LookupTimeRestrictedKey.MSTuFee, mstuFee, learnStartDate);
+            return !_provideLookupDetails.IsCurrent(TypeOfLimitedLifeLookup.MSTuFee, mstuFee, learnStartDate);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, int mstuFee)

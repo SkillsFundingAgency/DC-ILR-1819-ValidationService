@@ -97,7 +97,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         public bool ConditionMet(int? tTAccom, DateTime referenceDate)
         {
             return It.Has(tTAccom)
-                ? _lookupDetails.IsCurrent(LookupTimeRestrictedKey.TTAccom, tTAccom.Value, referenceDate)
+                ? _lookupDetails.IsCurrent(TypeOfLimitedLifeLookup.TTAccom, tTAccom.Value, referenceDate)
                 : true;
         }
 

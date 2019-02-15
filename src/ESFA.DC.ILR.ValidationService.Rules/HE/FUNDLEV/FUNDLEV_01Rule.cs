@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.FUNDLEV
 
         public bool ConditionMet(int fundlevValue)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.FundLev, fundlevValue);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.FundLev, fundlevValue);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundlevValue)

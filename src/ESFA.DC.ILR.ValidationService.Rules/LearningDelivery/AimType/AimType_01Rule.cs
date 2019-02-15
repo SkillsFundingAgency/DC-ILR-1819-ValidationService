@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AimType
 
         public bool ConditionMet(int aimType)
         {
-            return !_provideLookupDetails.Contains(LookupSimpleKey.AimType, aimType);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.AimType, aimType);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int aimType)

@@ -1,11 +1,11 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
 {
-    using System.Collections.Generic;
     using ESFA.DC.ILR.Model.Interface;
     using ESFA.DC.ILR.ValidationService.Data.Interface;
     using ESFA.DC.ILR.ValidationService.Interface;
     using ESFA.DC.ILR.ValidationService.Rules.Abstract;
     using ESFA.DC.ILR.ValidationService.Rules.Constants;
+    using System.Collections.Generic;
 
     public class LearnFAMType_01Rule : AbstractRule, IRule<ILearner>
     {
@@ -18,7 +18,7 @@
         }
 
         public void Validate(ILearner objectToValidate)
-       {
+        {
             if (objectToValidate.LearnerFAMs == null)
             {
                 return;
@@ -36,7 +36,7 @@
         public bool ConditionMet(ILearnerFAM learnerFam)
         {
             return learnerFam.LearnFAMType != null
-                   && !_lookupDetails.ContainsValueForKey(LookupCodedKeyDictionary.LearnerFAM, learnerFam.LearnFAMType, learnerFam.LearnFAMCode);
+                && !_lookupDetails.Contains(TypeOfLimitedLifeLookup.LearnerFAM, $"{learnerFam.LearnFAMType}{learnerFam.LearnFAMCode}");
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string learnFAMType, int learnFAMCode)

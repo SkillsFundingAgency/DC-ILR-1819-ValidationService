@@ -61,7 +61,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         ///   <c>true</c> if [is not valid] [the specified status]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsNotValid(ILearnerEmploymentStatus status) =>
-            !_lookupDetails.Contains(LookupSimpleKey.EmpStat, status.EmpStat);
+            !_lookupDetails.Contains(TypeOfIntegerCodedLookup.EmpStat, status.EmpStat);
 
         /// <summary>
         /// Validates the specified object.

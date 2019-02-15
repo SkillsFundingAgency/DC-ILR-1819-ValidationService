@@ -23,7 +23,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Sex
         public void ConditionMet_True(string sex)
         {
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.Sex, sex)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.Sex, sex)).Returns(false);
             NewRule(provideLookupDetails: provideLookupDetails.Object).ConditionMet(sex).Should().BeTrue();
         }
 
@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Sex
         public void ConditionMet_False(string sex)
         {
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.Sex, sex)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.Sex, sex)).Returns(true);
             NewRule(provideLookupDetails: provideLookupDetails.Object).ConditionMet(sex).Should().BeFalse();
         }
 
@@ -49,7 +49,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Sex
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.Sex, learner.Sex)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.Sex, learner.Sex)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -66,7 +66,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.Sex
             };
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.Sex, learner.Sex)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.Sex, learner.Sex)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

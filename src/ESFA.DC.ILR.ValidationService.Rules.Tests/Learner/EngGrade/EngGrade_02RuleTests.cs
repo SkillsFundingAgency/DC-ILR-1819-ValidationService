@@ -45,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, engGrade)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.GCSEGrade, engGrade)).Returns(true);
 
             NewRule(provideLookupDetails: provideLookupDetails.Object).EngGradeConditionMet(engGrade).Should().BeFalse();
         }
@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
         {
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, engGrade)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.GCSEGrade, engGrade)).Returns(false);
 
             NewRule(provideLookupDetails: provideLookupDetails.Object).EngGradeConditionMet(engGrade).Should().BeTrue();
         }
@@ -92,7 +92,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, engGrade)).Returns(false);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.GCSEGrade, engGrade)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -118,7 +118,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, engGrade)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.GCSEGrade, engGrade)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -146,7 +146,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, Grades.AstarA)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.GCSEGrade, Grades.AstarA)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -164,7 +164,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.EngGrade
 
             var provideLookupDetails = new Mock<IProvideLookupDetails>();
 
-            provideLookupDetails.Setup(p => p.Contains(LookupCodedKey.GCSEGrade, Grades.AstarA)).Returns(true);
+            provideLookupDetails.Setup(p => p.Contains(TypeOfStringCodedLookup.GCSEGrade, Grades.AstarA)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

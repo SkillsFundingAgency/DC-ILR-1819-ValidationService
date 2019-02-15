@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 {
@@ -37,10 +37,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 
         public bool ConditionMet(IAppFinRecord appFinRecord)
         {
-            return !_lookups.ContainsValueForKey(
-                LookupCodedKeyDictionary.ApprenticeshipFinancialRecord,
-                appFinRecord.AFinType,
-                appFinRecord.AFinCode);
+            return !_lookups.Contains(TypeOfStringCodedLookup.ApprenticeshipFinancialRecord, $"{appFinRecord.AFinType}{appFinRecord.AFinCode}");
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string aFinType, int aFinCode)

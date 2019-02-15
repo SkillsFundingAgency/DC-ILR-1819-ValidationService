@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SOC2000
             var soc2000 = 1;
 
             var provideLookupDetailsMock = new Mock<IProvideLookupDetails>();
-            provideLookupDetailsMock.Setup(pldm => pldm.Contains(LookupSimpleKey.SOC2010, soc2000)).Returns(false);
+            provideLookupDetailsMock.Setup(pldm => pldm.Contains(TypeOfIntegerCodedLookup.SOC2010, soc2000)).Returns(false);
 
             NewRule(provideLookupDetailsMock.Object).ConditionMet(learnStartDate, soc2000).Should().BeTrue();
         }
@@ -42,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SOC2000
             var soc2000 = 1;
 
             var provideLookupDetailsMock = new Mock<IProvideLookupDetails>();
-            provideLookupDetailsMock.Setup(pldm => pldm.Contains(LookupSimpleKey.SOC2010, soc2000)).Returns(false);
+            provideLookupDetailsMock.Setup(pldm => pldm.Contains(TypeOfIntegerCodedLookup.SOC2010, soc2000)).Returns(false);
 
             NewRule(provideLookupDetailsMock.Object).ConditionMet(learnStartDate, soc2000).Should().BeFalse();
         }
@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SOC2000
             var soc2000 = 1;
 
             var provideLookupDetailsMock = new Mock<IProvideLookupDetails>();
-            provideLookupDetailsMock.Setup(pldm => pldm.Contains(LookupSimpleKey.SOC2010, soc2000)).Returns(true);
+            provideLookupDetailsMock.Setup(pldm => pldm.Contains(TypeOfIntegerCodedLookup.SOC2010, soc2000)).Returns(true);
 
             NewRule(provideLookupDetailsMock.Object).ConditionMet(learnStartDate, soc2000).Should().BeFalse();
         }
@@ -79,7 +79,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SOC2000
             };
 
             var provideLookupDetailsMock = new Mock<IProvideLookupDetails>();
-            provideLookupDetailsMock.Setup(pldm => pldm.Contains(LookupSimpleKey.SOC2010, soc2000)).Returns(false);
+            provideLookupDetailsMock.Setup(pldm => pldm.Contains(TypeOfIntegerCodedLookup.SOC2010, soc2000)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -107,7 +107,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.SOC2000
             };
 
             var provideLookupDetailsMock = new Mock<IProvideLookupDetails>();
-            provideLookupDetailsMock.Setup(pldm => pldm.Contains(LookupSimpleKey.SOC2010, soc2000)).Returns(true);
+            provideLookupDetailsMock.Setup(pldm => pldm.Contains(TypeOfIntegerCodedLookup.SOC2010, soc2000)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

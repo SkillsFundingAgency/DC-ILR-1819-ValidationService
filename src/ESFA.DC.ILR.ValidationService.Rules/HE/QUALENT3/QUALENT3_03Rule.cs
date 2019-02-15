@@ -57,7 +57,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.QUALENT3
         public bool LearningDeliveryHEConditionMet(DateTime learnStartDate, string qUALENT3)
         {
             return !string.IsNullOrEmpty(qUALENT3)
-                && !_provideLookupDetails.IsCurrent(LookupTimeRestrictedKey.QualEnt3, qUALENT3, learnStartDate);
+                && !_provideLookupDetails.IsCurrent(TypeOfLimitedLifeLookup.QualEnt3, qUALENT3, learnStartDate);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, string qUALENT3)

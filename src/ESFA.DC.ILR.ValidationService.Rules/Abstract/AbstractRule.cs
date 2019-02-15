@@ -1,5 +1,4 @@
 ﻿using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -36,6 +35,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
         /// </summary>
         public string RuleName { get; }
 
+        public static string AsRequiredCultureDate(DateTime? candidate) =>
+            candidate?.ToString("d", RequiredCulture);
+
         /// <summary>
         /// Raises a validation message using a collection of message parameters.
         /// </summary>
@@ -48,12 +50,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
         }
 
         /// <summary>
-        /// Build Error Message
+        /// Builds the error message parameter.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="propertyName"></param>
-        /// <param name="value"></param>
-        /// <returns>Error Message Parameter</returns>
+        /// <typeparam name="T">a parameter of type</typeparam>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>a date message parameter with the required culture</returns>
         protected IErrorMessageParameter BuildErrorMessageParameter<T>(string propertyName, T value)
         {
             return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value);
@@ -67,7 +69,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
         /// <returns>a date message parameter with the required culture</returns>
         protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, DateTime value)
         {
-            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value.ToString("d", RequiredCulture));
+            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, AsRequiredCultureDate(value));
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Abstract
         /// <returns>a nullable date message parameter with the required culture</returns>
         protected IErrorMessageParameter BuildErrorMessageParameter(string propertyName, DateTime? value)
         {
-            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, value?.ToString("d", RequiredCulture));
+            return _validationErrorHandler.BuildErrorMessageParameter(propertyName, AsRequiredCultureDate(value));
         }
     }
 }

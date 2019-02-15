@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.ELQ
 
         public bool ConditionMet(ILearningDeliveryHE learningDeliveryHE)
         {
-            return learningDeliveryHE?.ELQNullable != null && !_provideLookupDetails.Contains(LookupSimpleKey.ELQ, learningDeliveryHE.ELQNullable.Value);
+            return learningDeliveryHE?.ELQNullable != null && !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.ELQ, learningDeliveryHE.ELQNullable.Value);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? elqNullable)

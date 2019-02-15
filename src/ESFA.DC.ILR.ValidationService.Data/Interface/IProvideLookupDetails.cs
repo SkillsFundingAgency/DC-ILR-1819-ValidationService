@@ -1,5 +1,4 @@
-﻿using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Interface
@@ -10,38 +9,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
     public interface IProvideLookupDetails
     {
         /// <summary>
-        /// Determines whether [the specified lookup key] [contains] the value.
-        /// </summary>
-        /// <param name="lookupKey">The lookup key.</param>
-        /// <param name="candidate">The candidate.</param>
-        /// <returns>
-        ///   <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
-        /// </returns>
-        bool Contains(LookupSimpleKey lookupKey, int candidate);
-
-        /// <summary>
-        /// As a set.
+        /// Gets the domain of values for the specified lookup key.
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>
         /// <returns>the domain of values pertinent to the coded lookup key</returns>
-        IReadOnlyCollection<int> AsASet(LookupSimpleKey lookupKey);
+        IReadOnlyCollection<int> Get(TypeOfIntegerCodedLookup lookupKey);
 
         /// <summary>
-        /// Determines whether [the specified lookup key] [contains] the value.
-        /// </summary>
-        /// <param name="lookupKey">The lookup key.</param>
-        /// <param name="candidate">The candidate.</param>
-        /// <returns>
-        ///   <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
-        /// </returns>
-        bool Contains(LookupCodedKey lookupKey, string candidate);
-
-        /// <summary>
-        /// As a set.
+        /// Gets the domain of values for the specified lookup key.
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>
         /// <returns>the domain of values pertinent to the coded lookup key</returns>
-        IReadOnlyCollection<string> AsASet(LookupCodedKey lookupKey);
+        IReadOnlyCollection<string> Get(TypeOfStringCodedLookup lookupKey);
 
         /// <summary>
         /// Determines whether [the specified lookup key] [contains] the value.
@@ -51,7 +30,27 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <returns>
         ///   <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
         /// </returns>
-        bool Contains(LookupTimeRestrictedKey lookupKey, int candidate);
+        bool Contains(TypeOfIntegerCodedLookup lookupKey, int candidate);
+
+        /// <summary>
+        /// Determines whether [the specified lookup key] [contains] the value.
+        /// </summary>
+        /// <param name="lookupKey">The lookup key.</param>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
+        /// </returns>
+        bool Contains(TypeOfStringCodedLookup lookupKey, string candidate);
+
+        /// <summary>
+        /// Determines whether [the specified lookup key] [contains] the value.
+        /// </summary>
+        /// <param name="lookupKey">The lookup key.</param>
+        /// <param name="candidate">The candidate.</param>
+        /// <returns>
+        ///   <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
+        /// </returns>
+        bool Contains(TypeOfLimitedLifeLookup lookupKey, int candidate);
 
         /// <summary>
         /// Determines whether [contains] [the specified lookup key].
@@ -61,29 +60,18 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <returns>
         ///   <c>true</c> if [contains] [the specified lookup key]; otherwise, <c>false</c>.
         /// </returns>
-        bool Contains(LookupTimeRestrictedKey lookupKey, string candidate);
+        bool Contains(TypeOfLimitedLifeLookup lookupKey, string candidate);
 
         /// <summary>
-        /// Determines whether [the specified lookup key] [contains] the value.
-        /// </summary>
-        /// <param name="lookupKey">The lookup key.</param>
-        /// <param name="keyCandidate">The dictionary key candidate.</param>
-        /// <param name="valueCandidate">The dictionary value candidate.</param>
-        /// <returns>
-        /// <c>true</c> if [the specified lookup] [contains]; otherwise, <c>false</c>.
-        /// </returns>
-        bool ContainsValueForKey(LookupCodedKeyDictionary lookupKey, string keyCandidate, string valueCandidate);
-
-        /// <summary>
-        /// Determines whether [the specified lookup key] [contains] the value.
+        /// Determines whether [contains] [for the specified lookup] [the key and value].
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>
         /// <param name="keyCandidate">The key candidate.</param>
         /// <param name="valueCandidate">The value candidate.</param>
         /// <returns>
-        ///   <c>true</c> if [contains value for key] [the specified lookup key]; otherwise, <c>false</c>.
+        ///   <c>true</c> if [contains] [the specified lookup key]; otherwise, <c>false</c>.
         /// </returns>
-        bool ContainsValueForKey(LookupCodedKeyDictionary lookupKey, string keyCandidate, int valueCandidate);
+        bool Contains(TypeOfListItemLookup lookupKey, string keyCandidate, string valueCandidate);
 
         /// <summary>
         /// Determines whether [the specified lookup key] is current on the given date
@@ -94,10 +82,10 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <returns>
         ///   <c>true</c> if [the specified lookup] [is current] for the given date; otherwise, <c>false</c>.
         /// </returns>
-        bool IsCurrent(LookupTimeRestrictedKey lookupKey, int candidate, DateTime referenceDate);
+        bool IsCurrent(TypeOfLimitedLifeLookup lookupKey, int candidate, DateTime referenceDate);
 
         /// <summary>
-        /// Determines whether the specified lookup key is current.
+        /// Determines whether the specified candidate lookup is current.
         /// </summary>
         /// <param name="lookupKey">The lookup key.</param>
         /// <param name="candidate">The candidate.</param>
@@ -105,10 +93,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         /// <returns>
         ///   <c>true</c> if the specified lookup key is current; otherwise, <c>false</c>.
         /// </returns>
-        bool IsCurrent(LookupTimeRestrictedKey lookupKey, string candidate, DateTime referenceDate);
-
-        bool IsCurrent(LookupComplexKey lookupKey, string key, string value, DateTime date);
-
-        bool ContainsValueForKey(LookupItemKey lookupKey, string keyCandidate, string valueCandidate);
+        bool IsCurrent(TypeOfLimitedLifeLookup lookupKey, string candidate, DateTime referenceDate);
     }
 }

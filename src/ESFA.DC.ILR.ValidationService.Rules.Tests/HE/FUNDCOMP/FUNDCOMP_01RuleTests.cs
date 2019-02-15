@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDCOMP
             var fundComp = 1;
             var providerDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerDetailsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.FundComp, 1)).Returns(false);
+            providerDetailsMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.FundComp, 1)).Returns(false);
             NewRule(providerDetailsMock.Object).ConditionMet(fundComp).Should().BeTrue();
         }
 
@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDCOMP
             var fundComp = 1;
             var providerDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerDetailsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.FundComp, 1)).Returns(true);
+            providerDetailsMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.FundComp, 1)).Returns(true);
             NewRule(providerDetailsMock.Object).ConditionMet(fundComp).Should().BeFalse();
         }
 
@@ -59,7 +59,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDCOMP
 
             var providerDetailsMock = new Mock<IProvideLookupDetails>();
 
-            providerDetailsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.FundComp, fundComp)).Returns(false);
+            providerDetailsMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.FundComp, fundComp)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -90,7 +90,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.FUNDCOMP
             };
 
             var providerDetailsMock = new Mock<IProvideLookupDetails>();
-            providerDetailsMock.Setup(ds => ds.Contains(LookupTimeRestrictedKey.FundComp, fundComp)).Returns(true);
+            providerDetailsMock.Setup(ds => ds.Contains(TypeOfLimitedLifeLookup.FundComp, fundComp)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {

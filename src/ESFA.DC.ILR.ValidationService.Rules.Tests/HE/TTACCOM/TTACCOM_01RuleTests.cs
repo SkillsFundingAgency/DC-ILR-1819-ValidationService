@@ -140,7 +140,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.Contains(LookupTimeRestrictedKey.TTAccom, candidate))
+                .Setup(x => x.Contains(TypeOfLimitedLifeLookup.TTAccom, candidate))
                 .Returns(expectation);
 
             var sut = new TTACCOM_01Rule(mockHandler.Object, mockService.Object);
@@ -193,7 +193,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
 
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.Contains(LookupTimeRestrictedKey.TTAccom, candidate))
+                .Setup(x => x.Contains(TypeOfLimitedLifeLookup.TTAccom, candidate))
                 .Returns(false);
 
             var sut = new TTACCOM_01Rule(mockHandler.Object, mockService.Object);
@@ -240,7 +240,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.Contains(LookupTimeRestrictedKey.TTAccom, candidate))
+                .Setup(x => x.Contains(TypeOfLimitedLifeLookup.TTAccom, candidate))
                 .Returns(true);
 
             var sut = new TTACCOM_01Rule(mockHandler.Object, mockService.Object);

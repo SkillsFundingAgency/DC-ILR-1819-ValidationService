@@ -36,7 +36,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.OutGrade
 
         public bool ConditionMet(string outGrade)
         {
-            return !string.IsNullOrWhiteSpace(outGrade) && !_provideLookupDetails.Contains(LookupCodedKey.OutGrade, outGrade);
+            return !string.IsNullOrWhiteSpace(outGrade) && !_provideLookupDetails.Contains(TypeOfStringCodedLookup.OutGrade, outGrade);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(string outGrade)

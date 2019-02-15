@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LLDDCat
 
         public bool ConditionMet(int llddCat)
         {
-            return !_provideLookupDetails.Contains(LookupTimeRestrictedKey.LLDDCat, llddCat);
+            return !_provideLookupDetails.Contains(TypeOfLimitedLifeLookup.LLDDCat, llddCat);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int llddCat)

@@ -66,9 +66,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <returns>
         /// a safe key set collection
         /// </returns>
-        public static ICollection<T> AsSafeDistinctKeySet<T>(this IEnumerable<T> list)
+        public static IContainThis<T> AsSafeDistinctKeySet<T>(this IEnumerable<T> list)
         {
-            return new HashSet<T>(list.SafeReadOnlyList());
+            return new DistinctKeySet<T>(list.SafeReadOnlyList());
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <returns>
         /// a safe case insensitive key set collection
         /// </returns>
-        public static ICollection<string> AsSafeDistinctKeySet(this IEnumerable<string> list)
+        public static IContainThis<string> AsSafeDistinctKeySet(this IEnumerable<string> list)
         {
-            return new HashSet<string>(list.SafeReadOnlyList(), StringComparer.OrdinalIgnoreCase);
+            return new CaseInsensitiveDistinctKeySet(list.SafeReadOnlyList());
         }
 
         /// <summary>
