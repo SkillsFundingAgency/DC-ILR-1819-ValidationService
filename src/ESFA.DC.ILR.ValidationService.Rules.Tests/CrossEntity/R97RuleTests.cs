@@ -50,6 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var testLearnerEmloymentStatus = new TestLearnerEmploymentStatus()
             {
+                DateEmpStatApp = new DateTime(2018, 07, 01),
                 AgreeId = "123A01",
                 EmpIdNullable = 11768,
                 EmpStat = 10
@@ -57,6 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
 
             var testPreviousLearnerEmloymentStatus = new TestLearnerEmploymentStatus()
             {
+                DateEmpStatApp = new DateTime(2018, 09, 01),
                 AgreeId = "123a01",
                 EmpIdNullable = 11768,
                 EmpStat = 10
@@ -191,6 +193,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AgreeId = "123A01",
                         EmpIdNullable = 11768,
                         EmpStat = 10,
+                        DateEmpStatApp = new DateTime(2018, 07, 01),
                         EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
                         {
                             new TestEmploymentStatusMonitoring()
@@ -210,6 +213,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AgreeId = "123a01",
                         EmpIdNullable = 11768,
                         EmpStat = 10,
+                        DateEmpStatApp = new DateTime(2018, 07, 10),
                         EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
                         {
                             new TestEmploymentStatusMonitoring()
@@ -246,6 +250,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AgreeId = "123A01",
                         EmpIdNullable = 11768,
                         EmpStat = 10,
+                        DateEmpStatApp = new DateTime(2018, 07, 01),
                         EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
                         {
                             new TestEmploymentStatusMonitoring()
@@ -267,6 +272,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AgreeId = "123a01",
                         EmpIdNullable = 11768,
                         EmpStat = 10,
+                        DateEmpStatApp = new DateTime(2018, 10, 01),
                         EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
                         {
                             new TestEmploymentStatusMonitoring()
@@ -494,6 +500,63 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                             {
                                 ESMType = "MTI",
                                 ESMCode = 8
+                            }
+                        }
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
+        public void Validate_NoError_ForSameDate()
+        {
+            var testLearner = new TestLearner()
+            {
+                LearnRefNumber = "1R97",
+                LearnerEmploymentStatuses = new TestLearnerEmploymentStatus[]
+                {
+                    new TestLearnerEmploymentStatus()
+                    {
+                        AgreeId = "1",
+                        EmpIdNullable = 154549452,
+                        EmpStat = 1,
+                        DateEmpStatApp = new DateTime(2018, 10, 12),
+                        EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                        {
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "LOE",
+                                ESMCode = 4
+                            },
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "EII",
+                                ESMCode = 4
+                            }
+                        }
+                    },
+                    new TestLearnerEmploymentStatus()
+                    {
+                        AgreeId = "1",
+                        EmpIdNullable = 154549452,
+                        EmpStat = 1,
+                        DateEmpStatApp = new DateTime(2018, 10, 12),
+                        EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                        {
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "loe",
+                                ESMCode = 4
+                            },
+                            new TestEmploymentStatusMonitoring()
+                            {
+                                ESMType = "eii",
+                                ESMCode = 4
                             }
                         }
                     }
