@@ -3,6 +3,7 @@ using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
 
@@ -18,21 +19,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         private readonly IProvideLookupDetails _lookupDetails;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LearnDelFAMType_06Rule"/> class.
+        /// The check (rule commmmon operations provider)
+        /// </summary>
+        private readonly IProvideRuleCommonOperations _check;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LearnDelFAMType_06Rule" /> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         /// <param name="lookupDetails">The lookup details.</param>
+        /// <param name="commonOperations">The common operations.</param>
         public LearnDelFAMType_06Rule(
             IValidationErrorHandler validationErrorHandler,
-            IProvideLookupDetails lookupDetails)
+            IProvideLookupDetails lookupDetails,
+            IProvideRuleCommonOperations commonOperations)
             : base(validationErrorHandler, RuleNameConstants.LearnDelFAMType_06)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
             It.IsNull(lookupDetails)
                 .AsGuard<ArgumentNullException>(nameof(lookupDetails));
+            It.IsNull(commonOperations)
+                .AsGuard<ArgumentNullException>(nameof(commonOperations));
 
             _lookupDetails = lookupDetails;
+            _check = commonOperations;
         }
 
         /// <summary>
@@ -45,8 +56,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 .AsGuard<ArgumentNullException>(nameof(thisLearner));
 
             thisLearner.LearningDeliveries
-                .ForEach(x => CheckDeliveryFAMs(x, y => RaiseValidationMessage(thisLearner.LearnRefNumber, x, y)));
+                .ForAny(IsQualifyingDelivery, x => CheckDeliveryFAMs(x, y => RaiseValidationMessage(thisLearner.LearnRefNumber, x, y)));
         }
+
+        /// <summary>
+        /// Determines whether [is qualifying delivery] [this delivery].
+        /// </summary>
+        /// <param name="thisDelivery">this delivery.</param>
+        /// <returns>
+        ///   <c>true</c> if [is qualifying delivery] [this delivery]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsQualifyingDelivery(ILearningDelivery thisDelivery) =>
+            !_check.IsRestart(thisDelivery);
 
         /// <summary>
         /// Checks the delivery fams.
