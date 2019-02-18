@@ -1,518 +1,337 @@
-﻿using System;
-using System.Collections.Generic;
-using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId;
-using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
-using FluentAssertions;
+using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 {
-    public class EmpId_10RuleTests : AbstractRuleTests<EmpId_10Rule>
+    public class EmpId_10RuleTests
     {
+        /// <summary>
+        /// New rule with null message handler throws.
+        /// </summary>
         [Fact]
-        public void RuleName()
+        public void NewRuleWithNullMessageHandlerThrows()
         {
-            NewRule().RuleName.Should().Be("EmpId_10");
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new EmpId_10Rule(null, commonOps.Object));
         }
 
+        /// <summary>
+        /// New rule with null common operations throws.
+        /// </summary>
         [Fact]
-        public void DD07ConditionMet_True()
+        public void NewRuleWithNullCommonOperationsThrows()
         {
-            var progType = 2;
+            // arrange
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => new EmpId_10Rule(handler.Object, null));
+        }
 
-            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
+        /// <summary>
+        /// Rule name 1, matches a literal.
+        /// </summary>
+        [Fact]
+        public void RuleName1()
+        {
+            // arrange
+            var sut = NewRule();
 
-            NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeTrue();
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal("EmpId_10", result);
+        }
+
+        /// <summary>
+        /// Rule name 2, matches the constant.
+        /// </summary>
+        [Fact]
+        public void RuleName2()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.Equal(RuleNameConstants.EmpId_10, result);
+        }
+
+        /// <summary>
+        /// Rule name 3 test, account for potential false positives.
+        /// </summary>
+        [Fact]
+        public void RuleName3()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.RuleName;
+
+            // assert
+            Assert.NotEqual("SomeOtherRuleName_07", result);
+        }
+
+        /// <summary>
+        /// Validate with null learner throws.
+        /// </summary>
+        [Fact]
+        public void ValidateWithNullLearnerThrows()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act / assert
+            Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
+        }
+
+        /// <summary>
+        /// Is apprenticeship meets expectation
+        /// </summary>
+        /// <param name="isApprenctice">if set to <c>true</c> [is apprenctice].</param>
+        /// <param name="isProgramAim">if set to <c>true</c> [is program aim].</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(true, true, true)]
+        public void IsApprenticeshipMeetsExpectation(bool isApprenctice, bool isProgramAim, bool expectation)
+        {
+            // arrange
+            var mockItem = new Mock<ILearningDelivery>();
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.InApprenticeship(mockItem.Object))
+                .Returns(isApprenctice);
+
+            if (isApprenctice)
+            {
+                commonOps
+                    .Setup(x => x.InAProgramme(mockItem.Object))
+                    .Returns(isProgramAim);
+            }
+
+            var sut = new EmpId_10Rule(handler.Object, commonOps.Object);
+
+            // act
+            var result = sut.IsPrimaryLearningAim(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+
+            handler.VerifyAll();
+            commonOps.VerifyAll();
+        }
+
+        /// <summary>
+        /// Has qualifying employment status meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(TypeOfEmploymentStatus.InPaidEmployment, true)]
+        [InlineData(TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable, false)]
+        [InlineData(TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable, false)]
+        [InlineData(TypeOfEmploymentStatus.NotKnownProvided, false)]
+        public void HasQualifyingEmploymentStatusMeetsExpectation(int candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<ILearnerEmploymentStatus>();
+            mockItem
+                .SetupGet(y => y.EmpStat)
+                .Returns(candidate);
+
+            // act
+            var result = sut.HasQualifyingEmploymentStatus(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
         }
 
         [Theory]
-        [InlineData(50)]
-        [InlineData(null)]
-        public void DD07ConditionMet_False(int? progType)
+        [InlineData(null, true)]
+        [InlineData(1004, false)]
+        public void HasQualifyingEmployerMeetsExpectation(int? candidate, bool expectation)
         {
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<ILearnerEmploymentStatus>();
+            mockItem
+                .SetupGet(y => y.EmpIdNullable)
+                .Returns(candidate);
 
-            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
+            // act
+            var result = sut.HasDisqualifyingEmployerID(mockItem.Object);
 
-            NewRule(dd07Mock.Object).DD07ConditionMet(progType).Should().BeFalse();
+            // assert
+            Assert.Equal(expectation, result);
         }
 
+        /// <summary>
+        /// Invalid item raises validation message.
+        /// </summary>
         [Fact]
-        public void AimTypeConditionMet_True()
+        public void InvalidItemRaisesValidationMessage()
         {
-            var aimType = 1;
+            // arrange
+            const string LearnRefNumber = "123456789X";
 
-            NewRule().AimTypeConditionMet(aimType).Should().BeTrue();
+            var testDate = DateTime.Parse("2013-08-01");
+
+            var status = new Mock<ILearnerEmploymentStatus>();
+            status
+                .SetupGet(x => x.DateEmpStatApp)
+                .Returns(testDate);
+            status
+                .SetupGet(x => x.EmpStat)
+                .Returns(TypeOfEmploymentStatus.InPaidEmployment);
+
+            var statii = new ILearnerEmploymentStatus[] { status.Object };
+
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(testDate);
+
+            var deliveries = new ILearningDelivery[] { mockDelivery.Object };
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries);
+            mockLearner
+                .SetupGet(y => y.LearnerEmploymentStatuses)
+                .Returns(statii);
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle("EmpId_10", LearnRefNumber, 0, It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("EmpId", "(missing)"))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("EmpStat", TypeOfEmploymentStatus.InPaidEmployment))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("LearnStartDate", AbstractRule.AsRequiredCultureDate(testDate)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.GetEmploymentStatusOn(testDate, statii))
+                .Returns(status.Object);
+            commonOps
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(true);
+            commonOps
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
+
+            var sut = new EmpId_10Rule(handler.Object, commonOps.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            commonOps.VerifyAll();
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(10)]
-        public void AimTypeConditionMet_False(int aimType)
-        {
-            NewRule().AimTypeConditionMet(aimType).Should().BeFalse();
-        }
-
+        /// <summary>
+        /// Valid item does not raise validation message.
+        /// </summary>
         [Fact]
-        public void EmpIdNotExistsOnLearnStartDate_True_DateMatch()
+        public void ValidItemDoesNotRaiseValidationMessage()
         {
-            var learnStartDate = new DateTime(2018, 8, 1);
+            // arrange
+            const string LearnRefNumber = "123456789X";
 
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 1),
-                    EmpStat = 10
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 9, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
+            var testDate = DateTime.Parse("2013-08-01");
 
-            NewRule().EmpIdNotExistsOnLearnStartDate(learnStartDate, learnerEmploymentStatuses).Should().BeTrue();
+            var status = new Mock<ILearnerEmploymentStatus>();
+            status
+                .SetupGet(x => x.EmpIdNullable)
+                .Returns(10004);
+            status
+                .SetupGet(x => x.EmpStat)
+                .Returns(TypeOfEmploymentStatus.InPaidEmployment);
+
+            var statii = new ILearnerEmploymentStatus[] { status.Object };
+
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(testDate);
+
+            var deliveries = new ILearningDelivery[] { mockDelivery.Object };
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries);
+            mockLearner
+                .SetupGet(y => y.LearnerEmploymentStatuses)
+                .Returns(statii);
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonOps
+                .Setup(x => x.GetEmploymentStatusOn(testDate, statii))
+                .Returns(status.Object);
+            commonOps
+                .Setup(x => x.InApprenticeship(mockDelivery.Object))
+                .Returns(true);
+            commonOps
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
+
+            var sut = new EmpId_10Rule(handler.Object, commonOps.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            commonOps.VerifyAll();
         }
 
-        [Fact]
-        public void EmpIdNotExistsOnLearnStartDate_True_DateLess()
+        /// <summary>
+        /// New rule.
+        /// </summary>
+        /// <returns>a constructed and mocked up validation rule</returns>
+        public EmpId_10Rule NewRule()
         {
-            var learnStartDate = new DateTime(2018, 8, 10);
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 1),
-                    EmpStat = 10
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 9, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            NewRule().EmpIdNotExistsOnLearnStartDate(learnStartDate, learnerEmploymentStatuses).Should().BeTrue();
-        }
-
-        [Fact]
-        public void EmpIdNotExistsOnLearnStartDate_False_DateAfter()
-        {
-            var learnStartDate = new DateTime(2018, 8, 1);
-
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 2),
-                    EmpStat = 10
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 9, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            NewRule().EmpIdNotExistsOnLearnStartDate(learnStartDate, learnerEmploymentStatuses).Should().BeFalse();
-        }
-
-        [Fact]
-        public void EmpIdNotExistsOnLearnStartDate_False_EmpIdNotNull()
-        {
-            var learnStartDate = new DateTime(2018, 8, 1);
-
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 9, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            NewRule().EmpIdNotExistsOnLearnStartDate(learnStartDate, learnerEmploymentStatuses).Should().BeFalse();
-        }
-
-        [Fact]
-        public void EmpIdNotExistsOnLearnStartDate_False_NoEmploymentStatus()
-        {
-            var learnStartDate = new DateTime(2018, 8, 1);
-
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>();
-
-            NewRule().EmpIdNotExistsOnLearnStartDate(learnStartDate, learnerEmploymentStatuses).Should().BeFalse();
-        }
-
-        [Fact]
-        public void EmploymentStatusesInPaidEmployment_ReturnsEmptyCollection_NoEmploymentStatus()
-        {
-            NewRule().EmploymentStatusesInPaidEmployment(null).Should().BeEquivalentTo(new List<TestLearnerEmploymentStatus>());
-        }
-
-        [Theory]
-        [InlineData(20)]
-        [InlineData(1)]
-        [InlineData(2)]
-        public void EmploymentStatusesInPaidEmployment_ReturnsEmptyCollection(int empStat)
-        {
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    EmpStat = empStat,
-                }
-            };
-
-            NewRule().EmploymentStatusesInPaidEmployment(learnerEmploymentStatuses).Should().BeEquivalentTo(new List<TestLearnerEmploymentStatus>());
-        }
-
-        [Fact]
-        public void EmploymentStatusesInPaidEmployment_ReturnsCollection()
-        {
-            var statusOne = new TestLearnerEmploymentStatus
-            {
-                EmpStat = 10,
-            };
-
-            var statusTwo = new TestLearnerEmploymentStatus
-            {
-                EmpStat = 11,
-            };
-
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                statusOne,
-                statusTwo
-            };
-
-            NewRule().EmploymentStatusesInPaidEmployment(learnerEmploymentStatuses).Should().BeEquivalentTo(new List<TestLearnerEmploymentStatus> { statusOne });
-        }
-
-        [Fact]
-        public void ConditionMet_True()
-        {
-            var progType = 2;
-            var aimType = 1;
-            var learnStartDate = new DateTime(2018, 8, 1);
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 1),
-                    EmpStat = 10
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 9, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
-            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
-
-            NewRule(dd07Mock.Object).ConditionMet(progType, aimType, learnStartDate, learnerEmploymentStatuses).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(0, false, 1, "2018-8-1", "2018-8-1", "2018-9-1")]
-        [InlineData(2, true, 2, "2018-8-1", "2018-8-1", "2018-9-1")]
-        [InlineData(2, true, 1, "2018-8-1", "2018-9-1", "2018-9-1")]
-        [InlineData(2, true, 1, "2018-8-1", "2018-8-1", "2018-8-1")]
-        public void ConditionMet_False(int? progType, bool mock, int aimType, DateTime learnStartDate, DateTime empstatAppOne, DateTime empstatAppTwo)
-        {
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = empstatAppOne,
-                    EmpStat = 10
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = empstatAppTwo,
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
-            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(mock);
-
-            NewRule(dd07Mock.Object).ConditionMet(progType, aimType, learnStartDate, learnerEmploymentStatuses).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(0, false, 1, "2018-8-1", "2018-8-1", "2018-9-1", 10, 10)]
-        [InlineData(2, true, 2, "2018-8-1", "2018-8-1", "2018-9-1", 10, 10)]
-        [InlineData(2, true, 1, "2018-8-1", "2018-9-1", "2018-9-1", 10, 10)]
-        [InlineData(2, true, 1, "2018-8-1", "2018-8-1", "2018-8-1", 10, 10)]
-        [InlineData(2, true, 1, "2018-8-1", "2018-8-1", "2018-9-1", 11, 10)]
-        [InlineData(2, true, 1, "2018-8-1", "2018-9-1", "2018-9-1", 10, 11)]
-        [InlineData(2, true, 1, "2018-8-1", "2018-8-1", "2018-8-1", 11, 11)]
-        public void Validate_NoError(int? progType, bool mock, int aimType, DateTime learnStartDate, DateTime empstatAppOne, DateTime empstatAppTwo, int empstatOne, int empstatTwo)
-        {
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = empstatAppOne,
-                    EmpStat = empstatOne
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = empstatAppTwo,
-                    EmpStat = empstatTwo,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            var learner = new TestLearner
-            {
-                LearnerEmploymentStatuses = learnerEmploymentStatuses,
-                LearningDeliveries = new List<TestLearningDelivery>
-                {
-                    new TestLearningDelivery
-                    {
-                        ProgTypeNullable = progType,
-                        AimType = aimType,
-                        LearnStartDate = learnStartDate
-                    },
-                }
-            };
-
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
-
-            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(mock);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
-        }
-
-        [Fact]
-        public void Validate_NoError_NoDeliveries()
-        {
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 1),
-                    EmpStat = 10
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 9, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            var learner = new TestLearner
-            {
-                LearnerEmploymentStatuses = learnerEmploymentStatuses
-            };
-
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
-
-            dd07Mock.Setup(dm => dm.IsApprenticeship(2)).Returns(false);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
-        }
-
-        [Fact]
-        public void Validate_NoError_NoEmploymentStatuses()
-        {
-            var learner = new TestLearner
-            {
-                LearningDeliveries = new List<TestLearningDelivery>
-                {
-                    new TestLearningDelivery
-                    {
-                        ProgTypeNullable = 2,
-                        AimType = 1,
-                        LearnStartDate = new DateTime(2018, 8, 1)
-                    },
-                }
-            };
-
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
-
-            dd07Mock.Setup(dm => dm.IsApprenticeship(2)).Returns(true);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
-        }
-
-        [Fact]
-        public void Validate_NoError_NoEmploymentStatusesInPaidEmployment()
-        {
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 1),
-                    EmpStat = 11
-                }
-            };
-
-            var learner = new TestLearner
-            {
-                LearnerEmploymentStatuses = learnerEmploymentStatuses,
-                LearningDeliveries = new List<TestLearningDelivery>
-                {
-                    new TestLearningDelivery
-                    {
-                        ProgTypeNullable = 2,
-                        AimType = 1,
-                        LearnStartDate = new DateTime(2018, 8, 1)
-                    },
-                }
-            };
-
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
-
-            dd07Mock.Setup(dm => dm.IsApprenticeship(2)).Returns(true);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
-            {
-                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
-        }
-
-        [Fact]
-        public void Validate_Error()
-        {
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 1),
-                    EmpStat = 10
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 9, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            var learner = new TestLearner
-            {
-                LearnerEmploymentStatuses = learnerEmploymentStatuses,
-                LearningDeliveries = new List<TestLearningDelivery>
-                {
-                    new TestLearningDelivery
-                    {
-                        ProgTypeNullable = 2,
-                        AimType = 1,
-                        LearnStartDate = new DateTime(2018, 8, 1)
-                    },
-                }
-            };
-
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
-
-            dd07Mock.Setup(dm => dm.IsApprenticeship(2)).Returns(true);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
-        }
-
-        [Fact]
-        public void Validate_Error_MultipleDeliveries()
-        {
-            var learnerEmploymentStatuses = new List<TestLearnerEmploymentStatus>
-            {
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 8, 1),
-                    EmpStat = 10
-                },
-                new TestLearnerEmploymentStatus
-                {
-                    DateEmpStatApp = new DateTime(2018, 9, 1),
-                    EmpStat = 10,
-                    EmpIdNullable = 11111
-                }
-            };
-
-            var learner = new TestLearner
-            {
-                LearnerEmploymentStatuses = learnerEmploymentStatuses,
-                LearningDeliveries = new List<TestLearningDelivery>
-                {
-                    new TestLearningDelivery
-                    {
-                        ProgTypeNullable = 2,
-                        AimType = 1,
-                        LearnStartDate = new DateTime(2018, 8, 1)
-                    },
-                    new TestLearningDelivery
-                    {
-                        ProgTypeNullable = 2,
-                        AimType = 1,
-                        LearnStartDate = new DateTime(2018, 9, 1)
-                    },
-                }
-            };
-
-            var dd07Mock = new Mock<IDerivedData_07Rule>();
-
-            dd07Mock.Setup(dm => dm.IsApprenticeship(2)).Returns(true);
-
-            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
-            {
-                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
-            }
-        }
-
-        [Fact]
-        public void BuildErrorMessageParameters()
-        {
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("EmpStat", 10)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("EmpId", string.Empty)).Verifiable();
-
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(10);
-
-            validationErrorHandlerMock.Verify();
-        }
-
-        private EmpId_10Rule NewRule(IDerivedData_07Rule dd07 = null, IValidationErrorHandler validationErrorHandler = null)
-        {
-            return new EmpId_10Rule(dd07, validationErrorHandler);
+            return new EmpId_10Rule(handler.Object, commonOps.Object);
         }
     }
 }
