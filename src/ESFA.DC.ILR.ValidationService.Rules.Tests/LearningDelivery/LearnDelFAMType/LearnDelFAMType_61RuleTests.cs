@@ -1,20 +1,19 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
+using ESFA.DC.ILR.ValidationService.Utility;
+using FluentAssertions;
+using Moq;
+using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAMType
 {
-    using System;
-    using System.Collections.Generic;
-    using ESFA.DC.ILR.Model.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-    using ESFA.DC.ILR.ValidationService.Interface;
-    using ESFA.DC.ILR.ValidationService.Rules.Constants;
-    using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
-    using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
-    using ESFA.DC.ILR.ValidationService.Utility;
-    using FluentAssertions;
-    using Moq;
-    using Xunit;
-
     public class LearnDelFAMType_61RuleTests
     {
         [Fact]
@@ -380,21 +379,45 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(TypeOfLARSCategory.LegalEntitlementLevel2, true)]
-        [InlineData(TypeOfLARSCategory.WorkPlacementSFAFunded, false)]
-        [InlineData(TypeOfLARSCategory.WorkPreparationSFATraineeships, false)]
-        [InlineData(23, false)]
-        public void IsLegallyEntitledMeetsExpectation(int candidate, bool expectation)
+        [InlineData(TypeOfLARSCategory.LegalEntitlementLevel2, false)]
+        [InlineData(TypeOfLARSCategory.WorkPlacementSFAFunded, true)]
+        [InlineData(TypeOfLARSCategory.WorkPreparationSFATraineeships, true)]
+        [InlineData(37, false)]
+        [InlineData(23, true)]
+        public void IsNotEntitledMeetsExpectation(int candidate, bool expectation)
         {
             // arrange
-            var sut = NewRule();
-            var mockItem = new Mock<ILARSLearningCategory>();
-            mockItem
-                .SetupGet(y => y.CategoryRef)
+            const string learnAimRef = "asdfbasdf";
+            var mockCat = new Mock<ILARSLearningCategory>();
+            mockCat
+                .SetupGet(x => x.CategoryRef)
                 .Returns(candidate);
 
+            var larsCats = Collection.Empty<ILARSLearningCategory>();
+            larsCats.Add(mockCat.Object);
+
+            var mock = new Mock<ILARSLearningDelivery>();
+            mock
+                .SetupGet(x => x.NotionalNVQLevelv2)
+                .Returns(LARSNotionalNVQLevelV2.Level2);
+            mock
+                .SetupGet(x => x.Categories)
+                .Returns(larsCats.AsSafeReadOnlyList());
+
+            var service = new Mock<ILARSDataService>();
+            service
+                .Setup(x => x.GetDeliveryFor(learnAimRef))
+                .Returns(mock.Object);
+
+            var mockDDRule07 = new Mock<IDerivedData_07Rule>(MockBehavior.Strict);
+            var mockDDRule21 = new Mock<IDerivedData_21Rule>(MockBehavior.Strict);
+            var mockDDRule28 = new Mock<IDerivedData_28Rule>(MockBehavior.Strict);
+            var mockDDRule29 = new Mock<IDerivedData_29Rule>(MockBehavior.Strict);
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            var sut = new LearnDelFAMType_61Rule(validationErrorHandlerMock.Object, service.Object, mockDDRule07.Object, mockDDRule21.Object, mockDDRule28.Object, mockDDRule29.Object);
             // act
-            var result = sut.IsLegallyEntitled(mockItem.Object);
+            var result = sut.IsNotEntitled(new TestLearningDelivery() { LearnAimRef = learnAimRef });
 
             // assert
             Assert.Equal(expectation, result);
@@ -675,7 +698,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var mockCat = new Mock<ILARSLearningCategory>();
             mockCat
                 .SetupGet(x => x.CategoryRef)
-                .Returns(TypeOfLARSCategory.LegalEntitlementLevel2);
+                .Returns(TypeOfLARSCategory.LicenseToPractice);
 
             var larsCats = Collection.Empty<ILARSLearningCategory>();
             larsCats.Add(mockCat.Object);

@@ -35,11 +35,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.LearnFAMType
                 return;
             }
 
-            foreach (var learnerFam in objectToValidate.LearnerFAMs)
+            var learnFamTypes = objectToValidate.LearnerFAMs.Select(x => x.LearnFAMType).Distinct();
+
+            foreach (var learnerFamType in learnFamTypes)
             {
-                if (ConditionMet(learnerFam.LearnFAMType, objectToValidate.LearnerFAMs))
+                if (ConditionMet(learnerFamType, objectToValidate.LearnerFAMs))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learnerFam.LearnFAMType));
+                    HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(learnerFamType));
                 }
             }
         }

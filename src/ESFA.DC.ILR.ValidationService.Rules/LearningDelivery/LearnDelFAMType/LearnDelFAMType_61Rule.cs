@@ -1,18 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
+using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
-    using System;
-    using System.Globalization;
-    using System.Linq;
-    using ESFA.DC.ILR.Model.Interface;
-    using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-    using ESFA.DC.ILR.ValidationService.Interface;
-    using ESFA.DC.ILR.ValidationService.Rules.Abstract;
-    using ESFA.DC.ILR.ValidationService.Rules.Constants;
-    using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
-    using ESFA.DC.ILR.ValidationService.Utility;
-
     public class LearnDelFAMType_61Rule : AbstractRule, IRule<ILearner>
     {
         public const string MessagePropertyName = "LearnDelFAMType";
@@ -140,21 +138,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return IsV2NotionalLevel2(larsDelivery);
         }
 
-        public bool IsEntitled(ILearningDelivery delivery)
+        public bool IsNotEntitled(ILearningDelivery delivery)
         {
             var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
-            return larsDelivery.Categories.SafeAny(IsLegallyEntitled);
+            return !larsDelivery.Categories.SafeAny(category => category.CategoryRef == TypeOfLARSCategory.LegalEntitlementLevel2);
         }
 
         public bool IsV2NotionalLevel2(ILARSLearningDelivery delivery)
         {
             return delivery.NotionalNVQLevelv2 == LARSNotionalNVQLevelV2.Level2;
-        }
-
-        public bool IsLegallyEntitled(ILARSLearningCategory category)
-        {
-            return category.CategoryRef == TypeOfLARSCategory.LegalEntitlementLevel2;
         }
 
         public bool IsExcluded(ILearner candidate)
@@ -219,7 +212,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                                 && IsAdultFunding(x)
                                 && IsTargetAgeGroup(learner, x)
                                 && IsLevel2Nvq(x)
-                                && IsEntitled(x)
+                                && IsNotEntitled(x)
                                 && x.LearningDeliveryFAMs != null))
             {
                 foreach (var learningDeliveryFam in learningDelivery.LearningDeliveryFAMs)
