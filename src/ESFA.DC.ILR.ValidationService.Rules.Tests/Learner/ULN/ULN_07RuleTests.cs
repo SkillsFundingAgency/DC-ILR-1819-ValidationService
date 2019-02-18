@@ -206,8 +206,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ULN
         [InlineData(9999999999, 100, "2019-01-01", "2019-05-10", 100, "LDM", "033")]
         [InlineData(9999999999, 35, "2018-3-10", "2019-05-10", 100, "LDM", "033")]
         [InlineData(9999999999, 35, "2019-01-01", "2019-05-01", 1, "LDM", "033")]
-        [InlineData(9999999999, 99, "2019-01-01", "2019-05-01", 100, "LDM", "034")]
-        [InlineData(9999999999, 99, "2019-01-01", "2019-05-01", 100, "ACT", "1")]
         public void ConditionMet_False(long uln, int fundModel, string filePrepDateString, string learnPlanEndDateString, double dateTimeMock, string famType, string famCode)
         {
             var learnStartDate = new DateTime(2019, 05, 01);

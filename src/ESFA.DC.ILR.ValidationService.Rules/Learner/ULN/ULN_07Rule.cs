@@ -42,6 +42,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
+                if (!LearningDeliveryFAMConditionMet(learningDelivery.LearningDeliveryFAMs))
+                {
+                    return;
+                }
+
                 if (ConditionMet(
                     objectToValidate.ULN,
                     learningDelivery.FundModel,
@@ -53,6 +58,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
                     januaryFirst))
                 {
                     HandleValidationError(objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.ULN, filePrepDate, learningDelivery.LearnStartDate));
+                    return;
                 }
             }
         }
@@ -70,8 +76,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
             return UlnConditionMet(uln)
                 && FundModelConditionMet(fundModel, learningDeliveryFAMs)
                 && FilePreparationDateConditionMet(learnStartDate, filePrepDate, januaryFirst)
-                && LearningDatesConditionMet(learnStartDate, learnPlanEndDate, learnActEndDate)
-                && LearningDeliveryFAMConditionMet(learningDeliveryFAMs);
+                && LearningDatesConditionMet(learnStartDate, learnPlanEndDate, learnActEndDate);
         }
 
         public bool UlnConditionMet(long uln)
