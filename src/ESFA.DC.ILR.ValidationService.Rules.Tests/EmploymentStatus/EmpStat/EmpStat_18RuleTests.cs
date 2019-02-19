@@ -68,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(EmpStat_18Rule.Name, result);
+            Assert.Equal(RuleNameConstants.EmpStat_18, result);
         }
 
         /// <summary>
@@ -109,21 +109,190 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             // arrange / act / assert
             Assert.Equal(DateTime.Parse("2018-07-31"), EmpStat_18Rule.OldCodeMonitoringThresholdDate);
         }
+        ///// <summary>
+        ///// Does not have a qualifying employment status with null employment returns true
+        ///// </summary>
+        //[Fact]
+        //public void DoesNotHaveAQualifyingEmploymentStatusWithNullEmploymentReturnsTrue()
+        //{
+        //    // arrange
+        //    var sut = NewRule();
 
-        /// <summary>
-        /// Has a qualifying monitor status meets expectation
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        //    // act
+        //    var result = sut.RunChecks(null, null, null);
+
+        //    // assert
+        //    Assert.True(result);
+        //}
+
+        [Fact]
+        public void IsQualifyingPrimaryLearningAimWithNullReturnsFalse()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.IsQualifyingPrimaryLearningAim(null);
+
+            // assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsQualifyingPrimaryLearningAimWithInvalidDateReturnsFalse()
+        {
+            // arrange
+            var mockDelivery = new Mock<ILearningDelivery>();
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonchecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, EmpStat_18Rule.OldCodeMonitoringThresholdDate))
+                .Returns(false);
+
+            var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
+
+            // act
+            var result = sut.IsQualifyingPrimaryLearningAim(mockDelivery.Object);
+
+            // assert
+            Assert.False(result);
+
+            handler.VerifyAll();
+            commonchecks.VerifyAll();
+        }
+
+        [Fact]
+        public void IsQualifyingPrimaryLearningAimNotTraineeReturnsFalse()
+        {
+            // arrange
+            var mockDelivery = new Mock<ILearningDelivery>();
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonchecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, DateTime.Parse("2018-07-31"))) // EmpStat_18Rule.OldCodeMonitoringThresholdDate
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.IsTraineeship(mockDelivery.Object))
+                .Returns(false);
+
+            var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
+
+            // act
+            var result = sut.IsQualifyingPrimaryLearningAim(mockDelivery.Object);
+
+            // assert
+            Assert.False(result);
+
+            handler.VerifyAll();
+            commonchecks.VerifyAll();
+        }
+
+        [Fact]
+        public void IsQualifyingPrimaryLearningAimWithWrongAimTypeReturnsFalse()
+        {
+            // arrange
+            var mockDelivery = new Mock<ILearningDelivery>();
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonchecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, DateTime.Parse("2018-07-31"))) // EmpStat_18Rule.OldCodeMonitoringThresholdDate
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.IsTraineeship(mockDelivery.Object))
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(false);
+
+            var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
+
+            // act
+            var result = sut.IsQualifyingPrimaryLearningAim(mockDelivery.Object);
+
+            // assert
+            Assert.False(result);
+
+            handler.VerifyAll();
+            commonchecks.VerifyAll();
+        }
+
+        [Fact]
+        public void IsQualifyingPrimaryLearningAimPassingChecksReturnsTrue()
+        {
+            // arrange
+            var mockDelivery = new Mock<ILearningDelivery>();
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonchecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, DateTime.Parse("2018-07-31"))) // EmpStat_18Rule.OldCodeMonitoringThresholdDate
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.IsTraineeship(mockDelivery.Object))
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
+
+            var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
+
+            // act
+            var result = sut.IsQualifyingPrimaryLearningAim(mockDelivery.Object);
+
+            // assert
+            Assert.True(result);
+
+            handler.VerifyAll();
+            commonchecks.VerifyAll();
+        }
+
+        [Fact]
+        public void HasQualifyingEmploymentStatusWithNullReturnsFalse()
+        {
+            // arrange
+            var sut = NewRule();
+
+            // act
+            var result = sut.HasQualifyingEmploymentStatus(null);
+
+            // assert
+            Assert.False(result);
+        }
+
         [Theory]
-        [InlineData(Monitoring.EmploymentStatus.EmployedForLessThan16HoursPW, true)]
-        [InlineData(Monitoring.EmploymentStatus.EmployedFor16HoursOrMorePW, false)]
-        [InlineData(Monitoring.EmploymentStatus.EmployedFor16To19HoursPW, false)]
-        [InlineData(Monitoring.EmploymentStatus.EmployedFor20HoursOrMorePW, false)]
-        [InlineData(Monitoring.EmploymentStatus.EmployedFor0To10HourPW, false)]
-        [InlineData(Monitoring.EmploymentStatus.EmployedFor11To20HoursPW, false)]
-        [InlineData(Monitoring.EmploymentStatus.EmployedFor21To30HoursPW, false)]
-        [InlineData(Monitoring.EmploymentStatus.EmployedFor31PlusHoursPW, false)]
+        [InlineData(10, true)] // TypeOfEmploymentStatus.InPaidEmployment
+        [InlineData(11, false)] // TypeOfEmploymentStatus.NotEmployedSeekingAndAvailable
+        [InlineData(12, false)] // TypeOfEmploymentStatus.NotEmployedNotSeekingOrNotAvailable
+        [InlineData(98, false)] // TypeOfEmploymentStatus.NotKnownProvided
+        public void HasQualifyingEmploymentStatusMeetsExpectation(int candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+
+            var mockItem = new Mock<ILearnerEmploymentStatus>();
+            mockItem
+                .SetupGet(x => x.EmpStat)
+                .Returns(candidate);
+
+            // act
+            var result = sut.HasQualifyingEmploymentStatus(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
+        }
+
+        [Theory]
+        [InlineData(Monitoring.EmploymentStatus.EmployedFor16HoursOrMorePW, true)]
+        [InlineData(Monitoring.EmploymentStatus.EmployedFor16To19HoursPW, true)]
+        [InlineData(Monitoring.EmploymentStatus.EmployedFor20HoursOrMorePW, true)]
+        [InlineData(Monitoring.EmploymentStatus.EmployedFor0To10HourPW, true)]
+        [InlineData(Monitoring.EmploymentStatus.EmployedFor11To20HoursPW, true)]
+        [InlineData(Monitoring.EmploymentStatus.EmployedFor21To30HoursPW, true)]
+        [InlineData(Monitoring.EmploymentStatus.EmployedFor31PlusHoursPW, true)]
+        [InlineData(Monitoring.EmploymentStatus.EmployedForLessThan16HoursPW, false)]
         [InlineData(Monitoring.EmploymentStatus.EmployedForUpTo3M, false)]
         [InlineData(Monitoring.EmploymentStatus.EmployedFor4To6M, false)]
         [InlineData(Monitoring.EmploymentStatus.EmployedFor7To12M, false)]
@@ -140,11 +309,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [InlineData(Monitoring.EmploymentStatus.UnemployedFor12To23M, false)]
         [InlineData(Monitoring.EmploymentStatus.UnemployedFor24To35M, false)]
         [InlineData(Monitoring.EmploymentStatus.UnemployedFor36MPlus, false)]
-        public void HasAQualifyingMonitorStatusMeetsExpectation(string candidate, bool expectation)
+        public void HasDisqualifyingMonitorMeetsExpectation(string candidate, bool expectation)
         {
             // arrange
             var sut = NewRule();
-            var mockItem = new Mock<IEmploymentStatusMonitoring>(MockBehavior.Strict);
+            var mockItem = new Mock<IEmploymentStatusMonitoring>();
             mockItem
                 .SetupGet(y => y.ESMType)
                 .Returns(candidate.Substring(0, 3));
@@ -153,63 +322,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Returns(int.Parse(candidate.Substring(3)));
 
             // act
-            var result = sut.HasAQualifyingMonitorStatus(mockItem.Object);
+            var result = sut.HasDisqualifyingMonitor(mockItem.Object);
 
             // assert
             Assert.Equal(expectation, result);
-            mockItem.VerifyAll();
-        }
-
-        /// <summary>
-        /// Does not have a qualifying employment status with null employment returns true
-        /// </summary>
-        [Fact]
-        public void DoesNotHaveAQualifyingEmploymentStatusWithNullEmploymentReturnsTrue()
-        {
-            // arrange
-            var sut = NewRule();
-
-            // act
-            var result = sut.DoesNotHaveAQualifyingEmploymentStatus(null, null);
-
-            // assert
-            Assert.True(result);
-        }
-
-        /// <summary>
-        /// Does not have a qualifying employment status with null statuses returns true
-        /// </summary>
-        [Fact]
-        public void DoesNotHaveAQualifyingEmploymentStatusWithNullStatusesReturnsTrue()
-        {
-            // arrange
-            var sut = NewRule();
-
-            var mockItem = new Mock<ILearningDelivery>();
-
-            // act
-            var result = sut.DoesNotHaveAQualifyingEmploymentStatus(null, mockItem.Object);
-
-            // assert
-            Assert.True(result);
-        }
-
-        /// <summary>
-        /// Does not have a qualifying employment status with empty statuses returns true
-        /// </summary>
-        [Fact]
-        public void DoesNotHaveAQualifyingEmploymentStatusWithEmptyStatusesReturnsTrue()
-        {
-            // arrange
-            var sut = NewRule();
-
-            var mockItem = new Mock<ILearningDelivery>();
-
-            // act
-            var result = sut.DoesNotHaveAQualifyingEmploymentStatus(Collection.EmptyAndReadOnly<ILearnerEmploymentStatus>(), mockItem.Object);
-
-            // assert
-            Assert.True(result);
         }
 
         /// <summary>
@@ -224,6 +340,107 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [InlineData(Monitoring.EmploymentStatus.EmployedFor11To20HoursPW)]
         [InlineData(Monitoring.EmploymentStatus.EmployedFor21To30HoursPW)]
         [InlineData(Monitoring.EmploymentStatus.EmployedFor31PlusHoursPW)]
+        public void InvalidItemRaisesValidationMessage(string candidate)
+        {
+            // arrange
+            const string LearnRefNumber = "123456789X";
+            const int AimSeqNumber = 1;
+
+            var testDate = DateTime.Parse("2018-07-31");
+
+            var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(x => x.LearnStartDate)
+                .Returns(testDate);
+            mockDelivery
+                .SetupGet(x => x.AimType)
+                .Returns(TypeOfAim.ProgrammeAim);
+            mockDelivery
+                .SetupGet(x => x.ProgTypeNullable)
+                .Returns(TypeOfLearningProgramme.Traineeship);
+            mockDelivery
+                .SetupGet(x => x.AimSeqNumber)
+                .Returns(AimSeqNumber);
+
+            var deliveries = new ILearningDelivery[] { mockDelivery.Object };
+
+            var esmType = candidate.Substring(0, 3);
+            var esmCode = int.Parse(candidate.Substring(3));
+
+            var mockItem = new Mock<IEmploymentStatusMonitoring>(MockBehavior.Strict);
+            mockItem
+                .SetupGet(y => y.ESMType)
+                .Returns(esmType);
+            mockItem
+                .SetupGet(y => y.ESMCode)
+                .Returns(esmCode);
+
+            var monitors = new IEmploymentStatusMonitoring[] { mockItem.Object };
+
+            var mockStatus = new Mock<ILearnerEmploymentStatus>();
+            mockStatus
+                .SetupGet(y => y.DateEmpStatApp)
+                .Returns(testDate);
+            mockStatus
+                .SetupGet(y => y.EmpStat)
+                .Returns(TypeOfEmploymentStatus.InPaidEmployment);
+            mockStatus
+                .SetupGet(y => y.EmploymentStatusMonitorings)
+                .Returns(monitors.AsSafeReadOnlyList());
+
+            var statii = new ILearnerEmploymentStatus[] { mockStatus.Object };
+
+            var mockLearner = new Mock<ILearner>();
+            mockLearner
+                .SetupGet(x => x.LearnRefNumber)
+                .Returns(LearnRefNumber);
+            mockLearner
+                .SetupGet(x => x.LearningDeliveries)
+                .Returns(deliveries);
+            mockLearner
+                .SetupGet(x => x.LearnerEmploymentStatuses)
+                .Returns(statii);
+
+            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+            handler
+                .Setup(x => x.Handle("EmpStat_18", LearnRefNumber, AimSeqNumber, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("ESMType", esmType))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            handler
+                .Setup(x => x.BuildErrorMessageParameter("ESMCode", esmCode))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonchecks
+                .Setup(x => x.GetEmploymentStatusOn(testDate, statii))
+                .Returns(mockStatus.Object);
+            commonchecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, EmpStat_18Rule.OldCodeMonitoringThresholdDate))
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.IsTraineeship(mockDelivery.Object))
+                .Returns(true);
+            commonchecks
+                .Setup(x => x.InAProgramme(mockDelivery.Object))
+                .Returns(true);
+
+            var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
+
+            // act
+            sut.Validate(mockLearner.Object);
+
+            // assert
+            handler.VerifyAll();
+            commonchecks.VerifyAll();
+        }
+
+        /// <summary>
+        /// Valid item does not raise validation message.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        [Theory]
+        [InlineData(Monitoring.EmploymentStatus.EmployedForLessThan16HoursPW)]
         [InlineData(Monitoring.EmploymentStatus.EmployedForUpTo3M)]
         [InlineData(Monitoring.EmploymentStatus.EmployedFor4To6M)]
         [InlineData(Monitoring.EmploymentStatus.EmployedFor7To12M)]
@@ -240,108 +457,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
         [InlineData(Monitoring.EmploymentStatus.UnemployedFor12To23M)]
         [InlineData(Monitoring.EmploymentStatus.UnemployedFor24To35M)]
         [InlineData(Monitoring.EmploymentStatus.UnemployedFor36MPlus)]
-        public void InvalidItemRaisesValidationMessage(string candidate)
-        {
-            // arrange
-            const string LearnRefNumber = "123456789X";
-            const int AimSeqNumber = 1;
-
-            var testDate = DateTime.Parse("2018-07-31");
-
-            var deliveries = Collection.Empty<ILearningDelivery>();
-            var mockDelivery = new Mock<ILearningDelivery>();
-            mockDelivery
-                .SetupGet(x => x.LearnStartDate)
-                .Returns(testDate);
-            mockDelivery
-                .SetupGet(x => x.AimType)
-                .Returns(TypeOfAim.ProgrammeAim);
-            mockDelivery
-                .SetupGet(x => x.ProgTypeNullable)
-                .Returns(TypeOfLearningProgramme.Traineeship);
-            mockDelivery
-                .SetupGet(x => x.AimSeqNumber)
-                .Returns(AimSeqNumber);
-            deliveries.Add(mockDelivery.Object);
-
-            var monitors = Collection.Empty<IEmploymentStatusMonitoring>();
-            var mockItem = new Mock<IEmploymentStatusMonitoring>(MockBehavior.Strict);
-            mockItem
-                .SetupGet(y => y.ESMType)
-                .Returns(candidate.Substring(0, 3));
-            mockItem
-                .SetupGet(y => y.ESMCode)
-                .Returns(int.Parse(candidate.Substring(3)));
-            monitors.Add(mockItem.Object);
-
-            var statii = Collection.Empty<ILearnerEmploymentStatus>();
-            var mockStatus = new Mock<ILearnerEmploymentStatus>();
-            mockStatus
-                .SetupGet(y => y.DateEmpStatApp)
-                .Returns(testDate);
-            mockStatus
-                .SetupGet(y => y.EmpStat)
-                .Returns(TypeOfEmploymentStatus.InPaidEmployment);
-            mockStatus
-                .SetupGet(y => y.EmploymentStatusMonitorings)
-                .Returns(monitors.AsSafeReadOnlyList());
-            statii.Add(mockStatus.Object);
-
-            var mockLearner = new Mock<ILearner>();
-            mockLearner
-                .SetupGet(x => x.LearnRefNumber)
-                .Returns(LearnRefNumber);
-            mockLearner
-                .SetupGet(x => x.LearningDeliveries)
-                .Returns(deliveries.AsSafeReadOnlyList());
-            mockLearner
-                .SetupGet(x => x.LearnerEmploymentStatuses)
-                .Returns(statii.AsSafeReadOnlyList());
-
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            handler
-                .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == EmpStat_18Rule.Name),
-                    Moq.It.Is<string>(y => y == LearnRefNumber),
-                    AimSeqNumber,
-                    Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
-            handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == EmpStat_18Rule.MessagePropertyName),
-                    Monitoring.EmploymentStatus.EmployedForLessThan16HoursPW))
-                .Returns(new Mock<IErrorMessageParameter>().Object);
-            handler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == PropertyNameConstants.LearnStartDate),
-                    testDate))
-                .Returns(new Mock<IErrorMessageParameter>().Object);
-
-            var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
-            commonchecks
-                .Setup(x => x.IsTraineeship(mockDelivery.Object))
-                .Returns(true);
-            commonchecks
-                .Setup(x => x.InAProgramme(mockDelivery.Object))
-                .Returns(true);
-            commonchecks
-                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, EmpStat_18Rule.OldCodeMonitoringThresholdDate))
-                .Returns(true);
-
-            var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
-
-            // act
-            sut.Validate(mockLearner.Object);
-
-            // assert
-            handler.VerifyAll();
-        }
-
-        /// <summary>
-        /// Valid item does not raise validation message.
-        /// </summary>
-        /// <param name="candidate">The candidate.</param>
-        [Theory]
-        [InlineData(Monitoring.EmploymentStatus.EmployedForLessThan16HoursPW)]
         public void ValidItemDoesNotRaiseValidationMessage(string candidate)
         {
             // arrange
@@ -350,7 +465,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
 
             var testDate = DateTime.Parse("2018-07-31");
 
-            var deliveries = Collection.Empty<ILearningDelivery>();
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.LearnStartDate)
@@ -364,9 +478,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             mockDelivery
                 .SetupGet(x => x.AimSeqNumber)
                 .Returns(AimSeqNumber);
-            deliveries.Add(mockDelivery.Object);
 
-            var monitors = Collection.Empty<IEmploymentStatusMonitoring>();
+            var deliveries = new ILearningDelivery[] { mockDelivery.Object };
+
             var mockItem = new Mock<IEmploymentStatusMonitoring>(MockBehavior.Strict);
             mockItem
                 .SetupGet(y => y.ESMType)
@@ -374,9 +488,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
             mockItem
                 .SetupGet(y => y.ESMCode)
                 .Returns(int.Parse(candidate.Substring(3)));
-            monitors.Add(mockItem.Object);
 
-            var statii = Collection.Empty<ILearnerEmploymentStatus>();
+            var monitors = new IEmploymentStatusMonitoring[] { mockItem.Object };
+
             var mockStatus = new Mock<ILearnerEmploymentStatus>();
             mockStatus
                 .SetupGet(y => y.DateEmpStatApp)
@@ -386,8 +500,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Returns(TypeOfEmploymentStatus.InPaidEmployment);
             mockStatus
                 .SetupGet(y => y.EmploymentStatusMonitorings)
-                .Returns(monitors.AsSafeReadOnlyList());
-            statii.Add(mockStatus.Object);
+                .Returns(monitors);
+
+            var statii = new ILearnerEmploymentStatus[] { mockStatus.Object };
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -395,21 +510,24 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpStat
                 .Returns(LearnRefNumber);
             mockLearner
                 .SetupGet(x => x.LearningDeliveries)
-                .Returns(deliveries.AsSafeReadOnlyList());
+                .Returns(deliveries);
             mockLearner
                 .SetupGet(x => x.LearnerEmploymentStatuses)
-                .Returns(statii.AsSafeReadOnlyList());
+                .Returns(statii);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var commonchecks = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
+            commonchecks
+                .Setup(x => x.GetEmploymentStatusOn(testDate, statii))
+                .Returns(mockStatus.Object);
+            commonchecks
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, EmpStat_18Rule.OldCodeMonitoringThresholdDate))
+                .Returns(true);
             commonchecks
                 .Setup(x => x.IsTraineeship(mockDelivery.Object))
                 .Returns(true);
             commonchecks
                 .Setup(x => x.InAProgramme(mockDelivery.Object))
-                .Returns(true);
-            commonchecks
-                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, EmpStat_18Rule.OldCodeMonitoringThresholdDate))
                 .Returns(true);
 
             var sut = new EmpStat_18Rule(handler.Object, commonchecks.Object);
