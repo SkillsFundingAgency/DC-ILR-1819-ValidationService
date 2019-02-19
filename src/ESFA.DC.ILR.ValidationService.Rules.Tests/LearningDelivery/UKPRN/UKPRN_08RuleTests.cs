@@ -268,14 +268,20 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         public void HasFundingRelationshipWithNullDeliveryReturnsFalse()
         {
             // arrange
+            const int testUKPRN = 123;
+
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
+            fileData
+                .Setup(x => x.UKPRN())
+                .Returns(testUKPRN);
+
             var academicData = new Mock<IAcademicYearDataService>(MockBehavior.Strict);
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetContractAllocationFor(null))
-                .Returns((IFcsContractAllocation)null);
+                .Setup(x => x.GetContractAllocationsFor(testUKPRN))
+                .Returns((IReadOnlyCollection<IFcsContractAllocation>)null);
 
             var sut = new UKPRN_08Rule(handler.Object, fileData.Object, academicData.Object, commonOps.Object, fcsData.Object);
 
@@ -296,25 +302,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         /// Invalid item raises validation message.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
-        /// <param name="providerID">The provider identifier.</param>
-        /// <param name="deliveryID">The delivery identifier.</param>
         [Theory]
-        [InlineData("AEBC1819", 1, 1)] // FundingStreamPeriodCodeConstants.AEBC1819
-        [InlineData("AEBTO-TOL1819", 1, 1)] // FundingStreamPeriodCodeConstants.AEBTO_TOL1819
-        [InlineData("AEB-LS1819", 1, 1)] // FundingStreamPeriodCodeConstants.AEB_LS1819
-        [InlineData("AEB-TOL1819", 1, 1)] // FundingStreamPeriodCodeConstants.AEB_TOL1819
-        [InlineData("ANLAP2018", 1, 1)] // FundingStreamPeriodCodeConstants.ANLAP2018
-        [InlineData("APPS1819", 1, 1)] // FundingStreamPeriodCodeConstants.APPS1819
-        [InlineData("16-18NLAP2018", 1, 1)] // FundingStreamPeriodCodeConstants.C1618_NLAP2018
-        [InlineData("ESF1420", 1, 1)] // FundingStreamPeriodCodeConstants.ESF1420
-        [InlineData("LEVY1799", 1, 1)] // FundingStreamPeriodCodeConstants.LEVY1799
-        [InlineData("ALLB1819", 1, 2)] // FundingStreamPeriodCodeConstants.ALLB1819
-        [InlineData("ALLBC1819", 1, 2)] // FundingStreamPeriodCodeConstants.ALLBC1819
-        public void InvalidItemRaisesValidationMessage(string candidate, int providerID, int deliveryID)
+        [InlineData("AEBC1819")] // FundingStreamPeriodCodeConstants.AEBC1819
+        [InlineData("AEBTO-TOL1819")] // FundingStreamPeriodCodeConstants.AEBTO_TOL1819
+        [InlineData("AEB-LS1819")] // FundingStreamPeriodCodeConstants.AEB_LS1819
+        [InlineData("AEB-TOL1819")] // FundingStreamPeriodCodeConstants.AEB_TOL1819
+        [InlineData("ANLAP2018")] // FundingStreamPeriodCodeConstants.ANLAP2018
+        [InlineData("APPS1819")] // FundingStreamPeriodCodeConstants.APPS1819
+        [InlineData("16-18NLAP2018")] // FundingStreamPeriodCodeConstants.C1618_NLAP2018
+        [InlineData("ESF1420")] // FundingStreamPeriodCodeConstants.ESF1420
+        [InlineData("LEVY1799")] // FundingStreamPeriodCodeConstants.LEVY1799
+        public void InvalidItemRaisesValidationMessage(string candidate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
             const string contractRef = "shonkyRef12";
+            const int providerID = 123;
+
             var testDate = DateTime.Today;
 
             var delivery = new Mock<ILearningDelivery>();
@@ -325,10 +329,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 .SetupGet(y => y.LearnActEndDateNullable)
                 .Returns(testDate);
 
-            var deliveries = new List<ILearningDelivery>
-            {
-                delivery.Object
-            };
+            var deliveries = new ILearningDelivery[] { delivery.Object };
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -370,14 +371,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             allocation
                 .SetupGet(x => x.FundingStreamPeriodCode)
                 .Returns(candidate);
-            allocation
-                .SetupGet(x => x.DeliveryUKPRN)
-                .Returns(deliveryID);
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetContractAllocationFor(contractRef))
-                .Returns(allocation.Object);
+                .Setup(x => x.GetContractAllocationsFor(providerID))
+                .Returns(new[] { allocation.Object });
 
             var sut = new UKPRN_08Rule(handler.Object, fileData.Object, academicData.Object, commonOps.Object, fcsData.Object);
 
@@ -396,16 +394,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
         /// Valid item does not raise validation message.
         /// </summary>
         /// <param name="candidate">The candidate.</param>
-        /// <param name="providerID">The provider identifier.</param>
-        /// <param name="deliveryID">The delivery identifier.</param>
         [Theory]
-        [InlineData("ALLB1819", 1, 1)] // FundingStreamPeriodCodeConstants.ALLB1819
-        [InlineData("ALLBC1819", 1, 1)] // FundingStreamPeriodCodeConstants.ALLBC1819
-        public void ValidItemDoesNotRaiseValidationMessage(string candidate, int providerID, int deliveryID)
+        [InlineData("ALLB1819")] // FundingStreamPeriodCodeConstants.ALLB1819
+        [InlineData("ALLBC1819")] // FundingStreamPeriodCodeConstants.ALLBC1819
+        public void ValidItemDoesNotRaiseValidationMessage(string candidate)
         {
             // arrange
             const string LearnRefNumber = "123456789X";
             const string contractRef = "shonkyRef12";
+            const int providerID = 123;
+
             var testDate = DateTime.Today;
 
             var delivery = new Mock<ILearningDelivery>();
@@ -416,10 +414,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 .SetupGet(y => y.LearnActEndDateNullable)
                 .Returns(testDate);
 
-            var deliveries = new List<ILearningDelivery>
-            {
-                delivery.Object
-            };
+            var deliveries = new ILearningDelivery[] { delivery.Object };
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -430,6 +425,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
                 .Returns(deliveries);
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
+
             var fileData = new Mock<IFileDataService>(MockBehavior.Strict);
             fileData
                 .Setup(x => x.UKPRN())
@@ -452,14 +448,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             allocation
                 .SetupGet(x => x.FundingStreamPeriodCode)
                 .Returns(candidate);
-            allocation
-                .SetupGet(x => x.DeliveryUKPRN)
-                .Returns(deliveryID);
 
             var fcsData = new Mock<IFCSDataService>(MockBehavior.Strict);
             fcsData
-                .Setup(x => x.GetContractAllocationFor(contractRef))
-                .Returns(allocation.Object);
+                .Setup(x => x.GetContractAllocationsFor(providerID))
+                .Returns(new[] { allocation.Object });
 
             var sut = new UKPRN_08Rule(handler.Object, fileData.Object, academicData.Object, commonOps.Object, fcsData.Object);
 

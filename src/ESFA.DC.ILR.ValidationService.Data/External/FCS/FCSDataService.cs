@@ -48,6 +48,20 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS
         }
 
         /// <summary>
+        /// Gets the contract allocations for.
+        /// </summary>
+        /// <param name="thisProviderID">this provider identifier.</param>
+        /// <returns>
+        /// a collection of contract allocations for the provider
+        /// </returns>
+        public IReadOnlyCollection<IFcsContractAllocation> GetContractAllocationsFor(int thisProviderID)
+        {
+            return _contractAllocations.Values
+                .SafeWhere(ca => ca.DeliveryUKPRN == thisProviderID)
+                .AsSafeReadOnlyList();
+        }
+
+        /// <summary>
         /// Gets the eligibility rule for (this contract reference).
         /// </summary>
         /// <param name="thisContractReference">this contract reference.</param>
