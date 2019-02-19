@@ -14,11 +14,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
 {
     public class R64Rule : AbstractRule, IRule<ILearner>
     {
-        private const int ValidOutcome = 1;
-        private const int ExcludedProgType = 25;
-        private const int ValidCompStatus = 2;
+        private const int ValidOutcome = OutcomeConstants.Achieved;
+        private const int ExcludedProgType = TypeOfLearningProgramme.ApprenticeshipStandard;
+        private const int ValidCompStatus = CompletionState.HasCompleted;
         private readonly ILARSDataService _larsDataService;
-        private readonly HashSet<int> validFundModels = new HashSet<int>() { 35, 36 };
+        private readonly HashSet<int> validFundModels = new HashSet<int>() { TypeOfFunding.AdultSkills, TypeOfFunding.ApprenticeshipsFrom1May2017 };
         private readonly HashSet<int?> validComponentTypes = new HashSet<int?>() { 1, 3 };
 
         public R64Rule(
@@ -39,7 +39,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
             var filteredLearningDeliveries = objectToValidate.LearningDeliveries
                 .Where(x => AimTypeConditionMet(x.AimType) &&
                             FundModelsConditionMet(x.FundModel) &&
-                            !ExcludeConditionMet(x.FundModel) &&
+                            !ExcludeConditionMet(x.ProgTypeNullable) &&
                             LarsComponentTypeConditionMet(x.LearnAimRef));
 
             var completedLearningDeliveries = filteredLearningDeliveries.

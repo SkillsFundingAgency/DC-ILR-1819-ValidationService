@@ -43,9 +43,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(TypeOfAim.ProgrammeAim)]
-        [InlineData(TypeOfAim.CoreAim16To19ExcludingApprenticeships)]
-        [InlineData(TypeOfAim.AimNotPartOfAProgramme)]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(4)]
         public void AimTypeConditionMet_False(int aimType)
         {
             NewRule().AimTypeConditionMet(aimType).Should().BeFalse();
@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void AimTypeConditionMet_True()
         {
-            NewRule().AimTypeConditionMet(TypeOfAim.ComponentAimInAProgramme).Should().BeTrue();
+            NewRule().AimTypeConditionMet(3).Should().BeTrue();
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery()
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
+                    AimType = 3,
                     FworkCodeNullable = 1,
                     PwayCodeNullable = 2,
                     StdCodeNullable = 3,
@@ -110,7 +110,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery()
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
+                    AimType = 3,
                     FworkCodeNullable = 1,
                     PwayCodeNullable = 5,
                     StdCodeNullable = 3,
@@ -121,7 +121,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var completedLearningDelivery = new TestLearningDelivery()
             {
                 LearnAimRef = "101",
-                AimType = TypeOfAim.ComponentAimInAProgramme,
+                AimType = 3,
                 FworkCodeNullable = 1,
                 PwayCodeNullable = 2,
                 StdCodeNullable = 3,
@@ -132,15 +132,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(TypeOfAim.ProgrammeAim, null, null, null, null)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 99, null, null, null)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 99, 100, 200, null)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 80, 0, 0, 100)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 0, 0, 0, 0)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 1, null, 20, null)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 1, null, 2, 9999)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 1, 2, 2, 9999)]
-        [InlineData(TypeOfAim.ComponentAimInAProgramme, 2, null, 3, 3)]
+        [InlineData(1, null, null, null, null)]
+        [InlineData(3, 99, null, null, null)]
+        [InlineData(3, 99, 100, 200, null)]
+        [InlineData(3, 80, 0, 0, 100)]
+        [InlineData(3, 0, 0, 0, 0)]
+        [InlineData(3, 1, null, 20, null)]
+        [InlineData(3, 1, null, 2, 9999)]
+        [InlineData(3, 1, 2, 2, 9999)]
+        [InlineData(3, 2, null, 3, 3)]
         public void ConditionMet_False(int aimType, int? frameworkCode, int? standardCode, int?pwayCode, int? progType)
         {
             var learningDeliveries = new[]
@@ -148,7 +148,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery()
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
+                    AimType = aimType,
                     FworkCodeNullable = frameworkCode,
                     PwayCodeNullable = pwayCode,
                     StdCodeNullable = standardCode,
@@ -158,7 +158,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery()
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
+                    AimType = aimType,
                     FworkCodeNullable = 1,
                     PwayCodeNullable = 5,
                     StdCodeNullable = 3,
@@ -170,7 +170,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var completedLearningDelivery = new TestLearningDelivery()
             {
                 LearnAimRef = "101",
-                AimType = TypeOfAim.ComponentAimInAProgramme,
+                AimType = aimType,
                 FworkCodeNullable = 1,
                 PwayCodeNullable = 2,
                 StdCodeNullable = null,
@@ -189,7 +189,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery()
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
+                    AimType = 3,
                     FworkCodeNullable = 1,
                     PwayCodeNullable = 2,
                     StdCodeNullable = null,
@@ -199,7 +199,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery()
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
+                    AimType = 3,
                     FworkCodeNullable = null,
                     PwayCodeNullable = null,
                     StdCodeNullable = null,
@@ -211,7 +211,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
             var completedLearningDelivery = new TestLearningDelivery()
             {
                 LearnAimRef = "101",
-                AimType = TypeOfAim.ComponentAimInAProgramme,
+                AimType = 3,
                 FworkCodeNullable = 1,
                 PwayCodeNullable = 2,
                 StdCodeNullable = null,
@@ -247,8 +247,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery() // this will cause the condition to be met
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
-                    ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
+                    AimType = 3,
+                    ProgTypeNullable = 2,
                     FworkCodeNullable = 2,
                     PwayCodeNullable = 3,
                     StdCodeNullable = null,
@@ -258,8 +258,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery()
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
-                    ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
+                    AimType = 3,
+                    ProgTypeNullable = 2,
                     FworkCodeNullable = 2,
                     PwayCodeNullable = 3,
                     StdCodeNullable = null,
@@ -271,8 +271,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 new TestLearningDelivery() // this will be excluded as fund model is 25
                 {
                     LearnAimRef = "101",
-                    AimType = TypeOfAim.ComponentAimInAProgramme,
-                    ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
+                    AimType = 3,
+                    ProgTypeNullable = 2,
                     FworkCodeNullable = 2,
                     PwayCodeNullable = 3,
                     StdCodeNullable = null,
@@ -377,25 +377,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.AimType, TypeOfAim.ComponentAimInAProgramme)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.ApprenticeshipsFrom1May2017)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.ProgType, TypeOfLearningProgramme.AdvancedLevelApprenticeship)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.FworkCode, 2)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.PwayCode, 3)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.StdCode, null)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.Outcome, 1)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.CompStatus, 2)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, "10/10/2017")).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("AimType", 3)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("FundModel", 36)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("ProgType", 2)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("FworkCode", 2)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("PwayCode", 3)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("StdCode", null)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("Outcome", 1)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("CompStatus", 2)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("LearnStartDate", "10/10/2017")).Verifiable();
 
             var learningDelivery = new TestLearningDelivery()
             {
                 LearnAimRef = "101",
-                AimType = TypeOfAim.ComponentAimInAProgramme,
-                ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
+                AimType = 3,
+                ProgTypeNullable = 2,
                 FworkCodeNullable = 2,
                 PwayCodeNullable = 3,
                 StdCodeNullable = null,
-                FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
+                FundModel = 36,
                 OutcomeNullable = 1,
                 CompStatus = 2,
                 LearnStartDate = new DateTime(2017, 10, 10)
