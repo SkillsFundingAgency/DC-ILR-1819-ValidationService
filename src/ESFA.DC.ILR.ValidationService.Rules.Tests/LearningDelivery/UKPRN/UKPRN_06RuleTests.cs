@@ -174,14 +174,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             NewRule(academicYearQueryService: academicYearQueryServiceMock.Object).LearnActEndDateConditionMet(learnActEndDate, academicYear).Should().BeFalse();
         }
 
-        [Fact]
-        public void ConditionMet_True()
+        [Theory]
+        [InlineData(24)]
+        [InlineData(null)]
+        public void ConditionMet_True(int? progType)
         {
             var fundModel = _fundModel;
             DateTime academicYear = new DateTime(2018, 8, 1);
             DateTime startDate = new DateTime(2018, 8, 1);
             DateTime learnActEndDate = new DateTime(2018, 8, 1);
-            int progType = 24;
+
             var learningDeliveryFAMs = new List<TestLearningDeliveryFAM>
             {
                 new TestLearningDeliveryFAM
@@ -202,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.UKPRN
             rule.Setup(r => r.LearnActEndDateConditionMet(learnActEndDate, academicYear)).Returns(true);
             rule.Setup(r => r.LearningDeliveryFAMsConditionMet(learningDeliveryFAMs)).Returns(true);
             rule.Setup(r => r.FCTFundingConditionMet()).Returns(true);
-            rule.Setup(r => r.DD07ConditionMet(progType)).Returns(true);
+            rule.Setup(r => r.DD07ConditionMet(24)).Returns(true);
 
             rule.Object.ConditionMet(fundModel, progType, academicYear, learnActEndDate, learningDeliveryFAMs).Should().BeTrue();
         }

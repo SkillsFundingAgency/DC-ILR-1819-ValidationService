@@ -74,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         {
             return FundModelConditionMet(fundModel)
                 && (learningDeliveryFAMs != null && LearningDeliveryFAMsConditionMet(learningDeliveryFAMs))
-                && (progType.HasValue && DD07ConditionMet(progType.Value))
+                && (!progType.HasValue || DD07ConditionMet(progType.Value))
                 && (!learnActEndDate.HasValue || LearnActEndDateConditionMet(learnActEndDate.Value, academicYearStart))
                 && FCTFundingConditionMet();
         }
