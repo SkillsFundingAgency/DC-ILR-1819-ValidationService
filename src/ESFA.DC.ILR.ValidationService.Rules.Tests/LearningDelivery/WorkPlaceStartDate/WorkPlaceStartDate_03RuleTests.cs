@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
+using System;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceStartDate
@@ -30,6 +26,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceSt
         [InlineData(TypeOfAim.References.WorkPlacement500PlusHours)]
         [InlineData(TypeOfAim.References.SupportedInternship16To19)]
         [InlineData(TypeOfAim.References.WorkExperience)]
+        [InlineData(TypeOfAim.References.IndustryPlacement)]
         public void LearnAimRefConditionMet_False(string learnAimRef)
         {
             NewRule().LearnAimRefConditionMet(learnAimRef).Should().BeFalse();

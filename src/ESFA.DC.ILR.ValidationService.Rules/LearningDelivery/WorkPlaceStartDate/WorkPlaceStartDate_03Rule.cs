@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate
 {
@@ -20,7 +17,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDat
             TypeOfAim.References.WorkPlacement200To499Hours,
             TypeOfAim.References.WorkPlacement500PlusHours,
             TypeOfAim.References.SupportedInternship16To19,
-            TypeOfAim.References.WorkExperience
+            TypeOfAim.References.WorkExperience,
+            TypeOfAim.References.IndustryPlacement,
         };
 
         public WorkPlaceStartDate_03Rule(IValidationErrorHandler validationErrorHandler)
