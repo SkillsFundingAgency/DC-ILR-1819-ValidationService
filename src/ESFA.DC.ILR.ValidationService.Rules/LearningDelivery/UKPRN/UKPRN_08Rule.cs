@@ -131,11 +131,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.UKPRN
         /// </returns>
         public bool HasFundingRelationship(ILearningDelivery thisDelivery)
         {
-            var allocation = _fcsDataService.GetContractAllocationFor(thisDelivery?.ConRefNumber);
+            var allocations = _fcsDataService.GetContractAllocationsFor(_fileDataService.UKPRN());
 
-            return It.Has(allocation)
-                && HasQualifyingProviderID(allocation, _fileDataService.UKPRN())
-                && HasQualifyingFundingStream(allocation);
+            return allocations.SafeAny(HasQualifyingFundingStream);
         }
 
         /// <summary>

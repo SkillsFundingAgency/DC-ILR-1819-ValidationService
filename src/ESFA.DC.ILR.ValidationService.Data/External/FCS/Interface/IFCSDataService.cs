@@ -17,6 +17,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface
         IFcsContractAllocation GetContractAllocationFor(string thisContractReference);
 
         /// <summary>
+        /// Gets the contract allocations for.
+        /// </summary>
+        /// <param name="thisProviderID">this provider identifier.</param>
+        /// <returns>
+        /// a collection of contract allocations for the provider
+        /// </returns>
+        IReadOnlyCollection<IFcsContractAllocation> GetContractAllocationsFor(int thisProviderID);
+
+        /// <summary>
         /// Gets the eligibility rule for (this contract reference).
         /// </summary>
         /// <param name="thisContractReference">this contract reference.</param>
