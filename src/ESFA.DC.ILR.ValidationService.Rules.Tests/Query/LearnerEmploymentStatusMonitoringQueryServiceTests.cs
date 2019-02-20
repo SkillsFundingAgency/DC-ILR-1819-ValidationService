@@ -26,6 +26,54 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Fact]
+        public void HasAnyESMCodesForType_False_NullLearnerEmploymentStatusMonitorings()
+        {
+            var learnerEmploymentStatuses = new TestLearnerEmploymentStatus[]
+            {
+                new TestLearnerEmploymentStatus
+                {
+                    EmploymentStatusMonitorings = null
+                }
+            };
+
+            NewService().HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "EII", 2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyESMCodesForType_False_ESMTypesMissing()
+        {
+            var learnerEmploymentStatuses = new TestLearnerEmploymentStatus[]
+            {
+                new TestLearnerEmploymentStatus
+                {
+                    EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                    {
+                        new TestEmploymentStatusMonitoring() { ESMCode = 1 }
+                    }
+                }
+            };
+
+            NewService().HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "EII", 2).Should().BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyESMCodesForType_False_ESMCodeMissing()
+        {
+            var learnerEmploymentStatuses = new TestLearnerEmploymentStatus[]
+            {
+                new TestLearnerEmploymentStatus
+                {
+                    EmploymentStatusMonitorings = new TestEmploymentStatusMonitoring[]
+                    {
+                        new TestEmploymentStatusMonitoring() { ESMType = "EII" }
+                    }
+                }
+            };
+
+            NewService().HasAnyEmploymentStatusMonitoringTypeAndCodeForLearnerEmploymentStatus(learnerEmploymentStatuses, "EII", 2).Should().BeFalse();
+        }
+
+        [Fact]
         public void HasAnyESMTypeAndCodeForLES_False_EsmTypeNull()
         {
             var learnerEmploymentStatuses = SetupLearnerEmploymentStatuses();
