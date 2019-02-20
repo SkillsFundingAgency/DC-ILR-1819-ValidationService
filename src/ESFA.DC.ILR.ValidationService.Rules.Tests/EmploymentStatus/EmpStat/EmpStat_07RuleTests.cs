@@ -11,7 +11,7 @@ using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 {
-    public class EmpStat_06RuleTests
+    public class EmpStat_07RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpStat_06Rule(null, commonOps.Object));
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_07Rule(null, commonOps.Object));
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
             // act / assert
-            Assert.Throws<ArgumentNullException>(() => new EmpStat_06Rule(handler.Object, null));
+            Assert.Throws<ArgumentNullException>(() => new EmpStat_07Rule(handler.Object, null));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("EmpStat_06", result);
+            Assert.Equal("EmpStat_07", result);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(RuleNameConstants.EmpStat_06, result);
+            Assert.Equal(RuleNameConstants.EmpStat_07, result);
         }
 
         /// <summary>
@@ -103,23 +103,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         }
 
         /// <summary>
-        /// First viable date meets expectation.
-        /// </summary>
-        [Fact]
-        public void FirstViableDateMeetsExpectation()
-        {
-            // arrange / act / assert
-            Assert.Equal(DateTime.Parse("2013-08-01"), EmpStat_06Rule.FirstViableDate);
-        }
-
-        /// <summary>
         /// Last viable date meets expectation.
         /// </summary>
         [Fact]
         public void LastViableDateMeetsExpectation()
         {
             // arrange / act / assert
-            Assert.Equal(DateTime.Parse("2014-07-31"), EmpStat_06Rule.LastViableDate);
+            Assert.Equal(DateTime.Parse("2013-07-31"), EmpStat_07Rule.LastViableDate);
         }
 
         /// <summary>
@@ -160,36 +150,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         }
 
         /// <summary>
-        /// Is excluded meets expectation
-        /// </summary>
-        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void IsExcludedMeetsExpectation(bool expectation)
-        {
-            // arrange
-            var mockItem = new Mock<ILearningDelivery>();
-
-            var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
-            commonOps
-                .Setup(x => x.IsTraineeship(mockItem.Object))
-                .Returns(expectation);
-
-            var sut = new EmpStat_06Rule(handler.Object, commonOps.Object);
-
-            // act
-            var result = sut.IsExcluded(mockItem.Object);
-
-            // assert
-            Assert.Equal(expectation, result);
-
-            handler.VerifyAll();
-            commonOps.VerifyAll();
-        }
-
-        /// <summary>
         /// Has qualifying funding meets expectation
         /// </summary>
         /// <param name="expectation">if set to <c>true</c> [expectation].</param>
@@ -207,7 +167,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Setup(x => x.HasQualifyingFunding(mockItem.Object, 25, 82))
                 .Returns(expectation);
 
-            var sut = new EmpStat_06Rule(handler.Object, commonOps.Object);
+            var sut = new EmpStat_07Rule(handler.Object, commonOps.Object);
 
             // act
             var result = sut.HasQualifyingFunding(mockItem.Object);
@@ -234,10 +194,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
             commonOps
-                .Setup(x => x.HasQualifyingStart(mockItem.Object, DateTime.Parse("2013-08-01"), DateTime.Parse("2014-07-31")))
+                .Setup(x => x.HasQualifyingStart(mockItem.Object, DateTime.MinValue, DateTime.Parse("2013-07-31")))
                 .Returns(expectation);
 
-            var sut = new EmpStat_06Rule(handler.Object, commonOps.Object);
+            var sut = new EmpStat_07Rule(handler.Object, commonOps.Object);
 
             // act
             var result = sut.HasQualifyingStart(mockItem.Object);
@@ -317,10 +277,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
-                .Setup(x => x.Handle("EmpStat_06", LearnRefNumber, 0, It.IsAny<IEnumerable<IErrorMessageParameter>>()));
-            handler
-                .Setup(x => x.BuildErrorMessageParameter("DateEmpStatApp", "(missing)"))
-                .Returns(new Mock<IErrorMessageParameter>().Object);
+                .Setup(x => x.Handle("EmpStat_07", LearnRefNumber, 0, It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter("PlanLearnHours", null))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
@@ -339,13 +296,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Setup(x => x.HasQualifyingFunding(mockDelivery.Object, 25, 82))
                 .Returns(true);
             commonOps
-                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.Parse("2013-08-01"), DateTime.Parse("2014-07-31")))
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, DateTime.Parse("2013-07-31")))
                 .Returns(true);
-            commonOps
-                .Setup(x => x.IsTraineeship(mockDelivery.Object))
-                .Returns(false);
 
-            var sut = new EmpStat_06Rule(handler.Object, commonOps.Object);
+            var sut = new EmpStat_07Rule(handler.Object, commonOps.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -398,13 +352,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
                 .Setup(x => x.HasQualifyingFunding(mockDelivery.Object, 25, 82))
                 .Returns(true);
             commonOps
-                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.Parse("2013-08-01"), DateTime.Parse("2014-07-31")))
+                .Setup(x => x.HasQualifyingStart(mockDelivery.Object, DateTime.MinValue, DateTime.Parse("2013-07-31")))
                 .Returns(true);
-            commonOps
-                .Setup(x => x.IsTraineeship(mockDelivery.Object))
-                .Returns(false);
 
-            var sut = new EmpStat_06Rule(handler.Object, commonOps.Object);
+            var sut = new EmpStat_07Rule(handler.Object, commonOps.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -418,12 +369,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public EmpStat_06Rule NewRule()
+        public EmpStat_07Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var commonOps = new Mock<IProvideRuleCommonOperations>(MockBehavior.Strict);
 
-            return new EmpStat_06Rule(handler.Object, commonOps.Object);
+            return new EmpStat_07Rule(handler.Object, commonOps.Object);
         }
     }
 }
