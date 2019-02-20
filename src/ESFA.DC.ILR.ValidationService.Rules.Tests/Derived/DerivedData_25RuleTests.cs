@@ -261,7 +261,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Derived
                     {
                         new TestEmploymentStatusMonitoring
                         {
-                            ESMType = "LOU",
+                            ESMType = "lou",
                             ESMCode = expectedResult
                         }
                     }

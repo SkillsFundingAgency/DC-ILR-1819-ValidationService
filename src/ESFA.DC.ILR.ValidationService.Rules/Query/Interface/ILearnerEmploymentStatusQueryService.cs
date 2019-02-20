@@ -9,10 +9,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query.Interface
         /// <summary>
         /// returns the latest Learner Employment Status that applies for a given Date
         /// </summary>
-        /// <param name="learnerEmploymentStatuses"></param>
-        /// <param name="dateValue"></param>
-        /// <returns></returns>
-        ILearnerEmploymentStatus LearnerEmploymentStatusForDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime datetime);
+        /// <param name="learnerEmploymentStatuses">Learner Employment Statuses</param>
+        /// <param name="date">Date to Compare</param>
+        /// <returns>An Employment Status</returns>
+        ILearnerEmploymentStatus LearnerEmploymentStatusForDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date);
 
         bool EmpStatsNotExistBeforeDate(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime date);
 
