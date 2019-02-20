@@ -35,7 +35,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Derived
 
             var employmentStatusMonitoring = _learnerEmploymentStatusQueryService
                 .LearnerEmploymentStatusForDate(learner.LearnerEmploymentStatuses, delivery.LearnStartDate)
-                ?.EmploymentStatusMonitorings?.FirstOrDefault(esm => esm.ESMType == Monitoring.EmploymentStatus.Types.LengthOfUnemployment);
+                ?.EmploymentStatusMonitorings?.FirstOrDefault(esm => esm.ESMType.CaseInsensitiveEquals(Monitoring.EmploymentStatus.Types.LengthOfUnemployment));
 
             return employmentStatusMonitoring?.ESMCode;
         }
