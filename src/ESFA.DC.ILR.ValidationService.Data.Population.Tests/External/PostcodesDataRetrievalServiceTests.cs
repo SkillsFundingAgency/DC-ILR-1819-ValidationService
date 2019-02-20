@@ -221,6 +221,84 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
             postcodes.Should().Contain("CV2 4AA");
         }
 
+        [Fact]
+        public async Task RetrieveOnsPostCodes()
+        {
+            var message = new TestMessage
+            {
+                LearningProviderEntity = new TestLearningProvider
+                {
+                    UKPRN = 1
+                },
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner
+                    {
+                        LearningDeliveries = new List<TestLearningDelivery>
+                        {
+                            new TestLearningDelivery
+                            {
+                                DelLocPostCode = "cv2 4AA"
+                            }
+                        }
+                    }
+                }
+            };
+
+            var postcodesMock = new Mock<IPostcodes>();
+            var messageCacheMock = new Mock<ICache<IMessage>>();
+
+            ONS_Postcodes oNS_Postcode = new ONS_Postcodes()
+            {
+                Postcode = "cv2 4AA",
+                EffectiveFrom = new System.DateTime(2017, 10, 01),
+                EffectiveTo = new System.DateTime(2019, 02, 01),
+                LocalAuthority = "E07000187",
+                Lep1 = "E37000016",
+                Lep2 = "E45000028",
+                Termination = "201902"
+            };
+
+            IEnumerable<ONS_Postcodes> onsPostcodeList = new List<ONS_Postcodes>
+            {
+                new ONS_Postcodes
+                {
+                    Postcode = "CV1 2WT",
+                    EffectiveFrom = new System.DateTime(2018, 09, 01),
+                    EffectiveTo = null,
+                    Lep1 = "Z000123",
+                    Lep2 = "B123456",
+                    Termination = "201803"
+                },
+                new ONS_Postcodes
+                {
+                    Postcode = "CV2 3WT",
+                    EffectiveFrom = new System.DateTime(2016, 01, 01),
+                    EffectiveTo = new System.DateTime(2017, 12, 15),
+                    Lep1 = "A123456",
+                    Lep2 = "B987654",
+                    Termination = "201705"
+                },
+                oNS_Postcode
+            };
+
+            var onsPostcodesMock = onsPostcodeList.AsMockDbSet();
+
+            postcodesMock.Setup(o => o.ONS_Postcodes).Returns(onsPostcodesMock);
+
+            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+
+            var onsPostCodes = await NewService(postcodesMock.Object, messageCacheMock.Object).RetrieveONSPostcodesAsync(CancellationToken.None);
+
+            onsPostCodes.Should().HaveCount(1);
+            onsPostCodes.FirstOrDefault().Postcode.Should().BeEquivalentTo(oNS_Postcode.Postcode);
+            onsPostCodes.FirstOrDefault().LocalAuthority.Should().BeEquivalentTo(oNS_Postcode.LocalAuthority);
+            onsPostCodes.FirstOrDefault().Lep1.Should().BeEquivalentTo(oNS_Postcode.Lep1);
+            onsPostCodes.FirstOrDefault().Lep2.Should().BeEquivalentTo(oNS_Postcode.Lep2);
+            onsPostCodes.FirstOrDefault().EffectiveFrom.Should().Be(oNS_Postcode.EffectiveFrom);
+            onsPostCodes.FirstOrDefault().EffectiveTo.Should().Be(oNS_Postcode.EffectiveTo);
+        }
+
         private PostcodesDataRetrievalService NewService(IPostcodes postcodes = null, ICache<IMessage> messageCache = null)
         {
             return new PostcodesDataRetrievalService(postcodes, messageCache);

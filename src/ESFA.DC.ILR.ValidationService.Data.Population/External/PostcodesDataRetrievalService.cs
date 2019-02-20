@@ -94,6 +94,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
                             EffectiveFrom = p.EffectiveFrom,
                             EffectiveTo = p.EffectiveTo,
                             LocalAuthority = p.LocalAuthority,
+                            Lep1 = p.Lep1,
+                            Lep2 = p.Lep2,
                             Termination = GetEndOfMonthDateFromYearMonthString(p.Termination)
                         })
                         .AsSafeReadOnlyList();
