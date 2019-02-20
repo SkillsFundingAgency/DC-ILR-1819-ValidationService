@@ -103,6 +103,36 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
         }
 
         /// <summary>
+        /// First viable date meets expectation.
+        /// </summary>
+        [Fact]
+        public void FirstViableDateMeetsExpectation()
+        {
+            // arrange / act / assert
+            Assert.Equal(DateTime.Parse("2013-08-01"), EmpStat_06Rule.FirstViableDate);
+        }
+
+        /// <summary>
+        /// Last viable date meets expectation.
+        /// </summary>
+        [Fact]
+        public void LastViableDateMeetsExpectation()
+        {
+            // arrange / act / assert
+            Assert.Equal(DateTime.Parse("2014-07-31"), EmpStat_06Rule.LastViableDate);
+        }
+
+        /// <summary>
+        /// Planned total qualifying hours meets expectation.
+        /// </summary>
+        [Fact]
+        public void PlannedTotalQualifyingHoursMeetsExpectation()
+        {
+            // arrange / act / assert
+            Assert.Equal(540, EmpStat_07Rule.PlannedTotalQualifyingHours);
+        }
+
+        /// <summary>
         /// Get learning hours total meets expectation.
         /// </summary>
         /// <param name="planned">The planned.</param>
