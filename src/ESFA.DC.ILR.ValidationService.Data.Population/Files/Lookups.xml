@@ -1145,8 +1145,8 @@ localised additions are:
                 validTo="2015-07-31" />
         <option code="LDM132"
                 description="Apprenticeship Grant for Employers for 16 to 24 year olds (AGE 16 to 24) - Provider Payment Trigger"
-                validFrom="1900-01-01"
-                validTo="2014-07-31" />
+                validFrom="2012-02-08"
+                validTo="2014-12-31" />
         <option code="LDM133"
                 description="Apprenticeship Grant for Employers for 16 to 24 year olds (AGE 16 to 24) - Strategic Partner"
                 validFrom="1900-01-01"
