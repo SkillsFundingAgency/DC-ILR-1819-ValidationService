@@ -1954,6 +1954,8 @@ localised additions are:
                 description="*C" />
         <option code="*D"
                 description="*D" />
+        <option code="***D"
+              description="***D" />
         <option code="*DD"
                 description="*DD" />
         <option code="*E"
@@ -2376,6 +2378,10 @@ localised additions are:
                 description="D" />
         <option code="D*"
                 description="D*" />
+      <option code="D**"
+              description="D**" />
+      <option code="D***"
+              description="D***" />
         <option code="D*D"
                 description="D*D" />
         <option code="D*D*"
@@ -2700,6 +2706,8 @@ localised additions are:
                 description="General" />
         <option code="L1"
                 description="L1" />
+      <option code="L2"
+              description="L2" />
         <option code="L2D"
                 description="L2D" />
         <option code="L2D*"
@@ -2830,6 +2838,12 @@ localised additions are:
                 description="Ordinary" />
         <option code="OTH"
                 description="Other grade not included on the list above" />
+        <option code="P1"
+              description="P1" />
+        <option code="P2"
+              description="P2" />
+        <option code="P3"
+              description="P3" />
         <option code="PA"
                 description="Pass" />
         <option code="PD"
@@ -2940,8 +2954,26 @@ localised additions are:
                 description="Unclassified honours" />
         <option code="X"
                 description="X" />
-        <option code="Y"
-                description="Y" />
+      <option code="Y"
+              description="Y" />
+      <option code="1"
+              description="1" />
+      <option code="2"
+              description="2" />
+      <option code="3"
+              description="3" />
+      <option code="4"
+              description="4" />
+      <option code="5"
+              description="5" />
+      <option code="6"
+              description="6" />
+      <option code="7"
+              description="7" />
+      <option code="8"
+              description="8" />
+      <option code="9"
+              description="9" />
     </OutGrade>
     <OutGradeLearningAimType>
         <option code="0001">
