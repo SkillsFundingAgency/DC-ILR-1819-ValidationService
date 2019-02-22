@@ -31,20 +31,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 return;
             }
 
-            var completedMainAim = objectToValidate.LearningDeliveries.Where(ld =>
-                ld.AimType == TypeOfAim.ProgrammeAim &&
-                ld.LearnActEndDateNullable.HasValue)
-                .OrderByDescending(x => x.LearnActEndDateNullable)
+            var latestMainAim = objectToValidate.LearningDeliveries.Where(ld =>
+                ld.AimType == TypeOfAim.ProgrammeAim)
+                .OrderByDescending(x => x.LearnStartDate)
                 .FirstOrDefault();
 
-            if (completedMainAim != null)
+            if (latestMainAim?.LearnActEndDateNullable != null)
             {
-                if (ConditionMet(completedMainAim, objectToValidate.LearningDeliveries))
+                if (ConditionMet(latestMainAim, objectToValidate.LearningDeliveries))
                 {
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
-                        completedMainAim.AimSeqNumber,
-                        BuildErrorMessageParameters(completedMainAim));
+                        latestMainAim.AimSeqNumber,
+                        BuildErrorMessageParameters(latestMainAim));
                 }
             }
         }
