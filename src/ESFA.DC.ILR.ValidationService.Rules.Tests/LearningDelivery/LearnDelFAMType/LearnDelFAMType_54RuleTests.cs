@@ -26,30 +26,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [Fact]
         public void FundModelConditionMet_False()
         {
-            NewRule().FundModelConditionMet(TypeOfFunding.ApprenticeshipsFrom1May2017).Should().BeFalse();
+            NewRule().FundModelConditionMet(35).Should().BeFalse();
         }
 
         [Fact]
         public void FundModelConditionMet_True()
         {
-            NewRule().FundModelConditionMet(TypeOfFunding.AdultSkills).Should().BeTrue();
+            NewRule().FundModelConditionMet(36).Should().BeTrue();
         }
 
-        [Fact]
-        public void ProgTypeConditionMet_False()
+        [Theory]
+        [InlineData(21)]
+        [InlineData(null)]
+        public void ProgTypeConditionMet_False(int? progType)
         {
-            NewRule().ProgTypeConditionMet(TypeOfLearningProgramme.ApprenticeshipStandard).Should().BeFalse();
+            NewRule().ProgTypeConditionMet(progType).Should().BeFalse();
         }
 
         [Fact]
         public void ProgTypeConditionMet_True()
         {
-            NewRule().ProgTypeConditionMet(TypeOfLearningProgramme.HigherApprenticeshipLevel5).Should().BeTrue();
+            NewRule().ProgTypeConditionMet(25).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(LearningDeliveryFAMTypeConstants.EEF, "2")]
-        [InlineData(LearningDeliveryFAMTypeConstants.FFI, "2")]
+        [InlineData("EEF", "2")]
+        [InlineData("FFI", "2")]
         public void LearningDeliveryFAMsCondtionMet_False(string learnDelFAMType, string learnDelFAMCode)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
@@ -61,17 +63,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                     },
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                        LearnDelFAMType = "ACT",
                         LearnDelFAMCode = "34"
                     }
                 };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")).Returns(false);
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "EEF", "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "FFI", "2")).Returns(false);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsCondtionMet(testLearningDeliveryFAMs).Should().BeFalse();
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object)
+                .LearningDeliveryFAMsCondtionMet(testLearningDeliveryFAMs).Should().BeFalse();
         }
 
         [Fact]
@@ -81,17 +84,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                        LearnDelFAMType = "ACT",
                         LearnDelFAMCode = "34"
                     }
                 };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")).Returns(false);
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "EEF", "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "FFI", "2")).Returns(false);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsCondtionMet(null).Should().BeFalse();
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object)
+                .LearningDeliveryFAMsCondtionMet(null).Should().BeFalse();
         }
 
         [Fact]
@@ -101,35 +105,38 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.EEF,
+                        LearnDelFAMType = "EEF",
                         LearnDelFAMCode = "2"
                     },
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.FFI,
+                        LearnDelFAMType = "FFI",
                         LearnDelFAMCode = "2"
                     },
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                        LearnDelFAMType = "ACT",
                         LearnDelFAMCode = "34"
                     }
                 };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")).Returns(true);
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "EEF", "2")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "FFI", "2")).Returns(true);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).LearningDeliveryFAMsCondtionMet(testLearningDeliveryFAMs).Should().BeTrue();
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object)
+                .LearningDeliveryFAMsCondtionMet(testLearningDeliveryFAMs).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.HigherApprenticeshipLevel4, LearningDeliveryFAMTypeConstants.ACT, "3")]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.HigherApprenticeshipLevel4, LearningDeliveryFAMTypeConstants.ACT, "2")]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.HigherApprenticeshipLevel4, LearningDeliveryFAMTypeConstants.EEF, "2")]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard, LearningDeliveryFAMTypeConstants.EEF, "2")]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.ApprenticeshipStandard, LearningDeliveryFAMTypeConstants.EEF, "3")]
+        [InlineData(35, 20, "ACT", "3")]
+        [InlineData(35, 20, "ACT", "2")]
+        [InlineData(35, 20, "EEF", "2")]
+        [InlineData(35, 25, "EEF", "2")]
+        [InlineData(36, 3, "EEF", "2")]
+        [InlineData(36, 25, "EEF", "3")]
+        [InlineData(36, 25, "EEF", "2")]
         public void ConditonMet_False(int fundModel, int? progType, string learnDelFAMType, string learnDelFAMCode)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
@@ -143,17 +150,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")).Returns(false);
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "EEF", "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "FFI", "2")).Returns(false);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).ConditionMet(fundModel, progType, testLearningDeliveryFAMs).Should().BeFalse();
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object)
+                .ConditionMet(fundModel, progType, testLearningDeliveryFAMs).Should().BeFalse();
         }
 
         [Theory]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.HigherApprenticeshipLevel4, LearningDeliveryFAMTypeConstants.FFI, "2")]
-        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, TypeOfLearningProgramme.AdvancedLevelApprenticeship, LearningDeliveryFAMTypeConstants.FFI, "2")]
-        [InlineData(TypeOfFunding.AdultSkills, TypeOfLearningProgramme.ApprenticeshipStandard, LearningDeliveryFAMTypeConstants.FFI, "2")]
-        [InlineData(TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfLearningProgramme.ApprenticeshipStandard, LearningDeliveryFAMTypeConstants.FFI, "2")]
+        [InlineData(35, 2, "FFI", "2")]
+        [InlineData(35, null, "FFI", "2")]
         public void ConditonMet_True(int fundModel, int? progType, string learnDelFAMType, string learnDelFAMCode)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
@@ -165,32 +171,35 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                     },
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.EEF,
+                        LearnDelFAMType = "EEF",
                         LearnDelFAMCode = "2"
                     }
                 };
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")).Returns(true);
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "EEF", "2")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "FFI", "2")).Returns(true);
 
-            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).ConditionMet(fundModel, progType, testLearningDeliveryFAMs).Should().BeTrue();
+            NewRule(learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object)
+                .ConditionMet(fundModel, progType, testLearningDeliveryFAMs).Should().BeTrue();
         }
 
-        [Fact]
-        public void Validate_Error()
+        [Theory]
+        [InlineData(81, 3)]
+        [InlineData(81, null)]
+        public void Validate_Error(int fundModel, int? progType)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
                 {
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.EEF,
+                        LearnDelFAMType = "EEF",
                         LearnDelFAMCode = "2"
                     },
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.FFI,
+                        LearnDelFAMType = "FFI",
                         LearnDelFAMCode = "2"
                     }
                 };
@@ -201,8 +210,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = TypeOfFunding.AdultSkills,
-                        ProgTypeNullable = TypeOfLearningProgramme.AdvancedLevelApprenticeship,
+                        FundModel = fundModel,
+                        ProgTypeNullable = progType,
                         LearningDeliveryFAMs = testLearningDeliveryFAMs
                     }
                 }
@@ -210,23 +219,29 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")).Returns(true);
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "EEF", "2")).Returns(true);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "FFI", "2")).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).Validate(testLearner);
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object)
+                    .Validate(testLearner);
             }
         }
 
-        [Fact]
-        public void Validate_NoError()
+        [Theory]
+        [InlineData(36, 25)]
+        [InlineData(36, 3)]
+        [InlineData(81, 25)]
+        public void Validate_NoError(int fundModel, int? progType)
         {
             var testLearningDeliveryFAMs = new TestLearningDeliveryFAM[]
                 {
                     new TestLearningDeliveryFAM()
                     {
-                        LearnDelFAMType = LearningDeliveryFAMTypeConstants.ACT,
+                        LearnDelFAMType = "ACT",
                         LearnDelFAMCode = "44"
                     }
                 };
@@ -237,8 +252,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                 {
                     new TestLearningDelivery()
                     {
-                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
-                        ProgTypeNullable = TypeOfLearningProgramme.ApprenticeshipStandard,
+                        FundModel = fundModel,
+                        ProgTypeNullable = progType,
                         LearningDeliveryFAMs = testLearningDeliveryFAMs
                     }
                 }
@@ -246,12 +261,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
 
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")).Returns(false);
-            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "EEF", "2")).Returns(false);
+            learningDeliveryFAMQueryServiceMock.Setup(d => d.HasLearningDeliveryFAMCodeForType(testLearningDeliveryFAMs, "FFI", "2")).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).Validate(testLearner);
+                NewRule(
+                    validationErrorHandler: validationErrorHandlerMock.Object,
+                    learningDeliveryFAMQueryService: learningDeliveryFAMQueryServiceMock.Object).Validate(testLearner);
             }
         }
 
@@ -260,11 +277,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.ProgType, TypeOfLearningProgramme.ApprenticeshipStandard)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.EEF)).Verifiable();
-            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, "2")).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("ProgType", 25)).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("LearnDelFAMType", "EEF")).Verifiable();
+            validationErrorHandlerMock.Setup(v => v.BuildErrorMessageParameter("LearnDelFAMCode", "2")).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(TypeOfLearningProgramme.ApprenticeshipStandard, LearningDeliveryFAMTypeConstants.EEF, "2");
+            NewRule(
+                validationErrorHandler: validationErrorHandlerMock.Object)
+                .BuildErrorMessageParameters(25, "EEF", "2");
 
             validationErrorHandlerMock.Verify();
         }

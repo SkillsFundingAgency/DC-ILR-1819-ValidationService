@@ -22,6 +22,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.OutGrade
         [InlineData("9999")]
         [InlineData("***A")]
         [InlineData("ZZZ")]
+        [InlineData("P1")]
+        [InlineData("1")]
+        [InlineData("L2")]
+        [InlineData("D**")]
+        [InlineData("***D")]
         public void ConditionMet_True(string outGrade)
         {
             var provideLookupDetails = new Mock<IProvideLookupDetails>();

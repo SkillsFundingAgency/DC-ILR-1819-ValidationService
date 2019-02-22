@@ -80,7 +80,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests
         [InlineData(TypeOfStringCodedLookup.GCSEGrade, 35)]
         [InlineData(TypeOfStringCodedLookup.ESMType, 7)]
         [InlineData(TypeOfStringCodedLookup.LearnFAMType, 11)]
-        [InlineData(TypeOfStringCodedLookup.OutGrade, 502)]
+        [InlineData(TypeOfStringCodedLookup.OutGrade, 518)]
         [InlineData(TypeOfStringCodedLookup.OutType, 7)]
         [InlineData(TypeOfStringCodedLookup.Sex, 2)]
         [InlineData(TypeOfStringCodedLookup.TBFinType, 2)]
