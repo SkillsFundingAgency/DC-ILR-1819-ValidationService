@@ -43,7 +43,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                 foreach (ILearner learner in message.Learners)
                 {
                     DateTime? learnActEndDateLatest = null;
-                    string ldapLearnRefNumber = string.Empty;
 
                     if (learner?.LearningDeliveries == null
                         || !FundModelConditionMet(learner.LearningDeliveries)
@@ -54,25 +53,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
                                 || !DPOutComeConditionMet(
                                     learner.LearnRefNumber,
                                     message?.LearnerDestinationAndProgressions,
-                                    learnActEndDateLatest.Value,
-                                    out ldapLearnRefNumber))))
+                                    learnActEndDateLatest.Value))))
                     {
                         continue;
                     }
 
-                    foreach (var learningDelivery in learner.LearningDeliveries)
+                    if (learner.LearningDeliveries.Any(ld => ProgTypeConditionMet(ld.ProgTypeNullable)))
                     {
-                        if (ProgTypeConditionMet(learningDelivery.ProgTypeNullable))
-                        {
-                            HandleValidationError(
-                                learner.LearnRefNumber,
-                                learningDelivery.AimSeqNumber,
-                                BuildErrorMessageParameters(
-                                learningDelivery.FundModel,
-                                learningDelivery.CompStatus,
-                                learningDelivery.LearnActEndDateNullable,
-                                ldapLearnRefNumber));
-                        }
+                        HandleValidationError(learner.LearnRefNumber);
                     }
                 }
             }
@@ -110,47 +98,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.CrossEntity
         public bool DPOutComeConditionMet(
             string learnRefNumber,
             IEnumerable<ILearnerDestinationAndProgression> lDAPs,
-            DateTime learnActEndDateLatest,
-            out string ldapLearnRefNumber)
-        {
-            ldapLearnRefNumber = string.Empty;
-            bool conditionMet = false;
-
-            var dpOutComesForRefNumber = lDAPs?
-                .Where(p => p.LearnRefNumber.CaseInsensitiveEquals(learnRefNumber) && p.DPOutcomes != null)
-                .SelectMany(p => p.DPOutcomes).ToList();
-            if ((dpOutComesForRefNumber?.Count() ?? 0) == 0)
-            {
-                conditionMet = true;
-            }
-            else
-            {
-                var dpOutCome = dpOutComesForRefNumber
-                    .Where(d => d.OutStartDate >= learnActEndDateLatest)?
-                    .FirstOrDefault();
-                if (dpOutCome?.OutStartDate == null)
-                {
-                    conditionMet = true;
-                    ldapLearnRefNumber = learnRefNumber;
-                }
-            }
-
-            return conditionMet;
-        }
-
-        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(
-            int fundModel,
-            int compStatus,
-            DateTime? learnActEndDateNullable,
-            string ldapLearnRefNumber)
-        {
-            return new[]
-            {
-                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
-                BuildErrorMessageParameter(PropertyNameConstants.CompStatus, compStatus),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, learnActEndDateNullable),
-                BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, ldapLearnRefNumber)
-            };
-        }
+            DateTime learnActEndDateLatest) =>
+             (lDAPs?
+                    .Where(p => p.LearnRefNumber.CaseInsensitiveEquals(learnRefNumber) && p.DPOutcomes != null)
+                    .SelectMany(p => p.DPOutcomes)
+                    .Any(d => d.OutStartDate >= learnActEndDateLatest) ?? false) ? false : true;
     }
 }
