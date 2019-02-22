@@ -27,39 +27,53 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null)
+            if (objectToValidate?.LearningDeliveries == null)
             {
                 return;
             }
 
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
-                if (ConditionMet(learningDelivery.FundModel, learningDelivery.ProgTypeNullable, learningDelivery.LearningDeliveryFAMs))
+                if (ConditionMet(
+                    learningDelivery.FundModel,
+                    learningDelivery.ProgTypeNullable,
+                    learningDelivery.LearningDeliveryFAMs))
                 {
                     HandleValidationError(
                         objectToValidate.LearnRefNumber,
                         learningDelivery.AimSeqNumber,
-                        BuildErrorMessageParameters(learningDelivery.ProgTypeNullable, LearningDeliveryFAMTypeConstants.EEF, "2"));
+                        BuildErrorMessageParameters(
+                            learningDelivery.ProgTypeNullable,
+                            LearningDeliveryFAMTypeConstants.EEF,
+                            LearningDeliveryFAMCodeConstants.ACT_ContractESFA));
                 }
             }
         }
 
         public bool ConditionMet(int fundModel, int? progType, IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return (FundModelConditionMet(fundModel)
+            return !(FundModelConditionMet(fundModel)
                 || ProgTypeConditionMet(progType))
                 && LearningDeliveryFAMsCondtionMet(learningDeliveryFAMs);
         }
 
         public bool LearningDeliveryFAMsCondtionMet(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.EEF, "2")
-                && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.FFI, "2");
+            return _learningDeliveryFAMQueryService
+                    .HasLearningDeliveryFAMCodeForType(
+                        learningDeliveryFAMs,
+                        LearningDeliveryFAMTypeConstants.EEF,
+                        LearningDeliveryFAMCodeConstants.ACT_ContractESFA)
+                && _learningDeliveryFAMQueryService
+                    .HasLearningDeliveryFAMCodeForType(
+                        learningDeliveryFAMs,
+                        LearningDeliveryFAMTypeConstants.FFI,
+                        LearningDeliveryFAMCodeConstants.ACT_ContractESFA);
         }
 
-        public bool ProgTypeConditionMet(int? progType) => progType != TypeOfLearningProgramme.ApprenticeshipStandard;
+        public bool ProgTypeConditionMet(int? progType) => progType == TypeOfLearningProgramme.ApprenticeshipStandard;
 
-        public bool FundModelConditionMet(int fundModel) => fundModel != _fundModel;
+        public bool FundModelConditionMet(int fundModel) => fundModel == _fundModel;
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int? progTypeNullable, string learnDelFAMType, string learnDelFAMCode)
         {
