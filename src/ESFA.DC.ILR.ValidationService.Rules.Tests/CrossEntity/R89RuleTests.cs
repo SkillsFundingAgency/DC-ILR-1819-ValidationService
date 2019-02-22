@@ -239,6 +239,53 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Fact]
+        public void Validate_Succsess_LatestMainAimOpen()
+        {
+            var testLearner = new TestLearner()
+            {
+                LearningDeliveries = new TestLearningDelivery[]
+                {
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 2,
+                        AimType = TypeOfAim.ProgrammeAim,
+                        ProgTypeNullable = 99,
+                        FworkCodeNullable = 100,
+                        PwayCodeNullable = 200,
+                        StdCodeNullable = 300,
+                        LearnStartDate = new DateTime(2016, 10, 10),
+                        LearnActEndDateNullable = new DateTime(2017, 10, 10),
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 2,
+                        AimType = TypeOfAim.ProgrammeAim,
+                        ProgTypeNullable = 99,
+                        FworkCodeNullable = 100,
+                        PwayCodeNullable = 200,
+                        StdCodeNullable = 300,
+                        LearnStartDate = new DateTime(2016, 10, 12),
+                    },
+                    new TestLearningDelivery()
+                    {
+                        AimSeqNumber = 2,
+                        AimType = TypeOfAim.ComponentAimInAProgramme,
+                        ProgTypeNullable = 99,
+                        FworkCodeNullable = 100,
+                        PwayCodeNullable = 200,
+                        StdCodeNullable = 300,
+                        LearnActEndDateNullable = new DateTime(2017, 10, 16)
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(testLearner);
+            }
+        }
+
+        [Fact]
         public void Validate_Succsess_NoClosedMainAim()
         {
             var testLearner = new TestLearner()
@@ -253,6 +300,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                     FworkCodeNullable = 100,
                     PwayCodeNullable = 200,
                     StdCodeNullable = 300,
+                    LearnStartDate = new DateTime(2016, 10, 12),
                 },
                 new TestLearningDelivery()
                 {
@@ -288,6 +336,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         FworkCodeNullable = 100,
                         PwayCodeNullable = 200,
                         StdCodeNullable = 300,
+                        LearnStartDate = new DateTime(2016, 10, 12),
                         LearnActEndDateNullable = new DateTime(2017, 10, 10)
                     },
                     new TestLearningDelivery()
@@ -295,6 +344,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         AimSeqNumber = 2,
                         AimType = TypeOfAim.ComponentAimInAProgramme,
                         ProgTypeNullable = 99,
+                        LearnStartDate = new DateTime(2016, 10, 15),
                         LearnActEndDateNullable = new DateTime(2016, 10, 10)
                     },
                     new TestLearningDelivery()
@@ -330,6 +380,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         FworkCodeNullable = 100,
                         PwayCodeNullable = 200,
                         StdCodeNullable = 300,
+                        LearnStartDate = new DateTime(2016, 10, 10),
                         LearnActEndDateNullable = new DateTime(2017, 10, 10)
                     },
                     new TestLearningDelivery()
@@ -340,6 +391,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         FworkCodeNullable = 100,
                         PwayCodeNullable = 200,
                         StdCodeNullable = 300,
+                        LearnStartDate = new DateTime(2016, 10, 12),
                         LearnActEndDateNullable = new DateTime(2017, 10, 09)
                     },
                     new TestLearningDelivery()
@@ -350,7 +402,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                         FworkCodeNullable = 100,
                         PwayCodeNullable = 200,
                         StdCodeNullable = 300,
-                        LearnActEndDateNullable = new DateTime(2017, 10, 11)
+                        LearnActEndDateNullable = new DateTime(2017, 10, 10)
                     }
                 }
             };
