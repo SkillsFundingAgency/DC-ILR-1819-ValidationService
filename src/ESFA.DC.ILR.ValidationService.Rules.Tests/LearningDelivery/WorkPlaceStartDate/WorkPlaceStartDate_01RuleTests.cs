@@ -16,15 +16,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceSt
     public class WorkPlaceStartDate_01RuleTests
     {
         /// <summary>
-        /// New rule with null message handler throws.
-        /// </summary>
-        [Fact]
-        public void NewRuleWithNullMessageHandlerThrows()
-        {
-            Assert.Throws<ArgumentNullException>(() => new WorkPlaceStartDate_01Rule(null));
-        }
-
-        /// <summary>
         /// Rule name 1, matches a literal.
         /// </summary>
         [Fact]
@@ -53,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceSt
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(WorkPlaceStartDate_01Rule.Name, result);
+            Assert.Equal(RuleNameConstants.WorkPlaceStartDate_01, result);
         }
 
         /// <summary>
@@ -261,6 +252,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceSt
             mockDelivery
                 .SetupGet(x => x.LearnStartDate)
                 .Returns(DateTime.Parse(startDate));
+            mockDelivery
+                .SetupGet(x => x.AimSeqNumber)
+                .Returns(0);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -274,15 +268,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WorkPlaceSt
                 .Returns(deliveries.AsSafeReadOnlyList());
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == WorkPlaceStartDate_01Rule.Name),
-                Moq.It.Is<string>(y => y == LearnRefNumber),
-                0,
-                Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == WorkPlaceStartDate_01Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+              .Setup(x => x.Handle("WorkPlaceStartDate_01", LearnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter("LearnAimRef", aimReference))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new WorkPlaceStartDate_01Rule(mockHandler.Object);
