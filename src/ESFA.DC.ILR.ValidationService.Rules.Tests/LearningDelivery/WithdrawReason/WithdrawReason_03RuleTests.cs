@@ -16,15 +16,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WithdrawRea
     public class WithdrawReason_03RuleTests
     {
         /// <summary>
-        /// New rule with null message handler throws.
-        /// </summary>
-        [Fact]
-        public void NewRuleWithNullMessageHandlerThrows()
-        {
-            Assert.Throws<ArgumentNullException>(() => new WithdrawReason_03Rule(null));
-        }
-
-        /// <summary>
         /// Rule name 1, matches a literal.
         /// </summary>
         [Fact]

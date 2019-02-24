@@ -18,21 +18,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason
         IRule<ILearner>
     {
         /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="WithdrawReason_03Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         public WithdrawReason_03Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.WithdrawReason_03)
         {
-            It.IsNull(validationErrorHandler)
-                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-
-            _messageHandler = validationErrorHandler;
         }
 
         /// <summary>
