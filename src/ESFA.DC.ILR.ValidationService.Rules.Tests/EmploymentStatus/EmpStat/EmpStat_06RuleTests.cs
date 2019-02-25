@@ -319,7 +319,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.EmploymentStatus.EmpId
             handler
                 .Setup(x => x.Handle("EmpStat_06", LearnRefNumber, 0, It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
-                .Setup(x => x.BuildErrorMessageParameter("DateEmpStatApp", "(missing)"))
+                .Setup(x => x.BuildErrorMessageParameter("DateEmpStatApp", null))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
             handler
                 .Setup(x => x.BuildErrorMessageParameter("PlanLearnHours", null))
