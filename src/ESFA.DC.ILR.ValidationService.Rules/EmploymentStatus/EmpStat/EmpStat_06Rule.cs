@@ -185,7 +185,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpId
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.DateEmpStatApp, "(missing)"),
+                BuildErrorMessageParameter(PropertyNameConstants.DateEmpStatApp, null),
                 BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, thisLearner.PlanLearnHoursNullable),
                 BuildErrorMessageParameter(PropertyNameConstants.PlanEEPHours, thisLearner.PlanEEPHoursNullable),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate)
