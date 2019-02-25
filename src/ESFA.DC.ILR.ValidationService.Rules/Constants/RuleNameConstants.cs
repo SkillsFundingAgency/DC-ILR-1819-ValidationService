@@ -522,6 +522,8 @@
 
         public const string STULOAD_04 = "STULOAD_04";
 
+        public const string SWSupAimId_01 = "SWSupAimId_01";
+
         public const string TTACCOM_04 = "TTACCOM_04";
 
         public const string TYPEYR_01 = "TYPEYR_01";

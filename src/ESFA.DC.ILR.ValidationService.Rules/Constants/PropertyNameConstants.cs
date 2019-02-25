@@ -99,6 +99,7 @@
         public const string SSN = "SSN";
         public const string StdCode = "StdCode";
         public const string SOC2000 = "SOC2000";
+        public const string SWSupAimId = "SWSupAimId";
         public const string TYPEYR = "TYPEYR";
         public const string UCASAPPID = "UCASAPPID";
         public const string UCASPERID = "UCASPERID";

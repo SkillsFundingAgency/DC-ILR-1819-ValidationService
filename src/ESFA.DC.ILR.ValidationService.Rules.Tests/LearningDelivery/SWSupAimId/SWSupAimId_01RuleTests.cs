@@ -53,7 +53,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSupAimId
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(SWSupAimId_01Rule.Name, result);
+            Assert.Equal(RuleNameConstants.SWSupAimId_01, result);
         }
 
         /// <summary>
@@ -140,6 +140,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSupAimId
             mockDelivery
                 .SetupGet(y => y.SWSupAimId)
                 .Returns(candidate);
+            mockDelivery
+                .SetupGet(y => y.AimSeqNumber)
+                .Returns(0);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -154,14 +157,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.SWSupAimId
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == SWSupAimId_01Rule.Name),
-                Moq.It.Is<string>(y => y == LearnRefNumber),
+                RuleNameConstants.SWSupAimId_01,
+                LearnRefNumber,
                 0,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == SWSupAimId_01Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    PropertyNameConstants.SWSupAimId,
+                    candidate))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new SWSupAimId_01Rule(mockHandler.Object);

@@ -1,7 +1,10 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId
 {
@@ -11,39 +14,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
     public class SWSupAimId_01Rule :
-        IRule<ILearner>
+        AbstractRule, IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = "SWSupAimId";
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "SWSupAimId_01";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SWSupAimId_01Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         public SWSupAimId_01Rule(IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.SWSupAimId_01)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-
-            _messageHandler = validationErrorHandler;
         }
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
 
         /// <summary>
         /// Determines whether [is valid unique identifier] [the specified candidate].
@@ -100,10 +82,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.SWSupAimId
         /// <param name="thisDelivery">this delivery.</param>
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildErrorMessageParameters(thisDelivery));
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(ILearningDelivery thisDelivery)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.SWSupAimId, thisDelivery.SWSupAimId.ToString())
+            };
         }
     }
 }
