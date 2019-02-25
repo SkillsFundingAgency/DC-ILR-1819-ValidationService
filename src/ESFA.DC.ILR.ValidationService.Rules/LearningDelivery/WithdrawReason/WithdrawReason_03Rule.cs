@@ -1,8 +1,10 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason
 {
@@ -12,39 +14,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
     public class WithdrawReason_03Rule :
+        AbstractRule,
         IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = "WithdrawReason";
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "WithdrawReason_03";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WithdrawReason_03Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         public WithdrawReason_03Rule(IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.WithdrawReason_03)
         {
-            It.IsNull(validationErrorHandler)
-                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-
-            _messageHandler = validationErrorHandler;
         }
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
 
         /// <summary>
         /// Determines whether the specified delivery has withdrawn.
@@ -97,10 +77,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason
         /// <param name="thisDelivery">this delivery.</param>
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery));
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        /// <summary>
+        /// Builds the message parameters for..
+        /// </summary>
+        /// <param name="thisDelivery">The this delivery.</param>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.CompStatus, thisDelivery.CompStatus.ToString())
+            };
         }
     }
 }
