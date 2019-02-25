@@ -1,8 +1,10 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate
 {
@@ -12,39 +14,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDat
     /// </summary>
     /// <seealso cref="Interface.IRule{ILearner}" />
     public class WorkPlaceStartDate_01Rule :
-        IRule<ILearner>
+        AbstractRule, IRule<ILearner>
     {
-        /// <summary>
-        /// Gets the name of the message property.
-        /// </summary>
-        public const string MessagePropertyName = "WorkPlaceStartDate";
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public const string Name = "WorkPlaceStartDate_01";
-
-        /// <summary>
-        /// The message handler
-        /// </summary>
-        private readonly IValidationErrorHandler _messageHandler;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkPlaceStartDate_01Rule"/> class.
         /// </summary>
         /// <param name="validationErrorHandler">The validation error handler.</param>
         public WorkPlaceStartDate_01Rule(IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.WorkPlaceStartDate_01)
         {
-            It.IsNull(validationErrorHandler)
-                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-
-            _messageHandler = validationErrorHandler;
         }
-
-        /// <summary>
-        /// Gets the name of the rule.
-        /// </summary>
-        public string RuleName => Name;
 
         /// <summary>
         /// Gets the last inviable date.
@@ -116,10 +95,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDat
         /// <param name="thisDelivery">this delivery.</param>
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
-            var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery));
+        }
 
-            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
+        /// <summary>
+        /// Builds the message parameters for..
+        /// </summary>
+        /// <param name="thisDelivery">The this delivery.</param>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnAimRef, thisDelivery.LearnAimRef.ToString())
+            };
         }
     }
 }
