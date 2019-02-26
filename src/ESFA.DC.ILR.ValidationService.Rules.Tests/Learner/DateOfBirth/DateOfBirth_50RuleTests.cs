@@ -21,16 +21,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             NewRule().RuleName.Should().Be("DateOfBirth_50");
         }
 
-        [Fact]
-        public void ConditionMet_True()
+        [Theory]
+        [InlineData("2018-01-01")]
+        [InlineData("2018-08-01")]
+        public void ConditionMet_True(string learnStartDateString)
         {
+            DateTime learnStartDate = DateTime.Parse(learnStartDateString);
             var firstAugustForAcademicYearOfLearnersSixteenthBirthDate = new DateTime(2018, 08, 01);
 
             var learningDelivery = new TestLearningDelivery
             {
                 ProgTypeNullable = TypeOfLearningProgramme.Traineeship,
                 AimType = TypeOfAim.ProgrammeAim,
-                LearnStartDate = new DateTime(2018, 01, 01)
+                LearnStartDate = learnStartDate
             };
 
             NewRule().ConditionMet(learningDelivery, firstAugustForAcademicYearOfLearnersSixteenthBirthDate).Should().BeTrue();
@@ -75,7 +78,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             {
                 ProgTypeNullable = TypeOfLearningProgramme.Traineeship,
                 AimType = TypeOfAim.ProgrammeAim,
-                LearnStartDate = new DateTime(2019, 01, 01)
+                LearnStartDate = new DateTime(2018, 08, 02)
             };
 
             NewRule().ConditionMet(learningDelivery, firstAugustForAcademicYearOfLearnersSixteenthBirthDate).Should().BeFalse();
