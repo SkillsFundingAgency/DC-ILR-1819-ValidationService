@@ -54,7 +54,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                     continue;
                 }
 
-                if (age.Value < (contract.EsfEligibilityRule.MinAge ?? int.MaxValue) || age.Value > (contract.EsfEligibilityRule.MaxAge ?? int.MinValue))
+                if (age.Value < (contract.EsfEligibilityRule.MinAge ?? int.MinValue)
+                    || age.Value > (contract.EsfEligibilityRule.MaxAge ?? int.MaxValue))
                 {
                     RaiseValidationMessage(learner, learningDelivery);
                 }
