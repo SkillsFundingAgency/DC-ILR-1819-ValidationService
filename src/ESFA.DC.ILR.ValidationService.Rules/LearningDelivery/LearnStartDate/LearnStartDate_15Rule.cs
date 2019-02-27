@@ -81,20 +81,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnStartDate
             !HasQualifyingStart(thisDelivery, GetStartFor(thisDelivery, usingSources));
 
         /// <summary>
-        /// Validates the specified object.
+        /// Validates this learner.
         /// </summary>
-        /// <param name="objectToValidate">The object to validate.</param>
-        public void Validate(ILearner objectToValidate)
+        /// <param name="thisLearner">this learner.</param>
+        public void Validate(ILearner thisLearner)
         {
-            It.IsNull(objectToValidate)
-                .AsGuard<ArgumentNullException>(nameof(objectToValidate));
+            It.IsNull(thisLearner)
+                .AsGuard<ArgumentNullException>(nameof(thisLearner));
 
-            var learnRefNumber = objectToValidate.LearnRefNumber;
-            var deliveries = objectToValidate.LearningDeliveries.AsSafeReadOnlyList();
+            var learnRefNumber = thisLearner.LearnRefNumber;
+            var deliveries = thisLearner.LearningDeliveries.AsSafeReadOnlyList();
 
-            objectToValidate.LearningDeliveries
-                .SafeWhere(x => IsNotValid(x, deliveries))
-                .ForEach(x => RaiseValidationMessage(learnRefNumber, x));
+            deliveries
+                .ForAny(x => IsNotValid(x, deliveries), x => RaiseValidationMessage(learnRefNumber, x));
         }
 
         /// <summary>
