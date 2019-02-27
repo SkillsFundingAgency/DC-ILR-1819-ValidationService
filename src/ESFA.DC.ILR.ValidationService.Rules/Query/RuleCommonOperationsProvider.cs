@@ -234,7 +234,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         ///   <c>true</c> if [has qualifying start] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasQualifyingStart(ILearningDelivery delivery, DateTime minStart, DateTime? maxStart = null) =>
-            It.Has(delivery) && It.IsBetween(delivery.LearnStartDate, minStart, maxStart ?? DateTime.Today);
+            It.Has(delivery)
+            && It.IsBetween(delivery.LearnStartDate, minStart, maxStart ?? DateTime.MaxValue);
 
         /// <summary>
         /// Determines whether the specified employment status record has qualifying start date
@@ -246,7 +247,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
         ///   <c>true</c> if [has qualifying start] [the specified employment]; otherwise, <c>false</c>.
         /// </returns>
         public bool HasQualifyingStart(ILearnerEmploymentStatus employment, DateTime minStart, DateTime? maxStart = null) =>
-            It.Has(employment) && It.IsBetween(employment.DateEmpStatApp, minStart, maxStart ?? DateTime.Today);
+            It.Has(employment)
+            && It.IsBetween(employment.DateEmpStatApp, minStart, maxStart ?? DateTime.MaxValue);
 
         /// <summary>
         /// Gets the (closest) qualifying employment status to the learner start date.

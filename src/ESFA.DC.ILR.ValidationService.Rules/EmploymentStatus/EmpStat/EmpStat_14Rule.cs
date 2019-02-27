@@ -3,7 +3,6 @@ using ESFA.DC.ILR.ValidationService.Data.External.FCS.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
-using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
@@ -17,15 +16,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         IRule<ILearner>
     {
         /// <summary>
-        /// The derived data 22 (rule)
-        /// </summary>
-        private readonly IDerivedData_22Rule _derivedData22;
-
-        /// <summary>
         /// The (academic) year data (service)
         /// </summary>
         private readonly IFCSDataService _fcsData;
 
+        /// <summary>
+        /// The check (rule common operations provider)
+        /// </summary>
         private readonly IProvideRuleCommonOperations _check;
 
         /// <summary>
@@ -37,62 +34,36 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// <param name="commonOperations">The common operations.</param>
         public EmpStat_14Rule(
             IValidationErrorHandler validationErrorHandler,
-            IDerivedData_22Rule derivedData22,
             IFCSDataService fcsData,
             IProvideRuleCommonOperations commonOperations)
             : base(validationErrorHandler, RuleNameConstants.EmpStat_14)
         {
             It.IsNull(validationErrorHandler)
                 .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
-            It.IsNull(derivedData22)
-                .AsGuard<ArgumentNullException>(nameof(derivedData22));
             It.IsNull(fcsData)
                 .AsGuard<ArgumentNullException>(nameof(fcsData));
             It.IsNull(commonOperations)
                 .AsGuard<ArgumentNullException>(nameof(commonOperations));
 
-            _derivedData22 = derivedData22;
             _fcsData = fcsData;
             _check = commonOperations;
-        }
-
-        /// <summary>
-        /// Gets the contract completion date.
-        /// </summary>
-        /// <param name="delivery">The delivery.</param>
-        /// <param name="usingSources">The using sources.</param>
-        /// <returns>the latest completion date for the contract (if there is one)</returns>
-        public DateTime? GetContractCompletionDate(ILearningDelivery delivery, IReadOnlyCollection<ILearningDelivery> usingSources) =>
-            _derivedData22.GetLatestLearningStartForESFContract(delivery, usingSources);
-
-        /// <summary>
-        /// Gets the latest contract completion date.
-        /// </summary>
-        /// <param name="usingSources">The using sources.</param>
-        /// <returns>the latest completion date for all the contracts (if there is one)</returns>
-        public DateTime? GetLatestContractCompletionDate(IReadOnlyCollection<ILearningDelivery> usingSources)
-        {
-            var candidates = Collection.Empty<DateTime?>();
-            usingSources.ForEach(source => candidates.Add(GetContractCompletionDate(source, usingSources)));
-
-            return candidates.Max();
         }
 
         /// <summary>
         /// Gets the qualifying aim on this date using sources.
         /// the incoming set is guaranteed not to be null
         /// </summary>
-        /// <param name="thisDate">this date.</param>
         /// <param name="usingSources">using sources.</param>
         /// <returns>
         /// the qualifying aim on this date
         /// </returns>
-        public ILearningDelivery GetQualifyingdAimOn(DateTime? thisDate, IReadOnlyCollection<ILearningDelivery> usingSources) =>
+        public ILearningDelivery GetQualifyingdAimOn(IReadOnlyCollection<ILearningDelivery> usingSources) =>
             usingSources
-                .FirstOrDefault(x => x.LearnStartDate == thisDate
-                    && x.FundModel == TypeOfFunding.EuropeanSocialFund
+                .Where(x => x.FundModel == TypeOfFunding.EuropeanSocialFund
                     && x.LearnAimRef == TypeOfAim.References.ESFLearnerStartandAssessment
-                    && x.CompStatus == CompletionState.HasCompleted);
+                    && x.CompStatus == CompletionState.HasCompleted)
+                .OrderByDescending(x => x.LearnStartDate)
+                .FirstOrDefault();
 
         /// <summary>
         /// Gets the eligible employment status.
@@ -114,8 +85,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         public bool HasAQualifyingEmploymentStatus(IEsfEligibilityRuleEmploymentStatus eligibility, ILearnerEmploymentStatus thisEmployment) =>
             eligibility.Code == thisEmployment.EmpStat;
 
-        public bool IsNotValid(IEsfEligibilityRuleEmploymentStatus eligibility, ILearnerEmploymentStatus employment) =>
-            !HasAQualifyingEmploymentStatus(eligibility, employment);
+        public bool IsNotValid(IReadOnlyCollection<IEsfEligibilityRuleEmploymentStatus> eligibilities, ILearnerEmploymentStatus employment) =>
+            !eligibilities.Any(x => HasAQualifyingEmploymentStatus(x, employment));
 
         /// <summary>
         /// Validates the specified object.
@@ -129,8 +100,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
             var learnRefNumber = objectToValidate.LearnRefNumber;
 
             var fromDeliveries = objectToValidate.LearningDeliveries.AsSafeReadOnlyList();
-            var qualifyingDate = GetLatestContractCompletionDate(fromDeliveries);
-            var qualifyingAim = GetQualifyingdAimOn(qualifyingDate, fromDeliveries);
+            var qualifyingAim = GetQualifyingdAimOn(fromDeliveries);
+
+            if (It.IsNull(qualifyingAim))
+            {
+                return;
+            }
+
             var eligibilities = GetEligibilityRulesFor(qualifyingAim);
 
             if (It.IsEmpty(eligibilities))
@@ -139,15 +115,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
             }
 
             var fromEmployments = objectToValidate.LearnerEmploymentStatuses.AsSafeReadOnlyList();
-            var employment = _check.GetEmploymentStatusOn(qualifyingDate, fromEmployments);
+            var employment = _check.GetEmploymentStatusOn(qualifyingAim.LearnStartDate, fromEmployments);
 
             if (It.IsNull(employment))
             {
                 return;
             }
 
-            eligibilities
-                .ForAny(x => IsNotValid(x, employment), x => RaiseValidationMessage(learnRefNumber, qualifyingAim, x));
+            if (IsNotValid(eligibilities, employment))
+            {
+                RaiseValidationMessage(learnRefNumber, qualifyingAim, employment);
+            }
         }
 
         /// <summary>
@@ -155,25 +133,25 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
         /// <param name="thisDelivery">this delivery.</param>
-        /// <param name="thisEligibility">this eligibility.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery, IEsfEligibilityRuleEmploymentStatus thisEligibility)
+        /// <param name="thisEmployment">this employment.</param>
+        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery, ILearnerEmploymentStatus thisEmployment)
         {
-            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery, thisEligibility));
+            HandleValidationError(learnRefNumber, thisDelivery.AimSeqNumber, BuildMessageParametersFor(thisDelivery, thisEmployment));
         }
 
         /// <summary>
         /// Builds the message parameters for.
         /// </summary>
         /// <param name="thisDelivery">this delivery.</param>
-        /// <param name="thisEligibility">this eligibility.</param>
+        /// <param name="thisEmployment">this employment.</param>
         /// <returns>
         /// returns a list of message parameters
         /// </returns>
-        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery, IEsfEligibilityRuleEmploymentStatus thisEligibility)
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(ILearningDelivery thisDelivery, ILearnerEmploymentStatus thisEmployment)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.EmpStat, thisEligibility.Code),
+                BuildErrorMessageParameter(PropertyNameConstants.EmpStat, thisEmployment.EmpStat),
                 BuildErrorMessageParameter(PropertyNameConstants.ConRefNumber, thisDelivery.ConRefNumber),
                 BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate)
             };

@@ -95,9 +95,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         }
 
         [Theory]
-        [InlineData(20)]
-        [InlineData(null)]
-        public void ValidatePasses_AgeInRangeOrNull(int? age)
+        [InlineData(20, 18, 20)]
+        [InlineData(null, 18, 25)]
+        [InlineData(20, 17, null)]
+        [InlineData(20, null, 20)]
+        [InlineData(20, null, null)]
+        [InlineData(null, null, null)]
+        public void ValidatePasses_AgeInRangeOrNull(int? age, int? minAge, int? maxAge)
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError();
 
@@ -115,8 +119,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 {
                     EsfEligibilityRule = new EsfEligibilityRule
                     {
-                        MinAge = 18,
-                        MaxAge = 25
+                        MinAge = minAge,
+                        MaxAge = maxAge
                     }
                 });
 
@@ -151,8 +155,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             VerifyErrorHandlerMock(validationErrorHandlerMock);
         }
 
-        [Fact]
-        public void ValidateFails()
+        [Theory]
+        [InlineData(30, 18, 25)]
+        [InlineData(20, 21, 25)]
+        [InlineData(20, 21, 19)]
+        [InlineData(20, 21, null)]
+        [InlineData(20, null, 19)]
+        public void ValidateFails(int? age, int? minAge, int? maxAge)
         {
             var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError();
 
@@ -161,7 +170,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             var dd23Rule = new Mock<IDerivedData_23Rule>();
             dd23Rule
                 .Setup(m => m.GetLearnersAgeAtStartOfESFContract(It.IsAny<ILearner>(), It.IsAny<string>()))
-                .Returns(30);
+                .Returns(age);
 
             var fcsDataServiceMock = new Mock<IFCSDataService>();
             fcsDataServiceMock
@@ -170,8 +179,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                         {
                             EsfEligibilityRule = new EsfEligibilityRule
                             {
-                                MinAge = 18,
-                                MaxAge = 25
+                                MinAge = minAge,
+                                MaxAge = maxAge
                             }
                         });
 
