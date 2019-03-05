@@ -44,5 +44,15 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Model
         /// Gets or sets the effective to date.
         /// </summary>
         public DateTime? EffectiveTo { get; set; }
+
+        /// <summary>
+        /// Gets the effective from (date).
+        /// </summary>
+        public DateTime StartDate => EffectiveFrom;
+
+        /// <summary>
+        /// Gets the effective to (date).
+        /// </summary>
+        public DateTime? EndDate => EffectiveTo;
     }
 }

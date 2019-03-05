@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using ESFA.DC.ILR.Model;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Cache;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
+using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Data.File;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal;
@@ -80,9 +81,11 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             ILogger logger = _parentLifeTimeScope.Resolve<ILogger>();
 
             InternalDataCache internalDataCache;
+            ExternalDataCache externalDataCacheGet;
             ExternalDataCache externalDataCache;
             FileDataCache fileDataCache;
             Message message;
+            IEnumerable<string> tasks;
             ValidationContext validationContext;
             IEnumerable<IValidationError> errors;
 
@@ -90,10 +93,28 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
             {
                 logger.LogDebug($"{nameof(ValidationActor)} {_actorId} {GC.GetGeneration(actorModel)} starting");
 
-                internalDataCache = _jsonSerializationService.Deserialize<InternalDataCache>(Encoding.UTF8.GetString(actorModel.InternalDataCache));
-                externalDataCache = _jsonSerializationService.Deserialize<ExternalDataCache>(Encoding.UTF8.GetString(actorModel.ExternalDataCache));
-                fileDataCache = _jsonSerializationService.Deserialize<FileDataCache>(Encoding.UTF8.GetString(actorModel.FileDataCache));
-                message = _jsonSerializationService.Deserialize<Message>(new MemoryStream(actorModel.Message));
+                internalDataCache = _jsonSerializationService.Deserialize<InternalDataCache>(actorModel.InternalDataCache);
+                externalDataCacheGet = _jsonSerializationService.Deserialize<ExternalDataCache>(actorModel.ExternalDataCache);
+                fileDataCache = _jsonSerializationService.Deserialize<FileDataCache>(actorModel.FileDataCache);
+                message = _jsonSerializationService.Deserialize<Message>(actorModel.Message);
+                tasks = _jsonSerializationService.Deserialize<IEnumerable<string>>(actorModel.TaskList);
+
+                externalDataCache = new ExternalDataCache
+                {
+                    LearningDeliveries = externalDataCacheGet.LearningDeliveries.ToCaseInsensitiveDictionary(),
+                    EPAOrganisations = externalDataCacheGet.EPAOrganisations.ToCaseInsensitiveDictionary(),
+                    ERNs = externalDataCacheGet.ERNs,
+                    FCSContractAllocations = externalDataCacheGet.FCSContractAllocations,
+                    Frameworks = externalDataCacheGet.Frameworks,
+                    Organisations = externalDataCacheGet.Organisations,
+                    Postcodes = externalDataCacheGet.Postcodes.ToCaseInsensitiveHashSet(),
+                    ONSPostcodes = externalDataCacheGet.ONSPostcodes,
+                    Standards = externalDataCacheGet.Standards,
+                    StandardValidities = externalDataCacheGet.StandardValidities,
+                    ULNs = externalDataCacheGet.ULNs,
+                    ValidationErrors = externalDataCacheGet.ValidationErrors.ToCaseInsensitiveDictionary(),
+                    CampusIdentifiers = externalDataCacheGet.CampusIdentifiers
+                };
 
                 validationContext = new ValidationContext
                 {
@@ -130,7 +151,7 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                     IRuleSetOrchestrationService<ILearner, IValidationError> preValidationOrchestrationService = childLifeTimeScope
                         .Resolve<IRuleSetOrchestrationService<ILearner, IValidationError>>();
 
-                    errors = await preValidationOrchestrationService.Execute(cancellationToken);
+                    errors = await preValidationOrchestrationService.ExecuteAsync(tasks, cancellationToken);
                     jobLogger.LogDebug($"{nameof(ValidationActor)} {_actorId} {GC.GetGeneration(actorModel)} {executionContext.TaskKey} validation done");
                 }
                 catch (Exception ex)

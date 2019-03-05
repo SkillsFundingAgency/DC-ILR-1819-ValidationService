@@ -24,9 +24,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
             return (end - start).TotalDays;
         }
 
-        public DateTime DateAddYears(DateTime date, int yearsToAdd)
+        [Obsolete("Please use YearsBetween instead")]
+        public int AgeAtGivenDate(DateTime dateOfBirth, DateTime givenDate)
         {
-            return date.AddYears(yearsToAdd);
+            return YearsBetween(dateOfBirth, givenDate);
         }
     }
 }

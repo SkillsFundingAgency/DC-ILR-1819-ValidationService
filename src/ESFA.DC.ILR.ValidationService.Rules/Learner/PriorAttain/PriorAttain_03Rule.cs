@@ -1,33 +1,44 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.PriorAttain;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
 {
     public class PriorAttain_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IPriorAttainInternalDataService _priorAttainReferenceDataService;
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public PriorAttain_03Rule(IPriorAttainInternalDataService priorAttainReferenceDataService, IValidationErrorHandler validationErrorHandler)
-           : base(validationErrorHandler)
+        public PriorAttain_03Rule(IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
+           : base(validationErrorHandler, RuleNameConstants.PriorAttain_03)
         {
-            _priorAttainReferenceDataService = priorAttainReferenceDataService;
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.PriorAttainNullable))
+            if (objectToValidate != null && objectToValidate.PriorAttainNullable.HasValue)
             {
-                HandleValidationError(RuleNameConstants.PriorAttain_03Rule, objectToValidate.LearnRefNumber);
+                if (ConditionMet(objectToValidate.PriorAttainNullable.Value))
+                {
+                    HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.PriorAttainNullable.Value));
+                }
             }
         }
 
-        public bool ConditionMet(long? priorAttain)
+        public bool ConditionMet(int priorAttainValue)
         {
-            return priorAttain.HasValue &&
-                    !_priorAttainReferenceDataService.Exists(priorAttain.Value);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttainValue);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int priorAttainValue)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.PriorAttain, priorAttainValue)
+            };
         }
     }
 }

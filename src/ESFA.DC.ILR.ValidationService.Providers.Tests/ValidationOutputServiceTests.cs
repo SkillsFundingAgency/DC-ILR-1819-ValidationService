@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using ESFA.DC.ILR.IO.Model.Validation;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -9,6 +10,7 @@ using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.IO.Model;
 using ESFA.DC.ILR.ValidationService.Providers.Output;
 using ESFA.DC.IO.Interfaces;
+using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 using FluentAssertions;
 using Moq;
@@ -45,34 +47,23 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
         [Fact]
         public void BuildInvalidLearnRefNumbers()
         {
-            var validationErrors = new List<IValidationError>()
+            var validationErrors = new List<ValidationError>()
             {
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "a", severity: Severity.Error),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "a", severity: Severity.Error),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "b", severity: Severity.Error),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "b", severity: Severity.Warning),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "c", severity: Severity.Warning),
-                new RuleSet.ErrorHandler.Model.ValidationError(ruleName: string.Empty, learnerReferenceNumber: "c", severity: Severity.Warning),
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "a", Severity = "E" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "a", Severity = "E" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "b", Severity = "E" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "b", Severity = "W" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "c", Severity = "W" },
+                new ValidationError() { RuleName = string.Empty, LearnerReferenceNumber = "c", Severity = "W" },
             };
-
-            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
-
-            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
-
-            NewService(validationErrorCacheMock.Object).BuildInvalidLearnRefNumbers().Should().BeEquivalentTo("a", "b");
+            
+            NewService().BuildInvalidLearnRefNumbers(validationErrors).Should().BeEquivalentTo("a", "b");
         }
 
         [Fact]
         public void BuildValidLearnRefNumbers()
         {
             var invalidLearnRefNumbers = new List<string>() { "a", "b" };
-
-            var validationErrors = new List<IValidationError>()
-            {
-                new RuleSet.ErrorHandler.Model.ValidationError(string.Empty, "XYZ"),
-            };
-            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
-            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
 
             var message = new TestMessage()
             {
@@ -86,24 +77,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
                 }
             };
 
-            var messageCacheMock = new Mock<ICache<IMessage>>();
-
-            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
-
-            NewService(validationErrorCacheMock.Object, messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
+            NewService().BuildValidLearnRefNumbers(message, invalidLearnRefNumbers).Should().BeEquivalentTo("c", "d", "e");
         }
 
         [Fact]
-        public void BuildValidLearnRefNumbers_No_ValidLearners()
+        public void BuildValidLearnRefNumbers_No_InvalidLearners()
         {
             var invalidLearnRefNumbers = new List<string>();
-
-            var validationErrors = new List<IValidationError>()
-            {
-                new RuleSet.ErrorHandler.Model.ValidationError("HEADER", string.Empty),
-            };
-            var validationErrorCacheMock = new Mock<IValidationErrorCache<IValidationError>>();
-            validationErrorCacheMock.SetupGet(c => c.ValidationErrors).Returns(validationErrors);
 
             var message = new TestMessage()
             {
@@ -114,11 +94,19 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
                 }
             };
 
-            var messageCacheMock = new Mock<ICache<IMessage>>();
+            NewService().BuildValidLearnRefNumbers(message, invalidLearnRefNumbers).Should().HaveCount(2);
+        }
 
-            messageCacheMock.SetupGet(mc => mc.Item).Returns(message);
+        [Fact]
+        public void BuildValidLearnRefNumbers_NullMessage()
+        {
+            NewService().BuildValidLearnRefNumbers(null, new List<string>()).Should().HaveCount(0);
+        }
 
-            NewService(validationErrorCacheMock.Object, messageCacheMock.Object).BuildValidLearnRefNumbers(invalidLearnRefNumbers).Should().BeEmpty();
+        [Fact]
+        public void BuildValidLearnRefNumbers_NullLearners()
+        {
+            NewService().BuildValidLearnRefNumbers(new TestMessage(), new List<string>()).Should().HaveCount(0);
         }
 
 
@@ -175,7 +163,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
             IKeyValuePersistenceService keyValuePersistenceService = null,
             IPreValidationContext preValidationContext = null,
             IJsonSerializationService jsonSerializationService = null,
-            IValidationErrorsDataService validationErrorsDataService = null)
+            IValidationErrorsDataService validationErrorsDataService = null
+            )
         {
             return new ValidationOutputService(
                 validationErrorCache,
@@ -183,7 +172,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Tests
                 keyValuePersistenceService,
                 preValidationContext,
                 jsonSerializationService,
-                validationErrorsDataService);
+                validationErrorsDataService,
+                new Mock<ILogger>().Object);
         }
     }
 }

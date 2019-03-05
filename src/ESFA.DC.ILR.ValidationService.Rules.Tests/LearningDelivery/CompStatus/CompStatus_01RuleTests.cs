@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -23,9 +23,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
         {
             var compStatus = 1;
 
-            var compStatusInternalDataServiceMock = new Mock<ICompStatusDataService>();
+            var compStatusInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(false);
+            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus)).Returns(false);
 
             NewRule(compStatusInternalDataServiceMock.Object).ConditionMet(compStatus).Should().BeTrue();
         }
@@ -35,9 +35,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
         {
             var compStatus = 1;
 
-            var compStatusInternalDataServiceMock = new Mock<ICompStatusDataService>();
+            var compStatusInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(true);
+            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus)).Returns(true);
 
             NewRule(compStatusInternalDataServiceMock.Object).ConditionMet(compStatus).Should().BeFalse();
         }
@@ -60,9 +60,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
                 }
             };
 
-            var compStatusInternalDataServiceMock = new Mock<ICompStatusDataService>();
+            var compStatusInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(false);
+            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -88,9 +88,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
                 }
             };
 
-            var compStatusInternalDataServiceMock = new Mock<ICompStatusDataService>();
+            var compStatusInternalDataServiceMock = new Mock<IProvideLookupDetails>();
 
-            compStatusInternalDataServiceMock.Setup(ds => ds.Exists(compStatus)).Returns(true);
+            compStatusInternalDataServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -110,9 +110,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.CompStatus
             validationErrorHandlerMock.Verify();
         }
 
-        private CompStatus_01Rule NewRule(ICompStatusDataService compStatusInternalDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private CompStatus_01Rule NewRule(IProvideLookupDetails provideLookupDetails = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new CompStatus_01Rule(compStatusInternalDataService, validationErrorHandler);
+            return new CompStatus_01Rule(provideLookupDetails, validationErrorHandler);
         }
     }
 }

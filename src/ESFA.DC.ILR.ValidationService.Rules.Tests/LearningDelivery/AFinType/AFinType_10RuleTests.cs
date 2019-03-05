@@ -201,14 +201,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         [InlineData("", 2, false)]
         [InlineData("", 3, false)]
         [InlineData("", 4, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.Types.PaymentRecord, 1, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.Types.PaymentRecord, 2, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.Types.PaymentRecord, 3, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.Types.PaymentRecord, 4, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 1, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 2, true)]
-        [InlineData(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 3, false)]
-        [InlineData(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice, 4, true)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.PaymentRecord, 1, false)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.PaymentRecord, 2, false)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.PaymentRecord, 3, false)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.PaymentRecord, 4, false)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 1, false)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 2, true)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 3, false)]
+        [InlineData(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice, 4, true)]
         public void ConditionMetWithFinancialRecordMeetsExpectation(string candidateType, int candidateCode, bool expectation)
         {
             // arrange
@@ -290,11 +290,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
                 Moq.It.Is<string>(y => y == LearnRefNumber),
                 0,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
-            mockHandler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == AFinType_10Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == mockDelivery.Object)))
-                .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new AFinType_10Rule(mockHandler.Object);
 

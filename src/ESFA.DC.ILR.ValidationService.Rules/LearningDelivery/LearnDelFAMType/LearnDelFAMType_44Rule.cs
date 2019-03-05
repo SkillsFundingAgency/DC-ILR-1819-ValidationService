@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -13,7 +11,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
 {
     public class LearnDelFAMType_44Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { FundModelConstants.AdultSkills, FundModelConstants.ESF, FundModelConstants.OtherAdult };
+        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { TypeOfFunding.AdultSkills, TypeOfFunding.EuropeanSocialFund, TypeOfFunding.OtherAdult };
         private readonly IEnumerable<int> _aimTypes = new HashSet<int>() { 3, 5 };
         private readonly DateTime _firstAugust2015 = new DateTime(2015, 08, 01);
 

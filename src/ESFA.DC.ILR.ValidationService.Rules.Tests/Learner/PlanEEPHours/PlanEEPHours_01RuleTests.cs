@@ -1,192 +1,235 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.Tests.Model;
+﻿using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanEEPHours;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanEEPHours
 {
-    public class PlanEEPHours_01RuleTests
+    public class PlanEEPHours_01RuleTests : AbstractRuleTests<PlanEEPHours_01Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("PlanEEPHours_01");
+        }
+
         [Theory]
         [InlineData(25)]
         [InlineData(82)]
-        public void ConditionMet_True(long? fundModel)
+        public void FundModelConditionMet_true(int fundModel)
         {
-            NewRule().ConditionMet(null, fundModel).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(null, 10)]
-        [InlineData(10, 82)]
-        [InlineData(10, 25)]
-        public void ConditionMet_False(long? planEepHours, long? fundModel)
-        {
-            NewRule().ConditionMet(10, 82).Should().BeFalse();
+            NewRule().FundModelConditionMet(fundModel).Should().BeTrue();
         }
 
         [Fact]
-        public void ExcludeConditionMet_AllAimsClosed_True()
+        public void FundModelConditionMet_False()
+        {
+            var fundModel = 0;
+
+            NewRule().FundModelConditionMet(fundModel).Should().BeFalse();
+        }
+
+        [Fact]
+        public void PlanEEPHoursConditionMet_True()
+        {
+            NewRule().PlanEEPHoursConditionMet(null).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Excluded_TrueDD07()
+        {
+            var progType = 23;
+            var fundModel = 99;
+
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
+
+            NewRule(dd07Mock.Object).Excluded(progType, fundModel).Should().BeTrue();
+        }
+
+        [Fact]
+        public void Excluded_TrueFundModel()
+        {
+            var fundModel = 70;
+
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            dd07Mock.Setup(dm => dm.IsApprenticeship(null)).Returns(false);
+
+            NewRule(dd07Mock.Object).Excluded(null, fundModel).Should().BeTrue();
+        }
+
+        [Fact]
+        public void FundModelExcludeConditionMet_True()
+        {
+            var fundModel = 70;
+
+            NewRule().FundModelExcludeConditionMet(fundModel).Should().BeTrue();
+        }
+
+        [Fact]
+        public void FundModelExcludeConditionMet_False()
+        {
+            var fundModel = 0;
+
+            NewRule().FundModelExcludeConditionMet(fundModel).Should().BeFalse();
+        }
+
+        [Fact]
+        public void AllLearningAimsClosedExcludeConditionMet_True()
         {
             var learningDeliveries = new List<TestLearningDelivery>()
             {
-                new TestLearningDelivery()
-                {
-                    LearnActEndDateNullable = new DateTime(2018, 1, 1)
-                },
-                new TestLearningDelivery()
-                {
-                    LearnActEndDateNullable = new DateTime(2018, 1, 1)
-                }
+                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 10, 01) },
+                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 11, 01) },
+                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 09, 01) },
             };
 
-            NewRule().HasAllLearningAimsClosedExcludeConditionMet(learningDeliveries).Should().BeTrue();
+            NewRule().AllLearningAimsClosedExcludeConditionMet(learningDeliveries).Should().BeTrue();
         }
 
         [Fact]
-        public void ExcludeConditionMet_All_AimsClosed_False()
+        public void AllLearningAimsClosedExcludeConditionMet_FalseNullObject()
         {
-            var learningDelivers = new List<TestLearningDelivery>()
+            NewRule().AllLearningAimsClosedExcludeConditionMet(null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void AllLearningAimsClosedExcludeConditionMet_False()
+        {
+            var learningDeliveries = new List<TestLearningDelivery>()
             {
-                new TestLearningDelivery(),
-                new TestLearningDelivery()
-                {
-                    LearnActEndDateNullable = new DateTime(2018, 1, 1),
-                }
+                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 10, 01) },
+                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 11, 01) },
+                new TestLearningDelivery() { LearnActEndDateNullable = null },
             };
 
-            NewRule().HasAllLearningAimsClosedExcludeConditionMet(learningDelivers).Should().BeFalse();
-        }
-
-        [Theory]
-        [InlineData(70, null)]
-        [InlineData(null, 2)]
-        public void ExcludeConditionMet_True(long? fundModel, long? progType)
-        {
-            var learningDelivery = SetupLearningDelivery(fundModel, progType);
-
-            var dd07Mock = new Mock<IDD07>();
-
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("Y");
-
-            var rule = NewRule(dd07Mock.Object);
-
-            rule.Exclude(learningDelivery).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(10, null)]
-        [InlineData(null, 12)]
-        public void ExcludeConditionMet_False(long? fundModel, long? progType)
-        {
-            var learningDelivery = SetupLearningDelivery(fundModel, progType);
-
-            var dd07Mock = new Mock<IDD07>();
-
-            dd07Mock.Setup(dd => dd.Derive(progType)).Returns("N");
-
-            var rule = NewRule(dd07Mock.Object);
-
-            rule.Exclude(learningDelivery).Should().BeFalse();
+            NewRule().AllLearningAimsClosedExcludeConditionMet(learningDeliveries).Should().BeFalse();
         }
 
         [Fact]
-        public void ExcludeConditionDD07_False()
+        public void ConditionMet_True()
         {
-            NewRule().HasLearningDeliveryDd07ExcludeConditionMet(string.Empty).Should().BeFalse();
+            var fundModel = 25;
+            int? planEEPHours = null;
+            int? progType = null;
+
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
+
+            NewRule(dd07Mock.Object).ConditionMet(fundModel, planEEPHours, progType).Should().BeTrue();
         }
 
         [Fact]
-        public void ExcludeConditionDD07_True()
+        public void ConditionMet_FalseFundModel()
         {
-            NewRule().HasLearningDeliveryDd07ExcludeConditionMet("Y").Should().BeTrue();
+            var fundModel = 1;
+            int? planEEPHours = null;
+            int? progType = null;
+
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
+
+            NewRule(dd07Mock.Object).ConditionMet(fundModel, planEEPHours, progType).Should().BeFalse();
         }
 
         [Fact]
-        public void ExcludeConditionFundModel_True()
+        public void ConditionMet_FalsePlanEEPHours()
         {
-            NewRule().HasLearningDeliveryFundModelExcludeConditionMet(70).Should().BeTrue();
+            var fundModel = 25;
+            int? planEEPHours = 1;
+            int? progType = null;
+
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(false);
+
+            NewRule(dd07Mock.Object).ConditionMet(fundModel, planEEPHours, progType).Should().BeFalse();
         }
 
         [Fact]
-        public void ExcludeConditionFundModel_False()
+        public void ConditionMet_FalseExcluded()
         {
-            NewRule().HasLearningDeliveryFundModelExcludeConditionMet(10).Should().BeFalse();
+            var fundModel = 25;
+            int? planEEPHours = null;
+            int? progType = 2;
+
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            dd07Mock.Setup(dm => dm.IsApprenticeship(progType)).Returns(true);
+
+            NewRule(dd07Mock.Object).ConditionMet(fundModel, planEEPHours, progType).Should().BeFalse();
         }
 
         [Fact]
-        public void Validate_Error()
+        public void ValidateError()
         {
-            var learner = SetupLearner(null);
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PlanEEPHours_01", null, null, null);
-
-            var dd07Mock = new Mock<IDD07>();
-
-            dd07Mock.Setup(dd => dd.Derive(It.IsAny<long>())).Returns("N");
-
-            var rule = NewRule(dd07Mock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
-
-        [Fact]
-        public void Validate_NoError()
-        {
-            var learner = SetupLearner(10);
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PlanEEPHours_01", null, null, null);
-
-            var dd07Mock = new Mock<IDD07>();
-
-            dd07Mock.Setup(dd => dd.Derive(It.IsAny<long>())).Returns("N");
-
-            var rule = NewRule(dd07Mock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Never);
-        }
-
-        private ILearner SetupLearner(long? planEEPHours)
-        {
-            return new TestLearner()
+            var learner = new TestLearner()
             {
-                PlanEEPHoursNullable = planEEPHours,
-                LearningDeliveries = new TestLearningDelivery[]
+                PlanEEPHoursNullable = null,
+                LearningDeliveries = new List<TestLearningDelivery>()
                 {
                     new TestLearningDelivery()
                     {
-                        FundModelNullable = 25,
+                        FundModel = 25,
                     }
                 }
             };
+
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            dd07Mock.Setup(dm => dm.IsApprenticeship(null)).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
-        private PlanEEPHours_01Rule NewRule(IDD07 dd07 = null, IValidationErrorHandler validationErrorHandler = null)
+        [Fact]
+        public void ValidateNoError()
+        {
+            var learner = new TestLearner()
+            {
+                PlanEEPHoursNullable = null,
+                LearningDeliveries = new List<TestLearningDelivery>()
+                {
+                    new TestLearningDelivery()
+                    {
+                        FundModel = 25,
+                        LearnActEndDateNullable = new DateTime(2018, 10, 01)
+                    }
+                }
+            };
+
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
+            dd07Mock.Setup(dm => dm.IsApprenticeship(null)).Returns(false);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(dd07Mock.Object, validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("FundModel", 1)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1);
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private PlanEEPHours_01Rule NewRule(
+            IDerivedData_07Rule dd07 = null,
+            IValidationErrorHandler validationErrorHandler = null)
         {
             return new PlanEEPHours_01Rule(dd07, validationErrorHandler);
-        }
-
-        private ILearningDelivery SetupLearningDelivery(long? fundModel, long? progType)
-        {
-            return new TestLearningDelivery()
-            {
-                FundModelNullable = fundModel,
-                ProgTypeNullable = progType,
-            };
         }
     }
 }

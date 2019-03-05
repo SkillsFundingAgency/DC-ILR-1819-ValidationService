@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -33,44 +35,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.File
             fileDataCacheMock.SetupGet(c => c.FilePreparationDate).Returns(date);
 
             NewService(fileDataCacheMock.Object).FilePreparationDate().Should().Be(date);
-        }
-
-        [Fact]
-        public void LearnerDestinationAndProgressions()
-        {
-            var learnerDestinationAndProgressions = new List<TestLearnerDestinationAndProgression>
-            {
-                new TestLearnerDestinationAndProgression
-                {
-                    LearnRefNumber = "111111"
-                }
-            };
-
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.SetupGet(c => c.LearnerDestinationAndProgressions).Returns(learnerDestinationAndProgressions);
-
-            NewService(fileDataCacheMock.Object).LearnerDestinationAndProgressions().Should().BeEquivalentTo(learnerDestinationAndProgressions);
-        }
-
-        [Fact]
-        public void LearnerDestinationAndProgressionsForLearnRefNumber()
-        {
-            var learnerDP = new TestLearnerDestinationAndProgression
-            {
-                LearnRefNumber = "111111"
-            };
-
-            var learnerDestinationAndProgressions = new List<TestLearnerDestinationAndProgression>
-            {
-                learnerDP
-            };
-
-            var fileDataCacheMock = new Mock<IFileDataCache>();
-
-            fileDataCacheMock.SetupGet(c => c.LearnerDestinationAndProgressions).Returns(learnerDestinationAndProgressions);
-
-            NewService(fileDataCacheMock.Object).LearnerDestinationAndProgressionsForLearnRefNumber("111111").Should().BeEquivalentTo(learnerDP);
         }
 
         [Fact]

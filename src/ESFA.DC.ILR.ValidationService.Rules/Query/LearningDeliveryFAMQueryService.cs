@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Query
@@ -9,37 +11,100 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Query
     {
         public bool HasAnyLearningDeliveryFAMCodesForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType, IEnumerable<string> famCodes)
         {
-            if (learningDeliveryFAMs == null || famCodes == null)
-            {
-                return false;
-            }
-
-            return learningDeliveryFAMs.Any(ldfam => ldfam.LearnDelFAMType == famType && famCodes.Contains(ldfam.LearnDelFAMCode));
+            return GetLearningDeliveryFAMsForTypeAndCodes(learningDeliveryFAMs, famType, famCodes)?
+                       .Any()
+                   ?? false;
         }
 
         public bool HasLearningDeliveryFAMCodeForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType, string famCode)
         {
-            return learningDeliveryFAMs != null && learningDeliveryFAMs.Any(ldfam => ldfam.LearnDelFAMType == famType && ldfam.LearnDelFAMCode == famCode);
+            return GetLearningDeliveryFAMsForTypeAndCode(learningDeliveryFAMs, famType, famCode)?
+                       .Any()
+                   ?? false;
         }
 
         public bool HasLearningDeliveryFAMType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType)
         {
-            return learningDeliveryFAMs != null && learningDeliveryFAMs.Any(ldfam => ldfam.LearnDelFAMType == famType);
+            return GetLearningDeliveryFAMsForType(learningDeliveryFAMs, famType)?.
+                       Any()
+                   ?? false;
         }
 
-        public bool HasAnyLearningDeliveryFAMTypes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, IEnumerable<string> famTypes)
+        public bool HasLearningDeliveryFAMTypeForDate(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string famType, DateTime date)
         {
-            return learningDeliveryFAMs != null
-                   && famTypes != null
-                   && learningDeliveryFAMs.Any(ldfam => famTypes.Contains(ldfam.LearnDelFAMType));
+            return GetLearningDeliveryFAMsForType(learningDeliveryFAMs, famType)?.Any(ldfam => ldfam.LearnDelFAMDateFromNullable == date) ?? false;
         }
 
-        public ILearningDeliveryFAM GetLearningDeliveryFAMByTypeAndLatestByDateFrom(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs, string learnDelFAMType)
+        public int GetLearningDeliveryFAMsCountByFAMType(IReadOnlyCollection<ILearningDeliveryFAM> learningDeliveryFAMs, string famType)
         {
-            return learningDeliveryFAMs?
-                .Where(f => f.LearnDelFAMType == learnDelFAMType)
-                .OrderByDescending(f => f.LearnDelFAMDateFromNullable)
-                .FirstOrDefault();
+            return GetLearningDeliveryFAMsForType(learningDeliveryFAMs, famType)?.Count() ?? 0;
+        }
+
+        public IEnumerable<ILearningDeliveryFAM> GetLearningDeliveryFAMsForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType)
+        {
+            return learningDeliveryFams?.Where(fam => HasFamType(fam, famType)) ?? new List<ILearningDeliveryFAM>();
+        }
+
+        public IEnumerable<ILearningDeliveryFAM> GetLearningDeliveryFAMsForTypeAndCode(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType, string famCode)
+        {
+            return learningDeliveryFams?.Where(fam => HasFamType(fam, famType) && HasFamCode(fam, famCode));
+        }
+
+        public IEnumerable<ILearningDeliveryFAM> GetLearningDeliveryFAMsForTypeAndCodes(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType, IEnumerable<string> famCodes)
+        {
+            if (famCodes == null)
+            {
+                return null;
+            }
+
+            return learningDeliveryFams?.Where(fam => HasFamType(fam, famType) && famCodes.Contains(fam.LearnDelFAMCode));
+        }
+
+        public IEnumerable<ILearningDeliveryFAM> GetOverLappingLearningDeliveryFAMsForType(IEnumerable<ILearningDeliveryFAM> learningDeliveryFams, string famType)
+        {
+            var overlappingLearningDeliveryFAMs = new List<ILearningDeliveryFAM>();
+
+            var learnDelFAMs =
+                learningDeliveryFams?
+                .Where(fam => HasFamType(fam, famType))
+                .OrderBy(ld => ld.LearnDelFAMDateFromNullable ?? DateTime.MaxValue)
+                .ToArray() ?? new ILearningDeliveryFAM[] { };
+
+            var arraySize = learnDelFAMs.Length;
+
+            if (arraySize >= 2 && !learnDelFAMs.All(ldf => ldf.LearnDelFAMDateFromNullable == null))
+            {
+                for (var i = 0; i < arraySize - 1; i++)
+                {
+                    var learnDelFAMSource = learnDelFAMs[i];
+                    var learnDelFAMToCompare = learnDelFAMs[i + 1];
+
+                    if (IsOverlappingLearnDelFAMDates(learnDelFAMSource.LearnDelFAMDateToNullable, learnDelFAMToCompare.LearnDelFAMDateFromNullable))
+                    {
+                        overlappingLearningDeliveryFAMs.Add(learnDelFAMToCompare);
+                    }
+                }
+            }
+
+            return overlappingLearningDeliveryFAMs;
+        }
+
+        public bool IsOverlappingLearnDelFAMDates(DateTime? dateTo, DateTime? dateFrom)
+        {
+            return
+                 dateTo == null ? true
+                 : dateFrom == null ? false
+                 : dateTo >= dateFrom;
+        }
+
+        public bool HasFamType(ILearningDeliveryFAM learningDeliveryFam, string famType)
+        {
+            return learningDeliveryFam.LearnDelFAMType.CaseInsensitiveEquals(famType);
+        }
+
+        public bool HasFamCode(ILearningDeliveryFAM learningDeliveryFam, string famCode)
+        {
+            return learningDeliveryFam.LearnDelFAMCode == famCode;
         }
     }
 }

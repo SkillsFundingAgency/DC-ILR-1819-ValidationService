@@ -106,7 +106,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public bool ConditionMet(IAppFinRecord financialRecord)
         {
             return It.Has(financialRecord)
-                ? It.IsInRange($"{financialRecord.AFinType}{financialRecord.AFinCode}", ApprenticeshipFinanicalRecord.TotalAssessmentPrice, ApprenticeshipFinanicalRecord.ResidualAssessmentPrice)
+                ? It.IsInRange($"{financialRecord.AFinType}{financialRecord.AFinCode}", ApprenticeshipFinancialRecord.TotalAssessmentPrice, ApprenticeshipFinancialRecord.ResidualAssessmentPrice)
                 : true;
         }
 
@@ -118,7 +118,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }

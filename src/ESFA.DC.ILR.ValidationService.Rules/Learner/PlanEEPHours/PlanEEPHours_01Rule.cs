@@ -1,73 +1,92 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanEEPHours
 {
-    /// <summary>
-    /// If the learner's learning aim is EFA funded, the Planned employability, enrichment and pastoral hours, must be returned
-    /// </summary>
     public class PlanEEPHours_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
-        public PlanEEPHours_01Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+        public PlanEEPHours_01Rule(
+            IDerivedData_07Rule dd07,
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PlanEEPHours_01)
         {
             _dd07 = dd07;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (!HasAllLearningAimsClosedExcludeConditionMet(objectToValidate.LearningDeliveries))
+            if (!AllLearningAimsClosedExcludeConditionMet(objectToValidate.LearningDeliveries))
             {
-                foreach (var learningDelivery in objectToValidate.LearningDeliveries.Where(ld => !Exclude(ld)))
+                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
-                    if (ConditionMet(objectToValidate.PlanEEPHoursNullable, learningDelivery.FundModelNullable))
+                    if (ConditionMet(
+                        learningDelivery.FundModel,
+                        objectToValidate.PlanEEPHoursNullable,
+                        learningDelivery.ProgTypeNullable))
                     {
-                        HandleValidationError(RuleNameConstants.PlanEEPHours_01Rule, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                        HandleValidationError(
+                            objectToValidate.LearnRefNumber,
+                            learningDelivery.AimSeqNumber,
+                            BuildErrorMessageParameters(learningDelivery.FundModel));
                     }
                 }
             }
         }
 
-        public bool ConditionMet(long? planEepHoursNullable, long? fundModelNullable)
+        public bool ConditionMet(int fundModel, int? planEEPHours, int? progType)
         {
-            return !planEepHoursNullable.HasValue &&
-                    FundModelConditionMet(fundModelNullable);
+            return FundModelConditionMet(fundModel)
+                   && PlanEEPHoursConditionMet(planEEPHours)
+                   && !Excluded(progType, fundModel);
         }
 
-        public bool FundModelConditionMet(long? fundModelNullable)
+        public bool FundModelConditionMet(int fundModel)
         {
-            return fundModelNullable.HasValue &&
-                   (fundModelNullable.Value == 25 || fundModelNullable.Value == 82);
+            var fundModels = new[] { 25, 82 };
+
+            return fundModels.Contains(fundModel);
         }
 
-        public bool Exclude(ILearningDelivery learningDelivery)
+        public bool PlanEEPHoursConditionMet(int? planEEPHours)
         {
-            return HasLearningDeliveryDd07ExcludeConditionMet(_dd07.Derive(learningDelivery.ProgTypeNullable)) ||
-                   HasLearningDeliveryFundModelExcludeConditionMet(learningDelivery.FundModelNullable);
+            return planEEPHours == null;
         }
 
-        public bool HasLearningDeliveryDd07ExcludeConditionMet(string dd07)
+        public bool Excluded(int? progType, int fundModel)
         {
-            return dd07 == ValidationConstants.Y;
+            return DD07ExcludeConditionMet(progType)
+                   || FundModelExcludeConditionMet(fundModel);
         }
 
-        public bool HasLearningDeliveryFundModelExcludeConditionMet(long? fundModelNullable)
+        public bool DD07ExcludeConditionMet(int? progType)
         {
-            return fundModelNullable.HasValue
-                && fundModelNullable.Value == 70;
+            return _dd07.IsApprenticeship(progType);
         }
 
-        public bool HasAllLearningAimsClosedExcludeConditionMet(IReadOnlyCollection<ILearningDelivery> learningDeliveries)
+        public bool FundModelExcludeConditionMet(int fundModel)
+        {
+            return fundModel == 70;
+        }
+
+        public bool AllLearningAimsClosedExcludeConditionMet(IEnumerable<ILearningDelivery> learningDeliveries)
         {
             return learningDeliveries != null
-                && learningDeliveries.All(x => x.LearnActEndDateNullable.HasValue);
+                   && learningDeliveries.All(ld => ld.LearnActEndDateNullable.HasValue);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel)
+            };
         }
     }
 }

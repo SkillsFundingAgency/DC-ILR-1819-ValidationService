@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Query;
 using FluentAssertions;
 using Moq;
@@ -45,13 +46,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             var learnerFams = SetupLearnerFams();
 
-            NewService().HasLearnerFAMCodeForType(learnerFams, "FamB", 2).Should().BeTrue();
+            NewService().HasLearnerFAMCodeForType(learnerFams, "FAmB", 2).Should().BeTrue();
         }
 
         [Fact]
         public void HasLearnerFAMCodeForType_NullLearnerFams()
         {
-            NewService().HasLearnerFAMCodeForType(null, "FamB", 2).Should().BeFalse();
+            NewService().HasLearnerFAMCodeForType(null, "FaMB", 2).Should().BeFalse();
         }
 
         [Fact]
@@ -67,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         {
             var learnerFams = SetupLearnerFams();
 
-            NewService().HasLearnerFAMType(learnerFams, "FamA").Should().BeTrue();
+            NewService().HasLearnerFAMType(learnerFams, "FAmA").Should().BeTrue();
         }
 
         [Fact]
@@ -108,14 +109,64 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
             NewService().HasAnyLearnerFAMTypes(learnerFams, null).Should().BeFalse();
         }
 
+        [Fact]
+        public void GetLearningFAMsCountByFAMType_CountCheckForFound()
+        {
+            var testLearningFAMs = new TestLearnerFAM[]
+                {
+                    new TestLearnerFAM
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.EHC
+                    },
+                    new TestLearnerFAM
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.EHC
+                    },
+                    new TestLearnerFAM
+                    {
+                        LearnFAMType = LearnerFAMTypeConstants.DLA
+                    },
+                };
+
+            NewService().GetLearnerFAMsCountByFAMType(testLearningFAMs, LearnerFAMTypeConstants.EHC).Should().Be(2);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_CountCheckForNotFound()
+        {
+            var testLearningFAMs = new TestLearnerFAM[]
+            {
+                new TestLearnerFAM
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.EHC
+                },
+                new TestLearnerFAM
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.HNS
+                },
+                new TestLearnerFAM
+                {
+                    LearnFAMType = LearnerFAMTypeConstants.DLA
+                },
+            };
+
+            NewService().GetLearnerFAMsCountByFAMType(testLearningFAMs, LearnerFAMTypeConstants.FME).Should().Be(0);
+        }
+
+        [Fact]
+        public void GetLearningDeliveryFAMsCountByFAMType_NullCheck()
+        {
+            NewService().GetLearnerFAMsCountByFAMType(null, LearnerFAMTypeConstants.FME).Should().Be(0);
+        }
+
         private ILearnerFAM[] SetupLearnerFams()
         {
             var learnerFams = new TestLearnerFAM[]
             {
-                new TestLearnerFAM() { LearnFAMType = "FamA", LearnFAMCode = 1 },
-                new TestLearnerFAM() { LearnFAMType = "FamB", LearnFAMCode = 2 },
-                new TestLearnerFAM() { LearnFAMType = "FamC", LearnFAMCode = 3 },
-                new TestLearnerFAM() { LearnFAMType = "FamC", LearnFAMCode = 5 },
+                new TestLearnerFAM() { LearnFAMType = "famA", LearnFAMCode = 1 },
+                new TestLearnerFAM() { LearnFAMType = "FAmB", LearnFAMCode = 2 },
+                new TestLearnerFAM() { LearnFAMType = "FaMC", LearnFAMCode = 3 },
+                new TestLearnerFAM() { LearnFAMType = "FAmc", LearnFAMCode = 5 },
             };
 
             return learnerFams;

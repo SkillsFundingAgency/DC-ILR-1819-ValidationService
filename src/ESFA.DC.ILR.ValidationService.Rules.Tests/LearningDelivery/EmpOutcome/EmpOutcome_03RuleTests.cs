@@ -65,7 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EmpOutcome
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -77,7 +77,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EmpOutcome
         {
             var progType = 1;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
@@ -113,7 +113,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EmpOutcome
                 }
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -155,7 +155,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.EmpOutcome
             validationErrorHandlerMock.Verify();
         }
 
-        private EmpOutcome_03Rule NewRule(IDD07 dd07 = null, IValidationErrorHandler validationErrorHandler = null)
+        private EmpOutcome_03Rule NewRule(IDerivedData_07Rule dd07 = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new EmpOutcome_03Rule(dd07, validationErrorHandler);
         }

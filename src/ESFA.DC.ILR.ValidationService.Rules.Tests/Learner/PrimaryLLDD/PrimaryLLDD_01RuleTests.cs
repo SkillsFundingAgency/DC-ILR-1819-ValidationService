@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Derived.Interface;
@@ -48,7 +46,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
                 }
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 08, 01));
 
@@ -70,7 +68,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
                 }
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2009, 08, 01));
 
@@ -167,7 +165,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
                 }
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 08, 01));
 
@@ -206,7 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
                 }
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(year2, 08, 01));
 
@@ -248,7 +246,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
                 LearningDeliveries = learningDeliveries
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 08, 01));
 
@@ -293,7 +291,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
                 LearningDeliveries = learningDeliveries
             };
 
-            var dd06Mock = new Mock<IDD06>();
+            var dd06Mock = new Mock<IDerivedData_06Rule>();
 
             dd06Mock.Setup(dd => dd.Derive(learningDeliveries)).Returns(new DateTime(2015, 08, 01));
 
@@ -303,7 +301,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PrimaryLLDD
             }
         }
 
-        private PrimaryLLDD_01Rule NewRule(IDD06 dd06 = null, IValidationErrorHandler validationErrorHandler = null)
+        private PrimaryLLDD_01Rule NewRule(IDerivedData_06Rule dd06 = null, IValidationErrorHandler validationErrorHandler = null)
         {
             return new PrimaryLLDD_01Rule(dd06, validationErrorHandler);
         }

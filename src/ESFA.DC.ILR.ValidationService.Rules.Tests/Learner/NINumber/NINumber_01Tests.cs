@@ -3,186 +3,193 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.NiNumber;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.NINumber
 {
-    public class NINumber_01Tests
+    public class NINumber_01Tests : AbstractRuleTests<NINumber_01Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("NINumber_01");
+        }
+
         [Theory]
-        [InlineData("DZ0123456C")]
-        [InlineData("FZ0123456C")]
-        [InlineData("IZ0123456C")]
-        [InlineData("QZ0123456C")]
-        [InlineData("UZ0123456C")]
-        [InlineData("VZ0123456C")]
+        [InlineData("AA123456AA")]
+        [InlineData("A")]
+        public void ConditionMet_True_Length(string niNumber)
+        {
+            NewRule().ConditionMet(niNumber).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData("DZ123456C")]
+        [InlineData("FZ123456C")]
+        [InlineData("IZ123456C")]
+        [InlineData("QZ123456C")]
+        [InlineData("UZ123456C")]
+        [InlineData("VZ123456C")]
         public void ConditionMet_True_FirstCharacter(string niNumber)
         {
-            var rule = new NINumber_01Rule(null);
-
-            rule.ConditionMet(niNumber).Should().BeTrue();
+            NewRule().ConditionMet(niNumber).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData("AD0123456C")]
-        [InlineData("AF0123456C")]
-        [InlineData("AI0123456C")]
-        [InlineData("AO0123456C")]
-        [InlineData("AQ0123456C")]
-        [InlineData("AU0123456C")]
-        [InlineData("AV0123456C")]
+        [InlineData("AD123456C")]
+        [InlineData("AF123456C")]
+        [InlineData("AI123456C")]
+        [InlineData("AO123456C")]
+        [InlineData("AQ123456C")]
+        [InlineData("AU123456C")]
+        [InlineData("AV123456C")]
         public void ConditionMet_True_SecondCharacter(string niNumber)
         {
-            var rule = new NINumber_01Rule(null);
-
-            rule.ConditionMet(niNumber).Should().BeTrue();
+            NewRule().ConditionMet(niNumber).Should().BeTrue();
         }
 
         [Theory]
-        [InlineData("AXA23456C")]
-        [InlineData("AX1X3456C")]
-        [InlineData("AX12X456C")]
-        [InlineData("AX123X56C")]
-        [InlineData("AX1234X6C")]
-        [InlineData("AX12345XC")]
-        public void ConditionMet_True_ThreeTo8Characters(string niNumber)
+        [InlineData("AAX23456C")]
+        [InlineData("AA1X3456C")]
+        [InlineData("AAX2X456C")]
+        [InlineData("AAX23X56C")]
+        [InlineData("AAX234X6C")]
+        [InlineData("AAX2345XC")]
+        public void ConditionMet_True_Characters3To8(string niNumber)
         {
-            var rule = new NINumber_01Rule(null);
-
-            rule.ConditionMet(niNumber).Should().BeTrue();
+            NewRule().ConditionMet(niNumber).Should().BeTrue();
         }
 
         [Fact]
         public void ConditionMet_True_LastCharacter()
         {
-            var rule = new NINumber_01Rule(null);
-
             for (char letter = 'E'; letter <= 'Z'; letter++)
             {
-                var niNumber = $"AX123456{letter}";
-                rule.ConditionMet(niNumber).Should().BeTrue();
+                var niNumber = $"AA123456{letter}";
+                NewRule().ConditionMet(niNumber).Should().BeTrue();
             }
         }
 
         [Theory]
-        [InlineData("AX123456c")]
-        [InlineData("aX123456D")]
-        [InlineData("Ab123456A")]
+        [InlineData("aA123456A")]
+        [InlineData("Aa123456A")]
+        [InlineData("AA123456a")]
         public void ConditionMet_True_LowerCase(string niNumber)
         {
-            var rule = new NINumber_01Rule(null);
-            rule.ConditionMet(niNumber).Should().BeTrue();
+            NewRule().ConditionMet(niNumber).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(" ")]
+        [InlineData("")]
+        public void ConditionMet_False_NullOrEmpty(string niNumber)
+        {
+            NewRule().ConditionMet(niNumber).Should().BeFalse();
         }
 
         [Fact]
-        public void ConditionMet_FalseFirstLetter()
+        public void ConditionMet_False_FirstCharacter()
         {
             var notAllowed = new List<char>() { 'D', 'F', 'I', 'Q', 'U', 'V' };
-            char[] eToZ = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (char)i).Where(x => !notAllowed.Contains(x)).ToArray();
-
-            var rule = new NINumber_01Rule(null);
-
-            foreach (char letter in eToZ)
-            {
-                var niNumber = $"{letter}X123456C";
-                rule.ConditionMet(niNumber).Should().BeFalse();
-            }
-        }
-
-        [Fact]
-        public void ConditionMet_FalseSecondLetter()
-        {
-            var notAllowed = new List<char>() { 'D', 'F', 'I', 'O', 'Q', 'U', 'V' };
-            char[] eToZ = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (char)i).Where(x => !notAllowed.Contains(x)).ToArray();
-
-            var rule = new NINumber_01Rule(null);
-
-            foreach (char letter in eToZ)
-            {
-                var niNumber = $"A{letter}123456B";
-                rule.ConditionMet(niNumber).Should().BeFalse();
-            }
-        }
-
-        [Fact]
-        public void ConditionMet_FalseLastLetter()
-        {
-            var allowed = new List<char>() { 'A', 'B', 'C', 'D', ' ' };
-            var rule = new NINumber_01Rule(null);
+            char[] allowed = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (char)i).Where(x => !notAllowed.Contains(x)).ToArray();
 
             foreach (char letter in allowed)
             {
-                var niNumber = $"AX123456{letter}";
-                rule.ConditionMet(niNumber).Should().BeFalse();
+                var niNumber = $"{letter}A123456A";
+                NewRule().ConditionMet(niNumber).Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void ConditionMet_False_SecondCharacter()
+        {
+            var notAllowed = new List<char>() { 'D', 'F', 'I', 'O', 'Q', 'U', 'V' };
+            var allowed = Enumerable.Range('A', 'Z' - 'A' + 1).Select(i => (char)i).Where(x => !notAllowed.Contains(x)).ToArray();
+
+            foreach (char letter in allowed)
+            {
+                var niNumber = $"{letter}A123456A";
+                NewRule().ConditionMet(niNumber).Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void ConditionMet_False_LastCharacter()
+        {
+            var allowed = new List<char>() { 'A', 'B', 'C', 'D' };
+
+            foreach (char letter in allowed)
+            {
+                var niNumber = $"AA123456{letter}";
+                NewRule().ConditionMet(niNumber).Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void ConditionMet_False_LastCharacterEmpty()
+        {
+            var niNumber = "AA123456";
+
+            NewRule().ConditionMet(niNumber).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("AA123456A")]
+        [InlineData("AA123456")]
+        [InlineData(null)]
+        [InlineData(" ")]
+        public void Validate_NoErrors(string niNumber)
+        {
+            var learner = new TestLearner
+            {
+                NINumber = niNumber
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Theory]
-        [InlineData("AX{0}23456C")]
-        [InlineData("AX1{0}3456C")]
-        [InlineData("AX12{0}456C")]
-        [InlineData("AX123{0}56C")]
-        [InlineData("AX2234{0}6C")]
-        [InlineData("AX12345{0}C")]
-        public void ConditionMet_FalseNumbers(string niTemplate)
+        [InlineData("AA123456AA")]
+        [InlineData("AA23456A")]
+        [InlineData("DD123456A")]
+        public void Validate_Error(string niNumber)
         {
-            var rule = new NINumber_01Rule(null);
-
-            for (var i = 0; i < 10; i++)
+            var learner = new TestLearner
             {
-                var niNumber = string.Format(niTemplate, i);
-                rule.ConditionMet(niNumber).Should().BeFalse();
+                NINumber = niNumber
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
             }
         }
 
         [Fact]
-        public void ConditionMet_FalseEmptyString()
+        public void BuildErrorMessageParameters()
         {
-            var rule = new NINumber_01Rule(null);
-
-            rule.ConditionMet("  ").Should().BeFalse();
-        }
-
-        [Fact]
-        public void ConditionMet_FalseEmptyNull()
-        {
-            var rule = new NINumber_01Rule(null);
-
-            rule.ConditionMet(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void Validate_NoErrors()
-        {
-            var learner = new Mock<ILearner>();
-            learner.SetupGet(x => x.NINumber).Returns("AZ123456C");
-
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("NINumber_01", null, null, null);
 
-            var rule = new NINumber_01Rule(validationErrorHandlerMock.Object);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter("NINumber", " ")).Verifiable();
 
-            rule.Validate(learner.Object);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            NewRule(validationErrorHandlerMock.Object).BuildErrorMessageParameters(" ");
+
+            validationErrorHandlerMock.Verify();
         }
 
-        [Fact]
-        public void Validate_Error()
+        private NINumber_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
         {
-            var learner = new Mock<ILearner>();
-            learner.SetupGet(x => x.NINumber).Returns("AO123456X");
-
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("NINumber_01", null, null, null);
-
-            var rule = new NINumber_01Rule(validationErrorHandlerMock.Object);
-
-            rule.Validate(learner.Object);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            return new NINumber_01Rule(validationErrorHandler);
         }
     }
 }

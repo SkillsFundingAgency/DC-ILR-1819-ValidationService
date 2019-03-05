@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS;
+using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -25,9 +27,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
                     learnAimRef,
                     new LearningDelivery
                     {
-                        LearnAimRef = learnAimRef,
-                        EffectiveFrom = effectiveFrom,
-                        EffectiveTo = effectiveTo
+                        Validities = new List<LARSValidity>
+                        {
+                            new LARSValidity
+                            {
+                                 StartDate = effectiveFrom,
+                                 EndDate = effectiveTo
+                            }
+                        }
                     }
                 }
             };
@@ -48,12 +55,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
+                [learnAimRef] = new LearningDelivery
                 {
-                    learnAimRef,
-                    new LearningDelivery
+                    Validities = new List<LARSValidity>
                     {
-                        LearnAimRef = learnAimRef,
-                        EffectiveFrom = effectiveFrom
+                        new LARSValidity
+                        {
+                                StartDate = effectiveFrom
+                        }
                     }
                 }
             };
@@ -69,45 +78,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         public void EffectiveDatesValidforLearnAimRef_False()
         {
             var learnAimRef = "LearnAimRef";
-            var effectiveFrom = new DateTime(2018, 01, 01);
-            var effectiveTo = new DateTime(2019, 01, 01);
             var date = new DateTime(2020, 01, 01);
-
-            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
-            {
-                {
-                    learnAimRef,
-                    new LearningDelivery
-                    {
-                        LearnAimRef = learnAimRef,
-                        EffectiveFrom = effectiveFrom,
-                        EffectiveTo = effectiveTo
-                    }
-                }
-            };
-
             var externalDataCacheMock = new Mock<IExternalDataCache>();
-
-            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
-
-            NewService(externalDataCacheMock.Object).EffectiveDatesValidforLearnAimRef(learnAimRef, date).Should().BeFalse();
-        }
-
-        [Fact]
-        public void EffectiveDatesValidforLearnAimRef_False_LearningDeliveryNull()
-        {
-            var learnAimRef = "LearnAimRef";
-            var effectiveFrom = new DateTime(2018, 01, 01);
-            var effectiveTo = new DateTime(2019, 01, 01);
-            var date = new DateTime(2020, 01, 01);
-
-            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
-            {
-            };
-
-            var externalDataCacheMock = new Mock<IExternalDataCache>();
-
-            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
             NewService(externalDataCacheMock.Object).EffectiveDatesValidforLearnAimRef(learnAimRef, date).Should().BeFalse();
         }
@@ -120,37 +92,57 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             var fworkCode = 1;
             var pwayCode = 1;
 
-            var frameworks = new List<Framework>()
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>
             {
-                new Framework()
+                [learnAimRef] = new LearningDelivery
                 {
-                    FrameworkAims = new List<FrameworkAim>()
+                    LearnAimRef = learnAimRef,
+                    FrameworkAims = new List<FrameworkAim>
                     {
                         new FrameworkAim()
                         {
-                            LearnAimRef = learnAimRef,
                             ProgType = progType,
                             FworkCode = fworkCode,
                             PwayCode = pwayCode,
                         }
                     }
-                },
-                new Framework()
-                {
-                    FrameworkAims = new List<FrameworkAim>()
-                    {
-                        new FrameworkAim(),
-                    }
-                },
-                new Framework()
-                {
-                    FrameworkAims = null
                 }
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
-            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).FrameworkCodeExistsForFrameworkAims(learnAimRef, progType, fworkCode, pwayCode).Should().BeTrue();
+        }
+
+        [Fact]
+        public void FrameworkCodeExistsForFrameworkAims_CaseSensitive_True()
+        {
+            var learnAimRef = "LearnAimRef";
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>
+            {
+                ["LEARNAIMREF"] = new LearningDelivery
+                {
+                    FrameworkAims = new List<FrameworkAim>
+                    {
+                        new FrameworkAim()
+                        {
+                            ProgType = progType,
+                            FworkCode = fworkCode,
+                            PwayCode = pwayCode,
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
             NewService(externalDataCacheMock.Object).FrameworkCodeExistsForFrameworkAims(learnAimRef, progType, fworkCode, pwayCode).Should().BeTrue();
         }
@@ -162,38 +154,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             var progType = 1;
             var fworkCode = 1;
             var pwayCode = 1;
-
-            var frameworks = new List<Framework>()
-            {
-                new Framework()
-                {
-                    FrameworkAims = new List<FrameworkAim>()
-                    {
-                        new FrameworkAim()
-                        {
-                            LearnAimRef = learnAimRef,
-                            ProgType = progType,
-                            FworkCode = fworkCode,
-                            PwayCode = pwayCode + 1,
-                        }
-                    }
-                },
-                new Framework()
-                {
-                    FrameworkAims = new List<FrameworkAim>()
-                    {
-                        new FrameworkAim(),
-                    }
-                },
-                new Framework()
-                {
-                    FrameworkAims = null
-                }
-            };
-
             var externalDataCacheMock = new Mock<IExternalDataCache>();
-
-            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
 
             NewService(externalDataCacheMock.Object).FrameworkCodeExistsForFrameworkAims(learnAimRef, progType, fworkCode, pwayCode).Should().BeFalse();
         }
@@ -332,17 +293,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         [Fact]
         public void LearnAimRefExists_True()
         {
+            // a tenant of the dictionary is that the key will always point to a lars delivery...
             var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
             {
-                { "One", null },
-                { "Two", null },
+                ["One"] = new Mock<LearningDelivery>().Object,
+                ["Two"] = new Mock<LearningDelivery>().Object,
             };
 
             var externalDataCacheMock = new Mock<IExternalDataCache>();
 
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
-            NewService(externalDataCacheMock.Object).LearnAimRefExists("One").Should().BeTrue();
+            // let's make it lower case and see if it finds it...
+            NewService(externalDataCacheMock.Object).LearnAimRefExists("one").Should().BeTrue();
         }
 
         [Fact]
@@ -949,6 +912,100 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Fact]
+        public void BasicSkillsTypeMatchForLearnAimRef_False_NoneMatched()
+        {
+            var learnAimRef = "LearnAimRef";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 1
+                            },
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 2
+                            },
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 3
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsTypeMatchForLearnAimRef(new List<int>() { 6, 7 }, learnAimRef).Should().BeFalse();
+        }
+
+        [Fact]
+        public void BasicSkillsTypeMatchForLearnAimRef_PartialMatch_True()
+        {
+            var learnAimRef = "LearnAimRef";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        AnnualValues = new List<AnnualValue>
+                        {
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 1
+                            },
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 2
+                            },
+                            new AnnualValue
+                            {
+                                BasicSkillsType = 3
+                            }
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsTypeMatchForLearnAimRef(new List<int>() { 3, 9999 }, learnAimRef).Should().BeTrue();
+        }
+
+        [Fact]
+        public void BasicSkillsTypeMatchForLearnAimRef_List_False_Null_LearnAimRef()
+        {
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+            NewService(externalDataCacheMock.Object).BasicSkillsTypeMatchForLearnAimRef(new List<int>(), null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void BasicSkillsTypeMatchForLearnAimRef_List_False_Null_List()
+        {
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+            NewService(externalDataCacheMock.Object).BasicSkillsTypeMatchForLearnAimRef(null, "test").Should().BeFalse();
+        }
+
+        [Fact]
         public void BasicSkillsMatchForLearnAimRef_False_Null_AnnualValue()
         {
             var learnAimRef = "LearnAimRef";
@@ -999,6 +1056,50 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
             NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRef(learnAimRef, 2).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("456", "NUL")]
+        [InlineData("456", "")]
+        public void LearnDirectClassSystemCode2MatchForLearnAimRef_False(string learnAimRef, string learnDirectClassSystemCode2)
+        {
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LearnDirectClassSystemCode2 = new LearnDirectClassSystemCode(learnDirectClassSystemCode2)
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object).LearnDirectClassSystemCode2MatchForLearnAimRef(learnAimRef).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnDirectClassSystemCode2MatchForLearnAimRef_True()
+        {
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    "123", new LearningDelivery()
+                    {
+                        LearnAimRef = "123",
+                        LearnDirectClassSystemCode2 = new LearnDirectClassSystemCode("CDE")
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object).LearnDirectClassSystemCode2MatchForLearnAimRef("123").Should().BeTrue();
         }
 
         [Theory]
@@ -1070,6 +1171,885 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
 
             NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", learnStartDate).Should().BeTrue();
+        }
+
+        [Fact]
+        public void BasicSkillsMatchForLearnAimRefAndStartDate_False_NullCheck()
+        {
+            IEnumerable<int> basicSkillsTypes = new List<int>() { 01, 11, 13, 20, 23, 24, 29, 31, 02, 12, 14, 19, 21, 25, 30, 32, 33, 34, 35 };
+
+            Dictionary<string, LearningDelivery> learningDeliveriesDictionary = null;
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object).BasicSkillsMatchForLearnAimRefAndStartDate(basicSkillsTypes, "00100309", new DateTime(2013, 07, 01)).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterFrameworkThanEffectiveTo_True()
+        {
+            var effectiveTo = new DateTime(2018, 09, 01);
+
+            var learnStartDate = new DateTime(2018, 10, 01);
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    EffectiveTo = effectiveTo,
+                    ProgType = progType,
+                    FworkCode = fworkCode,
+                    PwayCode = pwayCode
+                },
+                new Framework()
+                {
+                    EffectiveTo = effectiveTo,
+                    ProgType = 15,
+                    FworkCode = 16,
+                    PwayCode = 0
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanFrameworkEffectiveTo(learnStartDate, progType, fworkCode, pwayCode).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanFrameworkEffectiveTo_False()
+        {
+            var learnStartDate = new DateTime(2018, 10, 01);
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanFrameworkEffectiveTo(learnStartDate, progType, fworkCode, pwayCode).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanEffectiveTo_FalseNull()
+        {
+            var learnStartDate = new DateTime(2018, 10, 01);
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanFrameworkEffectiveTo(learnStartDate, null, null, null).Should().BeFalse();
+        }
+
+        [Fact]
+        public void DD04DateGreaterThanFrameworkAimEffectiveTo_True()
+        {
+            var dd04Date = new DateTime(2018, 11, 01);
+            var effectiveTo = new DateTime(2018, 10, 01);
+
+            var learnAimRef = "LearnAimRef";
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                [learnAimRef] = new LearningDelivery
+                {
+                    LearnAimRef = learnAimRef,
+                    FrameworkAims = new List<FrameworkAim>
+                    {
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = learnAimRef,
+                            ProgType = progType,
+                            FworkCode = fworkCode,
+                            PwayCode = pwayCode,
+                            EffectiveTo = effectiveTo
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .DD04DateGreaterThanFrameworkAimEffectiveTo(dd04Date, learnAimRef, progType, fworkCode, pwayCode)
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void DD04DateGreaterThanFrameworkAimEffectiveTo_False()
+        {
+            var dd04Date = new DateTime(2018, 09, 01);
+            var learnAimRef = "LearnAimRef";
+            var progType = 1;
+            var fworkCode = 1;
+            var pwayCode = 1;
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            NewService(externalDataCacheMock.Object)
+                .DD04DateGreaterThanFrameworkAimEffectiveTo(dd04Date, learnAimRef, progType, fworkCode, pwayCode)
+                .Should()
+                .BeFalse();
+        }
+
+        [Theory]
+        [InlineData(TypeOfLARSValidity.Apprenticeships)]
+        [InlineData(TypeOfLARSValidity.AdultSkills)]
+        [InlineData(TypeOfLARSValidity.Unemployed)]
+        [InlineData(TypeOfLARSValidity.OLASSAdult)]
+        [InlineData(TypeOfLARSValidity.Any)]
+        [InlineData(TypeOfLARSValidity.CommunityLearning)]
+        [InlineData(TypeOfLARSValidity.EFAConFundEnglish)]
+        [InlineData(TypeOfLARSValidity.AdvancedLearnerLoan)]
+        [InlineData(TypeOfLARSValidity.EFA16To19)]
+        [InlineData(TypeOfLARSValidity.EFAConFundMaths)]
+        [InlineData(TypeOfLARSValidity.EuropeanSocialFund)]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_True(string larsValidityType)
+        {
+            var learnAimRef = "123456789";
+            var origLearnStartDate = new DateTime(2017, 11, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>
+            {
+                [learnAimRef] = new LearningDelivery()
+                {
+                    LearnAimRef = learnAimRef,
+                    Validities = new List<LARSValidity>()
+                    {
+                        new LARSValidity()
+                        {
+                            LearnAimRef = learnAimRef,
+                            ValidityCategory = larsValidityType,
+                            StartDate = new DateTime(2017, 10, 01),
+                            EndDate = new DateTime(2018, 10, 01)
+                        },
+                        new LARSValidity()
+                        {
+                            LearnAimRef = learnAimRef,
+                            ValidityCategory = larsValidityType,
+                            StartDate = new DateTime(2016, 10, 01)
+                        },
+                        new LARSValidity()
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                    .OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, larsValidityType)
+                    .Should()
+                    .BeTrue();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory_True()
+        {
+            var learnAimRef = "123456789";
+            var origLearnStartDate = new DateTime(2017, 11, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        Validities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = TypeOfLARSValidity.Apprenticeships,
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = TypeOfLARSValidity.EFA16To19,
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            var categorryTypesToCheck = new List<string>()
+            {
+                TypeOfLARSValidity.Apprenticeships,
+                TypeOfLARSValidity.OLASSAdult,
+                "XYZ"
+            };
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(origLearnStartDate, learnAimRef, categorryTypesToCheck)
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory_False()
+        {
+            var learnAimRef = "123456789";
+            var origLearnStartDate = new DateTime(2017, 11, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        Validities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "ABC",
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "YYYYYY",
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            var categorryTypesToCheck = new List<string>()
+            {
+                TypeOfLARSValidity.Apprenticeships,
+                TypeOfLARSValidity.OLASSAdult,
+            };
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForAnyValidityCategory(origLearnStartDate, learnAimRef, categorryTypesToCheck)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_TrueEndDateNullInLARS()
+        {
+            var learnAimRef = "123456789";
+            var origLearnStartDate = new DateTime(2018, 11, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        Validities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = TypeOfLARSValidity.Apprenticeships,
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = TypeOfLARSValidity.Any,
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Any)
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_FalseCategoryMisMatch()
+        {
+            var learnAimRef = "123456789";
+            var origLearnStartDate = new DateTime(2018, 09, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        Validities = new List<LARSValidity>()
+                        {
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "XXX",
+                                StartDate = new DateTime(2017, 10, 01),
+                                EndDate = new DateTime(2018, 10, 01)
+                            },
+                            new LARSValidity()
+                            {
+                                LearnAimRef = learnAimRef,
+                                ValidityCategory = "XXX",
+                                StartDate = new DateTime(2016, 10, 01)
+                            },
+                            new LARSValidity()
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Apprenticeships)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void OrigLearnStartDateBetweenStartAndEndDateForValidityCategory_FalseNull()
+        {
+            var learnAimRef = "123456789";
+            var origLearnStartDate = new DateTime(2017, 11, 01);
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>();
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .OrigLearnStartDateBetweenStartAndEndDateForValidityCategory(origLearnStartDate, learnAimRef, TypeOfLARSValidity.Apprenticeships)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void FrameWorkComponentTypeExistsInFrameworkAims_False()
+        {
+            var frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var learnAimRef = "ZESF12345";
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    FrameworkAims = new List<FrameworkAim>()
+                    {
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 5
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 2
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 6
+                        },
+                        new FrameworkAim()
+                        {
+                            LearnAimRef = "ZESF99887",
+                            FrameworkComponentType = 3
+                        }
+                    }
+                },
+                new Framework()
+                {
+                    FrameworkAims = new List<FrameworkAim>()
+                    {
+                        new FrameworkAim(),
+                    }
+                },
+                new Framework()
+                {
+                    FrameworkAims = null
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void FrameWorkComponentTypeExistsInFrameworkAims_FalseNull()
+        {
+            var frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var learnAimRef = "ZESF12345";
+
+            var frameworks = new List<Framework>()
+            {
+                new Framework()
+                {
+                    FrameworkAims = null
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void FrameWorkComponentTypeExistsInFrameworkAims_False_FrameworkNull()
+        {
+            var frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var learnAimRef = "ZESF12345";
+
+            List<Framework> frameworks = null;
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.Frameworks).Returns(frameworks);
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void FrameWorkComponentTypeExistsInFrameworkAims_True()
+        {
+            var frameWorkComponentTypes = new HashSet<int?>() { 1, 3 };
+            var learnAimRef = "ZESF12345";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>
+            {
+                [learnAimRef] = new LearningDelivery
+                {
+                    LearnAimRef = learnAimRef,
+                    FrameworkAims = new List<FrameworkAim>
+                    {
+                        new FrameworkAim
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 1
+                        },
+                        new FrameworkAim
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 2
+                        },
+                        new FrameworkAim
+                        {
+                            LearnAimRef = "ZESF12345",
+                            FrameworkComponentType = 3
+                        }
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .FrameWorkComponentTypeExistsInFrameworkAims(learnAimRef, frameWorkComponentTypes)
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void EnglishPrescribedIdsExistsforLearnAimRef_False()
+        {
+            var learnAimRef = "ESF123456";
+            var englishPrescribedIDs = new HashSet<int?>() { 1, 2 };
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        EnglPrscID = 3
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .EnglishPrescribedIdsExistsforLearnAimRef(learnAimRef, englishPrescribedIDs).Should().BeFalse();
+        }
+
+        [Fact]
+        public void EnglishPrescribedIdsExistsforLearnAimRef_True()
+        {
+            var learnAimRef = "ESF123456";
+            var englishPrescribedIDs = new HashSet<int?>() { 1, 2 };
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef, new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        EnglPrscID = 1
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .EnglishPrescribedIdsExistsforLearnAimRef(learnAimRef, englishPrescribedIDs).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNoMatch()
+        {
+            var stdCode = 1;
+            var learnStartDate = new DateTime(2018, 10, 01);
+
+            var standards = new List<LARSStandard>()
+            {
+                new LARSStandard()
+                {
+                    StandardCode = 2,
+                    StandardSectorCode = "3",
+                    NotionalEndLevel = "4",
+                    EffectiveTo = new DateTime(2018, 01, 01),
+                    EffectiveFrom = new DateTime(2017, 01, 01)
+                },
+                new LARSStandard()
+                {
+                    StandardCode = 3,
+                    StandardSectorCode = "3",
+                    NotionalEndLevel = "4",
+                    EffectiveTo = new DateTime(2018, 01, 01),
+                    EffectiveFrom = new DateTime(2017, 01, 01)
+                },
+                new LARSStandard()
+                {
+                    StandardCode = 4
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_FalseNoStandards()
+        {
+            var stdCode = 1;
+            var learnStartDate = new DateTime(2018, 10, 01);
+            var standards = new List<LARSStandard>();
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeFalse();
+        }
+
+        [Fact]
+        public void LearnStartDateGreaterThanStandardsEffectiveTo_True()
+        {
+            var stdCode = 1;
+            var learnStartDate = new DateTime(2017, 10, 01);
+
+            var standards = new List<LARSStandardValidity>()
+            {
+                new LARSStandardValidity()
+                {
+                    StandardCode = 1,
+                    StartDate = new DateTime(2017, 01, 01),
+                    EndDate = new DateTime(2018, 01, 01)
+                },
+                new LARSStandardValidity()
+                {
+                    StandardCode = 3,
+                    StartDate = new DateTime(2017, 01, 01),
+                    EndDate = new DateTime(2018, 01, 01)
+                },
+                new LARSStandardValidity()
+                {
+                    StandardCode = 4,
+                    StartDate = new DateTime(2020, 01, 01),
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.StandardValidities).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).LearnStartDateGreaterThanStandardsEffectiveTo(stdCode, learnStartDate).Should().BeTrue();
+        }
+
+        /// <summary>
+        /// Gets the notional NVQ levelv2 for learn aim reference.
+        /// and also (not by design) conducts a case insensitive request (test) from the cache...
+        /// </summary>
+        [Fact]
+        public void GetNotionalNVQLevelv2ForLearnAimRef()
+        {
+            var learnAimRef = "ESF123456";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    "esf123456",
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        NotionalNVQLevelv2 = "1"
+                    }
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object)
+                .GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef).Should().Be("1");
+        }
+
+        [Fact]
+        public void GetNotionalNVQLevelv2ForLearnAimRef_NullCheck()
+        {
+            var learnAimRef = "ESF09876";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    "esf223344",
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = "esf223344",
+                        NotionalNVQLevelv2 = "223"
+                    }
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(e => e.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCache: externalDataCacheMock.Object).GetNotionalNVQLevelv2ForLearnAimRef(learnAimRef).Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryForLearnAimRefAndTypes_True()
+        {
+            var learnAimRefTypes = new[] { "1111", "2222", "3333" };
+            var learnAimRef = "123456789";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LearnAimRefType = "2222"
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)
+                .Should()
+                .BeTrue();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryForLearnAimRefAndTypes_False_NullType()
+        {
+            var learnAimRefTypes = new[] { "1111", "2222", "3333" };
+            var learnAimRef = "123456789";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Fact]
+        public void HasAnyLearningDeliveryForLearnAimRefAndTypes_False_NoMatch()
+        {
+            var learnAimRefTypes = new[] { "1111", "2222", "3333" };
+            var learnAimRef = "123456789";
+
+            var learningDeliveriesDictionary = new Dictionary<string, LearningDelivery>()
+            {
+                {
+                    learnAimRef,
+                    new LearningDelivery()
+                    {
+                        LearnAimRef = learnAimRef,
+                        LearnAimRefType = "4444"
+                    }
+                }
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+            externalDataCacheMock.SetupGet(c => c.LearningDeliveries).Returns(learningDeliveriesDictionary);
+
+            NewService(externalDataCacheMock.Object)
+                .HasAnyLearningDeliveryForLearnAimRefAndTypes(learnAimRef, learnAimRefTypes)
+                .Should()
+                .BeFalse();
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void GetCoreGovContributionCapForStandard_NoStandardMatch(int standardCode)
+        {
+            var standards = new List<LARSStandard>()
+            {
+                new LARSStandard()
+                {
+                    StandardCode = 2,
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).GetStandardFundingForCodeOnDate(standardCode, It.IsAny<DateTime>())
+                .Should().BeNull();
+        }
+
+        [Theory]
+        [InlineData("2017-10-10", null, "2017-10-10")]
+        [InlineData("2017-10-08", null, "2017-10-09")]
+        [InlineData("2017-10-09", "2017-10-10", "2017-10-10")]
+        [InlineData("2016-10-09", "2017-10-10", "2017-10-10")]
+        [InlineData("2016-10-09", null, "2018-08-11")]
+        public void GetCoreGovContributionCapForStandard_Match(string effectiveFrom, string effectiveTo, string learnStartDate)
+        {
+            var standards = new List<LARSStandard>()
+            {
+                new LARSStandard()
+                {
+                    StandardCode = 2,
+                    StandardsFunding = new ILARSStandardFunding[]
+                    {
+                        new LARSStandardFunding()
+                        {
+                            CoreGovContributionCap = 10,
+                            EffectiveFrom = DateTime.Parse(effectiveFrom),
+                            EffectiveTo = effectiveTo == null ? null : (DateTime?)DateTime.Parse(effectiveTo)
+                        },
+                        new LARSStandardFunding()
+                        {
+                            CoreGovContributionCap = null,
+                            EffectiveFrom = DateTime.Parse(learnStartDate).AddDays(1),
+                            EffectiveTo = effectiveTo == null ? null : (DateTime?)DateTime.Parse(effectiveTo)
+                        }
+                    }
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).GetStandardFundingForCodeOnDate(2, DateTime.Parse(learnStartDate)).CoreGovContributionCap
+                .Should().Be(10);
+        }
+
+        [Theory]
+        [InlineData("2017-10-11", null, "2017-10-10")]
+        [InlineData("2016-10-09", "2017-10-09", "2017-10-10")]
+        [InlineData("2017-10-09", "2017-10-09", "2017-10-10")]
+        public void GetCoreGovContributionCapForStandard_NoDateMatch(string effectiveFrom, string effectiveTo, string learnStartDate)
+        {
+            var standards = new List<LARSStandard>()
+            {
+                new LARSStandard()
+                {
+                    StandardCode = 2,
+                    StandardsFunding = new ILARSStandardFunding[]
+                    {
+                        new LARSStandardFunding()
+                        {
+                            CoreGovContributionCap = 10,
+                            EffectiveFrom = DateTime.Parse(effectiveFrom),
+                            EffectiveTo = effectiveTo == null ? null : (DateTime?)DateTime.Parse(effectiveTo)
+                        },
+                        new LARSStandardFunding()
+                        {
+                            CoreGovContributionCap = null,
+                            EffectiveFrom = DateTime.Parse(learnStartDate).AddDays(1),
+                            EffectiveTo = effectiveTo == null ? null : (DateTime?)DateTime.Parse(effectiveTo)
+                        }
+                    }
+                },
+            };
+
+            var externalDataCacheMock = new Mock<IExternalDataCache>();
+
+            externalDataCacheMock.SetupGet(dc => dc.Standards).Returns(standards);
+
+            NewService(externalDataCacheMock.Object).GetStandardFundingForCodeOnDate(2, DateTime.Parse(learnStartDate))
+                .Should().Be(null);
         }
 
         private LARSDataService NewService(IExternalDataCache externalDataCache = null)

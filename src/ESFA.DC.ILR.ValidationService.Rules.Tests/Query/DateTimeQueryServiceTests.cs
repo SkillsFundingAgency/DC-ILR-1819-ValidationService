@@ -13,6 +13,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         [InlineData("1988-3-10", "1988-3-10", 0)]
         [InlineData("1988-3-10", "1989-3-10", 1)]
         [InlineData("1988-3-10", "1987-3-10", -1)]
+        [InlineData("1988-3-10", "1987-4-10", -1)]
         public void YearsBetween(string start, string end, int years)
         {
             new DateTimeQueryService().YearsBetween(DateTime.Parse(start), DateTime.Parse(end)).Should().Be(years);
@@ -42,12 +43,15 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Query
         }
 
         [Theory]
-        [InlineData("2002-04-12", 16, "2018-04-12")]
-        [InlineData("2002-04-12", 0, "2002-04-12")]
-        [InlineData("2002-04-12", -1, "2001-04-12")]
-        public void DateAddYears(string date, int yearsToAdd, string newDate)
+        [InlineData("1988-3-10", "2018-2-18", 29)]
+        [InlineData("1988-3-10", "2018-3-10", 30)]
+        [InlineData("1988-3-10", "1988-3-10", 0)]
+        [InlineData("1988-3-10", "1989-3-10", 1)]
+        [InlineData("1988-3-10", "1987-3-10", -1)]
+        [InlineData("1988-3-10", "1987-4-10", -1)]
+        public void AgeAtGivenDate(string start, string end, int years)
         {
-            new DateTimeQueryService().DateAddYears(DateTime.Parse(date), yearsToAdd).Should().Be(DateTime.Parse(newDate));
+            new DateTimeQueryService().AgeAtGivenDate(DateTime.Parse(start), DateTime.Parse(end)).Should().Be(years);
         }
     }
 }

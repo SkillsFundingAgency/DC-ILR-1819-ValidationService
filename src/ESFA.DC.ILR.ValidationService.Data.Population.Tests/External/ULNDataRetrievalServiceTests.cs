@@ -41,6 +41,80 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.Tests.External
                     {
                         ULN = 2
                     }
+                },
+                LearnerDestinationAndProgressions = new List<TestLearnerDestinationAndProgression>
+                {
+                    new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 1
+                    },
+                     new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 2
+                    },
+                      new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 3
+                    }
+                }
+            };
+
+            var result = NewService().UniqueULNsFromMessage(message).ToList();
+
+            result.Should().HaveCount(3);
+            result.Should().Contain(1);
+            result.Should().Contain(2);
+            result.Should().Contain(3);
+        }
+
+        [Fact]
+        public void UniqueULNsFromMessage_LearnersOnly()
+        {
+            var message = new TestMessage()
+            {
+                Learners = new List<TestLearner>()
+                {
+                    new TestLearner()
+                    {
+                        ULN = 1
+                    },
+                    new TestLearner()
+                    {
+                        ULN = 1
+                    },
+                    new TestLearner()
+                    {
+                        ULN = 2
+                    }
+                }
+            };
+
+            var result = NewService().UniqueULNsFromMessage(message).ToList();
+
+            result.Should().HaveCount(2);
+            result.Should().Contain(1);
+            result.Should().Contain(2);
+        }
+
+        [Fact]
+        public void UniqueULNsFromMessage_LearnerDPOnly()
+        {
+            var message = new TestMessage()
+            {
+                LearnerDestinationAndProgressions = new List<TestLearnerDestinationAndProgression>
+                {
+                    new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 1
+                    },
+                     new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 2
+                    },
+                      new TestLearnerDestinationAndProgression
+                    {
+                        ULN = 2
+                    }
                 }
             };
 

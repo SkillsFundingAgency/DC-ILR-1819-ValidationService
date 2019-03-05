@@ -1,42 +1,100 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.ContPrefType;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
+using ESFA.DC.ILR.ValidationService.Utility;
+using System;
+using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ContPrefType
 {
-    /// <summary>
-    /// LearnerContactPreference.ContPrefType is not null and LearnerContactPreference.ContPrefCode <> valid lookup on ILR_ContPrefTypeCode
-    /// </summary>
-    public class ContPrefType_01Rule : AbstractRule, IRule<ILearner>
+    public class ContPrefType_01Rule :
+        AbstractRule,
+        IRule<ILearner>
     {
-        private readonly IContactPreferenceInternalDataService _contactPreferenceDataService;
+        /// <summary>
+        /// The lookup (details provider)
+        /// </summary>
+        private readonly IProvideLookupDetails _lookups;
 
-        public ContPrefType_01Rule(IValidationErrorHandler validationErrorHandler, IContactPreferenceInternalDataService contactPreferenceDataService)
-            : base(validationErrorHandler)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContPrefType_01Rule" /> class.
+        /// </summary>
+        /// <param name="validationErrorHandler">The validation error handler.</param>
+        /// <param name="lookups">The lookups.</param>
+        public ContPrefType_01Rule(
+            IValidationErrorHandler validationErrorHandler,
+            IProvideLookupDetails lookups)
+            : base(validationErrorHandler, RuleNameConstants.ContPrefType_01)
         {
-            _contactPreferenceDataService = contactPreferenceDataService;
+            It.IsNull(validationErrorHandler)
+                .AsGuard<ArgumentNullException>(nameof(validationErrorHandler));
+            It.IsNull(lookups)
+                .AsGuard<ArgumentNullException>(nameof(lookups));
+
+            _lookups = lookups;
         }
 
-        public void Validate(ILearner objectToValidate)
+        /// <summary>
+        /// Determines whether [has disqualifying contact preference] [the specified preference].
+        /// </summary>
+        /// <param name="preference">The preference.</param>
+        /// <returns>
+        ///   <c>true</c> if [has disqualifying contact preference] [the specified preference]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool HasDisqualifyingContactPreference(IContactPreference preference) =>
+            !_lookups.Contains(TypeOfLimitedLifeLookup.ContactPreference, $"{preference.ContPrefType}{preference.ContPrefCode}");
+
+        /// <summary>
+        /// Determines whether [is not valid] [the specified preference].
+        /// </summary>
+        /// <param name="preference">The preference.</param>
+        /// <returns>
+        ///   <c>true</c> if [is not valid] [the specified preference]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsNotValid(IContactPreference preference) =>
+            HasDisqualifyingContactPreference(preference);
+
+        /// <summary>
+        /// Validates this learner.
+        /// </summary>
+        /// <param name="thisLearner">this learner.</param>
+        public void Validate(ILearner thisLearner)
         {
-            if (objectToValidate.ContactPreferences != null)
+            It.IsNull(thisLearner)
+                .AsGuard<ArgumentNullException>(nameof(thisLearner));
+
+            var learnRefNumber = thisLearner.LearnRefNumber;
+
+            thisLearner.ContactPreferences
+                .ForAny(IsNotValid, x => RaiseValidationMessage(learnRefNumber, x));
+        }
+
+        /// <summary>
+        /// Raises the validation message.
+        /// </summary>
+        /// <param name="learnRefNumber">The learn reference number.</param>
+        /// <param name="thisPreference">this preference.</param>
+        public void RaiseValidationMessage(string learnRefNumber, IContactPreference thisPreference)
+        {
+            HandleValidationError(learnRefNumber, null, BuildMessageParametersFor(thisPreference));
+        }
+
+        /// <summary>
+        /// Builds the error message parameters.
+        /// </summary>
+        /// <param name="thisPreference">this preference.</param>
+        /// <returns>
+        /// returns a list of message parameters
+        /// </returns>
+        public IEnumerable<IErrorMessageParameter> BuildMessageParametersFor(IContactPreference thisPreference)
+        {
+            return new[]
             {
-                foreach (var contactPreference in objectToValidate.ContactPreferences)
-                {
-                    if (ConditionMet(contactPreference.ContPrefType, contactPreference.ContPrefCodeNullable))
-                    {
-                        HandleValidationError(RuleNameConstants.ContPrefType_01Rule, objectToValidate.LearnRefNumber);
-                    }
-                }
-            }
-        }
-
-        public bool ConditionMet(string contactPreferenceType, long? contPrefCode)
-        {
-            return !string.IsNullOrWhiteSpace(contactPreferenceType) &&
-                   !_contactPreferenceDataService.CodeExists(contPrefCode);
+                BuildErrorMessageParameter(PropertyNameConstants.ContPrefType, thisPreference.ContPrefType),
+                BuildErrorMessageParameter(PropertyNameConstants.ContPrefCode, thisPreference.ContPrefCode)
+            };
         }
     }
 }

@@ -10,18 +10,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 {
     public class FundModel_08Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
         private readonly DateTime _learnStartDate = new DateTime(2017, 5, 1);
 
-        public FundModel_08Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
+        public FundModel_08Rule(IDerivedData_07Rule dd07, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.FundModel_08)
         {
             _dd07 = dd07;
         }
 
         public FundModel_08Rule()
-            : base(null, null)
+            : base(null, RuleNameConstants.FundModel_08)
         {
         }
 

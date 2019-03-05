@@ -1,7 +1,7 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
-    /// (types of) completion status
+    /// (types of) completion status / CompStatus
     /// </summary>
     public static class CompletionState
     {

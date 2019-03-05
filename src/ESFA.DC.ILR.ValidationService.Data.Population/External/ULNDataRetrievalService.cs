@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
 
@@ -26,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
             var uniqueULNs = UniqueULNsFromMessage(_messageCache.Item);
 
             List<long> result = new List<long>(uniqueULNs.Count());
-            var ulnShards = SplitList(uniqueULNs, 5000);
+            var ulnShards = uniqueULNs.SplitList(5000);
             foreach (var shard in ulnShards)
             {
                 result.AddRange(await _uln.UniqueLearnerNumbers
@@ -40,21 +41,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Population.External
 
         public IEnumerable<long> UniqueULNsFromMessage(IMessage message)
         {
-            return message?
-                       .Learners?
-                       .Select(l => l.ULN)
-                       .Distinct()
-                   ?? new List<long>();
-        }
+            var ulns = new List<long>();
 
-        private IEnumerable<IEnumerable<long>> SplitList(IEnumerable<long> ulns, int nSize = 30)
-        {
-            var ulnList = ulns.ToList();
+            ulns.AddRange(
+                message?
+                    .Learners?
+                    .Select(l => l.ULN).Distinct() ?? Enumerable.Empty<long>());
 
-            for (var i = 0; i < ulnList.Count; i += nSize)
-            {
-                yield return ulnList.GetRange(i, Math.Min(nSize, ulnList.Count - i));
-            }
+            ulns.AddRange(
+               message?
+                   .LearnerDestinationAndProgressions?
+                   .Select(l => l.ULN).Distinct() ?? Enumerable.Empty<long>());
+
+            return ulns.Distinct();
         }
     }
 }

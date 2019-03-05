@@ -181,7 +181,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinType)
-                .Returns(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice);
+                .Returns(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice);
 
             var records = Collection.Empty<IAppFinRecord>();
             records.Add(mockFinRec.Object);
@@ -204,6 +204,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            const int AimSeqNumber = 1;
 
             var mockLearner = new Mock<ILearner>();
             mockLearner
@@ -211,6 +212,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
                 .Returns(LearnRefNumber);
 
             var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+               .SetupGet(x => x.AimSeqNumber)
+               .Returns(AimSeqNumber);
             mockDelivery
                 .SetupGet(x => x.AimType)
                 .Returns(TypeOfAim.ProgrammeAim);
@@ -233,13 +237,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             mockHandler.Setup(x => x.Handle(
                 Moq.It.Is<string>(y => y == AFinType_12Rule.Name),
                 Moq.It.Is<string>(y => y == LearnRefNumber),
-                null,
+                AimSeqNumber,
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
 
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == AFinType_12Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == mockDelivery.Object)))
+                    Moq.It.Is<string>(y => y == "AFinType"),
+                    Moq.It.Is<string>(y => y == "TNP")))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new AFinType_12Rule(mockHandler.Object);
@@ -276,7 +280,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinType)
-                .Returns(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice);
+                .Returns(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice);
 
             var records = Collection.Empty<IAppFinRecord>();
             records.Add(mockFinRec.Object);

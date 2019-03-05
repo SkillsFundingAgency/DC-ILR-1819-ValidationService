@@ -1,18 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.ProvSpecLearnMonOccur;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ProvSpecLearnMonOccur
 {
-    public class ProvSpecLearnMonOccur_01RuleTests
+    public class ProvSpecLearnMonOccur_01RuleTests : AbstractRuleTests<ProvSpecLearnMonOccur_01Rule>
     {
+        [Fact]
+        public void RuleName()
+        {
+            NewRule().RuleName.Should().Be("ProvSpecLearnMonOccur_01");
+        }
+
         [Fact]
         public void ConditionMet_True()
         {
@@ -36,7 +42,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ProvSpecLearnMonOccu
         }
 
         [Fact]
-        public void Validate_False()
+        public void Validate_True()
         {
             var learner = new TestLearner()
             {
@@ -49,31 +55,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ProvSpecLearnMonOccu
                 }
             };
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ProvSpecLearnMonOccur_01", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
-        }
-
-        [Fact]
-        public void Validate_True_Null()
-        {
-            var learner = new TestLearner()
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
-            };
-
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ProvSpecLearnMonOccur_01", null, null, null);
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
-        public void Validate_True()
+        public void Validate_False()
         {
             var learner = new TestLearner()
             {
@@ -86,12 +75,42 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.ProvSpecLearnMonOccu
                 }
             };
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("ProvSpecLearnMonOccur_01", null, null, null);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void Validate_False_Null()
+        {
+            var learner = new TestLearner()
+            {
+                ProviderSpecLearnerMonitorings = new List<IProviderSpecLearnerMonitoring>()
+                {
+                    new TestProviderSpecLearnerMonitoring()
+                    {
+                        ProvSpecLearnMonOccur = null
+                    }
+                }
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
-            var rule = NewRule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.ProvSpecLearnMonOccur, "A")).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters("A");
+
+            validationErrorHandlerMock.Verify();
         }
 
         private ProvSpecLearnMonOccur_01Rule NewRule(IValidationErrorHandler validationErrorHandler = null)

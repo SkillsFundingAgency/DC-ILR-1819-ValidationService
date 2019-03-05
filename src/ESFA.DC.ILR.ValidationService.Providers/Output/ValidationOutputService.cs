@@ -1,19 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Features.AttributeFilters;
+using ESFA.DC.ILR.IO.Model.Validation;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Interface.Enum;
 using ESFA.DC.ILR.ValidationService.IO.Model;
 using ESFA.DC.IO.Interfaces;
+using ESFA.DC.Logging.Interfaces;
 using ESFA.DC.Serialization.Interfaces;
 
 namespace ESFA.DC.ILR.ValidationService.Providers.Output
 {
-    public class ValidationOutputService : IValidationOutputService<IValidationError>
+    public class ValidationOutputService : IValidationOutputService
     {
         private const string Error = "E";
         private const string Warning = "W";
@@ -25,6 +28,7 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
         private readonly IPreValidationContext _validationContext;
         private readonly IJsonSerializationService _serializationService;
         private readonly IValidationErrorsDataService _validationErrorsDataService;
+        private readonly ILogger _logger;
 
         public ValidationOutputService(
             IValidationErrorCache<IValidationError> validationErrorCache,
@@ -32,7 +36,8 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             [KeyFilter(PersistenceStorageKeys.Redis)] IKeyValuePersistenceService keyValuePersistenceService,
             IPreValidationContext validationContext,
             IJsonSerializationService serializationService,
-            IValidationErrorsDataService validationErrorsDataService)
+            IValidationErrorsDataService validationErrorsDataService,
+            ILogger logger)
         {
             _validationErrorCache = validationErrorCache;
             _messageCache = messageCache;
@@ -40,12 +45,12 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
             _validationContext = validationContext;
             _serializationService = serializationService;
             _validationErrorsDataService = validationErrorsDataService;
+            _logger = logger;
         }
 
-        public async Task<IEnumerable<IValidationError>> ProcessAsync(CancellationToken cancellationToken)
+        public async Task ProcessAsync(CancellationToken cancellationToken)
         {
-            var invalidLearnerRefNumbers = BuildInvalidLearnRefNumbers().ToList();
-            var validLearnerRefNumbers = BuildValidLearnRefNumbers(invalidLearnerRefNumbers).ToList();
+            var existingValidationErrors = await GetExistingValidationErrors();
 
             var validationErrors = _validationErrorCache
                 .ValidationErrors
@@ -63,8 +68,13 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                     }).ToList()
                 }).ToList();
 
-            var validationErrorMessageLookups = _validationErrorCache
-                .ValidationErrors
+            validationErrors.AddRange(existingValidationErrors);
+
+            var invalidLearnerRefNumbers = BuildInvalidLearnRefNumbers(validationErrors).ToList();
+            var validLearnerRefNumbers = BuildValidLearnRefNumbers(_messageCache.Item, invalidLearnerRefNumbers).ToList();
+            _logger.LogDebug($"ValidationOutputService invalid:{invalidLearnerRefNumbers.Count} valid:{validLearnerRefNumbers.Count}");
+
+            var validationErrorMessageLookups = validationErrors
                 .Select(ve => ve.RuleName)
                 .Distinct()
                 .Select(rn => new ValidationErrorMessageLookup
@@ -79,33 +89,27 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                 validationErrors,
                 validationErrorMessageLookups,
                 cancellationToken);
-
-            return _validationErrorCache.ValidationErrors;
         }
 
-        public IEnumerable<string> BuildInvalidLearnRefNumbers()
+        public IEnumerable<string> BuildInvalidLearnRefNumbers(IEnumerable<ValidationError> validationErrors)
         {
-            return _validationErrorCache
-                .ValidationErrors
+            return validationErrors
                 .Where(x => !string.IsNullOrEmpty(x.LearnerReferenceNumber)
-                    && x.Severity == Severity.Error)
+                    && x.Severity == Error)
                 .Select(ve => ve.LearnerReferenceNumber)
                 .Distinct();
         }
 
-        public IEnumerable<string> BuildValidLearnRefNumbers(IEnumerable<string> invalidLearnRefNumbers)
+        public IEnumerable<string> BuildValidLearnRefNumbers(IMessage message, IEnumerable<string> invalidLearnRefNumbers)
         {
-            var invalidLearnRefNumbersHashSet = new HashSet<string>(invalidLearnRefNumbers);
-            if (_validationErrorCache.ValidationErrors.Any(x => !string.IsNullOrEmpty(x.LearnerReferenceNumber)))
-            {
-                return _messageCache
-                    .Item
-                    .Learners
-                    .Select(l => l.LearnRefNumber)
-                    .Where(lrn => !invalidLearnRefNumbersHashSet.Contains(lrn));
-            }
+            var invalidLearnRefNumbersHashSet = invalidLearnRefNumbers != null ? new HashSet<string>(invalidLearnRefNumbers) : new HashSet<string>();
 
-            return invalidLearnRefNumbersHashSet;
+            return message?
+                       .Learners?
+                       .Select(l => l.LearnRefNumber)
+                       .Where(lrn => !invalidLearnRefNumbersHashSet.Contains(lrn))
+                       .Distinct()
+                   ?? new List<string>();
         }
 
         public async Task SaveAsync(
@@ -148,6 +152,22 @@ namespace ESFA.DC.ILR.ValidationService.Providers.Output
                 default:
                     return null;
             }
+        }
+
+        private async Task<IEnumerable<ValidationError>> GetExistingValidationErrors()
+        {
+            IEnumerable<ValidationError> validationErrors = new List<ValidationError>();
+
+            try
+            {
+                validationErrors = _serializationService.Deserialize<List<ValidationError>>(await _keyValuePersistenceService.GetAsync(_validationContext.ValidationErrorsKey));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Failed To get Existing Validation Errors, assume none available and carry on.", e);
+            }
+
+            return validationErrors;
         }
     }
 }

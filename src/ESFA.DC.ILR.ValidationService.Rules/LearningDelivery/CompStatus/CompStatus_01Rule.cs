@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.CompStatus.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -9,12 +9,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
 {
     public class CompStatus_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly ICompStatusDataService _compStatusInternalDataService;
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public CompStatus_01Rule(ICompStatusDataService compStatusInternalDataService, IValidationErrorHandler validationErrorHandler)
+        public CompStatus_01Rule(IProvideLookupDetails provideLookupDetails, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.CompStatus_01)
         {
-            _compStatusInternalDataService = compStatusInternalDataService;
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.CompStatus
 
         public bool ConditionMet(int compStatus)
         {
-            return !_compStatusInternalDataService.Exists(compStatus);
+            return !_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.CompStatus, compStatus);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int compStatus)

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using ESFA.DC.ILR.Model.Interface;
+using System;
 using System.Collections.Generic;
-using ESFA.DC.ILR.Model.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Interface
 {
@@ -13,7 +13,5 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
         int? FileNameUKPRN { get; }
 
         int UKPRN { get; }
-
-        IEnumerable<ILearnerDestinationAndProgression> LearnerDestinationAndProgressions { get; }
     }
 }

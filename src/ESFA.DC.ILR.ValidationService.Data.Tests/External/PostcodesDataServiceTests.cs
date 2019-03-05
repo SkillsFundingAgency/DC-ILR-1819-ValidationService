@@ -1,49 +1,39 @@
-﻿using System.Collections.Generic;
-using ESFA.DC.ILR.ValidationService.Data.External.Postcodes;
+﻿using ESFA.DC.ILR.ValidationService.Data.External.Postcodes;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
-using FluentAssertions;
 using Moq;
+using System.Collections.Generic;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
 {
     public class PostcodesDataServiceTests
     {
-        [Fact]
-        public void Exists_True()
+        /// <summary>
+        /// Postcode exists meets expectation.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData(null, false)]
+        [InlineData(" ", false)]
+        [InlineData("jkl", false)]
+        [InlineData("def", true)]
+        [InlineData("ghi", true)]
+        public void PostcodeExistsMeetsExpectation(string candidate, bool expectation)
         {
-            var referenceDataCacheMock = new Mock<IExternalDataCache>();
+            // arrange
+            var externalDC = new Mock<IExternalDataCache>();
+            externalDC
+                .SetupGet(rdc => rdc.Postcodes)
+                .Returns(new HashSet<string>() { "abc", "def", "ghi" });
 
-            referenceDataCacheMock.SetupGet(rdc => rdc.Postcodes).Returns(new HashSet<string>() { "abc", "def", "ghi" });
+            var sut = new PostcodesDataService(externalDC.Object);
 
-            NewService(referenceDataCacheMock.Object).PostcodeExists("abc").Should().BeTrue();
-        }
+            // act
+            var result = sut.PostcodeExists(candidate);
 
-        [Fact]
-        public void Exists_False()
-        {
-            var referenceDataCacheMock = new Mock<IExternalDataCache>();
-
-            referenceDataCacheMock.SetupGet(rdc => rdc.Postcodes).Returns(new HashSet<string>() { "abc", "def", "ghi" });
-
-            NewService(referenceDataCacheMock.Object).PostcodeExists("jkl").Should().BeFalse();
-        }
-
-        [Fact]
-        public void Exists_False_Null()
-        {
-            NewService().PostcodeExists(null).Should().BeFalse();
-        }
-
-        [Fact]
-        public void Exists_False_WhiteSpace()
-        {
-            NewService().PostcodeExists(" ").Should().BeFalse();
-        }
-
-        private PostcodesDataService NewService(IExternalDataCache externalDataCache = null)
-        {
-            return new PostcodesDataService(externalDataCache);
+            // assert
+            Assert.Equal(expectation, result);
         }
     }
 }

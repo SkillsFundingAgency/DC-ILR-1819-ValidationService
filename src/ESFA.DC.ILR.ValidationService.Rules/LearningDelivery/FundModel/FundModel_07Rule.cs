@@ -11,13 +11,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 {
     public class FundModel_07Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFamQueryService;
 
         private readonly DateTime _learnStartDate = new DateTime(2017, 5, 1);
         private readonly IEnumerable<string> _ldmLearningDeliveryFamCodes = new List<string>() { "353", "354", "355" };
 
-        public FundModel_07Rule(IDD07 dd07, ILearningDeliveryFAMQueryService learningDeliveryFamQueryService, IValidationErrorHandler validationErrorHandler)
+        public FundModel_07Rule(IDerivedData_07Rule dd07, ILearningDeliveryFAMQueryService learningDeliveryFamQueryService, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.FundModel_07)
         {
             _dd07 = dd07;
@@ -25,7 +25,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
         }
 
         public FundModel_07Rule()
-            : base(null, null)
+            : base(null, RuleNameConstants.FundModel_07)
         {
         }
 

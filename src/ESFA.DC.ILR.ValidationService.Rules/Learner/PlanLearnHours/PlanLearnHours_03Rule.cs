@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -12,7 +8,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours
 {
     public class PlanLearnHours_03Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<long> _fundModels = new HashSet<long> { FundModelConstants.CommunityLearning, FundModelConstants.SixteenToNineteen };
+        private readonly HashSet<long> _fundModels = new HashSet<long> { TypeOfFunding.Age16To19ExcludingApprenticeships, TypeOfFunding.Other16To19 };
 
         public PlanLearnHours_03Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.PlanLearnHours_03)

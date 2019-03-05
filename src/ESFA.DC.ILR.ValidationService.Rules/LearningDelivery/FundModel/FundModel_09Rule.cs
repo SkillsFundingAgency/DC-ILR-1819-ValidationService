@@ -10,11 +10,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 {
     public class FundModel_09Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
         private readonly DateTime _learnStartDate = new DateTime(2017, 5, 1);
 
-        public FundModel_09Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
+        public FundModel_09Rule(IDerivedData_07Rule dd07, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.FundModel_09)
         {
             _dd07 = dd07;
@@ -56,7 +56,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 
         public virtual bool FundModelConditionMet(int fundModel)
         {
-            return fundModel != FundModelConstants.OtherAdult;
+            return fundModel != TypeOfFunding.OtherAdult;
         }
 
         public virtual bool ProgTypeConditionMet(int? progType)
@@ -71,7 +71,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 
         public virtual bool ApprenticeshipConditionMet(int fundModel, int? progType)
         {
-            return !(fundModel == FundModelConstants.NonFunded && _dd07.IsApprenticeship(progType));
+            return !(fundModel == TypeOfFunding.NotFundedByESFA && _dd07.IsApprenticeship(progType));
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)

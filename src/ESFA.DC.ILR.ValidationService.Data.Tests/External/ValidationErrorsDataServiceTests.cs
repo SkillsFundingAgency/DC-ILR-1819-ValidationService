@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors;
 using ESFA.DC.ILR.ValidationService.Data.External.ValidationErrors.Model;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
@@ -38,6 +40,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
         }
 
         [Fact]
+        public void SeverityForRuleName_Error_CaseSensitivityCheck()
+        {
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
+
+            referenceDataCacheMock.SetupGet(rdc => rdc.ValidationErrors).Returns(new Dictionary<string, ValidationError>
+            {
+                { "RULENAME", new ValidationError() { RuleName = "rulename", Severity = Severity.Error } }
+            }.ToCaseInsensitiveDictionary());
+
+            NewService(referenceDataCacheMock.Object).SeverityForRuleName("rulename").Should().Be(Severity.Error);
+        }
+
+        [Fact]
         public void SeverityForRuleName_Missing()
         {
             var referenceDataCacheMock = new Mock<IExternalDataCache>();
@@ -68,6 +83,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.Tests.External
             });
 
             NewService(referenceDataCacheMock.Object).MessageforRuleName("rulename").Should().Be("message");
+        }
+
+        [Fact]
+        public void CaseInsensitiveDictionary()
+        {
+            var referenceDataCacheMock = new Mock<IExternalDataCache>();
+
+            referenceDataCacheMock.SetupGet(rdc => rdc.ValidationErrors).Returns(new Dictionary<string, ValidationError>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "rulename", new ValidationError() { RuleName = "rulename", Message = "message" } }
+            });
+
+            NewService(referenceDataCacheMock.Object).MessageforRuleName("RULENAME").Should().Be("message");
         }
 
         private ValidationErrorsDataService NewService(IExternalDataCache externalDataCache = null)

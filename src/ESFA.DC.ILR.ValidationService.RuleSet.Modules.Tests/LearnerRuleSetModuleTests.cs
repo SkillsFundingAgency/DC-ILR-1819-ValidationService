@@ -64,7 +64,9 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Tests
         public IReadOnlyCollection<Type> GetAssemblyRuleSet()
         {
             var asm = Assembly.LoadFile(Path.Combine(Environment.CurrentDirectory, "ESFA.DC.ILR.ValidationService.Rules.dll"));
-            return asm.GetTypes().Where(x => typeof(IRule<ILearner>).IsAssignableFrom(x)).ToList();
+            return asm.GetTypes()
+                .Where(x => typeof(IRule<ILearner>).IsAssignableFrom(x) && !x.IsAbstract)
+                .ToList();
         }
 
         /// <summary>

@@ -1,9 +1,9 @@
 ﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
-    /// LARS Notional NVQ Levels Version 2
+    /// LARS Notional NVQ Levels Version 2 (see the helper class  <see cref="LARSNotionalNVQLevelV2Helper"/>)
     /// </summary>
-    public class LARSNotionalNVQLevelV2
+    public static class LARSNotionalNVQLevelV2
     {
         public const string Level1 = "1";
         public const string Level1_2 = "1.5";

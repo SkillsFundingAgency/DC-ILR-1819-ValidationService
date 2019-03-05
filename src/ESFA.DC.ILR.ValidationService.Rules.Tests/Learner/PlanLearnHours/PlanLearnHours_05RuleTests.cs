@@ -1,59 +1,87 @@
 ﻿using System;
 using System.Linq.Expressions;
+using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PlanLearnHours;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PlanLearnHours
 {
-    public class PlanLearnHours_05RuleTests : PlanLearnHoursTestsBase
+    public class PlanLearnHours_05RuleTests : AbstractRuleTests<PlanLearnHours_05Rule>
     {
-        [Theory]
-        [InlineData(4001, null)]
-        [InlineData(4001, 0)]
-        [InlineData(4311, 900)]
-        public void ConditionMet_True(long? planLearnHours, long? planEeepHours)
+        [Fact]
+        public void RuleName()
         {
-            var rule = new PlanLearnHours_05Rule(null);
-            rule.ConditionMet(planLearnHours, planEeepHours).Should().BeTrue();
+            NewRule().RuleName.Should().Be("PlanLearnHours_05");
         }
 
         [Theory]
-        [InlineData(null, null)]
-        [InlineData(null, 4500)]
-        [InlineData(3900, 100)]
-        public void ConditionMet_False(long? planLearnHours, long? planEeepHours)
+        [InlineData(500, 500, false)]
+        [InlineData(500, null, false)]
+        [InlineData(null, 500, false)]
+        [InlineData(2000, 2000, false)]
+        [InlineData(2000, 2001, true)]
+        [InlineData(4001, null, true)]
+        [InlineData(null, 4001, true)]
+        [InlineData(4001, 0, true)]
+        public void PlanLearnHoursMeetsExpectation(int? planLearnHours, int? planEEPHours, bool expectation)
         {
-            var rule = new PlanLearnHours_05Rule(null);
-            rule.ConditionMet(planLearnHours, planEeepHours).Should().BeFalse();
+            NewRule().ConditionMet(planLearnHours, planEEPHours).Should().Be(expectation);
         }
 
         [Fact]
         public void Validate_Error()
         {
-            var learner = SetupLearner(4000, 1, null);
+            var learner = new TestLearner()
+            {
+                PlanLearnHoursNullable = 2000,
+                PlanEEPHoursNullable = 3000
+            };
 
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PlanLearnHours_05", null, null, null);
-
-            var rule = new PlanLearnHours_05Rule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
         }
 
         [Fact]
         public void Validate_NoError()
         {
-            var learner = SetupLearner(3990, 10, null);
+            var learner = new TestLearner()
+            {
+                PlanLearnHoursNullable = 500,
+                PlanEEPHoursNullable = 500,
+            };
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandlerMock.Object).Validate(learner);
+            }
+        }
+
+        [Fact]
+        public void BuildErrorMessageParameters()
+        {
+            int? planLearnHours = 0;
+            int? planEEPHours = 0;
 
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PlanLearnHours_05", null, null, null);
 
-            var rule = new PlanLearnHours_05Rule(validationErrorHandlerMock.Object);
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.PlanLearnHours, planLearnHours)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.PlanEEPHours, planEEPHours)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(planLearnHours, planEEPHours);
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private PlanLearnHours_05Rule NewRule(IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new PlanLearnHours_05Rule(validationErrorHandler);
         }
     }
 }

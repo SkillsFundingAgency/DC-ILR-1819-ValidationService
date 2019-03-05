@@ -23,6 +23,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public const string Name = "LearnDelFAMType_62";
 
         /// <summary>
+        /// Gets the FAM Type for Error parameter.
+        /// </summary>
+        public const string _famTypeForError = Monitoring.Delivery.Types.FullOrCoFunding;
+
+        /// <summary>
+        /// Gets the FAM Code for Error parameter.
+        /// </summary>
+        public const string _famCodeForError = "2";
+
+        /// <summary>
         /// The message handler
         /// </summary>
         private readonly IValidationErrorHandler _messageHandler;
@@ -35,7 +45,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// The derived data 07 (rule)
         /// </summary>
-        private readonly IDD07 _derivedData07;
+        private readonly IDerivedData_07Rule _derivedData07;
 
         /// <summary>
         /// The derived data 21 (rule)
@@ -64,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public LearnDelFAMType_62Rule(
             IValidationErrorHandler validationErrorHandler,
             ILARSDataService larsData,
-            IDD07 derivedData07,
+            IDerivedData_07Rule derivedData07,
             IDerivedData_21Rule derivedData21,
             IDerivedData_28Rule derivedData28,
             IDerivedData_29Rule derivedData29)
@@ -96,9 +106,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public string RuleName => Name;
 
         /// <summary>
-        /// Gets the minimun viable start.
+        /// Gets the last inviable date.
         /// </summary>
-        public DateTime MinimumViableStart => new DateTime(2017, 07, 31);
+        public DateTime LastInviableDate => new DateTime(2017, 07, 31);
 
         /// <summary>
         /// Gets the minimum viable age.
@@ -159,13 +169,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsBasicSkillsLearner(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef)
-                .Where(x => It.IsBetween(delivery.LearnStartDate, x.EffectiveFrom, x.EffectiveTo ?? DateTime.MaxValue))
-                .AsSafeReadOnlyList();
+            var validities = _larsData.GetValiditiesFor(delivery.LearnAimRef);
+            var annualValues = _larsData.GetAnnualValuesFor(delivery.LearnAimRef);
 
-            return deliveries
-                .SelectMany(x => x.AnnualValues.AsSafeReadOnlyList())
-                .Any(x => IsBasicSkillsLearner(x) || IsESOLBasicSkillsLearner(x));
+            return validities.Any(x => x.IsCurrent(delivery.LearnStartDate))
+                && annualValues.Any(x => IsBasicSkillsLearner(x) || IsESOLBasicSkillsLearner(x));
         }
 
         /// <summary>
@@ -264,7 +272,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         ///   <c>true</c> if [is viable start] [the specified delivery]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsViableStart(ILearningDelivery delivery) =>
-            delivery.LearnStartDate > MinimumViableStart;
+            delivery.LearnStartDate > LastInviableDate;
 
         /// <summary>
         /// Determines whether [is target age group] [the specified learner].
@@ -296,12 +304,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// </returns>
         public bool IsEntitledLevel2NVQ(ILearningDelivery delivery)
         {
-            var deliveries = _larsData.GetDeliveriesFor(delivery.LearnAimRef).AsSafeReadOnlyList();
+            var larsDelivery = _larsData.GetDeliveryFor(delivery.LearnAimRef);
 
-            return deliveries
-                .Where(IsV2NotionalLevel2)
-                .SelectMany(x => x.LearningDeliveryCategories.AsSafeReadOnlyList())
-                .Any(IsLegallyEntitled);
+            return IsV2NotionalLevel2(larsDelivery)
+                && larsDelivery.Categories.SafeAny(IsLegallyEntitled);
         }
 
         /// <summary>
@@ -347,6 +353,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
             return IsAdultFundedUnemployedWithOtherStateBenefits(candidate)
                 || IsAdultFundedUnemployedWithBenefits(candidate)
                 || IsInflexibleElementOfTrainingAim(candidate)
+                || IsHigherAchiever(candidate)
                 || CheckLearningDeliveries(candidate, IsApprenticeship)
                 || CheckLearningDeliveries(candidate, IsBasicSkillsLearner)
                 || CheckLearningDeliveries(candidate, x => CheckDeliveryFAMs(x, IsLearnerInCustody))
@@ -380,7 +387,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         public void ValidateDeliveries(ILearner candidate)
         {
             var learnRefNumber = candidate.LearnRefNumber;
-            var higherAchiever = IsHigherAchiever(candidate);
+            var dateOfBirth = candidate.DateOfBirthNullable;
 
             /*
             LearningDelivery.LearnStartDate > 2017-07-31                                                        <= for a delivery after the given date
@@ -396,11 +403,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
                 .SafeWhere(x => IsAdultFunding(x) && IsViableStart(x) && IsTargetAgeGroup(candidate, x) && CheckDeliveryFAMs(x, IsCoFunded))
                 .ForEach(x =>
                 {
-                    var failedValidation = !(higherAchiever && IsEntitledLevel2NVQ(x));
+                    var failedValidation = !IsEntitledLevel2NVQ(x);
 
                     if (failedValidation)
                     {
-                        RaiseValidationMessage(learnRefNumber, x);
+                        RaiseValidationMessage(learnRefNumber, dateOfBirth, x);
                     }
                 });
         }
@@ -408,12 +415,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType
         /// <summary>
         /// Raises the validation message.
         /// </summary>
-        /// <param name="learnRefNumber">The learn reference number.</param>
+        /// <param name="learnRefNumber">The learner reference number.</param>
+        /// <param name="dateOfBirth">The date of birth of the learner.</param>
         /// <param name="thisDelivery">this delivery.</param>
-        public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
+        public void RaiseValidationMessage(string learnRefNumber, DateTime? dateOfBirth, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.FundModel, thisDelivery.FundModel));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, _famTypeForError));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMCode, _famCodeForError));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }

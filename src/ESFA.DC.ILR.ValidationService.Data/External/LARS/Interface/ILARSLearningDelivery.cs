@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
 {
     /// <summary>
     /// the lars learning delivery
+    /// dates removed to ensure validity is determined using the right classes, removed: ISupportFundingWithdrawal
     /// </summary>
     public interface ILARSLearningDelivery
     {
@@ -14,14 +14,14 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         string LearnAimRef { get; }
 
         /// <summary>
-        /// Gets the effective from date.
+        /// Gets the learn aim reference type.
         /// </summary>
-        DateTime EffectiveFrom { get; }
+        string LearnAimRefType { get; }
 
         /// <summary>
-        /// Gets the effective to date.
+        /// Gets the english prescribed Ids.
         /// </summary>
-        DateTime? EffectiveTo { get; }
+        int? EnglPrscID { get; }
 
         /// <summary>
         /// Gets the notional NVQ level.
@@ -39,14 +39,34 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         int? FrameworkCommonComponent { get; }
 
         /// <summary>
-        /// Gets the learn direct class system code1.
+        /// Gets the learn direct class system code 1.
         /// </summary>
-        string LearnDirectClassSystemCode1 { get; }
+        ILearnDirectClassSystemCode LearnDirectClassSystemCode1 { get; }
+
+        /// <summary>
+        /// Gets the learn direct class system code 2
+        /// </summary>
+        ILearnDirectClassSystemCode LearnDirectClassSystemCode2 { get; }
+
+        /// <summary>
+        /// Gets the learn direct class system code 3.
+        /// </summary>
+        ILearnDirectClassSystemCode LearnDirectClassSystemCode3 { get; }
+
+        /// <summary>
+        ///  Gets the Sector Subject Area Tier 1
+        /// </summary>
+        decimal? SectorSubjectAreaTier1 { get; }
+
+        /// <summary>
+        ///  Gets the Sector Subject Area Tier 2
+        /// </summary>
+        decimal? SectorSubjectAreaTier2 { get; }
 
         /// <summary>
         /// Gets the learning delivery categories.
         /// </summary>
-        IReadOnlyCollection<ILARSLearningCategory> LearningDeliveryCategories { get; }
+        IReadOnlyCollection<ILARSLearningCategory> Categories { get; }
 
         /// <summary>
         /// Gets the framework aims.
@@ -59,8 +79,8 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface
         IReadOnlyCollection<ILARSAnnualValue> AnnualValues { get; }
 
         /// <summary>
-        /// Gets the lars validities.
+        /// Gets the (lars) learning delivery periods of validity.
         /// </summary>
-        IReadOnlyCollection<ILARSValidity> LARSValidities { get; }
+        IReadOnlyCollection<ILARSLearningDeliveryValidity> Validities { get; }
     }
 }

@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ESFA.DC.ILR.Model.Interface;
+﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Utility;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Data.File.FileData
 {
-    public class FileDataService : IFileDataService
+    public class FileDataService :
+        IFileDataService
     {
         private readonly IFileDataCache _fileDataCache;
 
@@ -24,18 +26,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.File.FileData
         public DateTime FilePreparationDate()
         {
             return _fileDataCache.FilePreparationDate;
-        }
-
-        public IEnumerable<ILearnerDestinationAndProgression> LearnerDestinationAndProgressions()
-        {
-            return _fileDataCache.LearnerDestinationAndProgressions;
-        }
-
-        public ILearnerDestinationAndProgression LearnerDestinationAndProgressionsForLearnRefNumber(string learnRefNumber)
-        {
-            return _fileDataCache.LearnerDestinationAndProgressions?
-                .Where(dp => dp.LearnRefNumber == learnRefNumber)
-                .Select(dp => dp).FirstOrDefault();
         }
 
         public string FileName()

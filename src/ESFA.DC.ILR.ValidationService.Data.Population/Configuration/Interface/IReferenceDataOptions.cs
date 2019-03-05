@@ -10,6 +10,12 @@
 
         string ULNConnectionstring { get; }
 
+        string FCSConnectionString { get; }
+
+        string EPAConnectionString { get; }
+
+        string EmployersConnectionString { get; }
+
         string ValidationErrorsConnectionString { get; }
     }
 }

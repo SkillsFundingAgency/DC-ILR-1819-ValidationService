@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -7,17 +9,11 @@ using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
 {
-    // <summary>
-    // LearningDelivery.LearnStartDate > 2016-07-31 and LearningDelivery.FundModel = 35 and
-    // Learner.PriorAttain = (3, 4, 5, 10, 11, 12, 13, 97 or 98) and LearningDelivery.ProgType = 24
-    // </summary>
     public class PriorAttain_07Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<long> _validPriorAttainValues = new HashSet<long> { 4, 5, 10, 11, 12, 13, 97, 98 };
-        private readonly DateTime _startConditionDate = new DateTime(2016, 7, 31);
-
-        public PriorAttain_07Rule(IValidationErrorHandler validationErrorHandler)
-           : base(validationErrorHandler)
+        public PriorAttain_07Rule(
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.PriorAttain_07)
         {
         }
 
@@ -26,42 +22,62 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 if (ConditionMet(
+                    learningDelivery.LearnStartDate,
+                    learningDelivery.FundModel,
                     objectToValidate.PriorAttainNullable,
-                    learningDelivery.FundModelNullable,
-                    learningDelivery.ProgTypeNullable,
-                    learningDelivery.LearnStartDateNullable))
+                    learningDelivery.ProgTypeNullable))
                 {
-                    HandleValidationError(RuleNameConstants.PriorAttain_07Rule, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(
+                        learningDelivery.LearnStartDate,
+                        learningDelivery.FundModel,
+                        objectToValidate.PriorAttainNullable,
+                        learningDelivery.ProgTypeNullable));
                 }
             }
         }
 
-        public bool ConditionMet(long? priorAttain, long? fundModel, long? progType, DateTime? learnStartDate)
+        public bool ConditionMet(DateTime learnStartDate, int fundModel, int? priorAttain, int? progType)
         {
-            return PriorAttainConditionMet(priorAttain) &&
-                    LearnStartDateConditionMet(learnStartDate) &&
-                    FundModelConditionMet(fundModel) &&
-                    ProgTypeConditionMet(progType);
+            return LearnStartDateConditionMet(learnStartDate)
+                   && FundModelConditionMet(fundModel)
+                   && PriorAttainConditionMet(priorAttain)
+                   && ProgTypeConditionMet(progType);
         }
 
-        public bool PriorAttainConditionMet(long? priorAttain)
+        public bool LearnStartDateConditionMet(DateTime learnStartDate)
         {
-            return priorAttain.HasValue && _validPriorAttainValues.Contains(priorAttain.Value);
+            var conditionStartDate = new DateTime(2016, 07, 31);
+
+            return learnStartDate > conditionStartDate;
         }
 
-        public bool LearnStartDateConditionMet(DateTime? learnStartDate)
+        public bool FundModelConditionMet(int fundModel)
         {
-            return learnStartDate.HasValue && learnStartDate.Value > _startConditionDate;
+            return fundModel == 35;
         }
 
-        public bool FundModelConditionMet(long? fundModel)
+        public bool PriorAttainConditionMet(int? priorAttain)
         {
-            return fundModel.HasValue && fundModel.Value == 35;
+            var priorAttains = new[] { 3, 4, 5, 10, 11, 12, 13, 97, 98 };
+
+            return priorAttain.HasValue
+                && priorAttains.Contains(priorAttain.Value);
         }
 
-        public bool ProgTypeConditionMet(long? progType)
+        public bool ProgTypeConditionMet(int? progType)
         {
-            return progType.HasValue && progType.Value == 24;
+            return progType == 24;
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, int fundModel, int? priorAttain, int? progType)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate),
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
+                BuildErrorMessageParameter(PropertyNameConstants.PriorAttain, priorAttain),
+                BuildErrorMessageParameter(PropertyNameConstants.ProgType, progType),
+            };
         }
     }
 }

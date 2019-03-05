@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Utility
@@ -18,7 +17,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <returns>an empty collection of <typeparamref name="T"/></returns>
         public static ICollection<T> Empty<T>()
         {
-            return new List<T>();
+            return Enumerable.Empty<T>().SafeList();
         }
 
         /// <summary>
@@ -30,7 +29,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         public static IReadOnlyCollection<T> EmptyAndReadOnly<T>()
         {
-            return new List<T>().SafeReadOnlyList();
+            return Enumerable.Empty<T>().SafeReadOnlyList();
         }
 
         /// <summary>
@@ -60,6 +59,58 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
+        /// As safe distinct key set.
+        /// </summary>
+        /// <typeparam name="T">of type</typeparam>
+        /// <param name="list">The list.</param>
+        /// <returns>
+        /// a safe key set collection
+        /// </returns>
+        public static IContainThis<T> AsSafeDistinctKeySet<T>(this IEnumerable<T> list)
+        {
+            return new DistinctKeySet<T>(list.SafeReadOnlyList());
+        }
+
+        /// <summary>
+        /// As a safe distinct case insensitive key set.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns>
+        /// a safe case insensitive key set collection
+        /// </returns>
+        public static IContainThis<string> AsSafeDistinctKeySet(this IEnumerable<string> list)
+        {
+            return new CaseInsensitiveDistinctKeySet(list.SafeReadOnlyList());
+        }
+
+        /// <summary>
+        /// As (a) safe read only digit list.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        /// <returns>
+        /// a readonly safe collection
+        /// </returns>
+        public static IReadOnlyCollection<int> AsSafeReadOnlyDigitList(this long number)
+        {
+            return Math.Abs(number)
+                .ToString()
+                .Select(x => Convert.ToInt32(x.ToString()))
+                .SafeReadOnlyList();
+        }
+
+        /// <summary>
+        /// As (a) safe read only digit list.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        /// <returns>
+        /// a readonly safe collection
+        /// </returns>
+        public static IReadOnlyCollection<int> AsSafeReadOnlyDigitList(this int number)
+        {
+            return AsSafeReadOnlyDigitList((long)number);
+        }
+
+        /// <summary>
         /// Safe any.
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
@@ -75,7 +126,23 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
-        /// Safes the where.
+        /// Safe all.
+        /// be careful All returns true for empty lists
+        /// </summary>
+        /// <typeparam name="T">of type</typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="expression">The expression.</param>
+        /// <returns>
+        /// the result of the expression
+        /// </returns>
+        public static bool SafeAll<T>(this IEnumerable<T> list, Func<T, bool> expression)
+        {
+            var safeList = list.SafeReadOnlyList();
+            return safeList.All(expression);
+        }
+
+        /// <summary>
+        /// Safe where.
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
         /// <param name="list">The list.</param>
@@ -90,6 +157,21 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
+        /// Safe count.
+        /// </summary>
+        /// <typeparam name="T">of type</typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="expression">The expression.</param>
+        /// <returns>
+        /// the result of the expression
+        /// </returns>
+        public static int SafeCount<T>(this IEnumerable<T> list, Func<T, bool> expression)
+        {
+            var safeList = list.SafeReadOnlyList();
+            return safeList.Count(expression);
+        }
+
+        /// <summary>
         /// For each, to safe list and conducts the action
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
@@ -98,7 +180,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         public static void ForEach<T>(this ICollection<T> collection, Action<T> action)
         {
             It.IsNull(action)
-                .AsGuard<ArgumentNullException>();
+                .AsGuard<ArgumentNullException>(nameof(action));
 
             var items = collection.AsSafeList();
             foreach (var item in items)
@@ -116,9 +198,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
         {
             It.IsNull(action)
-                .AsGuard<ArgumentNullException>();
+                .AsGuard<ArgumentNullException>(nameof(action));
 
-            var items = collection.AsSafeList();
+            var items = collection.SafeReadOnlyList();
             foreach (var item in items)
             {
                 action(item);
@@ -126,7 +208,31 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         }
 
         /// <summary>
-        /// Safe list, the private implemntation of null coalescing
+        /// For any item that matches the condition do the action.
+        /// </summary>
+        /// <typeparam name="T">of type</typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="matchCondition">match condition.</param>
+        /// <param name="doAction">do action.</param>
+        public static void ForAny<T>(this IEnumerable<T> list, Func<T, bool> matchCondition, Action<T> doAction)
+        {
+            It.IsNull(matchCondition)
+                .AsGuard<ArgumentNullException>(nameof(matchCondition));
+            It.IsNull(doAction)
+                .AsGuard<ArgumentNullException>(nameof(doAction));
+
+            var safeList = list.SafeReadOnlyList();
+            safeList.ForEach(x =>
+            {
+                if (matchCondition(x))
+                {
+                    doAction(x);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Safe list, the private implementation, null coalescing
         /// </summary>
         /// <typeparam name="T">of type</typeparam>
         /// <param name="list">The list.</param>
@@ -135,7 +241,7 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// </returns>
         private static List<T> SafeList<T>(this IEnumerable<T> list)
         {
-            return (list ?? new List<T>()).ToList();
+            return new List<T>(list ?? Enumerable.Empty<T>());
         }
 
         /// <summary>
@@ -146,9 +252,9 @@ namespace ESFA.DC.ILR.ValidationService.Utility
         /// <returns>
         /// a safe readonly list
         /// </returns>
-        private static ReadOnlyCollection<T> SafeReadOnlyList<T>(this IEnumerable<T> list)
+        private static IReadOnlyCollection<T> SafeReadOnlyList<T>(this IEnumerable<T> list)
         {
-            return new ReadOnlyCollection<T>(list.SafeList());
+            return list.SafeList();
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
@@ -41,8 +38,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(FundModelConstants.NonFunded)]
-        [InlineData(FundModelConstants.Apprenticeships)]
+        [InlineData(99)]
+        [InlineData(36)]
         public void FundModelConditionMet_False(int fundModel)
         {
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
@@ -53,10 +50,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         }
 
         [Theory]
-        [InlineData(FundModelConstants.CommunityLearning)]
-        [InlineData(FundModelConstants.AdultSkills)]
-        [InlineData(FundModelConstants.ESF)]
-        [InlineData(FundModelConstants.OtherAdult)]
+        [InlineData(25)]
+        [InlineData(35)]
+        [InlineData(70)]
+        [InlineData(TypeOfFunding.OtherAdult)]
         public void FundModelConditionMet_True(int fundModel)
         {
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
@@ -91,27 +88,31 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void CompStatusConditionMet_False()
         {
-            DateTime? learnActEndDate = null;
+            DateTime learnActEndDateExpected = new DateTime(2018, 06, 01);
+            DateTime? learnActEndDate;
 
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
             {
-                new TestLearningDelivery() { LearnActEndDateNullable = null, CompStatus = 5 },
-                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 06, 01), CompStatus = 6 }
+                new TestLearningDelivery() { LearnActEndDateNullable = null, CompStatus = 1 },
+                new TestLearningDelivery() { LearnActEndDateNullable = learnActEndDateExpected, CompStatus = 6 }
             };
             NewRule().CompStatusConditionMet(learningDeliveries, out learnActEndDate).Should().BeFalse();
+            learnActEndDate.Should().Be(learnActEndDateExpected);
         }
 
         [Fact]
         public void CompStatusConditionMet_True()
         {
-            DateTime? learnActEndDate = null;
+            DateTime learnActEndDateExpected = new DateTime(2018, 06, 01);
+            DateTime? learnActEndDate;
 
             IReadOnlyCollection<ILearningDelivery> learningDeliveries = new List<ILearningDelivery>()
             {
-                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2017, 05, 02), CompStatus = 5 },
-                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2018, 06, 01) }
+                new TestLearningDelivery() { LearnActEndDateNullable = new DateTime(2017, 05, 02), CompStatus = 1 },
+                new TestLearningDelivery() { LearnActEndDateNullable = learnActEndDateExpected }
             };
             NewRule().CompStatusConditionMet(learningDeliveries, out learnActEndDate).Should().BeTrue();
+            learnActEndDate.Should().Be(learnActEndDateExpected);
         }
 
         [Fact]
@@ -135,9 +136,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
         [Fact]
         public void DPOutComeConditionMet_False()
         {
-            string learnRefNumber = "00100309";
-            string ldapLearnRefNumber = null;
-            DateTime? outStartDate = null;
+            string learnRefNumber = "00100310";
 
             var learnerDestinationAndProgression = new TestLearnerDestinationAndProgression()
             {
@@ -149,20 +148,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
-
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
-
-            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeFalse();
+            NewRule().DPOutComeConditionMet(
+                learnRefNumber,
+                new List<TestLearnerDestinationAndProgression> { learnerDestinationAndProgression },
+                new DateTime(2018, 06, 01)).Should().BeFalse();
         }
 
-        [Fact]
-        public void DPOutComeConditionMet_True()
+        [Theory]
+        [InlineData("00100309")]
+        [InlineData("00100310")]
+        public void DPOutComeConditionMet_True(string learnRefNumber)
         {
-            string learnRefNumber = "00100309";
-            string ldapLearnRefNumber = null;
-            DateTime? outStartDate = null;
-
             var learnerDestinationAndProgression = new TestLearnerDestinationAndProgression()
             {
                 LearnRefNumber = "00100309",
@@ -173,52 +169,103 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
-            var fileDataServiceMock = new Mock<IFileDataService>();
+            string ldapLearnRefNumberExpectedValue =
+                learnRefNumber == learnerDestinationAndProgression.LearnRefNumber
+                ? learnRefNumber
+                : string.Empty;
 
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
-
-            NewRule(fileDataService: fileDataServiceMock.Object).DPOutComeConditionMet(learnRefNumber, new DateTime(2018, 06, 01), out ldapLearnRefNumber, out outStartDate).Should().BeTrue();
+            NewRule()
+                .DPOutComeConditionMet(
+                learnRefNumber,
+                new List<TestLearnerDestinationAndProgression> { learnerDestinationAndProgression },
+                new DateTime(2018, 06, 01)).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(24)]
-        [InlineData(25)]
-        public void ConditionMet_False(int? progType)
+        [Fact]
+        public void DPOutComeConditionMet_True_DPOutComeNullCheck()
         {
-            NewRule().ConditionMet(progType).Should().BeFalse();
+            string learnRefNumber = "00100309";
+
+            var learnerDestinationAndProgression = new List<TestLearnerDestinationAndProgression>()
+            {
+                new TestLearnerDestinationAndProgression()
+                {
+                    LearnRefNumber = "00100309",
+                    DPOutcomes = null
+                },
+                new TestLearnerDestinationAndProgression()
+                {
+                    LearnRefNumber = "00100310",
+                    DPOutcomes = null
+                }
+            };
+
+            NewRule()
+                .DPOutComeConditionMet(
+                learnRefNumber,
+                learnerDestinationAndProgression,
+                new DateTime(2018, 06, 01)).Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(12)]
-        [InlineData(null)]
-        public void ConditionMet_True(int? progType)
+        [Fact]
+        public void DPOutComeConditionMet_True_NullCheck()
         {
-            NewRule().ConditionMet(progType).Should().BeTrue();
+            string learnRefNumber = "00100309";
+
+            List<TestLearnerDestinationAndProgression> learnerDestinationAndProgression = null;
+
+            NewRule()
+                .DPOutComeConditionMet(
+                learnRefNumber,
+                learnerDestinationAndProgression,
+                new DateTime(2018, 06, 01)).Should().BeTrue();
         }
 
         [Fact]
         public void Validate_Error()
         {
-            string learnRefNumber = "00100309";
-
-            var learner = new TestLearner()
+            var learners = new TestLearner[]
             {
-                LearnRefNumber = "00100309",
-                LearningDeliveries = new TestLearningDelivery[]
+                new TestLearner()
                 {
-                    new TestLearningDelivery()
+                    LearnRefNumber = "00100308",
+                    LearningDeliveries = new TestLearningDelivery[]
                     {
-                        ProgTypeNullable = 12,
-                        FundModel = FundModelConstants.AdultSkills,
-                        LearnActEndDateNullable = new DateTime(2017, 05, 01),
-                        CompStatus = 7
-                    },
-                    new TestLearningDelivery()
+                        new TestLearningDelivery()
+                        {
+                            ProgTypeNullable = 24,
+                            FundModel = 35,
+                            LearnActEndDateNullable = new DateTime(2017, 05, 01),
+                            CompStatus = 1
+                        },
+                        new TestLearningDelivery()
+                        {
+                            ProgTypeNullable = null,
+                            FundModel = 70,
+                            LearnActEndDateNullable = new DateTime(2018, 06, 01),
+                            CompStatus = 2
+                        }
+                    }
+                },
+                new TestLearner()
+                {
+                    LearnRefNumber = "00100309",
+                    LearningDeliveries = new TestLearningDelivery[]
                     {
-                        ProgTypeNullable = null,
-                        FundModel = FundModelConstants.ESF,
-                        LearnActEndDateNullable = new DateTime(2018, 06, 01),
-                        CompStatus = 8
+                        new TestLearningDelivery()
+                        {
+                            ProgTypeNullable = 12,
+                            FundModel = 35,
+                            LearnActEndDateNullable = new DateTime(2017, 05, 01),
+                            CompStatus = 1
+                        },
+                        new TestLearningDelivery()
+                        {
+                            ProgTypeNullable = null,
+                            FundModel = 70,
+                            LearnActEndDateNullable = new DateTime(2018, 06, 01),
+                            CompStatus = 2
+                        }
                     }
                 }
             };
@@ -230,26 +277,44 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestDPOutcome() { OutStartDate = new DateTime(2017, 05, 01) },
                     new TestDPOutcome() { OutStartDate = new DateTime(2012, 01, 01) }
+                }
+            };
+
+            var message = new TestMessage()
+            {
+                Learners = learners,
+                LearnerDestinationAndProgressions = new TestLearnerDestinationAndProgression[]
+                {
+                    learnerDestinationAndProgression
                 }
             };
 
             var fileDataServiceMock = new Mock<IFileDataService>();
 
             fileDataServiceMock.Setup(fds => fds.FilePreparationDate()).Returns(DateTime.Now.AddMonths(4));
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    fileDataService: fileDataServiceMock.Object).Validate(learner);
+                    fileDataService: fileDataServiceMock.Object).Validate(message);
             }
         }
 
-        [Fact]
-        public void Validate_NoError()
+        [Theory]
+        [InlineData(25, 36, 2, "2018-06-01", "2018-06-01")]
+        [InlineData(24, 99, 3, "2018-06-02", "2018-06-02")]
+        [InlineData(2, 35, 2, "2018-06-02", "2018-06-02")]
+        [InlineData(3, 70, 3, "2018-06-02", "2018-06-02")]
+        [InlineData(2, 36, 6, "2018-06-02", "2018-06-02")]
+        [InlineData(3, 99, 6, "2018-06-02", "2018-06-02")]
+        [InlineData(25, 35, 6, null, null)]
+        [InlineData(24, 70, 6, null, "2018-06-02")]
+        [InlineData(24, 70, 6, "2018-06-02", null)]
+        public void Validate_NoError(int? progType, int fundModel, int compStatus, string learnActEndDate1, string learnActEndDate2)
         {
-            string learnRefNumber = "00100309";
+            DateTime? learnActEndDateLD1 = string.IsNullOrEmpty(learnActEndDate1) ? (DateTime?)null : DateTime.Parse(learnActEndDate1);
+            DateTime? learnActEndDateLD2 = string.IsNullOrEmpty(learnActEndDate2) ? (DateTime?)null : DateTime.Parse(learnActEndDate2);
 
             var learner = new TestLearner()
             {
@@ -258,17 +323,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 {
                     new TestLearningDelivery()
                     {
-                        ProgTypeNullable = 24,
-                        FundModel = FundModelConstants.NonFunded,
-                        LearnActEndDateNullable = null,
-                        CompStatus = 5
+                        ProgTypeNullable = 3,
+                        FundModel = fundModel,
+                        LearnActEndDateNullable = learnActEndDateLD1,
+                        CompStatus = compStatus
                     },
                     new TestLearningDelivery()
                     {
-                        ProgTypeNullable = 25,
-                        FundModel = FundModelConstants.Apprenticeships,
-                        LearnActEndDateNullable = new DateTime(2018, 06, 01),
-                        CompStatus = 6
+                        ProgTypeNullable = progType,
+                        FundModel = fundModel,
+                        LearnActEndDateNullable = learnActEndDateLD2,
+                        CompStatus = compStatus
                     }
                 }
             };
@@ -283,34 +348,22 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.CrossEntity
                 }
             };
 
+            var message = new TestMessage()
+            {
+                Learners = new TestLearner[] { learner },
+                LearnerDestinationAndProgressions = new TestLearnerDestinationAndProgression[] { learnerDestinationAndProgression }
+            };
+
             var fileDataServiceMock = new Mock<IFileDataService>();
 
             fileDataServiceMock.Setup(fds => fds.FilePreparationDate()).Returns(new DateTime(2018, 03, 01));
-            fileDataServiceMock.Setup(fds => fds.LearnerDestinationAndProgressionsForLearnRefNumber(learnRefNumber)).Returns(learnerDestinationAndProgression);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
                 NewRule(
                     validationErrorHandler: validationErrorHandlerMock.Object,
-                    fileDataService: fileDataServiceMock.Object).Validate(learner);
+                    fileDataService: fileDataServiceMock.Object).Validate(message);
             }
-        }
-
-        [Fact]
-        public void BuildErrorMessageParameters()
-        {
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
-
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnRefNumber, "00100309")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, FundModelConstants.AdultSkills)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.CompStatus, 5)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, "01/06/2018")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearningDestinationAndProgressionLearnRefNumber, "00100309")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.OutStartDate, "01/06/2018")).Verifiable();
-
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters("00100309", FundModelConstants.AdultSkills, 5, new DateTime(2018, 06, 01), "00100309", new DateTime(2018, 06, 01));
-
-            validationErrorHandlerMock.Verify();
         }
 
         public R108Rule NewRule(

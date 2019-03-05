@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -9,7 +10,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 {
     public class LearnAimRef_55Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IEnumerable<string> _workExperienceLearnAimRefs = new HashSet<string>()
+        private readonly IEnumerable<string> _workExperienceLearnAimRefs = new HashSet<string>
         {
             "Z0007834",
             "Z0007835",
@@ -17,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
             "Z0007837",
             "Z0007838",
             "ZWRKX001",
-        };
+        }.ToCaseInsensitiveHashSet();
 
         public LearnAimRef_55Rule(IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.LearnAimRef_55)
@@ -54,7 +55,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnAimRef
 
         public virtual bool TraineeshipConditionMet(int fundModel, int? progType)
         {
-            return fundModel == FundModelConstants.CommunityLearning && progType == 24;
+            return fundModel == TypeOfFunding.Age16To19ExcludingApprenticeships && progType == TypeOfLearningProgramme.Traineeship;
         }
 
         public virtual bool AimTypeConditionMet(int aimType)

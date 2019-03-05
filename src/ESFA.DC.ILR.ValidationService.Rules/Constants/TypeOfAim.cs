@@ -46,6 +46,27 @@
         };
 
         /// <summary>
+        /// branches contains partial aim references, those aims that begin with this code
+        /// </summary>
+        public static class Branches
+        {
+            /// <summary>
+            /// The vocational studies not leading to a recognised qualification
+            /// </summary>
+            public const string VocationalStudiesNotLeadingToARecognisedQualification = "ZVOC";
+
+            /// <summary>
+            /// The units of approved NQF provision
+            /// </summary>
+            public const string UnitsOfApprovedNQFProvision = "ZUXA";
+
+            /// <summary>
+            /// The non externally certificated fe other provision
+            /// </summary>
+            public const string NonExternallyCertificatedFEOtherProvision = "Z9OPE";
+        }
+
+        /// <summary>
         /// type of aim references
         /// </summary>
         public static class References
@@ -89,6 +110,11 @@
             /// industry placement code
             /// </summary>
             public const string IndustryPlacement = "ZWRKX002";
+
+            /// <summary>
+            /// esf learner start and assessment
+            /// </summary>
+            public const string ESFLearnerStartandAssessment = "ZESF0001";
 
             /// <summary>
             /// Gets the work placement codes.

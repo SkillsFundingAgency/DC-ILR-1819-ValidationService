@@ -1,21 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Extensions;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
+using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Query.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Query
 {
     public class LearnerDPQueryService : ILearnerDPQueryService
     {
-        public bool HasULNForLearnRefNumber(string learnRefNumber, long uln, ILearnerDestinationAndProgression learnerDestinationAndProgression)
+        private readonly ICache<IMessage> _messageCache;
+
+        public LearnerDPQueryService(ICache<IMessage> messageCache)
         {
-            if (learnerDestinationAndProgression == null)
+            _messageCache = messageCache;
+        }
+
+        public IDictionary<DateTime, IEnumerable<string>> OutTypesForStartDateAndTypes(IEnumerable<IDPOutcome> dpOutcomes, IEnumerable<string> outTypes)
+        {
+            if (dpOutcomes != null && outTypes != null)
             {
-                return false;
+                if (dpOutcomes.Any(dp => outTypes.Contains(dp.OutType)))
+                {
+                    return dpOutcomes
+                    .GroupBy(g => g.OutStartDate)
+                    .ToDictionary(k => k.Key, v => v.Select(o => o.OutType));
+                }
             }
 
-            return learnerDestinationAndProgression.LearnRefNumber == learnRefNumber
-                && learnerDestinationAndProgression.ULN == uln;
+            return null;
+        }
+
+        public ILearnerDestinationAndProgression GetDestinationAndProgressionForLearner(string learnRefNumber)
+        {
+            return _messageCache.Item.LearnerDestinationAndProgressions
+                .FirstOrDefault(ldp => ldp.LearnRefNumber.CaseInsensitiveEquals(learnRefNumber));
         }
     }
 }

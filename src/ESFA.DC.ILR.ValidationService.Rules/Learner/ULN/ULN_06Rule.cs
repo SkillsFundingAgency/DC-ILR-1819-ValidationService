@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -109,8 +108,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.ULN
             return new[]
             {
                 BuildErrorMessageParameter(PropertyNameConstants.ULN, uln),
-                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, filePrepDate.ToString("d", new CultureInfo("en-GB"))),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
+                BuildErrorMessageParameter(PropertyNameConstants.FilePreparationDate, filePrepDate),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate)
             };
         }
     }

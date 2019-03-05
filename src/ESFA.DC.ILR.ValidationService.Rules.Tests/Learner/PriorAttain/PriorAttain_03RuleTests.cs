@@ -1,85 +1,139 @@
 ﻿using System;
 using System.Linq.Expressions;
 using ESFA.DC.ILR.Tests.Model;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.InternalData.PriorAttain;
+using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.Learner.PriorAttain;
+using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.PriorAttain
 {
-    public class PriorAttain_03RuleTests
+    public class PriorAttain_03RuleTests : AbstractRuleTests<PriorAttain_03Rule>
     {
         [Fact]
-        public void ConditionMet_True()
+        public void RuleName()
         {
-            var priorAttainReferenceDataServiceMock = new Mock<IPriorAttainInternalDataService>();
-
-            priorAttainReferenceDataServiceMock.Setup(rds => rds.Exists(1)).Returns(false);
-
-            var rule = new PriorAttain_03Rule(priorAttainReferenceDataServiceMock.Object, null);
-            rule.ConditionMet(1).Should().BeTrue();
+            NewRule().RuleName.Should().Be("PriorAttain_03");
         }
 
-        [Fact]
-        public void ConditionMet_False()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(7)]
+        [InlineData(9)]
+        [InlineData(10)]
+        [InlineData(11)]
+        [InlineData(12)]
+        [InlineData(13)]
+        [InlineData(97)]
+        [InlineData(98)]
+        [InlineData(99)]
+        public void ConditionMet_True(int priorAttainValue)
         {
-            var priorAttainReferenceDataServiceMock = new Mock<IPriorAttainInternalDataService>();
+            var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            priorAttainReferenceDataServiceMock.Setup(rds => rds.Exists(1)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttainValue)).Returns(false);
 
-            var rule = new PriorAttain_03Rule(priorAttainReferenceDataServiceMock.Object, null);
-            rule.ConditionMet(1).Should().BeFalse();
+            NewRule(provideLookupDetails: provideLookupDetailsMockup.Object).ConditionMet(priorAttainValue).Should().BeTrue();
         }
 
-        [Fact]
-        public void Validate_Error()
+        [Theory]
+        [InlineData(6)]
+        [InlineData(8)]
+        [InlineData(14)]
+        [InlineData(15)]
+        public void ConditionMet_False(int priorAttainValue)
         {
-            var learner = new TestLearner
+            var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
+
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttainValue)).Returns(true);
+
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
-                PriorAttainNullable = 100
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, provideLookupDetails: provideLookupDetailsMockup.Object).ConditionMet(priorAttainValue).Should().BeFalse();
+            }
+        }
+
+        [Theory]
+        [InlineData(6)]
+        [InlineData(8)]
+        [InlineData(14)]
+        [InlineData(15)]
+        public void Validate_Error(int priorAttain)
+        {
+            var testLearner = new TestLearner()
+            {
+                PriorAttainNullable = priorAttain
             };
 
-            var priorAttainReferenceDataServiceMock = new Mock<IPriorAttainInternalDataService>();
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            priorAttainReferenceDataServiceMock.Setup(rds => rds.Exists(100)).Returns(false);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttain)).Returns(false);
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PriorAttain_03", null, null, null);
-
-            var rule = new PriorAttain_03Rule(priorAttainReferenceDataServiceMock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-            validationErrorHandlerMock.Verify(handle, Times.Once);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, provideLookupDetails: provideLookupDetailsMockup.Object).Validate(testLearner);
+            }
         }
 
-        [Fact]
-        public void Validate_NoError()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        [InlineData(7)]
+        [InlineData(9)]
+        [InlineData(10)]
+        [InlineData(11)]
+        [InlineData(12)]
+        [InlineData(13)]
+        [InlineData(97)]
+        [InlineData(98)]
+        [InlineData(99)]
+        public void Validate_NoError(int priorAttain)
         {
-            var learner = new TestLearner
+            var testLearner = new TestLearner()
             {
-                PriorAttainNullable = 11
+                PriorAttainNullable = priorAttain
             };
 
-            var priorAttainReferenceDataServiceMock = new Mock<IPriorAttainInternalDataService>();
-            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+            var provideLookupDetailsMockup = new Mock<IProvideLookupDetails>();
 
-            priorAttainReferenceDataServiceMock.Setup(rds => rds.Exists(11)).Returns(true);
+            provideLookupDetailsMockup.Setup(p => p.Contains(TypeOfIntegerCodedLookup.PriorAttain, priorAttain)).Returns(true);
 
-            Expression<Action<IValidationErrorHandler>> handle = veh => veh.Handle("PriorAttain_03", null, null, null);
-
-            var rule = new PriorAttain_03Rule(priorAttainReferenceDataServiceMock.Object, validationErrorHandlerMock.Object);
-
-            rule.Validate(learner);
-
-            validationErrorHandlerMock.Verify(handle, Times.Never);
+            using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
+            {
+                NewRule(validationErrorHandler: validationErrorHandlerMock.Object, provideLookupDetails: provideLookupDetailsMockup.Object).Validate(testLearner);
+            }
         }
 
-        private PriorAttain_03Rule NewRule(IPriorAttainInternalDataService priorAttainReferenceDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        [Theory]
+        [InlineData(6)]
+        [InlineData(8)]
+        [InlineData(14)]
+        [InlineData(15)]
+        public void BuildErrorMessageParameters(int priorAttain)
         {
-            return new PriorAttain_03Rule(priorAttainReferenceDataService, validationErrorHandler);
+            var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
+
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.PriorAttain, priorAttain)).Verifiable();
+
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(priorAttain);
+
+            validationErrorHandlerMock.Verify();
+        }
+
+        private PriorAttain_03Rule NewRule(IProvideLookupDetails provideLookupDetails = null, IValidationErrorHandler validationErrorHandler = null)
+        {
+            return new PriorAttain_03Rule(provideLookupDetails, validationErrorHandler);
         }
     }
 }

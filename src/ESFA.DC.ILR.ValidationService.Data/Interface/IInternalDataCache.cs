@@ -1,4 +1,5 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
+using ESFA.DC.ILR.ValidationService.Utility;
 using System.Collections.Generic;
 using IAcademicYear = ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface.IAcademicYear;
 
@@ -8,31 +9,24 @@ namespace ESFA.DC.ILR.ValidationService.Data.Interface
     {
         IAcademicYear AcademicYear { get; }
 
-        IReadOnlyCollection<int> AimTypes { get; }
-
-        IReadOnlyCollection<int> CompStatuses { get; }
-
-        IReadOnlyCollection<int> EmpOutcomes { get; }
-
-        IReadOnlyCollection<int> FundModels { get; }
-
-        IDictionary<int, ValidityPeriods> LLDDCats { get; }
-
-        IReadOnlyCollection<string> QUALENT3s { get; }
-
         /// <summary>
         /// Gets the simple lookups.
         /// </summary>
-        IDictionary<LookupSimpleKey, IReadOnlyCollection<int>> SimpleLookups { get; }
+        IDictionary<TypeOfIntegerCodedLookup, IContainThis<int>> IntegerLookups { get; }
 
         /// <summary>
         /// Gets the coded lookups.
         /// </summary>
-        IDictionary<LookupCodedKey, IReadOnlyCollection<string>> CodedLookups { get; }
+        IDictionary<TypeOfStringCodedLookup, IContainThis<string>> StringLookups { get; }
 
         /// <summary>
         /// Gets the time restricted lookups.
         /// </summary>
-        IDictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> LimitedLifeLookups { get; }
+        IDictionary<TypeOfLimitedLifeLookup, IReadOnlyDictionary<string, ValidityPeriods>> LimitedLifeLookups { get; }
+
+        /// <summary>
+        /// Gets the list item lookups.
+        /// </summary>
+        IDictionary<TypeOfListItemLookup, IReadOnlyDictionary<string, IContainThis<string>>> ListItemLookups { get; }
     }
 }

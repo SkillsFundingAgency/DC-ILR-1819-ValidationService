@@ -1,15 +1,15 @@
 ﻿using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
-using ESFA.DC.ILR.ValidationService.Rules.HE.Domicile;
+using ESFA.DC.ILR.ValidationService.Rules.HE.DOMICILE;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
+namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.DOMICILE
 {
-    public class Domicile_01RuleTests
+    public class DOMICILE_01RuleTests
     {
         /// <summary>
         /// New rule with null message handler throws.
@@ -18,7 +18,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
         public void NewRuleWithNullMessageHandlerThrows()
         {
             // arrange / act / assert
-            Assert.Throws<ArgumentNullException>(() => new Domicile_01Rule(null));
+            Assert.Throws<ArgumentNullException>(() => new DOMICILE_01Rule(null));
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal("Domicile_01", result);
+            Assert.Equal("DOMICILE_01", result);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(Domicile_01Rule.Name, result);
+            Assert.Equal(DOMICILE_01Rule.Name, result);
         }
 
         /// <summary>
@@ -80,6 +80,32 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
 
             // act/assert
             Assert.Throws<ArgumentNullException>(() => sut.Validate(null));
+        }
+
+        /// <summary>
+        /// Is qualifying start date meets expectation
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="expectation">if set to <c>true</c> [expectation].</param>
+        [Theory]
+        [InlineData("2013-08-01", true)]
+        [InlineData("2017-06-24", true)]
+        [InlineData("2013-07-31", false)]
+        [InlineData("2010-11-09", false)]
+        public void IsQualifyingStartDateMeetsExpectation(string candidate, bool expectation)
+        {
+            // arrange
+            var sut = NewRule();
+            var mockItem = new Mock<ILearningDelivery>();
+            mockItem
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse(candidate));
+
+            // act
+            var result = sut.IsQualifyingStartDate(mockItem.Object);
+
+            // assert
+            Assert.Equal(expectation, result);
         }
 
         /// <summary>
@@ -157,6 +183,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var mockHE = new Mock<ILearningDeliveryHE>();
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
+                .SetupGet(y => y.LearnStartDate)
+                .Returns(DateTime.Parse("2013-08-01"));
+            mockDelivery
                 .SetupGet(y => y.LearningDeliveryHEEntity)
                 .Returns(mockHE.Object);
 
@@ -174,17 +203,17 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             handler
                 .Setup(x => x.Handle(
-                    Moq.It.Is<string>(y => y == Domicile_01Rule.Name),
+                    Moq.It.Is<string>(y => y == DOMICILE_01Rule.Name),
                     Moq.It.Is<string>(y => y == LearnRefNumber),
                     0,
                     Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             handler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == Domicile_01Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    Moq.It.Is<string>(y => y == "LearnStartDate"),
+                    Moq.It.Is<DateTime>(y => y == mockDelivery.Object.LearnStartDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
-            var sut = new Domicile_01Rule(handler.Object);
+            var sut = new DOMICILE_01Rule(handler.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -225,7 +254,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
 
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            var sut = new Domicile_01Rule(handler.Object);
+            var sut = new DOMICILE_01Rule(handler.Object);
 
             // act
             sut.Validate(mockLearner.Object);
@@ -238,11 +267,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.Domicile
         /// New rule.
         /// </summary>
         /// <returns>a constructed and mocked up validation rule</returns>
-        public Domicile_01Rule NewRule()
+        public DOMICILE_01Rule NewRule()
         {
             var handler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
 
-            return new Domicile_01Rule(handler.Object);
+            return new DOMICILE_01Rule(handler.Object);
         }
     }
 }

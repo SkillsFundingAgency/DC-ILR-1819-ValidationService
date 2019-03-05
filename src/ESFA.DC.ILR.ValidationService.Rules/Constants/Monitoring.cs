@@ -1,4 +1,6 @@
-﻿namespace ESFA.DC.ILR.ValidationService.Rules.Constants
+﻿using System.Collections.Generic;
+
+namespace ESFA.DC.ILR.ValidationService.Rules.Constants
 {
     /// <summary>
     /// type(s) of monitoring (learner, learning delivery and employment status)
@@ -43,7 +45,7 @@
                 /// <summary>
                 /// disabled students allowance
                 /// </summary>
-                public const string DisabledStudentsAllowance = "DSA";
+                public const string DisabledStudentsAllowance = "DLA";
 
                 /// <summary>
                 /// learner support reason
@@ -83,7 +85,7 @@
                 /// <summary>
                 /// pupil premium funding
                 /// </summary>
-                public const string PupilPremiumFunding = "PPF";
+                public const string PupilPremiumFunding = "PPE";
             }
         }
 
@@ -141,6 +143,16 @@
             /// The esfa 16 to 19 funding
             /// </summary>
             public const string ESFA16To19Funding = "SOF107";
+
+            /// <summary>
+            /// local authority community learning funds
+            /// </summary>
+            public const string LocalAuthorityCommunityLearningFunds = "SOF108";
+
+            /// <summary>
+            /// financed by advanced learner loans
+            /// </summary>
+            public const string FinancedByAdvancedLearnerLoans = "ADL1";
 
             /// <summary>
             /// funding and monitoring types
@@ -354,6 +366,35 @@
             /// </summary>
             public const string SmallEmployer = "SEM1";
 
+            // TODO: this should be removed now we have ESMTypedCodes in the lookup provider
+            public static string[] AsASet => new string[]
+            {
+                SelfEmployed,
+                EmployedFor16HoursOrMorePW,
+                EmployedForLessThan16HoursPW,
+                EmployedFor16To19HoursPW,
+                EmployedFor20HoursOrMorePW,
+                EmployedFor0To10HourPW,
+                EmployedFor11To20HoursPW,
+                EmployedFor21To30HoursPW,
+                EmployedFor31PlusHoursPW,
+                UnemployedForLessThan6M,
+                UnemployedFor6To11M,
+                UnemployedFor12To23M,
+                UnemployedFor24To35M,
+                UnemployedFor36MPlus,
+                EmployedForUpTo3M,
+                EmployedFor4To6M,
+                EmployedFor7To12M,
+                EmployedForMoreThan12M,
+                InReceiptOfJobSeekersAllowance,
+                InReceiptOfEmploymentAndSupportAllowance,
+                InReceiptOfAnotherStateBenefit,
+                InReceiptOfUniversalCredit,
+                InFulltimeEducationOrTrainingPriorToEnrolment,
+                SmallEmployer
+            };
+
             /// <summary>
             /// employment status monitoring types
             /// </summary>
@@ -380,9 +421,9 @@
                 public const string LengthOfEmployment = "LOE";
 
                 /// <summary>
-                /// benfit status indicator
+                /// benefit status indicator
                 /// </summary>
-                public const string BenfitStatusIndicator = "BSI";
+                public const string BenefitStatusIndicator = "BSI";
 
                 /// <summary>
                 /// previous education indicator

@@ -260,6 +260,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             // arrange
             const string LearnRefNumber = "123456789X";
 
+            var testStartDate = DateTime.Parse(startDate);
+            var testEndDate = DateTime.Parse(endDate);
+
             var mockLearner = new Mock<ILearner>();
             mockLearner
                 .SetupGet(x => x.LearnRefNumber)
@@ -268,10 +271,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(y => y.LearnStartDate)
-                .Returns(DateTime.Parse(startDate));
+                .Returns(testStartDate);
             mockDelivery
                 .SetupGet(y => y.LearnPlanEndDate)
-                .Returns(DateTime.Parse(endDate));
+                .Returns(testEndDate);
             mockDelivery
                 .SetupGet(y => y.ProgTypeNullable)
                 .Returns(TypeOfLearningProgramme.Traineeship);
@@ -294,8 +297,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.ProgType
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == ProgType_07Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+                    Moq.It.Is<string>(y => y == "LearnPlanEndDate"),
+                    Moq.It.Is<DateTime>(y => y == testEndDate)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == "LearnStartDate"),
+                    Moq.It.Is<DateTime>(y => y == testStartDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new ProgType_07Rule(mockHandler.Object);

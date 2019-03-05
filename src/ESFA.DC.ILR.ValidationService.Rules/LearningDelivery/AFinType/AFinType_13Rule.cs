@@ -83,7 +83,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
                 .ForEach(x =>
                 {
                     var failedValidation = !x.AppFinRecords
-                        .SafeWhere(afr => afr.AFinType == ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice)
+                        .SafeWhere(afr => afr.AFinType == ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice)
                         .Any(y => ConditionMet(x, y));
 
                     if (failedValidation)
@@ -114,10 +114,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         /// </summary>
         /// <param name="learnRefNumber">The learn reference number.</param>
         /// <param name="thisDelivery">this learning delivery.</param>
+        /// AFinDate is unknown so returns string.Empty.
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, thisDelivery.LearnStartDate));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.AFinType, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.AFinDate, string.Empty));
 
             _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }

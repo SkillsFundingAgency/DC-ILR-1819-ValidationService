@@ -3,7 +3,6 @@ using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Utility;
 using System;
-using System.Linq;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
 {
@@ -101,7 +100,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public bool ConditionMet(ILearningDelivery thisDelivery)
         {
             return It.Has(thisDelivery)
-                ? thisDelivery.AppFinRecords.SafeAny(afr => It.IsInRange(afr.AFinType, ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice))
+                ? thisDelivery.AppFinRecords.SafeAny(afr => It.IsInRange(afr.AFinType, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice))
                 : true;
         }
 
@@ -113,9 +112,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.AFinType
         public void RaiseValidationMessage(string learnRefNumber, ILearningDelivery thisDelivery)
         {
             var parameters = Collection.Empty<IErrorMessageParameter>();
-            parameters.Add(_messageHandler.BuildErrorMessageParameter(MessagePropertyName, thisDelivery));
+            parameters.Add(_messageHandler.BuildErrorMessageParameter(PropertyNameConstants.AFinType, ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice));
 
-            _messageHandler.Handle(RuleName, learnRefNumber, null, parameters);
+            _messageHandler.Handle(RuleName, learnRefNumber, thisDelivery.AimSeqNumber, parameters);
         }
     }
 }

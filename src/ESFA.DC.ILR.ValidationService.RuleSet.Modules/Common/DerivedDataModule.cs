@@ -8,13 +8,28 @@ namespace ESFA.DC.ILR.ValidationService.RuleSet.Modules.Common
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<DD01>().As<IDD01>().InstancePerLifetimeScope();
-            builder.RegisterType<DD04>().As<IDD04>().InstancePerLifetimeScope();
-            builder.RegisterType<DD06>().As<IDD06>().InstancePerLifetimeScope();
-            builder.RegisterType<DD07>().As<IDD07>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_01Rule>().As<IDerivedData_01Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_04Rule>().As<IDerivedData_04Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_06Rule>().As<IDerivedData_06Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_07Rule>().As<IDerivedData_07Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_05Rule>().As<IDerivedData_05Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_11Rule>().As<IDerivedData_11Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_12Rule>().As<IDerivedData_12Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_14Rule>().As<IDerivedData_14Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_15Rule>().As<IDerivedData_15Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_17Rule>().As<IDerivedData_17Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_18Rule>().As<IDerivedData_18Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_19Rule>().As<IDerivedData_19Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_21Rule>().As<IDerivedData_21Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_22Rule>().As<IDerivedData_22Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_23Rule>().As<IDerivedData_23Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_25Rule>().As<IDerivedData_25Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_26Rule>().As<IDerivedData_26Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_27Rule>().As<IDerivedData_27Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_28Rule>().As<IDerivedData_28Rule>().InstancePerLifetimeScope();
             builder.RegisterType<DerivedData_29Rule>().As<IDerivedData_29Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_31Rule>().As<IDerivedData_31Rule>().InstancePerLifetimeScope();
+            builder.RegisterType<DerivedData_32Rule>().As<IDerivedData_32Rule>().InstancePerLifetimeScope();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ESFA.DC.ILR.Tests.Model;
-using ESFA.DC.ILR.ValidationService.Data.Internal.FundModel.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel;
 using ESFA.DC.ILR.ValidationService.Rules.Tests.Abstract;
@@ -23,9 +23,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
         {
             var fundModel = 1;
 
-            var fundModelServiceMock = new Mock<IFundModelDataService>();
+            var fundModelServiceMock = new Mock<IProvideLookupDetails>();
 
-            fundModelServiceMock.Setup(ds => ds.Exists(fundModel)).Returns(false);
+            fundModelServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel)).Returns(false);
 
             NewRule(fundModelServiceMock.Object).ConditionMet(fundModel).Should().BeTrue();
         }
@@ -35,9 +35,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
         {
             var fundModel = 1;
 
-            var fundModelServiceMock = new Mock<IFundModelDataService>();
+            var fundModelServiceMock = new Mock<IProvideLookupDetails>();
 
-            fundModelServiceMock.Setup(ds => ds.Exists(fundModel)).Returns(true);
+            fundModelServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel)).Returns(true);
 
             NewRule(fundModelServiceMock.Object).ConditionMet(fundModel).Should().BeFalse();
         }
@@ -58,9 +58,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
                 }
             };
 
-            var fundModelServiceMock = new Mock<IFundModelDataService>();
+            var fundModelServiceMock = new Mock<IProvideLookupDetails>();
 
-            fundModelServiceMock.Setup(ds => ds.Exists(fundModel)).Returns(false);
+            fundModelServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel)).Returns(false);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForError())
             {
@@ -84,9 +84,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
                 }
             };
 
-            var fundModelServiceMock = new Mock<IFundModelDataService>();
+            var fundModelServiceMock = new Mock<IProvideLookupDetails>();
 
-            fundModelServiceMock.Setup(ds => ds.Exists(fundModel)).Returns(true);
+            fundModelServiceMock.Setup(ds => ds.Contains(TypeOfIntegerCodedLookup.FundModel, fundModel)).Returns(true);
 
             using (var validationErrorHandlerMock = BuildValidationErrorHandlerMockForNoError())
             {
@@ -106,9 +106,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.FundModel
             validationErrorHandlerMock.Verify();
         }
 
-        private FundModel_01Rule NewRule(IFundModelDataService fundModelDataService = null, IValidationErrorHandler validationErrorHandler = null)
+        private FundModel_01Rule NewRule(IProvideLookupDetails provideLookupDetails = null, IValidationErrorHandler validationErrorHandler = null)
         {
-            return new FundModel_01Rule(fundModelDataService, validationErrorHandler);
+            return new FundModel_01Rule(provideLookupDetails, validationErrorHandler);
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -27,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         [Fact]
         public void FundModelConditionMet_True()
         {
-            NewRule().FundModelConditionMet(FundModelConstants.Apprenticeships).Should().BeTrue();
+            NewRule().FundModelConditionMet(TypeOfFunding.ApprenticeshipsFrom1May2017).Should().BeTrue();
         }
 
         [Fact]
@@ -65,7 +62,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         {
             var progType = 23;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(true);
 
@@ -77,7 +74,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         {
             var progType = 25;
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(progType)).Returns(false);
 
@@ -87,7 +84,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
         [Fact]
         public void DD07ConditionMet_Null()
         {
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
 
             dd07Mock.Setup(dd => dd.IsApprenticeship(null)).Returns(false);
 
@@ -190,7 +187,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             var learningDelivery = new TestLearningDelivery
             {
-                FundModel = FundModelConstants.Apprenticeships,
+                FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                 ProgTypeNullable = 2,
                 AimType = 1,
                 CompStatus = 2,
@@ -199,7 +196,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 LearningDeliveryFAMs = learningDeliveryFAMs
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -255,7 +252,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 LearningDeliveryFAMs = learningDeliveryFAMs
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -296,7 +293,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
             {
                 new TestLearningDelivery
                 {
-                    FundModel = FundModelConstants.Apprenticeships,
+                    FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                     ProgTypeNullable = 2,
                     AimType = 1,
                     CompStatus = 2,
@@ -312,7 +309,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 LearningDeliveries = learningDeliveries
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -364,7 +361,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
                 LearningDeliveries = learningDeliveries
             };
 
-            var dd07Mock = new Mock<IDD07>();
+            var dd07Mock = new Mock<IDerivedData_07Rule>();
             var dateTimeQueryServiceMock = new Mock<IDateTimeQueryService>();
             var learningDeliveryFAMQueryServiceMock = new Mock<ILearningDeliveryFAMQueryService>();
 
@@ -389,18 +386,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.Learner.DateOfBirth
 
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.AimType, 1)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, "01/05/2017")).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, FundModelConstants.Apprenticeships)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.ApprenticeshipsFrom1May2017)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnActEndDate, "01/05/2018")).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.Outcome, 1)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.RES)).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, FundModelConstants.Apprenticeships, 1, LearningDeliveryFAMTypeConstants.RES, new DateTime(2017, 05, 01), new DateTime(2018, 5, 1));
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, TypeOfFunding.ApprenticeshipsFrom1May2017, 1, LearningDeliveryFAMTypeConstants.RES, new DateTime(2017, 05, 01), new DateTime(2018, 5, 1));
 
             validationErrorHandlerMock.Verify();
         }
 
         public DateOfBirth_53Rule NewRule(
-            IDD07 dd07 = null,
+            IDerivedData_07Rule dd07 = null,
             IDateTimeQueryService dateTimeQueryService = null,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService = null,
             IValidationErrorHandler validationErrorHandler = null)

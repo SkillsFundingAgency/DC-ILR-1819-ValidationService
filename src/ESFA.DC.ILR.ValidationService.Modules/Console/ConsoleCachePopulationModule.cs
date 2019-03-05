@@ -3,15 +3,19 @@ using ESFA.DC.Data.ILR.ValidationErrors.Model;
 using ESFA.DC.Data.ILR.ValidationErrors.Model.Interfaces;
 using ESFA.DC.Data.LARS.Model;
 using ESFA.DC.Data.LARS.Model.Interfaces;
-using ESFA.DC.Data.Organisatons.Model;
-using ESFA.DC.Data.Organisatons.Model.Interface;
 using ESFA.DC.Data.Postcodes.Model;
 using ESFA.DC.Data.Postcodes.Model.Interfaces;
 using ESFA.DC.Data.ULN.Model;
 using ESFA.DC.Data.ULN.Model.Interfaces;
 using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population;
+using ESFA.DC.ILR.ValidationService.Data.Population.Configuration.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Population.Interface;
+using ESFA.DC.ReferenceData.FCS.Model;
+using ESFA.DC.ReferenceData.FCS.Model.Interface;
+using ESFA.DC.ReferenceData.Organisations.Model;
+using ESFA.DC.ReferenceData.Organisations.Model.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ESFA.DC.ILR.ValidationService.Modules.Console
 {
@@ -30,7 +34,14 @@ namespace ESFA.DC.ILR.ValidationService.Modules.Console
             builder.RegisterType<LARS>().As<ILARS>().InstancePerLifetimeScope();
             builder.RegisterType<ULN>().As<IULN>().InstancePerLifetimeScope();
             builder.RegisterType<Postcodes>().As<IPostcodes>().InstancePerLifetimeScope();
-            builder.RegisterType<Organisations>().As<IOrganisations>().InstancePerLifetimeScope();
+            builder.Register(c =>
+            {
+                DbContextOptions<OrganisationsContext> options = new DbContextOptionsBuilder<OrganisationsContext>()
+            .UseSqlServer(c.Resolve<IReferenceDataOptions>().OrganisationsConnectionString).Options;
+
+                return new OrganisationsContext(options);
+            }).As<IOrganisationsContext>().InstancePerLifetimeScope();
+            builder.RegisterType<FcsContext>().As<IFcsContext>().InstancePerLifetimeScope();
             builder.RegisterType<ValidationErrors>().As<IValidationErrors>().InstancePerLifetimeScope();
 
             builder.RegisterModule<ExternalDataCachePopulationServiceModule>();

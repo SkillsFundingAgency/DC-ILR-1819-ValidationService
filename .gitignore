@@ -294,3 +294,9 @@ __pycache__/
 src/ESFA.DC.ILR.ValidationService/ApplicationParameters/Local.1Node.xml
 src/ESFA.DC.ILR.ValidationService/ApplicationParameters/Local.5Node.xml
 
+/src/ESFA.DC.ILR.ValidationService.Providers.Tests/Files/ILR-10003231-1819-20181012-100000-01.xml
+/src/ESFA.DC.ILR.ValidationService/ApplicationPackageRoot/ApplicationManifest_BKUP.xml
+/src/ESFA.DC.ILR.ValidationService/ApplicationParameters/localNode.xml
+/src/ESFA.DC.ILR.ValidationService.Data.Population/Properties/Configuration/Interface
+/src/ESFA.DC.ILR.ValidationService.Data.Population/Properties/Configuration
+/src/ESFA.DC.ILR.ValidationService/ApplicationParameters/Cloud.bkup.xml

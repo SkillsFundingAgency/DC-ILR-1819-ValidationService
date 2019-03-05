@@ -1,6 +1,7 @@
 ﻿using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Data.Internal.Model;
+using ESFA.DC.ILR.ValidationService.Utility;
 using System.Collections.Generic;
 
 namespace ESFA.DC.ILR.ValidationService.Data.Internal
@@ -10,67 +11,70 @@ namespace ESFA.DC.ILR.ValidationService.Data.Internal
         /// <summary>
         /// The simple lookups
         /// </summary>
-        private Dictionary<LookupSimpleKey, IReadOnlyCollection<int>> _simpleLookups;
+        private Dictionary<TypeOfIntegerCodedLookup, IContainThis<int>> _integerLookups;
 
         /// <summary>
         /// The coded lookups
         /// </summary>
-        private Dictionary<LookupCodedKey, IReadOnlyCollection<string>> _codedLookups;
+        private Dictionary<TypeOfStringCodedLookup, IContainThis<string>> _codedLookups;
 
         /// <summary>
         /// The time restricted lookups
         /// </summary>
-        private Dictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> _limitedLifeLookups;
-
-        public IAcademicYear AcademicYear { get; set; }
-
-        public IReadOnlyCollection<int> AimTypes { get; set; }
-
-        public IReadOnlyCollection<int> CompStatuses { get; set; }
-
-        public IReadOnlyCollection<int> EmpOutcomes { get; set; }
-
-        public IReadOnlyCollection<int> FundModels { get; set; }
-
-        public IDictionary<int, ValidityPeriods> LLDDCats { get; set; }
-
-        public IReadOnlyCollection<string> QUALENT3s { get; set; }
-
-        public IDictionary<int, ValidityPeriods> TTAccoms { get; set; }
+        private Dictionary<TypeOfLimitedLifeLookup, IReadOnlyDictionary<string, ValidityPeriods>> _limitedLifeLookups;
 
         /// <summary>
-        /// Gets the simple lookups.
+        /// The item lookups
         /// </summary>
-        public IDictionary<LookupSimpleKey, IReadOnlyCollection<int>> SimpleLookups
+        private Dictionary<TypeOfListItemLookup, IReadOnlyDictionary<string, IContainThis<string>>> _listItemLookups;
+
+        /// <summary>
+        /// Gets or sets the academic year.
+        /// </summary>
+        public IAcademicYear AcademicYear { get; set; }
+
+        /// <summary>
+        /// Gets the integer lookups.
+        /// </summary>
+        public IDictionary<TypeOfIntegerCodedLookup, IContainThis<int>> IntegerLookups
         {
             get
             {
-                return _simpleLookups
-                  ?? (_simpleLookups = new Dictionary<LookupSimpleKey, IReadOnlyCollection<int>>());
+                return _integerLookups
+                  ?? (_integerLookups = new Dictionary<TypeOfIntegerCodedLookup, IContainThis<int>>());
             }
         }
 
         /// <summary>
-        /// Gets the coded lookups.
+        /// Gets the string lookups.
         /// </summary>
-        public IDictionary<LookupCodedKey, IReadOnlyCollection<string>> CodedLookups
+        public IDictionary<TypeOfStringCodedLookup, IContainThis<string>> StringLookups
         {
             get
             {
                 return _codedLookups
-                  ?? (_codedLookups = new Dictionary<LookupCodedKey, IReadOnlyCollection<string>>());
+                  ?? (_codedLookups = new Dictionary<TypeOfStringCodedLookup, IContainThis<string>>());
+            }
+        }
+
+        public IDictionary<TypeOfListItemLookup, IReadOnlyDictionary<string, IContainThis<string>>> ListItemLookups
+        {
+            get
+            {
+                return _listItemLookups
+                       ?? (_listItemLookups = new Dictionary<TypeOfListItemLookup, IReadOnlyDictionary<string, IContainThis<string>>>());
             }
         }
 
         /// <summary>
         /// Gets the time limited lookups.
         /// </summary>
-        public IDictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>> LimitedLifeLookups
+        public IDictionary<TypeOfLimitedLifeLookup, IReadOnlyDictionary<string, ValidityPeriods>> LimitedLifeLookups
         {
             get
             {
                 return _limitedLifeLookups
-                  ?? (_limitedLifeLookups = new Dictionary<LookupTimeRestrictedKey, IDictionary<int, ValidityPeriods>>());
+                  ?? (_limitedLifeLookups = new Dictionary<TypeOfLimitedLifeLookup, IReadOnlyDictionary<string, ValidityPeriods>>());
             }
         }
     }

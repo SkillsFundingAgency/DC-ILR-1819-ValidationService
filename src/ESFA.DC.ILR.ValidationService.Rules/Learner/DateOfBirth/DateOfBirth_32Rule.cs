@@ -4,7 +4,6 @@ using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
 using ESFA.DC.ILR.ValidationService.Data.External.Organisation.Interface;
 using ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -20,7 +19,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly HashSet<string> _nvqLevel2s = new HashSet<string> { "3", "4", "5", "6", "7", "8", "H" };
         private readonly HashSet<string> _ldmCodes = new HashSet<string> { "034", "346", "347", "339" };
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
         private readonly ILARSDataService _larsDataService;
@@ -28,7 +27,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         private readonly IFileDataService _fileDataService;
 
         public DateOfBirth_32Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IDateTimeQueryService dateTimeQueryService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             ILARSDataService larsDataService,

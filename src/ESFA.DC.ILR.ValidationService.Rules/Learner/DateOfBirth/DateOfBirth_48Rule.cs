@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
-using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -18,22 +14,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
     {
         private readonly DateTime _augustFirst2016 = new DateTime(2016, 08, 01);
         private readonly IAcademicYearQueryService _academicYearQueryService;
-        private readonly IDateTimeQueryService _datetimeQueryService;
-        private readonly IDD07 _dd07;
-        private readonly IDD04 _dd04;
+        private readonly IDerivedData_07Rule _dd07;
+        private readonly IDerivedData_04Rule _dd04;
 
         public DateOfBirth_48Rule(
-            IDD07 dd07,
-            IDD04 dd04,
+            IDerivedData_07Rule dd07,
+            IDerivedData_04Rule dd04,
             IAcademicYearQueryService academicYearQueryService,
-            IDateTimeQueryService dateTimeQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_48)
         {
             _dd07 = dd07;
             _dd04 = dd04;
             _academicYearQueryService = academicYearQueryService;
-            _datetimeQueryService = dateTimeQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
@@ -44,10 +37,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
                 return;
             }
 
+            DateTime sixteenthBirthDate = objectToValidate.DateOfBirthNullable.Value.AddYears(16);
+
             foreach (var learningDelivery in objectToValidate.LearningDeliveries)
             {
                 DateTime? dd04Date = _dd04.Derive(objectToValidate.LearningDeliveries, learningDelivery);
-                DateTime sixteenthBirthDate = _datetimeQueryService.DateAddYears((DateTime)objectToValidate.DateOfBirthNullable, 16);
                 DateTime lastFridayInJuneForAcademicYear = _academicYearQueryService.LastFridayInJuneForDateInAcademicYear(sixteenthBirthDate);
 
                 if (ConditionMet(learningDelivery.ProgTypeNullable, dd04Date, lastFridayInJuneForAcademicYear))
@@ -71,7 +65,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         public bool DD07ConditionMet(int? progType)
         {
             return progType.HasValue
-                && progType != 25
+                && progType != TypeOfLearningProgramme.ApprenticeshipStandard
                 && _dd07.IsApprenticeship(progType);
         }
 
@@ -86,8 +80,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth?.ToString("d", new CultureInfo("en-GB"))),
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
+                BuildErrorMessageParameter(PropertyNameConstants.DateOfBirth, dateOfBirth),
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate)
             };
         }
     }

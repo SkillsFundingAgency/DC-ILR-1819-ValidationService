@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.Tests.Model;
 using ESFA.DC.ILR.ValidationService.Data.External.LARS.Interface;
-using ESFA.DC.ILR.ValidationService.Data.External.LARS.Model;
-using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.LearnDelFAMType;
@@ -32,13 +28,13 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         [Fact]
         public void FundModelConditionMet_False()
         {
-            NewRule().FundModelConditionMet(FundModelConstants.AdultSkills).Should().BeFalse();
+            NewRule().FundModelConditionMet(TypeOfFunding.AdultSkills).Should().BeFalse();
         }
 
         [Fact]
         public void FundModelConditionMet_True()
         {
-            NewRule().FundModelConditionMet(FundModelConstants.Apprenticeships).Should().BeTrue();
+            NewRule().FundModelConditionMet(TypeOfFunding.ApprenticeshipsFrom1May2017).Should().BeTrue();
         }
 
         [Fact]
@@ -120,11 +116,11 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(FundModelConstants.AdultSkills, 2, LearningDeliveryFAMTypeConstants.ACT, "00100310", "2017-01-01")]
-        [InlineData(FundModelConstants.Apprenticeships, 2, LearningDeliveryFAMTypeConstants.ACT, "00100310", "2017-01-01")]
-        [InlineData(FundModelConstants.Apprenticeships, 1, LearningDeliveryFAMTypeConstants.ACT, "00100310", "2017-01-01")]
-        [InlineData(FundModelConstants.Apprenticeships, 1, LearningDeliveryFAMTypeConstants.ADL, "00100310", "2017-01-01")]
-        [InlineData(FundModelConstants.Apprenticeships, 1, LearningDeliveryFAMTypeConstants.ADL, "00100309", "2017-01-01")]
+        [InlineData(TypeOfFunding.AdultSkills, 2, LearningDeliveryFAMTypeConstants.ACT, "00100310", "2017-01-01")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, 2, LearningDeliveryFAMTypeConstants.ACT, "00100310", "2017-01-01")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, 1, LearningDeliveryFAMTypeConstants.ACT, "00100310", "2017-01-01")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, 1, LearningDeliveryFAMTypeConstants.ADL, "00100310", "2017-01-01")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, 1, LearningDeliveryFAMTypeConstants.ADL, "00100309", "2017-01-01")]
         public void ConditionMet_False(int fundModel, int aimType, string learnDelFAMType, string learnAimRef, string learnStartDateString)
         {
             DateTime.TryParse(learnStartDateString, out DateTime learnStartDate);
@@ -146,8 +142,8 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
         }
 
         [Theory]
-        [InlineData(FundModelConstants.Apprenticeships, 1, LearningDeliveryFAMTypeConstants.ADL, "00100309", "2018-06-01")]
-        [InlineData(FundModelConstants.Apprenticeships, 3, LearningDeliveryFAMTypeConstants.LDM, "00100309", "2018-06-01")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, 1, LearningDeliveryFAMTypeConstants.ADL, "00100309", "2018-06-01")]
+        [InlineData(TypeOfFunding.ApprenticeshipsFrom1May2017, 3, LearningDeliveryFAMTypeConstants.LDM, "00100309", "2018-06-01")]
         public void ConditionMet_True(int fundModel, int aimType, string learnDelFAMType, string learnAimRef, string learnStartDateString)
         {
             DateTime.TryParse(learnStartDateString, out DateTime learnStartDate);
@@ -185,7 +181,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                         LearnAimRef = "00100309",
                         AimType = 1,
                         LearnStartDate = new DateTime(2018, 06, 01),
-                        FundModel = FundModelConstants.Apprenticeships,
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                         LearningDeliveryFAMs = learningDeliveryFAMs.ToList()
                     }
                 }
@@ -223,7 +219,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
                         LearnAimRef = "00100309",
                         AimType = 1,
                         LearnStartDate = new DateTime(2018, 06, 01),
-                        FundModel = FundModelConstants.Apprenticeships,
+                        FundModel = TypeOfFunding.ApprenticeshipsFrom1May2017,
                         LearningDeliveryFAMs = learningDeliveryFAMs.ToList()
                     }
                 }
@@ -250,10 +246,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.LearnDelFAM
             var validationErrorHandlerMock = new Mock<IValidationErrorHandler>();
 
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.AimType, 1)).Verifiable();
-            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, FundModelConstants.AdultSkills)).Verifiable();
+            validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.FundModel, TypeOfFunding.AdultSkills)).Verifiable();
             validationErrorHandlerMock.Setup(veh => veh.BuildErrorMessageParameter(PropertyNameConstants.LearnDelFAMType, LearningDeliveryFAMTypeConstants.ACT)).Verifiable();
 
-            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, FundModelConstants.AdultSkills, LearningDeliveryFAMTypeConstants.ACT);
+            NewRule(validationErrorHandler: validationErrorHandlerMock.Object).BuildErrorMessageParameters(1, TypeOfFunding.AdultSkills, LearningDeliveryFAMTypeConstants.ACT);
 
             validationErrorHandlerMock.Verify();
         }

@@ -178,8 +178,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            const string aFinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice;
+            var aFinDate = string.Empty;
+            var learnStartDate = new DateTime(2018, 8, 1);
 
             var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+                .SetupGet(x => x.LearnStartDate)
+                .Returns(learnStartDate);
             mockDelivery
                 .SetupGet(x => x.AimType)
                 .Returns(TypeOfAim.ProgrammeAim);
@@ -206,8 +212,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == AFinType_13Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == mockDelivery.Object)))
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.LearnStartDate),
+                    Moq.It.Is<DateTime>(y => y == learnStartDate)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.AFinType),
+                    Moq.It.Is<string>(y => y == aFinType)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.AFinDate),
+                    Moq.It.Is<string>(y => y == aFinDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new AFinType_13Rule(mockHandler.Object);
@@ -227,8 +243,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            const string aFinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice;
+            var aFinDate = string.Empty;
+            var learnStartDate = new DateTime(2018, 8, 1);
 
             var mockDelivery = new Mock<ILearningDelivery>();
+            mockDelivery
+               .SetupGet(x => x.LearnStartDate)
+               .Returns(learnStartDate);
             mockDelivery
                 .SetupGet(x => x.AimType)
                 .Returns(TypeOfAim.ProgrammeAim);
@@ -259,8 +281,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == AFinType_13Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == mockDelivery.Object)))
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.LearnStartDate),
+                    Moq.It.Is<DateTime>(y => y == learnStartDate)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.AFinType),
+                    Moq.It.Is<string>(y => y == aFinType)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.AFinDate),
+                    Moq.It.Is<string>(y => y == aFinDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new AFinType_13Rule(mockHandler.Object);
@@ -286,11 +318,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
         {
             // arrange
             const string LearnRefNumber = "123456789X";
+            const string aFinType = ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice;
+            var aFinDate = string.Empty;
+            var learnStartDate = DateTime.Parse(learnDate);
 
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinType)
-                .Returns(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice);
+                .Returns(aFinType);
             mockFinRec
                 .SetupGet(x => x.AFinDate)
                 .Returns(DateTime.Parse(finDate));
@@ -307,7 +342,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
                 .Returns(TypeOfFunding.ApprenticeshipsFrom1May2017);
             mockDelivery
                 .SetupGet(x => x.LearnStartDate)
-                .Returns(DateTime.Parse(learnDate));
+                .Returns(learnStartDate);
             mockDelivery
                 .SetupGet(x => x.AppFinRecords)
                 .Returns(records.AsSafeReadOnlyList());
@@ -331,8 +366,18 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
                 Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
                 .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == AFinType_13Rule.MessagePropertyName),
-                    Moq.It.Is<object>(y => y == mockDelivery.Object)))
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.LearnStartDate),
+                    Moq.It.Is<DateTime>(y => y == learnStartDate)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.AFinType),
+                    Moq.It.Is<string>(y => y == aFinType)))
+                .Returns(new Mock<IErrorMessageParameter>().Object);
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter(
+                    Moq.It.Is<string>(y => y == PropertyNameConstants.AFinDate),
+                    Moq.It.Is<string>(y => y == aFinDate)))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new AFinType_13Rule(mockHandler.Object);
@@ -360,7 +405,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.AFinType
             var mockFinRec = new Mock<IAppFinRecord>();
             mockFinRec
                 .SetupGet(x => x.AFinType)
-                .Returns(ApprenticeshipFinanicalRecord.Types.TotalNegotiatedPrice);
+                .Returns(ApprenticeshipFinancialRecord.Types.TotalNegotiatedPrice);
             mockFinRec
                 .SetupGet(x => x.AFinDate)
                 .Returns(DateTime.Parse(finDate));

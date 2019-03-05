@@ -9,9 +9,9 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 {
     public class FundModel_06Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
-        public FundModel_06Rule(IDD07 dd07, IValidationErrorHandler validationErrorHandler)
+        public FundModel_06Rule(IDerivedData_07Rule dd07, IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.FundModel_06)
         {
             _dd07 = dd07;
@@ -30,7 +30,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.FundModel
 
         public bool ConditionMet(int fundModel, int? progType)
         {
-            return fundModel == FundModelConstants.Apprenticeships && !_dd07.IsApprenticeship(progType);
+            return fundModel == TypeOfFunding.ApprenticeshipsFrom1May2017 && !_dd07.IsApprenticeship(progType);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)

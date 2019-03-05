@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -8,25 +13,35 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.Ethnicity
 {
     public class Ethnicity_01Rule : AbstractRule, IRule<ILearner>
     {
-        private readonly HashSet<long> _validEthnicityValues = new HashSet<long>() { 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 98, 99 };
+        private readonly IProvideLookupDetails _provideLookupDetails;
 
-        public Ethnicity_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+        public Ethnicity_01Rule(
+            IValidationErrorHandler validationErrorHandler,
+            IProvideLookupDetails provideLookupDetails)
+            : base(validationErrorHandler, RuleNameConstants.Ethnicity_01)
         {
+            _provideLookupDetails = provideLookupDetails;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (ConditionMet(objectToValidate.EthnicityNullable))
+            if (objectToValidate == null)
             {
-                HandleValidationError(RuleNameConstants.Ethnicity_01Rule, objectToValidate.LearnRefNumber);
+                return;
+            }
+
+            if (!_provideLookupDetails.Contains(TypeOfIntegerCodedLookup.Ethnicity, objectToValidate.Ethnicity))
+            {
+                HandleValidationError(learnRefNumber: objectToValidate.LearnRefNumber, errorMessageParameters: BuildErrorMessageParameters(objectToValidate.Ethnicity));
             }
         }
 
-        public bool ConditionMet(long? ethnicty)
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int ethnicity)
         {
-            return ethnicty.HasValue &&
-                   !_validEthnicityValues.Contains(ethnicty.Value);
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.Ethnicity, ethnicity)
+            };
         }
     }
 }

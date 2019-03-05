@@ -1,7 +1,6 @@
-﻿using System;
+﻿using ESFA.DC.ILR.Model.Interface;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using ESFA.DC.ILR.Model.Interface;
 
 namespace ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface
 {
@@ -10,10 +9,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.File.FileData.Interface
         int UKPRN();
 
         DateTime FilePreparationDate();
-
-        IEnumerable<ILearnerDestinationAndProgression> LearnerDestinationAndProgressions();
-
-        ILearnerDestinationAndProgression LearnerDestinationAndProgressionsForLearnRefNumber(string learnRefNumber);
 
         string FileName();
 

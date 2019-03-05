@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
@@ -16,16 +14,16 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Learner.DateOfBirth
     {
         private readonly DateTime _augustFirst2014 = new DateTime(2014, 08, 01);
 
-        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { FundModelConstants.AdultSkills, FundModelConstants.OtherAdult };
+        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { TypeOfFunding.AdultSkills, TypeOfFunding.OtherAdult };
         private readonly IDateTimeQueryService _dateTimeQueryService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
 
         public DateOfBirth_36Rule(
             IValidationErrorHandler validationErrorHandler,
             IDateTimeQueryService dateTimeQueryService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
-            IDD07 dd07)
+            IDerivedData_07Rule dd07)
             : base(validationErrorHandler, RuleNameConstants.DateOfBirth_36)
         {
             _dateTimeQueryService = dateTimeQueryService;

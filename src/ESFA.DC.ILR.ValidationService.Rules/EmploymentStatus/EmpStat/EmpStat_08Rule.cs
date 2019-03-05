@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ESFA.DC.ILR.Model.Interface;
+using ESFA.DC.ILR.ValidationService.Data.Internal.AcademicYear.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
@@ -15,18 +14,23 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
     public class EmpStat_08Rule : AbstractRule, IRule<ILearner>
     {
         private readonly DateTime _augustFirst2014 = new DateTime(2014, 08, 01);
-        private readonly IEnumerable<int> _fundModels = new HashSet<int>() { FundModelConstants.AdultSkills, FundModelConstants.OtherAdult, FundModelConstants.NonFunded };
+        private readonly IEnumerable<int> _fundModels = new HashSet<int>()
+        {
+            TypeOfFunding.AdultSkills,
+            TypeOfFunding.OtherAdult,
+            TypeOfFunding.NotFundedByESFA
+        };
 
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly IDateTimeQueryService _dateTimeQueryService;
-        private readonly IAcademicYearQueryService _academicYearQueryService;
+        private readonly IAcademicYearDataService _academicYearDataService;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
         private readonly ILearnerEmploymentStatusQueryService _learnerEmploymentStatusQueryService;
 
         public EmpStat_08Rule(
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             IDateTimeQueryService dateTimeQueryService,
-            IAcademicYearQueryService academicYearQueryService,
+            IAcademicYearDataService academicYearDataService,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             ILearnerEmploymentStatusQueryService learnerEmploymentStatusQueryService,
             IValidationErrorHandler validationErrorHandler)
@@ -34,14 +38,14 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         {
             _dd07 = dd07;
             _dateTimeQueryService = dateTimeQueryService;
-            _academicYearQueryService = academicYearQueryService;
+            _academicYearDataService = academicYearDataService;
             _learnerEmploymentStatusQueryService = learnerEmploymentStatusQueryService;
             _learningDeliveryFAMQueryService = learningDeliveryFAMQueryService;
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            if (objectToValidate == null)
+            if (objectToValidate?.LearningDeliveries == null)
             {
                 return;
             }
@@ -56,7 +60,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
                     objectToValidate.LearnerEmploymentStatuses,
                     learningDelivery.LearningDeliveryFAMs))
                 {
-                    HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.LearnStartDate, learningDelivery.FundModel));
+                    HandleValidationError(
+                        objectToValidate.LearnRefNumber,
+                        learningDelivery.AimSeqNumber,
+                        BuildErrorMessageParameters(
+                            learningDelivery.LearnStartDate,
+                            learningDelivery.FundModel));
                 }
             }
         }
@@ -76,36 +85,39 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
                 && LearningDeliveryFAMsConditionMet(fundModel, learningDeliveryFAMs);
         }
 
-        public bool FundModelConditionMet(int fundModel)
-        {
-            return _fundModels.Contains(fundModel);
-        }
+        public bool FundModelConditionMet(int fundModel) => _fundModels.Contains(fundModel);
 
         public bool LearningDeliveryConditionMet(DateTime? dateOfBirth, DateTime learnStartDate)
-        {
-            return dateOfBirth.HasValue
+            => dateOfBirth.HasValue
                 && learnStartDate >= _augustFirst2014
-                && _dateTimeQueryService.YearsBetween((DateTime)dateOfBirth, _academicYearQueryService.AugustThirtyFirstOfLearnStartDate(learnStartDate)) >= 19;
-        }
+                && _dateTimeQueryService.YearsBetween(
+                    dateOfBirth.Value,
+                    _academicYearDataService.GetAcademicYearOfLearningDate(
+                        learnStartDate,
+                        AcademicYearDates.August31)) >= 19;
 
-        public bool EmploymentStatusConditionMet(IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses, DateTime learnStartDate)
-        {
-            return _learnerEmploymentStatusQueryService.EmpStatsNotExistBeforeLearnStartDate(learnerEmploymentStatuses, learnStartDate);
-        }
+        public bool EmploymentStatusConditionMet(
+            IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses,
+            DateTime learnStartDate) => _learnerEmploymentStatusQueryService.EmpStatsNotExistBeforeDate(
+                learnerEmploymentStatuses,
+                learnStartDate);
 
-        public bool DD07ConditionMet(int? progType)
-        {
-            return !progType.HasValue
-                || (progType.HasValue
-                && progType != 24
-                && !_dd07.IsApprenticeship(progType));
-        }
+        public bool DD07ConditionMet(int? progType) => !progType.HasValue
+                || (progType != TypeOfLearningProgramme.Traineeship
+                    && !_dd07.IsApprenticeship(progType));
 
-        public bool LearningDeliveryFAMsConditionMet(int fundModel, IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
-        {
-            return !(_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, "034")
-                || (fundModel != 99 && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.SOF, "108")));
-        }
+        public bool LearningDeliveryFAMsConditionMet(
+            int fundModel,
+            IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
+            => !(_learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(
+                learningDeliveryFAMs,
+                LearningDeliveryFAMTypeConstants.LDM,
+                LearningDeliveryFAMCodeConstants.LDM_OLASS)
+                || (fundModel == TypeOfFunding.NotFundedByESFA
+                    && _learningDeliveryFAMQueryService.HasLearningDeliveryFAMCodeForType(
+                    learningDeliveryFAMs,
+                    LearningDeliveryFAMTypeConstants.SOF,
+                    LearningDeliveryFAMCodeConstants.SOF_LA)));
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate, int fundModel)
         {

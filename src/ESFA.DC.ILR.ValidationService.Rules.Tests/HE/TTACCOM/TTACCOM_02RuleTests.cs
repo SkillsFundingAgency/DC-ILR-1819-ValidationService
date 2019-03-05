@@ -24,7 +24,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         {
             // arrange
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
-            var mockDerived = new Mock<IDD06>(MockBehavior.Strict);
+            var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new TTACCOM_02Rule(null, mockService.Object, mockDerived.Object));
@@ -38,7 +38,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         {
             // arrange
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            var mockDerived = new Mock<IDD06>(MockBehavior.Strict);
+            var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
 
             // act / assert
             Assert.Throws<ArgumentNullException>(() => new TTACCOM_02Rule(mockHandler.Object, null, mockDerived.Object));
@@ -128,7 +128,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             // arrange
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
-            var mockDerived = new Mock<IDD06>(MockBehavior.Strict);
+            var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
             var sut = new TTACCOM_02Rule(mockHandler.Object, mockService.Object, mockDerived.Object);
 
             // act
@@ -162,10 +162,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.IsCurrent(LookupTimeRestrictedKey.TTAccom, candidate, testDate))
+                .Setup(x => x.IsCurrent(TypeOfLimitedLifeLookup.TTAccom, candidate, testDate))
                 .Returns(expectation);
 
-            var mockDerived = new Mock<IDD06>(MockBehavior.Strict);
+            var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
 
             var sut = new TTACCOM_02Rule(mockHandler.Object, mockService.Object, mockDerived.Object);
 
@@ -228,10 +228,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
 
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.IsCurrent(LookupTimeRestrictedKey.TTAccom, candidate, testDate))
+                .Setup(x => x.IsCurrent(TypeOfLimitedLifeLookup.TTAccom, candidate, testDate))
                 .Returns(false);
 
-            var mockDerived = new Mock<IDD06>(MockBehavior.Strict);
+            var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
             mockDerived
                 .Setup(x => x.Derive(deliveries))
                 .Returns(testDate);
@@ -287,10 +287,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
             var mockService = new Mock<IProvideLookupDetails>(MockBehavior.Strict);
             mockService
-                .Setup(x => x.IsCurrent(LookupTimeRestrictedKey.TTAccom, candidate, testDate))
+                .Setup(x => x.IsCurrent(TypeOfLimitedLifeLookup.TTAccom, candidate, testDate))
                 .Returns(true);
 
-            var mockDerived = new Mock<IDD06>(MockBehavior.Strict);
+            var mockDerived = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
             mockDerived
                 .Setup(x => x.Derive(deliveries))
                 .Returns(testDate);
@@ -314,7 +314,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.HE.TTACCOM
         {
             var handler = new Mock<IValidationErrorHandler>();
             var service = new Mock<IProvideLookupDetails>();
-            var rule = new Mock<IDD06>(MockBehavior.Strict);
+            var rule = new Mock<IDerivedData_06Rule>(MockBehavior.Strict);
 
             return new TTACCOM_02Rule(handler.Object, service.Object, rule.Object);
         }

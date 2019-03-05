@@ -1,41 +1,53 @@
-﻿using ESFA.DC.ILR.Model.Interface;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ESFA.DC.ILR.Model.Interface;
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Abstract;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 
 namespace ESFA.DC.ILR.ValidationService.Rules.Learner.MathGrade
 {
-    /// <summary>
-    /// If the learner's learning aim is EFA funded, the GCSE maths qualification grade must be returned
-    /// </summary>
     public class MathGrade_01Rule : AbstractRule, IRule<ILearner>
     {
-        public MathGrade_01Rule(IValidationErrorHandler validationErrorHandler)
-            : base(validationErrorHandler)
+        public MathGrade_01Rule(
+            IValidationErrorHandler validationErrorHandler)
+            : base(validationErrorHandler, RuleNameConstants.MathGrade_01)
         {
         }
 
         public void Validate(ILearner objectToValidate)
         {
-            foreach (var learningDelivery in objectToValidate.LearningDeliveries)
+            if (MathGradeConditionMet(objectToValidate.MathGrade))
             {
-                if (ConditionMet(objectToValidate.MathGrade, learningDelivery.FundModelNullable))
+                foreach (var learningDelivery in objectToValidate.LearningDeliveries)
                 {
-                    HandleValidationError(RuleNameConstants.MathGrade_01Rule, objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumberNullable);
+                    if (FundModelConditionMet(learningDelivery.FundModel))
+                    {
+                        HandleValidationError(objectToValidate.LearnRefNumber, learningDelivery.AimSeqNumber, BuildErrorMessageParameters(learningDelivery.FundModel));
+                        return;
+                    }
                 }
             }
         }
 
-        public bool ConditionMet(string mathGradeNullable, long? fundModelNullable)
+        public bool MathGradeConditionMet(string mathGrade)
         {
-            return string.IsNullOrWhiteSpace(mathGradeNullable) &&
-                    FundModelConditionMet(fundModelNullable);
+            return string.IsNullOrWhiteSpace(mathGrade);
         }
 
-        public bool FundModelConditionMet(long? fundModelNullable)
+        public bool FundModelConditionMet(int fundModel)
         {
-            return fundModelNullable.HasValue &&
-                   (fundModelNullable.Value == 25 || fundModelNullable.Value == 82);
+            var fundModels = new[] { 25, 82 };
+
+            return fundModels.Contains(fundModel);
+        }
+
+        public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(int fundModel)
+        {
+            return new[]
+            {
+                BuildErrorMessageParameter(PropertyNameConstants.FundModel, fundModel),
+            };
         }
     }
 }

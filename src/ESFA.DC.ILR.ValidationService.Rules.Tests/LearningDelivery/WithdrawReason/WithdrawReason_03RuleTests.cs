@@ -2,7 +2,6 @@
 using ESFA.DC.ILR.ValidationService.Interface;
 using ESFA.DC.ILR.ValidationService.Rules.Constants;
 using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WithdrawReason;
-using ESFA.DC.ILR.ValidationService.Rules.LearningDelivery.WorkPlaceStartDate;
 using ESFA.DC.ILR.ValidationService.Utility;
 using Moq;
 using System;
@@ -16,15 +15,6 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WithdrawRea
     /// </summary>
     public class WithdrawReason_03RuleTests
     {
-        /// <summary>
-        /// New rule with null message handler throws.
-        /// </summary>
-        [Fact]
-        public void NewRuleWithNullMessageHandlerThrows()
-        {
-            Assert.Throws<ArgumentNullException>(() => new WithdrawReason_03Rule(null));
-        }
-
         /// <summary>
         /// Rule name 1, matches a literal.
         /// </summary>
@@ -54,7 +44,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WithdrawRea
             var result = sut.RuleName;
 
             // assert
-            Assert.Equal(WithdrawReason_03Rule.Name, result);
+            Assert.Equal(RuleNameConstants.WithdrawReason_03, result);
         }
 
         /// <summary>
@@ -152,7 +142,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WithdrawRea
             var mockDelivery = new Mock<ILearningDelivery>();
             mockDelivery
                 .SetupGet(x => x.CompStatus)
-                .Returns(CompletionState.HasWithdrawn);
+                .Returns(3);
+            mockDelivery
+                .SetupGet(x => x.AimSeqNumber)
+                .Returns(0);
 
             var deliveries = Collection.Empty<ILearningDelivery>();
             deliveries.Add(mockDelivery.Object);
@@ -166,15 +159,10 @@ namespace ESFA.DC.ILR.ValidationService.Rules.Tests.LearningDelivery.WithdrawRea
                 .Returns(deliveries.AsSafeReadOnlyList());
 
             var mockHandler = new Mock<IValidationErrorHandler>(MockBehavior.Strict);
-            mockHandler.Setup(x => x.Handle(
-                Moq.It.Is<string>(y => y == WithdrawReason_03Rule.Name),
-                Moq.It.Is<string>(y => y == LearnRefNumber),
-                0,
-                Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
             mockHandler
-                .Setup(x => x.BuildErrorMessageParameter(
-                    Moq.It.Is<string>(y => y == WithdrawReason_03Rule.MessagePropertyName),
-                    Moq.It.IsAny<ILearningDelivery>()))
+               .Setup(x => x.Handle(RuleNameConstants.WithdrawReason_03, LearnRefNumber, 0, Moq.It.IsAny<IEnumerable<IErrorMessageParameter>>()));
+            mockHandler
+                .Setup(x => x.BuildErrorMessageParameter("CompStatus", "3"))
                 .Returns(new Mock<IErrorMessageParameter>().Object);
 
             var sut = new WithdrawReason_03Rule(mockHandler.Object);

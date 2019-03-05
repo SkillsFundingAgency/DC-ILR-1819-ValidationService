@@ -16,12 +16,12 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
         private readonly HashSet<string> _famCodes = new HashSet<string> { "353", "354", "355" };
 
         private readonly ILearnerEmploymentStatusQueryService _learnerEmploymentStatusQueryService;
-        private readonly IDD07 _dd07;
+        private readonly IDerivedData_07Rule _dd07;
         private readonly ILearningDeliveryFAMQueryService _learningDeliveryFAMQueryService;
 
         public EmpStat_12Rule(
             ILearnerEmploymentStatusQueryService learnerEmploymentStatusQueryService,
-            IDD07 dd07,
+            IDerivedData_07Rule dd07,
             ILearningDeliveryFAMQueryService learningDeliveryFAMQueryService,
             IValidationErrorHandler validationErrorHandler)
             : base(validationErrorHandler, RuleNameConstants.EmpStat_12)
@@ -73,29 +73,19 @@ namespace ESFA.DC.ILR.ValidationService.Rules.EmploymentStatus.EmpStat
 
         public bool EmpStatConditionMet(DateTime learnStartDate, IEnumerable<ILearnerEmploymentStatus> learnerEmploymentStatuses)
         {
-            if (learnerEmploymentStatuses != null)
-            {
-                var empStats = _learnerEmploymentStatusQueryService.EmpStatsForDateEmpStatApp(learnerEmploymentStatuses, learnStartDate);
-
-                if (empStats.Any(es => es != 10))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return _learnerEmploymentStatusQueryService.LearnerEmploymentStatusForDate(learnerEmploymentStatuses, learnStartDate)?.EmpStat != TypeOfEmploymentStatus.InPaidEmployment;
         }
 
         public bool LearningDeliveryFAMConditionMet(IEnumerable<ILearningDeliveryFAM> learningDeliveryFAMs)
         {
-            return !_learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, "LDM", _famCodes);
+            return !_learningDeliveryFAMQueryService.HasAnyLearningDeliveryFAMCodesForType(learningDeliveryFAMs, LearningDeliveryFAMTypeConstants.LDM, _famCodes);
         }
 
         public IEnumerable<IErrorMessageParameter> BuildErrorMessageParameters(DateTime learnStartDate)
         {
             return new[]
             {
-                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate.ToString("d", new CultureInfo("en-GB")))
+                BuildErrorMessageParameter(PropertyNameConstants.LearnStartDate, learnStartDate)
             };
         }
     }

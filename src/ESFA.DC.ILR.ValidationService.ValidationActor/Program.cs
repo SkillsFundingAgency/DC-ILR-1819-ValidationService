@@ -6,6 +6,7 @@ using ESFA.DC.ILR.ValidationService.Modules;
 using ESFA.DC.ILR.ValidationService.Modules.Actor;
 using ESFA.DC.ILR.ValidationService.Stateless.Models;
 using ESFA.DC.ServiceFabric.Helpers;
+using Microsoft.ServiceFabric.Actors.Runtime;
 
 namespace ESFA.DC.ILR.ValidationService.ValidationActor
 {
@@ -24,7 +25,10 @@ namespace ESFA.DC.ILR.ValidationService.ValidationActor
                 builder.RegisterServiceFabricSupport();
 
                 // Register the actor service.
-                builder.RegisterActor<ValidationActor>();
+                builder.RegisterActor<ValidationActor>(settings: new ActorServiceSettings
+                {
+                    ActorGarbageCollectionSettings = new ActorGarbageCollectionSettings(30, 30)
+                });
 
                 using (var container = builder.Build())
                 {

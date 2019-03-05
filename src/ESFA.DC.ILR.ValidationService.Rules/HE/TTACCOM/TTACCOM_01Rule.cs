@@ -86,7 +86,7 @@ namespace ESFA.DC.ILR.ValidationService.Rules.HE.TTACCOM
         public bool ConditionMet(int? tTAccom)
         {
             return It.Has(tTAccom)
-                ? _lookupDetails.Contains(LookupTimeRestrictedKey.TTAccom, tTAccom.Value)
+                ? _lookupDetails.Contains(TypeOfLimitedLifeLookup.TTAccom, tTAccom.Value)
                 : true;
         }
 
