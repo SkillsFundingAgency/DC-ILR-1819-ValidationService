@@ -202,6 +202,19 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
             return frameworkAims.Any(fa => frameworkTypeComponents.Contains(fa.FrameworkComponentType));
         }
 
+        public bool FrameworkCodeExistsForFrameworkAimsAndFrameworkComponentTypes(string learnAimRef, int? progType, int? fworkCode, int? pwayCode, HashSet<int?> frameworkTypeComponents, DateTime startDate)
+        {
+            var frameworkAims = GetFrameworkAimsFor(learnAimRef);
+
+            return frameworkAims.Any(
+                fa => fa.ProgType == progType
+                      && fa.FworkCode == fworkCode
+                      && fa.PwayCode == pwayCode
+                      && frameworkTypeComponents.Contains(fa.FrameworkComponentType)
+                      && startDate >= fa.StartDate
+                      && (!fa.EndDate.HasValue || startDate <= fa.EndDate));
+        }
+
         // TODO: needs to be thought out, this isn't right either...
         public bool FrameworkCodeExistsForCommonComponent(string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
         {
@@ -346,18 +359,6 @@ namespace ESFA.DC.ILR.ValidationService.Data.External.LARS
 
                     // && f.EffectiveTo != null <= not needed with uplifting operators
                     && learnStartDate > f.EffectiveTo);
-        }
-
-        // TODO: this should happen in the rule, and it's now improperly named...
-        public bool DD04DateGreaterThanFrameworkAimEffectiveTo(DateTime dd04Date, string learnAimRef, int? progType, int? fworkCode, int? pwayCode)
-        {
-            var frameworkAims = GetFrameworkAimsFor(learnAimRef);
-
-            return frameworkAims.Any(
-                fa => fa.ProgType == progType
-                && fa.FworkCode == fworkCode
-                && fa.PwayCode == pwayCode
-                && !fa.IsCurrent(dd04Date));
         }
 
         // TODO: this should happen in the rule
